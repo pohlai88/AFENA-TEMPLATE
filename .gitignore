@@ -49,6 +49,10 @@ Thumbs.db
 # Afena CLI discovery output (generated)
 .afena/
 
+# Tailwind engine generated output
+packages/ui/engine/generated/
+packages/ui/engine/index.css
+
 # Temporary folders
 tmp/
 temp/

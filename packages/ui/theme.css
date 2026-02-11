@@ -1,11 +1,1 @@
-@theme {
-  /* Brand palette (extends default Tailwind colors) */
-  --color-primary: oklch(0.55 0.22 265);
-  --color-primary-foreground: #ffffff;
-
-  /* Radius scale */
-  --radius-sm: 0.25rem;
-  --radius-md: 0.375rem;
-  --radius-lg: 0.5rem;
-  --radius-xl: 0.75rem;
-}
+@import './engine/index.css';

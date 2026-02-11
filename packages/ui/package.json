@@ -10,7 +10,8 @@
     "dev": "tsup --watch",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx --fix",
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc --noEmit",
+    "engine:generate": "tsx engine/generate.ts"
   },
   "dependencies": {
     "clsx": "catalog:",

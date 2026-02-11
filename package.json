@@ -23,7 +23,8 @@
     "clean": "turbo run clean",
     "clean:types": "rimraf types && rimraf apps/web/.next/types",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
-    "format:check": "prettier --check \"**/*.{ts,tsx,md}\""
+    "format:check": "prettier --check \"**/*.{ts,tsx,md}\"",
+    "engine:generate": "pnpm --filter afena-ui engine:generate"
   },
   "devDependencies": {
     "@types/node": "catalog:",
