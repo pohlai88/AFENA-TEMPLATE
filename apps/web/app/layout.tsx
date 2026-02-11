@@ -3,7 +3,6 @@ import { Geist, Geist_Mono } from 'next/font/google';
 import { Providers } from 'afena-ui/providers';
 
 import './globals.css';
-import './auth.css';
 
 import type { Metadata } from 'next';
 

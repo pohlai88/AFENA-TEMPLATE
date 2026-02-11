@@ -7,6 +7,22 @@ import logger from './src/lib/logger';
 
 const loggingMiddleware = createLoggingMiddleware(logger);
 
+/**
+ * Public routes that bypass auth middleware entirely.
+ * These routes are accessible without authentication.
+ */
+const PUBLIC_ROUTES = [
+  '/',              // Marketing landing page
+  '/auth',          // Auth pages (sign-in, sign-up, forgot-password, etc.)
+  '/api/auth',      // Auth API endpoints
+];
+
+function isPublicRoute(pathname: string): boolean {
+  return PUBLIC_ROUTES.some(
+    (route) => pathname === route || pathname.startsWith(`${route}/`),
+  );
+}
+
 export async function proxy(request: NextRequest) {
   const context = loggingMiddleware.onRequest(request);
 
@@ -16,8 +32,11 @@ export async function proxy(request: NextRequest) {
     context.alsContext.org_id = orgSlug;
   }
 
-  // Run Neon Auth middleware (validates sessions, refreshes tokens)
-  const authResponse = await auth.middleware()(request);
+  // Skip auth middleware for public routes
+  // Auth middleware still runs on protected routes to validate sessions & refresh tokens
+  const authResponse = isPublicRoute(request.nextUrl.pathname)
+    ? null
+    : await auth.middleware()(request);
 
   // Use the auth response if it returned one (e.g. redirect), otherwise continue
   const response = authResponse ?? NextResponse.next({

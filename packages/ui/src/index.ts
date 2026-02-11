@@ -1,5 +1,6 @@
 // Components
 export * from './components/accordion';
+export * from './components/animate-on-scroll';
 export * from './components/alert';
 export * from './components/alert-dialog';
 export * from './components/aspect-ratio';

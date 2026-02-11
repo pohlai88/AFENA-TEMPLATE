@@ -1,30 +1,45 @@
 {
-  "colors": {
-    "primary": "#0f766e",
-    "secondary": "#64748b",
-    "accent": "#be185d"
+  "neutralBase": "slate",
+  "surfaces": {
+    "dark": {
+      "bg": "oklch(0.10 0.03 260)",
+      "panel": "oklch(1 0 0 / 6%)",
+      "panel2": "oklch(1 0 0 / 8%)",
+      "border": "oklch(1 0 0 / 10%)",
+      "text": "oklch(1 0 0 / 92%)",
+      "muted": "oklch(1 0 0 / 66%)"
+    }
+  },
+  "brand": {
+    "primary": "oklch(0.80 0.12 205)",
+    "primaryDark": "oklch(0.82 0.14 195)",
+    "primaryForeground": "oklch(0.14 0.03 260)",
+    "primaryForegroundDark": "oklch(0.14 0.03 260)"
+  },
+  "semanticColors": {
+    "destructive": "oklch(0.62 0.22 25)",
+    "destructiveDark": "oklch(0.70 0.19 25)",
+    "success": "oklch(0.72 0.16 150)",
+    "successDark": "oklch(0.78 0.14 150)",
+    "warning": "oklch(0.80 0.17 85)",
+    "warningDark": "oklch(0.85 0.15 85)",
+    "info": "oklch(0.68 0.15 250)",
+    "infoDark": "oklch(0.74 0.13 250)"
   },
   "fonts": {
     "sans": "'Plus Jakarta Sans', 'Inter', sans-serif",
     "mono": "'JetBrains Mono', 'Fira Code', monospace"
   },
   "spacingUnit": "4px",
-  "radiusBase": "0.5rem",
+  "radiusBase": "0.625rem",
   "fontSizeBase": "1rem",
   "typeScaleRatio": 1.25,
   "darkMode": "class",
-  "shadowColor": "oklch(0.1 0.03 260 / 0.1)",
   "projectName": "Aura",
   "motion": {
     "normal": "400ms"
   },
   "easings": {
-    "default": "cubic-bezier(0.2, 0.8, 0.2, 1)"
-  },
-  "semanticColors": {
-    "destructive": "#e11d48",
-    "success": "#059669",
-    "warning": "#d97706",
-    "info": "#2563eb"
+    "default": "cubic-bezier(0.2, 0, 0, 1)"
   }
 }

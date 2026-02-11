@@ -4,6 +4,13 @@
  * Reads tailwindengine.json, validates with Zod, and generates
  * all CSS files for the complete Tailwind v4 design system.
  *
+ * Architecture: "Neutral base + brand primary" pattern.
+ * - Layer A: Official shadcn neutral presets (stone/zinc/slate/neutral) — no math
+ * - Layer B: Brand primary overrides from config (oklch)
+ * - Layer C: Semantic + extended tokens derived from inputs
+ *
+ * Output: generates globals.css (bridge) matching official shadcn v4 pattern.
+ *
  * Usage: npx tsx packages/ui/engine/generate.ts
  */
 
@@ -14,12 +21,36 @@ import { z } from 'zod';
 
 // ─── Zod Schema ──────────────────────────────────────────────
 
+const SurfaceSchema = z.object({
+  bg: z.string(),       // → --background
+  panel: z.string(),    // → --card, --popover, --sidebar
+  panel2: z.string(),   // → --secondary, --muted, --accent
+  border: z.string(),   // → --border, --input, --sidebar-border
+  text: z.string(),     // → --foreground, --card-foreground, --popover-foreground
+  muted: z.string(),    // → --muted-foreground, --ring
+});
+
 const EngineSchema = z.object({
-  // Compulsory (8)
-  colors: z.object({
+  neutralBase: z.enum(['stone', 'zinc', 'slate', 'neutral']),
+  surfaces: z.object({
+    light: SurfaceSchema.optional(),
+    dark: SurfaceSchema.optional(),
+  }).optional(),
+  brand: z.object({
     primary: z.string(),
-    secondary: z.string(),
-    accent: z.string(),
+    primaryDark: z.string(),
+    primaryForeground: z.string(),
+    primaryForegroundDark: z.string(),
+  }),
+  semanticColors: z.object({
+    destructive: z.string(),
+    destructiveDark: z.string(),
+    success: z.string(),
+    successDark: z.string(),
+    warning: z.string(),
+    warningDark: z.string(),
+    info: z.string(),
+    infoDark: z.string(),
   }),
   fonts: z.object({
     sans: z.string(),
@@ -28,20 +59,9 @@ const EngineSchema = z.object({
   spacingUnit: z.string(),
   radiusBase: z.string(),
   fontSizeBase: z.string(),
+  typeScaleRatio: z.number().optional(),
   darkMode: z.enum(['class', 'media', 'data-attribute']),
   projectName: z.string(),
-  shadowColor: z.string(),
-
-  // Optional (12)
-  'fonts.heading': z.string().nullable().optional(),
-  semanticColors: z.object({
-    destructive: z.string().nullable().optional(),
-    success: z.string().nullable().optional(),
-    warning: z.string().nullable().optional(),
-    info: z.string().nullable().optional(),
-  }).optional(),
-  typeScaleRatio: z.number().optional(),
-  spacingSteps: z.array(z.number()).nullable().optional(),
   motion: z.object({
     fast: z.string().optional(),
     normal: z.string().optional(),
@@ -49,6 +69,8 @@ const EngineSchema = z.object({
     reduced: z.string().optional(),
   }).optional(),
   easings: z.record(z.string(), z.string()).optional(),
+  'fonts.heading': z.string().nullable().optional(),
+  spacingSteps: z.array(z.number()).nullable().optional(),
   zIndex: z.record(z.string(), z.number()).optional(),
   breakpoints: z.record(z.string(), z.string()).nullable().optional(),
   containers: z.record(z.string(), z.string()).nullable().optional(),
@@ -59,91 +81,208 @@ const EngineSchema = z.object({
 
 type EngineConfig = z.infer<typeof EngineSchema>;
 
-// ─── Color Math (hex → oklch, shade generation) ─────────────
+// ─── Official shadcn v4 Neutral Presets ──────────────────────
+// Exact values from shadcn-ui/ui repo theming.mdx — zero math, zero errors.
 
-function hexToRgb(hex: string): [number, number, number] {
-  const h = hex.replace('#', '');
-  return [
-    parseInt(h.slice(0, 2), 16) / 255,
-    parseInt(h.slice(2, 4), 16) / 255,
-    parseInt(h.slice(4, 6), 16) / 255,
-  ];
+interface NeutralPreset {
+  light: Record<string, string>;
+  dark: Record<string, string>;
 }
 
-function linearize(c: number): number {
-  return c <= 0.04045 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
-}
-
-function rgbToOklch(r: number, g: number, b: number): { l: number; c: number; h: number } {
-  const lr = linearize(r);
-  const lg = linearize(g);
-  const lb = linearize(b);
-
-  // RGB → linear LMS (using OKLab matrix)
-  const l_ = 0.4122214708 * lr + 0.5363325363 * lg + 0.0514459929 * lb;
-  const m_ = 0.2119034982 * lr + 0.6806995451 * lg + 0.1073969566 * lb;
-  const s_ = 0.0883024619 * lr + 0.2220049168 * lg + 0.6896926213 * lb;
-
-  const l_c = Math.cbrt(l_);
-  const m_c = Math.cbrt(m_);
-  const s_c = Math.cbrt(s_);
-
-  const L = 0.2104542553 * l_c + 0.7936177850 * m_c - 0.0040720468 * s_c;
-  const a = 1.9779984951 * l_c - 2.4285922050 * m_c + 0.4505937099 * s_c;
-  const bVal = 0.0259040371 * l_c + 0.7827717662 * m_c - 0.8086757660 * s_c;
-
-  const C = Math.sqrt(a * a + bVal * bVal);
-  let H = Math.atan2(bVal, a) * (180 / Math.PI);
-  if (H < 0) H += 360;
-
-  return { l: L, c: C, h: H };
-}
-
-function hexToOklch(hex: string): { l: number; c: number; h: number } {
-  const [r, g, b] = hexToRgb(hex);
-  return rgbToOklch(r, g, b);
-}
-
-function formatOklch(l: number, c: number, h: number): string {
-  return `oklch(${l.toFixed(3)} ${c.toFixed(3)} ${h.toFixed(2)})`;
-}
-
-// WCAG 2.1 contrast: use white text on dark/saturated backgrounds.
-// Threshold 0.72 aligns with shadcn convention (white fg on primary/accent/destructive).
-function contrastForeground(l: number): string {
-  return l > 0.72 ? '#000000' : '#ffffff';
-}
-
-interface ShadeEntry {
-  step: number;
-  l: number;
-  c: number;
-  h: number;
-}
-
-function generateShades(base: { l: number; c: number; h: number }): ShadeEntry[] {
-  // Lightness targets for each shade step (Tailwind-like distribution)
-  const targets: { step: number; l: number; cScale: number }[] = [
-    { step: 50, l: 0.97, cScale: 0.10 },
-    { step: 100, l: 0.94, cScale: 0.25 },
-    { step: 200, l: 0.88, cScale: 0.45 },
-    { step: 300, l: 0.80, cScale: 0.65 },
-    { step: 400, l: 0.74, cScale: 0.85 },
-    { step: 500, l: 0.64, cScale: 1.00 },
-    { step: 600, l: 0.55, cScale: 0.90 },
-    { step: 700, l: 0.45, cScale: 0.80 },
-    { step: 800, l: 0.35, cScale: 0.65 },
-    { step: 900, l: 0.25, cScale: 0.50 },
-    { step: 950, l: 0.15, cScale: 0.35 },
-  ];
-
-  return targets.map(t => ({
-    step: t.step,
-    l: t.l,
-    c: Math.min(base.c * t.cScale, 0.4),
-    h: base.h,
-  }));
-}
+const NEUTRAL_PRESETS: Record<string, NeutralPreset> = {
+  stone: {
+    light: {
+      '--background': 'oklch(1 0 0)',
+      '--foreground': 'oklch(0.147 0.004 49.25)',
+      '--card': 'oklch(1 0 0)',
+      '--card-foreground': 'oklch(0.147 0.004 49.25)',
+      '--popover': 'oklch(1 0 0)',
+      '--popover-foreground': 'oklch(0.147 0.004 49.25)',
+      '--secondary': 'oklch(0.97 0.001 106.424)',
+      '--secondary-foreground': 'oklch(0.216 0.006 56.043)',
+      '--muted': 'oklch(0.97 0.001 106.424)',
+      '--muted-foreground': 'oklch(0.553 0.013 58.071)',
+      '--accent': 'oklch(0.97 0.001 106.424)',
+      '--accent-foreground': 'oklch(0.216 0.006 56.043)',
+      '--border': 'oklch(0.923 0.003 48.717)',
+      '--input': 'oklch(0.923 0.003 48.717)',
+      '--ring': 'oklch(0.709 0.01 56.259)',
+      '--sidebar': 'oklch(0.985 0.001 106.423)',
+      '--sidebar-foreground': 'oklch(0.147 0.004 49.25)',
+      '--sidebar-accent': 'oklch(0.97 0.001 106.424)',
+      '--sidebar-accent-foreground': 'oklch(0.216 0.006 56.043)',
+      '--sidebar-border': 'oklch(0.923 0.003 48.717)',
+      '--sidebar-ring': 'oklch(0.709 0.01 56.259)',
+    },
+    dark: {
+      '--background': 'oklch(0.147 0.004 49.25)',
+      '--foreground': 'oklch(0.985 0.001 106.423)',
+      '--card': 'oklch(0.216 0.006 56.043)',
+      '--card-foreground': 'oklch(0.985 0.001 106.423)',
+      '--popover': 'oklch(0.216 0.006 56.043)',
+      '--popover-foreground': 'oklch(0.985 0.001 106.423)',
+      '--secondary': 'oklch(0.268 0.007 34.298)',
+      '--secondary-foreground': 'oklch(0.985 0.001 106.423)',
+      '--muted': 'oklch(0.268 0.007 34.298)',
+      '--muted-foreground': 'oklch(0.709 0.01 56.259)',
+      '--accent': 'oklch(0.268 0.007 34.298)',
+      '--accent-foreground': 'oklch(0.985 0.001 106.423)',
+      '--border': 'oklch(1 0 0 / 10%)',
+      '--input': 'oklch(1 0 0 / 15%)',
+      '--ring': 'oklch(0.553 0.013 58.071)',
+      '--sidebar': 'oklch(0.216 0.006 56.043)',
+      '--sidebar-foreground': 'oklch(0.985 0.001 106.423)',
+      '--sidebar-accent': 'oklch(0.268 0.007 34.298)',
+      '--sidebar-accent-foreground': 'oklch(0.985 0.001 106.423)',
+      '--sidebar-border': 'oklch(1 0 0 / 10%)',
+      '--sidebar-ring': 'oklch(0.553 0.013 58.071)',
+    },
+  },
+  zinc: {
+    light: {
+      '--background': 'oklch(1 0 0)',
+      '--foreground': 'oklch(0.141 0.005 285.823)',
+      '--card': 'oklch(1 0 0)',
+      '--card-foreground': 'oklch(0.141 0.005 285.823)',
+      '--popover': 'oklch(1 0 0)',
+      '--popover-foreground': 'oklch(0.141 0.005 285.823)',
+      '--secondary': 'oklch(0.967 0.001 286.375)',
+      '--secondary-foreground': 'oklch(0.21 0.006 285.885)',
+      '--muted': 'oklch(0.967 0.001 286.375)',
+      '--muted-foreground': 'oklch(0.552 0.016 285.938)',
+      '--accent': 'oklch(0.967 0.001 286.375)',
+      '--accent-foreground': 'oklch(0.21 0.006 285.885)',
+      '--border': 'oklch(0.92 0.004 286.32)',
+      '--input': 'oklch(0.92 0.004 286.32)',
+      '--ring': 'oklch(0.705 0.015 286.067)',
+      '--sidebar': 'oklch(0.985 0 0)',
+      '--sidebar-foreground': 'oklch(0.141 0.005 285.823)',
+      '--sidebar-accent': 'oklch(0.967 0.001 286.375)',
+      '--sidebar-accent-foreground': 'oklch(0.21 0.006 285.885)',
+      '--sidebar-border': 'oklch(0.92 0.004 286.32)',
+      '--sidebar-ring': 'oklch(0.705 0.015 286.067)',
+    },
+    dark: {
+      '--background': 'oklch(0.141 0.005 285.823)',
+      '--foreground': 'oklch(0.985 0 0)',
+      '--card': 'oklch(0.21 0.006 285.885)',
+      '--card-foreground': 'oklch(0.985 0 0)',
+      '--popover': 'oklch(0.21 0.006 285.885)',
+      '--popover-foreground': 'oklch(0.985 0 0)',
+      '--secondary': 'oklch(0.274 0.006 286.033)',
+      '--secondary-foreground': 'oklch(0.985 0 0)',
+      '--muted': 'oklch(0.274 0.006 286.033)',
+      '--muted-foreground': 'oklch(0.705 0.015 286.067)',
+      '--accent': 'oklch(0.274 0.006 286.033)',
+      '--accent-foreground': 'oklch(0.985 0 0)',
+      '--border': 'oklch(1 0 0 / 10%)',
+      '--input': 'oklch(1 0 0 / 15%)',
+      '--ring': 'oklch(0.552 0.016 285.938)',
+      '--sidebar': 'oklch(0.21 0.006 285.885)',
+      '--sidebar-foreground': 'oklch(0.985 0 0)',
+      '--sidebar-accent': 'oklch(0.274 0.006 286.033)',
+      '--sidebar-accent-foreground': 'oklch(0.985 0 0)',
+      '--sidebar-border': 'oklch(1 0 0 / 10%)',
+      '--sidebar-ring': 'oklch(0.552 0.016 285.938)',
+    },
+  },
+  slate: {
+    light: {
+      '--background': 'oklch(1 0 0)',
+      '--foreground': 'oklch(0.13 0.028 261.692)',
+      '--card': 'oklch(1 0 0)',
+      '--card-foreground': 'oklch(0.13 0.028 261.692)',
+      '--popover': 'oklch(1 0 0)',
+      '--popover-foreground': 'oklch(0.13 0.028 261.692)',
+      '--secondary': 'oklch(0.967 0.003 264.542)',
+      '--secondary-foreground': 'oklch(0.21 0.034 264.665)',
+      '--muted': 'oklch(0.967 0.003 264.542)',
+      '--muted-foreground': 'oklch(0.551 0.027 264.364)',
+      '--accent': 'oklch(0.967 0.003 264.542)',
+      '--accent-foreground': 'oklch(0.21 0.034 264.665)',
+      '--border': 'oklch(0.928 0.006 264.531)',
+      '--input': 'oklch(0.928 0.006 264.531)',
+      '--ring': 'oklch(0.707 0.022 261.325)',
+      '--sidebar': 'oklch(0.985 0.002 247.839)',
+      '--sidebar-foreground': 'oklch(0.13 0.028 261.692)',
+      '--sidebar-accent': 'oklch(0.967 0.003 264.542)',
+      '--sidebar-accent-foreground': 'oklch(0.21 0.034 264.665)',
+      '--sidebar-border': 'oklch(0.928 0.006 264.531)',
+      '--sidebar-ring': 'oklch(0.707 0.022 261.325)',
+    },
+    dark: {
+      '--background': 'oklch(0.13 0.028 261.692)',
+      '--foreground': 'oklch(0.985 0.002 247.839)',
+      '--card': 'oklch(0.21 0.034 264.665)',
+      '--card-foreground': 'oklch(0.985 0.002 247.839)',
+      '--popover': 'oklch(0.21 0.034 264.665)',
+      '--popover-foreground': 'oklch(0.985 0.002 247.839)',
+      '--secondary': 'oklch(0.278 0.033 256.848)',
+      '--secondary-foreground': 'oklch(0.985 0.002 247.839)',
+      '--muted': 'oklch(0.278 0.033 256.848)',
+      '--muted-foreground': 'oklch(0.707 0.022 261.325)',
+      '--accent': 'oklch(0.278 0.033 256.848)',
+      '--accent-foreground': 'oklch(0.985 0.002 247.839)',
+      '--border': 'oklch(1 0 0 / 10%)',
+      '--input': 'oklch(1 0 0 / 15%)',
+      '--ring': 'oklch(0.551 0.027 264.364)',
+      '--sidebar': 'oklch(0.21 0.034 264.665)',
+      '--sidebar-foreground': 'oklch(0.985 0.002 247.839)',
+      '--sidebar-accent': 'oklch(0.278 0.033 256.848)',
+      '--sidebar-accent-foreground': 'oklch(0.985 0.002 247.839)',
+      '--sidebar-border': 'oklch(1 0 0 / 10%)',
+      '--sidebar-ring': 'oklch(0.551 0.027 264.364)',
+    },
+  },
+  neutral: {
+    light: {
+      '--background': 'oklch(1 0 0)',
+      '--foreground': 'oklch(0.145 0 0)',
+      '--card': 'oklch(1 0 0)',
+      '--card-foreground': 'oklch(0.145 0 0)',
+      '--popover': 'oklch(1 0 0)',
+      '--popover-foreground': 'oklch(0.145 0 0)',
+      '--secondary': 'oklch(0.97 0 0)',
+      '--secondary-foreground': 'oklch(0.205 0 0)',
+      '--muted': 'oklch(0.97 0 0)',
+      '--muted-foreground': 'oklch(0.556 0 0)',
+      '--accent': 'oklch(0.97 0 0)',
+      '--accent-foreground': 'oklch(0.205 0 0)',
+      '--border': 'oklch(0.922 0 0)',
+      '--input': 'oklch(0.922 0 0)',
+      '--ring': 'oklch(0.708 0 0)',
+      '--sidebar': 'oklch(0.985 0 0)',
+      '--sidebar-foreground': 'oklch(0.145 0 0)',
+      '--sidebar-accent': 'oklch(0.97 0 0)',
+      '--sidebar-accent-foreground': 'oklch(0.205 0 0)',
+      '--sidebar-border': 'oklch(0.922 0 0)',
+      '--sidebar-ring': 'oklch(0.708 0 0)',
+    },
+    dark: {
+      '--background': 'oklch(0.145 0 0)',
+      '--foreground': 'oklch(0.985 0 0)',
+      '--card': 'oklch(0.205 0 0)',
+      '--card-foreground': 'oklch(0.985 0 0)',
+      '--popover': 'oklch(0.205 0 0)',
+      '--popover-foreground': 'oklch(0.985 0 0)',
+      '--secondary': 'oklch(0.269 0 0)',
+      '--secondary-foreground': 'oklch(0.985 0 0)',
+      '--muted': 'oklch(0.269 0 0)',
+      '--muted-foreground': 'oklch(0.708 0 0)',
+      '--accent': 'oklch(0.269 0 0)',
+      '--accent-foreground': 'oklch(0.985 0 0)',
+      '--border': 'oklch(1 0 0 / 10%)',
+      '--input': 'oklch(1 0 0 / 15%)',
+      '--ring': 'oklch(0.556 0 0)',
+      '--sidebar': 'oklch(0.205 0 0)',
+      '--sidebar-foreground': 'oklch(0.985 0 0)',
+      '--sidebar-accent': 'oklch(0.269 0 0)',
+      '--sidebar-accent-foreground': 'oklch(0.985 0 0)',
+      '--sidebar-border': 'oklch(1 0 0 / 10%)',
+      '--sidebar-ring': 'oklch(0.556 0 0)',
+    },
+  },
+};
 
 // ─── Defaults ────────────────────────────────────────────────
 
@@ -200,84 +339,591 @@ function header(projectName: string, section: string): string {
  * ═══════════════════════════════════════════════════════════ */\n\n`;
 }
 
-// ─── Token Generators ────────────────────────────────────────
+// ─── Theme Generator (replaces old generateColorsCSS) ────────
 
-function generateColorsCSS(config: EngineConfig): string {
-  const { colors, projectName, shadowColor } = config;
-  const semantic = config.semanticColors ?? {};
-  let out = header(projectName, 'Colors');
+function generateGlobalsCSS(config: EngineConfig): string {
+  const { projectName, brand, semanticColors, neutralBase, radiusBase } = config;
+  const preset = NEUTRAL_PRESETS[neutralBase];
+  let out = '';
 
-  // Generate shade palettes
-  const colorEntries = Object.entries(colors);
-  const palettes: Record<string, ShadeEntry[]> = {};
+  out += `/*\n`;
+  out += ` * ${projectName} Design System — globals.css\n`;
+  out += ` * AUTO-GENERATED by tailwind engine. Do not hand-edit.\n`;
+  out += ` *\n`;
+  out += ` * Neutral base: ${neutralBase} (official shadcn preset)\n`;
+  out += ` * Brand primary: ${brand.primary}\n`;
+  out += ` *\n`;
+  out += ` * Structure:\n`;
+  out += ` *   1. @theme inline — Tailwind v4 utility mapping\n`;
+  out += ` *   2. :root — Light mode concrete oklch values\n`;
+  out += ` *   3. .dark — Dark mode concrete oklch values\n`;
+  out += ` *   4. @layer base — Resets\n`;
+  out += ` *   5. @layer utilities — Elevation, status\n`;
+  out += ` *   6. @layer components — FAB, metric cards, activity trail\n`;
+  out += ` *   7. View transitions\n`;
+  out += ` */\n\n`;
 
-  for (const [name, hex] of colorEntries) {
-    const base = hexToOklch(hex);
-    palettes[name] = generateShades(base);
+  out += `@import 'tw-animate-css';\n\n`;
+  out += `@custom-variant dark (&:where(.dark, .dark *));\n\n`;
+
+  // ── @theme inline ──
+  out += `@theme inline {\n`;
+  // Core shadcn tokens
+  const themeTokens = [
+    'background', 'foreground', 'card', 'card-foreground',
+    'popover', 'popover-foreground', 'primary', 'primary-foreground',
+    'secondary', 'secondary-foreground', 'muted', 'muted-foreground',
+    'accent', 'accent-foreground', 'destructive', 'destructive-foreground',
+    'border', 'input', 'ring',
+    'chart-1', 'chart-2', 'chart-3', 'chart-4', 'chart-5',
+    'sidebar', 'sidebar-foreground', 'sidebar-primary', 'sidebar-primary-foreground',
+    'sidebar-accent', 'sidebar-accent-foreground', 'sidebar-border', 'sidebar-ring',
+  ];
+  for (const t of themeTokens) {
+    out += `  --color-${t}: var(--${t});\n`;
   }
+  // Extended tokens
+  const extendedTokens = [
+    'chart-grid', 'chart-axis', 'chart-tooltip', 'chart-tooltip-text',
+    'sidebar-hover', 'sidebar-active', 'sidebar-selected',
+    'sidebar-muted', 'sidebar-muted-foreground',
+    'hover', 'active', 'selected',
+    'disabled', 'disabled-foreground',
+    'link', 'link-hover', 'placeholder',
+    'accent-hover', 'muted-hover',
+    'success', 'success-foreground', 'success-muted', 'success-border', 'success-ring',
+    'warning', 'warning-foreground', 'warning-muted', 'warning-border', 'warning-ring',
+    'info', 'info-foreground', 'info-muted', 'info-border', 'info-ring',
+    'critical', 'critical-foreground', 'critical-muted', 'critical-border', 'critical-ring',
+  ];
+  for (const t of extendedTokens) {
+    out += `  --color-${t}: var(--${t});\n`;
+  }
+  // Font
+  out += `  --font-sans: var(--font-sans);\n`;
+  out += `  --font-mono: var(--font-geist-mono);\n`;
+  // Radius
+  out += `  --radius-sm: calc(var(--radius) - 4px);\n`;
+  out += `  --radius-md: calc(var(--radius) - 2px);\n`;
+  out += `  --radius-lg: var(--radius);\n`;
+  out += `  --radius-xl: calc(var(--radius) + 4px);\n`;
+  out += `  --radius-2xl: calc(var(--radius) + 8px);\n`;
+  out += `  --radius-3xl: calc(var(--radius) + 12px);\n`;
+  out += `  --radius-4xl: calc(var(--radius) + 16px);\n`;
+  // Shadows
+  out += `  --shadow-xs: var(--shadow-xs);\n`;
+  out += `  --shadow-sm: var(--shadow-sm);\n`;
+  out += `  --shadow-md: var(--shadow-md);\n`;
+  out += `  --shadow-lg: var(--shadow-lg);\n`;
+  out += `  --shadow-xl: var(--shadow-xl);\n`;
+  out += `  --shadow-2xl: var(--shadow-2xl);\n`;
+  out += `  --shadow-glow: var(--glow);\n`;
+  out += `}\n\n`;
 
-  // Semantic color defaults
-  const destructiveHex = semantic.destructive ?? '#ef4444';
-  const successHex = semantic.success ?? colors.primary;
-  const warningHex = semantic.warning ?? colors.accent;
-  const infoHex = semantic.info ?? colors.secondary;
-
-  palettes['destructive'] = generateShades(hexToOklch(destructiveHex));
-  palettes['success'] = generateShades(hexToOklch(successHex));
-  palettes['warning'] = generateShades(hexToOklch(warningHex));
-  palettes['info'] = generateShades(hexToOklch(infoHex));
-
-  // Light mode @theme
-  out += '@theme {\n';
-  for (const [name, shades] of Object.entries(palettes)) {
-    out += `  /* ${name} */\n`;
-    for (const s of shades) {
-      out += `  --color-${name}-${s.step}: ${formatOklch(s.l, s.c, s.h)};\n`;
+  // ── :root (light mode) ──
+  out += `:root {\n`;
+  out += `  color-scheme: light;\n`;
+  out += `  --font-sans: var(--font-figtree), system-ui, sans-serif;\n`;
+  // Neutral tokens: surfaces override > preset fallback
+  const lightSurf = config.surfaces?.light;
+  if (lightSurf) {
+    out += `  --background: ${lightSurf.bg};\n`;
+    out += `  --foreground: ${lightSurf.text};\n`;
+    out += `  --card: ${lightSurf.panel};\n`;
+    out += `  --card-foreground: ${lightSurf.text};\n`;
+    out += `  --popover: ${lightSurf.panel};\n`;
+    out += `  --popover-foreground: ${lightSurf.text};\n`;
+    out += `  --secondary: ${lightSurf.panel2};\n`;
+    out += `  --secondary-foreground: ${lightSurf.text};\n`;
+    out += `  --muted: ${lightSurf.panel2};\n`;
+    out += `  --muted-foreground: ${lightSurf.muted};\n`;
+    out += `  --accent: ${lightSurf.panel2};\n`;
+    out += `  --accent-foreground: ${lightSurf.text};\n`;
+    out += `  --border: ${lightSurf.border};\n`;
+    out += `  --input: ${lightSurf.border};\n`;
+    out += `  --ring: ${lightSurf.muted};\n`;
+    out += `  --sidebar: ${lightSurf.panel};\n`;
+    out += `  --sidebar-foreground: ${lightSurf.text};\n`;
+    out += `  --sidebar-accent: ${lightSurf.panel2};\n`;
+    out += `  --sidebar-accent-foreground: ${lightSurf.text};\n`;
+    out += `  --sidebar-border: ${lightSurf.border};\n`;
+    out += `  --sidebar-ring: ${lightSurf.muted};\n`;
+  } else {
+    for (const [key, val] of Object.entries(preset.light)) {
+      out += `  ${key}: ${val};\n`;
     }
-    // Foreground for the 500 shade
-    const base500 = shades.find(s => s.step === 500) ?? shades[5];
-    out += `  --color-${name}-foreground: ${contrastForeground(base500.l)};\n\n`;
   }
+  // Brand overrides
+  out += `  --primary: ${brand.primary};\n`;
+  out += `  --primary-foreground: ${brand.primaryForeground};\n`;
+  out += `  --destructive: ${semanticColors.destructive};\n`;
+  out += `  --destructive-foreground: ${brand.primaryForeground};\n`;
+  out += `  --sidebar-primary: ${brand.primary};\n`;
+  out += `  --sidebar-primary-foreground: ${brand.primaryForeground};\n`;
+  // Radius
+  out += `  --radius: ${radiusBase};\n`;
+  // Charts (teal gradient)
+  out += `  --chart-1: oklch(0.85 0.13 165);\n`;
+  out += `  --chart-2: oklch(0.77 0.15 163);\n`;
+  out += `  --chart-3: oklch(0.7 0.15 162);\n`;
+  out += `  --chart-4: oklch(0.6 0.13 163);\n`;
+  out += `  --chart-5: oklch(0.51 0.1 166);\n`;
+  // Layout
+  out += `  --sidebar-width: 16rem;\n`;
+  out += `  --sidebar-width-icon: 3rem;\n`;
+  out += `  --sidebar-width-mobile: 18rem;\n`;
+  out += `  --header-height: 3.5rem;\n`;
+  // Badges
+  out += `  --badge-critical: ${semanticColors.destructive};\n`;
+  out += `  --badge-critical-foreground: ${brand.primaryForeground};\n`;
+  out += `  --badge-warning: ${semanticColors.warning};\n`;
+  out += `  --badge-warning-foreground: oklch(0.15 0.01 85);\n`;
+  out += `  --badge-success: ${semanticColors.success};\n`;
+  out += `  --badge-success-foreground: oklch(0.98 0.02 145);\n`;
+  out += `  --badge-info: ${semanticColors.info};\n`;
+  out += `  --badge-info-foreground: ${brand.primaryForeground};\n`;
+  // Palette
+  out += `  --palette-1: oklch(0.55 0.22 265);\n`;
+  out += `  --palette-2: oklch(0.58 0.24 293);\n`;
+  out += `  --palette-3: oklch(0.65 0.22 350);\n`;
+  out += `  --palette-4: oklch(0.58 0.24 27);\n`;
+  out += `  --palette-5: oklch(0.65 0.18 45);\n`;
+  out += `  --palette-6: oklch(0.75 0.18 95);\n`;
+  out += `  --palette-7: oklch(0.65 0.18 145);\n`;
+  out += `  --palette-8: oklch(0.65 0.12 175);\n`;
+  out += `  --palette-9: oklch(0.65 0.14 195);\n`;
+  out += `  --palette-10: var(--primary);\n`;
+  // Animation speed
+  out += `  --speed: 1.2s;\n`;
+  // Chart companions
+  out += `  --chart-grid: var(--border);\n`;
+  out += `  --chart-axis: var(--muted-foreground);\n`;
+  out += `  --chart-tooltip: var(--popover);\n`;
+  out += `  --chart-tooltip-text: var(--popover-foreground);\n`;
+  // Sidebar interaction states
+  out += `  --sidebar-hover: oklch(0.97 0.001 106.424);\n`;
+  out += `  --sidebar-active: oklch(0.95 0.002 106.424);\n`;
+  out += `  --sidebar-selected: oklch(0.96 0.002 106.424);\n`;
+  out += `  --sidebar-muted: var(--muted);\n`;
+  out += `  --sidebar-muted-foreground: var(--muted-foreground);\n`;
+  // Global interaction
+  out += `  --hover: oklch(0.95 0.001 106.424);\n`;
+  out += `  --active: oklch(0.93 0.002 106.424);\n`;
+  out += `  --selected: oklch(0.94 0.002 106.424);\n`;
+  out += `  --disabled: oklch(0.98 0.001 106.424);\n`;
+  out += `  --disabled-foreground: oklch(0.72 0.01 56.259);\n`;
+  out += `  --link: var(--primary);\n`;
+  out += `  --link-hover: oklch(0.52 0.13 163);\n`;
+  out += `  --placeholder: oklch(0.709 0.01 56.259);\n`;
+  out += `  --accent-hover: oklch(0.94 0.002 106.424);\n`;
+  out += `  --muted-hover: oklch(0.94 0.002 106.424);\n`;
+  // Status
+  out += `  --success: var(--badge-success);\n`;
+  out += `  --success-foreground: var(--badge-success-foreground);\n`;
+  out += `  --success-muted: oklch(0.95 0.04 145);\n`;
+  out += `  --success-border: oklch(0.88 0.06 145);\n`;
+  out += `  --success-ring: var(--badge-success);\n`;
+  out += `  --warning: var(--badge-warning);\n`;
+  out += `  --warning-foreground: var(--badge-warning-foreground);\n`;
+  out += `  --warning-muted: oklch(0.97 0.05 85);\n`;
+  out += `  --warning-border: oklch(0.9 0.07 85);\n`;
+  out += `  --warning-ring: var(--badge-warning);\n`;
+  out += `  --info: var(--badge-info);\n`;
+  out += `  --info-foreground: var(--badge-info-foreground);\n`;
+  out += `  --info-muted: oklch(0.95 0.04 163);\n`;
+  out += `  --info-border: oklch(0.88 0.06 163);\n`;
+  out += `  --info-ring: var(--badge-info);\n`;
+  out += `  --critical: var(--badge-critical);\n`;
+  out += `  --critical-foreground: var(--badge-critical-foreground);\n`;
+  out += `  --critical-muted: oklch(0.96 0.06 27.325);\n`;
+  out += `  --critical-border: oklch(0.9 0.08 27.325);\n`;
+  out += `  --critical-ring: var(--badge-critical);\n`;
+  // Z-index governance
+  out += `  --z-base: 0;\n`;
+  out += `  --z-sidebar: 20;\n`;
+  out += `  --z-sticky: 30;\n`;
+  out += `  --z-dropdown: 40;\n`;
+  out += `  --z-popover: 45;\n`;
+  out += `  --z-modal: 50;\n`;
+  out += `  --z-fab: 60;\n`;
+  out += `  --z-toast: 100;\n`;
+  // Motion + elevation
+  out += `  --ease-standard: cubic-bezier(0.2, 0, 0, 1);\n`;
+  out += `  --ease-emphasized: cubic-bezier(0.2, 0, 0, 1);\n`;
+  out += `  --dur-fast: 120ms;\n`;
+  out += `  --dur-standard: 200ms;\n`;
+  out += `  --dur-slow: 320ms;\n`;
+  out += `  --shadow-xs: 0 1px 1px hsl(0 0% 0% / 0.06);\n`;
+  out += `  --shadow-sm: 0 1px 2px hsl(0 0% 0% / 0.08);\n`;
+  out += `  --shadow-md: 0 6px 16px hsl(0 0% 0% / 0.1);\n`;
+  out += `  --shadow-lg: 0 10px 28px hsl(0 0% 0% / 0.12);\n`;
+  out += `  --shadow-xl: 0 18px 44px hsl(0 0% 0% / 0.14);\n`;
+  out += `  --shadow-2xl: 0 28px 64px hsl(0 0% 0% / 0.16);\n`;
+  // Card elevation
+  out += `  --card-shadow: 0 0 0 1px hsl(0 0% 0% / 0.03), 0 2px 4px hsl(0 0% 0% / 0.05), 0 12px 24px hsl(0 0% 0% / 0.05);\n`;
+  out += `  --card-shadow-dark: 0 -20px 80px -20px oklch(1 0 0 / 0.12) inset;\n`;
+  out += `  --card-border-dark: 1px solid oklch(1 0 0 / 0.1);\n`;
+  // Glow (accent-tinted card shadow)
+  out += `  --glow: 0 0 0 1px hsl(0 0% 0% / 0.06), 0 18px 60px color-mix(in oklab, var(--primary) 14%, transparent);\n`;
+  // Panel shadow
+  out += `  --panel-shadow-left: 2px 0 4px hsl(0 0% 0% / 0.08);\n`;
+  out += `  --panel-shadow-right: -2px 0 4px hsl(0 0% 0% / 0.08);\n`;
+  out += `}\n\n`;
 
-  // Semantic aliases
-  out += '  /* Semantic aliases */\n';
-  out += '  --color-background: #ffffff;\n';
-  out += '  --color-foreground: #0a0a0a;\n';
-  out += '  --color-muted: var(--color-secondary-100);\n';
-  out += '  --color-muted-foreground: var(--color-secondary-500);\n';
-  out += '  --color-border: var(--color-secondary-200);\n';
-  out += '  --color-ring: var(--color-primary-500);\n';
-  out += '  --color-input: var(--color-secondary-300);\n';
-  out += `  --color-shadow: ${shadowColor};\n`;
-  out += '}\n\n';
-
-  // Dark mode overrides
-  out += '/* Dark mode overrides */\n';
-  out += '.dark {\n';
-  for (const [name, shades] of Object.entries(palettes)) {
-    // Swap: 50↔950, 100↔900, 200↔800, 300↔700, 400↔600, 500 stays
-    const swapMap: Record<number, number> = {
-      50: 950, 100: 900, 200: 800, 300: 700, 400: 600,
-      500: 500,
-      600: 400, 700: 300, 800: 200, 900: 100, 950: 50,
-    };
-    for (const s of shades) {
-      const darkStep = swapMap[s.step] ?? s.step;
-      const darkShade = shades.find(x => x.step === darkStep) ?? shades[0];
-      out += `  --color-${name}-${s.step}: ${formatOklch(darkShade.l, darkShade.c, darkShade.h)};\n`;
+  // ── .dark ──
+  out += `.dark {\n`;
+  out += `  color-scheme: dark;\n`;
+  // Neutral tokens: surfaces override > preset fallback
+  const darkSurf = config.surfaces?.dark;
+  if (darkSurf) {
+    out += `  --background: ${darkSurf.bg};\n`;
+    out += `  --foreground: ${darkSurf.text};\n`;
+    out += `  --card: ${darkSurf.panel};\n`;
+    out += `  --card-foreground: ${darkSurf.text};\n`;
+    out += `  --popover: ${darkSurf.panel};\n`;
+    out += `  --popover-foreground: ${darkSurf.text};\n`;
+    out += `  --secondary: ${darkSurf.panel2};\n`;
+    out += `  --secondary-foreground: ${darkSurf.text};\n`;
+    out += `  --muted: ${darkSurf.panel2};\n`;
+    out += `  --muted-foreground: ${darkSurf.muted};\n`;
+    out += `  --accent: ${darkSurf.panel2};\n`;
+    out += `  --accent-foreground: ${darkSurf.text};\n`;
+    out += `  --border: ${darkSurf.border};\n`;
+    out += `  --input: ${darkSurf.border};\n`;
+    out += `  --ring: ${darkSurf.muted};\n`;
+    out += `  --sidebar: ${darkSurf.panel};\n`;
+    out += `  --sidebar-foreground: ${darkSurf.text};\n`;
+    out += `  --sidebar-accent: ${darkSurf.panel2};\n`;
+    out += `  --sidebar-accent-foreground: ${darkSurf.text};\n`;
+    out += `  --sidebar-border: ${darkSurf.border};\n`;
+    out += `  --sidebar-ring: ${darkSurf.muted};\n`;
+  } else {
+    for (const [key, val] of Object.entries(preset.dark)) {
+      out += `  ${key}: ${val};\n`;
     }
   }
-  out += '  --color-background: #0a0a0a;\n';
-  out += '  --color-foreground: #fafafa;\n';
-  out += '  --color-muted: var(--color-secondary-800);\n';
-  out += '  --color-muted-foreground: var(--color-secondary-400);\n';
-  out += '  --color-border: var(--color-secondary-700);\n';
-  out += '  --color-ring: var(--color-primary-400);\n';
-  out += '  --color-input: var(--color-secondary-700);\n';
-  out += '}\n';
+  // Brand overrides dark
+  const darkBg = darkSurf?.bg ?? preset.dark['--background'];
+  out += `  --primary: ${brand.primaryDark};\n`;
+  out += `  --primary-foreground: ${brand.primaryForegroundDark};\n`;
+  out += `  --destructive: ${semanticColors.destructiveDark};\n`;
+  out += `  --destructive-foreground: ${darkBg};\n`;
+  out += `  --sidebar-primary: oklch(0.77 0.15 163);\n`;
+  out += `  --sidebar-primary-foreground: ${brand.primaryForegroundDark};\n`;
+  // Layout
+  out += `  --sidebar-width: 16rem;\n`;
+  out += `  --sidebar-width-icon: 3rem;\n`;
+  out += `  --sidebar-width-mobile: 18rem;\n`;
+  out += `  --header-height: 3.5rem;\n`;
+  // Badges dark
+  out += `  --badge-critical: ${semanticColors.destructiveDark};\n`;
+  out += `  --badge-critical-foreground: ${darkBg};\n`;
+  out += `  --badge-warning: ${semanticColors.warningDark};\n`;
+  out += `  --badge-warning-foreground: ${darkBg};\n`;
+  out += `  --badge-success: ${semanticColors.successDark};\n`;
+  out += `  --badge-success-foreground: ${darkBg};\n`;
+  out += `  --badge-info: ${semanticColors.infoDark};\n`;
+  out += `  --badge-info-foreground: ${darkBg};\n`;
+  // Charts (same in dark)
+  out += `  --chart-1: oklch(0.85 0.13 165);\n`;
+  out += `  --chart-2: oklch(0.77 0.15 163);\n`;
+  out += `  --chart-3: oklch(0.7 0.15 162);\n`;
+  out += `  --chart-4: oklch(0.6 0.13 163);\n`;
+  out += `  --chart-5: oklch(0.51 0.1 166);\n`;
+  // Chart companions dark
+  out += `  --chart-grid: var(--border);\n`;
+  out += `  --chart-axis: var(--muted-foreground);\n`;
+  out += `  --chart-tooltip: var(--popover);\n`;
+  out += `  --chart-tooltip-text: var(--popover-foreground);\n`;
+  // Sidebar states dark
+  out += `  --sidebar-hover: oklch(0.24 0.01 34.298);\n`;
+  out += `  --sidebar-active: oklch(0.28 0.01 34.298);\n`;
+  out += `  --sidebar-selected: oklch(0.26 0.01 34.298);\n`;
+  out += `  --sidebar-muted: var(--muted);\n`;
+  out += `  --sidebar-muted-foreground: var(--muted-foreground);\n`;
+  // Interaction dark
+  out += `  --hover: oklch(0.24 0.01 34.298);\n`;
+  out += `  --active: oklch(0.28 0.01 34.298);\n`;
+  out += `  --selected: oklch(0.26 0.01 34.298);\n`;
+  out += `  --disabled: oklch(0.22 0.01 34.298);\n`;
+  out += `  --disabled-foreground: oklch(0.56 0.01 56.259);\n`;
+  out += `  --link: var(--primary);\n`;
+  out += `  --link-hover: oklch(0.78 0.12 163);\n`;
+  out += `  --placeholder: oklch(0.56 0.01 56.259);\n`;
+  out += `  --accent-hover: oklch(0.3 0.01 34.298);\n`;
+  out += `  --muted-hover: oklch(0.3 0.01 34.298);\n`;
+  // Status dark
+  out += `  --success: var(--badge-success);\n`;
+  out += `  --success-foreground: var(--badge-success-foreground);\n`;
+  out += `  --success-muted: oklch(0.24 0.05 145);\n`;
+  out += `  --success-border: oklch(0.34 0.07 145);\n`;
+  out += `  --success-ring: var(--badge-success);\n`;
+  out += `  --warning: var(--badge-warning);\n`;
+  out += `  --warning-foreground: var(--badge-warning-foreground);\n`;
+  out += `  --warning-muted: oklch(0.26 0.05 85);\n`;
+  out += `  --warning-border: oklch(0.36 0.07 85);\n`;
+  out += `  --warning-ring: var(--badge-warning);\n`;
+  out += `  --info: var(--badge-info);\n`;
+  out += `  --info-foreground: var(--badge-info-foreground);\n`;
+  out += `  --info-muted: oklch(0.24 0.05 163);\n`;
+  out += `  --info-border: oklch(0.34 0.07 163);\n`;
+  out += `  --info-ring: var(--badge-info);\n`;
+  out += `  --critical: var(--badge-critical);\n`;
+  out += `  --critical-foreground: var(--badge-critical-foreground);\n`;
+  out += `  --critical-muted: oklch(0.26 0.05 22.216);\n`;
+  out += `  --critical-border: oklch(0.36 0.07 22.216);\n`;
+  out += `  --critical-ring: var(--badge-critical);\n`;
+  // Card elevation dark
+  out += `  --card-shadow-dark: 0 -20px 80px -20px oklch(1 0 0 / 0.12) inset;\n`;
+  out += `  --card-border-dark: 1px solid oklch(1 0 0 / 0.1);\n`;
+  // Glow dark (stronger accent tint)
+  out += `  --glow: 0 0 0 1px oklch(1 0 0 / 0.08), 0 0 40px color-mix(in oklab, var(--primary) 22%, transparent);\n`;
+  // Shadows dark (deeper)
+  out += `  --shadow-xs: 0 1px 2px hsl(0 0% 0% / 0.2);\n`;
+  out += `  --shadow-sm: 0 1px 3px hsl(0 0% 0% / 0.3);\n`;
+  out += `  --shadow-md: 0 6px 16px hsl(0 0% 0% / 0.35);\n`;
+  out += `  --shadow-lg: 0 10px 28px hsl(0 0% 0% / 0.4);\n`;
+  out += `  --shadow-xl: 0 20px 60px hsl(0 0% 0% / 0.45);\n`;
+  out += `  --shadow-2xl: 0 28px 64px hsl(0 0% 0% / 0.5);\n`;
+  // Palette dark
+  out += `  --palette-1: oklch(0.62 0.2 265);\n`;
+  out += `  --palette-2: oklch(0.65 0.22 293);\n`;
+  out += `  --palette-3: oklch(0.7 0.2 350);\n`;
+  out += `  --palette-4: oklch(0.65 0.22 27);\n`;
+  out += `  --palette-5: oklch(0.72 0.16 45);\n`;
+  out += `  --palette-6: oklch(0.78 0.16 95);\n`;
+  out += `  --palette-7: oklch(0.72 0.16 145);\n`;
+  out += `  --palette-8: oklch(0.72 0.1 175);\n`;
+  out += `  --palette-9: oklch(0.72 0.12 195);\n`;
+  out += `  --palette-10: var(--primary);\n`;
+  out += `}\n\n`;
+
+  // ── @layer base ──
+  out += `@layer base {\n`;
+  out += `  * {\n`;
+  out += `    @apply border-border;\n`;
+  out += `  }\n`;
+  out += `  html {\n`;
+  out += `    scrollbar-gutter: stable;\n`;
+  out += `  }\n`;
+  out += `  body {\n`;
+  out += `    @apply bg-background text-foreground font-sans antialiased min-h-svh;\n`;
+  out += `    @apply selection:bg-primary/20 selection:text-foreground;\n`;
+  out += `    font-feature-settings: "cv11", "ss01", "tnum";\n`;
+  out += `  }\n`;
+  out += `  .dark body {\n`;
+  out += `    background:\n`;
+  out += `      radial-gradient(900px 480px at 15% 10%, color-mix(in oklab, var(--primary) 24%, transparent) 0%, transparent 60%),\n`;
+  out += `      radial-gradient(900px 520px at 85% 15%, color-mix(in oklab, var(--info) 18%, transparent) 0%, transparent 60%),\n`;
+  out += `      linear-gradient(180deg, color-mix(in oklab, var(--primary) 22%, var(--background)) 0%, var(--background) 100%);\n`;
+  out += `    letter-spacing: -0.01em;\n`;
+  out += `  }\n`;
+  out += `  h1, h2, h3, h4, h5, h6 {\n`;
+  out += `    @apply tracking-tight font-medium text-balance;\n`;
+  out += `  }\n`;
+  out += `  td, th, .tabular-nums {\n`;
+  out += `    font-variant-numeric: tabular-nums;\n`;
+  out += `  }\n`;
+  out += `  ::-webkit-scrollbar {\n`;
+  out += `    width: 6px;\n`;
+  out += `    height: 6px;\n`;
+  out += `  }\n`;
+  out += `  ::-webkit-scrollbar-track {\n`;
+  out += `    @apply bg-transparent;\n`;
+  out += `  }\n`;
+  out += `  ::-webkit-scrollbar-thumb {\n`;
+  out += `    @apply bg-muted-foreground/20 rounded-full hover:bg-muted-foreground/40 transition-colors;\n`;
+  out += `  }\n`;
+  out += `  button, a, input, select, textarea {\n`;
+  out += `    touch-action: manipulation;\n`;
+  out += `  }\n`;
+  out += `  :focus-visible {\n`;
+  out += `    @apply outline-2 outline-offset-2 outline-ring;\n`;
+  out += `  }\n`;
+  out += `  @media (prefers-reduced-motion: reduce) {\n`;
+  out += `    *, *::before, *::after {\n`;
+  out += `      animation-duration: 0.001ms !important;\n`;
+  out += `      animation-iteration-count: 1 !important;\n`;
+  out += `      transition-duration: 0.001ms !important;\n`;
+  out += `    }\n`;
+  out += `    html {\n`;
+  out += `      scroll-behavior: auto;\n`;
+  out += `    }\n`;
+  out += `  }\n`;
+  out += `}\n\n`;
+
+  // ── @layer utilities ──
+  out += `@layer utilities {\n`;
+  out += `  .text-balance {\n`;
+  out += `    text-wrap: balance;\n`;
+  out += `  }\n`;
+  const elevations = ['xs', 'sm', 'md', 'lg', 'xl', '2xl'];
+  for (const e of elevations) {
+    out += `  .elev-${e} {\n`;
+    out += `    box-shadow: var(--shadow-${e});\n`;
+    out += `  }\n`;
+  }
+  const statuses = ['success', 'warning', 'info', 'critical'];
+  for (const s of statuses) {
+    out += `  .status-${s} {\n`;
+    out += `    @apply border;\n`;
+    out += `    background: var(--${s}-muted);\n`;
+    out += `    color: var(--${s}-foreground);\n`;
+    out += `    border-color: var(--${s}-border);\n`;
+    out += `  }\n`;
+  }
+  // .aurora-card is opt-in only — not applied to cards by default
+  out += `  .aurora-card {\n`;
+  out += `    position: relative;\n`;
+  out += `    overflow: hidden;\n`;
+  out += `    box-shadow: var(--shadow-lg);\n`;
+  out += `    transition: box-shadow var(--dur-standard) var(--ease-standard);\n`;
+  out += `  }\n`;
+  out += `  .aurora-card:hover {\n`;
+  out += `    box-shadow: var(--glow);\n`;
+  out += `  }\n`;
+  out += `  .aurora-card::before {\n`;
+  out += `    content: "";\n`;
+  out += `    position: absolute;\n`;
+  out += `    inset: -2px;\n`;
+  out += `    background: radial-gradient(520px 180px at 30% 0%, color-mix(in oklab, var(--primary) 22%, transparent), transparent 60%);\n`;
+  out += `    pointer-events: none;\n`;
+  out += `    opacity: 0.9;\n`;
+  out += `    z-index: 0;\n`;
+  out += `  }\n`;
+  out += `  .aurora-card > * {\n`;
+  out += `    position: relative;\n`;
+  out += `    z-index: 1;\n`;
+  out += `  }\n`;
+
+  // ── Button polish (both modes) ──
+  out += `  [data-slot="button"] {\n`;
+  out += `    transition: transform 150ms var(--ease-standard), box-shadow 150ms var(--ease-standard), background-color 150ms var(--ease-standard), border-color 150ms var(--ease-standard);\n`;
+  out += `  }\n`;
+  // Light-mode: subtle shadow + lift + press
+  out += `  :root [data-slot="button"] {\n`;
+  out += `    box-shadow: var(--shadow-sm);\n`;
+  out += `  }\n`;
+  out += `  :root [data-slot="button"]:hover {\n`;
+  out += `    transform: translateY(-1px);\n`;
+  out += `    box-shadow: var(--shadow-md);\n`;
+  out += `  }\n`;
+  out += `  :root [data-slot="button"]:active {\n`;
+  out += `    transform: translateY(0px) scale(0.98);\n`;
+  out += `    box-shadow: var(--shadow-sm);\n`;
+  out += `  }\n`;
+  // Ghost + link variants: no shadow in light mode
+  out += `  :root [data-slot="button"][data-variant="ghost"],\n`;
+  out += `  :root [data-slot="button"][data-variant="link"] {\n`;
+  out += `    box-shadow: none;\n`;
+  out += `  }\n`;
+  out += `  :root [data-slot="button"][data-variant="ghost"]:hover,\n`;
+  out += `  :root [data-slot="button"][data-variant="link"]:hover {\n`;
+  out += `    box-shadow: none;\n`;
+  out += `  }\n`;
+  // Dark-mode: more dramatic
+  out += `  .dark [data-slot="button"]:hover {\n`;
+  out += `    transform: translateY(-1px);\n`;
+  out += `  }\n`;
+  out += `  .dark [data-slot="button"]:active {\n`;
+  out += `    transform: translateY(0px) scale(0.97);\n`;
+  out += `  }\n`;
+
+  // Dark: default variant — gradient bg + accent border glow
+  out += `  .dark [data-slot="button"][data-variant="default"] {\n`;
+  out += `    background: linear-gradient(135deg, var(--primary), color-mix(in oklab, var(--primary) 70%, var(--background)));\n`;
+  out += `    border: 1px solid color-mix(in oklab, var(--primary) 55%, var(--border));\n`;
+  out += `  }\n`;
+  out += `  .dark [data-slot="button"][data-variant="default"]:hover {\n`;
+  out += `    box-shadow: var(--glow);\n`;
+  out += `    border-color: color-mix(in oklab, var(--primary) 65%, var(--border));\n`;
+  out += `  }\n`;
+
+  // Dark: outline variant — glass bg + accent border tint
+  out += `  .dark [data-slot="button"][data-variant="outline"] {\n`;
+  out += `    background: var(--card);\n`;
+  out += `    border: 1px solid var(--border);\n`;
+  out += `  }\n`;
+  out += `  .dark [data-slot="button"][data-variant="outline"]:hover {\n`;
+  out += `    background: var(--accent);\n`;
+  out += `    border-color: color-mix(in oklab, var(--primary) 45%, var(--border));\n`;
+  out += `    box-shadow: var(--glow);\n`;
+  out += `  }\n`;
+
+  // Dark: secondary variant — glass bg
+  out += `  .dark [data-slot="button"][data-variant="secondary"] {\n`;
+  out += `    background: var(--card);\n`;
+  out += `    border: 1px solid var(--border);\n`;
+  out += `  }\n`;
+  out += `  .dark [data-slot="button"][data-variant="secondary"]:hover {\n`;
+  out += `    background: var(--accent);\n`;
+  out += `    border-color: color-mix(in oklab, var(--primary) 35%, var(--border));\n`;
+  out += `  }\n`;
+
+  // Dark: ghost variant
+  out += `  .dark [data-slot="button"][data-variant="ghost"]:hover {\n`;
+  out += `    background: var(--card);\n`;
+  out += `  }\n`;
+
+  // Dark: destructive variant — destructive glow
+  out += `  .dark [data-slot="button"][data-variant="destructive"]:hover {\n`;
+  out += `    box-shadow: 0 0 0 1px oklch(1 0 0 / 0.08), 0 0 30px color-mix(in oklab, var(--destructive) 22%, transparent);\n`;
+  out += `  }\n`;
+
+  // ── Card baseline motion (both modes) ──
+  out += `  [data-slot="card"] {\n`;
+  out += `    transition: box-shadow 180ms var(--ease-standard), transform 180ms var(--ease-standard), border-color 180ms var(--ease-standard);\n`;
+  out += `  }\n`;
+  out += `  :root [data-slot="card"]:hover {\n`;
+  out += `    box-shadow: var(--shadow-md);\n`;
+  out += `    transform: translateY(-1px);\n`;
+  out += `  }\n`;
+  out += `  .dark [data-slot="card"]:hover {\n`;
+  out += `    transform: translateY(-1px);\n`;
+  out += `  }\n`;
+
+  // ── Section divider (gradient fade) ──
+  out += `  .section-divider {\n`;
+  out += `    height: 1px;\n`;
+  out += `    width: 100%;\n`;
+  out += `    background: linear-gradient(to right, transparent, color-mix(in oklab, var(--border) 60%, transparent), transparent);\n`;
+  out += `  }\n`;
+
+  // ── Glass utility (dark-mode-aware) ──
+  out += `  .glass {\n`;
+  out += `    background: oklch(1 0 0 / 0.7);\n`;
+  out += `    backdrop-filter: blur(12px) saturate(180%);\n`;
+  out += `    -webkit-backdrop-filter: blur(12px) saturate(180%);\n`;
+  out += `  }\n`;
+  out += `  .dark .glass {\n`;
+  out += `    background: oklch(0 0 0 / 0.3);\n`;
+  out += `  }\n`;
+
+  // ── Dark-mode badge ──
+  out += `  .dark [data-slot="badge"] {\n`;
+  out += `    border: 1px solid var(--border);\n`;
+  out += `    background: var(--accent);\n`;
+  out += `  }\n`;
+
+  out += `  @media print {\n`;
+  out += `    .elev-xs, .elev-sm, .elev-md, .elev-lg, .elev-xl, .elev-2xl {\n`;
+  out += `      box-shadow: none;\n`;
+  out += `    }\n`;
+  out += `  }\n`;
+  out += `}\n\n`;
+
+  // ── View transitions ──
+  out += `/* View Transitions (theme toggle animation) */\n`;
+  out += `::view-transition-old(root),\n`;
+  out += `::view-transition-new(root) {\n`;
+  out += `  animation: none;\n`;
+  out += `  mix-blend-mode: normal;\n`;
+  out += `}\n`;
 
   return out;
 }
+
+// ─── Token Generators ────────────────────────────────────────
 
 function generateTypographyCSS(config: EngineConfig): string {
   const { fonts, fontSizeBase, projectName } = config;
@@ -379,27 +1025,27 @@ function generateSpacingCSS(config: EngineConfig): string {
 }
 
 function generateEffectsCSS(config: EngineConfig): string {
-  const { shadowColor, projectName } = config;
+  const { projectName } = config;
   const opacitySteps = config.opacitySteps ?? DEFAULT_OPACITY_STEPS;
   const easings = { ...DEFAULT_EASINGS, ...config.easings };
   const motion = { ...DEFAULT_MOTION, ...config.motion };
   let out = header(projectName, 'Effects');
 
+  const sc = 'hsl(0 0% 0% / 0.1)';
   out += '@theme {\n';
   out += '  /* Shadows */\n';
-  out += `  --shadow-xs: 0 1px 2px 0 ${shadowColor};\n`;
-  out += `  --shadow-sm: 0 1px 3px 0 ${shadowColor}, 0 1px 2px -1px ${shadowColor};\n`;
-  out += `  --shadow-md: 0 4px 6px -1px ${shadowColor}, 0 2px 4px -2px ${shadowColor};\n`;
-  out += `  --shadow-lg: 0 10px 15px -3px ${shadowColor}, 0 4px 6px -4px ${shadowColor};\n`;
-  out += `  --shadow-xl: 0 20px 25px -5px ${shadowColor}, 0 8px 10px -6px ${shadowColor};\n`;
-  out += `  --shadow-2xl: 0 25px 50px -12px ${shadowColor};\n`;
-  out += `  --shadow-inner: inset 0 2px 4px 0 ${shadowColor};\n`;
+  out += `  --shadow-xs: 0 1px 2px 0 ${sc};\n`;
+  out += `  --shadow-sm: 0 1px 3px 0 ${sc}, 0 1px 2px -1px ${sc};\n`;
+  out += `  --shadow-md: 0 4px 6px -1px ${sc}, 0 2px 4px -2px ${sc};\n`;
+  out += `  --shadow-lg: 0 10px 15px -3px ${sc}, 0 4px 6px -4px ${sc};\n`;
+  out += `  --shadow-xl: 0 20px 25px -5px ${sc}, 0 8px 10px -6px ${sc};\n`;
+  out += `  --shadow-2xl: 0 25px 50px -12px ${sc};\n`;
+  out += `  --shadow-inner: inset 0 2px 4px 0 ${sc};\n`;
   out += `  --shadow-ring: 0 0 0 3px var(--color-ring);\n`;
 
-  out += '\n  /* Opacity scale */\n';
-  for (const step of opacitySteps) {
-    out += `  --opacity-${step}: ${(step / 100).toFixed(2)};\n`;
-  }
+  // NOTE: Do NOT generate --opacity-* in @theme — Tailwind v4 handles opacity
+  // internally. Custom --opacity-* values break color-mix() because they emit
+  // decimals (0.9) where color-mix() requires percentages (90%).
 
   out += '\n  /* Blur scale */\n';
   const blurs = [
@@ -737,294 +1383,6 @@ function generateVariantsCSS(config: EngineConfig): string {
   return out;
 }
 
-// ─── Component Generators ────────────────────────────────────
-
-function btnBase(): string {
-  return [
-    'display: inline-flex;',
-    'align-items: center;',
-    'justify-content: center;',
-    'border-radius: var(--radius-md);',
-    'font-weight: 500;',
-    'transition-property: color, background-color, border-color, box-shadow;',
-    'transition-duration: var(--duration-fast, 150ms);',
-    'transition-timing-function: var(--ease-default, cubic-bezier(0.4, 0, 0.2, 1));',
-  ].map(l => `  ${l}`).join('\n');
-}
-
-function btnFocus(): string {
-  return [
-    '&:focus-visible {',
-    '  outline: none;',
-    '  box-shadow: 0 0 0 2px var(--color-background), 0 0 0 4px var(--color-ring);',
-    '}',
-  ].map(l => `  ${l}`).join('\n');
-}
-
-function btnDisabled(): string {
-  return [
-    '&:disabled {',
-    '  opacity: 0.5;',
-    '  pointer-events: none;',
-    '}',
-  ].map(l => `  ${l}`).join('\n');
-}
-
-function generateButtonComponentCSS(config: EngineConfig): string {
-  const { projectName } = config;
-  let out = header(projectName, 'Component — Button');
-
-  // .btn base
-  out += `.btn {\n${btnBase()}\n${btnFocus()}\n${btnDisabled()}\n}\n\n`;
-
-  // .btn-primary
-  out += `.btn-primary {\n${btnBase()}\n`;
-  out += '  background-color: var(--color-primary-500);\n';
-  out += '  color: var(--color-primary-foreground);\n';
-  out += '  &:hover { background-color: var(--color-primary-600); }\n';
-  out += `${btnFocus()}\n${btnDisabled()}\n}\n\n`;
-
-  // .btn-secondary
-  out += `.btn-secondary {\n${btnBase()}\n`;
-  out += '  background-color: var(--color-secondary-500);\n';
-  out += '  color: var(--color-secondary-foreground);\n';
-  out += '  &:hover { background-color: var(--color-secondary-600); }\n';
-  out += `${btnFocus()}\n${btnDisabled()}\n}\n\n`;
-
-  // .btn-outline
-  out += `.btn-outline {\n${btnBase()}\n`;
-  out += '  border: 1px solid var(--color-border);\n';
-  out += '  background-color: transparent;\n';
-  out += '  color: var(--color-foreground);\n';
-  out += '  &:hover { background-color: var(--color-muted); }\n';
-  out += `${btnFocus()}\n${btnDisabled()}\n}\n\n`;
-
-  // .btn-ghost
-  out += `.btn-ghost {\n${btnBase()}\n`;
-  out += '  background-color: transparent;\n';
-  out += '  color: var(--color-foreground);\n';
-  out += '  &:hover { background-color: var(--color-muted); }\n';
-  out += `${btnFocus()}\n${btnDisabled()}\n}\n\n`;
-
-  // .btn-destructive
-  out += `.btn-destructive {\n${btnBase()}\n`;
-  out += '  background-color: var(--color-destructive-500);\n';
-  out += '  color: var(--color-destructive-foreground);\n';
-  out += '  &:hover { background-color: var(--color-destructive-600); }\n';
-  out += `${btnFocus()}\n${btnDisabled()}\n}\n\n`;
-
-  // Sizes
-  out += '/* Button sizes */\n';
-  out += '.btn-sm { padding: 0.375rem 0.75rem; font-size: var(--text-sm, 0.875rem); }\n';
-  out += '.btn-md { padding: 0.5rem 1rem; font-size: var(--text-base, 1rem); }\n';
-  out += '.btn-lg { padding: 0.75rem 1.5rem; font-size: var(--text-lg, 1.125rem); }\n';
-  out += '.btn-icon { width: 2.25rem; height: 2.25rem; padding: 0; }\n';
-
-  return out;
-}
-
-function generateCardComponentCSS(config: EngineConfig): string {
-  const { projectName } = config;
-  let out = header(projectName, 'Component — Card');
-
-  out += '.card {\n';
-  out += '  border-radius: var(--radius-lg);\n';
-  out += '  border: 1px solid var(--color-border);\n';
-  out += '  background-color: var(--color-background);\n';
-  out += '  box-shadow: var(--shadow-sm);\n';
-  out += '}\n\n';
-
-  out += '.card-header {\n';
-  out += '  display: flex;\n';
-  out += '  flex-direction: column;\n';
-  out += '  gap: 0.375rem;\n';
-  out += '  padding: 1.5rem;\n';
-  out += '}\n\n';
-
-  out += '.card-title {\n';
-  out += '  font-size: var(--text-2xl, 1.5rem);\n';
-  out += '  font-weight: 600;\n';
-  out += '  line-height: 1;\n';
-  out += '  letter-spacing: -0.025em;\n';
-  out += '}\n\n';
-
-  out += '.card-description {\n';
-  out += '  font-size: var(--text-sm, 0.875rem);\n';
-  out += '  color: var(--color-muted-foreground);\n';
-  out += '}\n\n';
-
-  out += '.card-content {\n';
-  out += '  padding: 0 1.5rem 1.5rem;\n';
-  out += '}\n\n';
-
-  out += '.card-footer {\n';
-  out += '  display: flex;\n';
-  out += '  align-items: center;\n';
-  out += '  padding: 0 1.5rem 1.5rem;\n';
-  out += '}\n';
-
-  return out;
-}
-
-function inputBase(): string {
-  return [
-    'display: flex;',
-    'width: 100%;',
-    'border-radius: var(--radius-md);',
-    'border: 1px solid var(--color-input);',
-    'background-color: var(--color-background);',
-    'padding: 0.5rem 0.75rem;',
-    'font-size: var(--text-sm, 0.875rem);',
-    '&::placeholder { color: var(--color-muted-foreground); }',
-    '&:focus-visible {',
-    '  outline: none;',
-    '  box-shadow: 0 0 0 2px var(--color-background), 0 0 0 4px var(--color-ring);',
-    '}',
-    '&:disabled {',
-    '  cursor: not-allowed;',
-    '  opacity: 0.5;',
-    '}',
-  ].map(l => `  ${l}`).join('\n');
-}
-
-function generateInputComponentCSS(config: EngineConfig): string {
-  const { projectName } = config;
-  let out = header(projectName, 'Component — Input');
-
-  out += `.input {\n  height: 2.5rem;\n${inputBase()}\n}\n\n`;
-
-  out += `.input-error {\n  height: 2.5rem;\n${inputBase()}\n`;
-  out += '  border-color: var(--color-destructive-500);\n';
-  out += '  &:focus-visible {\n';
-  out += '    box-shadow: 0 0 0 2px var(--color-background), 0 0 0 4px var(--color-destructive-500);\n';
-  out += '  }\n';
-  out += '}\n\n';
-
-  out += `.textarea {\n  min-height: 5rem;\n${inputBase()}\n}\n\n`;
-
-  out += `.select {\n  height: 2.5rem;\n${inputBase()}\n}\n`;
-
-  return out;
-}
-
-function badgeBase(): string {
-  return [
-    'display: inline-flex;',
-    'align-items: center;',
-    'border-radius: 9999px;',
-    'padding: 0.125rem 0.625rem;',
-    'font-size: var(--text-xs, 0.75rem);',
-    'font-weight: 600;',
-    'transition-property: color, background-color, border-color;',
-    'transition-duration: var(--duration-fast, 150ms);',
-  ].map(l => `  ${l}`).join('\n');
-}
-
-function generateBadgeComponentCSS(config: EngineConfig): string {
-  const { projectName } = config;
-  let out = header(projectName, 'Component — Badge');
-
-  out += `.badge {\n${badgeBase()}\n}\n\n`;
-
-  out += `.badge-primary {\n${badgeBase()}\n`;
-  out += '  background-color: var(--color-primary-500);\n';
-  out += '  color: var(--color-primary-foreground);\n';
-  out += '}\n\n';
-
-  out += `.badge-secondary {\n${badgeBase()}\n`;
-  out += '  background-color: var(--color-secondary-100);\n';
-  out += '  color: var(--color-secondary-700);\n';
-  out += '}\n\n';
-
-  out += `.badge-outline {\n${badgeBase()}\n`;
-  out += '  border: 1px solid var(--color-border);\n';
-  out += '  color: var(--color-foreground);\n';
-  out += '}\n\n';
-
-  out += `.badge-destructive {\n${badgeBase()}\n`;
-  out += '  background-color: var(--color-destructive-500);\n';
-  out += '  color: var(--color-destructive-foreground);\n';
-  out += '}\n\n';
-
-  out += `.badge-success {\n${badgeBase()}\n`;
-  out += '  background-color: var(--color-success-500);\n';
-  out += '  color: var(--color-success-foreground);\n';
-  out += '}\n\n';
-
-  out += `.badge-warning {\n${badgeBase()}\n`;
-  out += '  background-color: var(--color-warning-500);\n';
-  out += '  color: var(--color-warning-foreground);\n';
-  out += '}\n';
-
-  return out;
-}
-
-function generateTypographyComponentCSS(config: EngineConfig): string {
-  const { projectName } = config;
-  const ratio = config.typeScaleRatio ?? 1.25;
-  const baseRem = parseFloat(config.fontSizeBase);
-  let out = header(projectName, 'Component — Typography');
-
-  const headings = [
-    { cls: 'heading-1', exp: 5, weight: 800, tracking: '-0.025em' },
-    { cls: 'heading-2', exp: 4, weight: 700, tracking: '-0.025em' },
-    { cls: 'heading-3', exp: 3, weight: 600, tracking: '-0.025em' },
-    { cls: 'heading-4', exp: 2, weight: 600, tracking: '0em' },
-    { cls: 'heading-5', exp: 1, weight: 500, tracking: '0em' },
-    { cls: 'heading-6', exp: 0, weight: 500, tracking: '0em' },
-  ];
-
-  for (const h of headings) {
-    const size = baseRem * Math.pow(ratio, h.exp);
-    const lh = size < 1.25 ? 1.6 : size < 2 ? 1.5 : size < 3 ? 1.25 : 1.1;
-    out += `.${h.cls} {\n`;
-    out += `  font-family: var(--font-heading);\n`;
-    out += `  font-size: ${size.toFixed(4)}rem;\n`;
-    out += `  font-weight: ${h.weight};\n`;
-    out += `  letter-spacing: ${h.tracking};\n`;
-    out += `  line-height: ${lh};\n`;
-    out += `  color: var(--color-foreground);\n`;
-    out += '}\n\n';
-  }
-
-  out += '.body {\n';
-  out += '  font-family: var(--font-sans);\n';
-  out += `  font-size: ${baseRem}rem;\n`;
-  out += '  color: var(--color-foreground);\n';
-  out += '  line-height: 1.625;\n';
-  out += '}\n\n';
-
-  out += '.body-sm {\n';
-  out += '  font-family: var(--font-sans);\n';
-  out += `  font-size: ${(baseRem * Math.pow(ratio, -1)).toFixed(4)}rem;\n`;
-  out += '  color: var(--color-foreground);\n';
-  out += '  line-height: 1.625;\n';
-  out += '}\n\n';
-
-  out += '.body-lg {\n';
-  out += '  font-family: var(--font-sans);\n';
-  out += `  font-size: ${(baseRem * Math.pow(ratio, 1)).toFixed(4)}rem;\n`;
-  out += '  color: var(--color-foreground);\n';
-  out += '  line-height: 1.625;\n';
-  out += '}\n\n';
-
-  out += '.caption {\n';
-  out += '  font-family: var(--font-sans);\n';
-  out += `  font-size: ${(baseRem * Math.pow(ratio, -2)).toFixed(4)}rem;\n`;
-  out += '  color: var(--color-muted-foreground);\n';
-  out += '}\n\n';
-
-  out += '.code {\n';
-  out += '  font-family: var(--font-mono);\n';
-  out += `  font-size: ${(baseRem * Math.pow(ratio, -1)).toFixed(4)}rem;\n`;
-  out += '  background-color: var(--color-muted);\n';
-  out += '  border-radius: var(--radius-sm);\n';
-  out += '  padding: 0.125rem 0.375rem;\n';
-  out += '}\n';
-
-  return out;
-}
-
 // ─── Breakpoints & Containers ────────────────────────────────
 
 function generateBreakpointsCSS(config: EngineConfig): string {
@@ -1061,11 +1419,12 @@ function main() {
   const resolvedDir = engineDir.replace(/^\/([A-Za-z]:)/, '$1');
   const jsonPath = path.join(resolvedDir, 'tailwindengine.json');
   const generatedDir = path.join(resolvedDir, 'generated');
+  const srcStylesDir = path.resolve(resolvedDir, '..', 'src', 'styles');
 
   console.log(`Reading ${jsonPath}...`);
   const raw: unknown = JSON.parse(fs.readFileSync(jsonPath, 'utf-8'));
   const config = EngineSchema.parse(raw);
-  console.log(`✓ Validated: ${config.projectName} engine config (${Object.keys(config.colors).length} colors)`);
+  console.log(`✓ Validated: ${config.projectName} engine config (neutral base: ${config.neutralBase})`);
 
   // Ensure output directories
   const dirs = [
@@ -1073,34 +1432,24 @@ function main() {
     path.join(generatedDir, 'tokens'),
     path.join(generatedDir, 'utilities'),
     path.join(generatedDir, 'variants'),
-    path.join(generatedDir, 'components'),
+    srcStylesDir,
   ];
   for (const d of dirs) {
     fs.mkdirSync(d, { recursive: true });
   }
 
-  // Generate all files
+  // Generate token/utility/variant files (NO colors.css, NO component CSS)
   const files: { rel: string; content: string }[] = [
-    // Tokens
-    { rel: 'tokens/colors.css', content: generateColorsCSS(config) },
     { rel: 'tokens/typography.css', content: generateTypographyCSS(config) },
     { rel: 'tokens/spacing.css', content: generateSpacingCSS(config) },
     { rel: 'tokens/effects.css', content: generateEffectsCSS(config) },
     { rel: 'tokens/motion.css', content: generateMotionCSS(config) },
-    // Utilities
     { rel: 'utilities/layout.css', content: generateLayoutUtilitiesCSS(config) },
     { rel: 'utilities/flexgrid.css', content: generateFlexgridUtilitiesCSS(config) },
     { rel: 'utilities/typography.css', content: generateTypographyUtilitiesCSS(config) },
     { rel: 'utilities/effects.css', content: generateEffectsUtilitiesCSS(config) },
     { rel: 'utilities/interactivity.css', content: generateInteractivityUtilitiesCSS(config) },
-    // Variants
     { rel: 'variants/custom.css', content: generateVariantsCSS(config) },
-    // Components
-    { rel: 'components/button.css', content: generateButtonComponentCSS(config) },
-    { rel: 'components/card.css', content: generateCardComponentCSS(config) },
-    { rel: 'components/input.css', content: generateInputComponentCSS(config) },
-    { rel: 'components/badge.css', content: generateBadgeComponentCSS(config) },
-    { rel: 'components/typography.css', content: generateTypographyComponentCSS(config) },
   ];
 
   // Breakpoints/containers (only if provided)
@@ -1109,14 +1458,14 @@ function main() {
     files.push({ rel: 'tokens/breakpoints.css', content: bpContent });
   }
 
-  // Write files
+  // Write generated files
   for (const f of files) {
     const filePath = path.join(generatedDir, f.rel);
     fs.writeFileSync(filePath, f.content, 'utf-8');
     console.log(`  ✓ ${f.rel}`);
   }
 
-  // Write barrel index.css
+  // Write barrel index.css (engine tokens + utilities + variants only)
   const indexContent = `${files
     .map(f => `@import './generated/${f.rel}';`)
     .join('\n')}\n`;
@@ -1124,7 +1473,15 @@ function main() {
   fs.writeFileSync(indexPath, indexContent, 'utf-8');
   console.log(`  ✓ index.css (barrel)`);
 
-  console.log(`\n✅ Generated ${files.length} CSS files for ${config.projectName} design system.`);
+  // Generate the bridge globals.css (theme file with shadcn preset + brand)
+  const globalsContent = generateGlobalsCSS(config);
+  const globalsPath = path.join(srcStylesDir, 'globals.css');
+  fs.writeFileSync(globalsPath, globalsContent, 'utf-8');
+  console.log(`  ✓ src/styles/globals.css (theme bridge)`);
+
+  console.log(`\n✅ Generated ${files.length + 1} CSS files for ${config.projectName} design system.`);
+  console.log(`   Neutral base: ${config.neutralBase}`);
+  console.log(`   Brand primary: ${config.brand.primary}`);
 }
 
 try {
