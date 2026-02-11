@@ -24,6 +24,6 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["src/**/*", "utils/**/*", "engine/**/*"],
+  "include": ["src/**/*", "engine/**/*"],
   "exclude": ["node_modules", "dist", "build", "**/*.test.*", "**/*.spec.*", "**/*.stories.*"]
 }

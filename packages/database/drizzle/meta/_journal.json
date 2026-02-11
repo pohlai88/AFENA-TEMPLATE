@@ -22,6 +22,20 @@
       "when": 1770807801732,
       "tag": "0002_mature_carmella_unuscione",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1770813443496,
+      "tag": "0003_condemned_hellfire_club",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1770817248888,
+      "tag": "0004_cultured_ogun",
+      "breakpoints": true
     }
   ]
 }

@@ -1,0 +1,23 @@
+{
+  "rules": [
+    {
+      "allowed": {
+        "origins": [
+          "http://localhost:3000",
+          "https://nexuscanon.com",
+          "https://*.nexuscanon.com"
+        ],
+        "methods": [
+          "PUT"
+        ],
+        "headers": [
+          "Content-Type"
+        ]
+      },
+      "exposed_headers": [
+        "ETag"
+      ],
+      "max_age_seconds": 3600
+    }
+  ]
+}

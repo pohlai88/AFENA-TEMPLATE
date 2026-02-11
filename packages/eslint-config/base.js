@@ -2,23 +2,23 @@ const js = require('@eslint/js');
 const tseslint = require('typescript-eslint');
 const security = require('eslint-plugin-security');
 const importPlugin = require('eslint-plugin-import');
+const pinoPlugin = require('eslint-plugin-pino');
 
 module.exports = [
+  // ── Base rules (all files) ──────────────────────────────────
   js.configs.recommended,
   ...tseslint.configs.recommended,
-  ...tseslint.configs.recommendedTypeChecked,
   security.configs.recommended,
   {
     plugins: {
       '@typescript-eslint': tseslint.plugin,
       security,
       import: importPlugin,
+      pino: pinoPlugin,
     },
     languageOptions: {
       parser: tseslint.parser,
       parserOptions: {
-        project: true,
-        tsconfigRootDir: __dirname,
         ecmaVersion: 'latest',
         sourceType: 'module',
         ecmaFeatures: {
@@ -41,22 +41,10 @@ module.exports = [
       },
     },
     rules: {
-      // TypeScript specific rules
+      // TypeScript rules (non-type-checked — safe for all files)
       '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
       '@typescript-eslint/no-explicit-any': 'warn',
       '@typescript-eslint/no-non-null-assertion': 'warn',
-      '@typescript-eslint/prefer-nullish-coalescing': 'error',
-      '@typescript-eslint/prefer-optional-chain': 'error',
-      '@typescript-eslint/no-unnecessary-type-assertion': 'error',
-      '@typescript-eslint/no-floating-promises': 'error',
-      '@typescript-eslint/await-thenable': 'error',
-      '@typescript-eslint/no-misused-promises': 'error',
-      '@typescript-eslint/require-await': 'error',
-      '@typescript-eslint/return-await': 'error',
-      '@typescript-eslint/no-unsafe-assignment': 'warn',
-      '@typescript-eslint/no-unsafe-call': 'warn',
-      '@typescript-eslint/no-unsafe-member-access': 'warn',
-      '@typescript-eslint/no-unsafe-return': 'warn',
 
       // Import rules
       'import/order': [
@@ -85,8 +73,22 @@ module.exports = [
       // Security rules
       'security/detect-object-injection': 'off', // Too noisy for general use
 
-      // General rules
-      'no-console': 'warn',
+      // Pino rules — catch wrong argument order (logger.info('msg', obj) silently drops obj)
+      'pino/correct-args-position': 'error',
+
+      // General rules — Pino enforcement (INVARIANT-08)
+      'no-console': 'error',
+      'no-restricted-syntax': [
+        'error',
+        {
+          selector: "CallExpression[callee.object.name='console']",
+          message: 'Use afena-logger instead of console.* (INVARIANT-08)',
+        },
+        {
+          selector: "CallExpression[callee.object.property.name='console']",
+          message: 'Use afena-logger instead of console.* (INVARIANT-08)',
+        },
+      ],
       'no-debugger': 'error',
       'prefer-const': 'error',
       'no-var': 'error',
@@ -94,6 +96,36 @@ module.exports = [
       'prefer-template': 'error',
     },
   },
+
+  // ── Type-checked rules (TS/TSX only — requires tsconfig) ────
+  ...tseslint.configs.recommendedTypeCheckedOnly.map((cfg) => ({
+    ...cfg,
+    files: ['**/*.ts', '**/*.tsx'],
+  })),
+  {
+    files: ['**/*.ts', '**/*.tsx'],
+    languageOptions: {
+      parserOptions: {
+        project: true,
+      },
+    },
+    rules: {
+      '@typescript-eslint/prefer-nullish-coalescing': 'error',
+      '@typescript-eslint/prefer-optional-chain': 'error',
+      '@typescript-eslint/no-unnecessary-type-assertion': 'error',
+      '@typescript-eslint/no-floating-promises': 'error',
+      '@typescript-eslint/await-thenable': 'error',
+      '@typescript-eslint/no-misused-promises': 'error',
+      '@typescript-eslint/require-await': 'error',
+      '@typescript-eslint/return-await': 'error',
+      '@typescript-eslint/no-unsafe-assignment': 'warn',
+      '@typescript-eslint/no-unsafe-call': 'warn',
+      '@typescript-eslint/no-unsafe-member-access': 'warn',
+      '@typescript-eslint/no-unsafe-return': 'warn',
+    },
+  },
+
+  // ── Test file overrides ─────────────────────────────────────
   {
     files: ['**/*.test.*', '**/*.spec.*'],
     languageOptions: {

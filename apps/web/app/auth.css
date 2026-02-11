@@ -1,0 +1,11 @@
+/* ============================================================
+ * Afena — Neon Auth UI Styles
+ * Separated from globals.css to isolate auth UI concerns.
+ *
+ * Uses the Tailwind v4 integration path prescribed by Neon Auth SDK.
+ * This imports only theme tokens (~2KB). Tailwind handles utility classes.
+ *
+ * NEVER import @neondatabase/auth/ui/css alongside this — causes duplicates.
+ * Auth UI auto-inherits shadcn CSS vars (--primary, --background, etc.)
+ * ============================================================ */
+@import '@neondatabase/auth/ui/tailwind';

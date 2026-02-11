@@ -31,6 +31,7 @@
     "afena-typescript-config": "workspace:*",
     "dotenv": "^16.5.0",
     "drizzle-kit": "^0.31.0",
+    "postgres": "^3.4.8",
     "tslib": "catalog:",
     "tsup": "catalog:",
     "typescript": "catalog:"

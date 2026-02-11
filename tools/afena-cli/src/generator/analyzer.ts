@@ -1,8 +1,11 @@
 import { readFileSync } from 'fs';
 import { join } from 'path';
+
 import fg from 'fast-glob';
-import { toPosix } from '../utils/paths';
+
 import { ReadmeCanonModelSchema } from '../types';
+import { toPosix } from '../utils/paths';
+
 import type { ReadmeCanonModel, ReadmeCanonExport } from '../types';
 
 /**
@@ -41,6 +44,7 @@ function analyzePackageUnsafe(
   const isPrivate: boolean = pkg.private ?? true;
 
   const packageType = detectPackageType(pkgDir, pkg);
+  const binNames = extractBinNames(pkg);
   const exports = normalizeExports(pkg);
   const sourceFiles = scanSourceFiles(pkgDir, repoRoot);
 
@@ -68,6 +72,7 @@ function analyzePackageUnsafe(
       workspace: isPrivate,
       peerDeps: peerDepNames,
     },
+    binNames,
     exports,
     sourceFiles,
     scripts,
@@ -84,7 +89,7 @@ function analyzePackageUnsafe(
 function detectPackageType(
   pkgDir: string,
   pkg: Record<string, any>
-): 'ui' | 'config' | 'library' | 'app' {
+): 'ui' | 'config' | 'library' | 'app' | 'tool' {
   const allDeps = {
     ...(pkg.dependencies ?? {}),
     ...(pkg.peerDependencies ?? {}),
@@ -92,6 +97,9 @@ function detectPackageType(
 
   // App: under apps/
   if (pkgDir.startsWith('apps/')) return 'app';
+
+  // Tool: under tools/
+  if (pkgDir.startsWith('tools/')) return 'tool';
 
   // Config: name contains config or eslint
   const name = (pkg.name ?? '').toLowerCase();
@@ -176,6 +184,22 @@ function scanSourceFiles(pkgDir: string, repoRoot: string): string[] {
     .map((f) => toPosix(f).replace(`${pkgDir}/`, ''))
     .filter((f) => f !== 'package.json')
     .sort();
+}
+
+/**
+ * Extract bin command names from package.json bin field.
+ */
+function extractBinNames(pkg: Record<string, any>): string[] {
+  const bin = pkg.bin;
+  if (!bin) return [];
+  if (typeof bin === 'string') {
+    const name: string = pkg.name ?? '';
+    return [name.replace(/^@.*\//, '')];
+  }
+  if (typeof bin === 'object' && !Array.isArray(bin)) {
+    return Object.keys(bin as Record<string, string>).sort();
+  }
+  return [];
 }
 
 /**

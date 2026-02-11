@@ -27,6 +27,7 @@
   // invalidApply, invalidScreen, invalidConfigPath are v3-only concepts
   "tailwindCSS.lint.cssConflict": "warning",
   "tailwindCSS.lint.invalidTailwindDirective": "error",
+  "tailwindCSS.lint.suggestCanonicalClasses": "ignore",
 
   // ── Editor ───────────────────────────────────────────────
   "editor.quickSuggestions": {
@@ -53,5 +54,16 @@
 
   // ── TypeScript ───────────────────────────────────────────
   "typescript.tsdk": "node_modules/typescript/lib",
-  "typescript.enablePromptUseWorkspaceTsdk": true
+  "typescript.enablePromptUseWorkspaceTsdk": true,
+
+  // ── Terminal ───────────────────────────────────────────────
+  // Use PowerShell 7+ (pwsh) which supports && chaining.
+  // Falls back to cmd.exe if pwsh is not installed.
+  "terminal.integrated.defaultProfile.windows": "PowerShell",
+  "terminal.integrated.profiles.windows": {
+    "PowerShell": {
+      "source": "PowerShell",
+      "args": ["-NoLogo"]
+    }
+  }
 }

@@ -17,7 +17,8 @@
     "eslint-plugin-jsx-a11y": "catalog:",
     "eslint-plugin-react": "catalog:",
     "eslint-plugin-react-hooks": "catalog:",
-    "eslint-plugin-security": "catalog:"
+    "eslint-plugin-security": "catalog:",
+    "eslint-plugin-pino": "catalog:"
   },
   "peerDependencies": {
     "eslint": "^9.0.0",

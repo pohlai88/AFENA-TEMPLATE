@@ -3,6 +3,7 @@ import { NextResponse } from 'next/server';
 import { db, eq, r2Files } from 'afena-database';
 
 import { auth } from '@/lib/auth/server';
+import { getLogger } from '@/lib/logger';
 
 export async function POST(request: Request) {
   const { data: session } = await auth.getSession();
@@ -11,8 +12,14 @@ export async function POST(request: Request) {
   }
 
   try {
-    const { objectKey, publicFileUrl, fileName, contentType, sizeBytes } =
-      await request.json();
+    const body = (await request.json()) as {
+      objectKey?: string;
+      publicFileUrl?: string;
+      fileName?: string;
+      contentType?: string;
+      sizeBytes?: number;
+    };
+    const { objectKey, publicFileUrl, fileName, contentType, sizeBytes } = body;
 
     if (!objectKey) {
       return NextResponse.json(
@@ -35,7 +42,7 @@ export async function POST(request: Request) {
 
     return NextResponse.json({ success: true, file });
   } catch (error) {
-    console.error('Metadata save error:', error);
+    getLogger().error({ err: error, op: 'storage.metadata.save' }, 'Metadata save error');
     return NextResponse.json(
       { error: 'Failed to save file metadata' },
       { status: 500 },
@@ -57,7 +64,7 @@ export async function GET() {
 
     return NextResponse.json({ files });
   } catch (error) {
-    console.error('Metadata fetch error:', error);
+    getLogger().error({ err: error, op: 'storage.metadata.fetch' }, 'Metadata fetch error');
     return NextResponse.json(
       { error: 'Failed to fetch file metadata' },
       { status: 500 },

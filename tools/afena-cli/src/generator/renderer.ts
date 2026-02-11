@@ -1,4 +1,5 @@
 import { renderTemplate } from './templates';
+
 import type { ReadmeCanonModel } from '../types';
 
 /**
@@ -15,6 +16,7 @@ export function renderReadme(
     packageType: model.identity.packageType,
     workspace: model.install.workspace,
     peerDeps: model.install.peerDeps,
+    binNames: model.binNames,
     exports: model.exports,
     sourceFiles: model.sourceFiles,
     scripts: model.scripts,

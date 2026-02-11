@@ -13,7 +13,7 @@ const nextConfig: NextConfig = {
   },
 
   // External Packages
-  serverExternalPackages: ['@prisma/client'],
+  serverExternalPackages: ['@neondatabase/serverless'],
 
   // Features
   typedRoutes: true,

@@ -1,11 +1,25 @@
 import pino, { type Logger } from 'pino';
 
 import { getConfig } from './config';
+import { bindLogger } from './context';
 
-import type { LogContext, ChildLoggerOptions, RequestLoggerOptions } from './types';
+import type {
+  AuditLogContext,
+  ChildLoggerOptions,
+  ComponentName,
+  LogContext,
+  RequestLoggerOptions,
+} from './types';
 
+// ---------------------------------------------------------------------------
+// Base singleton
+// ---------------------------------------------------------------------------
 let instance: Logger | null = null;
 
+/**
+ * Create (or return cached) base Pino instance.
+ * Pass optional `context` to add static fields to every log line.
+ */
 export function createLogger(context?: LogContext): Logger {
   if (instance && !context) {
     return instance;
@@ -17,26 +31,69 @@ export function createLogger(context?: LogContext): Logger {
     ...context,
   };
 
-  const logger = pino(
-    {
-      ...config,
-      base: {
-        ...config.base,
-        ...baseContext,
-      },
+  const pinoOpts: pino.LoggerOptions = {
+    name: config.name ?? config.base?.service ?? 'afena',
+    level: config.level ?? 'info',
+    timestamp: config.timestamp !== false ? pino.stdTimeFunctions.isoTime : false,
+    depthLimit: 5,
+    edgeLimit: 100,
+    serializers: {
+      err: pino.stdSerializers.err,
+      req: pino.stdSerializers.req,
+      res: pino.stdSerializers.res,
     },
-    pino.destination(1)
-  );
+    base: {
+      ...config.base,
+      ...baseContext,
+    },
+    ...(config.redact && { redact: config.redact }),
+  };
+
+  const logger = config.transport
+    ? pino(pinoOpts, pino.transport(config.transport))
+    : pino(pinoOpts, pino.destination(1));
 
   instance ??= logger;
 
   return logger;
 }
 
+// ---------------------------------------------------------------------------
+// ALS-aware logger accessor
+// ---------------------------------------------------------------------------
+
+/**
+ * Returns a logger bound to the current ALS request context.
+ * If no ALS context exists, returns the base singleton.
+ */
 export function getLogger(): Logger {
   instance ??= createLogger();
-  return instance;
+  return bindLogger(instance);
 }
+
+// ---------------------------------------------------------------------------
+// Child logger factories
+// ---------------------------------------------------------------------------
+
+/** Create a child logger scoped to a CRUD-SAP component. */
+export function createComponentLogger(
+  parent: Logger,
+  component: ComponentName
+): Logger {
+  return parent.child({ component });
+}
+
+/** Create a child logger for audit channel with stable schema. */
+export function createAuditLogger(
+  parent: Logger,
+  ctx: Omit<AuditLogContext, 'channel'>
+): Logger {
+  return parent.child({ channel: 'audit' as const, ...ctx });
+}
+
+// ---------------------------------------------------------------------------
+// Backward-compatible helpers
+// ---------------------------------------------------------------------------
 
 export function createChildLogger(
   parent: Logger,
@@ -86,14 +143,7 @@ export function logRequest(
 
   if (error) {
     logger.error(
-      {
-        ...logData,
-        error: {
-          name: error.name,
-          message: error.message,
-          stack: error.stack,
-        },
-      },
+      { ...logData, err: error },
       'Request failed'
     );
   } else if (statusCode && statusCode >= 400) {
@@ -126,11 +176,7 @@ export function logError(
 ): void {
   logger.error(
     {
-      error: {
-        name: error.name,
-        message: error.message,
-        stack: error.stack,
-      },
+      err: error,
       ...context,
     },
     error.message || 'An error occurred'
@@ -145,4 +191,14 @@ export function withLogger<T extends Record<string, unknown>>(
     ...obj,
     logger: logger ?? getLogger(),
   };
+}
+
+/**
+ * Flush any buffered log lines to the destination.
+ * Call this in shutdown handlers to prevent losing the last few log lines.
+ */
+export function flushLogger(): void {
+  if (instance) {
+    instance.flush();
+  }
 }

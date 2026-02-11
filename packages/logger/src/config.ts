@@ -1,7 +1,21 @@
-import type { LoggerConfig } from './types';
+import type { LoggerConfig, LogLevel } from './types';
 
-export const defaultConfig: LoggerConfig = {
-  level: (process.env.LOG_LEVEL as 'trace' | 'debug' | 'info' | 'warn' | 'error' | 'fatal') || 'info',
+// ---------------------------------------------------------------------------
+// Shared defaults
+// ---------------------------------------------------------------------------
+const redactPaths = [
+  'password',
+  'token',
+  'secret',
+  'key',
+  'authorization',
+  'cookie',
+  'req.headers.cookie',
+  'req.headers.authorization',
+];
+
+const defaultConfig: LoggerConfig = {
+  level: (process.env.LOG_LEVEL as LogLevel | undefined) ?? 'info',
   timestamp: true,
   base: {
     pid: true,
@@ -10,36 +24,39 @@ export const defaultConfig: LoggerConfig = {
     ...(process.env.APP_VERSION && { version: process.env.APP_VERSION }),
   },
   redact: {
-    paths: [
-      'password',
-      'token',
-      'secret',
-      'key',
-      'authorization',
-      'cookie',
-      'req.headers.cookie',
-      'req.headers.authorization',
-    ],
+    paths: redactPaths,
     censor: '[REDACTED]',
   },
 };
 
+// ---------------------------------------------------------------------------
+// Environment-specific configs
+// ---------------------------------------------------------------------------
+
+/** prod: JSON logs, level info (overridable via LOG_LEVEL), no transport */
+export const productionConfig: LoggerConfig = {
+  ...defaultConfig,
+  level: (process.env.LOG_LEVEL as LogLevel | undefined) ?? 'info',
+};
+
+/** dev: pretty logs, level debug */
 export const developmentConfig: LoggerConfig = {
   ...defaultConfig,
   level: 'debug',
-  ...(process.env.NODE_ENV === 'development' && { prettyPrint: true }),
+  transport: {
+    target: 'pino-pretty',
+    options: {
+      colorize: true,
+      translateTime: 'SYS:standard',
+      ignore: 'pid,hostname',
+    },
+  },
 };
 
-export const productionConfig: LoggerConfig = {
-  ...defaultConfig,
-  level: (process.env.LOG_LEVEL as 'trace' | 'debug' | 'info' | 'warn' | 'error' | 'fatal') || 'warn',
-  prettyPrint: false,
-};
-
+/** test: silent — no log output during test runs */
 export const testConfig: LoggerConfig = {
   ...defaultConfig,
-  level: 'info', // Changed from 'silent' to 'info' since 'silent' is not a valid level
-  prettyPrint: false,
+  level: 'silent',
   base: {
     pid: false,
     hostname: false,
@@ -48,6 +65,9 @@ export const testConfig: LoggerConfig = {
   },
 };
 
+// ---------------------------------------------------------------------------
+// Config resolver
+// ---------------------------------------------------------------------------
 export function getConfig(): LoggerConfig {
   const env = process.env.NODE_ENV ?? 'development';
 

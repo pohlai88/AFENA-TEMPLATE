@@ -1,7 +1,10 @@
 import { existsSync, statSync } from 'fs';
 import { join } from 'path';
+
 import fg from 'fast-glob';
+
 import { toPosix } from '../utils/paths';
+
 import type { AfenaConfig } from '../types';
 
 /**
@@ -17,7 +20,7 @@ export function scanReadmes(
 
   // Find all workspace package directories
   const pkgJsons: string[] = fg.sync(
-    ['apps/*/package.json', 'packages/*/package.json'],
+    ['apps/*/package.json', 'packages/*/package.json', 'tools/*/package.json'],
     { cwd: repoRoot, absolute: false }
   );
 

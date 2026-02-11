@@ -10,6 +10,12 @@ const loggingMiddleware = createLoggingMiddleware(logger);
 export async function proxy(request: NextRequest) {
   const context = loggingMiddleware.onRequest(request);
 
+  // Extract org slug from path-based routing: /org/[slug]/...
+  const orgSlug = extractOrgSlug(request.nextUrl.pathname);
+  if (orgSlug) {
+    context.alsContext.org_id = orgSlug;
+  }
+
   // Run Neon Auth middleware (validates sessions, refreshes tokens)
   const authResponse = await auth.middleware()(request);
 
@@ -33,6 +39,16 @@ export async function proxy(request: NextRequest) {
   );
 
   return response;
+}
+
+/**
+ * Extract org slug from path-based routing.
+ * Pattern: /org/[slug]/... → returns slug
+ * Returns undefined for non-org routes (personal workspace).
+ */
+function extractOrgSlug(pathname: string): string | undefined {
+  const match = pathname.match(/^\/org\/([^/]+)/);
+  return match?.[1];
 }
 
 export const config = {

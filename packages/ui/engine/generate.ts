@@ -108,9 +108,10 @@ function formatOklch(l: number, c: number, h: number): string {
   return `oklch(${l.toFixed(3)} ${c.toFixed(3)} ${h.toFixed(2)})`;
 }
 
-// Attempt WCAG 2.1 relative luminance from oklch L
+// WCAG 2.1 contrast: use white text on dark/saturated backgrounds.
+// Threshold 0.72 aligns with shadcn convention (white fg on primary/accent/destructive).
 function contrastForeground(l: number): string {
-  return l > 0.6 ? '#000000' : '#ffffff';
+  return l > 0.72 ? '#000000' : '#ffffff';
 }
 
 interface ShadeEntry {
@@ -242,11 +243,11 @@ function generateColorsCSS(config: EngineConfig): string {
   out += '  /* Semantic aliases */\n';
   out += '  --color-background: #ffffff;\n';
   out += '  --color-foreground: #0a0a0a;\n';
-  out += '  --color-muted: var(--color-primary-100);\n';
-  out += '  --color-muted-foreground: var(--color-primary-700);\n';
-  out += '  --color-border: var(--color-primary-200);\n';
+  out += '  --color-muted: var(--color-secondary-100);\n';
+  out += '  --color-muted-foreground: var(--color-secondary-500);\n';
+  out += '  --color-border: var(--color-secondary-200);\n';
   out += '  --color-ring: var(--color-primary-500);\n';
-  out += '  --color-input: var(--color-primary-200);\n';
+  out += '  --color-input: var(--color-secondary-300);\n';
   out += `  --color-shadow: ${shadowColor};\n`;
   out += '}\n\n';
 
@@ -268,11 +269,11 @@ function generateColorsCSS(config: EngineConfig): string {
   }
   out += '  --color-background: #0a0a0a;\n';
   out += '  --color-foreground: #fafafa;\n';
-  out += '  --color-muted: var(--color-primary-900);\n';
-  out += '  --color-muted-foreground: var(--color-primary-300);\n';
-  out += '  --color-border: var(--color-primary-800);\n';
+  out += '  --color-muted: var(--color-secondary-800);\n';
+  out += '  --color-muted-foreground: var(--color-secondary-400);\n';
+  out += '  --color-border: var(--color-secondary-700);\n';
   out += '  --color-ring: var(--color-primary-400);\n';
-  out += '  --color-input: var(--color-primary-800);\n';
+  out += '  --color-input: var(--color-secondary-700);\n';
   out += '}\n';
 
   return out;

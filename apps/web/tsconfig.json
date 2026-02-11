@@ -11,6 +11,7 @@
     "declarationMap": false,
     "emitDeclarationOnly": false,
     "esModuleInterop": true,
+    "importHelpers": false,
     "module": "ESNext",
     "moduleResolution": "bundler",
     "resolveJsonModule": true,
@@ -31,9 +32,9 @@
     // Path Mapping
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./*"],
+      "@/*": ["./*", "../../packages/ui/src/*"],
       "@/ui/*": ["../../packages/ui/dist/*"],
-      "@/lib/*": ["./src/lib/*"],
+      "@/lib/*": ["./src/lib/*", "../../packages/ui/src/lib/*"],
       "@/components/*": ["./components/*"],
       "@/app/*": ["./app/*"],
       "@/types/*": ["./src/types/*"]

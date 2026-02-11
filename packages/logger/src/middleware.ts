@@ -1,5 +1,7 @@
+import { runWithContext } from './context';
 import { createRequestLogger, logRequest } from './logger';
 
+import type { RequestContext } from './types';
 import type { Logger } from 'pino';
 
 /** Minimal request shape — avoids coupling to a specific `next` package instance. */
@@ -25,10 +27,17 @@ export interface RequestWithLogger extends MiddlewareRequest {
   request: MiddlewareRequest;
 }
 
-export function createRequestLoggerMiddleware(baseLogger: Logger) {
+export interface MiddlewareContext {
+  requestId: string;
+  logger: Logger;
+  startTime: number;
+  alsContext: RequestContext;
+}
+
+export function createRequestLoggerMiddleware(baseLogger: Logger, service = 'web') {
   return function requestLoggerMiddleware(
     request: MiddlewareRequest
-  ): { requestId: string; logger: Logger; startTime: number } {
+  ): MiddlewareContext {
     const requestId = request.headers.get('x-request-id') ?? randomUUID();
     const startTime = Date.now();
 
@@ -51,12 +60,29 @@ export function createRequestLoggerMiddleware(baseLogger: Logger) {
 
     const logger = createRequestLogger(baseLogger, logOptions);
 
+    const alsContext: RequestContext = {
+      request_id: requestId,
+      service,
+    };
+
     return {
       requestId,
       logger,
       startTime,
+      alsContext,
     };
   };
+}
+
+/**
+ * Run a callback within the ALS request context established by the middleware.
+ * All logs emitted inside `fn` will automatically include request_id, service, etc.
+ */
+export function runInRequestContext<T>(
+  ctx: MiddlewareContext,
+  fn: () => T
+): T {
+  return runWithContext(ctx.alsContext, fn);
 }
 
 export function logResponse(
@@ -85,15 +111,15 @@ export function logResponse(
   logRequest(logger, logData);
 }
 
-export function createLoggingMiddleware(baseLogger: Logger) {
-  const requestLogger = createRequestLoggerMiddleware(baseLogger);
+export function createLoggingMiddleware(baseLogger: Logger, service = 'web') {
+  const requestLogger = createRequestLoggerMiddleware(baseLogger, service);
 
   return {
     onRequest: (request: MiddlewareRequest) => {
       return requestLogger(request);
     },
     onResponse: (
-      context: ReturnType<typeof requestLogger>,
+      context: MiddlewareContext,
       method: string,
       url: string,
       statusCode: number,
@@ -108,6 +134,9 @@ export function createLoggingMiddleware(baseLogger: Logger) {
         statusCode,
         error
       );
+    },
+    runInContext: <T>(context: MiddlewareContext, fn: () => T): T => {
+      return runInRequestContext(context, fn);
     },
   };
 }

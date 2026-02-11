@@ -1,7 +1,7 @@
 const reactConfig = require('afena-eslint-config/react');
 
 module.exports = [
-  { ignores: ['dist/**', '*.config.*'] },
+  { ignores: ['dist/**', '*.config.*', 'engine/**'] },
   ...reactConfig,
   {
     languageOptions: {

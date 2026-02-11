@@ -1,1 +1,5 @@
-export { neon as default, neon } from '../neon';
+'use client';
+
+import { createAuthClient } from '@neondatabase/auth/next';
+
+export const authClient = createAuthClient();

@@ -54,7 +54,7 @@
     "declarationMap": true,
     "sourceMap": true,
     "removeComments": false,
-    "importHelpers": true,
+    "importHelpers": false,
 
     // Advanced Options
     "skipDefaultLibCheck": true,

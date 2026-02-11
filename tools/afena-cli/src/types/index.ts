@@ -93,7 +93,27 @@ export const AfenaConfigSchema = z
           .default(['type-', 'docs:', 'gen:', 'sync:', 'guard:']),
       })
       .strict()
-      .default({}),
+      .default({
+        scanPaths: [
+          'apps/*/package.json',
+          'packages/*/package.json',
+          'tools/*',
+          'scripts/*',
+        ],
+        verbose: false,
+        staleThresholdSeconds: 60,
+        commonScripts: [
+          'test',
+          'build',
+          'dev',
+          'clean',
+          'start',
+          'preinstall',
+          'postinstall',
+          'prepare',
+        ],
+        customPrefixes: ['type-', 'docs:', 'gen:', 'sync:', 'guard:'],
+      }),
 
     docs: z
       .object({
@@ -162,7 +182,7 @@ export interface PackageInfo {
 
 // --- README Canon Model ---
 
-export const PackageType = z.enum(['ui', 'config', 'library', 'app']);
+export const PackageType = z.enum(['ui', 'config', 'library', 'app', 'tool']);
 
 export const ReadmeCanonExportSchema = z
   .object({
@@ -189,6 +209,7 @@ export const ReadmeCanonModelSchema = z
         peerDeps: z.array(z.string()).default([]),
       })
       .strict(),
+    binNames: z.array(z.string()).default([]),
     exports: z.array(ReadmeCanonExportSchema).default([]),
     sourceFiles: z.array(z.string()).default([]),
     scripts: z.record(z.string(), z.string()).default({}),

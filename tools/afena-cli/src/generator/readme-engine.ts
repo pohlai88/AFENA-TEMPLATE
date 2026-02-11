@@ -1,12 +1,18 @@
-import { existsSync } from 'fs';
+import { createHash } from 'crypto';
+import { existsSync, readFileSync, writeFileSync } from 'fs';
 import { join } from 'path';
+
 import fg from 'fast-glob';
+
 import { log } from '../utils/logger';
 import { toPosix } from '../utils/paths';
+
 import { analyzePackage } from './analyzer';
-import { computeReadmeSignature, loadReadmeSignature, saveReadmeSignature } from './signature';
 import { renderReadme } from './renderer';
+import { computeReadmeSignature, loadReadmeSignature, saveReadmeSignature } from './signature';
+import { AUTOGEN_START, AUTOGEN_END, TEMPLATE_VERSION, renderRootReadme } from './templates';
 import { writeReadme, validateReadme } from './writer';
+
 import type { AfenaConfig } from '../types';
 
 export interface ReadmeCommandOptions {
@@ -38,7 +44,7 @@ function resolvePackages(
 ): string[] {
   // Find all workspace package directories
   const pkgJsons: string[] = fg.sync(
-    ['apps/*/package.json', 'packages/*/package.json'],
+    ['apps/*/package.json', 'packages/*/package.json', 'tools/*/package.json'],
     { cwd: repoRoot, absolute: false }
   );
 
@@ -66,8 +72,8 @@ function resolvePackages(
     const match = allPkgDirs.find((d) => {
       try {
         const pkgPath = join(repoRoot, d, 'package.json');
-        const pkg = JSON.parse(require('fs').readFileSync(pkgPath, 'utf-8'));
-        return pkg.name === target;
+        const pkg = JSON.parse(readFileSync(pkgPath, 'utf-8')) as Record<string, unknown>;
+        return (pkg.name as string) === target;
       } catch {
         return false;
       }
@@ -87,9 +93,9 @@ function resolvePackages(
  * Shared engine for all readme entrypoints.
  * Called by `afena readme gen|sync|check` and `discover --fix-readmes`.
  */
-export async function runReadmeCommand(
+export function runReadmeCommand(
   options: ReadmeCommandOptions
-): Promise<ReadmeCommandResult> {
+): ReadmeCommandResult {
   const { mode, repoRoot, config, dryRun } = options;
   const pkgDirs = resolvePackages(repoRoot, config, options.packages);
 
@@ -170,10 +176,100 @@ export async function runReadmeCommand(
     }
   }
 
+  // Root README (only when no specific packages targeted)
+  if (!options.packages || options.packages.length === 0) {
+    const rootAction = generateRootReadme(repoRoot, pkgDirs, mode, dryRun);
+    if (rootAction === 'generated') result.generated.push('(root)');
+    else if (rootAction === 'updated') result.updated.push('(root)');
+    else if (rootAction === 'skipped') result.skipped.push('(root)');
+    else if (rootAction === 'failed') {
+      result.failures.push({ pkg: '(root)', reasons: ['Root README generation failed'] });
+    }
+  }
+
   // Print summary
   printSummary(mode, result, dryRun);
 
   return result;
+}
+
+/**
+ * Generate or update the root monorepo README autogen block.
+ */
+function generateRootReadme(
+  repoRoot: string,
+  pkgDirs: string[],
+  mode: 'gen' | 'sync' | 'check',
+  dryRun?: boolean
+): 'generated' | 'updated' | 'skipped' | 'failed' {
+  const readmePath = join(repoRoot, 'README.md');
+  const readmeExists = existsSync(readmePath);
+
+  if (mode === 'sync' && !readmeExists) return 'skipped';
+  if (mode === 'check') return 'skipped';
+
+  // Read root package.json
+  const rootPkgPath = join(repoRoot, 'package.json');
+  const rootPkg = JSON.parse(readFileSync(rootPkgPath, 'utf-8')) as Record<string, unknown>;
+  const rootName = (rootPkg.name as string) ?? 'monorepo';
+  const rootScripts = (rootPkg.scripts as Record<string, string>) ?? {};
+
+  // Analyze all packages for the root overview
+  const packages = pkgDirs.map((dir) => {
+    const model = analyzePackage(dir, repoRoot);
+    return {
+      dir,
+      name: model.identity.name,
+      description: model.identity.description,
+      packageType: model.identity.packageType,
+    };
+  });
+
+  // Compute signature for root
+  const payload = JSON.stringify({ packages, rootScripts, v: TEMPLATE_VERSION });
+  const sig = `sha256:${createHash('sha256').update(payload).digest('hex')}`;
+
+  // Check cached signature
+  const oldSig = loadReadmeSignature('__root__', repoRoot);
+  if (sig === oldSig && readmeExists) return 'skipped';
+
+  // Render
+  const markdown = renderRootReadme({ name: rootName, packages, scripts: rootScripts, signature: sig });
+  const autogenBlock = `${AUTOGEN_START}\n${markdown}\n${AUTOGEN_END}`;
+
+  if (dryRun) {
+    log.bold(`\n--- (root) (${readmeExists ? 'update' : 'create'}) ---`);
+    log.info(autogenBlock);
+    log.bold(`--- end (root) ---\n`);
+    return readmeExists ? 'updated' : 'generated';
+  }
+
+  if (!readmeExists) {
+    writeFileSync(readmePath, `${autogenBlock}\n`, 'utf-8');
+    saveReadmeSignature('__root__', repoRoot, sig);
+    return 'generated';
+  }
+
+  const existing = readFileSync(readmePath, 'utf-8');
+  const hasStart = existing.includes(AUTOGEN_START);
+  const hasEnd = existing.includes(AUTOGEN_END);
+
+  if (hasStart && hasEnd) {
+    const startIdx = existing.indexOf(AUTOGEN_START);
+    const endIdx = existing.indexOf(AUTOGEN_END);
+    if (startIdx >= 0 && endIdx > startIdx) {
+      const before = existing.substring(0, startIdx);
+      const after = existing.substring(endIdx + AUTOGEN_END.length);
+      writeFileSync(readmePath, `${before}${autogenBlock}${after}`, 'utf-8');
+      saveReadmeSignature('__root__', repoRoot, sig);
+      return 'updated';
+    }
+  }
+
+  // No markers — prepend autogen block, keep existing content below
+  writeFileSync(readmePath, `${autogenBlock}\n\n${existing}`, 'utf-8');
+  saveReadmeSignature('__root__', repoRoot, sig);
+  return 'updated';
 }
 
 function printSummary(

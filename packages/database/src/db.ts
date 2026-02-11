@@ -11,4 +11,7 @@ if (!databaseUrl) {
 
 const sql = neon(databaseUrl);
 
-export const db = drizzle(sql, { schema });
+export const db = drizzle(sql, {
+  schema,
+  logger: process.env.NODE_ENV === 'development',
+});
