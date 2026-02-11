@@ -88,6 +88,18 @@ module.exports = [
           selector: "CallExpression[callee.object.property.name='console']",
           message: 'Use afena-logger instead of console.* (INVARIANT-08)',
         },
+        {
+          selector: "CallExpression[callee.object.name='db'][callee.property.name='insert']",
+          message: 'Direct db.insert() is forbidden — use mutate() from afena-crud (INVARIANT-01/K-01)',
+        },
+        {
+          selector: "CallExpression[callee.object.name='db'][callee.property.name='update']",
+          message: 'Direct db.update() is forbidden — use mutate() from afena-crud (INVARIANT-01/K-01)',
+        },
+        {
+          selector: "CallExpression[callee.object.name='db'][callee.property.name='delete']",
+          message: 'Direct db.delete() is forbidden — use mutate() from afena-crud (INVARIANT-01/K-01)',
+        },
       ],
       'no-debugger': 'error',
       'prefer-const': 'error',

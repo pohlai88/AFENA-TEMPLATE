@@ -83,6 +83,21 @@
     },
     {
       "path": "./packages/database"
+    },
+    {
+      "path": "./packages/canon"
+    },
+    {
+      "path": "./packages/crud"
+    },
+    {
+      "path": "./packages/search"
+    },
+    {
+      "path": "./packages/workflow"
+    },
+    {
+      "path": "./packages/advisory"
     }
   ]
 }
