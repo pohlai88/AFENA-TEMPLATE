@@ -8,4 +8,5 @@ export default defineConfig({
   sourcemap: true,
   clean: true,
   external: ['pino', 'pino-abstract-transport'],
+  tsconfig: './tsconfig.build.json',
 });

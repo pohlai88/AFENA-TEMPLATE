@@ -1,5 +1,7 @@
 import pino, { type Logger } from 'pino';
+
 import { getConfig } from './config';
+
 import type { LogContext, ChildLoggerOptions, RequestLoggerOptions } from './types';
 
 let instance: Logger | null = null;
@@ -11,7 +13,7 @@ export function createLogger(context?: LogContext): Logger {
 
   const config = getConfig();
   const baseContext = {
-    environment: process.env.NODE_ENV || 'development',
+    environment: process.env.NODE_ENV ?? 'development',
     ...context,
   };
 
@@ -26,17 +28,13 @@ export function createLogger(context?: LogContext): Logger {
     pino.destination(1)
   );
 
-  if (!instance) {
-    instance = logger;
-  }
+  instance ??= logger;
 
   return logger;
 }
 
 export function getLogger(): Logger {
-  if (!instance) {
-    instance = createLogger();
-  }
+  instance ??= createLogger();
   return instance;
 }
 
@@ -109,7 +107,7 @@ export function logPerformance(
   logger: Logger,
   operation: string,
   duration: number,
-  metadata?: Record<string, any>
+  metadata?: Record<string, unknown>
 ): void {
   logger.info(
     {
@@ -124,7 +122,7 @@ export function logPerformance(
 export function logError(
   logger: Logger,
   error: Error,
-  context?: Record<string, any>
+  context?: Record<string, unknown>
 ): void {
   logger.error(
     {
@@ -139,12 +137,12 @@ export function logError(
   );
 }
 
-export function withLogger<T extends Record<string, any>>(
+export function withLogger<T extends Record<string, unknown>>(
   obj: T,
   logger?: Logger
 ): T & { logger: Logger } {
   return {
     ...obj,
-    logger: logger || getLogger(),
+    logger: logger ?? getLogger(),
   };
 }

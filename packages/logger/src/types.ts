@@ -5,7 +5,7 @@ export interface LogContext {
   service?: string;
   version?: string;
   environment?: string;
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 export interface LogMetadata {
@@ -34,7 +34,7 @@ export interface LoggerConfig {
 export interface ChildLoggerOptions {
   component?: string;
   module?: string;
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 export interface RequestLoggerOptions extends LogContext {

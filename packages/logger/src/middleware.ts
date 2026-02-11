@@ -1,6 +1,13 @@
-import type { NextRequest } from 'next/server';
-import type { Logger } from 'pino';
 import { createRequestLogger, logRequest } from './logger';
+
+import type { Logger } from 'pino';
+
+/** Minimal request shape — avoids coupling to a specific `next` package instance. */
+interface MiddlewareRequest {
+  readonly method: string;
+  readonly url: string;
+  readonly headers: { get(name: string): string | null };
+}
 
 // Simple UUID generator for Edge Runtime
 function randomUUID(): string {
@@ -11,18 +18,18 @@ function randomUUID(): string {
   });
 }
 
-export interface RequestWithLogger extends NextRequest {
+export interface RequestWithLogger extends MiddlewareRequest {
   logger: Logger;
   requestId: string;
   startTime: number;
-  request: NextRequest
+  request: MiddlewareRequest;
 }
 
 export function createRequestLoggerMiddleware(baseLogger: Logger) {
   return function requestLoggerMiddleware(
-    request: NextRequest
+    request: MiddlewareRequest
   ): { requestId: string; logger: Logger; startTime: number } {
-    const requestId = request.headers.get('x-request-id') || randomUUID();
+    const requestId = request.headers.get('x-request-id') ?? randomUUID();
     const startTime = Date.now();
 
     const userAgent = request.headers.get('user-agent');
@@ -82,7 +89,7 @@ export function createLoggingMiddleware(baseLogger: Logger) {
   const requestLogger = createRequestLoggerMiddleware(baseLogger);
 
   return {
-    onRequest: (request: NextRequest) => {
+    onRequest: (request: MiddlewareRequest) => {
       return requestLogger(request);
     },
     onResponse: (

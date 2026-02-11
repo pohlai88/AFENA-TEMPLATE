@@ -1,6 +1,7 @@
 const nextConfig = require('afena-eslint-config/next');
 
 module.exports = [
+  { ignores: ['.next/**', 'dist/**', '*.config.*', 'src/types/**'] },
   ...nextConfig,
   {
     languageOptions: {

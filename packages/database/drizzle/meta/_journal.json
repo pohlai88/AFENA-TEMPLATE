@@ -1,0 +1,27 @@
+{
+  "version": "7",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1770804478942,
+      "tag": "0000_first_stranger",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1770805106163,
+      "tag": "0001_true_night_nurse",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1770807801732,
+      "tag": "0002_mature_carmella_unuscione",
+      "breakpoints": true
+    }
+  ]
+}

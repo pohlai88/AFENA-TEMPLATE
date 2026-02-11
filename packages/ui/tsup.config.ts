@@ -10,5 +10,5 @@ export default defineConfig({
   sourcemap: true,
   clean: true,
   external: ['react', 'react-dom'],
-  tsconfig: './tsconfig.json',
+  tsconfig: './tsconfig.build.json',
 });

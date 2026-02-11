@@ -7,7 +7,7 @@ export const CommandEntryObjectSchema = z
     cmd: z.string().min(1),
     args: z.array(z.string()).default([]),
     cwd: z.string().default('.'),
-    env: z.record(z.string()).optional(),
+    env: z.record(z.string(), z.string()).optional(),
     allowFail: z.boolean().default(false),
 
     // Resolve output -> { stdio, parseJson }
@@ -55,7 +55,7 @@ export type Registry = z.infer<typeof RegistrySchema>;
 
 export const AfenaConfigSchema = z
   .object({
-    watchPatterns: z.record(z.array(z.string())).default({}),
+    watchPatterns: z.record(z.string(), z.array(z.string())).default({}),
     guardrails: z
       .object({
         enabled: z.array(GuardName).default([]),
@@ -191,10 +191,10 @@ export const ReadmeCanonModelSchema = z
       .strict(),
     exports: z.array(ReadmeCanonExportSchema).default([]),
     sourceFiles: z.array(z.string()).default([]),
-    scripts: z.record(z.string()).default({}),
-    dependencies: z.record(z.string()).default({}),
-    devDependencies: z.record(z.string()).default({}),
-    peerDependencies: z.record(z.string()).default({}),
+    scripts: z.record(z.string(), z.string()).default({}),
+    dependencies: z.record(z.string(), z.string()).default({}),
+    devDependencies: z.record(z.string(), z.string()).default({}),
+    peerDependencies: z.record(z.string(), z.string()).default({}),
     relatedPackages: z.array(z.string()).default([]),
   })
   .strict();

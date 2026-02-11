@@ -7,9 +7,10 @@
  * Usage: npx tsx packages/ui/engine/generate.ts
  */
 
-import { z } from 'zod';
 import * as fs from 'fs';
 import * as path from 'path';
+
+import { z } from 'zod';
 
 // ─── Zod Schema ──────────────────────────────────────────────
 
@@ -42,18 +43,18 @@ const EngineSchema = z.object({
   typeScaleRatio: z.number().optional(),
   spacingSteps: z.array(z.number()).nullable().optional(),
   motion: z.object({
-    fast: z.string(),
-    normal: z.string(),
-    slow: z.string(),
-    reduced: z.string(),
+    fast: z.string().optional(),
+    normal: z.string().optional(),
+    slow: z.string().optional(),
+    reduced: z.string().optional(),
   }).optional(),
-  easings: z.record(z.string()).optional(),
-  zIndex: z.record(z.number()).optional(),
-  breakpoints: z.record(z.string()).nullable().optional(),
-  containers: z.record(z.string()).nullable().optional(),
+  easings: z.record(z.string(), z.string()).optional(),
+  zIndex: z.record(z.string(), z.number()).optional(),
+  breakpoints: z.record(z.string(), z.string()).nullable().optional(),
+  containers: z.record(z.string(), z.string()).nullable().optional(),
   opacitySteps: z.array(z.number()).optional(),
-  borderWidths: z.record(z.string()).optional(),
-  customVariants: z.record(z.string()).optional(),
+  borderWidths: z.record(z.string(), z.string()).optional(),
+  customVariants: z.record(z.string(), z.string()).optional(),
 });
 
 type EngineConfig = z.infer<typeof EngineSchema>;
@@ -233,7 +234,7 @@ function generateColorsCSS(config: EngineConfig): string {
       out += `  --color-${name}-${s.step}: ${formatOklch(s.l, s.c, s.h)};\n`;
     }
     // Foreground for the 500 shade
-    const base500 = shades.find(s => s.step === 500)!;
+    const base500 = shades.find(s => s.step === 500) ?? shades[5];
     out += `  --color-${name}-foreground: ${contrastForeground(base500.l)};\n\n`;
   }
 
@@ -261,7 +262,7 @@ function generateColorsCSS(config: EngineConfig): string {
     };
     for (const s of shades) {
       const darkStep = swapMap[s.step] ?? s.step;
-      const darkShade = shades.find(x => x.step === darkStep)!;
+      const darkShade = shades.find(x => x.step === darkStep) ?? shades[0];
       out += `  --color-${name}-${s.step}: ${formatOklch(darkShade.l, darkShade.c, darkShade.h)};\n`;
     }
   }
@@ -379,8 +380,8 @@ function generateSpacingCSS(config: EngineConfig): string {
 function generateEffectsCSS(config: EngineConfig): string {
   const { shadowColor, projectName } = config;
   const opacitySteps = config.opacitySteps ?? DEFAULT_OPACITY_STEPS;
-  const easings = config.easings ?? DEFAULT_EASINGS;
-  const motion = config.motion ?? DEFAULT_MOTION;
+  const easings = { ...DEFAULT_EASINGS, ...config.easings };
+  const motion = { ...DEFAULT_MOTION, ...config.motion };
   let out = header(projectName, 'Effects');
 
   out += '@theme {\n';
@@ -424,7 +425,7 @@ function generateEffectsCSS(config: EngineConfig): string {
 
 function generateMotionCSS(config: EngineConfig): string {
   const { projectName } = config;
-  const motion = config.motion ?? DEFAULT_MOTION;
+  const motion = { ...DEFAULT_MOTION, ...config.motion };
   let out = header(projectName, 'Motion & Animation');
 
   out += '@theme {\n';
@@ -747,7 +748,7 @@ function btnBase(): string {
     'transition-property: color, background-color, border-color, box-shadow;',
     'transition-duration: var(--duration-fast, 150ms);',
     'transition-timing-function: var(--ease-default, cubic-bezier(0.4, 0, 0.2, 1));',
-  ].map(l => '  ' + l).join('\n');
+  ].map(l => `  ${l}`).join('\n');
 }
 
 function btnFocus(): string {
@@ -756,7 +757,7 @@ function btnFocus(): string {
     '  outline: none;',
     '  box-shadow: 0 0 0 2px var(--color-background), 0 0 0 4px var(--color-ring);',
     '}',
-  ].map(l => '  ' + l).join('\n');
+  ].map(l => `  ${l}`).join('\n');
 }
 
 function btnDisabled(): string {
@@ -765,7 +766,7 @@ function btnDisabled(): string {
     '  opacity: 0.5;',
     '  pointer-events: none;',
     '}',
-  ].map(l => '  ' + l).join('\n');
+  ].map(l => `  ${l}`).join('\n');
 }
 
 function generateButtonComponentCSS(config: EngineConfig): string {
@@ -882,7 +883,7 @@ function inputBase(): string {
     '  cursor: not-allowed;',
     '  opacity: 0.5;',
     '}',
-  ].map(l => '  ' + l).join('\n');
+  ].map(l => `  ${l}`).join('\n');
 }
 
 function generateInputComponentCSS(config: EngineConfig): string {
@@ -915,7 +916,7 @@ function badgeBase(): string {
     'font-weight: 600;',
     'transition-property: color, background-color, border-color;',
     'transition-duration: var(--duration-fast, 150ms);',
-  ].map(l => '  ' + l).join('\n');
+  ].map(l => `  ${l}`).join('\n');
 }
 
 function generateBadgeComponentCSS(config: EngineConfig): string {
@@ -1052,7 +1053,8 @@ function generateBreakpointsCSS(config: EngineConfig): string {
 
 // ─── Main: Read, Validate, Generate, Write ───────────────────
 
-async function main() {
+/* eslint-disable no-console, security/detect-non-literal-fs-filename */
+function main() {
   const engineDir = path.dirname(new URL(import.meta.url).pathname);
   // On Windows, strip leading slash from /C:/...
   const resolvedDir = engineDir.replace(/^\/([A-Za-z]:)/, '$1');
@@ -1060,7 +1062,7 @@ async function main() {
   const generatedDir = path.join(resolvedDir, 'generated');
 
   console.log(`Reading ${jsonPath}...`);
-  const raw = JSON.parse(fs.readFileSync(jsonPath, 'utf-8'));
+  const raw: unknown = JSON.parse(fs.readFileSync(jsonPath, 'utf-8'));
   const config = EngineSchema.parse(raw);
   console.log(`✓ Validated: ${config.projectName} engine config (${Object.keys(config.colors).length} colors)`);
 
@@ -1114,9 +1116,9 @@ async function main() {
   }
 
   // Write barrel index.css
-  const indexContent = files
+  const indexContent = `${files
     .map(f => `@import './generated/${f.rel}';`)
-    .join('\n') + '\n';
+    .join('\n')}\n`;
   const indexPath = path.join(resolvedDir, 'index.css');
   fs.writeFileSync(indexPath, indexContent, 'utf-8');
   console.log(`  ✓ index.css (barrel)`);
@@ -1124,7 +1126,11 @@ async function main() {
   console.log(`\n✅ Generated ${files.length} CSS files for ${config.projectName} design system.`);
 }
 
-main().catch((err) => {
-  console.error('❌ Engine generation failed:', err.message ?? err);
+try {
+  main();
+} catch (err: unknown) {
+  const message = err instanceof Error ? err.message : String(err);
+  console.error('❌ Engine generation failed:', message);
   process.exit(1);
-});
+}
+/* eslint-enable no-console, security/detect-non-literal-fs-filename */

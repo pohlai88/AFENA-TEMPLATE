@@ -12,8 +12,7 @@
     "noEmit": false,
     "declaration": true,
     "declarationMap": true,
-    "composite": false,
-    "incremental": false,
+    "composite": true,
     "jsx": "react-jsx",
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
@@ -25,13 +24,6 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["src/**/*", "utils/**/*"],
-  "exclude": [
-    "node_modules",
-    "dist",
-    "build",
-    "**/*.test.*",
-    "**/*.spec.*",
-    "**/*.stories.*"
-  ]
+  "include": ["src/**/*", "utils/**/*", "engine/**/*"],
+  "exclude": ["node_modules", "dist", "build", "**/*.test.*", "**/*.spec.*", "**/*.stories.*"]
 }

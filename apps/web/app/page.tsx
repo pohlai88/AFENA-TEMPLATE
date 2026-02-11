@@ -8,6 +8,7 @@ export default function Home() {
 
   useEffect(() => {
     // Client-side logging example
+    // eslint-disable-next-line no-console
     console.log('Page loaded at:', new Date().toISOString());
   }, []);
 
@@ -18,7 +19,7 @@ export default function Home() {
     try {
       // Test GET request
       const getResponse = await fetch('/api/example');
-      const getData = await getResponse.json();
+      const getData: unknown = await getResponse.json();
       setLogs(prev => [...prev, `GET: ${JSON.stringify(getData)}`]);
 
       // Test POST request
@@ -27,7 +28,7 @@ export default function Home() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name: 'Afena User' }),
       });
-      const postData = await postResponse.json();
+      const postData: unknown = await postResponse.json();
       setLogs(prev => [...prev, `POST: ${JSON.stringify(postData)}`]);
 
       // Test error case
@@ -36,10 +37,11 @@ export default function Home() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({}),
       });
-      const errorData = await errorResponse.json();
+      const errorData: unknown = await errorResponse.json();
       setLogs(prev => [...prev, `Error: ${JSON.stringify(errorData)}`]);
-    } catch (error) {
-      setLogs(prev => [...prev, `Client Error: ${error}`]);
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : String(error);
+      setLogs(prev => [...prev, `Client Error: ${message}`]);
     } finally {
       setIsLoading(false);
     }
@@ -63,7 +65,7 @@ export default function Home() {
             Click the button below to test API endpoints with structured logging.
           </p>
           <button
-            onClick={testApiLogging}
+            onClick={() => void testApiLogging()}
             disabled={isLoading}
             className="w-full inline-flex items-center justify-center rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
           >

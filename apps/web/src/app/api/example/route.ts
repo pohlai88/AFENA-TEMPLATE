@@ -1,9 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
+
 import { createRequestLogger, logError, logPerformance } from 'afena-logger';
+
 import logger from '@/lib/logger';
 
 export async function GET(request: NextRequest) {
-  const requestId = request.headers.get('x-request-id') || 'unknown';
+  const requestId = request.headers.get('x-request-id') ?? 'unknown';
   const requestLogger = createRequestLogger(logger, {
     requestId,
     method: 'GET',
@@ -41,7 +43,7 @@ export async function GET(request: NextRequest) {
 }
 
 export async function POST(request: NextRequest) {
-  const requestId = request.headers.get('x-request-id') || 'unknown';
+  const requestId = request.headers.get('x-request-id') ?? 'unknown';
   const requestLogger = createRequestLogger(logger, {
     requestId,
     method: 'POST',
@@ -49,12 +51,14 @@ export async function POST(request: NextRequest) {
   });
 
   try {
-    const body = await request.json();
-    
+    const raw: unknown = await request.json();
+    const body = raw as Record<string, unknown>;
+    const name = typeof body.name === 'string' ? body.name : '';
+
     requestLogger.debug({ body }, 'Received POST request body');
 
     // Validate input
-    if (!body.name) {
+    if (!name) {
       requestLogger.warn({ body }, 'Missing required field: name');
       return NextResponse.json(
         { error: 'Name is required' },
@@ -69,11 +73,11 @@ export async function POST(request: NextRequest) {
 
     logPerformance(requestLogger, 'api-example-post', duration, {
       requestId,
-      inputName: body.name,
+      inputName: name,
     });
 
     const response = {
-      message: `Hello, ${body.name}!`,
+      message: `Hello, ${name}!`,
       timestamp: new Date().toISOString(),
       requestId,
     };

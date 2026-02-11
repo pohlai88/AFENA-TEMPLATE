@@ -40,7 +40,7 @@ module.exports = [
     },
   },
   {
-    files: ['middleware.ts', 'src/middleware/**/*'],
+    files: ['proxy.ts', 'src/proxy/**/*'],
     rules: {
       'import/no-unresolved': 'off',
       '@typescript-eslint/no-explicit-any': 'warn',

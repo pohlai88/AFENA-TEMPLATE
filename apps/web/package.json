@@ -8,25 +8,32 @@
     "start": "next start",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx --fix",
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc --noEmit",
+    "db:gen-types": "npx @neondatabase/neon-js gen-types --db-url \"$DATABASE_URL\" --output src/types/database.ts"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.987.0",
+    "@aws-sdk/s3-request-presigner": "^3.987.0",
+    "@neondatabase/api-client": "^2.6.0",
+    "@neondatabase/auth": "0.2.0-beta.1",
+    "@neondatabase/neon-js": "0.2.0-beta.1",
+    "afena-database": "workspace:^",
+    "afena-logger": "workspace:*",
+    "afena-ui": "workspace:*",
     "next": "catalog:",
     "react": "catalog:",
-    "react-dom": "catalog:",
-    "afena-ui": "workspace:*",
-    "afena-logger": "workspace:*"
+    "react-dom": "catalog:"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "catalog:",
     "@types/node": "catalog:",
-    "postcss": "catalog:",
     "@types/react": "catalog:",
     "@types/react-dom": "catalog:",
     "afena-eslint-config": "workspace:*",
     "afena-typescript-config": "workspace:*",
     "eslint": "catalog:",
     "eslint-config-next": "catalog:",
+    "postcss": "catalog:",
     "tailwindcss": "catalog:",
     "typescript": "catalog:"
   }

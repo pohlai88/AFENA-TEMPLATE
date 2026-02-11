@@ -25,6 +25,7 @@
     "afena-eslint-config": "workspace:^",
     "afena-typescript-config": "workspace:*",
     "tailwindcss": "catalog:",
+    "zod": "catalog:",
     "tsup": "catalog:",
     "typescript": "catalog:"
   },

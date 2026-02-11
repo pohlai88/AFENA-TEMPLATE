@@ -49,7 +49,7 @@ export const testConfig: LoggerConfig = {
 };
 
 export function getConfig(): LoggerConfig {
-  const env = process.env.NODE_ENV || 'development';
+  const env = process.env.NODE_ENV ?? 'development';
 
   switch (env) {
     case 'production':
