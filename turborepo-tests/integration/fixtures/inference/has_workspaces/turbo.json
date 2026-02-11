@@ -1,7 +1,0 @@
-// Has a comment!
-{
-  "$schema": "https://turborepo.dev/schema.json",
-  "tasks": {
-    "build": {}
-  }
-}

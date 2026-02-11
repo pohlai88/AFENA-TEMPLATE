@@ -1,0 +1,35 @@
+{
+  "name": "@afena/cli",
+  "version": "0.1.0",
+  "private": true,
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "bin": {
+    "afena": "bin/afena"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch"
+  },
+  "dependencies": {
+    "commander": "catalog:",
+    "cosmiconfig": "catalog:",
+    "execa": "catalog:",
+    "fast-glob": "catalog:",
+    "listr2": "catalog:",
+    "picocolors": "catalog:",
+    "semver": "catalog:",
+    "strip-ansi": "catalog:",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@types/node": "catalog:",
+    "@types/semver": "catalog:",
+    "afena-typescript-config": "workspace:*",
+    "tsup": "catalog:",
+    "typescript": "catalog:"
+  }
+}

@@ -1,9 +1,0 @@
-{
-  "$schema": "https://turborepo.dev/schema.json",
-  "// NOTE": "Schema docs at https://turborepo.dev/schema.json for reference",
-  "tasks": {
-    "build": {
-      "outputs": ["dist/**"]
-    }
-  }
-}

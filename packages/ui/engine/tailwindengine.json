@@ -1,0 +1,17 @@
+{
+  "colors": {
+    "primary": "#10b981",
+    "secondary": "#6366f1",
+    "accent": "#f59e0b"
+  },
+  "fonts": {
+    "sans": "'Geist', sans-serif",
+    "mono": "'Geist Mono', monospace"
+  },
+  "spacingUnit": "4px",
+  "radiusBase": "0.375rem",
+  "fontSizeBase": "1rem",
+  "darkMode": "class",
+  "projectName": "Afena",
+  "shadowColor": "oklch(0 0 0 / 0.08)"
+}

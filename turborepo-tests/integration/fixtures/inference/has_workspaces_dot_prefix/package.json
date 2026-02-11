@@ -1,8 +1,0 @@
-{
-  "name": "inference-dot-prefix",
-  "workspaces": [
-    "./apps/*",
-    "./packages/*"
-  ],
-  "packageManager": "npm@8.0.0"
-}

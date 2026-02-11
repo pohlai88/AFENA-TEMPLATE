@@ -1,28 +1,57 @@
 {
-  "eslint.validate": [
-    "javascript",
-    "javascriptreact",
-    "typescript",
-    "typescriptreact"
+  // ── Tailwind CSS v4 IntelliSense ─────────────────────────
+  // v4 auto-detects config from CSS files (@import "tailwindcss")
+  // No tailwind.config.js needed — config lives in globals.css via @theme
+  "tailwindCSS.experimental.configFile": {
+    "apps/web/app/globals.css": ["apps/web/**", "packages/ui/**"]
+  },
+  "tailwindCSS.includeLanguages": {
+    "typescript": "javascript",
+    "typescriptreact": "javascript"
+  },
+  "tailwindCSS.classAttributes": ["class", "className", "tw"],
+  "tailwindCSS.experimental.classRegex": [
+    ["cn\\(([^)]*)\\)", "'([^']*)'"],
+    ["cn\\(([^)]*)\\)", "\"([^\"]*)\""],
+    ["cn\\(([^)]*)\\)", "`([^`]*)`"],
+    ["clsx\\(([^)]*)\\)", "'([^']*)'"],
+    ["clsx\\(([^)]*)\\)", "\"([^\"]*)\""],
+    ["clsx\\(([^)]*)\\)", "`([^`]*)`"],
+    ["twMerge\\(([^)]*)\\)", "'([^']*)'"],
+    ["twMerge\\(([^)]*)\\)", "\"([^\"]*)\""]
   ],
-  "eslint.workingDirectories": [{ "mode": "auto" }],
-  "debug.javascript.unmapMissingSources": true,
+  "tailwindCSS.emmetCompletions": true,
+  "tailwindCSS.files.exclude": ["**/node_modules/**", "**/.git/**"],
+
+  // v4 lint — only cssConflict and invalidTailwindDirective are relevant
+  // invalidApply, invalidScreen, invalidConfigPath are v3-only concepts
+  "tailwindCSS.lint.cssConflict": "warning",
+  "tailwindCSS.lint.invalidTailwindDirective": "error",
+
+  // ── Editor ───────────────────────────────────────────────
+  "editor.quickSuggestions": {
+    "strings": "on"
+  },
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnSave": true,
+
+  // ── CSS ──────────────────────────────────────────────────
+  // Prevent native VS Code CSS validation from flagging @theme, @source, etc.
+  "css.validate": false,
+  "less.validate": false,
+  "scss.validate": false,
   "files.associations": {
-    "libturbo.h": "c",
-    "turbo.json": "jsonc",
-    "*.t.err": "cram"
+    "*.css": "tailwindcss"
   },
-  "[cram]": {
-    "editor.trimAutoWhitespace": false,
-    "files.trimFinalNewlines": false,
-    "files.insertFinalNewline": false,
-    "files.trimTrailingWhitespace": false
-  },
+
+  // ── ESLint ───────────────────────────────────────────────
+  "eslint.workingDirectories": [
+    { "pattern": "apps/*" },
+    { "pattern": "packages/*" },
+    { "pattern": "tools/*" }
+  ],
+
+  // ── TypeScript ───────────────────────────────────────────
   "typescript.tsdk": "node_modules/typescript/lib",
-  "json.schemas": [
-    {
-      "fileMatch": ["turbo.json"],
-      "url": "./packages/turbo-types/schemas/schema.json"
-    }
-  ]
+  "typescript.enablePromptUseWorkspaceTsdk": true
 }

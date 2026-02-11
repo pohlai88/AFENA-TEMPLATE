@@ -1,48 +1,94 @@
-<p align="center">
-  <a href="https://turborepo.dev">
-    <picture>
-      <source media="(prefers-color-scheme: dark)" srcset="https://user-images.githubusercontent.com/4060187/196936123-f6e1db90-784d-4174-b774-92502b718836.png">
-      <img src="https://user-images.githubusercontent.com/4060187/196936104-5797972c-ab10-4834-bd61-0d1e5f442c9c.png" height="128">
-    </picture>
-    <h1 align="center">Turborepo</h1>
-  </a>
-</p>
+# Afena Monorepo
 
-<p align="center">
-  <a aria-label="Vercel logo" href="https://vercel.com/"><img src="https://img.shields.io/badge/MADE%20BY%20Vercel-000000.svg?style=for-the-badge&logo=Vercel&labelColor=000"></a>
-  <a aria-label="NPM version" href="https://www.npmjs.com/package/turbo"><img alt="" src="https://img.shields.io/npm/v/turbo.svg?style=for-the-badge&labelColor=000000"></a>
-  <a aria-label="License" href="https://github.com/vercel/turborepo/blob/main/LICENSE"><img alt="" src="https://img.shields.io/npm/l/turbo.svg?style=for-the-badge&labelColor=000000&color="></a>
-  <a aria-label="Join the community on GitHub" href="https://github.com/vercel/turborepo/discussions"><img alt="" src="https://img.shields.io/badge/Join%20the%20community-blueviolet.svg?style=for-the-badge&logo=turborepo&labelColor=000000&logoWidth=20&logoColor=white"></a>
-</p>
+A modern monorepo powered by Turborepo, Next.js 16 with Turbopack, and TypeScript.
 
-Turborepo is a high-performance build system for JavaScript and TypeScript codebases, written in Rust.
+## 🚀 Features
 
-## Getting Started
+- **Monorepo Architecture**: Using Turborepo for efficient builds and caching
+- **Next.js 16**: With Turbopack for lightning-fast development
+- **TypeScript**: Full type safety across the monorepo
+- **Shared Packages**: Reusable UI components and configurations
+- **Tailwind CSS**: For styling
+- **PNPM**: Fast, disk space efficient package manager
 
-Visit https://turborepo.dev to get started with Turborepo.
+## 📁 Structure
 
-## Contributing
+```
+afena-monorepo/
+├── apps/
+│   └── web/                 # Next.js 16 application
+├── packages/
+│   ├── ui/                  # Shared UI components
+│   ├── eslint-config/       # Shared ESLint configuration
+│   └── typescript-config/   # Shared TypeScript configurations
+├── turbo.json              # Turborepo configuration
+├── pnpm-workspace.yaml     # PNPM workspace configuration
+└── package.json            # Root package.json
+```
 
-See [CONTRIBUTING.md](https://github.com/vercel/turborepo/blob/main/CONTRIBUTING.md) for more information.
+## 🛠️ Available Scripts
 
-## Community
+- `pnpm dev` - Start development servers for all apps
+- `pnpm build` - Build all apps and packages
+- `pnpm lint` - Lint all packages
+- `pnpm type-check` - Type check all packages
+- `pnpm clean` - Clean all build outputs
 
-The Turborepo community can be found on [GitHub Discussions](https://github.com/vercel/turborepo/discussions), where you can ask questions, voice ideas, and share your projects.
+## 🏃‍♂️ Getting Started
 
-To chat with other community members, you can join [Vercel Community's `#turborepo` tag](https://vercel.community/tag/turborepo).
+1. Install dependencies:
+   ```bash
+   pnpm install
+   ```
 
-Our [Code of Conduct](https://github.com/vercel/turborepo/blob/main/CODE_OF_CONDUCT.md) applies to all Turborepo community channels.
+2. Start the development server:
+   ```bash
+   pnpm dev
+   ```
 
-## Who is using Turborepo?
+3. Open [http://localhost:3000](http://localhost:3000) to view the application.
 
-Turborepo is used by the world's leading companies. Check out the [Turborepo Showcase](https://turborepo.dev/showcase) to learn more.
+## 📦 Packages
 
-## Updates
+### afena-ui
+Shared UI components built with React and Tailwind CSS.
 
-Follow [@turborepo](https://x.com/turborepo) on X for project updates.
+### afena-eslint-config
+Shared ESLint configuration for all packages.
 
-## Security
+### afena-typescript-config
+Shared TypeScript configurations:
+- `base.json` - Base TypeScript configuration
+- `nextjs.json` - Next.js specific configuration
+- `react-library.json` - React library configuration
 
-If you believe you have found a security vulnerability in Turborepo, we encourage you to responsibly disclose this and not open a public issue. We will investigate all legitimate reports. Email `security@vercel.com` to disclose any security vulnerabilities.
+## 🎯 Development Workflow
 
-https://vercel.com/security
+1. Make changes to packages or apps
+2. Turborepo automatically handles dependencies and caching
+3. Use `pnpm build` to verify changes
+4. Use `pnpm lint` and `pnpm type-check` to ensure code quality
+
+## 🔧 Turbopack
+
+Next.js 16 includes Turbopack for faster development. The dev script in `apps/web` uses:
+```bash
+next dev --turbopack
+```
+
+## 📝 Adding New Packages
+
+1. Create a new directory in `packages/`
+2. Add a `package.json` with the package name prefixed with `afena-`
+3. Add to `pnpm-workspace.yaml` if needed
+4. Configure TypeScript to extend from `afena-typescript-config`
+
+## 🚀 Deployment
+
+The monorepo is configured for optimal deployment with Vercel. Each app can be deployed independently.
+
+## 📚 Learn More
+
+- [Turborepo Documentation](https://turbo.build/repo/docs)
+- [Next.js Documentation](https://nextjs.org/docs)
+- [PNPM Workspace Documentation](https://pnpm.io/workspaces)

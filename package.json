@@ -1,48 +1,55 @@
 {
-  "name": "turbo-monorepo",
-  "version": "0.0.0",
+  "name": "afena-monorepo",
+  "version": "0.1.0",
   "private": true,
-  "pnpm": {
-    "overrides": {
-      "fast-xml-parser": ">=5.3.4"
-    }
-  },
+  "workspaces": [
+    "apps/*",
+    "packages/*",
+    "tools/*"
+  ],
   "scripts": {
+    "afena": "node tools/afena-cli/dist/index.js",
+    "afena:dev": "tsx tools/afena-cli/src/index.ts",
+    "afena:discover": "node tools/afena-cli/dist/discover.js",
+    "postinstall": "node -e \"try{require('./tools/afena-cli/dist/discover.js')}catch(e){process.exit(0)}\"",
     "build": "turbo run build",
-    "build:turbo": "pnpm run --filter=cli build",
-    "build:ts": "tsc -b tsconfig.project.json",
-    "lint": "pnpm exec oxlint --deny-warnings .",
-    "lint:fix": "pnpm exec oxlint --fix .",
-    "format": "oxfmt --check",
-    "format:fix": "oxfmt .",
-    "check:toml": "taplo format --check",
-    "fix:toml": "taplo format",
-    "docs:dev": "turbo run dev --filter=./apps/docs",
-    "turbo": "pnpm run build:turbo && ./target/debug/turbo",
-    "turbo-prebuilt": "pnpm -- turbo",
-    "prepare": "husky install",
-    "test": "turbo run test",
-    "test:integration": "pnpm --filter turborepo-tests-integration exec prysk",
-    "rustdoc": "RUSTDOCFLAGS=\"-Z unstable-options --enable-index-page\" cargo doc --workspace --no-deps --keep-going || true",
-    "rustdoc:open": "RUSTDOCFLAGS=\"-Z unstable-options --enable-index-page\" cargo doc --workspace --no-deps --keep-going --open"
+    "dev": "turbo run dev",
+    "lint": "turbo run lint",
+    "lint:fix": "turbo run lint:fix",
+    "type-check": "turbo run type-check",
+    "type-check:strict": "turbo run type-check -- --strict",
+    "type-gen": "tsx scripts/generate-types.ts",
+    "type-gen:watch": "tsx scripts/generate-types.ts --watch",
+    "clean": "turbo run clean",
+    "clean:types": "rimraf types && rimraf apps/web/.next/types",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "format:check": "prettier --check \"**/*.{ts,tsx,md}\""
   },
   "devDependencies": {
-    "@taplo/cli": "0.5.2",
-    "@types/node": "22.15.3",
-    "husky": "8.0.3",
-    "lint-staged": "13.1.0",
-    "oxfmt": "^0.23.0",
-    "oxlint": "^1.35.0",
-    "semver": "7.5.2",
-    "typescript": "5.5.4"
+    "@types/node": "catalog:",
+    "@typescript-eslint/eslint-plugin": "catalog:",
+    "@typescript-eslint/parser": "catalog:",
+    "eslint": "catalog:",
+    "eslint-config-prettier": "catalog:",
+    "eslint-plugin-import": "catalog:",
+    "eslint-plugin-jsx-a11y": "catalog:",
+    "eslint-plugin-react": "catalog:",
+    "eslint-plugin-react-hooks": "catalog:",
+    "eslint-plugin-security": "catalog:",
+    "openapi-typescript": "catalog:",
+    "pino": "catalog:",
+    "pino-abstract-transport": "catalog:",
+    "pino-pretty": "catalog:",
+    "prettier": "catalog:",
+    "prettier-plugin-tailwindcss": "catalog:",
+    "rimraf": "catalog:",
+    "tsx": "catalog:",
+    "turbo": "catalog:",
+    "typescript": "catalog:"
   },
-  "lint-staged": {
-    "*.{js,jsx,ts,tsx,md,mdx,mjs,yml,yaml,css,json,jsonc}": "oxfmt --no-error-on-unmatched-pattern",
-    "*.toml": "taplo format",
-    "*.rs": "bash -c 'cargo fmt'"
-  },
-  "packageManager": "pnpm@10.28.0",
   "engines": {
-    "node": "22.x"
-  }
+    "node": ">=18.0.0",
+    "pnpm": ">=9.5.0"
+  },
+  "packageManager": "pnpm@9.15.9"
 }

@@ -1,0 +1,192 @@
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'fs';
+import { join } from 'path';
+import { cosmiconfig } from 'cosmiconfig';
+import { log, isVerbose } from './utils/logger';
+import { findRepoRoot } from './utils/paths';
+import { computeSignature } from './scanner/signature';
+import { canonicalize } from './scanner/canonicalize';
+import { loadPreviousDiscovery, loadPreviousSignature, hasContentChanged, hasNewWarnings } from './scanner/diff';
+import { scanScripts } from './scanner/script-scanner';
+import { scanTools, scanStandaloneScripts } from './scanner/tool-scanner';
+import { scanReadmes } from './scanner/readme-scanner';
+import { AfenaConfigSchema, RegistrySchema } from './types';
+import type { AfenaConfig, Registry, DiscoveryOutput } from './types';
+
+/**
+ * Discovery scanner entry point.
+ * Runs on postinstall. Always exits 0. Never breaks installs.
+ */
+async function main(): Promise<void> {
+  try {
+    const repoRoot = findRepoRoot();
+    const afenaDir = join(repoRoot, '.afena');
+
+    // Ensure .afena directory exists
+    if (!existsSync(afenaDir)) {
+      mkdirSync(afenaDir, { recursive: true });
+    }
+
+    // Load config
+    const config = await loadConfig(repoRoot);
+
+    // Load registry
+    const registry = loadRegistry(repoRoot);
+
+    // Compute signature and check cache
+    const currentSignature = computeSignature(repoRoot);
+    const previousSignature = loadPreviousSignature(repoRoot);
+
+    if (currentSignature === previousSignature && !isVerbose) {
+      log.debug('Signature unchanged, skipping discovery.');
+      return;
+    }
+
+    // Run scanners
+    const { ungrouped: scriptUngrouped } = scanScripts(repoRoot, registry, config);
+    const toolUngrouped = scanTools(repoRoot, registry);
+    const standaloneUngrouped = scanStandaloneScripts(repoRoot, registry);
+    const { missing: missingReadmes, stale: staleReadmes } = scanReadmes(repoRoot, config);
+
+    // Merge + deterministic sort
+    const ungrouped = [...scriptUngrouped, ...toolUngrouped, ...standaloneUngrouped].sort(
+      (a, b) => a.source.localeCompare(b.source)
+    );
+    const missingSorted = [...missingReadmes].sort((a, b) => a.localeCompare(b));
+    const staleSorted = [...staleReadmes].sort((a, b) => a.localeCompare(b));
+
+    const output: DiscoveryOutput = {
+      generatedAt: new Date().toISOString(),
+      signature: currentSignature,
+      contentHash: '',
+      ungrouped,
+      missingReadmes: missingSorted,
+      staleReadmes: staleSorted,
+    };
+
+    // Canonicalize (deterministic sort + compute contentHash)
+    const canonical = canonicalize(output);
+
+    // Check if content actually changed
+    const previous = loadPreviousDiscovery(repoRoot);
+    const contentChanged = hasContentChanged(canonical, previous);
+    const newWarnings = hasNewWarnings(canonical, previous);
+
+    // Write discovery.json only if content changed
+    if (contentChanged) {
+      writeFileSync(
+        join(afenaDir, 'discovery.json'),
+        JSON.stringify(canonical, null, 2) + '\n'
+      );
+    }
+
+    // Always update signature
+    writeFileSync(join(afenaDir, 'last-signature'), currentSignature);
+
+    // Print report only if new warnings or verbose
+    if (newWarnings || isVerbose) {
+      printReport(canonical, registry);
+    }
+  } catch (err: any) {
+    // Never break installs — write error and exit 0
+    try {
+      const repoRoot = findRepoRoot();
+      const afenaDir = join(repoRoot, '.afena');
+      if (!existsSync(afenaDir)) {
+        mkdirSync(afenaDir, { recursive: true });
+      }
+      writeFileSync(
+        join(afenaDir, 'discovery.error.json'),
+        JSON.stringify({ error: err?.message ?? String(err), stack: err?.stack, timestamp: new Date().toISOString() }, null, 2) + '\n'
+      );
+    } catch {
+      // If we can't even write the error, just silently exit
+    }
+    log.debug(`Discovery failed: ${err?.message ?? String(err)}`);
+  }
+}
+
+async function loadConfig(repoRoot: string): Promise<AfenaConfig> {
+  try {
+    const explorer = cosmiconfig('afena');
+    const result = await explorer.search(repoRoot);
+    if (result && result.config) {
+      return AfenaConfigSchema.parse(result.config);
+    }
+  } catch (err: any) {
+    log.debug(`Config load error: ${err.message}`);
+  }
+  return AfenaConfigSchema.parse({});
+}
+
+function loadRegistry(repoRoot: string): Registry {
+  const registryPath = join(repoRoot, 'afena.registry.json');
+  if (!existsSync(registryPath)) {
+    return RegistrySchema.parse({ commands: {} });
+  }
+  try {
+    const raw = readFileSync(registryPath, 'utf-8');
+    return RegistrySchema.parse(JSON.parse(raw));
+  } catch (err: any) {
+    log.debug(`Registry load error: ${err.message}`);
+    return RegistrySchema.parse({ commands: {} });
+  }
+}
+
+function printReport(discovery: DiscoveryOutput, registry: Registry): void {
+  const registeredCount = countRegistered(registry);
+  const ungroupedCount = discovery.ungrouped.length;
+  const missingCount = discovery.missingReadmes.length;
+
+  const lines: string[] = [
+    `🔍 Afena CLI Discovery Report`,
+    ``,
+    `✅ Registered: ${registeredCount}    ⚠️  Ungrouped: ${ungroupedCount}   📄 No README: ${missingCount}`,
+  ];
+
+  if (ungroupedCount > 0) {
+    lines.push(``);
+    lines.push(`Ungrouped:`);
+    for (const u of discovery.ungrouped) {
+      const scriptInfo = u.currentScript ? ` (${u.currentScript})` : '';
+      lines.push(` • ${u.source}${scriptInfo} → ${u.suggestedCommand}`);
+    }
+  }
+
+  if (missingCount > 0) {
+    lines.push(``);
+    lines.push(`Missing READMEs:`);
+    for (const m of discovery.missingReadmes) {
+      lines.push(` • ${m}`);
+    }
+  }
+
+  if (discovery.staleReadmes.length > 0) {
+    lines.push(``);
+    lines.push(`Stale READMEs:`);
+    for (const s of discovery.staleReadmes) {
+      lines.push(` • ${s}`);
+    }
+  }
+
+  if (ungroupedCount > 0 || missingCount > 0) {
+    lines.push(``);
+    if (missingCount > 0) lines.push(`pnpm afena discover --fix-readmes`);
+    if (ungroupedCount > 0) lines.push(`pnpm afena --register --dry-run`);
+  }
+
+  log.box(lines);
+}
+
+function countRegistered(registry: Registry): number {
+  let count = 0;
+  const commands = registry.commands;
+  for (const key of Object.keys(commands).sort()) {
+    const cmd = commands[key];
+    if (cmd.default) count++;
+    const subs = cmd.subcommands ?? {};
+    count += Object.keys(subs).length;
+  }
+  return count;
+}
+
+main();
