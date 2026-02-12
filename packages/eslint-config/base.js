@@ -100,6 +100,18 @@ module.exports = [
           selector: "CallExpression[callee.object.name='db'][callee.property.name='delete']",
           message: 'Direct db.delete() is forbidden — use mutate() from afena-crud (INVARIANT-01/K-01)',
         },
+        {
+          selector: "CallExpression[callee.object.name='dbRo'][callee.property.name='insert']",
+          message: 'dbRo.insert() is forbidden — read replica is read-only (INVARIANT-RO)',
+        },
+        {
+          selector: "CallExpression[callee.object.name='dbRo'][callee.property.name='update']",
+          message: 'dbRo.update() is forbidden — read replica is read-only (INVARIANT-RO)',
+        },
+        {
+          selector: "CallExpression[callee.object.name='dbRo'][callee.property.name='delete']",
+          message: 'dbRo.delete() is forbidden — read replica is read-only (INVARIANT-RO)',
+        },
       ],
       'no-debugger': 'error',
       'prefer-const': 'error',

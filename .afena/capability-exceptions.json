@@ -1,0 +1,28 @@
+{
+  "exceptions": [
+    {
+      "id": "EXC-0001",
+      "key": "storage.files.upload",
+      "rule": "VIS-00",
+      "scope": { "kind": "file", "file": "apps/web/app/api/storage/presign/route.ts" },
+      "reason": "Presign route generates a signed URL but does not call mutate() — the actual upload goes directly to R2. No kernel write boundary to tag.",
+      "owner": "jackwee",
+      "createdAt": "2026-02-13",
+      "lastReviewedOn": "2026-02-13",
+      "reviewEveryDays": 30,
+      "expiresOn": "2026-04-15"
+    },
+    {
+      "id": "EXC-0002",
+      "key": "storage.files.save",
+      "rule": "VIS-00",
+      "scope": { "kind": "file", "file": "apps/web/app/api/storage/metadata/route.ts" },
+      "reason": "Metadata POST uses raw db.insert (not kernel mutate) for r2_files table which is not a domain entity. Will migrate to kernel in Phase 2.",
+      "owner": "jackwee",
+      "createdAt": "2026-02-13",
+      "lastReviewedOn": "2026-02-13",
+      "reviewEveryDays": 30,
+      "expiresOn": "2026-04-15"
+    }
+  ]
+}

@@ -2,15 +2,19 @@ import {
   extractEntityNamespace,
   extractVerb,
   getActionFamily,
+  LifecycleError,
   mutationSpecSchema,
 } from 'afena-canon';
-import { and, auditLogs, db, entityVersions, eq } from 'afena-database';
+import { and, auditLogs, contacts, db, entityVersions, eq } from 'afena-database';
 import { evaluateRules, loadAndRegisterOrgRules } from 'afena-workflow';
 
 import { generateDiff } from './diff';
 import { err, ok } from './envelope';
+import { applyGovernor, buildGovernorConfig } from './governor';
 import { contactsHandler } from './handlers/contacts';
-import { enforcePolicy } from './policy';
+import { enforceLifecycle } from './lifecycle';
+import { meterApiRequest, meterDbTimeout } from './metering';
+import { enforcePolicyV2 } from './policy-engine';
 import { stripSystemColumns } from './sanitize';
 
 import type { MutationContext } from './context';
@@ -20,6 +24,14 @@ import type { ApiResponse, ErrorCode, MutationSpec, Receipt } from 'afena-canon'
 /** Entity handler registry — maps entity type to handler. */
 const HANDLER_REGISTRY: Record<string, EntityHandler> = {
   contacts: contactsHandler,
+};
+
+/**
+ * Table registry for pre-transaction reads (resolve target).
+ * Used to fetch existing row for lifecycle + policy checks.
+ */
+const TABLE_REGISTRY: Record<string, any> = {
+  contacts,
 };
 
 /**
@@ -136,13 +148,46 @@ export async function mutate(
     }
   }
 
-  // 5. Evaluate policy (RBAC hard gate — INVARIANT-07)
-  const { authoritySnapshot } = enforcePolicy(validSpec as MutationSpec, ctx);
+  // 5. Resolve handler (early — fail fast if entity type unknown)
+  const handler = HANDLER_REGISTRY[validSpec.entityRef.type];
+  if (!handler) {
+    return err(
+      'VALIDATION_FAILED',
+      `No handler registered for entity type '${validSpec.entityRef.type}'`,
+      ctx.requestId,
+      buildRejectedReceipt(ctx.requestId, mutationId, spec),
+    );
+  }
 
-  // 5b. Load DB-driven workflow rules for this org (TTL-cached)
+  // 6. Resolve target — fetch existing row for lifecycle + policy checks
+  let targetRow: Record<string, unknown> | null = null;
+  if (verb !== 'create' && entityId) {
+    const table = TABLE_REGISTRY[validSpec.entityRef.type];
+    if (table) {
+      const [row] = await db
+        .select()
+        .from(table)
+        .where(eq(table.id, entityId))
+        .limit(1);
+      targetRow = row ? (row as Record<string, unknown>) : null;
+    }
+  }
+
+  // 7. enforceLifecycle() — BEFORE policy, absolute (INVARIANT-LIFECYCLE-01)
+  enforceLifecycle(validSpec as MutationSpec, verb, targetRow);
+
+  // 8. enforcePolicyV2() — DB-backed RBAC (INVARIANT-POLICY-01)
+  const { authoritySnapshot } = await enforcePolicyV2(
+    validSpec as MutationSpec,
+    ctx,
+    verb,
+    targetRow,
+  );
+
+  // 9. Load DB-driven workflow rules for this org (TTL-cached)
   await loadAndRegisterOrgRules(ctx.actor.orgId);
 
-  // 6. Evaluate before-rules (can block or enrich input)
+  // 10. Evaluate before-rules (can block or enrich input)
   const beforeResult = await evaluateRules('before', validSpec as MutationSpec, null, {
     requestId: ctx.requestId,
     actor: ctx.actor,
@@ -163,20 +208,17 @@ export async function mutate(
     Object.assign(sanitizedInput, beforeResult.enrichedInput);
   }
 
-  // 7. Resolve handler
-  const handler = HANDLER_REGISTRY[validSpec.entityRef.type];
-  if (!handler) {
-    return err(
-      'VALIDATION_FAILED',
-      `No handler registered for entity type '${validSpec.entityRef.type}'`,
-      ctx.requestId,
-      buildRejectedReceipt(ctx.requestId, mutationId, spec),
-    );
-  }
-
-  // 7-16. Transaction: mutation + audit + version
+  // 11-16. Transaction: governor → mutation → audit → version
   try {
+    const governorConfig = buildGovernorConfig(
+      ctx.channel === 'background_job' ? 'background' : 'interactive',
+      ctx.actor.orgId,
+      ctx.channel,
+    );
+
     const result = await db.transaction(async (tx) => {
+      // INVARIANT-GOVERNORS-01: SET LOCAL timeouts + application_name
+      await applyGovernor(tx as any, governorConfig);
       let handlerResult;
 
       switch (verb) {
@@ -206,6 +248,33 @@ export async function mutate(
           break;
         case 'restore':
           handlerResult = await handler.restore(
+            tx as any,
+            entityId as string,
+            expectedVer as number,
+            ctx,
+          );
+          break;
+        case 'submit':
+          if (!handler.submit) throw new Error(`Entity type '${validSpec.entityRef.type}' does not support submit`);
+          handlerResult = await handler.submit(
+            tx as any,
+            entityId as string,
+            expectedVer as number,
+            ctx,
+          );
+          break;
+        case 'cancel':
+          if (!handler.cancel) throw new Error(`Entity type '${validSpec.entityRef.type}' does not support cancel`);
+          handlerResult = await handler.cancel(
+            tx as any,
+            entityId as string,
+            expectedVer as number,
+            ctx,
+          );
+          break;
+        case 'amend':
+          if (!handler.amend) throw new Error(`Entity type '${validSpec.entityRef.type}' does not support amend`);
+          handlerResult = await handler.amend(
             tx as any,
             entityId as string,
             expectedVer as number,
@@ -287,6 +356,9 @@ export async function mutate(
       // After-rule errors are swallowed — they must not affect the mutation response
     });
 
+    // Meter successful mutation (fire-and-forget)
+    meterApiRequest(ctx.actor.orgId);
+
     return ok(result.handlerResult.after, ctx.requestId, receipt);
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Unknown error';
@@ -294,8 +366,14 @@ export async function mutate(
     // Map handler errors to deterministic error codes
     let errorCode: ErrorCode = 'INTERNAL_ERROR';
     if ((error as any)?.code === 'POLICY_DENIED') errorCode = 'POLICY_DENIED';
+    if (error instanceof LifecycleError) errorCode = 'LIFECYCLE_DENIED';
     if (message === 'NOT_FOUND') errorCode = 'NOT_FOUND';
     if (message === 'CONFLICT_VERSION') errorCode = 'CONFLICT_VERSION';
+
+    // Meter DB timeouts (fire-and-forget)
+    if (message.includes('statement timeout') || message.includes('idle-in-transaction timeout')) {
+      meterDbTimeout(ctx.actor.orgId);
+    }
 
     const status = errorCode === 'INTERNAL_ERROR' ? 'error' : 'rejected';
 

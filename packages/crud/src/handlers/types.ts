@@ -47,4 +47,28 @@ export interface EntityHandler {
     expectedVersion: number,
     ctx: MutationContext,
   ): Promise<HandlerResult>;
+
+  /** Submit a draft doc → submitted. Only for doc entities with docEntityColumns. */
+  submit?(
+    tx: NeonHttpDatabase,
+    entityId: string,
+    expectedVersion: number,
+    ctx: MutationContext,
+  ): Promise<HandlerResult>;
+
+  /** Cancel a submitted doc → cancelled. Only for doc entities. */
+  cancel?(
+    tx: NeonHttpDatabase,
+    entityId: string,
+    expectedVersion: number,
+    ctx: MutationContext,
+  ): Promise<HandlerResult>;
+
+  /** Amend a submitted doc — creates a new draft linked via amended_from_id. */
+  amend?(
+    tx: NeonHttpDatabase,
+    entityId: string,
+    expectedVersion: number,
+    ctx: MutationContext,
+  ): Promise<HandlerResult>;
 }

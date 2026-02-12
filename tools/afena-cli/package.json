@@ -23,12 +23,14 @@
     "picocolors": "catalog:",
     "semver": "catalog:",
     "strip-ansi": "catalog:",
-    "zod": "catalog:"
+    "zod": "catalog:",
+    "afena-canon": "workspace:*"
   },
   "devDependencies": {
     "@types/node": "catalog:",
     "@types/semver": "catalog:",
     "afena-typescript-config": "workspace:*",
+    "ts-morph": "catalog:",
     "tsup": "catalog:",
     "typescript": "catalog:"
   }

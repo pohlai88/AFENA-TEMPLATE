@@ -4,6 +4,19 @@ export { ENTITY_TYPES } from './types/entity';
 
 export type { ActorRef } from './types/actor';
 
+export type {
+  PolicyDecision,
+  PolicyDenyReason,
+  FieldRules,
+  ResolvedPermission,
+  UserScopeAssignment,
+  ResolvedActor,
+  AuthoritySnapshotV2,
+} from './types/policy';
+
+export { LifecycleError } from './types/lifecycle';
+export type { LifecycleDenyReason } from './types/lifecycle';
+
 export type { ActionVerb, ActionType, ActionFamily } from './types/action';
 export {
   ACTION_VERBS,
@@ -25,6 +38,41 @@ export { ERROR_CODES } from './types/errors';
 
 export type { AuditLogEntry } from './types/audit';
 
+export type {
+  CapabilityKind,
+  CapabilityDomain,
+  CapabilityNamespace,
+  RbacTier,
+  RbacScope,
+  ParsedCapabilityKey,
+  CapabilityDescriptor,
+  CapabilityStatus,
+  CapabilityScope,
+  CapabilityRisk,
+  VisPolicy,
+} from './types/capability';
+export {
+  CAPABILITY_KINDS,
+  CAPABILITY_DOMAINS,
+  CAPABILITY_NAMESPACES,
+  CAPABILITY_VERBS,
+  CAPABILITY_CATALOG,
+  CAPABILITY_KEYS,
+  RBAC_TIERS,
+  RBAC_SCOPES,
+  VERB_TO_KIND,
+  VIS_POLICY,
+  ACTION_FAMILY_TO_TIER,
+  KIND_TO_TIER,
+  KIND_TO_SCOPE,
+  parseCapabilityKey,
+  validateCapabilityKey,
+  inferKindFromVerb,
+} from './types/capability';
+
+// ── ERP Enums ────────────────────────────────────────────
+export * from './enums/index';
+
 // ── Zod Schemas ──────────────────────────────────────────
 export { entityTypeSchema, entityRefSchema } from './schemas/entity';
 export { actionTypeSchema, actionFamilySchema } from './schemas/action';
@@ -33,3 +81,36 @@ export { mutationSpecSchema } from './schemas/mutation';
 export { receiptStatusSchema, receiptSchema } from './schemas/receipt';
 export { apiResponseSchema } from './schemas/envelope';
 export { auditLogEntrySchema } from './schemas/audit';
+export {
+  capabilityKindSchema,
+  capabilityStatusSchema,
+  capabilityScopeSchema,
+  capabilityRiskSchema,
+  rbacTierSchema,
+  rbacScopeSchema,
+  capabilityDescriptorSchema,
+  exceptionScopeSchema,
+  capabilityExceptionSchema,
+  capabilityExceptionsFileSchema,
+  capabilityDomainSchema,
+  capabilityNamespaceSchema,
+} from './schemas/capability';
+export type {
+  ExceptionScope,
+  CapabilityException,
+} from './schemas/capability';
+
+// ── Data Type Schemas ────────────────────────────────────
+export {
+  TYPE_CONFIG_SCHEMAS,
+  getTypeConfigSchema,
+  validateTypeConfig,
+} from './schemas/data-types';
+export type { TypeConfigSchemas } from './schemas/data-types';
+
+// ── Validators ───────────────────────────────────────────
+export {
+  validateFieldValue,
+  DATA_TYPE_VALUE_COLUMN_MAP,
+} from './validators/custom-field-value';
+export type { FieldValidationResult } from './validators/custom-field-value';

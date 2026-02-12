@@ -12,4 +12,5 @@ export default defineConfig({
   target: 'node18',
   splitting: false,
   shims: true,
+  external: ['afena-canon'],
 });

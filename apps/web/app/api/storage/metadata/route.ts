@@ -5,6 +5,8 @@ import { db, eq, r2Files } from 'afena-database';
 import { auth } from '@/lib/auth/server';
 import { getLogger } from '@/lib/logger';
 
+export const CAPABILITIES = ['storage.files.save', 'storage.files.metadata'] as const;
+
 export async function POST(request: Request) {
   const { data: session } = await auth.getSession();
   if (!session?.user) {

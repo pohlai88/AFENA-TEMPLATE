@@ -7,6 +7,7 @@ import { commandExists } from './utils/exec';
 import { runRegistryCommand } from './executor/runner';
 import { registerDiscovered } from './register';
 import { runReadmeCommand } from './generator/readme-engine';
+import { registerMetaCommand } from './meta';
 import { RegistrySchema, AfenaConfigSchema } from './types';
 import type { Registry, AfenaConfig } from './types';
 import semver from 'semver';
@@ -292,6 +293,9 @@ program
   });
 
 // --- Register command ---
+
+// --- Meta commands (Capability Truth Ledger) ---
+registerMetaCommand(program);
 
 program
   .option('--register', 'Register discovered scripts into registry')

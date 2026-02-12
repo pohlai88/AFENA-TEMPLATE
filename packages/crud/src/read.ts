@@ -1,4 +1,4 @@
-import { and, contacts, db, eq } from 'afena-database';
+import { and, contacts, getDb, eq } from 'afena-database';
 
 import { err, ok } from './envelope';
 
@@ -18,13 +18,15 @@ export async function readEntity(
   entityType: EntityType,
   id: string,
   requestId: string,
+  options?: { forcePrimary?: boolean },
 ): Promise<ApiResponse> {
   const table = TABLE_REGISTRY[entityType];
   if (!table) {
     return err('VALIDATION_FAILED', `Unknown entity type: ${entityType}`, requestId);
   }
 
-  const [row] = await db
+  const conn = getDb(options?.forcePrimary ? { forcePrimary: true } : undefined);
+  const [row] = await conn
     .select()
     .from(table)
     .where(and(eq(table.id, id), eq(table.isDeleted, false)))
@@ -49,6 +51,7 @@ export async function listEntities(
     includeDeleted?: boolean;
     limit?: number;
     offset?: number;
+    forcePrimary?: boolean;
   },
 ): Promise<ApiResponse> {
   const table = TABLE_REGISTRY[entityType];
@@ -58,7 +61,8 @@ export async function listEntities(
 
   const whereClause = options?.includeDeleted ? undefined : eq(table.isDeleted, false);
 
-  const rows = await db
+  const conn = getDb(options?.forcePrimary ? { forcePrimary: true } : undefined);
+  const rows = await conn
     .select()
     .from(table)
     .where(whereClause)

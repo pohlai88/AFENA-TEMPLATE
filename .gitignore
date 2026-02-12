@@ -46,8 +46,9 @@ Thumbs.db
 # Turbo
 .turbo
 
-# Afena CLI discovery output (generated)
-.afena/
+# Afena CLI generated output (ledger, matrix, discovery, manifests)
+.afena/*
+!.afena/capability-exceptions.json
 
 # Tailwind engine generated output
 packages/ui/engine/generated/

@@ -27,7 +27,7 @@ module.exports = [
     },
   },
   {
-    files: ['src/mutate.ts', 'src/handlers/**/*.ts', 'src/read.ts'],
+    files: ['src/mutate.ts', 'src/handlers/**/*.ts', 'src/read.ts', 'src/metering.ts', 'src/policy-engine.ts'],
     rules: {
       // Drizzle transaction typing: tx from db.transaction() loses schema type,
       // requiring intentional `as any` casts for insert/update/select within tx

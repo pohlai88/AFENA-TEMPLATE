@@ -7,6 +7,8 @@ import { auth } from '@/lib/auth/server';
 import { getLogger } from '@/lib/logger';
 import { getR2, R2_BUCKET, R2_PUBLIC_BASE_URL } from '@/lib/r2';
 
+export const CAPABILITIES = ['storage.files.upload'] as const;
+
 const MAX_FILE_SIZE = 50 * 1024 * 1024; // 50 MB
 
 const ALLOWED_CONTENT_TYPES = new Set([

@@ -2,6 +2,15 @@
 
 Canon architecture specification for Afena's Interaction Kernel (AIK): the deterministic mutation ledger that governs every data interaction across UI, API, CLI, Workflow, and AI — built on the CRUD-SAP pattern.
 
+> **Implementation Status (2026-02-13):** All 5 phases complete. 15 kernel smoke tests + 24 workflow interpreter tests + 25 advisory tests + 19 policy tests + 11 lifecycle tests + 21 governor tests passing. Contacts entity fully wired (create/update/delete/restore). Search FTS, workflow execution logging, advisory engine all operational.
+>
+> **Deferred by Design (not gaps — additive when needed):**
+>
+> - **Additional entity handlers** — only `contacts` registered; new entities use `entity-new.ts` scaffold + same handler pattern
+> - **REST API routes** — server actions are the primary BFF; REST routes deferred until external integration needed
+> - **AsyncLocalStorage** — context propagation for background jobs deferred
+> - **`geo_country` population** — audit_logs column exists but always null until GeoIP service wired
+
 ---
 
 ## 0. Document Identity

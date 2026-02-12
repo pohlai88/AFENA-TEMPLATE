@@ -1,16 +1,9 @@
 {
   "$schema": "./tools/afena-cli/schema/registry.schema.json",
   "commands": {
-    "types": {
-      "default": { "cmd": "tsx", "args": ["scripts/generate-types.ts"], "cwd": "." },
-      "subcommands": {
-        "watch": "tsx scripts/generate-types.ts --watch"
-      }
-    },
     "clean": {
       "default": "turbo run clean",
       "subcommands": {
-        "types": "rimraf types && rimraf apps/web/.next/types",
         "all": "rimraf node_modules && turbo run clean"
       }
     },
@@ -22,6 +15,13 @@
     }
   },
   "ignore": {
-    "scripts": ["lint", "lint:fix", "type-check", "type-check:strict", "format", "format:check"]
+    "scripts": [
+      "lint",
+      "lint:fix",
+      "type-check",
+      "type-check:strict",
+      "format",
+      "format:check"
+    ]
   }
 }

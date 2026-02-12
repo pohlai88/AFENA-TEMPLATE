@@ -71,6 +71,41 @@
       "when": 1770864669738,
       "tag": "0009_sparkling_namorita",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1770870056696,
+      "tag": "0010_unusual_korath",
+      "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "7",
+      "when": 1770870300000,
+      "tag": "0011_phase_a_postgres_best_practices",
+      "breakpoints": true
+    },
+    {
+      "idx": 12,
+      "version": "7",
+      "when": 1770870600000,
+      "tag": "0012_phase_a_seed_defaults",
+      "breakpoints": true
+    },
+    {
+      "idx": 13,
+      "version": "7",
+      "when": 1770905252441,
+      "tag": "0013_sudden_korath",
+      "breakpoints": true
+    },
+    {
+      "idx": 14,
+      "version": "7",
+      "when": 1770915869778,
+      "tag": "0014_lethal_adam_warlock",
+      "breakpoints": true
     }
   ]
 }

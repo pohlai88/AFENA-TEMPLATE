@@ -1,4 +1,4 @@
-import { db, contacts, and, sql, ilike, isNull, or, desc } from 'afena-database';
+import { dbRo, contacts, and, sql, ilike, isNull, or, desc } from 'afena-database';
 
 import { ftsRank, ftsWhere } from '../fts';
 
@@ -24,7 +24,7 @@ export async function searchContacts(
 
     const rank = ftsRank(tsvec, normalized);
 
-    const rows = await db
+    const rows = await dbRo
       .select({
         id: contacts.id,
         name: contacts.name,
@@ -49,7 +49,7 @@ export async function searchContacts(
   // ILIKE fallback for short queries or email searches
   const pattern = `%${normalized}%`;
 
-  const rows = await db
+  const rows = await dbRo
     .select({
       id: contacts.id,
       name: contacts.name,
