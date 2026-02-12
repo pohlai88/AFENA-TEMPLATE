@@ -1,7 +1,7 @@
 # How to implement authentication in Next.js
+
 @doc-version: 16.1.6
 @last-updated: 2025-11-21
-
 
 Understanding authentication is crucial for protecting your application's data. This page will guide you through what React and Next.js features to use to implement auth.
 
@@ -32,7 +32,7 @@ Here are the steps to implement signup/login functionality:
 To capture user credentials, create a form that invokes a Server Action on submission. For example, a signup form that accepts the user's name, email, and password:
 
 ```tsx filename="app/ui/signup-form.tsx" switcher
-import { signup } from '@/app/actions/auth'
+import { signup } from '@/app/actions/auth';
 
 export function SignupForm() {
   return (
@@ -51,12 +51,12 @@ export function SignupForm() {
       </div>
       <button type="submit">Sign Up</button>
     </form>
-  )
+  );
 }
 ```
 
 ```jsx filename="app/ui/signup-form.js" switcher
-import { signup } from '@/app/actions/auth'
+import { signup } from '@/app/actions/auth';
 
 export function SignupForm() {
   return (
@@ -75,7 +75,7 @@ export function SignupForm() {
       </div>
       <button type="submit">Sign Up</button>
     </form>
-  )
+  );
 }
 ```
 
@@ -94,13 +94,10 @@ Use the Server Action to validate the form fields on the server. If your authent
 Using Zod as an example, you can define a form schema with appropriate error messages:
 
 ```ts filename="app/lib/definitions.ts" switcher
-import * as z from 'zod'
+import * as z from 'zod';
 
 export const SignupFormSchema = z.object({
-  name: z
-    .string()
-    .min(2, { error: 'Name must be at least 2 characters long.' })
-    .trim(),
+  name: z.string().min(2, { error: 'Name must be at least 2 characters long.' }).trim(),
   email: z.email({ error: 'Please enter a valid email.' }).trim(),
   password: z
     .string()
@@ -111,28 +108,25 @@ export const SignupFormSchema = z.object({
       error: 'Contain at least one special character.',
     })
     .trim(),
-})
+});
 
 export type FormState =
   | {
       errors?: {
-        name?: string[]
-        email?: string[]
-        password?: string[]
-      }
-      message?: string
+        name?: string[];
+        email?: string[];
+        password?: string[];
+      };
+      message?: string;
     }
-  | undefined
+  | undefined;
 ```
 
 ```js filename="app/lib/definitions.js" switcher
-import * as z from 'zod'
+import * as z from 'zod';
 
 export const SignupFormSchema = z.object({
-  name: z
-    .string()
-    .min(2, { error: 'Name must be at least 2 characters long.' })
-    .trim(),
+  name: z.string().min(2, { error: 'Name must be at least 2 characters long.' }).trim(),
   email: z.email({ error: 'Please enter a valid email.' }).trim(),
   password: z
     .string()
@@ -143,13 +137,13 @@ export const SignupFormSchema = z.object({
       error: 'Contain at least one special character.',
     })
     .trim(),
-})
+});
 ```
 
 To prevent unnecessary calls to your authentication provider's API or database, you can `return` early in the Server Action if any form fields do not match the defined schema.
 
 ```ts filename="app/actions/auth.ts" switcher
-import { SignupFormSchema, FormState } from '@/app/lib/definitions'
+import { SignupFormSchema, FormState } from '@/app/lib/definitions';
 
 export async function signup(state: FormState, formData: FormData) {
   // Validate form fields
@@ -157,13 +151,13 @@ export async function signup(state: FormState, formData: FormData) {
     name: formData.get('name'),
     email: formData.get('email'),
     password: formData.get('password'),
-  })
+  });
 
   // If any form fields are invalid, return early
   if (!validatedFields.success) {
     return {
       errors: validatedFields.error.flatten().fieldErrors,
-    }
+    };
   }
 
   // Call the provider or db to create a user...
@@ -171,7 +165,7 @@ export async function signup(state: FormState, formData: FormData) {
 ```
 
 ```js filename="app/actions/auth.js" switcher
-import { SignupFormSchema } from '@/app/lib/definitions'
+import { SignupFormSchema } from '@/app/lib/definitions';
 
 export async function signup(state, formData) {
   // Validate form fields
@@ -179,13 +173,13 @@ export async function signup(state, formData) {
     name: formData.get('name'),
     email: formData.get('email'),
     password: formData.get('password'),
-  })
+  });
 
   // If any form fields are invalid, return early
   if (!validatedFields.success) {
     return {
       errors: validatedFields.error.flatten().fieldErrors,
-    }
+    };
   }
 
   // Call the provider or db to create a user...
@@ -195,13 +189,13 @@ export async function signup(state, formData) {
 Back in your `<SignupForm />`, you can use React's `useActionState` hook to display validation errors while the form is submitting:
 
 ```tsx filename="app/ui/signup-form.tsx" switcher highlight={7,15,21,27-36}
-'use client'
+'use client';
 
-import { signup } from '@/app/actions/auth'
-import { useActionState } from 'react'
+import { signup } from '@/app/actions/auth';
+import { useActionState } from 'react';
 
 export default function SignupForm() {
-  const [state, action, pending] = useActionState(signup, undefined)
+  const [state, action, pending] = useActionState(signup, undefined);
 
   return (
     <form action={action}>
@@ -235,18 +229,18 @@ export default function SignupForm() {
         Sign Up
       </button>
     </form>
-  )
+  );
 }
 ```
 
 ```jsx filename="app/ui/signup-form.js" switcher highlight={7,15,21,27-36}
-'use client'
+'use client';
 
-import { signup } from '@/app/actions/auth'
-import { useActionState } from 'react'
+import { signup } from '@/app/actions/auth';
+import { useActionState } from 'react';
 
 export default function SignupForm() {
-  const [state, action, pending] = useActionState(signup, undefined)
+  const [state, action, pending] = useActionState(signup, undefined);
 
   return (
     <form action={action}>
@@ -280,14 +274,14 @@ export default function SignupForm() {
         Sign Up
       </button>
     </form>
-  )
+  );
 }
 ```
 
 > **Good to know:**
 >
-> * In React 19, `useFormStatus` includes additional keys on the returned object, like data, method, and action. If you are not using React 19, only the `pending` key is available.
-> * Before mutating data, you should always ensure a user is also authorized to perform the action. See [Authentication and Authorization](#authorization).
+> - In React 19, `useFormStatus` includes additional keys on the returned object, like data, method, and action. If you are not using React 19, only the `pending` key is available.
+> - Before mutating data, you should always ensure a user is also authorized to perform the action. See [Authentication and Authorization](#authorization).
 
 #### 3. Create a user or check user credentials
 
@@ -301,9 +295,9 @@ export async function signup(state: FormState, formData: FormData) {
   // ...
 
   // 2. Prepare data for insertion into database
-  const { name, email, password } = validatedFields.data
+  const { name, email, password } = validatedFields.data;
   // e.g. Hash the user's password before storing it
-  const hashedPassword = await bcrypt.hash(password, 10)
+  const hashedPassword = await bcrypt.hash(password, 10);
 
   // 3. Insert the user into the database or call an Auth Library's API
   const data = await db
@@ -313,19 +307,17 @@ export async function signup(state: FormState, formData: FormData) {
       email,
       password: hashedPassword,
     })
-    .returning({ id: users.id })
+    .returning({ id: users.id });
 
-  const user = data[0]
+  const user = data[0];
 
   if (!user) {
     return {
       message: 'An error occurred while creating your account.',
-    }
+    };
   }
 
-  // TODO:
-  // 4. Create user session
-  // 5. Redirect user
+  // Note: Session creation and redirect handled by your auth framework
 }
 ```
 
@@ -335,9 +327,9 @@ export async function signup(state, formData) {
   // ...
 
   // 2. Prepare data for insertion into database
-  const { name, email, password } = validatedFields.data
+  const { name, email, password } = validatedFields.data;
   // e.g. Hash the user's password before storing it
-  const hashedPassword = await bcrypt.hash(password, 10)
+  const hashedPassword = await bcrypt.hash(password, 10);
 
   // 3. Insert the user into the database or call an Library API
   const data = await db
@@ -347,19 +339,17 @@ export async function signup(state, formData) {
       email,
       password: hashedPassword,
     })
-    .returning({ id: users.id })
+    .returning({ id: users.id });
 
-  const user = data[0]
+  const user = data[0];
 
   if (!user) {
     return {
       message: 'An error occurred while creating your account.',
-    }
+    };
   }
 
-  // TODO:
-  // 4. Create user session
-  // 5. Redirect user
+  // Note: Session creation and redirect handled by your auth framework
 }
 ```
 
@@ -367,8 +357,8 @@ After successfully creating the user account or verifying the user credentials, 
 
 > **Tips:**
 >
-> * The example above is verbose since it breaks down the authentication steps for the purpose of education. This highlights that implementing your own secure solution can quickly become complex. Consider using an [Auth Library](#auth-libraries) to simplify the process.
-> * To improve the user experience, you may want to check for duplicate emails or usernames earlier in the registration flow. For example, as the user types in a username or the input field loses focus. This can help prevent unnecessary form submissions and provide immediate feedback to the user. You can debounce requests with libraries such as [use-debounce](https://www.npmjs.com/package/use-debounce) to manage the frequency of these checks.
+> - The example above is verbose since it breaks down the authentication steps for the purpose of education. This highlights that implementing your own secure solution can quickly become complex. Consider using an [Auth Library](#auth-libraries) to simplify the process.
+> - To improve the user experience, you may want to check for duplicate emails or usernames earlier in the registration flow. For example, as the user types in a username or the input field loses focus. This can help prevent unnecessary form submissions and provide immediate feedback to the user. You can debounce requests with libraries such as [use-debounce](https://www.npmjs.com/package/use-debounce) to manage the frequency of these checks.
 
 ## Session Management
 
@@ -410,7 +400,7 @@ SESSION_SECRET=your_secret_key
 You can then reference this key in your session management logic:
 
 ```js filename="app/lib/session.js"
-const secretKey = process.env.SESSION_SECRET
+const secretKey = process.env.SESSION_SECRET;
 ```
 
 #### 2. Encrypting and decrypting sessions
@@ -418,84 +408,84 @@ const secretKey = process.env.SESSION_SECRET
 Next, you can use your preferred [session management library](#session-management-libraries) to encrypt and decrypt sessions. Continuing from the previous example, we'll use [Jose](https://www.npmjs.com/package/jose) (compatible with the [Edge Runtime](/docs/app/api-reference/edge)) and React's [`server-only`](https://www.npmjs.com/package/server-only) package to ensure that your session management logic is only executed on the server.
 
 ```tsx filename="app/lib/session.ts" switcher
-import 'server-only'
-import { SignJWT, jwtVerify } from 'jose'
-import { SessionPayload } from '@/app/lib/definitions'
+import 'server-only';
+import { SignJWT, jwtVerify } from 'jose';
+import { SessionPayload } from '@/app/lib/definitions';
 
-const secretKey = process.env.SESSION_SECRET
-const encodedKey = new TextEncoder().encode(secretKey)
+const secretKey = process.env.SESSION_SECRET;
+const encodedKey = new TextEncoder().encode(secretKey);
 
 export async function encrypt(payload: SessionPayload) {
   return new SignJWT(payload)
     .setProtectedHeader({ alg: 'HS256' })
     .setIssuedAt()
     .setExpirationTime('7d')
-    .sign(encodedKey)
+    .sign(encodedKey);
 }
 
 export async function decrypt(session: string | undefined = '') {
   try {
     const { payload } = await jwtVerify(session, encodedKey, {
       algorithms: ['HS256'],
-    })
-    return payload
+    });
+    return payload;
   } catch (error) {
-    console.log('Failed to verify session')
+    console.log('Failed to verify session');
   }
 }
 ```
 
 ```jsx filename="app/lib/session.js" switcher
-import 'server-only'
-import { SignJWT, jwtVerify } from 'jose'
+import 'server-only';
+import { SignJWT, jwtVerify } from 'jose';
 
-const secretKey = process.env.SESSION_SECRET
-const encodedKey = new TextEncoder().encode(secretKey)
+const secretKey = process.env.SESSION_SECRET;
+const encodedKey = new TextEncoder().encode(secretKey);
 
 export async function encrypt(payload) {
   return new SignJWT(payload)
     .setProtectedHeader({ alg: 'HS256' })
     .setIssuedAt()
     .setExpirationTime('7d')
-    .sign(encodedKey)
+    .sign(encodedKey);
 }
 
 export async function decrypt(session) {
   try {
     const { payload } = await jwtVerify(session, encodedKey, {
       algorithms: ['HS256'],
-    })
-    return payload
+    });
+    return payload;
   } catch (error) {
-    console.log('Failed to verify session')
+    console.log('Failed to verify session');
   }
 }
 ```
 
 > **Tips**:
 >
-> * The payload should contain the **minimum**, unique user data that'll be used in subsequent requests, such as the user's ID, role, etc. It should not contain personally identifiable information like phone number, email address, credit card information, etc, or sensitive data like passwords.
+> - The payload should contain the **minimum**, unique user data that'll be used in subsequent requests, such as the user's ID, role, etc. It should not contain personally identifiable information like phone number, email address, credit card information, etc, or sensitive data like passwords.
 
 #### 3. Setting cookies (recommended options)
 
 To store the session in a cookie, use the Next.js [`cookies`](/docs/app/api-reference/functions/cookies) API. The cookie should be set on the server, and include the recommended options:
 
-* **HttpOnly**: Prevents client-side JavaScript from accessing the cookie.
-* **Secure**: Use https to send the cookie.
-* **SameSite**: Specify whether the cookie can be sent with cross-site requests.
-* **Max-Age or Expires**: Delete the cookie after a certain period.
-* **Path**: Define the URL path for the cookie.
+- **HttpOnly**: Prevents client-side JavaScript from accessing the cookie.
+- **Secure**: Use https to send the cookie.
+- **SameSite**: Specify whether the cookie can be sent with cross-site requests.
+- **Max-Age or Expires**: Delete the cookie after a certain period.
+- **Path**: Define the URL path for the cookie.
 
 Please refer to [MDN](https://developer.mozilla.org/en-US/docs/Web/HTTP/Cookies) for more information on each of these options.
 
 ```ts filename="app/lib/session.ts" switcher
-import 'server-only'
-import { cookies } from 'next/headers'
+import 'server-only';
+import { cookies } from 'next/headers';
 
 export async function createSession(userId: string) {
-  const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
-  const session = await encrypt({ userId, expiresAt })
-  const cookieStore = await cookies()
+  const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
+  const session = await encrypt({ userId, expiresAt });
+  const cookieStore = await cookies();
 
   cookieStore.set('session', session, {
     httpOnly: true,
@@ -503,18 +493,18 @@ export async function createSession(userId: string) {
     expires: expiresAt,
     sameSite: 'lax',
     path: '/',
-  })
+  });
 }
 ```
 
 ```js filename="app/lib/session.js" switcher
-import 'server-only'
-import { cookies } from 'next/headers'
+import 'server-only';
+import { cookies } from 'next/headers';
 
 export async function createSession(userId) {
-  const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
-  const session = await encrypt({ userId, expiresAt })
-  const cookieStore = await cookies()
+  const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
+  const session = await encrypt({ userId, expiresAt });
+  const cookieStore = await cookies();
 
   cookieStore.set('session', session, {
     httpOnly: true,
@@ -522,14 +512,14 @@ export async function createSession(userId) {
     expires: expiresAt,
     sameSite: 'lax',
     path: '/',
-  })
+  });
 }
 ```
 
 Back in your Server Action, you can invoke the `createSession()` function, and use the [`redirect()`](/docs/app/guides/redirecting) API to redirect the user to the appropriate page:
 
 ```ts filename="app/actions/auth.ts" switcher
-import { createSession } from '@/app/lib/session'
+import { createSession } from '@/app/lib/session';
 
 export async function signup(state: FormState, formData: FormData) {
   // Previous steps:
@@ -539,14 +529,14 @@ export async function signup(state: FormState, formData: FormData) {
 
   // Current steps:
   // 4. Create user session
-  await createSession(user.id)
+  await createSession(user.id);
   // 5. Redirect user
-  redirect('/profile')
+  redirect('/profile');
 }
 ```
 
 ```js filename="app/actions/auth.js" switcher
-import { createSession } from '@/app/lib/session'
+import { createSession } from '@/app/lib/session';
 
 export async function signup(state, formData) {
   // Previous steps:
@@ -556,69 +546,71 @@ export async function signup(state, formData) {
 
   // Current steps:
   // 4. Create user session
-  await createSession(user.id)
+  await createSession(user.id);
   // 5. Redirect user
-  redirect('/profile')
+  redirect('/profile');
 }
 ```
 
 > **Tips**:
 >
-> * **Cookies should be set on the server** to prevent client-side tampering.
-> * 🎥 Watch: Learn more about stateless sessions and authentication with Next.js → [YouTube (11 minutes)](https://www.youtube.com/watch?v=DJvM2lSPn6w).
+> - **Cookies should be set on the server** to prevent client-side tampering.
+> - 🎥 Watch: Learn more about stateless sessions and authentication with Next.js → [YouTube (11 minutes)](https://www.youtube.com/watch?v=DJvM2lSPn6w).
 
 #### Updating (or refreshing) sessions
 
 You can also extend the session's expiration time. This is useful for keeping the user logged in after they access the application again. For example:
 
 ```ts filename="app/lib/session.ts" switcher
-import 'server-only'
-import { cookies } from 'next/headers'
-import { decrypt } from '@/app/lib/session'
+import 'server-only';
+import { cookies } from 'next/headers';
+import { decrypt } from '@/app/lib/session';
 
 export async function updateSession() {
-  const session = (await cookies()).get('session')?.value
-  const payload = await decrypt(session)
+  const session = (await cookies()).get('session')?.value;
+  const payload = await decrypt(session);
 
   if (!session || !payload) {
-    return null
+    return null;
   }
 
-  const expires = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
+  const expires = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
 
-  const cookieStore = await cookies()
+  const cookieStore = await cookies();
   cookieStore.set('session', session, {
     httpOnly: true,
     secure: true,
     expires: expires,
     sameSite: 'lax',
     path: '/',
-  })
+  });
 }
 ```
 
 ```js filename="app/lib/session.js" switcher
-import 'server-only'
-import { cookies } from 'next/headers'
-import { decrypt } from '@/app/lib/session'
+import 'server-only';
+import { cookies } from 'next/headers';
+import { decrypt } from '@/app/lib/session';
 
 export async function updateSession() {
-  const session = (await cookies()).get('session')?.value
-  const payload = await decrypt(session)
+  const session = (await cookies()).get('session')?.value;
+  const payload = await decrypt(session);
 
   if (!session || !payload) {
-    return null
+    return null;
   }
 
-  const expires = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)(
-    await cookies()
-  ).set('session', session, {
-    httpOnly: true,
-    secure: true,
-    expires: expires,
-    sameSite: 'lax',
-    path: '/',
-  })
+  const expires = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)(await cookies()).set(
+    'session',
+    session,
+    {
+      httpOnly: true,
+      secure: true,
+      expires: expires,
+      sameSite: 'lax',
+      path: '/',
+    },
+  );
 }
 ```
 
@@ -629,44 +621,44 @@ export async function updateSession() {
 To delete the session, you can delete the cookie:
 
 ```ts filename="app/lib/session.ts" switcher
-import 'server-only'
-import { cookies } from 'next/headers'
+import 'server-only';
+import { cookies } from 'next/headers';
 
 export async function deleteSession() {
-  const cookieStore = await cookies()
-  cookieStore.delete('session')
+  const cookieStore = await cookies();
+  cookieStore.delete('session');
 }
 ```
 
 ```js filename="app/lib/session.js" switcher
-import 'server-only'
-import { cookies } from 'next/headers'
+import 'server-only';
+import { cookies } from 'next/headers';
 
 export async function deleteSession() {
-  const cookieStore = await cookies()
-  cookieStore.delete('session')
+  const cookieStore = await cookies();
+  cookieStore.delete('session');
 }
 ```
 
 Then you can reuse the `deleteSession()` function in your application, for example, on logout:
 
 ```ts filename="app/actions/auth.ts" switcher
-import { cookies } from 'next/headers'
-import { deleteSession } from '@/app/lib/session'
+import { cookies } from 'next/headers';
+import { deleteSession } from '@/app/lib/session';
 
 export async function logout() {
-  await deleteSession()
-  redirect('/login')
+  await deleteSession();
+  redirect('/login');
 }
 ```
 
 ```js filename="app/actions/auth.js" switcher
-import { cookies } from 'next/headers'
-import { deleteSession } from '@/app/lib/session'
+import { cookies } from 'next/headers';
+import { deleteSession } from '@/app/lib/session';
 
 export async function logout() {
-  await deleteSession()
-  redirect('/login')
+  await deleteSession();
+  redirect('/login');
 }
 ```
 
@@ -681,12 +673,12 @@ To create and manage database sessions, you'll need to follow these steps:
 For example:
 
 ```ts filename="app/lib/session.ts" switcher
-import cookies from 'next/headers'
-import { db } from '@/app/lib/db'
-import { encrypt } from '@/app/lib/session'
+import cookies from 'next/headers';
+import { db } from '@/app/lib/db';
+import { encrypt } from '@/app/lib/session';
 
 export async function createSession(id: number) {
-  const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
+  const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
 
   // 1. Create a session in the database
   const data = await db
@@ -696,32 +688,32 @@ export async function createSession(id: number) {
       expiresAt,
     })
     // Return the session ID
-    .returning({ id: sessions.id })
+    .returning({ id: sessions.id });
 
-  const sessionId = data[0].id
+  const sessionId = data[0].id;
 
   // 2. Encrypt the session ID
-  const session = await encrypt({ sessionId, expiresAt })
+  const session = await encrypt({ sessionId, expiresAt });
 
   // 3. Store the session in cookies for optimistic auth checks
-  const cookieStore = await cookies()
+  const cookieStore = await cookies();
   cookieStore.set('session', session, {
     httpOnly: true,
     secure: true,
     expires: expiresAt,
     sameSite: 'lax',
     path: '/',
-  })
+  });
 }
 ```
 
 ```js filename="app/lib/session.js" switcher
-import cookies from 'next/headers'
-import { db } from '@/app/lib/db'
-import { encrypt } from '@/app/lib/session'
+import cookies from 'next/headers';
+import { db } from '@/app/lib/db';
+import { encrypt } from '@/app/lib/session';
 
 export async function createSession(id) {
-  const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
+  const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
 
   // 1. Create a session in the database
   const data = await db
@@ -731,29 +723,29 @@ export async function createSession(id) {
       expiresAt,
     })
     // Return the session ID
-    .returning({ id: sessions.id })
+    .returning({ id: sessions.id });
 
-  const sessionId = data[0].id
+  const sessionId = data[0].id;
 
   // 2. Encrypt the session ID
-  const session = await encrypt({ sessionId, expiresAt })
+  const session = await encrypt({ sessionId, expiresAt });
 
   // 3. Store the session in cookies for optimistic auth checks
-  const cookieStore = await cookies()
+  const cookieStore = await cookies();
   cookieStore.set('session', session, {
     httpOnly: true,
     secure: true,
     expires: expiresAt,
     sameSite: 'lax',
     path: '/',
-  })
+  });
 }
 ```
 
 > **Tips**:
 >
-> * For faster access, you may consider adding server caching for the lifetime of the session. You can also keep the session data in your primary database, and combine data requests to reduce the number of queries.
-> * You may opt to use database sessions for more advanced use cases, such as keeping track of the last time a user logged in, or number of active devices, or give users the ability to log out of all devices.
+> - For faster access, you may consider adding server caching for the lifetime of the session. You can also keep the session data in your primary database, and combine data requests to reduce the number of queries.
+> - You may opt to use database sessions for more advanced use cases, such as keeping track of the last time a user logged in, or number of active devices, or give users the ability to log out of all devices.
 
 After implementing session management, you'll need to add authorization logic to control what users can access and do within your application. Continue to the [Authorization](#authorization) section to learn more.
 
@@ -768,112 +760,104 @@ There are two main types of authorization checks:
 
 For both cases, we recommend:
 
-* Creating a [Data Access Layer](#creating-a-data-access-layer-dal) to centralize your authorization logic
-* Using [Data Transfer Objects (DTO)](#using-data-transfer-objects-dto) to only return the necessary data
-* Optionally use [Proxy](#optimistic-checks-with-proxy-optional) to perform optimistic checks.
+- Creating a [Data Access Layer](#creating-a-data-access-layer-dal) to centralize your authorization logic
+- Using [Data Transfer Objects (DTO)](#using-data-transfer-objects-dto) to only return the necessary data
+- Optionally use [Proxy](#optimistic-checks-with-proxy-optional) to perform optimistic checks.
 
 ### Optimistic checks with Proxy (Optional)
 
 There are some cases where you may want to use [Proxy](/docs/app/api-reference/file-conventions/proxy) and redirect users based on permissions:
 
-* To perform optimistic checks. Since Proxy runs on every route, it's a good way to centralize redirect logic and pre-filter unauthorized users.
-* To protect static routes that share data between users (e.g. content behind a paywall).
+- To perform optimistic checks. Since Proxy runs on every route, it's a good way to centralize redirect logic and pre-filter unauthorized users.
+- To protect static routes that share data between users (e.g. content behind a paywall).
 
 However, since Proxy runs on every route, including [prefetched](/docs/app/getting-started/linking-and-navigating#prefetching) routes, it's important to only read the session from the cookie (optimistic checks), and avoid database checks to prevent performance issues.
 
 For example:
 
 ```tsx filename="proxy.ts" switcher
-import { NextRequest, NextResponse } from 'next/server'
-import { decrypt } from '@/app/lib/session'
-import { cookies } from 'next/headers'
+import { NextRequest, NextResponse } from 'next/server';
+import { decrypt } from '@/app/lib/session';
+import { cookies } from 'next/headers';
 
 // 1. Specify protected and public routes
-const protectedRoutes = ['/dashboard']
-const publicRoutes = ['/login', '/signup', '/']
+const protectedRoutes = ['/dashboard'];
+const publicRoutes = ['/login', '/signup', '/'];
 
 export default async function proxy(req: NextRequest) {
   // 2. Check if the current route is protected or public
-  const path = req.nextUrl.pathname
-  const isProtectedRoute = protectedRoutes.includes(path)
-  const isPublicRoute = publicRoutes.includes(path)
+  const path = req.nextUrl.pathname;
+  const isProtectedRoute = protectedRoutes.includes(path);
+  const isPublicRoute = publicRoutes.includes(path);
 
   // 3. Decrypt the session from the cookie
-  const cookie = (await cookies()).get('session')?.value
-  const session = await decrypt(cookie)
+  const cookie = (await cookies()).get('session')?.value;
+  const session = await decrypt(cookie);
 
   // 4. Redirect to /login if the user is not authenticated
   if (isProtectedRoute && !session?.userId) {
-    return NextResponse.redirect(new URL('/login', req.nextUrl))
+    return NextResponse.redirect(new URL('/login', req.nextUrl));
   }
 
   // 5. Redirect to /dashboard if the user is authenticated
-  if (
-    isPublicRoute &&
-    session?.userId &&
-    !req.nextUrl.pathname.startsWith('/dashboard')
-  ) {
-    return NextResponse.redirect(new URL('/dashboard', req.nextUrl))
+  if (isPublicRoute && session?.userId && !req.nextUrl.pathname.startsWith('/dashboard')) {
+    return NextResponse.redirect(new URL('/dashboard', req.nextUrl));
   }
 
-  return NextResponse.next()
+  return NextResponse.next();
 }
 
 // Routes Proxy should not run on
 export const config = {
   matcher: ['/((?!api|_next/static|_next/image|.*\\.png$).*)'],
-}
+};
 ```
 
 ```js filename="proxy.js" switcher
-import { NextResponse } from 'next/server'
-import { decrypt } from '@/app/lib/session'
-import { cookies } from 'next/headers'
+import { NextResponse } from 'next/server';
+import { decrypt } from '@/app/lib/session';
+import { cookies } from 'next/headers';
 
 // 1. Specify protected and public routes
-const protectedRoutes = ['/dashboard']
-const publicRoutes = ['/login', '/signup', '/']
+const protectedRoutes = ['/dashboard'];
+const publicRoutes = ['/login', '/signup', '/'];
 
 export default async function proxy(req) {
   // 2. Check if the current route is protected or public
-  const path = req.nextUrl.pathname
-  const isProtectedRoute = protectedRoutes.includes(path)
-  const isPublicRoute = publicRoutes.includes(path)
+  const path = req.nextUrl.pathname;
+  const isProtectedRoute = protectedRoutes.includes(path);
+  const isPublicRoute = publicRoutes.includes(path);
 
   // 3. Decrypt the session from the cookie
-  const cookie = (await cookies()).get('session')?.value
-  const session = await decrypt(cookie)
+  const cookie = (await cookies()).get('session')?.value;
+  const session = await decrypt(cookie);
 
   // 5. Redirect to /login if the user is not authenticated
   if (isProtectedRoute && !session?.userId) {
-    return NextResponse.redirect(new URL('/login', req.nextUrl))
+    return NextResponse.redirect(new URL('/login', req.nextUrl));
   }
 
   // 6. Redirect to /dashboard if the user is authenticated
-  if (
-    isPublicRoute &&
-    session?.userId &&
-    !req.nextUrl.pathname.startsWith('/dashboard')
-  ) {
-    return NextResponse.redirect(new URL('/dashboard', req.nextUrl))
+  if (isPublicRoute && session?.userId && !req.nextUrl.pathname.startsWith('/dashboard')) {
+    return NextResponse.redirect(new URL('/dashboard', req.nextUrl));
   }
 
-  return NextResponse.next()
+  return NextResponse.next();
 }
 
 // Routes Proxy should not run on
 export const config = {
   matcher: ['/((?!api|_next/static|_next/image|.*\\.png$).*)'],
-}
+};
 ```
 
 While Proxy can be useful for initial checks, it should not be your only line of defense in protecting your data. The majority of security checks should be performed as close as possible to your data source, see [Data Access Layer](#creating-a-data-access-layer-dal) for more information.
 
 > **Tips**:
 >
-> * In Proxy, you can also read cookies using `req.cookies.get('session').value`.
-> * Proxy uses the Node.js runtime, check if your Auth library and session management library are compatible. You may need to use [Middleware](https://github.com/vercel/next.js/blob/v15.5.6/docs/01-app/03-api-reference/03-file-conventions/middleware.mdx) if your Auth library only supports [Edge Runtime](/docs/app/api-reference/edge)
-> * You can use the `matcher` property in the Proxy to specify which routes Proxy should run on. Although, for auth, it's recommended Proxy runs on all routes.
+> - In Proxy, you can also read cookies using `req.cookies.get('session').value`.
+> - Proxy uses the Node.js runtime, check if your Auth library and session management library are compatible. You may need to use [Middleware](https://github.com/vercel/next.js/blob/v15.5.6/docs/01-app/03-api-reference/03-file-conventions/middleware.mdx) if your Auth library only supports [Edge Runtime](/docs/app/api-reference/edge)
+> - You can use the `matcher` property in the Proxy to specify which routes Proxy should run on. Although, for auth, it's recommended Proxy runs on all routes.
 
 ### Creating a Data Access Layer (DAL)
 
@@ -884,47 +868,47 @@ The DAL should include a function that verifies the user's session as they inter
 For example, create a separate file for your DAL that includes a `verifySession()` function. Then use React's [cache](https://react.dev/reference/react/cache) API to memoize the return value of the function during a React render pass:
 
 ```tsx filename="app/lib/dal.ts" switcher
-import 'server-only'
+import 'server-only';
 
-import { cookies } from 'next/headers'
-import { decrypt } from '@/app/lib/session'
+import { cookies } from 'next/headers';
+import { decrypt } from '@/app/lib/session';
 
 export const verifySession = cache(async () => {
-  const cookie = (await cookies()).get('session')?.value
-  const session = await decrypt(cookie)
+  const cookie = (await cookies()).get('session')?.value;
+  const session = await decrypt(cookie);
 
   if (!session?.userId) {
-    redirect('/login')
+    redirect('/login');
   }
 
-  return { isAuth: true, userId: session.userId }
-})
+  return { isAuth: true, userId: session.userId };
+});
 ```
 
 ```js filename="app/lib/dal.js" switcher
-import 'server-only'
+import 'server-only';
 
-import { cookies } from 'next/headers'
-import { decrypt } from '@/app/lib/session'
+import { cookies } from 'next/headers';
+import { decrypt } from '@/app/lib/session';
 
 export const verifySession = cache(async () => {
-  const cookie = (await cookies()).get('session')?.value
-  const session = await decrypt(cookie)
+  const cookie = (await cookies()).get('session')?.value;
+  const session = await decrypt(cookie);
 
   if (!session.userId) {
-    redirect('/login')
+    redirect('/login');
   }
 
-  return { isAuth: true, userId: session.userId }
-})
+  return { isAuth: true, userId: session.userId };
+});
 ```
 
 You can then invoke the `verifySession()` function in your data requests, Server Actions, Route Handlers:
 
 ```tsx filename="app/lib/dal.ts" switcher
 export const getUser = cache(async () => {
-  const session = await verifySession()
-  if (!session) return null
+  const session = await verifySession();
+  if (!session) return null;
 
   try {
     const data = await db.query.users.findMany({
@@ -935,22 +919,22 @@ export const getUser = cache(async () => {
         name: true,
         email: true,
       },
-    })
+    });
 
-    const user = data[0]
+    const user = data[0];
 
-    return user
+    return user;
   } catch (error) {
-    console.log('Failed to fetch user')
-    return null
+    console.log('Failed to fetch user');
+    return null;
   }
-})
+});
 ```
 
 ```jsx filename="app/lib/dal.js" switcher
 export const getUser = cache(async () => {
-  const session = await verifySession()
-  if (!session) return null
+  const session = await verifySession();
+  if (!session) return null;
 
   try {
     const data = await db.query.users.findMany({
@@ -961,23 +945,23 @@ export const getUser = cache(async () => {
         name: true,
         email: true,
       },
-    })
+    });
 
-    const user = data[0]
+    const user = data[0];
 
-    return user
+    return user;
   } catch (error) {
-    console.log('Failed to fetch user')
-    return null
+    console.log('Failed to fetch user');
+    return null;
   }
-})
+});
 ```
 
 > **Tip**:
 >
-> * A DAL can be used to protect data fetched at request time. However, for static routes that share data between users, data will be fetched at build time and not at request time. Use [Proxy](#optimistic-checks-with-proxy-optional) to protect static routes.
-> * For secure checks, you can check if the session is valid by comparing the session ID with your database. Use React's [cache](https://react.dev/reference/react/cache) function to avoid unnecessary duplicate requests to the database during a render pass.
-> * You may wish to consolidate related data requests in a JavaScript class that runs `verifySession()` before any methods.
+> - A DAL can be used to protect data fetched at request time. However, for static routes that share data between users, data will be fetched at build time and not at request time. Use [Proxy](#optimistic-checks-with-proxy-optional) to protect static routes.
+> - For secure checks, you can check if the session is valid by comparing the session ID with your database. Use React's [cache](https://react.dev/reference/react/cache) function to avoid unnecessary duplicate requests to the database during a render pass.
+> - You may wish to consolidate related data requests in a JavaScript class that runs `verifySession()` before any methods.
 
 ### Using Data Transfer Objects (DTO)
 
@@ -986,64 +970,60 @@ When retrieving data, it's recommended you return only the necessary data that w
 However, if you have no control over the returned data structure, or are working in a team where you want to avoid whole objects being passed to the client, you can use strategies such as specifying what fields are safe to be exposed to the client.
 
 ```tsx filename="app/lib/dto.ts" switcher
-import 'server-only'
-import { getUser } from '@/app/lib/dal'
+import 'server-only';
+import { getUser } from '@/app/lib/dal';
 
 function canSeeUsername(viewer: User) {
-  return true
+  return true;
 }
 
 function canSeePhoneNumber(viewer: User, team: string) {
-  return viewer.isAdmin || team === viewer.team
+  return viewer.isAdmin || team === viewer.team;
 }
 
 export async function getProfileDTO(slug: string) {
   const data = await db.query.users.findMany({
     where: eq(users.slug, slug),
     // Return specific columns here
-  })
-  const user = data[0]
+  });
+  const user = data[0];
 
-  const currentUser = await getUser(user.id)
+  const currentUser = await getUser(user.id);
 
   // Or return only what's specific to the query here
   return {
     username: canSeeUsername(currentUser) ? user.username : null,
-    phonenumber: canSeePhoneNumber(currentUser, user.team)
-      ? user.phonenumber
-      : null,
-  }
+    phonenumber: canSeePhoneNumber(currentUser, user.team) ? user.phonenumber : null,
+  };
 }
 ```
 
 ```js filename="app/lib/dto.js" switcher
-import 'server-only'
-import { getUser } from '@/app/lib/dal'
+import 'server-only';
+import { getUser } from '@/app/lib/dal';
 
 function canSeeUsername(viewer) {
-  return true
+  return true;
 }
 
 function canSeePhoneNumber(viewer, team) {
-  return viewer.isAdmin || team === viewer.team
+  return viewer.isAdmin || team === viewer.team;
 }
 
 export async function getProfileDTO(slug) {
   const data = await db.query.users.findMany({
     where: eq(users.slug, slug),
     // Return specific columns here
-  })
-  const user = data[0]
+  });
+  const user = data[0];
 
-  const currentUser = await getUser(user.id)
+  const currentUser = await getUser(user.id);
 
   // Or return only what's specific to the query here
   return {
     username: canSeeUsername(currentUser) ? user.username : null,
-    phonenumber: canSeePhoneNumber(currentUser, user.team)
-      ? user.phonenumber
-      : null,
-  }
+    phonenumber: canSeePhoneNumber(currentUser, user.team) ? user.phonenumber : null,
+  };
 }
 ```
 
@@ -1051,43 +1031,43 @@ By centralizing your data requests and authorization logic in a DAL and using DT
 
 > **Good to know**:
 >
-> * There are a couple of different ways you can define a DTO, from using `toJSON()`, to individual functions like the example above, or JS classes. Since these are JavaScript patterns and not a React or Next.js feature, we recommend doing some research to find the best pattern for your application.
-> * Learn more about security best practices in our [Security in Next.js article](/blog/security-nextjs-server-components-actions).
+> - There are a couple of different ways you can define a DTO, from using `toJSON()`, to individual functions like the example above, or JS classes. Since these are JavaScript patterns and not a React or Next.js feature, we recommend doing some research to find the best pattern for your application.
+> - Learn more about security best practices in our [Security in Next.js article](/blog/security-nextjs-server-components-actions).
 
 ### Server Components
 
 Auth check in [Server Components](/docs/app/getting-started/server-and-client-components) are useful for role-based access. For example, to conditionally render components based on the user's role:
 
 ```tsx filename="app/dashboard/page.tsx" switcher
-import { verifySession } from '@/app/lib/dal'
+import { verifySession } from '@/app/lib/dal';
 
 export default async function Dashboard() {
-  const session = await verifySession()
-  const userRole = session?.user?.role // Assuming 'role' is part of the session object
+  const session = await verifySession();
+  const userRole = session?.user?.role; // Assuming 'role' is part of the session object
 
   if (userRole === 'admin') {
-    return <AdminDashboard />
+    return <AdminDashboard />;
   } else if (userRole === 'user') {
-    return <UserDashboard />
+    return <UserDashboard />;
   } else {
-    redirect('/login')
+    redirect('/login');
   }
 }
 ```
 
 ```jsx filename="app/dashboard/page.jsx" switcher
-import { verifySession } from '@/app/lib/dal'
+import { verifySession } from '@/app/lib/dal';
 
 export default async function Dashboard() {
-  const session = await verifySession()
-  const userRole = session?.user?.role // Assuming 'role' is part of the session object
+  const session = await verifySession();
+  const userRole = session?.user?.role; // Assuming 'role' is part of the session object
 
   if (userRole === 'admin') {
-    return <AdminDashboard />
+    return <AdminDashboard />;
   } else if (userRole === 'user') {
-    return <UserDashboard />
+    return <UserDashboard />;
   } else {
-    redirect('/login')
+    redirect('/login');
   }
 }
 ```
@@ -1109,38 +1089,38 @@ This guarantees that wherever `getUser()` is called within your application, the
 For example, in a dashboard page, you can verify the user session and fetch the user data:
 
 ```tsx filename="app/dashboard/page.tsx" switcher
-import { verifySession } from '@/app/lib/dal'
+import { verifySession } from '@/app/lib/dal';
 
 export default async function DashboardPage() {
-  const session = await verifySession()
+  const session = await verifySession();
 
   // Fetch user-specific data from your database or data source
-  const user = await getUserData(session.userId)
+  const user = await getUserData(session.userId);
 
   return (
     <div>
       <h1>Welcome, {user.name}</h1>
       {/* Dashboard content */}
     </div>
-  )
+  );
 }
 ```
 
 ```jsx filename="app/dashboard/page.jsx" switcher
-import { verifySession } from '@/app/lib/dal'
+import { verifySession } from '@/app/lib/dal';
 
 export default async function DashboardPage() {
-  const session = await verifySession()
+  const session = await verifySession();
 
   // Fetch user-specific data from your database or data source
-  const user = await getUserData(session.userId)
+  const user = await getUserData(session.userId);
 
   return (
     <div>
       <h1>Welcome, {user.name}</h1>
       {/* Dashboard content */}
     </div>
-  )
+  );
 }
 ```
 
@@ -1149,14 +1129,14 @@ export default async function DashboardPage() {
 You can also perform auth checks in leaf components that conditionally render UI elements based on user permissions. For example, a component that displays admin-only actions:
 
 ```tsx filename="app/ui/admin-actions.tsx" switcher
-import { verifySession } from '@/app/lib/dal'
+import { verifySession } from '@/app/lib/dal';
 
 export default async function AdminActions() {
-  const session = await verifySession()
-  const userRole = session?.user?.role
+  const session = await verifySession();
+  const userRole = session?.user?.role;
 
   if (userRole !== 'admin') {
-    return null
+    return null;
   }
 
   return (
@@ -1164,19 +1144,19 @@ export default async function AdminActions() {
       <button>Delete User</button>
       <button>Edit Settings</button>
     </div>
-  )
+  );
 }
 ```
 
 ```jsx filename="app/ui/admin-actions.jsx" switcher
-import { verifySession } from '@/app/lib/dal'
+import { verifySession } from '@/app/lib/dal';
 
 export default async function AdminActions() {
-  const session = await verifySession()
-  const userRole = session?.user?.role
+  const session = await verifySession();
+  const userRole = session?.user?.role;
 
   if (userRole !== 'admin') {
-    return null
+    return null;
   }
 
   return (
@@ -1184,7 +1164,7 @@ export default async function AdminActions() {
       <button>Delete User</button>
       <button>Edit Settings</button>
     </div>
-  )
+  );
 }
 ```
 
@@ -1192,8 +1172,8 @@ This pattern allows you to show or hide UI elements based on user permissions wh
 
 > **Good to know:**
 >
-> * A common pattern in SPAs is to `return null` in a layout or a top-level component if a user is not authorized. This pattern is **not recommended** since Next.js applications have multiple entry points, which will not prevent nested route segments and Server Actions from being accessed.
-> * Ensure that any Server Actions called from these components also perform their own authorization checks, as client-side UI restrictions alone are not sufficient for security.
+> - A common pattern in SPAs is to `return null` in a layout or a top-level component if a user is not authorized. This pattern is **not recommended** since Next.js applications have multiple entry points, which will not prevent nested route segments and Server Actions from being accessed.
+> - Ensure that any Server Actions called from these components also perform their own authorization checks, as client-side UI restrictions alone are not sufficient for security.
 
 ### Server Actions
 
@@ -1202,16 +1182,16 @@ Treat [Server Actions](/docs/app/getting-started/updating-data) with the same se
 In the example below, we check the user's role before allowing the action to proceed:
 
 ```ts filename="app/lib/actions.ts" switcher
-'use server'
-import { verifySession } from '@/app/lib/dal'
+'use server';
+import { verifySession } from '@/app/lib/dal';
 
 export async function serverAction(formData: FormData) {
-  const session = await verifySession()
-  const userRole = session?.user?.role
+  const session = await verifySession();
+  const userRole = session?.user?.role;
 
   // Return early if user is not authorized to perform the action
   if (userRole !== 'admin') {
-    return null
+    return null;
   }
 
   // Proceed with the action for authorized users
@@ -1219,16 +1199,16 @@ export async function serverAction(formData: FormData) {
 ```
 
 ```js filename="app/lib/actions.js" switcher
-'use server'
-import { verifySession } from '@/app/lib/dal'
+'use server';
+import { verifySession } from '@/app/lib/dal';
 
 export async function serverAction() {
-  const session = await verifySession()
-  const userRole = session.user.role
+  const session = await verifySession();
+  const userRole = session.user.role;
 
   // Return early if user is not authorized to perform the action
   if (userRole !== 'admin') {
-    return null
+    return null;
   }
 
   // Proceed with the action for authorized users
@@ -1242,22 +1222,22 @@ Treat [Route Handlers](/docs/app/api-reference/file-conventions/route) with the 
 For example:
 
 ```ts filename="app/api/route.ts" switcher
-import { verifySession } from '@/app/lib/dal'
+import { verifySession } from '@/app/lib/dal';
 
 export async function GET() {
   // User authentication and role verification
-  const session = await verifySession()
+  const session = await verifySession();
 
   // Check if the user is authenticated
   if (!session) {
     // User is not authenticated
-    return new Response(null, { status: 401 })
+    return new Response(null, { status: 401 });
   }
 
   // Check if the user has the 'admin' role
   if (session.user.role !== 'admin') {
     // User is authenticated but does not have the right permissions
-    return new Response(null, { status: 403 })
+    return new Response(null, { status: 403 });
   }
 
   // Continue for authorized users
@@ -1265,22 +1245,22 @@ export async function GET() {
 ```
 
 ```js filename="app/api/route.js" switcher
-import { verifySession } from '@/app/lib/dal'
+import { verifySession } from '@/app/lib/dal';
 
 export async function GET() {
   // User authentication and role verification
-  const session = await verifySession()
+  const session = await verifySession();
 
   // Check if the user is authenticated
   if (!session) {
     // User is not authenticated
-    return new Response(null, { status: 401 })
+    return new Response(null, { status: 401 });
   }
 
   // Check if the user has the 'admin' role
   if (session.user.role !== 'admin') {
     // User is authenticated but does not have the right permissions
-    return new Response(null, { status: 403 })
+    return new Response(null, { status: 403 });
   }
 
   // Continue for authorized users
@@ -1296,7 +1276,7 @@ Using context providers for auth works due to [interleaving](/docs/app/getting-s
 This works, but any child Server Components will be rendered on the server first, and will not have access to the context provider’s session data:
 
 ```tsx filename="app/layout.ts" switcher
-import { ContextProvider } from 'auth-lib'
+import { ContextProvider } from 'auth-lib';
 
 export default function RootLayout({ children }) {
   return (
@@ -1305,7 +1285,7 @@ export default function RootLayout({ children }) {
         <ContextProvider>{children}</ContextProvider>
       </body>
     </html>
-  )
+  );
 }
 ```
 
@@ -1347,32 +1327,33 @@ Now that you've learned about authentication in Next.js, here are Next.js-compat
 
 ### Auth Libraries
 
-* [Auth0](https://auth0.com/docs/quickstart/webapp/nextjs)
-* [Better Auth](https://www.better-auth.com/docs/integrations/next)
-* [Clerk](https://clerk.com/docs/quickstarts/nextjs)
-* [Descope](https://docs.descope.com/getting-started/nextjs)
-* [Kinde](https://kinde.com/docs/developer-tools/nextjs-sdk)
-* [Logto](https://docs.logto.io/quick-starts/next-app-router)
-* [NextAuth.js](https://authjs.dev/getting-started/installation?framework=next.js)
-* [Ory](https://www.ory.sh/docs/getting-started/integrate-auth/nextjs)
-* [Stack Auth](https://docs.stack-auth.com/getting-started/setup)
-* [Supabase](https://supabase.com/docs/guides/getting-started/quickstarts/nextjs)
-* [Stytch](https://stytch.com/docs/guides/quickstarts/nextjs)
-* [WorkOS](https://workos.com/docs/user-management/nextjs)
+- [Auth0](https://auth0.com/docs/quickstart/webapp/nextjs)
+- [Better Auth](https://www.better-auth.com/docs/integrations/next)
+- [Clerk](https://clerk.com/docs/quickstarts/nextjs)
+- [Descope](https://docs.descope.com/getting-started/nextjs)
+- [Kinde](https://kinde.com/docs/developer-tools/nextjs-sdk)
+- [Logto](https://docs.logto.io/quick-starts/next-app-router)
+- [NextAuth.js](https://authjs.dev/getting-started/installation?framework=next.js)
+- [Ory](https://www.ory.sh/docs/getting-started/integrate-auth/nextjs)
+- [Stack Auth](https://docs.stack-auth.com/getting-started/setup)
+- [Supabase](https://supabase.com/docs/guides/getting-started/quickstarts/nextjs)
+- [Stytch](https://stytch.com/docs/guides/quickstarts/nextjs)
+- [WorkOS](https://workos.com/docs/user-management/nextjs)
 
 ### Session Management Libraries
 
-* [Iron Session](https://github.com/vvo/iron-session)
-* [Jose](https://github.com/panva/jose)
+- [Iron Session](https://github.com/vvo/iron-session)
+- [Jose](https://github.com/panva/jose)
 
 ## Further Reading
 
 To continue learning about authentication and security, check out the following resources:
 
-* [How to think about security in Next.js](/blog/security-nextjs-server-components-actions)
-* [Understanding XSS Attacks](https://vercel.com/guides/understanding-xss-attacks)
-* [Understanding CSRF Attacks](https://vercel.com/guides/understanding-csrf-attacks)
-* [The Copenhagen Book](https://thecopenhagenbook.com/)
+- [How to think about security in Next.js](/blog/security-nextjs-server-components-actions)
+- [Understanding XSS Attacks](https://vercel.com/guides/understanding-xss-attacks)
+- [Understanding CSRF Attacks](https://vercel.com/guides/understanding-csrf-attacks)
+- [The Copenhagen Book](https://thecopenhagenbook.com/)
+
 ---
 
 For an overview of all available documentation, see [/docs/llms.txt](/docs/llms.txt)

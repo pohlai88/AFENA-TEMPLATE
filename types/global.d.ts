@@ -6,12 +6,12 @@ declare global {
       params?: Record<string, string | string[]>
       searchParams?: Record<string, string | string[]>
     }
-    
+
     interface LayoutProps {
       children: React.ReactNode
       params?: Record<string, string | string[]>
     }
-    
+
     interface RouteContext {
       params?: Record<string, string | string[]>
       searchParams?: Record<string, string | string[]>
@@ -25,8 +25,6 @@ interface EnvVars {
   NEXT_PUBLIC_APP_URL: string
   NEXT_PUBLIC_API_URL: string
   DATABASE_URL?: string
-  NEXTAUTH_SECRET?: string
-  NEXTAUTH_URL?: string
 }
 
 declare const process: {
@@ -60,6 +58,6 @@ export interface BaseComponentProps {
   children?: React.ReactNode
 }
 
-export {}
+export { }
 
-export {}
+export { }

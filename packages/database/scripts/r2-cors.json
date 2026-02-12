@@ -5,13 +5,17 @@
         "origins": [
           "http://localhost:3000",
           "https://nexuscanon.com",
-          "https://*.nexuscanon.com"
+          "https://www.nexuscanon.com"
         ],
         "methods": [
-          "PUT"
+          "PUT",
+          "GET",
+          "HEAD"
         ],
         "headers": [
-          "Content-Type"
+          "Content-Type",
+          "Content-MD5",
+          "x-amz-*"
         ]
       },
       "exposeHeaders": [

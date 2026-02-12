@@ -15,11 +15,11 @@ if (!existsSync(typesDir)) {
 // Generate Next.js types
 console.log('🔧 Generating Next.js types...')
 try {
-  execSync('pnpm next build', { 
+  execSync('pnpm next build', {
     cwd: join(rootDir, 'apps/web'),
     stdio: 'inherit'
   })
-  
+
   // Copy generated types
   const nextTypesDir = join(rootDir, 'apps/web/.next/types')
   if (existsSync(nextTypesDir)) {
@@ -79,8 +79,6 @@ interface EnvVars {
   NEXT_PUBLIC_APP_URL: string
   NEXT_PUBLIC_API_URL: string
   DATABASE_URL?: string
-  NEXTAUTH_SECRET?: string
-  NEXTAUTH_URL?: string
 }
 
 declare const process: {
