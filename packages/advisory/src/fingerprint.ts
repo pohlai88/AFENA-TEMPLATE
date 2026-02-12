@@ -19,13 +19,13 @@ export function stableStringify(value: unknown): string {
   if (typeof value === 'string') return JSON.stringify(value);
   if (typeof value === 'number' || typeof value === 'boolean') return String(value);
   if (Array.isArray(value)) {
-    return '[' + value.map(stableStringify).join(',') + ']';
+    return `[${  value.map(stableStringify).join(',')  }]`;
   }
   if (typeof value === 'object') {
     const obj = value as Record<string, unknown>;
     const keys = Object.keys(obj).sort();
-    const pairs = keys.map((k) => JSON.stringify(k) + ':' + stableStringify(obj[k]));
-    return '{' + pairs.join(',') + '}';
+    const pairs = keys.map((k) => `${JSON.stringify(k)  }:${  stableStringify(obj[k])}`);
+    return `{${  pairs.join(',')  }}`;
   }
   return String(value);
 }

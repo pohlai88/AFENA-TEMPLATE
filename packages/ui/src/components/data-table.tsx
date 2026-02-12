@@ -11,7 +11,6 @@ import {
   type ColumnFiltersState,
   type OnChangeFn,
   type PaginationState,
-  type Row,
   type RowSelectionState,
   type SortingState,
   type Table as TanStackTable,
@@ -116,9 +115,9 @@ function DataTable<TData, TValue>({
                     {header.isPlaceholder
                       ? null
                       : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext(),
-                        )}
+                        header.column.columnDef.header,
+                        header.getContext(),
+                      )}
                   </TableHead>
                 ))}
               </TableRow>

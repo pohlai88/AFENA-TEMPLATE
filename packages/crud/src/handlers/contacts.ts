@@ -1,10 +1,9 @@
-import { eq, and, sql } from 'drizzle-orm';
-import type { NeonHttpDatabase } from 'drizzle-orm/neon-http';
-
 import { contacts } from 'afena-database';
+import { eq, and, sql } from 'drizzle-orm';
 
 import type { MutationContext } from '../context';
 import type { EntityHandler, HandlerResult } from './types';
+import type { NeonHttpDatabase } from 'drizzle-orm/neon-http';
 
 /**
  * K-11: Contacts allowlist — only these fields are accepted from input.

@@ -96,8 +96,8 @@ function FileUpload({
       });
 
       if (!presignRes.ok) {
-        const body = await presignRes.json().catch(() => ({}));
-        throw new Error((body as { error?: string }).error ?? 'Failed to get upload URL');
+        const body: { error?: string } = await presignRes.json().catch(() => ({})) as { error?: string };
+        throw new Error(body.error ?? 'Failed to get upload URL');
       }
 
       const { presignedUrl, objectKey, publicFileUrl } = (await presignRes.json()) as {
@@ -105,6 +105,12 @@ function FileUpload({
         objectKey: string;
         publicFileUrl: string | null;
       };
+
+      // Compute SHA-256 checksum client-side for integrity verification
+      const arrayBuffer = await file.arrayBuffer();
+      const hashBuffer = await crypto.subtle.digest('SHA-256', arrayBuffer);
+      const hashArray = Array.from(new Uint8Array(hashBuffer));
+      const checksum = hashArray.map((b) => b.toString(16).padStart(2, '0')).join('');
 
       // Upload to R2 with progress tracking
       setState({ status: 'uploading', progress: 0 });
@@ -140,6 +146,7 @@ function FileUpload({
           fileName: file.name,
           contentType: file.type,
           sizeBytes: file.size,
+          checksum,
         }),
       });
 
@@ -168,7 +175,7 @@ function FileUpload({
     e.preventDefault();
     setIsDragOver(false);
     const file = e.dataTransfer.files[0];
-    if (file) handleFile(file);
+    if (file) void handleFile(file);
   }
 
   function handleDragOver(e: React.DragEvent) {
@@ -183,7 +190,7 @@ function FileUpload({
 
   function handleInputChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
-    if (file) handleFile(file);
+    if (file) void handleFile(file);
     // Reset input so same file can be re-selected
     if (inputRef.current) inputRef.current.value = '';
   }
@@ -197,6 +204,7 @@ function FileUpload({
   return (
     <div
       data-slot="file-upload"
+      role="presentation"
       className={cn(
         'relative flex flex-col items-center justify-center rounded-lg border-2 border-dashed p-8 transition-colors',
         isDragOver && 'border-primary bg-primary/5',

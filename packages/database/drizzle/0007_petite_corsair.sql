@@ -1,0 +1,1 @@
+ALTER TABLE "r2_files" ADD COLUMN "checksum" text;

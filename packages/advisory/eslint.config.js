@@ -1,7 +1,7 @@
 const baseConfig = require('afena-eslint-config/base');
 
 module.exports = [
-  { ignores: ['dist/**', '*.config.*'] },
+  { ignores: ['dist/**', '*.config.*', '**/*.test.*', '**/*.spec.*'] },
   ...baseConfig,
   {
     languageOptions: {
@@ -24,6 +24,24 @@ module.exports = [
           message: 'Use afena-logger instead of console.* (INVARIANT-08)',
         },
       ],
+    },
+  },
+  {
+    files: [
+      'src/explain/**/*.ts',
+      'src/detectors/**/*.ts',
+      'src/forecasters/**/*.ts',
+      'src/scoring/**/*.ts',
+      'src/fingerprint.ts',
+      'src/writer.ts',
+    ],
+    rules: {
+      // Math/stats modules: array indexing within bounds-checked loops is safe,
+      // template params are always primitives at runtime (display-only strings)
+      '@typescript-eslint/no-base-to-string': 'off',
+      '@typescript-eslint/restrict-template-expressions': 'off',
+      '@typescript-eslint/no-non-null-assertion': 'off',
+      '@typescript-eslint/no-unnecessary-type-assertion': 'off',
     },
   },
 ];

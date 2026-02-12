@@ -28,14 +28,14 @@ export function forecastHolt(
   }
 
   // Initialize
-  let level = series[0]!;
-  let trend = series[1]! - series[0]!;
+  let level = series[0];
+  let trend = series[1] - series[0];
   const fitted: number[] = [level];
 
   // Fit
   for (let i = 1; i < series.length; i++) {
     const prevLevel = level;
-    level = alpha * series[i]! + (1 - alpha) * (prevLevel + trend);
+    level = alpha * series[i] + (1 - alpha) * (prevLevel + trend);
     trend = beta * (level - prevLevel) + (1 - beta) * trend;
     fitted.push(level + trend);
   }
@@ -48,7 +48,7 @@ export function forecastHolt(
   let mapeCount = 0;
   for (let i = 1; i < series.length; i++) {
     if (series[i] !== 0) {
-      mapeSum += Math.abs((series[i]! - fitted[i]!) / series[i]!);
+      mapeSum += Math.abs((series[i] - fitted[i]) / series[i]);
       mapeCount++;
     }
   }

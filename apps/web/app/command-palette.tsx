@@ -2,6 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 
+import { useQuery } from '@tanstack/react-query';
 import {
   CommandDialog,
   CommandEmpty,
@@ -11,7 +12,6 @@ import {
   CommandList,
   CommandSeparator,
 } from 'afena-ui/components/command';
-import { useQuery } from '@tanstack/react-query';
 import {
   Home,
   Plus,

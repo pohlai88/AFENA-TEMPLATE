@@ -45,6 +45,6 @@ function quantile(sorted: number[], q: number): number {
   const pos = q * (sorted.length - 1);
   const lo = Math.floor(pos);
   const hi = Math.ceil(pos);
-  if (lo === hi) return sorted[lo]!;
-  return sorted[lo]! + (pos - lo) * (sorted[hi]! - sorted[lo]!);
+  if (lo === hi) return sorted[lo];
+  return sorted[lo] + (pos - lo) * (sorted[hi] - sorted[lo]);
 }

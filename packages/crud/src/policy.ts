@@ -1,6 +1,5 @@
-import type { MutationSpec } from 'afena-canon';
-
 import type { MutationContext } from './context';
+import type { MutationSpec } from 'afena-canon';
 
 /**
  * Placeholder policy enforcement.

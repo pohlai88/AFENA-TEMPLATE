@@ -138,7 +138,7 @@ export default async function ContactVersionsPage({
                         .map(([key, value]) => (
                           <div key={key} className="flex gap-2">
                             <span className="font-mono text-xs text-muted-foreground">{key}:</span>
-                            <span className="text-xs">{value != null ? String(value) : '—'}</span>
+                            <span className="text-xs">{value != null ? `${value as string | number | boolean}` : '—'}</span>
                           </div>
                         ))}
                     </div>

@@ -50,6 +50,13 @@
       "when": 1770853406920,
       "tag": "0006_quick_firelord",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1770857079016,
+      "tag": "0007_petite_corsair",
+      "breakpoints": true
     }
   ]
 }

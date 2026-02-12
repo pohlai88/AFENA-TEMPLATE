@@ -48,5 +48,5 @@ function computeMedian(sorted: number[]): number {
   const n = sorted.length;
   if (n === 0) return 0;
   const mid = Math.floor(n / 2);
-  return n % 2 === 0 ? (sorted[mid - 1]! + sorted[mid]!) / 2 : sorted[mid]!;
+  return n % 2 === 0 ? (sorted[mid - 1] + sorted[mid]) / 2 : sorted[mid];
 }

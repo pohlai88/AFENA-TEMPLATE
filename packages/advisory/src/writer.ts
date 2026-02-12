@@ -56,7 +56,7 @@ export async function writeAdvisory(
   if (existing.length > 0) {
     return {
       created: false,
-      advisoryId: existing[0]!.id,
+      advisoryId: existing[0].id,
       fingerprint,
       deduplicated: true,
     };
@@ -92,7 +92,7 @@ export async function writeAdvisory(
     })
     .returning({ id: advisories.id });
 
-  const advisoryId = row!.id;
+  const advisoryId = row.id;
 
   // Insert evidence (append-only)
   if (evidence.length > 0) {

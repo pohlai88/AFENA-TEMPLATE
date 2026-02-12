@@ -18,12 +18,12 @@ export function forecastSes(
   }
 
   // Initialize level with first observation
-  let level = series[0]!;
+  let level = series[0];
   const fitted: number[] = [level];
 
   // Fit the model
   for (let i = 1; i < series.length; i++) {
-    level = alpha * series[i]! + (1 - alpha) * level;
+    level = alpha * series[i] + (1 - alpha) * level;
     fitted.push(level);
   }
 
@@ -43,7 +43,7 @@ function computeMape(actual: number[], fitted: number[]): number {
   let count = 0;
   for (let i = 1; i < actual.length; i++) {
     if (actual[i] !== 0) {
-      sum += Math.abs((actual[i]! - fitted[i]!) / actual[i]!);
+      sum += Math.abs((actual[i] - fitted[i]) / actual[i]);
       count++;
     }
   }
@@ -57,7 +57,7 @@ function computeMase(actual: number[], fitted: number[]): number {
   // Naive forecast error: |y_t - y_{t-1}|
   let naiveSum = 0;
   for (let i = 1; i < actual.length; i++) {
-    naiveSum += Math.abs(actual[i]! - actual[i - 1]!);
+    naiveSum += Math.abs(actual[i] - actual[i - 1]);
   }
   const naiveMae = naiveSum / (actual.length - 1);
   if (naiveMae === 0) return 0;
@@ -65,7 +65,7 @@ function computeMase(actual: number[], fitted: number[]): number {
   // Model forecast error
   let modelSum = 0;
   for (let i = 1; i < actual.length; i++) {
-    modelSum += Math.abs(actual[i]! - fitted[i]!);
+    modelSum += Math.abs(actual[i] - fitted[i]);
   }
   const modelMae = modelSum / (actual.length - 1);
 

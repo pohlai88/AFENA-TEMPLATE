@@ -13,9 +13,9 @@ import { contactsHandler } from './handlers/contacts';
 import { captureAuthoritySnapshot, enforcePolicy } from './policy';
 import { stripSystemColumns } from './sanitize';
 
-import type { ApiResponse, ErrorCode, MutationSpec, Receipt } from 'afena-canon';
 import type { MutationContext } from './context';
 import type { EntityHandler } from './handlers/types';
+import type { ApiResponse, ErrorCode, MutationSpec, Receipt } from 'afena-canon';
 
 /** Entity handler registry — maps entity type to handler. */
 const HANDLER_REGISTRY: Record<string, EntityHandler> = {
@@ -101,6 +101,10 @@ export async function mutate(
     }
   }
 
+  // Narrowed locals — guards above guarantee these are defined for non-create verbs
+  const entityId = validSpec.entityRef.id;
+  const expectedVer = validSpec.expectedVersion;
+
   // 4. Check idempotencyKey for duplicate create prevention (K-10)
   if (validSpec.idempotencyKey && verb === 'create') {
     const existing = await db
@@ -114,18 +118,18 @@ export async function mutate(
       )
       .limit(1);
 
-    if (existing.length > 0) {
-      const row = existing[0]!;
+    const existingRow = existing[0];
+    if (existingRow) {
       const replayReceipt: Receipt = {
         requestId: ctx.requestId,
-        mutationId: row.mutationId,
+        mutationId: existingRow.mutationId,
         batchId: validSpec.batchId,
-        entityId: row.entityId,
+        entityId: existingRow.entityId,
         entityType: validSpec.entityRef.type,
         versionBefore: null,
-        versionAfter: row.versionAfter,
+        versionAfter: existingRow.versionAfter,
         status: 'ok',
-        auditLogId: row.id,
+        auditLogId: existingRow.id,
         errorCode: undefined,
       };
       return ok(null, ctx.requestId, replayReceipt);
@@ -184,25 +188,25 @@ export async function mutate(
         case 'update':
           handlerResult = await handler.update(
             tx as any,
-            validSpec.entityRef.id!,
+            entityId as string,
             sanitizedInput as Record<string, unknown>,
-            validSpec.expectedVersion!,
+            expectedVer as number,
             ctx,
           );
           break;
         case 'delete':
           handlerResult = await handler.delete(
             tx as any,
-            validSpec.entityRef.id!,
-            validSpec.expectedVersion!,
+            entityId as string,
+            expectedVer as number,
             ctx,
           );
           break;
         case 'restore':
           handlerResult = await handler.restore(
             tx as any,
-            validSpec.entityRef.id!,
-            validSpec.expectedVersion!,
+            entityId as string,
+            expectedVer as number,
             ctx,
           );
           break;

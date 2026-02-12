@@ -69,7 +69,7 @@ export function ilikeFallback(
   const conditions = columns.map((col) => sql`${col} ILIKE ${pattern}`);
 
   if (conditions.length === 0) return null;
-  if (conditions.length === 1) return conditions[0]!;
+  if (conditions.length === 1) return conditions[0] ?? null;
 
   return sql.join(conditions, sql` OR `);
 }

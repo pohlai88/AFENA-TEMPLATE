@@ -77,7 +77,7 @@ export function ContactForm({ orgSlug, contact }: ContactFormProps) {
   }
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={(e) => void handleSubmit(e)}>
       <Card>
         <CardContent className="space-y-4 pt-6">
           {error && (

@@ -31,7 +31,7 @@ export function detectCusum(
   let direction: 'up' | 'down' | 'none' = 'none';
 
   for (let i = 0; i < series.length; i++) {
-    const xi = series[i]!.value;
+    const xi = series[i].value;
 
     // Update cumulative sums
     sPos = Math.max(0, sPos + (xi - targetMean - k));

@@ -18,8 +18,9 @@ export async function POST(request: Request) {
       fileName?: string;
       contentType?: string;
       sizeBytes?: number;
+      checksum?: string;
     };
-    const { objectKey, publicFileUrl, fileName, contentType, sizeBytes } = body;
+    const { objectKey, publicFileUrl, fileName, contentType, sizeBytes, checksum } = body;
 
     if (!objectKey) {
       return NextResponse.json(
@@ -37,6 +38,7 @@ export async function POST(request: Request) {
         fileName: fileName ?? null,
         contentType: contentType ?? null,
         sizeBytes: sizeBytes ?? null,
+        checksum: checksum ?? null,
       })
       .onConflictDoNothing({ target: r2Files.objectKey })
       .returning();

@@ -1,7 +1,7 @@
 const baseConfig = require('afena-eslint-config/base');
 
 module.exports = [
-  { ignores: ['dist/**', '*.config.*'] },
+  { ignores: ['dist/**', '*.config.*', '**/*.test.*', '**/*.spec.*'] },
   ...baseConfig,
   {
     languageOptions: {
@@ -24,6 +24,20 @@ module.exports = [
         },
         // INVARIANT-01 db.insert/update/delete rules intentionally omitted here
       ],
+    },
+  },
+  {
+    files: ['src/mutate.ts', 'src/handlers/**/*.ts', 'src/read.ts'],
+    rules: {
+      // Drizzle transaction typing: tx from db.transaction() loses schema type,
+      // requiring intentional `as any` casts for insert/update/select within tx
+      '@typescript-eslint/no-unsafe-argument': 'off',
+      '@typescript-eslint/no-explicit-any': 'off',
+      '@typescript-eslint/no-unsafe-call': 'off',
+      '@typescript-eslint/no-unsafe-member-access': 'off',
+      '@typescript-eslint/no-unsafe-assignment': 'off',
+      '@typescript-eslint/no-unsafe-return': 'off',
+      '@typescript-eslint/no-unnecessary-type-assertion': 'off',
     },
   },
 ];

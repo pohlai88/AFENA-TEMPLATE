@@ -1,6 +1,7 @@
 'use server';
 
 import { mutate, readEntity, listEntities } from 'afena-crud';
+
 import { auth } from '@/lib/auth/server';
 
 import type { ApiResponse, MutationSpec } from 'afena-canon';

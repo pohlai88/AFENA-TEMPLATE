@@ -25,14 +25,14 @@ export function detectEwma(
   }
 
   // Initialize EWMA with first value
-  let ewma = series[0]!.value;
+  let ewma = series[0].value;
   const tracked: { t: number; value: number; ewma: number }[] = [
-    { t: series[0]!.t, value: series[0]!.value, ewma },
+    { t: series[0].t, value: series[0].value, ewma },
   ];
 
   // Compute EWMA for all points
   for (let i = 1; i < series.length; i++) {
-    const point = series[i]!;
+    const point = series[i];
     ewma = alpha * point.value + (1 - alpha) * ewma;
     tracked.push({ t: point.t, value: point.value, ewma });
   }
@@ -44,7 +44,7 @@ export function detectEwma(
   const sigma = Math.sqrt(variance);
 
   // Evaluate last point
-  const lastResidual = residuals[residuals.length - 1]!;
+  const lastResidual = residuals[residuals.length - 1];
   const zScore = sigma > 0 ? Math.abs(lastResidual) / sigma : 0;
 
   return {

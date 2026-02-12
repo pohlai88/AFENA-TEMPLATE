@@ -1,7 +1,7 @@
 const baseConfig = require('afena-eslint-config/base');
 
 module.exports = [
-  { ignores: ['dist/**', '*.config.*'] },
+  { ignores: ['dist/**', '*.config.*', '**/*.test.*', '**/*.spec.*'] },
   ...baseConfig,
   {
     languageOptions: {

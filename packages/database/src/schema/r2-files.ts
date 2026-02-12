@@ -17,6 +17,7 @@ export const r2Files = pgTable(
     fileName: text('file_name'),
     contentType: text('content_type'),
     sizeBytes: integer('size_bytes'),
+    checksum: text('checksum'),
     createdAt: timestamp('created_at').defaultNow().notNull(),
   },
   (table) => [

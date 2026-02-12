@@ -1,4 +1,5 @@
 import { z } from 'zod';
+
 import { errorCodeSchema } from './errors';
 
 export const receiptStatusSchema = z.enum(['ok', 'rejected', 'error']);

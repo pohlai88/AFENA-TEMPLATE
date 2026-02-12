@@ -1,6 +1,8 @@
 import { sql } from 'drizzle-orm';
 import { crudPolicy, authenticatedRole } from 'drizzle-orm/neon';
 
+import type { AnyColumn } from 'drizzle-orm';
+
 /**
  * Tenant isolation — EVERY domain table.
  *
@@ -15,7 +17,7 @@ import { crudPolicy, authenticatedRole } from 'drizzle-orm/neon';
  *
  * [Hardening #4: WITH CHECK confirmed on INSERT/UPDATE]
  */
-export const tenantPolicy = (table: { orgId: any }) =>
+export const tenantPolicy = (table: { orgId: AnyColumn }) =>
   crudPolicy({
     role: authenticatedRole,
     read: sql`(select auth.org_id() = ${table.orgId})`,
@@ -30,7 +32,7 @@ export const tenantPolicy = (table: { orgId: any }) =>
  *
  * [Hardening #5: auth.org_role() only on tables that truly need it]
  */
-export const ownerPolicy = (table: { orgId: any; userId: any }) =>
+export const ownerPolicy = (table: { orgId: AnyColumn; userId: AnyColumn }) =>
   crudPolicy({
     role: authenticatedRole,
     read: sql`(select auth.org_id() = ${table.orgId} AND (auth.user_id() = ${table.userId} OR auth.org_role() IN ('owner','admin')))`,
