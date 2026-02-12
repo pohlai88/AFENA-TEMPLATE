@@ -32,9 +32,25 @@ export class LifecycleError extends Error {
       'CANCELLED_READ_ONLY',
     );
   }
+
+  static activeNoResubmit(): LifecycleError {
+    return new LifecycleError(
+      'Active documents cannot be submitted, approved, or rejected.',
+      'ACTIVE_NO_RESUBMIT',
+    );
+  }
+
+  static amendedReadOnly(): LifecycleError {
+    return new LifecycleError(
+      'Amended documents are read-only.',
+      'AMENDED_READ_ONLY',
+    );
+  }
 }
 
 export type LifecycleDenyReason =
   | 'SUBMITTED_IMMUTABLE'
   | 'ALREADY_SUBMITTED'
-  | 'CANCELLED_READ_ONLY';
+  | 'CANCELLED_READ_ONLY'
+  | 'ACTIVE_NO_RESUBMIT'
+  | 'AMENDED_READ_ONLY';

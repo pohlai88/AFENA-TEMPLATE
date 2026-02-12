@@ -25,7 +25,8 @@
     "ui:add": "pnpm dlx shadcn@latest add -c apps/web",
     "ui:diff": "pnpm dlx shadcn@latest diff -c apps/web",
     "ui:update": "pnpm dlx shadcn@latest add -o -c apps/web",
-    "check:no-console": "node -e \"const{execSync}=require('child_process');try{const r=execSync('npx rg console\\\\\\\\. --type ts --type tsx -l --glob !node_modules --glob !dist --glob !.next --glob !**/client-logger.ts --glob !**/*.config.* --glob !tools/**',{encoding:'utf8'});if(r.trim()){console.error('INVARIANT-08 violation: console.* found in:\\n'+r);process.exit(1)}}catch(e){if(e.status===1)process.exit(0);throw e}\""
+    "check:no-console": "node -e \"const{execSync}=require('child_process');try{const r=execSync('npx rg console\\\\\\\\. --type ts --type tsx -l --glob !node_modules --glob !dist --glob !.next --glob !**/client-logger.ts --glob !**/*.config.* --glob !tools/**',{encoding:'utf8'});if(r.trim()){console.error('INVARIANT-08 violation: console.* found in:\\n'+r);process.exit(1)}}catch(e){if(e.status===1)process.exit(0);throw e}\"",
+    "ci:invariants": "node tools/ci-invariants.mjs"
   },
   "devDependencies": {
     "@types/node": "catalog:",

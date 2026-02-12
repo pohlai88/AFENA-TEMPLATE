@@ -52,6 +52,9 @@ export type { FxSource } from './fx-source';
 export { AUTH_VERBS, authVerbSchema } from './auth-verb';
 export type { AuthVerb } from './auth-verb';
 
+export { UPDATE_MODES, updateModeSchema } from './update-mode';
+export type { UpdateMode } from './update-mode';
+
 export { AUTH_SCOPES, authScopeSchema } from './auth-scope';
 export type { AuthScope } from './auth-scope';
 

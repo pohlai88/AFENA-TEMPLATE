@@ -8,7 +8,7 @@ import fg from 'fast-glob';
 
 export interface CapabilitySurface {
   file: string;
-  kind: 'server_action' | 'api_route' | 'engine';
+  kind: 'server_action' | 'api_route' | 'cli_command' | 'engine';
   capabilities: string[];
 }
 
@@ -52,6 +52,8 @@ function classifyFile(filePath: string): CapabilitySurface['kind'] | null {
   if (normalized.includes('/app/actions/') || normalized.includes('/app/actions.'))
     return 'server_action';
   if (normalized.includes('/app/api/')) return 'api_route';
+  if (normalized.includes('/cli/') || normalized.includes('/bin/'))
+    return 'cli_command';
   if (normalized.includes('/handlers/') || normalized.includes('/engine'))
     return 'engine';
   return null;

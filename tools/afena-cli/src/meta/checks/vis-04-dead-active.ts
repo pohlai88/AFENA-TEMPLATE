@@ -3,7 +3,7 @@
  * If status === 'active', the capability must be observed in at least one app surface.
  * headlessOnly + kind rules apply (system/storage may be engine-only).
  *
- * Severity: warn (promotes to error in Phase 4).
+ * Severity: error (promoted in Phase 4).
  */
 
 import {
@@ -17,7 +17,7 @@ import type { ScanResult } from '../collectors/surface-scanner';
 export interface Vis04Violation {
   key: string;
   reason: string;
-  severity: 'warn';
+  severity: 'error';
 }
 
 /**
@@ -28,6 +28,7 @@ export function checkVis04(
   scanResult: ScanResult,
   exceptions: CapabilityException[],
 ): Vis04Violation[] {
+  // Phase 4: promoted from warn → error
   const violations: Vis04Violation[] = [];
   const now = new Date().toISOString().slice(0, 10);
 
@@ -63,7 +64,7 @@ export function checkVis04(
       violations.push({
         key,
         reason: `Active capability "${key}" (${kind}) not observed in any surface — consider annotating or marking as planned/headlessOnly`,
-        severity: 'warn',
+        severity: 'error',
       });
     }
   }

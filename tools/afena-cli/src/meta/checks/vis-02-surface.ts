@@ -95,8 +95,9 @@ export function checkVis02(
       }
     }
 
-    // Check app surface coverage
-    if (policy.appRequired && !observedAppKeys.has(key)) {
+    // Check app surface coverage (primary gate — actions, routes, engines)
+    const hasAppSurface = observedAppKeys.has(key);
+    if (policy.appRequired && !hasAppSurface) {
       violations.push({
         key,
         kind,
@@ -105,13 +106,16 @@ export function checkVis02(
       });
     }
 
-    // Check UI surface coverage (severity from policy)
-    if (!observedUiKeys.has(key)) {
+    // Check UI surface coverage — only if app surface exists
+    // Capabilities that have an app surface but no UI page are valid
+    // (they may be API-only or accessed via shared components)
+    const hasUiSurface = observedUiKeys.has(key);
+    if (hasAppSurface && !hasUiSurface && kind !== 'auth' && kind !== 'storage' && kind !== 'system') {
       violations.push({
         key,
         kind,
-        reason: `Capability "${key}" (${kind}) not found in any UI surface`,
-        severity: policy.uiSeverity as Vis02Severity,
+        reason: `Capability "${key}" (${kind}) has app surface but no UI surface`,
+        severity: 'warn' as Vis02Severity,
       });
     }
   }

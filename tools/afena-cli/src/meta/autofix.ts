@@ -13,32 +13,7 @@ import { readFileSync, writeFileSync } from 'fs';
 import fg from 'fast-glob';
 import type { FixAction, FixReport } from './emitters/fix-report';
 import { writeFixReport } from './emitters/fix-report';
-
-const WRITE_BOUNDARY_PATTERNS = [
-  /mutate\s*\(/,
-  /db\.insert\s*\(/,
-  /db\.update\s*\(/,
-  /db\.delete\s*\(/,
-  /db\.transaction\s*\(/,
-  /tx\.\w+\s*\(/,
-  /\.execute\s*\(/,
-];
-
-const CAPABILITIES_REGEX =
-  /export\s+const\s+CAPABILITIES\s*=\s*\[([^\]]*)\]\s*as\s+const/s;
-
-const JSDOC_CAPABILITY_REGEX = /@capability\s+[\w.]+/;
-
-const SURFACE_REGEX =
-  /export\s+const\s+SURFACE\s*=\s*\{/;
-
-function hasWriteBoundary(content: string): boolean {
-  return WRITE_BOUNDARY_PATTERNS.some((re) => re.test(content));
-}
-
-function hasCapabilityAnnotation(content: string): boolean {
-  return CAPABILITIES_REGEX.test(content) || JSDOC_CAPABILITY_REGEX.test(content);
-}
+import { hasWriteBoundary, hasCapabilityAnnotation } from './shared/patterns';
 
 /**
  * Detect indentation style from file content.
@@ -48,7 +23,7 @@ function detectIndent(content: string): string {
   for (const line of lines) {
     const match = line.match(/^(\s+)\S/);
     if (match) {
-      return match[1].includes('\t') ? '\t' : '  ';
+      return match[1]!.includes('\t') ? '\t' : '  ';
     }
   }
   return '  ';
@@ -93,7 +68,7 @@ function findCapabilitiesInsertLine(lines: string[]): number {
   let firstExportLine = -1;
 
   for (let i = 0; i < lines.length; i++) {
-    const line = lines[i].trim();
+    const line = lines[i]!.trim();
     if (line.startsWith('import ') || line.startsWith('import{')) {
       lastImportLine = i;
     }

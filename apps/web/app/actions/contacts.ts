@@ -4,16 +4,7 @@ import { generateEntityActions } from '@/lib/actions/entity-actions';
 
 import type { ApiResponse } from 'afena-canon';
 
-export const CAPABILITIES = [
-  'contacts.create',
-  'contacts.update',
-  'contacts.delete',
-  'contacts.restore',
-  'contacts.read',
-  'contacts.list',
-  'contacts.versions',
-  'contacts.audit',
-] as const;
+// CAPABILITIES moved to contacts.capabilities.ts (Next.js 16: 'use server' files can only export async functions)
 
 const actions = generateEntityActions('contacts');
 

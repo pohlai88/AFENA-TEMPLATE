@@ -27,6 +27,20 @@ export {
   getActionFamily,
 } from './types/action';
 
+export type {
+  ActionKind,
+  ActionGroup,
+  ResolvedAction,
+  ResolvedUpdateMode,
+  ResolvedActions,
+  ActionEnvelope,
+} from './types/action-spec';
+
+export type {
+  EntityContract,
+  LifecycleTransition,
+} from './types/entity-contract';
+
 export type { JsonValue, MutationSpec } from './types/mutation';
 
 export type { ReceiptStatus, Receipt } from './types/receipt';
@@ -40,6 +54,7 @@ export type { AuditLogEntry } from './types/audit';
 
 export type {
   CapabilityKind,
+  CapabilityKey,
   CapabilityDomain,
   CapabilityNamespace,
   RbacTier,

@@ -10,6 +10,12 @@
 
 import { readFileSync } from 'fs';
 import fg from 'fast-glob';
+import {
+  WRITE_BOUNDARY_PATTERNS,
+  CAPABILITIES_REGEX,
+  JSDOC_CAPABILITY_REGEX,
+  SURFACE_GLOBS,
+} from '../shared/patterns';
 
 export interface MutationBoundary {
   file: string;
@@ -17,28 +23,6 @@ export interface MutationBoundary {
   hasCapabilities: boolean;
   hasJsDocCapability: boolean;
 }
-
-const WRITE_BOUNDARY_PATTERNS: { regex: RegExp; label: string }[] = [
-  { regex: /mutate\s*\(/, label: 'mutate()' },
-  { regex: /db\.insert\s*\(/, label: 'db.insert()' },
-  { regex: /db\.update\s*\(/, label: 'db.update()' },
-  { regex: /db\.delete\s*\(/, label: 'db.delete()' },
-  { regex: /db\.transaction\s*\(/, label: 'db.transaction()' },
-  { regex: /tx\.\w+\s*\(/, label: 'tx.*()' },
-  { regex: /\.execute\s*\(/, label: '.execute()' },
-];
-
-const CAPABILITIES_REGEX =
-  /export\s+const\s+CAPABILITIES\s*=\s*\[([^\]]*)\]\s*as\s+const/s;
-
-const JSDOC_CAPABILITY_REGEX = /@capability\s+[\w.]+/;
-
-const SURFACE_GLOBS = [
-  'apps/web/app/actions/**/*.ts',
-  'apps/web/app/api/**/route.ts',
-  'packages/*/src/**/handlers/*.ts',
-  'packages/*/src/engine.ts',
-];
 
 /**
  * Detect mutation boundaries across all surface files.

@@ -35,7 +35,8 @@
       "@/*": ["./*", "../../packages/ui/src/*"],
       "@/ui/*": ["../../packages/ui/dist/*"],
       "@/lib/*": ["./src/lib/*", "../../packages/ui/src/lib/*"],
-      "@/components/*": ["./components/*"],
+      "@/components/*": ["./components/*", "../../packages/ui/src/components/*"],
+      "@/hooks/*": ["./hooks/*", "../../packages/ui/src/hooks/*"],
       "@/app/*": ["./app/*"],
       "@/types/*": ["./src/types/*"]
     }

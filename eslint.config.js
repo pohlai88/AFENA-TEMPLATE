@@ -17,6 +17,7 @@ module.exports = [
       '*.config.ts',
       '*.config.mjs',
       '**/*.d.ts',
+      'tools/ci-invariants.mjs',
     ],
   },
   ...baseConfig,

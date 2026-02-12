@@ -2,13 +2,9 @@
 
 Ratified zero-drift architecture for `afena meta`: a dual-ledger metadata system with domain/namespace taxonomy, canon key parser, precomputed verb→kind map, 5 CI-enforceable invariants (VIS-00 through VIS-04), structured scoped exceptions with stable IDs, hybrid scanning, safe autofix with fix reports, and composable RBAC derivation — designed to scale from contacts-only to 50+ ERP domains without annotation fatigue.
 
-> **Implementation Status (2026-02-13):** Phases 1–3 (steps 1–31) complete. All 5 VIS invariants (VIS-00 through VIS-04) enforced. VIS_POLICY.phase = 3 (all severities promoted to error). 26 capabilities, 15 covered, 9 orphaned (headlessOnly), 2 excepted. CLI commands: `afena meta gen/check/fix/matrix/manifest`. Structural metadata: 13 packages, 37 tables, ~30K LOC. All checks PASS.
+> **Implementation Status (2026-02-13):** All 5 phases (steps 1–41) complete + post-audit hardening. All 5 VIS invariants enforced at error severity. VIS_POLICY.phase = 3. RBAC derivation auto-populates `rbacTier` + `rbacScope` on all 26 capabilities. Runtime API (`GET /api/meta/capabilities` with auth guard), feature flag toggle API, AI context emitter, navigation generation, and permission pre-check all implemented. All checks PASS.
 >
-> **Deferred by Design (not gaps — additive when needed):**
->
-> - **Phase 4** (steps 32–36) — CI integration (`turbo.json`), `entity-new.ts` auto-annotation, RBAC derivation auto-populate, promote VIS-04 from warn → error
-> - **Phase 5** (steps 37–41) — Runtime API, feature flags, AI context emitter, navigation generation, permission pre-check
-> - **SURFACE in `surface.ts`** — placed in co-located `surface.ts` files (not `page.tsx`) due to Next.js restriction on arbitrary exports from page files
+> **Post-audit improvements:** VIS-02 UI check no longer double-fires (warn-only for missing UI surface), L2 AST scanner wired with `--deep` flag, `--json` output for CI, shared write boundary patterns module, `CapabilityKey` type union exported, `cli_command` surface kind added, expired exceptions shown as errors in `gen`, PRD verb sets synced with implementation.
 
 ---
 
@@ -245,10 +241,10 @@ export const CAPABILITY_VERBS = {
   ],
   read: ['read', 'list', 'versions', 'audit'],
   search: ['search', 'global'],
-  admin: ['define', 'manage', 'configure', 'seed'],
-  system: ['evaluate', 'run', 'explain'],
+  admin: ['define', 'manage', 'configure', 'seed', 'sync', 'resolve'],
+  system: ['evaluate', 'run', 'explain', 'detect', 'forecast'],
   auth: ['sign_in', 'sign_out', 'refresh'],
-  storage: ['upload', 'download', 'metadata'],
+  storage: ['upload', 'download', 'metadata', 'save'],
 } as const;
 ```
 
@@ -354,7 +350,10 @@ export async function createContact(...) { ... }
 
 ### UI pages (surface declaration with stable ID)
 
+> **Implementation note:** SURFACE declarations live in co-located `surface.ts` files (not `page.tsx`) due to Next.js restriction on arbitrary exports from page files.
+
 ```typescript
+// apps/web/app/(app)/org/[slug]/contacts/surface.ts
 export const SURFACE = {
   surfaceId: 'web.contacts.list.page', // stable ID — survives route renames
   page: '/org/[slug]/contacts',

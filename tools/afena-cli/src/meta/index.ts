@@ -1,7 +1,7 @@
 /**
  * Meta CLI commands — afena meta [gen|check|fix|matrix|manifest]
  *
- * gen      — scan surfaces, load exceptions, generate ledger + matrix + manifest + mermaid
+ * gen      — scan surfaces, load exceptions, generate ledger + matrix + manifest + mermaid + AI context
  * check    — run VIS-00 through VIS-04, exit non-zero on failure
  * fix      — autofix missing annotations (--dry-run supported)
  * matrix   — shortcut to generate and print the matrix only
@@ -30,6 +30,8 @@ import { generateLedger, writeLedger } from './emitters/ledger';
 import { generateMatrix, writeMatrix } from './emitters/matrix';
 import { generateManifest, writeManifest } from './emitters/manifest';
 import { generateCapabilityMermaid, generateDependencyMermaid, writeMermaid } from './emitters/mermaid';
+import { generateAiContext, writeAiContext } from './emitters/ai-context';
+import { scanAstCapabilities } from './collectors/ast-scanner';
 import { runAutofix } from './autofix';
 
 /**
@@ -64,11 +66,36 @@ export function registerMetaCommand(program: Command): void {
   meta
     .command('gen')
     .description('Scan surfaces + generate ledger and matrix')
-    .action(async () => {
+    .option('--deep', 'Enable L2 AST scanning for @capability JSDoc tags', false)
+    .action(async (opts: { deep: boolean }) => {
       const repoRoot = findRepoRoot();
       console.log(pc.cyan('Scanning surfaces...'));
 
       const scanResult = await scanSurfaces(repoRoot);
+
+      // L2 AST scanning (--deep flag)
+      if (opts.deep) {
+        console.log(pc.cyan('  Running L2 AST scan for @capability JSDoc tags...'));
+        const astCaps = await scanAstCapabilities(repoRoot);
+        for (const cap of astCaps) {
+          const existing = scanResult.capabilities.find((c) => c.file === cap.file);
+          if (existing) {
+            if (!existing.capabilities.includes(cap.key)) {
+              existing.capabilities.push(cap.key);
+            }
+          } else {
+            scanResult.capabilities.push({
+              file: cap.file,
+              kind: 'server_action',
+              capabilities: [cap.key],
+            });
+          }
+        }
+        if (astCaps.length > 0) {
+          console.log(`    Found ${astCaps.length} @capability JSDoc tag(s)`);
+        }
+      }
+
       console.log(
         `  Found ${pc.bold(String(scanResult.capabilities.length))} capability surfaces, ` +
         `${pc.bold(String(scanResult.uiSurfaces.length))} UI surfaces`,
@@ -76,7 +103,10 @@ export function registerMetaCommand(program: Command): void {
 
       const { exceptions, expired, reviewOverdue } = loadExceptions(repoRoot);
       if (expired.length > 0) {
-        console.log(pc.yellow(`  ⚠ ${expired.length} expired exception(s)`));
+        console.log(pc.red(`  ✗ ${expired.length} expired exception(s) — must renew or remove`));
+        for (const exc of expired) {
+          console.log(pc.red(`    ${exc.id}: ${exc.key} (expired ${exc.expiresOn})`));
+        }
       }
       if (reviewOverdue.length > 0) {
         console.log(pc.yellow(`  ⚠ ${reviewOverdue.length} review-overdue exception(s)`));
@@ -118,6 +148,11 @@ export function registerMetaCommand(program: Command): void {
       writeMermaid(repoRoot, capMermaid, depMermaid);
       console.log(pc.green(`  ✓ Wrote .afena/capability.mermaid.md`));
 
+      // Generate AI context
+      const aiContext = generateAiContext();
+      writeAiContext(repoRoot, aiContext);
+      console.log(pc.green(`  ✓ Wrote .agent/context/capability-map.md`));
+
       // Print summary
       console.log('');
       console.log(pc.bold('Summary:'));
@@ -132,8 +167,10 @@ export function registerMetaCommand(program: Command): void {
   // ── afena meta check ────────────────────────────────────
   meta
     .command('check')
-    .description('Run VIS-00 through VIS-03 checks (exits non-zero on failure)')
-    .action(async () => {
+    .description('Run VIS-00 through VIS-04 checks (exits non-zero on failure)')
+    .option('--deep', 'Enable L2 AST scanning for @capability JSDoc tags', false)
+    .option('--json', 'Output results as JSON', false)
+    .action(async (opts: { deep: boolean; json: boolean }) => {
       const repoRoot = findRepoRoot();
       let hasErrors = false;
       let hasWarnings = false;
@@ -151,6 +188,25 @@ export function registerMetaCommand(program: Command): void {
       }
 
       const scanResult = await scanSurfaces(repoRoot);
+
+      // L2 AST scanning (--deep flag)
+      if (opts.deep) {
+        const astCaps = await scanAstCapabilities(repoRoot);
+        for (const cap of astCaps) {
+          const existing = scanResult.capabilities.find((c) => c.file === cap.file);
+          if (existing) {
+            if (!existing.capabilities.includes(cap.key)) {
+              existing.capabilities.push(cap.key);
+            }
+          } else {
+            scanResult.capabilities.push({
+              file: cap.file,
+              kind: 'server_action',
+              capabilities: [cap.key],
+            });
+          }
+        }
+      }
 
       // VIS-00
       console.log(pc.cyan('\nVIS-00: Canon Completeness for Mutations'));
@@ -219,11 +275,11 @@ export function registerMetaCommand(program: Command): void {
       console.log(pc.cyan('\nVIS-04: No Dead Active Capabilities'));
       const vis04 = checkVis04(scanResult, exceptions);
       if (vis04.length > 0) {
-        console.log(pc.yellow(`  ⚠ ${vis04.length} warning(s)`));
+        console.log(pc.red(`  ✗ ${vis04.length} error(s)`));
         for (const v of vis04) {
-          console.log(pc.yellow(`    ${v.key}: ${v.reason}`));
+          console.log(pc.red(`    ${v.key}: ${v.reason}`));
         }
-        hasWarnings = true;
+        hasErrors = true;
       } else {
         console.log(pc.green(`  ✓ No dead active capabilities`));
       }
@@ -236,6 +292,22 @@ export function registerMetaCommand(program: Command): void {
           console.log(pc.yellow(`    ${w}`));
         }
         hasWarnings = true;
+      }
+
+      // JSON output mode (IMP-04)
+      if (opts.json) {
+        const result = {
+          status: hasErrors ? 'fail' : hasWarnings ? 'warn' : 'pass',
+          vis00: vis00Errors.map((v) => ({ file: v.file, reason: v.reason })),
+          vis01: vis01.map((v) => ({ key: v.key, reason: v.reason })),
+          vis02: { errors: vis02Errors.map((v) => ({ key: v.key, kind: v.kind, reason: v.reason })), warnings: vis02Warns.map((v) => ({ key: v.key, kind: v.kind, reason: v.reason })) },
+          vis03: vis03.map((v) => ({ file: v.file, surfaceId: v.surfaceId, phantomKey: v.phantomKey })),
+          vis04: vis04.map((v) => ({ key: v.key, reason: v.reason })),
+          kindWarnings,
+        };
+        console.log(JSON.stringify(result, null, 2));
+        if (hasErrors) process.exit(1);
+        return;
       }
 
       console.log('');

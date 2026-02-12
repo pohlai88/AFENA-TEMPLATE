@@ -12,7 +12,8 @@
   },
   "scripts": {
     "build": "tsup",
-    "dev": "tsup --watch"
+    "dev": "tsup --watch",
+    "meta:check": "node dist/index.js meta check"
   },
   "dependencies": {
     "commander": "catalog:",

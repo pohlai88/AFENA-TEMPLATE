@@ -32,6 +32,10 @@ export const ACTION_TYPES = [
   'contacts.update',
   'contacts.delete',
   'contacts.restore',
+  'contacts.submit',
+  'contacts.cancel',
+  'contacts.approve',
+  'contacts.reject',
 ] as const;
 export type ActionType = (typeof ACTION_TYPES)[number];
 

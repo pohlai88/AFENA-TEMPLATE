@@ -10,6 +10,11 @@ import { readFileSync } from 'fs';
 import fg from 'fast-glob';
 import type { CapabilityException } from 'afena-canon';
 import { findException } from '../exceptions';
+import {
+  SURFACE_GLOBS,
+  hasWriteBoundary,
+  hasCapabilityAnnotation,
+} from '../shared/patterns';
 
 export interface Vis00Violation {
   file: string;
@@ -17,31 +22,8 @@ export interface Vis00Violation {
   exceptionId?: string;
 }
 
-const WRITE_BOUNDARY_PATTERNS = [
-  /mutate\s*\(/,
-  /db\.insert\s*\(/,
-  /db\.update\s*\(/,
-  /db\.delete\s*\(/,
-  /db\.transaction\s*\(/,
-  /tx\.\w+\s*\(/,
-  /\.execute\s*\(/,
-];
-
-const CAPABILITIES_REGEX =
-  /export\s+const\s+CAPABILITIES\s*=\s*\[([^\]]*)\]\s*as\s+const/s;
-
-const JSDOC_CAPABILITY_REGEX = /@capability\s+[\w.]+/;
-
 const EXCEPTION_POINTER_REGEX =
   /@capability:ignore\s+VIS-00\s+exceptionId="([^"]+)"/;
-
-function hasWriteBoundary(content: string): boolean {
-  return WRITE_BOUNDARY_PATTERNS.some((re) => re.test(content));
-}
-
-function hasCapabilityAnnotation(content: string): boolean {
-  return CAPABILITIES_REGEX.test(content) || JSDOC_CAPABILITY_REGEX.test(content);
-}
 
 /**
  * Run VIS-00 check across all surface boundary files.
@@ -53,15 +35,10 @@ export async function checkVis00(
 ): Promise<Vis00Violation[]> {
   const violations: Vis00Violation[] = [];
 
-  const surfaceFiles = await fg(
-    [
-      'apps/web/app/actions/**/*.ts',
-      'apps/web/app/api/**/route.ts',
-      'packages/*/src/**/handlers/*.ts',
-      'packages/*/src/engine.ts',
-    ],
-    { cwd: repoRoot, absolute: true },
-  );
+  const surfaceFiles = await fg(SURFACE_GLOBS, {
+    cwd: repoRoot,
+    absolute: true,
+  });
 
   for (const absPath of surfaceFiles) {
     const content = readFileSync(absPath, 'utf-8');
@@ -74,7 +51,7 @@ export async function checkVis00(
     // Check for inline exception pointer
     const pointerMatch = content.match(EXCEPTION_POINTER_REGEX);
     if (pointerMatch) {
-      const pointerId = pointerMatch[1];
+      const pointerId = pointerMatch[1]!;
       const exc = exceptions.find((e) => e.id === pointerId);
       if (exc) {
         violations.push({

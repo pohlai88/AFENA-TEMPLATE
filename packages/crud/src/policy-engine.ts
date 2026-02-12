@@ -129,11 +129,10 @@ export function evaluatePolicyDecision(
     }
   }
 
-  return {
-    ok: true,
-    allowWriteFields: merged.allow_write,
-    denyWriteFields: merged.deny_write,
-  };
+  const result: { ok: true; allowWriteFields?: string[]; denyWriteFields?: string[] } = { ok: true };
+  if (merged.allow_write) result.allowWriteFields = merged.allow_write;
+  if (merged.deny_write) result.denyWriteFields = merged.deny_write;
+  return result;
 }
 
 /**
@@ -213,14 +212,17 @@ function mergeFieldRules(rules: FieldRules[]): FieldRules {
   let allow_write: string[] | undefined;
   if (allowSets && allowSets.length > 0) {
     // Intersection of all allow sets
-    const first = allowSets[0];
+    const first = allowSets[0]!;
     const intersection = new Set(
       [...first].filter((f) => allowSets.every((s) => s.has(f))),
     );
     allow_write = Array.from(intersection);
   }
 
-  return { deny_write, allow_write };
+  const merged: FieldRules = {};
+  if (deny_write) merged.deny_write = deny_write;
+  if (allow_write) merged.allow_write = allow_write;
+  return merged;
 }
 
 function parseFieldRules(json: unknown): FieldRules {

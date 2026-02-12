@@ -306,6 +306,17 @@ import { generateEntityActions } from '@/lib/actions/entity-actions';
 
 import type { ApiResponse } from 'afena-canon';
 
+export const CAPABILITIES = [
+  '${entityName}.create',
+  '${entityName}.update',
+  '${entityName}.delete',
+  '${entityName}.restore',
+  '${entityName}.read',
+  '${entityName}.list',
+  '${entityName}.versions',
+  '${entityName}.audit',
+] as const;
+
 const actions = generateEntityActions('${entityName}');
 
 // ── Create ──────────────────────────────────────────────────
@@ -472,15 +483,28 @@ console.log(`
    '${entityName}.delete',
    '${entityName}.restore',
 
-4. packages/crud/src/mutate.ts — add to HANDLER_REGISTRY:
+4. packages/canon/src/types/capability.ts — add to CAPABILITY_CATALOG:
+   '${entityName}.create': { key: '${entityName}.create', intent: 'Create a new ${singular}', scope: 'org', status: 'active', entities: ['${entityName}'], tags: ['TODO'] },
+   '${entityName}.update': { key: '${entityName}.update', intent: 'Update an existing ${singular}', scope: 'org', status: 'active', entities: ['${entityName}'], tags: ['TODO'] },
+   '${entityName}.delete': { key: '${entityName}.delete', intent: 'Soft-delete a ${singular}', scope: 'org', status: 'active', entities: ['${entityName}'], tags: ['TODO'], risks: ['irreversible'] },
+   '${entityName}.restore': { key: '${entityName}.restore', intent: 'Restore a soft-deleted ${singular}', scope: 'org', status: 'active', entities: ['${entityName}'], tags: ['TODO'] },
+   '${entityName}.read': { key: '${entityName}.read', intent: 'Read a single ${singular}', scope: 'org', status: 'active', entities: ['${entityName}'], tags: ['TODO'] },
+   '${entityName}.list': { key: '${entityName}.list', intent: 'List ${entityName} with filtering', scope: 'org', status: 'active', entities: ['${entityName}'], tags: ['TODO'] },
+   '${entityName}.versions': { key: '${entityName}.versions', intent: 'View version history of a ${singular}', scope: 'org', status: 'active', entities: ['${entityName}'], tags: ['TODO', 'audit'] },
+   '${entityName}.audit': { key: '${entityName}.audit', intent: 'View audit trail for a ${singular}', scope: 'org', status: 'active', entities: ['${entityName}'], tags: ['TODO', 'audit'] },
+
+5. packages/crud/src/mutate.ts — add to HANDLER_REGISTRY:
    import { ${camelPlural}Handler } from './handlers/${entityName}';
    // then in HANDLER_REGISTRY:
    ${entityName}: ${camelPlural}Handler,
 
-5. Generate migration:
+6. Generate migration:
    cd packages/database && npx drizzle-kit generate
 
-6. Apply migration:
+7. Apply migration:
    cd packages/database && npx drizzle-kit migrate
+
+8. Run capability checks:
+   cd tools/afena-cli && node dist/index.js meta check
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 `);

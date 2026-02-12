@@ -46,6 +46,13 @@
         "tsconfig.tsbuildinfo"
       ]
     },
+    "meta:check": {
+      "dependsOn": [
+        "^build"
+      ],
+      "outputs": [],
+      "cache": false
+    },
     "type-gen": {
       "cache": false,
       "outputs": [

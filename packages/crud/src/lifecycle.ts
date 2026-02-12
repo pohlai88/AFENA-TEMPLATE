@@ -6,16 +6,18 @@ import type { MutationSpec } from 'afena-canon';
  * Lifecycle guard — enforced BEFORE policy, absolute.
  * Prevents illegal state transitions on doc entities.
  *
- * State machine:
+ * Enterprise state machine:
  *   Draft     → create, update, delete, submit (subject to policy)
- *   Submitted → cancel, amend only (update/delete/submit denied)
- *   Cancelled → read-only (everything denied)
+ *   Submitted → approve, reject, cancel, amend (update/delete/submit denied)
+ *   Active    → update, cancel (submit/approve/reject denied)
+ *   Cancelled → restore only (everything else denied)
+ *   Amended   → read-only (everything denied)
  *
  * Non-doc entities (no doc_status column) pass through unchanged.
  * Create operations (no existing row) pass through unchanged.
  */
 export function enforceLifecycle(
-  spec: MutationSpec,
+  _spec: MutationSpec,
   verb: string,
   existing: Record<string, unknown> | null,
 ): void {
@@ -24,7 +26,9 @@ export function enforceLifecycle(
   const status = (existing.doc_status ?? existing.docStatus) as
     | 'draft'
     | 'submitted'
+    | 'active'
     | 'cancelled'
+    | 'amended'
     | undefined;
 
   if (!status) return; // non-doc entity — no lifecycle
@@ -36,12 +40,25 @@ export function enforceLifecycle(
     if (verb === 'submit') {
       throw LifecycleError.alreadySubmitted();
     }
-    // allow: cancel, amend
+    // allow: approve, reject, cancel, amend
+    return;
+  }
+
+  if (status === 'active') {
+    if (verb === 'submit' || verb === 'approve' || verb === 'reject') {
+      throw LifecycleError.activeNoResubmit();
+    }
+    // allow: update, cancel, delete
     return;
   }
 
   if (status === 'cancelled') {
+    if (verb === 'restore') return; // allow restore from cancelled
     throw LifecycleError.cancelledReadOnly();
+  }
+
+  if (status === 'amended') {
+    throw LifecycleError.amendedReadOnly();
   }
 
   // draft — all verbs allowed (subject to policy)

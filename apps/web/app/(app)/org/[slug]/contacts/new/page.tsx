@@ -1,3 +1,4 @@
+import { PageHeader } from '../../_components/crud/client/page-header';
 import { ContactForm } from '../_components/contact-form';
 
 export default async function NewContactPage({
@@ -8,14 +9,12 @@ export default async function NewContactPage({
   const { slug } = await params;
 
   return (
-    <div className="mx-auto max-w-2xl px-6 py-8">
-      <h1 className="text-2xl font-semibold tracking-tight">New Contact</h1>
-      <p className="mt-1 text-sm text-muted-foreground">
-        Add a new contact to your organization.
-      </p>
-      <div className="mt-6">
-        <ContactForm orgSlug={slug} />
-      </div>
+    <div className="mx-auto max-w-2xl space-y-6">
+      <PageHeader
+        title="New Contact"
+        description="Add a new contact to your organization."
+      />
+      <ContactForm orgSlug={slug} />
     </div>
   );
 }

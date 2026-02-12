@@ -8,6 +8,8 @@
  * but not every capability is an ActionType.
  */
 
+import { getActionFamily } from './action';
+
 import type { ActionFamily } from './action';
 
 // ── Capability Kind ─────────────────────────────────────────
@@ -579,19 +581,36 @@ export const CAPABILITY_CATALOG: Record<string, CapabilityDescriptor> = {
   },
 };
 
-// ── Catalog Validation (module init) ────────────────────────
+// ── Catalog Validation + RBAC Derivation (module init) ──────
 
-// Validate every key in the catalog at module init
+// Validate every key and auto-populate rbacTier + rbacScope
 for (const [key, descriptor] of Object.entries(CAPABILITY_CATALOG)) {
   if (descriptor.key !== key) {
     throw new Error(
       `CAPABILITY_CATALOG key mismatch: map key "${key}" !== descriptor.key "${descriptor.key}"`,
     );
   }
-  validateCapabilityKey(key);
+  const parsed = validateCapabilityKey(key);
+  const kind = descriptor.kind ?? inferKindFromVerb(parsed.verb);
+
+  // Auto-populate rbacTier if not explicitly set
+  if (!descriptor.rbacTier) {
+    if (kind === 'mutation') {
+      const family = getActionFamily(key);
+      descriptor.rbacTier = ACTION_FAMILY_TO_TIER[family];
+    } else {
+      descriptor.rbacTier = KIND_TO_TIER[kind];
+    }
+  }
+
+  // Auto-populate rbacScope if not explicitly set
+  descriptor.rbacScope ??= KIND_TO_SCOPE[kind];
 }
 
-// ── Derived CAPABILITY_KEYS ─────────────────────────────────
+// ── Derived CAPABILITY_KEYS + CapabilityKey type ────────────
 
 /** All valid capability keys, derived from the catalog. Never hand-edited. */
 export const CAPABILITY_KEYS = Object.keys(CAPABILITY_CATALOG);
+
+/** Type-safe union of all capability keys. */
+export type CapabilityKey = keyof typeof CAPABILITY_CATALOG;

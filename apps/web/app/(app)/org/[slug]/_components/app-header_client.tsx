@@ -1,0 +1,16 @@
+'use client';
+
+import { Separator } from 'afena-ui/components/separator';
+import { SidebarTrigger } from 'afena-ui/components/sidebar';
+
+import { AppBreadcrumbs } from './app-breadcrumbs_client';
+
+export function AppHeader() {
+  return (
+    <header className="flex h-14 shrink-0 items-center gap-2 border-b px-4">
+      <SidebarTrigger className="-ml-1" />
+      <Separator orientation="vertical" className="mr-2 h-4" />
+      <AppBreadcrumbs />
+    </header>
+  );
+}

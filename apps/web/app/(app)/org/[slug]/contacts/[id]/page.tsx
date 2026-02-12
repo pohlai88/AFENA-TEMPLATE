@@ -4,26 +4,15 @@ import { notFound } from 'next/navigation';
 import { Badge } from 'afena-ui/components/badge';
 import { Button } from 'afena-ui/components/button';
 import { Card, CardContent, CardHeader, CardTitle } from 'afena-ui/components/card';
-import { Separator } from 'afena-ui/components/separator';
-import { ArrowLeft, Building2, Clock, FileText, Mail, Pencil, Phone } from 'lucide-react';
+import { Building2, Clock, FileText, Mail, Pencil, Phone } from 'lucide-react';
 
-import { getContact } from '@/app/actions/contacts';
-
+import {
+  EntityDetailLayout,
+  MetadataCard,
+} from '../../_components/crud/client/entity-detail-layout';
+import { PageHeader } from '../../_components/crud/client/page-header';
 import { DeleteContactButton } from '../_components/delete-contact-button';
-
-interface Contact {
-  id: string;
-  name: string;
-  email: string | null;
-  phone: string | null;
-  company: string | null;
-  notes: string | null;
-  version: number;
-  is_deleted: boolean;
-  created_at: string;
-  updated_at: string;
-  created_by: string;
-}
+import { readContact } from '../_server/contacts.query_server';
 
 export default async function ContactDetailPage({
   params,
@@ -31,37 +20,15 @@ export default async function ContactDetailPage({
   params: Promise<{ slug: string; id: string }>;
 }) {
   const { slug, id } = await params;
-  const response = await getContact(id);
+  const contact = await readContact(id);
 
-  if (!response.ok) {
-    notFound();
-  }
-
-  const contact = response.data as Contact;
+  if (!contact) notFound();
 
   return (
-    <div className="mx-auto max-w-3xl px-6 py-8">
-      {/* Back link */}
-      <Link
-        href={`/org/${slug}/contacts`}
-        className="mb-6 inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground"
-      >
-        <ArrowLeft className="h-4 w-4" />
-        Back to contacts
-      </Link>
-
-      {/* Header */}
-      <div className="flex items-start justify-between">
-        <div>
-          <h1 className="text-2xl font-semibold tracking-tight">{contact.name}</h1>
-          <div className="mt-1 flex items-center gap-2">
-            <Badge variant="secondary" className="text-xs">v{contact.version}</Badge>
-            {contact.company && (
-              <span className="text-sm text-muted-foreground">{contact.company}</span>
-            )}
-          </div>
-        </div>
-        <div className="flex items-center gap-2">
+    <EntityDetailLayout
+      header={
+        <PageHeader title={contact.name}>
+          <Badge variant="secondary" className="text-xs">v{contact.version}</Badge>
           <Button variant="outline" size="sm" asChild>
             <Link href={`/org/${slug}/contacts/${id}/edit`}>
               <Pencil className="mr-2 h-4 w-4" />
@@ -74,13 +41,9 @@ export default async function ContactDetailPage({
             version={contact.version}
             orgSlug={slug}
           />
-        </div>
-      </div>
-
-      <Separator className="my-6" />
-
-      {/* Details */}
-      <div className="grid gap-6 md:grid-cols-2">
+        </PageHeader>
+      }
+      main={
         <Card>
           <CardHeader>
             <CardTitle className="text-base">Contact Information</CardTitle>
@@ -122,74 +85,70 @@ export default async function ContactDetailPage({
             )}
           </CardContent>
         </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-base">Metadata</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="flex items-center gap-3">
-              <Clock className="h-4 w-4 text-muted-foreground" />
-              <div>
-                <p className="text-xs text-muted-foreground">Created</p>
-                <p className="text-sm">
-                  {new Date(contact.created_at).toLocaleDateString('en-US', {
-                    year: 'numeric',
-                    month: 'short',
-                    day: 'numeric',
-                    hour: '2-digit',
-                    minute: '2-digit',
-                  })}
-                </p>
-              </div>
+      }
+      sidebar={
+        <MetadataCard>
+          <div className="flex items-center gap-3">
+            <Clock className="h-4 w-4 text-muted-foreground" />
+            <div>
+              <p className="text-xs text-muted-foreground">Created</p>
+              <p className="text-sm">
+                {new Date(contact.created_at).toLocaleDateString('en-US', {
+                  year: 'numeric',
+                  month: 'short',
+                  day: 'numeric',
+                  hour: '2-digit',
+                  minute: '2-digit',
+                })}
+              </p>
             </div>
-            <div className="flex items-center gap-3">
-              <Clock className="h-4 w-4 text-muted-foreground" />
-              <div>
-                <p className="text-xs text-muted-foreground">Last updated</p>
-                <p className="text-sm">
-                  {new Date(contact.updated_at).toLocaleDateString('en-US', {
-                    year: 'numeric',
-                    month: 'short',
-                    day: 'numeric',
-                    hour: '2-digit',
-                    minute: '2-digit',
-                  })}
-                </p>
-              </div>
+          </div>
+          <div className="flex items-center gap-3">
+            <Clock className="h-4 w-4 text-muted-foreground" />
+            <div>
+              <p className="text-xs text-muted-foreground">Last updated</p>
+              <p className="text-sm">
+                {new Date(contact.updated_at).toLocaleDateString('en-US', {
+                  year: 'numeric',
+                  month: 'short',
+                  day: 'numeric',
+                  hour: '2-digit',
+                  minute: '2-digit',
+                })}
+              </p>
             </div>
-            <div className="flex flex-col gap-1">
-              <Link
-                href={`/org/${slug}/contacts/${id}/versions`}
-                className="text-sm text-primary hover:underline"
-              >
-                Version history →
-              </Link>
-              <Link
-                href={`/org/${slug}/contacts/${id}/audit`}
-                className="text-sm text-primary hover:underline"
-              >
-                Audit trail →
-              </Link>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-
-      {/* Notes */}
-      {contact.notes && (
-        <Card className="mt-6">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-base">
-              <FileText className="h-4 w-4" />
-              Notes
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="whitespace-pre-wrap text-sm">{contact.notes}</p>
-          </CardContent>
-        </Card>
-      )}
-    </div>
+          </div>
+          <div className="flex flex-col gap-1">
+            <Link
+              href={`/org/${slug}/contacts/${id}/versions`}
+              className="text-sm text-primary hover:underline"
+            >
+              Version history →
+            </Link>
+            <Link
+              href={`/org/${slug}/contacts/${id}/audit`}
+              className="text-sm text-primary hover:underline"
+            >
+              Audit trail →
+            </Link>
+          </div>
+        </MetadataCard>
+      }
+      footer={
+        contact.notes ? (
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2 text-base">
+                <FileText className="h-4 w-4" />
+                Notes
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="whitespace-pre-wrap text-sm">{contact.notes}</p>
+            </CardContent>
+          </Card>
+        ) : undefined
+      }
+    />
   );
 }
