@@ -38,7 +38,18 @@ export async function POST(request: Request) {
         contentType: contentType ?? null,
         sizeBytes: sizeBytes ?? null,
       })
+      .onConflictDoNothing({ target: r2Files.objectKey })
       .returning();
+
+    // Idempotency: if ON CONFLICT hit, return existing row
+    if (!file) {
+      const [existing] = await db
+        .select()
+        .from(r2Files)
+        .where(eq(r2Files.objectKey, objectKey));
+
+      return NextResponse.json({ success: true, file: existing });
+    }
 
     return NextResponse.json({ success: true, file });
   } catch (error) {

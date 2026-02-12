@@ -1,3 +1,11 @@
+export { users } from './users';
+export type { User, NewUser } from './users';
+
+export { r2Files } from './r2-files';
+export type { R2File, NewR2File } from './r2-files';
+
+export { usersRelations, r2FilesRelations } from './relations';
+
 export { auditLogs } from './audit-logs';
 export type { AuditLog, NewAuditLog } from './audit-logs';
 

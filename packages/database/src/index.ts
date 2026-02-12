@@ -1,5 +1,4 @@
 export { db } from './db';
-export * from './schema';
 export * from './schema/index';
 export { tenantPolicy, ownerPolicy } from './helpers/tenant-policy';
 export { baseEntityColumns } from './helpers/base-entity';

@@ -11,4 +11,11 @@ module.exports = [
       },
     },
   },
+  // System/infra routes that write directly (not domain truth — exempt from INVARIANT-01)
+  {
+    files: ['app/api/storage/**/*.ts'],
+    rules: {
+      'no-restricted-syntax': 'off',
+    },
+  },
 ];

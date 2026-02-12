@@ -26,6 +26,7 @@ export * from './components/drawer';
 export * from './components/dropdown-menu';
 export * from './components/empty';
 export * from './components/field';
+export * from './components/file-upload';
 export * from './components/form';
 export * from './components/hover-card';
 export * from './components/input';
