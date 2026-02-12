@@ -54,6 +54,42 @@ export async function restoreContact(
   return actions.restore(id, expectedVersion);
 }
 
+// ── Submit (draft → submitted) ───────────────────────────────
+
+export async function submitContact(
+  id: string,
+  expectedVersion: number,
+): Promise<ApiResponse> {
+  return actions.submit(id, expectedVersion);
+}
+
+// ── Cancel (submitted/active → cancelled) ───────────────────
+
+export async function cancelContact(
+  id: string,
+  expectedVersion: number,
+): Promise<ApiResponse> {
+  return actions.cancel(id, expectedVersion);
+}
+
+// ── Approve (submitted → active) ────────────────────────────
+
+export async function approveContact(
+  id: string,
+  expectedVersion: number,
+): Promise<ApiResponse> {
+  return actions.approve(id, expectedVersion);
+}
+
+// ── Reject (submitted → draft) ──────────────────────────────
+
+export async function rejectContact(
+  id: string,
+  expectedVersion: number,
+): Promise<ApiResponse> {
+  return actions.reject(id, expectedVersion);
+}
+
 // ── Read ────────────────────────────────────────────────────
 
 export async function getContact(id: string): Promise<ApiResponse> {

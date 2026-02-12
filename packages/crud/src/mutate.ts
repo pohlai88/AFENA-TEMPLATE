@@ -281,6 +281,24 @@ export async function mutate(
             ctx,
           );
           break;
+        case 'approve':
+          if (!handler.approve) throw new Error(`Entity type '${validSpec.entityRef.type}' does not support approve`);
+          handlerResult = await handler.approve(
+            tx as any,
+            entityId as string,
+            expectedVer as number,
+            ctx,
+          );
+          break;
+        case 'reject':
+          if (!handler.reject) throw new Error(`Entity type '${validSpec.entityRef.type}' does not support reject`);
+          handlerResult = await handler.reject(
+            tx as any,
+            entityId as string,
+            expectedVer as number,
+            ctx,
+          );
+          break;
         default:
           throw new Error(`Unsupported verb: ${verb}`);
       }

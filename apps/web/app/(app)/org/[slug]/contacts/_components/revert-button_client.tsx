@@ -16,7 +16,9 @@ import {
 import { Undo2 } from 'lucide-react';
 import { useState } from 'react';
 
-import { updateContact } from '@/app/actions/contacts';
+import { executeContactAction } from '../_server/contacts.server-actions';
+
+import type { ActionEnvelope } from 'afena-canon';
 
 interface RevertButtonProps {
   contactId: string;
@@ -25,6 +27,7 @@ interface RevertButtonProps {
   currentVersion: number;
   snapshot: Record<string, unknown>;
   orgSlug: string;
+  orgId: string;
 }
 
 export function RevertButton({
@@ -34,6 +37,7 @@ export function RevertButton({
   currentVersion,
   snapshot,
   orgSlug,
+  orgId,
 }: RevertButtonProps) {
   const router = useRouter();
   const [pending, setPending] = useState(false);
@@ -44,7 +48,6 @@ export function RevertButton({
     setPending(true);
     setError(null);
 
-    // Extract mutable fields from the snapshot to revert to
     const input: Record<string, string> = {};
     const mutableFields = ['name', 'email', 'phone', 'company', 'notes'];
     for (const field of mutableFields) {
@@ -54,14 +57,26 @@ export function RevertButton({
       }
     }
 
-    // Must include name at minimum
     if (!input['name']) {
       setError('Cannot revert: snapshot missing required "name" field');
       setPending(false);
       return;
     }
 
-    const result = await updateContact(contactId, currentVersion, input);
+    const envelope: ActionEnvelope = {
+      clientActionId: crypto.randomUUID(),
+      orgId,
+      entityType: 'contacts',
+      entityId: contactId,
+      kind: 'update',
+    };
+
+    const result = await executeContactAction(envelope, {
+      input,
+      expectedVersion: currentVersion,
+      orgSlug,
+    });
+
     setPending(false);
 
     if (result.ok) {

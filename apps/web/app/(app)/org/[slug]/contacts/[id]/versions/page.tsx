@@ -8,7 +8,8 @@ import { ArrowLeft, Clock, GitBranch } from 'lucide-react';
 
 import { getContact, getContactVersions } from '@/app/actions/contacts';
 
-import { RevertButton } from '../../_components/revert-button';
+import { getOrgContext } from '../../../_server/org-context_server';
+import { RevertButton } from '../../_components/revert-button_client';
 
 interface EntityVersion {
   id: string;
@@ -27,12 +28,13 @@ export default async function ContactVersionsPage({
 }) {
   const { slug, id } = await params;
 
-  const [contactRes, versionsRes] = await Promise.all([
+  const [contactRes, versionsRes, ctx] = await Promise.all([
     getContact(id),
     getContactVersions(id),
+    getOrgContext(slug),
   ]);
 
-  if (!contactRes.ok) {
+  if (!contactRes.ok || !ctx) {
     notFound();
   }
 
@@ -124,6 +126,7 @@ export default async function ContactVersionsPage({
                           currentVersion={contact.version}
                           snapshot={snapshot}
                           orgSlug={slug}
+                          orgId={ctx.org.id}
                         />
                       )}
                     </div>

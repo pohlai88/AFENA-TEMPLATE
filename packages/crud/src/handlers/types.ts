@@ -71,4 +71,20 @@ export interface EntityHandler {
     expectedVersion: number,
     ctx: MutationContext,
   ): Promise<HandlerResult>;
+
+  /** Approve a submitted doc → active. Only for doc entities with workflow decisions. */
+  approve?(
+    tx: NeonHttpDatabase,
+    entityId: string,
+    expectedVersion: number,
+    ctx: MutationContext,
+  ): Promise<HandlerResult>;
+
+  /** Reject a submitted doc → draft. Only for doc entities with workflow decisions. */
+  reject?(
+    tx: NeonHttpDatabase,
+    entityId: string,
+    expectedVersion: number,
+    ctx: MutationContext,
+  ): Promise<HandlerResult>;
 }

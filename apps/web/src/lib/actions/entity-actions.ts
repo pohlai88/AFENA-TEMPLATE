@@ -133,11 +133,71 @@ export function generateEntityActions(entityType: EntityType) {
     }
   }
 
+  async function submit(
+    id: string,
+    expectedVersion: number,
+  ): Promise<ApiResponse> {
+    const ctx = await buildContext();
+    const spec: MutationSpec = {
+      actionType: `${entityType}.submit` as MutationSpec['actionType'],
+      entityRef: { type: entityType, id },
+      input: {},
+      expectedVersion,
+    };
+    return mutate(spec, ctx);
+  }
+
+  async function cancel(
+    id: string,
+    expectedVersion: number,
+  ): Promise<ApiResponse> {
+    const ctx = await buildContext();
+    const spec: MutationSpec = {
+      actionType: `${entityType}.cancel` as MutationSpec['actionType'],
+      entityRef: { type: entityType, id },
+      input: {},
+      expectedVersion,
+    };
+    return mutate(spec, ctx);
+  }
+
+  async function approve(
+    id: string,
+    expectedVersion: number,
+  ): Promise<ApiResponse> {
+    const ctx = await buildContext();
+    const spec: MutationSpec = {
+      actionType: `${entityType}.approve` as MutationSpec['actionType'],
+      entityRef: { type: entityType, id },
+      input: {},
+      expectedVersion,
+    };
+    return mutate(spec, ctx);
+  }
+
+  async function reject(
+    id: string,
+    expectedVersion: number,
+  ): Promise<ApiResponse> {
+    const ctx = await buildContext();
+    const spec: MutationSpec = {
+      actionType: `${entityType}.reject` as MutationSpec['actionType'],
+      entityRef: { type: entityType, id },
+      input: {},
+      expectedVersion,
+    };
+    return mutate(spec, ctx);
+  }
+
   return {
     create,
     update,
     remove,
     restore,
+    submit,
+    cancel,
+    approve,
+    reject,
     read,
     list,
     getVersions,

@@ -59,7 +59,7 @@ export function ContactsTable({ data, orgSlug, orgId, rowActions }: ContactsTabl
       kind,
     };
 
-    void executeContactAction(envelope, { expectedVersion: row.version }).then((result) => {
+    void executeContactAction(envelope, { expectedVersion: row.version, orgSlug }).then((result) => {
       if (result.ok) {
         router.refresh();
       }

@@ -1,3 +1,5 @@
+import { notFound } from 'next/navigation';
+
 import { Card, CardContent, CardHeader, CardTitle } from 'afena-ui/components/card';
 import {
   Table,
@@ -10,11 +12,33 @@ import {
 import { Trash2 } from 'lucide-react';
 
 import { PageHeader } from '../../_components/crud/client/page-header';
-import { RestoreContactButton } from '../_components/restore-contact-button';
+import { getOrgContext } from '../../_server/org-context_server';
+import { TrashRestoreButton } from '../_components/trash-restore-button_client';
+import { resolveContactActions } from '../_server/contacts.policy_server';
 import { listTrashedContacts } from '../_server/contacts.query_server';
 
-export default async function ContactsTrashPage() {
-  const contacts = await listTrashedContacts();
+import type { ResolvedActions } from 'afena-canon';
+
+export default async function ContactsTrashPage({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
+  const { slug } = await params;
+  const [contacts, ctx] = await Promise.all([
+    listTrashedContacts(),
+    getOrgContext(slug),
+  ]);
+
+  if (!ctx) notFound();
+
+  const rowActions: Record<string, ResolvedActions> = {};
+  for (const c of contacts) {
+    rowActions[c.id] = resolveContactActions(ctx, {
+      docStatus: c.doc_status,
+      isDeleted: c.is_deleted,
+    });
+  }
 
   return (
     <div className="space-y-6">
@@ -23,7 +47,6 @@ export default async function ContactsTrashPage() {
         description="Soft-deleted contacts that can be restored."
       />
 
-      {/* Empty state */}
       {contacts.length === 0 && (
         <Card>
           <CardContent className="flex flex-col items-center justify-center py-16">
@@ -36,7 +59,6 @@ export default async function ContactsTrashPage() {
         </Card>
       )}
 
-      {/* Table */}
       {contacts.length > 0 && (
         <Card>
           <CardHeader>
@@ -73,11 +95,18 @@ export default async function ContactsTrashPage() {
                       </span>
                     </TableCell>
                     <TableCell className="text-right">
-                      <RestoreContactButton
-                        contactId={contact.id}
-                        contactName={contact.name}
-                        version={contact.version}
-                      />
+                      {(() => {
+                        const a = rowActions[contact.id];
+                        return a ? (
+                          <TrashRestoreButton
+                            orgId={ctx.org.id}
+                            orgSlug={slug}
+                            entityId={contact.id}
+                            expectedVersion={contact.version}
+                            actions={a}
+                          />
+                        ) : null;
+                      })()}
                     </TableCell>
                   </TableRow>
                 ))}

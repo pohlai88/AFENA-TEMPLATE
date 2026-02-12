@@ -5,9 +5,13 @@ import { randomUUID } from 'crypto';
 import { revalidatePath } from 'next/cache';
 
 import {
+  approveContact,
+  cancelContact,
   createContact,
   deleteContact,
+  rejectContact,
   restoreContact,
+  submitContact,
   updateContact,
 } from '@/app/actions/contacts';
 import { auth } from '@/lib/auth/server';
@@ -35,7 +39,7 @@ function errorResponse(code: ErrorCode, message: string): ApiResponse {
 
 export async function executeContactAction(
   envelope: ActionEnvelope,
-  extra: { expectedVersion?: number; input?: Record<string, unknown> },
+  extra: { expectedVersion?: number; input?: Record<string, unknown>; orgSlug?: string },
 ): Promise<ApiResponse> {
   const start = Date.now();
 
@@ -87,6 +91,34 @@ export async function executeContactAction(
         result = await restoreContact(envelope.entityId, extra.expectedVersion);
         break;
 
+      case 'submit':
+        if (!envelope.entityId || extra.expectedVersion === undefined) {
+          return errorResponse('VALIDATION_FAILED', 'Missing entityId or expectedVersion');
+        }
+        result = await submitContact(envelope.entityId, extra.expectedVersion);
+        break;
+
+      case 'cancel':
+        if (!envelope.entityId || extra.expectedVersion === undefined) {
+          return errorResponse('VALIDATION_FAILED', 'Missing entityId or expectedVersion');
+        }
+        result = await cancelContact(envelope.entityId, extra.expectedVersion);
+        break;
+
+      case 'approve':
+        if (!envelope.entityId || extra.expectedVersion === undefined) {
+          return errorResponse('VALIDATION_FAILED', 'Missing entityId or expectedVersion');
+        }
+        result = await approveContact(envelope.entityId, extra.expectedVersion);
+        break;
+
+      case 'reject':
+        if (!envelope.entityId || extra.expectedVersion === undefined) {
+          return errorResponse('VALIDATION_FAILED', 'Missing entityId or expectedVersion');
+        }
+        result = await rejectContact(envelope.entityId, extra.expectedVersion);
+        break;
+
       default:
         return errorResponse('VALIDATION_FAILED', `Unsupported action kind: ${envelope.kind}`);
     }
@@ -97,7 +129,7 @@ export async function executeContactAction(
       logActionSuccess(envelope, { userId, durationMs });
 
       // INV-1: revalidatePath targets are exact and minimal
-      const slug = envelope.orgId; // orgId used as slug for path
+      const slug = extra.orgSlug ?? envelope.orgId;
       revalidatePath(`/org/${slug}/contacts`);
       if (envelope.entityId) {
         revalidatePath(`/org/${slug}/contacts/${envelope.entityId}`);

@@ -1,17 +1,18 @@
 import { sql } from 'drizzle-orm';
 import { check, index, pgTable, text } from 'drizzle-orm/pg-core';
 
-import { baseEntityColumns } from '../helpers/base-entity';
+import { docEntityColumns } from '../helpers/doc-entity';
 import { tenantPolicy } from '../helpers/tenant-policy';
 
 /**
  * Contacts — first domain entity, built alongside the kernel.
  * Exercises text search, soft-delete, audit timeline, version history.
+ * Uses docEntityColumns for lifecycle support (draft → submitted → active → cancelled).
  */
 export const contacts = pgTable(
   'contacts',
   {
-    ...baseEntityColumns,
+    ...docEntityColumns,
     name: text('name').notNull(),
     email: text('email'),
     phone: text('phone'),

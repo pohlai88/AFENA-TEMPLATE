@@ -16,19 +16,20 @@ import { Textarea } from 'afena-ui/components/textarea';
 import { Building2, FileText, Mail, Phone, User } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 
-import { createContact, updateContact } from '@/app/actions/contacts';
-
 import {
   EntityFormShell,
 } from '../../_components/crud/client/entity-form-shell_client';
+import { executeContactAction } from '../_server/contacts.server-actions';
 
 import { contactFormSchema } from './contact-fields';
 
 import type { ContactFormValues } from './contact-fields';
 import type { FormState } from '../../_components/crud/client/entity-form-shell_client';
+import type { ActionEnvelope } from 'afena-canon';
 
 interface ContactFormProps {
   orgSlug: string;
+  orgId: string;
   contact?: {
     id: string;
     name: string;
@@ -40,7 +41,7 @@ interface ContactFormProps {
   };
 }
 
-export function ContactForm({ orgSlug, contact }: ContactFormProps) {
+export function ContactForm({ orgSlug, orgId, contact }: ContactFormProps) {
   const router = useRouter();
   const isEdit = !!contact;
 
@@ -75,9 +76,19 @@ export function ContactForm({ orgSlug, contact }: ContactFormProps) {
     if (parsed.data.company) input['company'] = parsed.data.company;
     if (parsed.data.notes) input['notes'] = parsed.data.notes;
 
-    const result = isEdit
-      ? await updateContact(contact.id, contact.version, input)
-      : await createContact(input as { name: string });
+    const envelope: ActionEnvelope = {
+      clientActionId: crypto.randomUUID(),
+      orgId,
+      entityType: 'contacts',
+      kind: isEdit ? 'update' : 'create',
+      ...(isEdit ? { entityId: contact.id } : {}),
+    };
+
+    const result = await executeContactAction(envelope, {
+      input,
+      orgSlug,
+      ...(isEdit ? { expectedVersion: contact.version } : {}),
+    });
 
     if (result.ok) {
       const entityId = result.meta?.receipt?.entityId;

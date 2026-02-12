@@ -1,4 +1,7 @@
+import { notFound } from 'next/navigation';
+
 import { PageHeader } from '../../_components/crud/client/page-header';
+import { getOrgContext } from '../../_server/org-context_server';
 import { ContactForm } from '../_components/contact-form_client';
 
 export default async function NewContactPage({
@@ -7,6 +10,8 @@ export default async function NewContactPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
+  const ctx = await getOrgContext(slug);
+  if (!ctx) notFound();
 
   return (
     <div className="mx-auto max-w-2xl space-y-6">
@@ -14,7 +19,7 @@ export default async function NewContactPage({
         title="New Contact"
         description="Add a new contact to your organization."
       />
-      <ContactForm orgSlug={slug} />
+      <ContactForm orgSlug={slug} orgId={ctx.org.id} />
     </div>
   );
 }

@@ -47,7 +47,7 @@ export function ContactDetailActions({
     };
 
     setPending(true);
-    void executeContactAction(envelope, { expectedVersion }).then((result) => {
+    void executeContactAction(envelope, { expectedVersion, orgSlug }).then((result) => {
       setPending(false);
       if (result.ok) {
         if (kind === 'delete') {

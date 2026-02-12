@@ -188,4 +188,178 @@ export const contactsHandler: EntityHandler = {
       versionAfter: afterRow.version,
     };
   },
+
+  async submit(
+    tx: NeonHttpDatabase,
+    entityId: string,
+    expectedVersion: number,
+    ctx: MutationContext,
+  ): Promise<HandlerResult> {
+    const [beforeRow] = await tx
+      .select()
+      .from(contacts)
+      .where(eq(contacts.id, entityId))
+      .limit(1);
+
+    if (!beforeRow) throw new Error('NOT_FOUND');
+    if (beforeRow.isDeleted) throw new Error('NOT_FOUND');
+    if (beforeRow.version !== expectedVersion) throw new Error('CONFLICT_VERSION');
+
+    const [afterRow] = await tx
+      .update(contacts)
+      .set({
+        docStatus: 'submitted',
+        submittedAt: sql`now()`,
+        submittedBy: ctx.actor.userId,
+        updatedBy: ctx.actor.userId,
+        version: sql`${contacts.version} + 1`,
+      })
+      .where(
+        and(
+          eq(contacts.id, entityId),
+          eq(contacts.version, expectedVersion),
+        ),
+      )
+      .returning();
+
+    if (!afterRow) throw new Error('CONFLICT_VERSION');
+
+    return {
+      entityId,
+      before: toRecord(beforeRow as unknown as Record<string, unknown>),
+      after: toRecord(afterRow as unknown as Record<string, unknown>),
+      versionBefore: expectedVersion,
+      versionAfter: afterRow.version,
+    };
+  },
+
+  async cancel(
+    tx: NeonHttpDatabase,
+    entityId: string,
+    expectedVersion: number,
+    ctx: MutationContext,
+  ): Promise<HandlerResult> {
+    const [beforeRow] = await tx
+      .select()
+      .from(contacts)
+      .where(eq(contacts.id, entityId))
+      .limit(1);
+
+    if (!beforeRow) throw new Error('NOT_FOUND');
+    if (beforeRow.isDeleted) throw new Error('NOT_FOUND');
+    if (beforeRow.version !== expectedVersion) throw new Error('CONFLICT_VERSION');
+
+    const [afterRow] = await tx
+      .update(contacts)
+      .set({
+        docStatus: 'cancelled',
+        cancelledAt: sql`now()`,
+        cancelledBy: ctx.actor.userId,
+        updatedBy: ctx.actor.userId,
+        version: sql`${contacts.version} + 1`,
+      })
+      .where(
+        and(
+          eq(contacts.id, entityId),
+          eq(contacts.version, expectedVersion),
+        ),
+      )
+      .returning();
+
+    if (!afterRow) throw new Error('CONFLICT_VERSION');
+
+    return {
+      entityId,
+      before: toRecord(beforeRow as unknown as Record<string, unknown>),
+      after: toRecord(afterRow as unknown as Record<string, unknown>),
+      versionBefore: expectedVersion,
+      versionAfter: afterRow.version,
+    };
+  },
+
+  async approve(
+    tx: NeonHttpDatabase,
+    entityId: string,
+    expectedVersion: number,
+    ctx: MutationContext,
+  ): Promise<HandlerResult> {
+    const [beforeRow] = await tx
+      .select()
+      .from(contacts)
+      .where(eq(contacts.id, entityId))
+      .limit(1);
+
+    if (!beforeRow) throw new Error('NOT_FOUND');
+    if (beforeRow.isDeleted) throw new Error('NOT_FOUND');
+    if (beforeRow.version !== expectedVersion) throw new Error('CONFLICT_VERSION');
+
+    const [afterRow] = await tx
+      .update(contacts)
+      .set({
+        docStatus: 'active',
+        updatedBy: ctx.actor.userId,
+        version: sql`${contacts.version} + 1`,
+      })
+      .where(
+        and(
+          eq(contacts.id, entityId),
+          eq(contacts.version, expectedVersion),
+        ),
+      )
+      .returning();
+
+    if (!afterRow) throw new Error('CONFLICT_VERSION');
+
+    return {
+      entityId,
+      before: toRecord(beforeRow as unknown as Record<string, unknown>),
+      after: toRecord(afterRow as unknown as Record<string, unknown>),
+      versionBefore: expectedVersion,
+      versionAfter: afterRow.version,
+    };
+  },
+
+  async reject(
+    tx: NeonHttpDatabase,
+    entityId: string,
+    expectedVersion: number,
+    ctx: MutationContext,
+  ): Promise<HandlerResult> {
+    const [beforeRow] = await tx
+      .select()
+      .from(contacts)
+      .where(eq(contacts.id, entityId))
+      .limit(1);
+
+    if (!beforeRow) throw new Error('NOT_FOUND');
+    if (beforeRow.isDeleted) throw new Error('NOT_FOUND');
+    if (beforeRow.version !== expectedVersion) throw new Error('CONFLICT_VERSION');
+
+    const [afterRow] = await tx
+      .update(contacts)
+      .set({
+        docStatus: 'draft',
+        submittedAt: null,
+        submittedBy: null,
+        updatedBy: ctx.actor.userId,
+        version: sql`${contacts.version} + 1`,
+      })
+      .where(
+        and(
+          eq(contacts.id, entityId),
+          eq(contacts.version, expectedVersion),
+        ),
+      )
+      .returning();
+
+    if (!afterRow) throw new Error('CONFLICT_VERSION');
+
+    return {
+      entityId,
+      before: toRecord(beforeRow as unknown as Record<string, unknown>),
+      after: toRecord(afterRow as unknown as Record<string, unknown>),
+      versionBefore: expectedVersion,
+      versionAfter: afterRow.version,
+    };
+  },
 };

@@ -1,5 +1,3 @@
-'use client';
-
 import { textColumn, dateColumn } from '../../_components/crud/client/entity-columns';
 
 import type { ColumnDef } from '@tanstack/react-table';
