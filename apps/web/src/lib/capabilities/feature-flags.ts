@@ -53,7 +53,8 @@ export function setCapabilityFlag(key: string, enabled: boolean): void {
  */
 export function getAllCapabilityFlags(): CapabilityFlag[] {
   return CAPABILITY_KEYS.map((key) => {
-    const descriptor = CAPABILITY_CATALOG[key]!;
+    const descriptor = CAPABILITY_CATALOG[key];
+    if (!descriptor) return { key, enabled: false, kind: 'read' as const, rbacTier: 'viewer' as const };
     const parsed = parseCapabilityKey(key);
     const kind = descriptor.kind ?? inferKindFromVerb(parsed.verb);
     return {
@@ -76,7 +77,8 @@ export function getEnabledCapabilities(filters?: {
     if (!flagStore.get(key)) return false;
     if (!filters) return true;
 
-    const descriptor = CAPABILITY_CATALOG[key]!;
+    const descriptor = CAPABILITY_CATALOG[key];
+    if (!descriptor) return false;
     const parsed = parseCapabilityKey(key);
     const kind = descriptor.kind ?? inferKindFromVerb(parsed.verb);
 

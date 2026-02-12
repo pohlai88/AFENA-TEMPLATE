@@ -10,6 +10,7 @@ import {
   restoreContact,
   updateContact,
 } from '@/app/actions/contacts';
+import { auth } from '@/lib/auth/server';
 
 import {
   logActionError,
@@ -37,7 +38,13 @@ export async function executeContactAction(
   extra: { expectedVersion?: number; input?: Record<string, unknown> },
 ): Promise<ApiResponse> {
   const start = Date.now();
-  const userId = ''; // extracted from session in real impl
+
+  const { data: session } = await auth.getSession();
+  const userId = session?.user?.id ?? '';
+
+  if (!userId) {
+    return errorResponse('POLICY_DENIED', 'No active session');
+  }
 
   logActionStart(envelope, { userId });
 

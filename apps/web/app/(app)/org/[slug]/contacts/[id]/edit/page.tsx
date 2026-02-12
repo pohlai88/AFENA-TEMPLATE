@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation';
 
 import { PageHeader } from '../../../_components/crud/client/page-header';
-import { ContactForm } from '../../_components/contact-form';
+import { ContactForm } from '../../_components/contact-form_client';
 import { readContact } from '../../_server/contacts.query_server';
 
 export default async function EditContactPage({

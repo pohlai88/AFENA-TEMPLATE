@@ -7,17 +7,24 @@ import { Button } from 'afena-ui/components/button';
 import { Building2, Plus } from 'lucide-react';
 
 import { DataTable } from '../../_components/crud/client/data-table_client';
+import { EntityActionsCell } from '../../_components/crud/client/entity-actions-cell_client';
+import { StatusBadge } from '../../_components/crud/client/status-badge';
+import { executeContactAction } from '../_server/contacts.server-actions';
 
 import { contactColumns } from './contact-columns';
 
 import type { ContactRow } from './contact-columns';
+import type { ColumnDef } from '@tanstack/react-table';
+import type { ActionEnvelope, ActionKind, ResolvedActions } from 'afena-canon';
 
 interface ContactsTableProps {
   data: ContactRow[];
   orgSlug: string;
+  orgId: string;
+  rowActions: Record<string, ResolvedActions>;
 }
 
-export function ContactsTable({ data, orgSlug }: ContactsTableProps) {
+export function ContactsTable({ data, orgSlug, orgId, rowActions }: ContactsTableProps) {
   const router = useRouter();
 
   if (data.length === 0) {
@@ -38,26 +45,72 @@ export function ContactsTable({ data, orgSlug }: ContactsTableProps) {
     );
   }
 
-  // Add a click-to-navigate name column override
-  const columnsWithLink = [
+  function handleRowAction(row: ContactRow, kind: ActionKind) {
+    if (kind === 'update') {
+      router.push(`/org/${orgSlug}/contacts/${row.id}/edit`);
+      return;
+    }
+
+    const envelope: ActionEnvelope = {
+      clientActionId: crypto.randomUUID(),
+      orgId,
+      entityType: 'contacts',
+      entityId: row.id,
+      kind,
+    };
+
+    void executeContactAction(envelope, { expectedVersion: row.version }).then((result) => {
+      if (result.ok) {
+        router.refresh();
+      }
+    });
+  }
+
+  const nameCol = contactColumns[0];
+  const columnsWithActions: ColumnDef<ContactRow, unknown>[] = [
+    ...(nameCol
+      ? [
+        {
+          ...nameCol,
+          cell: ({ row }: { row: { original: ContactRow } }) => (
+            <button
+              type="button"
+              className="text-left font-medium hover:underline"
+              onClick={() => router.push(`/org/${orgSlug}/contacts/${row.original.id}`)}
+            >
+              {row.original.name}
+            </button>
+          ),
+        },
+      ]
+      : []),
+    ...contactColumns.slice(1),
     {
-      ...contactColumns[0]!,
+      id: 'status',
+      header: 'Status',
       cell: ({ row }: { row: { original: ContactRow } }) => (
-        <button
-          type="button"
-          className="font-medium hover:underline text-left"
-          onClick={() => router.push(`/org/${orgSlug}/contacts/${row.original.id}`)}
-        >
-          {row.original.name}
-        </button>
+        <StatusBadge status={row.original.doc_status} />
       ),
     },
-    ...contactColumns.slice(1),
+    {
+      id: 'actions',
+      header: '',
+      cell: ({ row }: { row: { original: ContactRow } }) => {
+        const actions = rowActions[row.original.id];
+        if (!actions) return null;
+        return (
+          <EntityActionsCell
+            actions={actions}
+            onAction={(kind) => handleRowAction(row.original, kind)}
+          />
+        );
+      },
+    },
   ];
 
   return (
     <DataTable
-      columns={columnsWithLink}
+      columns={columnsWithActions}
       data={data}
       emptyMessage="No contacts found."
     />

@@ -1,5 +1,5 @@
 import { PageHeader } from '../../_components/crud/client/page-header';
-import { ContactForm } from '../_components/contact-form';
+import { ContactForm } from '../_components/contact-form_client';
 
 export default async function NewContactPage({
   params,

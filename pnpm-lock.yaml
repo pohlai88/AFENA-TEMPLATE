@@ -224,6 +224,9 @@ importers:
       '@aws-sdk/s3-request-presigner':
         specifier: ^3.987.0
         version: 3.987.0
+      '@hookform/resolvers':
+        specifier: ^5.2.2
+        version: 5.2.2(react-hook-form@7.71.1(react@19.2.4))
       '@neondatabase/api-client':
         specifier: ^2.6.0
         version: 2.6.0
@@ -269,9 +272,15 @@ importers:
       react-dom:
         specifier: 'catalog:'
         version: 19.2.4(react@19.2.4)
+      react-hook-form:
+        specifier: ^7.71.1
+        version: 7.71.1(react@19.2.4)
       tw-animate-css:
         specifier: ^1.4.0
         version: 1.4.0
+      zod:
+        specifier: ^4.3.6
+        version: 4.3.6
     devDependencies:
       '@tailwindcss/postcss':
         specifier: 'catalog:'

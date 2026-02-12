@@ -2,16 +2,18 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
 import { Badge } from 'afena-ui/components/badge';
-import { Button } from 'afena-ui/components/button';
 import { Card, CardContent, CardHeader, CardTitle } from 'afena-ui/components/card';
-import { Building2, Clock, FileText, Mail, Pencil, Phone } from 'lucide-react';
+import { Building2, Clock, FileText, Mail, Phone } from 'lucide-react';
 
 import {
   EntityDetailLayout,
   MetadataCard,
 } from '../../_components/crud/client/entity-detail-layout';
 import { PageHeader } from '../../_components/crud/client/page-header';
-import { DeleteContactButton } from '../_components/delete-contact-button';
+import { StatusBadge } from '../../_components/crud/client/status-badge';
+import { getOrgContext } from '../../_server/org-context_server';
+import { ContactDetailActions } from '../_components/contact-detail-actions_client';
+import { resolveContactActions } from '../_server/contacts.policy_server';
 import { readContact } from '../_server/contacts.query_server';
 
 export default async function ContactDetailPage({
@@ -20,26 +22,30 @@ export default async function ContactDetailPage({
   params: Promise<{ slug: string; id: string }>;
 }) {
   const { slug, id } = await params;
-  const contact = await readContact(id);
+  const [contact, ctx] = await Promise.all([
+    readContact(id),
+    getOrgContext(slug),
+  ]);
 
-  if (!contact) notFound();
+  if (!contact || !ctx) notFound();
+
+  const actions = resolveContactActions(ctx, {
+    docStatus: contact.doc_status,
+    isDeleted: contact.is_deleted,
+  });
 
   return (
     <EntityDetailLayout
       header={
         <PageHeader title={contact.name}>
+          <StatusBadge status={contact.doc_status} />
           <Badge variant="secondary" className="text-xs">v{contact.version}</Badge>
-          <Button variant="outline" size="sm" asChild>
-            <Link href={`/org/${slug}/contacts/${id}/edit`}>
-              <Pencil className="mr-2 h-4 w-4" />
-              Edit
-            </Link>
-          </Button>
-          <DeleteContactButton
-            contactId={id}
-            contactName={contact.name}
-            version={contact.version}
+          <ContactDetailActions
+            actions={actions}
+            orgId={ctx.org.id}
             orgSlug={slug}
+            entityId={id}
+            expectedVersion={contact.version}
           />
         </PageHeader>
       }
