@@ -23,3 +23,6 @@ export type { Advisory, NewAdvisory } from './advisories';
 
 export { advisoryEvidence } from './advisory-evidence';
 export type { AdvisoryEvidence, NewAdvisoryEvidence } from './advisory-evidence';
+
+export { workflowRules } from './workflow-rules';
+export type { WorkflowRuleRow, NewWorkflowRuleRow } from './workflow-rules';

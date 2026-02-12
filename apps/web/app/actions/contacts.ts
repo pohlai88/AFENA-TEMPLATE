@@ -1,6 +1,7 @@
 'use server';
 
 import { mutate, readEntity, listEntities } from 'afena-crud';
+import { db, sql } from 'afena-database';
 
 import { auth } from '@/lib/auth/server';
 
@@ -17,11 +18,18 @@ async function buildContext(): Promise<MutationContext> {
     throw new Error('Unauthorized — no active session');
   }
 
+  const result = await db.execute(
+    sql`select auth.org_id() as org_id, auth.org_role() as role`,
+  );
+  const rows = (result as any).rows as { org_id: string | null; role: string | null }[];
+  const orgId = rows?.[0]?.org_id ?? '';
+  const role = rows?.[0]?.role ?? '';
+
   return {
     actor: {
       userId: session.user.id,
-      orgId: '', // Will be set by RLS via auth.org_id()
-      roles: [],
+      orgId,
+      roles: role ? [role] : [],
       email: session.user.email ?? '',
     },
     requestId: crypto.randomUUID(),

@@ -57,6 +57,13 @@
       "when": 1770857079016,
       "tag": "0007_petite_corsair",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1770861289440,
+      "tag": "0008_easy_dreaming_celestial",
+      "breakpoints": true
     }
   ]
 }

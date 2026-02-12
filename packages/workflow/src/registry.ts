@@ -41,3 +41,14 @@ export function getRegisteredRules(): readonly WorkflowRule[] {
 export function clearRules(): void {
   rules.length = 0;
 }
+
+/**
+ * Remove all rules whose ID starts with the given prefix.
+ * Used by the DB loader to clear stale org-scoped rules before reloading.
+ */
+export function unregisterByPrefix(prefix: string): number {
+  const all = getRegisteredRules();
+  const targets = all.filter((r) => r.id.startsWith(prefix));
+  for (const r of targets) unregisterRule(r.id);
+  return targets.length;
+}

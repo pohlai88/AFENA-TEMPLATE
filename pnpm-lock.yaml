@@ -648,6 +648,9 @@ importers:
       afena-canon:
         specifier: workspace:*
         version: link:../canon
+      afena-database:
+        specifier: workspace:*
+        version: link:../database
     devDependencies:
       '@types/node':
         specifier: 'catalog:'

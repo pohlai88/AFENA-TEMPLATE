@@ -5,12 +5,12 @@ import {
   mutationSpecSchema,
 } from 'afena-canon';
 import { and, auditLogs, db, entityVersions, eq } from 'afena-database';
-import { evaluateRules } from 'afena-workflow';
+import { evaluateRules, loadAndRegisterOrgRules } from 'afena-workflow';
 
 import { generateDiff } from './diff';
 import { err, ok } from './envelope';
 import { contactsHandler } from './handlers/contacts';
-import { captureAuthoritySnapshot, enforcePolicy } from './policy';
+import { enforcePolicy } from './policy';
 import { stripSystemColumns } from './sanitize';
 
 import type { MutationContext } from './context';
@@ -136,9 +136,11 @@ export async function mutate(
     }
   }
 
-  // 5. Evaluate policy
-  enforcePolicy(spec, ctx);
-  const authoritySnapshot = captureAuthoritySnapshot(ctx);
+  // 5. Evaluate policy (RBAC hard gate — INVARIANT-07)
+  const { authoritySnapshot } = enforcePolicy(validSpec as MutationSpec, ctx);
+
+  // 5b. Load DB-driven workflow rules for this org (TTL-cached)
+  await loadAndRegisterOrgRules(ctx.actor.orgId);
 
   // 6. Evaluate before-rules (can block or enrich input)
   const beforeResult = await evaluateRules('before', validSpec as MutationSpec, null, {
@@ -288,6 +290,7 @@ export async function mutate(
 
     // Map handler errors to deterministic error codes
     let errorCode: ErrorCode = 'INTERNAL_ERROR';
+    if ((error as any)?.code === 'POLICY_DENIED') errorCode = 'POLICY_DENIED';
     if (message === 'NOT_FOUND') errorCode = 'NOT_FOUND';
     if (message === 'CONFLICT_VERSION') errorCode = 'CONFLICT_VERSION';
 

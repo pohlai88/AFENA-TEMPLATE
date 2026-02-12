@@ -13,7 +13,8 @@
     "test": "vitest run"
   },
   "dependencies": {
-    "afena-canon": "workspace:*"
+    "afena-canon": "workspace:*",
+    "afena-database": "workspace:*"
   },
   "devDependencies": {
     "@types/node": "catalog:",
