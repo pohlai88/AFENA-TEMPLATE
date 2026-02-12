@@ -7,4 +7,5 @@ export interface ActorRef {
   orgId: string;
   roles?: string[];
   email?: string;
+  name?: string;
 }

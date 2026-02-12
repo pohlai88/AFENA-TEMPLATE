@@ -64,6 +64,13 @@
       "when": 1770861289440,
       "tag": "0008_easy_dreaming_celestial",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1770864669738,
+      "tag": "0009_sparkling_namorita",
+      "breakpoints": true
     }
   ]
 }

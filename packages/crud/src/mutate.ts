@@ -237,6 +237,9 @@ export async function mutate(
         .values({
           orgId: ctx.actor.orgId,
           actorUserId: ctx.actor.userId,
+          actorName: ctx.actor.name ?? null,
+          ownerId: handlerResult.before?.createdBy ?? handlerResult.after?.createdBy ?? ctx.actor.userId ?? null,
+          geoCountry: null,
           actionType: validSpec.actionType,
           actionFamily: getActionFamily(validSpec.actionType),
           entityType: validSpec.entityRef.type,

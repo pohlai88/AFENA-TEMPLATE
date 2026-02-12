@@ -23,7 +23,7 @@ export function toTsQuery(input: string): string {
 
 /**
  * Build a SQL fragment for full-text search using tsvector.
- * Uses the 'english' text search configuration.
+ * Uses the 'simple' text search configuration (multi-language friendly).
  *
  * @param columns - Array of column SQL references to search across
  * @param query - Raw user query string
@@ -36,7 +36,7 @@ export function ftsWhere(
   const tsquery = toTsQuery(query);
   if (!tsquery) return null;
 
-  return sql`${tsvectorColumn} @@ to_tsquery('english', ${tsquery})`;
+  return sql`${tsvectorColumn} @@ to_tsquery('simple', ${tsquery})`;
 }
 
 /**
@@ -50,7 +50,7 @@ export function ftsRank(
   const tsquery = toTsQuery(query);
   if (!tsquery) return sql<number>`0`;
 
-  return sql<number>`ts_rank(${tsvectorColumn}, to_tsquery('english', ${tsquery}))`;
+  return sql<number>`ts_rank(${tsvectorColumn}, to_tsquery('simple', ${tsquery}))`;
 }
 
 /**

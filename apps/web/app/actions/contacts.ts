@@ -31,6 +31,7 @@ async function buildContext(): Promise<MutationContext> {
       orgId,
       roles: role ? [role] : [],
       email: session.user.email ?? '',
+      name: session.user.name ?? session.user.email ?? '',
     },
     requestId: crypto.randomUUID(),
     channel: 'web_ui',

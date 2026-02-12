@@ -26,3 +26,6 @@ export type { AdvisoryEvidence, NewAdvisoryEvidence } from './advisory-evidence'
 
 export { workflowRules } from './workflow-rules';
 export type { WorkflowRuleRow, NewWorkflowRuleRow } from './workflow-rules';
+
+export { workflowExecutions } from './workflow-executions';
+export type { WorkflowExecution, NewWorkflowExecution } from './workflow-executions';

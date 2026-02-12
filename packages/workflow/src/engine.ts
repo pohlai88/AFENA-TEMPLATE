@@ -1,4 +1,5 @@
 import { extractVerb } from 'afena-canon';
+import { db, workflowExecutions } from 'afena-database';
 
 import { getRegisteredRules } from './registry';
 
@@ -97,6 +98,32 @@ export async function evaluateRules(
 
     entry.durationMs = performance.now() - start;
     log.push(entry);
+  }
+
+  // Fire-and-forget: execution logging must never fail the mutation
+  if (ctx.actor.orgId && log.length > 0) {
+    void db
+      .insert(workflowExecutions)
+      .values(
+        log.map((entry) => ({
+          orgId: ctx.actor.orgId,
+          ruleId: entry.ruleId,
+          ruleName: entry.ruleName,
+          timing,
+          entityType: spec.entityRef.type,
+          entityId: spec.entityRef.id ?? null,
+          actionType: spec.actionType,
+          conditionMatched: entry.conditionMatched,
+          actionResult: (entry.actionResult as unknown as Record<string, unknown>) ?? null,
+          error: entry.error ? String(entry.error).slice(0, 2000) : null,
+          durationMs:
+            typeof entry.durationMs === 'number' && Number.isFinite(entry.durationMs)
+              ? Math.round(entry.durationMs)
+              : null,
+          requestId: ctx.requestId,
+        })),
+      )
+      .catch(() => { });
   }
 
   return {

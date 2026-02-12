@@ -1,17 +1,53 @@
-import { db, contacts, and, ilike, isNull, or } from 'afena-database';
+import { db, contacts, and, sql, ilike, isNull, or, desc } from 'afena-database';
+
+import { ftsRank, ftsWhere } from '../fts';
 
 import type { SearchResult } from '../types';
 
 /**
  * Contacts search adapter.
- * Uses ILIKE fallback for now. When a tsvector GIN index is added,
- * switch to ftsWhere/ftsRank for ranked full-text search.
+ * Uses tsvector FTS for queries ≥ 3 chars (no @), ILIKE fallback otherwise.
  */
 export async function searchContacts(
   query: string,
   limit: number,
 ): Promise<SearchResult[]> {
-  const pattern = `%${query.trim()}%`;
+  const normalized = query.trim().replace(/\s+/g, ' ');
+  if (!normalized) return [];
+
+  const useFts = normalized.length >= 3 && !normalized.includes('@');
+
+  if (useFts) {
+    const tsvec = sql`"contacts"."search_vector"`;
+    const where = ftsWhere(tsvec, normalized);
+    if (!where) return [];
+
+    const rank = ftsRank(tsvec, normalized);
+
+    const rows = await db
+      .select({
+        id: contacts.id,
+        name: contacts.name,
+        email: contacts.email,
+        company: contacts.company,
+        rank,
+      })
+      .from(contacts)
+      .where(and(isNull(contacts.deletedAt), where))
+      .orderBy(desc(rank))
+      .limit(limit);
+
+    return rows.map((row) => ({
+      id: row.id,
+      type: 'contacts',
+      title: row.name,
+      subtitle: [row.email, row.company].filter(Boolean).join(' · ') || null,
+      score: typeof row.rank === 'number' ? row.rank : 0,
+    }));
+  }
+
+  // ILIKE fallback for short queries or email searches
+  const pattern = `%${normalized}%`;
 
   const rows = await db
     .select({

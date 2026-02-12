@@ -1,6 +1,6 @@
 import { sql } from 'drizzle-orm';
 import { crudPolicy, authenticatedRole } from 'drizzle-orm/neon';
-import { check, integer, jsonb, pgTable, text, timestamp, uniqueIndex, uuid } from 'drizzle-orm/pg-core';
+import { boolean, check, integer, jsonb, pgTable, text, timestamp, uniqueIndex, uuid } from 'drizzle-orm/pg-core';
 
 /**
  * Entity version history — fork-aware, snapshot-first.
@@ -15,6 +15,8 @@ export const entityVersions = pgTable(
     entityId: text('entity_id').notNull(),
     version: integer('version').notNull(),
     parentVersion: integer('parent_version'),
+    isFork: boolean('is_fork').notNull().default(false),
+    forkReason: text('fork_reason'),
     snapshot: jsonb('snapshot').notNull(),
     diff: jsonb('diff'),
     createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
