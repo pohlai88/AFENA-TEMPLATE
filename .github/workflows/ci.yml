@@ -36,6 +36,10 @@ jobs:
 
       - name: Build
         run: pnpm build
+        env:
+          # Dummy values for Next.js build — auth module throws at import time without these
+          NEON_AUTH_BASE_URL: 'https://ci-placeholder.neon.tech'
+          NEON_AUTH_COOKIE_SECRET: 'ci-placeholder-secret-32chars-min'
 
       - name: Lint
         run: pnpm lint
