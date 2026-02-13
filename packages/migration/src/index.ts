@@ -19,5 +19,8 @@ export * from './gates/index.js';
 // Audit (AUD-06: Canonical JSON + Signed Reports)
 export * from './audit/index.js';
 
+// Queries (OPS-04: Control Plane)
+export * from './queries/index.js';
+
 // Worker (Job Executor + Rate Limiter)
 export * from './worker/index.js';

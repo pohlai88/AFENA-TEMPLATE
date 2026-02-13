@@ -23,3 +23,6 @@ export type {
 
 export { CsvLegacyAdapter } from './csv-adapter.js';
 export type { CsvAdapterConfig } from './csv-adapter.js';
+
+export { StreamingCsvAdapter } from './streaming-csv-adapter.js';
+export type { StreamingCsvConfig } from './streaming-csv-adapter.js';

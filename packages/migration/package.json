@@ -20,14 +20,19 @@
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
+    "@neondatabase/serverless": "^1.0.0",
     "afena-canon": "workspace:*",
     "afena-database": "workspace:*",
     "afena-logger": "workspace:*",
     "drizzle-orm": "^0.44.0",
-    "@neondatabase/serverless": "^1.0.0"
+    "fuse.js": "^7.1.0",
+    "libphonenumber-js": "^1.12.36",
+    "p-limit": "^7.3.0",
+    "papaparse": "^5.5.3"
   },
   "devDependencies": {
     "@types/node": "catalog:",
+    "@types/papaparse": "^5.5.2",
     "afena-eslint-config": "workspace:^",
     "afena-typescript-config": "workspace:*",
     "tslib": "catalog:",

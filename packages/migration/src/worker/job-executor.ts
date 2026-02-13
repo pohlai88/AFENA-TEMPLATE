@@ -1,7 +1,12 @@
-import { eq } from 'drizzle-orm';
+import { and, eq } from 'drizzle-orm';
 
 import type { DbInstance } from 'afena-database';
-import { migrationJobs } from 'afena-database';
+import {
+  migrationJobs,
+  migrationConflicts,
+  migrationConflictResolutions,
+  migrationReports,
+} from 'afena-database';
 
 import type {
   MigrationJob,
@@ -164,12 +169,23 @@ export class JobExecutor {
         transformSteps,
         conflictDetectorName: detector.entityType,
         conflictDetectorMatchKeys: detector.matchKeys,
-        mergeEvidenceIds: [],
-        manualReviewIds: [],
+        mergeEvidenceIds: await this.queryMergeEvidenceIds(job.id, context.orgId),
+        manualReviewIds: await this.queryManualReviewIds(job.id, context.orgId),
       };
 
       const report = buildSignedReport(reportInputs);
       result.reportHash = report.reportHash;
+
+      // Persist report to migration_reports table
+      try {
+        await this.db.insert(migrationReports).values({
+          jobId: job.id,
+          reportData: report,
+          reportHash: report.reportHash,
+        });
+      } catch {
+        // Report persistence failure is non-fatal
+      }
 
       // 4. Mark job as completed
       await this.db
@@ -206,5 +222,46 @@ export class JobExecutor {
       .update(migrationJobs)
       .set({ checkpointCursor: cursor as any })
       .where(eq(migrationJobs.id, jobId));
+  }
+
+  // Nit B: Job-scoped evidence queries for signed report
+  private async queryMergeEvidenceIds(jobId: string, orgId: string): Promise<string[]> {
+    try {
+      const rows = await this.db
+        .select({ id: migrationConflictResolutions.id })
+        .from(migrationConflictResolutions)
+        .innerJoin(
+          migrationConflicts,
+          eq(migrationConflictResolutions.conflictId, migrationConflicts.id)
+        )
+        .where(
+          and(
+            eq(migrationConflicts.orgId, orgId),
+            eq(migrationConflicts.migrationJobId, jobId),
+            eq(migrationConflictResolutions.decision, 'merged')
+          )
+        );
+      return rows.map((r) => r.id);
+    } catch {
+      return [];
+    }
+  }
+
+  private async queryManualReviewIds(jobId: string, orgId: string): Promise<string[]> {
+    try {
+      const rows = await this.db
+        .select({ id: migrationConflicts.id })
+        .from(migrationConflicts)
+        .where(
+          and(
+            eq(migrationConflicts.orgId, orgId),
+            eq(migrationConflicts.migrationJobId, jobId),
+            eq(migrationConflicts.resolution, 'manual_review')
+          )
+        );
+      return rows.map((r) => r.id);
+    } catch {
+      return [];
+    }
   }
 }

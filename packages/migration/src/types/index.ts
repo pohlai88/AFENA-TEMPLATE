@@ -3,3 +3,8 @@ export * from './legacy-key.js';
 export * from './migration-job.js';
 export * from './upsert-plan.js';
 export * from './query.js';
+export * from './record-outcome.js';
+export * from './match-explanation.js';
+export type { StepCheckpoint } from './checkpoint.js';
+export type { ConflictThresholds } from './conflict-thresholds.js';
+export { DEFAULT_CONFLICT_THRESHOLDS } from './conflict-thresholds.js';

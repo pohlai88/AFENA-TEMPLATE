@@ -1,3 +1,5 @@
+import { parsePhoneNumberFromString, type CountryCode } from 'libphonenumber-js';
+
 /**
  * DET-05: Transform steps execute in monotonic order, coercion last.
  *
@@ -91,16 +93,29 @@ export class NormalizeWhitespaceStep implements TransformStep {
 export class PhoneNormalizeStep implements TransformStep {
   readonly name = 'phone_normalize';
   readonly order = 30;
+  private readonly defaultRegion: CountryCode;
+
+  constructor(defaultRegion: CountryCode = 'MY') {
+    this.defaultRegion = defaultRegion;
+  }
 
   canHandle(_fieldName: string, dataType: DataType): boolean {
     return dataType === 'phone';
   }
 
   transform(value: unknown): unknown {
-    if (typeof value !== 'string') return value;
-    return value.replace(/[\s\-().]/g, '');
+    if (typeof value !== 'string' || value.trim() === '') return value;
+    try {
+      const parsed = parsePhoneNumberFromString(value, this.defaultRegion);
+      if (!parsed || !parsed.isValid()) return null;
+      return parsed.format('E.164');
+    } catch {
+      return null;
+    }
   }
 }
+
+const GMAIL_DOMAINS = new Set(['gmail.com', 'googlemail.com']);
 
 export class EmailNormalizeStep implements TransformStep {
   readonly name = 'email_normalize';
@@ -111,7 +126,25 @@ export class EmailNormalizeStep implements TransformStep {
   }
 
   transform(value: unknown): unknown {
-    return typeof value === 'string' ? value.toLowerCase().trim() : value;
+    if (typeof value !== 'string') return value;
+    const trimmed = value.toLowerCase().trim();
+    const atIdx = trimmed.indexOf('@');
+    if (atIdx === -1) return trimmed;
+
+    let local = trimmed.slice(0, atIdx);
+    const domain = trimmed.slice(atIdx + 1);
+
+    if (GMAIL_DOMAINS.has(domain)) {
+      // Strip dots from local part
+      local = local.replace(/\./g, '');
+      // Strip + alias
+      const plusIdx = local.indexOf('+');
+      if (plusIdx !== -1) {
+        local = local.slice(0, plusIdx);
+      }
+    }
+
+    return `${local}@${domain}`;
   }
 }
 
@@ -132,11 +165,11 @@ export class TypeCoercionStep implements TransformStep {
 
 // ── Factory ─────────────────────────────────────────────────
 
-export function buildStandardTransformChain(): TransformChain {
+export function buildStandardTransformChain(phoneRegion: CountryCode = 'MY'): TransformChain {
   return new TransformChain()
     .addStep(new TrimWhitespaceStep())
     .addStep(new NormalizeWhitespaceStep())
-    .addStep(new PhoneNormalizeStep())
+    .addStep(new PhoneNormalizeStep(phoneRegion))
     .addStep(new EmailNormalizeStep())
     .addStep(new TypeCoercionStep());
 }

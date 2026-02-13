@@ -1,5 +1,5 @@
 import { sql } from 'drizzle-orm';
-import { check, index, pgTable, text, timestamp, unique, uuid } from 'drizzle-orm/pg-core';
+import { check, index, pgTable, text, timestamp, unique, uniqueIndex, uuid } from 'drizzle-orm/pg-core';
 
 import { tenantPolicy } from '../helpers/tenant-policy';
 
@@ -30,6 +30,7 @@ export const migrationLineage = pgTable(
     reservedBy: text('reserved_by'),
     committedAt: timestamp('committed_at', { withTimezone: true }),
     migratedAt: timestamp('migrated_at', { withTimezone: true }).defaultNow().notNull(),
+    dedupeKey: text('dedupe_key'),
   },
   (table) => [
     index('migration_lineage_job_idx').on(table.migrationJobId),
@@ -42,6 +43,9 @@ export const migrationLineage = pgTable(
     unique('migration_lineage_org_entity_afena_uniq').on(
       table.orgId, table.entityType, table.afenaId
     ),
+    uniqueIndex('migration_lineage_dedupe_key_idx')
+      .on(table.dedupeKey)
+      .where(sql`state = 'committed' AND dedupe_key IS NOT NULL`),
     check('migration_lineage_state_chk', sql`state IN ('reserved', 'committed')`),
     check('migration_lineage_reserved_requires_reserved_at',
       sql`state <> 'reserved' OR reserved_at IS NOT NULL`),

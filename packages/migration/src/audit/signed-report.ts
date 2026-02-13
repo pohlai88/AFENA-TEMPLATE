@@ -44,6 +44,13 @@ export interface SignedReport {
   recordsFailed: number;
   recordsManualReview: number;
 
+  // Terminal distribution (TERM-01)
+  recordsLoaded: number;
+  recordsQuarantined: number;
+
+  // Performance summary (GOV-01)
+  perfSummary?: Record<string, { count: number; p50: number; p95: number }>;
+
   // Evidence pointers (job-scoped)
   mergeEvidenceIds: string[];
   manualReviewIds: string[];
@@ -62,6 +69,9 @@ export interface ReportInputs {
   conflictDetectorMatchKeys: readonly string[];
   mergeEvidenceIds: string[];
   manualReviewIds: string[];
+  recordsLoaded?: number;
+  recordsQuarantined?: number;
+  perfSummary?: Record<string, { count: number; p50: number; p95: number }>;
 }
 
 export function buildSignedReport(inputs: ReportInputs): SignedReport {
@@ -98,6 +108,9 @@ export function buildSignedReport(inputs: ReportInputs): SignedReport {
     recordsSkipped: result.recordsSkipped,
     recordsFailed: result.recordsFailed,
     recordsManualReview: result.recordsManualReview,
+    recordsLoaded: inputs.recordsLoaded ?? (result.recordsCreated + result.recordsUpdated + result.recordsMerged),
+    recordsQuarantined: inputs.recordsQuarantined ?? result.recordsFailed,
+    ...(inputs.perfSummary ? { perfSummary: inputs.perfSummary } : {}),
     mergeEvidenceIds: inputs.mergeEvidenceIds,
     manualReviewIds: inputs.manualReviewIds,
     timestamp: new Date().toISOString(),

@@ -33,7 +33,7 @@ export interface EntityWriteAdapter {
 // ── Canon adapter (uses ENTITY_WRITABLE_CORE_FIELDS) ────────
 
 export class CanonEntityWriteAdapter implements EntityWriteAdapter {
-  constructor(public readonly entityType: EntityType) {}
+  constructor(public readonly entityType: EntityType) { }
 
   toWriteShape(rawRow: Record<string, unknown>): {
     core: Record<string, unknown>;
@@ -51,7 +51,10 @@ export class CanonEntityWriteAdapter implements EntityWriteAdapter {
       }
     }
 
-    const custom = (rawRow['custom_data'] as Record<string, unknown>) ?? {};
+    const custom =
+      (rawRow['custom_data'] as Record<string, unknown> | undefined) ??
+      (rawRow['customData'] as Record<string, unknown> | undefined) ??
+      {};
 
     return { core, custom };
   }

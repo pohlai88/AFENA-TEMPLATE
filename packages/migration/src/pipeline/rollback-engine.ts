@@ -8,6 +8,7 @@ import {
 } from 'afena-database';
 
 import type { EntityType } from '../types/migration-job.js';
+import type { CrudBridge } from './crud-bridge.js';
 
 /**
  * Rollback result for a single migration job.
@@ -22,15 +23,9 @@ export interface RollbackResult {
 }
 
 /**
- * Mutate function signature — injected to avoid direct crud dependency.
- * The caller provides the real mutate() from afena-crud at runtime.
+ * @deprecated Use CrudBridge instead. Kept for backward compatibility.
  */
-export type MutateFn = (params: {
-  action: string;
-  entity: { type: string; id?: string };
-  data?: Record<string, unknown>;
-  expectedVersion?: number | null;
-}) => Promise<{ status: string; entityId?: string | null }>;
+export type MutateFn = CrudBridge['mutate'];
 
 /**
  * Rollback engine — restores entities from write-shape snapshots.
@@ -39,14 +34,17 @@ export type MutateFn = (params: {
  * 1. Delete newly created records (lineage with state='committed')
  * 2. Restore updated records from before_write_core + before_write_custom snapshots
  *
- * Uses mutate() for all writes to maintain audit trail integrity.
+ * Uses CrudBridge.mutate() for all writes to maintain audit trail integrity.
  */
 export class RollbackEngine {
+  private readonly bridge: CrudBridge;
+
   constructor(
     private readonly db: DbInstance,
-    private readonly mutate: MutateFn,
-    private readonly systemContext: { orgId: string; actorUserId: string }
-  ) {}
+    bridge: CrudBridge,
+  ) {
+    this.bridge = bridge;
+  }
 
   async rollback(jobId: string): Promise<RollbackResult> {
     // 1. Load job metadata
@@ -89,10 +87,18 @@ export class RollbackEngine {
       if (!row.afenaId) continue;
 
       try {
-        await this.mutate({
-          action: `${entityType}.delete`,
-          entity: { type: entityType, id: row.afenaId },
-          expectedVersion: null,
+        // Read current version for optimistic lock
+        const currentRow = await this.bridge.readRawRow(entityType, row.afenaId);
+        const currentVersion = currentRow
+          ? (currentRow['version'] as number | undefined)
+          : undefined;
+
+        await this.bridge.mutate({
+          actionType: `${entityType}.delete`,
+          entityType,
+          entityId: row.afenaId,
+          input: {},
+          expectedVersion: currentVersion,
         });
         result.deletedCount++;
       } catch (error) {
@@ -121,11 +127,12 @@ export class RollbackEngine {
           ...(Object.keys(customData).length > 0 ? { customData } : {}),
         };
 
-        await this.mutate({
-          action: `${entityType}.update`,
-          entity: { type: entityType, id: snapshot.entityId },
-          data: restoreData,
-          expectedVersion: snapshot.beforeVersion,
+        await this.bridge.mutate({
+          actionType: `${entityType}.update`,
+          entityType,
+          entityId: snapshot.entityId,
+          input: restoreData,
+          expectedVersion: snapshot.beforeVersion ?? undefined,
         });
 
         result.restoredCount++;

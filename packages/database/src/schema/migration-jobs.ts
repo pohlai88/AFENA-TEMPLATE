@@ -33,7 +33,7 @@ export const migrationJobs = pgTable(
   (table) => [
     index('migration_jobs_org_status_idx').on(table.orgId, table.status),
     index('migration_jobs_entity_type_idx').on(table.entityType),
-    check('migration_jobs_status_chk', sql`status IN ('pending', 'running', 'completed', 'failed', 'rolled_back')`),
+    check('migration_jobs_status_chk', sql`status IN ('pending', 'preflight', 'ready', 'blocked', 'running', 'paused', 'cancelling', 'cancelled', 'completed', 'failed', 'rolled_back')`),
     check('migration_jobs_conflict_strategy_chk', sql`conflict_strategy IN ('skip', 'overwrite', 'merge', 'manual')`),
     check('migration_jobs_org_not_empty', sql`org_id <> ''`),
     tenantPolicy(table),

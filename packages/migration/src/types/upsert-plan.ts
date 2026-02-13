@@ -1,4 +1,5 @@
 import type { LegacyKey } from './legacy-key.js';
+import type { MatchExplanation } from './match-explanation.js';
 import type { EntityType } from './migration-job.js';
 
 /**
@@ -24,6 +25,7 @@ export interface MatchCandidate {
   entityId: string;
   entity: Record<string, unknown>;
   score: number;
+  explanations?: MatchExplanation[];
 }
 
 /**

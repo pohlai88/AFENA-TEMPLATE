@@ -143,4 +143,13 @@ export type { MigrationConflictResolutionRow, NewMigrationConflictResolutionRow 
 export { migrationReports } from './migration-reports';
 export type { MigrationReportRow, NewMigrationReportRow } from './migration-reports';
 
+export { migrationQuarantine } from './migration-quarantine';
+export type { MigrationQuarantineRow, NewMigrationQuarantineRow } from './migration-quarantine';
+
+export { migrationCheckpoints } from './migration-checkpoints';
+export type { MigrationCheckpointRow, NewMigrationCheckpointRow } from './migration-checkpoints';
+
+export { migrationMergeExplanations } from './migration-merge-explanations';
+export type { MigrationMergeExplanationRow, NewMigrationMergeExplanationRow } from './migration-merge-explanations';
+
 // @entity-gen:schema-barrel

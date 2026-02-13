@@ -41,6 +41,16 @@ export interface PipelineDb {
   commitLineage(lineageId: string, afenaId: string): Promise<boolean>;
 
   deleteReservation(lineageId: string): Promise<void>;
+
+  bulkInsertLineageReservations(params: Array<{
+    id: string;
+    orgId: string;
+    migrationJobId: string;
+    entityType: EntityType;
+    legacyId: string;
+    legacySystem: string;
+    reservedBy: string;
+  }>): Promise<Array<{ id: string; legacyId: string }>>;
 }
 
 /**

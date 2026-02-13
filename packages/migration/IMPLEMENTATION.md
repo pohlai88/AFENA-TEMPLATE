@@ -1,8 +1,8 @@
 # Migration Engine Implementation Progress
 
-## Status: Complete (Ratification-Grade)
+## Status: Complete (Ratification-Grade + Fully Wired)
 
-All 4 surgical fixes, 2 correctness nits, and 4 CI seal stamps implemented.
+All 4 surgical fixes, 2 correctness nits, 4 CI seal stamps, and full crud kernel integration.
 
 ### Completed
 
@@ -42,9 +42,10 @@ All 4 surgical fixes, 2 correctness nits, and 4 CI seal stamps implemented.
 ✅ **Fix 3: Entity-Agnostic Conflict Detection** (`src/strategies/`)
 
 - `ConflictDetector` interface with `matchKeys` + `detectBulk()`
-- `ContactsConflictDetector` — email + phone
-- `InvoicesConflictDetector` — invoiceNumber + vendorId
-- `ProductsConflictDetector` — sku
+- `DetectorQueryFn` — injected bulk query function (no direct DB imports)
+- `ContactsConflictDetector` — email(+40) + phone(+20) scoring, bulk lookup via queryFn
+- `InvoicesConflictDetector` — invoiceNumber(+50) + vendorId(+40) scoring
+- `ProductsConflictDetector` — SKU exact match (score 100)
 - `NoConflictDetector` — fallback (lineage-only)
 - `CONFLICT_DETECTOR_REGISTRY` — total, exhaustive, entity-type validated
 
@@ -100,10 +101,19 @@ All 4 surgical fixes, 2 correctness nits, and 4 CI seal stamps implemented.
   - Hardening 4: captureSnapshot via write-shape adapter (core/custom separated)
   - Transform chain integration with field data types
   - Preflight/postflight gate chains
+  - **Wired**: extractBatch → LegacyAdapter (SQL/CSV)
+  - **Wired**: loadPlan create → CrudBridge.mutate() with idempotencyKey
+  - **Wired**: loadPlan update/merge → CrudBridge.mutate() with optimistic lock
+  - **Wired**: captureSnapshot → CrudBridge.readRawRow()
+  - **Wired**: merge evidence → migration_conflict_resolutions table
+- `crud-bridge.ts` — CrudBridge interface (loosely coupled to afena-crud)
+  - `CrudMutateFn` — simplified mutate signature for migration use
+  - `ReadRawRowFn` — raw DB row reads for snapshot capture
+  - `buildCrudBridge()` — factory with usage example
 - `rollback-engine.ts` — RollbackEngine for restoring from write-shape snapshots
-  - Phase 1: Delete newly created records (reverse lineage)
+  - Phase 1: Delete newly created records (reverse lineage) via CrudBridge
   - Phase 2: Restore updated records from before_write_core + before_write_custom
-  - Uses injected MutateFn to maintain audit trail integrity
+  - Reads current version for optimistic lock before delete
   - Marks job as rolled_back, cleans up lineage
 
 ✅ **Legacy Source Adapters** (`src/adapters/`)
@@ -144,7 +154,7 @@ All 4 surgical fixes, 2 correctness nits, and 4 CI seal stamps implemented.
 
 - Root `tsconfig.json` references updated
 - `pnpm install` — clean
-- `pnpm --filter afena-migration build` — CJS + ESM + DTS (50KB CJS, 46KB ESM, 27KB DTS)
+- `pnpm --filter afena-migration build` — CJS + ESM + DTS (58KB CJS, 54KB ESM, 30KB DTS)
 - `pnpm --filter afena-migration type-check` — clean
 - `pnpm --filter afena-database type-check` — clean
 - `vitest run` — 44/44 tests pass
@@ -158,4 +168,6 @@ All 4 surgical fixes, 2 correctness nits, and 4 CI seal stamps implemented.
 - **Drizzle version alignment**: migration package uses same `@neondatabase/serverless@^1.0.0` as database package to avoid duplicate drizzle-orm instances
 - **Pluggable pool factory**: SqlLegacyAdapter uses `setLegacyPoolFactory()` to avoid direct pg/mysql2 dependency
 - **Separated RateLimiter**: Extracted to own file to avoid DATABASE_URL requirement in unit tests
-- **MutateFn injection**: RollbackEngine accepts mutate function to avoid direct crud dependency
+- **CrudBridge pattern**: Pipeline and RollbackEngine use injected CrudBridge (not direct afena-crud imports)
+- **DetectorQueryFn injection**: Conflict detectors receive bulk query function at runtime
+- **Graceful fallback**: All wired connections fall back to no-op when bridge/adapter not provided (testable without DB)

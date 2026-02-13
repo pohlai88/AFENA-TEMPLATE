@@ -38,14 +38,14 @@ export class PostgresQueryBuilder implements QueryBuilder {
 
     if (!cursor) {
       return {
-        text: `SELECT * FROM ${table} ORDER BY updated_at, id LIMIT $1`,
+        text: `SELECT * FROM ${table} ORDER BY "updated_at","id" LIMIT $1`,
         values: [batchSize],
       };
     }
 
     if (cursor.type === 'composite') {
       return {
-        text: `SELECT * FROM ${table} WHERE (updated_at, id) > ($1, $2) ORDER BY updated_at, id LIMIT $3`,
+        text: `SELECT * FROM ${table} WHERE ("updated_at","id") > ($1,$2) ORDER BY "updated_at","id" LIMIT $3`,
         values: [cursor.lastUpdatedAt, cursor.lastId, batchSize],
       };
     }
@@ -140,12 +140,12 @@ export class MySqlQueryBuilder implements QueryBuilder {
     const table = this.resolveTable(entityType);
 
     if (!cursor) {
-      return { text: `SELECT * FROM ${table} ORDER BY updated_at, id LIMIT ?`, values: [batchSize] };
+      return { text: `SELECT * FROM ${table} ORDER BY \`updated_at\`,\`id\` LIMIT ?`, values: [batchSize] };
     }
 
     if (cursor.type === 'composite') {
       return {
-        text: `SELECT * FROM ${table} WHERE (updated_at > ? OR (updated_at = ? AND id > ?)) ORDER BY updated_at, id LIMIT ?`,
+        text: `SELECT * FROM ${table} WHERE (\`updated_at\` > ? OR (\`updated_at\` = ? AND \`id\` > ?)) ORDER BY \`updated_at\`,\`id\` LIMIT ?`,
         values: [cursor.lastUpdatedAt, cursor.lastUpdatedAt, cursor.lastId, batchSize],
       };
     }
