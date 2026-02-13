@@ -12,9 +12,11 @@ jobs:
     timeout-minutes: 15
     runs-on: ubuntu-latest
     env:
-      # Dummy values for Next.js build — auth module throws at import time without these
+      # Dummy values — Next.js evaluates API route modules at build time.
+      # Modules that throw at import time need valid-looking placeholders.
+      DATABASE_URL: 'postgresql://ci:ci@ci-placeholder.neon.tech/neondb?sslmode=require'
       NEON_AUTH_BASE_URL: 'https://ci-placeholder.neon.tech'
-      NEON_AUTH_COOKIE_SECRET: 'ci-placeholder-secret-32chars-min'
+      NEON_AUTH_COOKIE_SECRET: 'ci-placeholder-secret-32chars-minimum'
       # Uncomment for Vercel Remote Cache:
       # TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
       # TURBO_TEAM: ${{ vars.TURBO_TEAM }}
