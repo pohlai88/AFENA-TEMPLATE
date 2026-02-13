@@ -46,12 +46,12 @@ export class TransformChain {
     return this.steps;
   }
 
-  async transform(
+  transform(
     value: unknown,
     fieldName: string,
     dataType: DataType,
     context: TransformContext
-  ): Promise<unknown> {
+  ): unknown {
     let result = value;
     for (const step of this.steps) {
       if (step.canHandle(fieldName, dataType)) {
@@ -107,7 +107,7 @@ export class PhoneNormalizeStep implements TransformStep {
     if (typeof value !== 'string' || value.trim() === '') return value;
     try {
       const parsed = parsePhoneNumberFromString(value, this.defaultRegion);
-      if (!parsed || !parsed.isValid()) return null;
+      if (!parsed?.isValid()) return null;
       return parsed.format('E.164');
     } catch {
       return null;

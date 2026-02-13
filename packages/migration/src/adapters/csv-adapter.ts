@@ -1,7 +1,7 @@
-import type { LegacyRecord, BatchResult, EntityType } from '../types/migration-job.js';
-import type { Cursor } from '../types/cursor.js';
-import type { LegacySchema } from '../types/query.js';
 import type { LegacyAdapter } from './legacy-adapter.js';
+import type { Cursor } from '../types/cursor.js';
+import type { LegacyRecord, BatchResult, EntityType } from '../types/migration-job.js';
+import type { LegacySchema } from '../types/query.js';
 
 /**
  * CSV Legacy Adapter — reads flat file imports.
@@ -34,7 +34,7 @@ export class CsvLegacyAdapter implements LegacyAdapter {
     this.idColumn = config.idColumn;
   }
 
-  async extractBatch(
+  extractBatch(
     entityType: EntityType,
     batchSize: number,
     cursor: Cursor
@@ -49,7 +49,7 @@ export class CsvLegacyAdapter implements LegacyAdapter {
     const slice = this.rows.slice(offset, offset + batchSize);
 
     const records: LegacyRecord[] = slice.map((row) => ({
-      legacyId: String(row[this.idColumn] ?? ''),
+      legacyId: String((row[this.idColumn] as string) ?? ''),
       data: row,
     }));
 
@@ -58,29 +58,30 @@ export class CsvLegacyAdapter implements LegacyAdapter {
         ? null
         : { type: 'offset', offset: offset + batchSize };
 
-    return { records, nextCursor };
+    return Promise.resolve({ records, nextCursor });
   }
 
-  async getSchema(_entityType: EntityType): Promise<LegacySchema> {
+  getSchema(_entityType: EntityType): Promise<LegacySchema> {
     if (this.rows.length === 0) {
-      return { tableName: 'csv_import', columns: [] };
+      return Promise.resolve({ tableName: 'csv_import', columns: [] });
     }
 
-    const firstRow = this.rows[0]!;
-    return {
+    const firstRow = this.rows[0];
+    return Promise.resolve({
       tableName: 'csv_import',
       columns: Object.keys(firstRow).map((name) => ({
         name,
         type: 'text',
       })),
-    };
+    });
   }
 
-  async healthCheck(): Promise<boolean> {
-    return this.rows.length > 0;
+  healthCheck(): Promise<boolean> {
+    return Promise.resolve(this.rows.length > 0);
   }
 
-  async close(): Promise<void> {
+  close(): Promise<void> {
     // No-op for CSV adapter
+    return Promise.resolve();
   }
 }

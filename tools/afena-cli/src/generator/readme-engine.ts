@@ -12,6 +12,8 @@ import { renderReadme } from './renderer';
 import { computeReadmeSignature, loadReadmeSignature, saveReadmeSignature } from './signature';
 import { AUTOGEN_START, AUTOGEN_END, TEMPLATE_VERSION, renderRootReadme } from './templates';
 import { writeReadme, validateReadme } from './writer';
+import { collectArchitectureData } from '../meta/collectors/architecture-introspector';
+import { generateArchitectureDocs, writeArchitectureDocs } from '../meta/emitters/architecture';
 
 import type { AfenaConfig } from '../types';
 
@@ -187,6 +189,11 @@ export function runReadmeCommand(
     }
   }
 
+  // Architecture docs (gen mode only, full workspace run)
+  if (mode === 'gen' && (!options.packages || options.packages.length === 0)) {
+    generateArchitectureDocuments(repoRoot, dryRun);
+  }
+
   // Print summary
   printSummary(mode, result, dryRun);
 
@@ -270,6 +277,33 @@ function generateRootReadme(
   writeFileSync(readmePath, `${autogenBlock}\n\n${existing}`, 'utf-8');
   saveReadmeSignature('__root__', repoRoot, sig);
   return 'updated';
+}
+
+/**
+ * Collect architecture data and generate .architecture/*.architecture.md files.
+ */
+function generateArchitectureDocuments(
+  repoRoot: string,
+  dryRun?: boolean,
+): void {
+  const packages = collectArchitectureData(repoRoot);
+  const docs = generateArchitectureDocs(packages);
+
+  if (docs.size === 0) {
+    log.dim('No architecture documents to generate.');
+    return;
+  }
+
+  if (dryRun) {
+    log.bold(`\n[dry-run] Would generate ${docs.size} architecture doc(s):`);
+    for (const filename of docs.keys()) {
+      log.info(`  .architecture/${filename}`);
+    }
+    return;
+  }
+
+  const written = writeArchitectureDocs(repoRoot, docs);
+  log.success(`Generated ${written.length} architecture doc(s): ${written.join(', ')}`);
 }
 
 function printSummary(

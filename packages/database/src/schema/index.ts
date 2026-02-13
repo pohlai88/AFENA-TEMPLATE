@@ -40,6 +40,9 @@ export type { Site, NewSite } from './sites';
 export { currencies } from './currencies';
 export type { Currency, NewCurrency } from './currencies';
 
+export { fxRates } from './fx-rates';
+export type { FxRate, NewFxRate } from './fx-rates';
+
 export { uom } from './uom';
 export type { Uom, NewUom } from './uom';
 
@@ -151,5 +154,124 @@ export type { MigrationCheckpointRow, NewMigrationCheckpointRow } from './migrat
 
 export { migrationMergeExplanations } from './migration-merge-explanations';
 export type { MigrationMergeExplanationRow, NewMigrationMergeExplanationRow } from './migration-merge-explanations';
+
+// ── Phase B: Finance Core ──────────────────────────────
+export { fiscalPeriods } from './fiscal-periods';
+export type { FiscalPeriod, NewFiscalPeriod } from './fiscal-periods';
+
+export { chartOfAccounts } from './chart-of-accounts';
+export type { ChartOfAccount, NewChartOfAccount } from './chart-of-accounts';
+
+export { journalEntries } from './journal-entries';
+export type { JournalEntry, NewJournalEntry } from './journal-entries';
+
+export { journalLines } from './journal-lines';
+export type { JournalLine, NewJournalLine } from './journal-lines';
+
+// ── Phase B: Tax + Payments ────────────────────────────
+export { taxRates } from './tax-rates';
+export type { TaxRate, NewTaxRate } from './tax-rates';
+
+export { paymentAllocations } from './payment-allocations';
+export type { PaymentAllocation, NewPaymentAllocation } from './payment-allocations';
+
+export { creditNotes } from './credit-notes';
+export type { CreditNote, NewCreditNote } from './credit-notes';
+
+// ── Phase C: Intercompany + Bank Reconciliation ──────
+export { intercompanyTransactions } from './intercompany-transactions';
+export type { IntercompanyTransaction, NewIntercompanyTransaction } from './intercompany-transactions';
+
+export { bankStatementLines } from './bank-statements';
+export type { BankStatementLine, NewBankStatementLine } from './bank-statements';
+
+// ── Phase D: Ledger Dimensions ────────────────────────
+export { costCenters } from './cost-centers';
+export type { CostCenter, NewCostCenter } from './cost-centers';
+
+export { projects } from './projects';
+export type { Project, NewProject } from './projects';
+
+// ── Phase D: Stock Ledger ─────────────────────────────
+export { stockMovements } from './stock-movements';
+export type { StockMovement, NewStockMovement } from './stock-movements';
+
+// ── Phase D: Approval Chains ──────────────────────────
+export { approvalChains, approvalSteps, approvalRequests, approvalDecisions } from './approval-chains';
+export type {
+    ApprovalChain, NewApprovalChain,
+    ApprovalStep, NewApprovalStep,
+    ApprovalRequest, NewApprovalRequest,
+    ApprovalDecision, NewApprovalDecision,
+} from './approval-chains';
+
+// ── Phase D: Reporting + Pricing + 3-Way Match ───────
+export { reportingSnapshots } from './reporting-snapshots';
+export type { ReportingSnapshot, NewReportingSnapshot } from './reporting-snapshots';
+
+export { priceLists, priceListItems } from './price-lists';
+export type {
+    PriceList, NewPriceList,
+    PriceListItem, NewPriceListItem,
+} from './price-lists';
+
+export { matchResults } from './match-results';
+export type { MatchResult, NewMatchResult } from './match-results';
+
+// ── Phase E: Manufacturing ────────────────────────────
+export { boms, bomLines } from './boms';
+export type { Bom, NewBom, BomLine, NewBomLine } from './boms';
+
+export { workOrders } from './work-orders';
+export type { WorkOrder, NewWorkOrder } from './work-orders';
+
+export { wipMovements } from './wip-movements';
+export type { WipMovement, NewWipMovement } from './wip-movements';
+
+// ── Phase E: Fixed Assets ─────────────────────────────
+export { assets, depreciationSchedules, assetEvents } from './fixed-assets';
+export type {
+    Asset, NewAsset,
+    DepreciationSchedule, NewDepreciationSchedule,
+    AssetEvent, NewAssetEvent,
+} from './fixed-assets';
+
+// ── Phase E: Revenue Recognition ──────────────────────
+export { revenueSchedules, revenueScheduleLines } from './revenue-schedules';
+export type {
+    RevenueSchedule, NewRevenueSchedule,
+    RevenueScheduleLine, NewRevenueScheduleLine,
+} from './revenue-schedules';
+
+// ── Phase E: Budgeting + Encumbrance ──────────────────
+export { budgets, budgetCommitments } from './budgets';
+export type {
+    Budget, NewBudget,
+    BudgetCommitment, NewBudgetCommitment,
+} from './budgets';
+
+// ── Phase E: Lot/Batch/Serial Traceability ────────────
+export { lotTracking } from './lot-tracking';
+export type { LotTracking, NewLotTracking } from './lot-tracking';
+
+// ── Phase E: Landed Cost ──────────────────────────────
+export { landedCostDocs, landedCostAllocations } from './landed-costs';
+export type {
+    LandedCostDoc, NewLandedCostDoc,
+    LandedCostAllocation, NewLandedCostAllocation,
+} from './landed-costs';
+
+// ── Gap Fixes: Webhooks + Trace DAG + Discount Rules ─
+export { webhookEndpoints, webhookDeliveries } from './webhook-endpoints';
+export type {
+    WebhookEndpoint, NewWebhookEndpoint,
+    WebhookDelivery, NewWebhookDelivery,
+} from './webhook-endpoints';
+
+export { inventoryTraceLinks } from './inventory-trace-links';
+export type { InventoryTraceLink, NewInventoryTraceLink } from './inventory-trace-links';
+
+export { discountRules } from './discount-rules';
+export type { DiscountRule, NewDiscountRule } from './discount-rules';
 
 // @entity-gen:schema-barrel

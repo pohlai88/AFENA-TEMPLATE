@@ -54,3 +54,40 @@ export {
     syncCustomFieldValues,
     processSyncQueue,
 } from './services/custom-field-sync';
+
+// ── Doc number allocation ───────────────────────────────
+export {
+    allocateDocNumber,
+    resolveFiscalYear,
+} from './services/doc-number';
+export type {
+    DocNumberResult,
+} from './services/doc-number';
+
+// ── FX rate lookup ──────────────────────────────────────
+export {
+    lookupFxRate,
+} from './services/fx-lookup';
+export type {
+    FxRateResult,
+} from './services/fx-lookup';
+
+// ── Fiscal period guards ────────────────────────────────
+export {
+    checkPeriodOpen,
+    assertPeriodOpen,
+} from './services/fiscal-period';
+export type {
+    FiscalPeriodStatus,
+} from './services/fiscal-period';
+
+// ── Tax calculation ────────────────────────────────────
+export {
+    resolveTaxRate,
+    calculateLineTax,
+    calculateTaxForLine,
+} from './services/tax-calc';
+export type {
+    ResolvedTaxRate,
+    TaxLineResult,
+} from './services/tax-calc';

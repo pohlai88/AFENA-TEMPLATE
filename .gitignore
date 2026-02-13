@@ -46,6 +46,9 @@ Thumbs.db
 # Turbo
 .turbo
 
+# ESLint cache
+.eslintcache
+
 # Afena CLI generated output (ledger, matrix, discovery, manifests)
 .afena/*
 !.afena/capability-exceptions.json

@@ -1,3 +1,5 @@
+import { hashCanonical } from './canonical-json.js';
+
 import type {
   EntityType,
   MigrationJob,
@@ -6,7 +8,6 @@ import type {
   FieldMergePolicy,
   SourceConfig,
 } from '../types/migration-job.js';
-import { hashCanonical } from './canonical-json.js';
 
 /**
  * Signed report with fingerprints for full reproducibility.

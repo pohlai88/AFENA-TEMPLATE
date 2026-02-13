@@ -65,8 +65,8 @@ export class ContactsConflictDetector implements ConflictDetector {
     if (!ctx.queryFn || records.length === 0) return [];
 
     // 1. Collect match values from batch
-    const emails = records.map((r) => r.data['email']).filter(Boolean) as unknown[];
-    const phones = records.map((r) => r.data['phone']).filter(Boolean) as unknown[];
+    const emails = records.map((r) => r.data['email']).filter(Boolean) as string[];
+    const phones = records.map((r) => r.data['phone']).filter(Boolean) as string[];
 
     if (emails.length === 0 && phones.length === 0) return [];
 
@@ -85,14 +85,16 @@ export class ContactsConflictDetector implements ConflictDetector {
     const byPhone = new Map<string, Array<Record<string, unknown>>>();
     for (const c of candidates) {
       if (c['email']) {
-        const key = String(c['email']).toLowerCase();
-        if (!byEmail.has(key)) byEmail.set(key, []);
-        byEmail.get(key)!.push(c);
+        const key = String(c['email'] as string).toLowerCase();
+        const emailList = byEmail.get(key) ?? [];
+        if (!byEmail.has(key)) byEmail.set(key, emailList);
+        emailList.push(c);
       }
       if (c['phone']) {
-        const key = String(c['phone']);
-        if (!byPhone.has(key)) byPhone.set(key, []);
-        byPhone.get(key)!.push(c);
+        const key = String(c['phone'] as string);
+        const phoneList = byPhone.get(key) ?? [];
+        if (!byPhone.has(key)) byPhone.set(key, phoneList);
+        phoneList.push(c);
       }
     }
 
@@ -100,11 +102,11 @@ export class ContactsConflictDetector implements ConflictDetector {
     const conflicts: Conflict[] = [];
     for (const record of records) {
       const matchSet = new Map<string, { entity: Record<string, unknown>; score: number; explanations: MatchExplanation[] }>();
-      const email = record.data['email'] ? String(record.data['email']).toLowerCase() : null;
-      const phone = record.data['phone'] ? String(record.data['phone']) : null;
+      const email = record.data['email'] ? String(record.data['email'] as string).toLowerCase() : null;
+      const phone = record.data['phone'] ? String(record.data['phone'] as string) : null;
 
       if (email && byEmail.has(email)) {
-        for (const c of byEmail.get(email)!) {
+        for (const c of byEmail.get(email) ?? []) {
           const id = String(c['id']);
           const existing = matchSet.get(id) ?? { entity: c, score: 0, explanations: [] };
           existing.score += 40;
@@ -113,13 +115,13 @@ export class ContactsConflictDetector implements ConflictDetector {
             matchType: 'normalized',
             scoreContribution: 40,
             legacyValue: email,
-            candidateValue: String(c['email']),
+            candidateValue: String(c['email'] as string),
           });
           matchSet.set(id, existing);
         }
       }
       if (phone && byPhone.has(phone)) {
-        for (const c of byPhone.get(phone)!) {
+        for (const c of byPhone.get(phone) ?? []) {
           const id = String(c['id']);
           const existing = matchSet.get(id) ?? { entity: c, score: 0, explanations: [] };
           existing.score += 20;
@@ -128,7 +130,7 @@ export class ContactsConflictDetector implements ConflictDetector {
             matchType: 'exact',
             scoreContribution: 20,
             legacyValue: phone,
-            candidateValue: String(c['phone']),
+            candidateValue: String(c['phone'] as string),
           });
           matchSet.set(id, existing);
         }
@@ -139,7 +141,7 @@ export class ContactsConflictDetector implements ConflictDetector {
           .map(([entityId, m]) => ({ entityId, entity: m.entity, score: m.score, explanations: m.explanations }))
           .sort((a, b) => b.score - a.score);
 
-        const bestScore = matches[0]!.score;
+        const bestScore = matches[0].score;
         conflicts.push({
           id: crypto.randomUUID(),
           legacyRecord: record,
@@ -166,7 +168,7 @@ export class InvoicesConflictDetector implements ConflictDetector {
   ): Promise<Conflict[]> {
     if (!ctx.queryFn || records.length === 0) return [];
 
-    const invoiceNumbers = records.map((r) => r.data['invoiceNumber']).filter(Boolean) as unknown[];
+    const invoiceNumbers = records.map((r) => r.data['invoiceNumber']).filter(Boolean);
     if (invoiceNumbers.length === 0) return [];
 
     const candidates = await ctx.queryFn({
@@ -181,16 +183,17 @@ export class InvoicesConflictDetector implements ConflictDetector {
     const byInvoiceNum = new Map<string, Array<Record<string, unknown>>>();
     for (const c of candidates) {
       const key = String(c['invoiceNumber']);
-      if (!byInvoiceNum.has(key)) byInvoiceNum.set(key, []);
-      byInvoiceNum.get(key)!.push(c);
+      const invList = byInvoiceNum.get(key) ?? [];
+      if (!byInvoiceNum.has(key)) byInvoiceNum.set(key, invList);
+      invList.push(c);
     }
 
     const conflicts: Conflict[] = [];
     for (const record of records) {
-      const invNum = record.data['invoiceNumber'] ? String(record.data['invoiceNumber']) : null;
+      const invNum = record.data['invoiceNumber'] ? String(record.data['invoiceNumber'] as string) : null;
       if (!invNum || !byInvoiceNum.has(invNum)) continue;
 
-      const matchList = byInvoiceNum.get(invNum)!;
+      const matchList = byInvoiceNum.get(invNum) ?? [];
       const matches: MatchCandidate[] = matchList.map((c) => {
         let score = 50;
         const explanations: MatchExplanation[] = [{
@@ -198,16 +201,16 @@ export class InvoicesConflictDetector implements ConflictDetector {
           matchType: 'exact',
           scoreContribution: 50,
           legacyValue: invNum,
-          candidateValue: String(c['invoiceNumber']),
+          candidateValue: String(c['invoiceNumber'] as string),
         }];
-        if (record.data['vendorId'] && String(record.data['vendorId']) === String(c['vendorId'])) {
+        if (record.data['vendorId'] && String(record.data['vendorId'] as string) === String(c['vendorId'] as string)) {
           score += 40;
           explanations.push({
             field: 'vendorId',
             matchType: 'exact',
             scoreContribution: 40,
-            legacyValue: String(record.data['vendorId']),
-            candidateValue: String(c['vendorId']),
+            legacyValue: String(record.data['vendorId'] as string),
+            candidateValue: String(c['vendorId'] as string),
           });
         }
         return { entityId: String(c['id']), entity: c, score, explanations };
@@ -217,7 +220,7 @@ export class InvoicesConflictDetector implements ConflictDetector {
         id: crypto.randomUUID(),
         legacyRecord: record,
         matches,
-        confidence: matches[0]!.score >= 90 ? 'high' : 'medium',
+        confidence: matches[0].score >= 90 ? 'high' : 'medium',
       });
     }
 
@@ -238,7 +241,7 @@ export class ProductsConflictDetector implements ConflictDetector {
   ): Promise<Conflict[]> {
     if (!ctx.queryFn || records.length === 0) return [];
 
-    const skus = records.map((r) => r.data['sku']).filter(Boolean) as unknown[];
+    const skus = records.map((r) => r.data['sku']).filter(Boolean);
     if (skus.length === 0) return [];
 
     const candidates = await ctx.queryFn({
@@ -257,10 +260,11 @@ export class ProductsConflictDetector implements ConflictDetector {
 
     const conflicts: Conflict[] = [];
     for (const record of records) {
-      const sku = record.data['sku'] ? String(record.data['sku']) : null;
+      const sku = record.data['sku'] ? String(record.data['sku'] as string) : null;
       if (!sku || !bySku.has(sku)) continue;
 
-      const candidate = bySku.get(sku)!;
+      const candidate = bySku.get(sku);
+      if (!candidate) continue;
       conflicts.push({
         id: crypto.randomUUID(),
         legacyRecord: record,
@@ -292,8 +296,8 @@ export class NoConflictDetector implements ConflictDetector {
 
   constructor(public readonly entityType: EntityType) { }
 
-  async detectBulk(): Promise<Conflict[]> {
-    return [];
+  detectBulk(): Promise<Conflict[]> {
+    return Promise.resolve([]);
   }
 }
 

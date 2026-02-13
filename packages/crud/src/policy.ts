@@ -68,9 +68,10 @@ export function enforcePolicy(
     const message = rule
       ? `Policy denied: actionFamily=${actionFamily} requires [${rule.allowRoles.join(', ')}], actor has [${roles.join(', ')}]`
       : `Policy denied: no rule for actionFamily=${actionFamily}`;
-    const err: any = new Error(message);
-    err.code = 'POLICY_DENIED';
-    err.authoritySnapshot = authoritySnapshot;
+    const err = Object.assign(new Error(message), {
+      code: 'POLICY_DENIED' as const,
+      authoritySnapshot,
+    });
     throw err;
   }
 

@@ -1,26 +1,28 @@
-import { and, eq } from 'drizzle-orm';
 
-import type { DbInstance } from 'afena-database';
 import {
   migrationJobs,
   migrationConflicts,
   migrationConflictResolutions,
   migrationReports,
 } from 'afena-database';
+import { and, eq } from 'drizzle-orm';
 
+import { buildSignedReport } from '../audit/signed-report.js';
+import { SqlMigrationPipeline } from '../pipeline/sql-migration-pipeline.js';
+
+import { RateLimiter } from './rate-limiter.js';
+
+import type { LegacyAdapter } from '../adapters/legacy-adapter.js';
+import type { ReportInputs } from '../audit/signed-report.js';
+import type { SqlPipelineConfig } from '../pipeline/sql-migration-pipeline.js';
+import type { Cursor } from '../types/cursor.js';
 import type {
   MigrationJob,
   MigrationContext,
   MigrationResult,
-  EntityType,
 } from '../types/migration-job.js';
-import type { Cursor } from '../types/cursor.js';
-import type { LegacyAdapter } from '../adapters/legacy-adapter.js';
-import type { SqlPipelineConfig } from '../pipeline/sql-migration-pipeline.js';
-import { SqlMigrationPipeline } from '../pipeline/sql-migration-pipeline.js';
-import { buildSignedReport } from '../audit/signed-report.js';
-import type { ReportInputs } from '../audit/signed-report.js';
-import { RateLimiter } from './rate-limiter.js';
+import type { LoadResult } from '../types/upsert-plan.js';
+import type { DbInstance } from 'afena-database';
 
 /**
  * Job execution result — extends MigrationResult with timing info.
@@ -82,7 +84,7 @@ export class JobExecutor {
         .where(eq(migrationJobs.id, job.id));
 
       // 2. Extract + process in batches
-      let cursor: Cursor = job.checkpointCursor as Cursor ?? null;
+      let cursor: Cursor = job.checkpointCursor ?? null;
       let batchCount = 0;
 
       while (true) {
@@ -100,7 +102,7 @@ export class JobExecutor {
 
         // Extract batch from legacy source
         const batch = await this.legacyAdapter.extractBatch(
-          job.entityType as EntityType,
+          job.entityType,
           job.batchSize,
           cursor
         );
@@ -110,13 +112,13 @@ export class JobExecutor {
         }
 
         // Transform
-        const transformed = await (pipeline as any).transformBatch(batch.records);
+        const transformed = await pipeline.transformBatch(batch.records);
 
         // Plan upserts (bulk prefetch, no N+1)
-        const plan = await (pipeline as any).planUpserts(transformed);
+        const plan = await pipeline.planUpserts(transformed);
 
         // Load plan (reservation-first creates)
-        const loadResult = await (pipeline as any).loadPlan(plan);
+        const loadResult: LoadResult = await pipeline.loadPlan(plan);
 
         // Accumulate results
         result.recordsProcessed += batch.records.length;
@@ -136,7 +138,7 @@ export class JobExecutor {
           .set({
             recordsSuccess: result.recordsCreated + result.recordsUpdated,
             recordsFailed: result.recordsFailed,
-            checkpointCursor: cursor as any,
+            checkpointCursor: cursor as Cursor,
           })
           .where(eq(migrationJobs.id, job.id));
 
@@ -149,7 +151,7 @@ export class JobExecutor {
       result.durationMs = Date.now() - startTime;
 
       // 3. Generate signed report
-      const schema = await this.legacyAdapter.getSchema(job.entityType as EntityType);
+      const schema = await this.legacyAdapter.getSchema(job.entityType);
       const transformSteps = pipeline.getTransformChain().getSteps().map((s) => ({
         name: s.name,
         order: s.order,
@@ -220,7 +222,7 @@ export class JobExecutor {
   private async saveCheckpoint(jobId: string, cursor: Cursor): Promise<void> {
     await this.db
       .update(migrationJobs)
-      .set({ checkpointCursor: cursor as any })
+      .set({ checkpointCursor: cursor as Cursor })
       .where(eq(migrationJobs.id, jobId));
   }
 

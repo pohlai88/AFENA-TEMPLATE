@@ -148,6 +148,76 @@
       "when": 1770945900000,
       "tag": "0020_seed_roles_wildcard_trigger",
       "breakpoints": true
+    },
+    {
+      "idx": 21,
+      "version": "7",
+      "when": 1771056000000,
+      "tag": "0021_phase_a_unblock_real_docs",
+      "breakpoints": true
+    },
+    {
+      "idx": 22,
+      "version": "7",
+      "when": 1771063200000,
+      "tag": "0022_phase_b_finance_core",
+      "breakpoints": true
+    },
+    {
+      "idx": 23,
+      "version": "7",
+      "when": 1771066800000,
+      "tag": "0023_phase_b_tax_payments",
+      "breakpoints": true
+    },
+    {
+      "idx": 24,
+      "version": "7",
+      "when": 1771070400000,
+      "tag": "0024_phase_c_trgm_intercompany",
+      "breakpoints": true
+    },
+    {
+      "idx": 25,
+      "version": "7",
+      "when": 1771074000000,
+      "tag": "0025_phase_d_enterprise_scale",
+      "breakpoints": true
+    },
+    {
+      "idx": 26,
+      "version": "7",
+      "when": 1771077600000,
+      "tag": "0026_phase_d_reporting_pricing_match",
+      "breakpoints": true
+    },
+    {
+      "idx": 27,
+      "version": "7",
+      "when": 1771081200000,
+      "tag": "0027_phase_e_manufacturing_assets",
+      "breakpoints": true
+    },
+    {
+      "idx": 28,
+      "version": "7",
+      "when": 1771084800000,
+      "tag": "0028_phase_e_revrec_budgets_lots_landed",
+      "breakpoints": true
+    },
+    {
+      "idx": 29,
+      "version": "7",
+      "when": 1771088400000,
+      "tag": "0029_phase_e_uom_rounding",
+      "breakpoints": true
+    },
+    {
+      "idx": 30,
+      "version": "7",
+      "when": 1771092000000,
+      "tag": "0030_gap_fixes_webhooks_trace_discount",
+      "breakpoints": true
     }
   ]
 }

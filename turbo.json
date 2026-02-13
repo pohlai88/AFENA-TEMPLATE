@@ -28,6 +28,13 @@
       ],
       "outputs": []
     },
+    "lint:ci": {
+      "dependsOn": [
+        "^build"
+      ],
+      "outputs": [],
+      "cache": false
+    },
     "lint:fix": {
       "outputs": [],
       "cache": false

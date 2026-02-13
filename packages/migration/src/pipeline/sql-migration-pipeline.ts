@@ -1,6 +1,4 @@
-import { and, eq, inArray, sql } from 'drizzle-orm';
 
-import type { DbInstance } from 'afena-database';
 import {
   migrationLineage,
   migrationConflicts,
@@ -10,7 +8,25 @@ import {
   migrationQuarantine,
   migrationMergeExplanations,
 } from 'afena-database';
+import { and, eq, inArray, sql } from 'drizzle-orm';
+import pLimit from 'p-limit';
 
+import { hashCanonical } from '../audit/canonical-json.js';
+import { PreflightGateChain, PostflightGateChain } from '../gates/gate-chain.js';
+import { DEFAULT_CONFLICT_THRESHOLDS } from '../types/index.js';
+
+import { PerfTracker } from './perf-tracker.js';
+import { MigrationPipelineBase } from './pipeline-base.js';
+import { withTerminalOutcome } from './with-terminal-outcome.js';
+
+import type { CrudBridge } from './crud-bridge.js';
+import type { PipelineDb } from './pipeline-base.js';
+import type { EntityWriteAdapter } from '../adapters/entity-write-adapter.js';
+import type { LegacyAdapter } from '../adapters/legacy-adapter.js';
+import type { QueryBuilder } from '../adapters/query-builder.js';
+import type { PreflightGate, PostflightGate } from '../gates/gate-chain.js';
+import type { ConflictDetector, Conflict, DetectorQueryFn } from '../strategies/conflict-detector.js';
+import type { TransformChain, DataType } from '../transforms/transform-chain.js';
 import type {
   Cursor,
   LegacyKey,
@@ -29,22 +45,7 @@ import type {
   StepCheckpoint,
   ConflictThresholds,
 } from '../types/index.js';
-import { DEFAULT_CONFLICT_THRESHOLDS } from '../types/index.js';
-import type { QueryBuilder } from '../adapters/query-builder.js';
-import type { EntityWriteAdapter } from '../adapters/entity-write-adapter.js';
-import type { ConflictDetector, Conflict, DetectorQueryFn } from '../strategies/conflict-detector.js';
-import type { TransformChain, DataType } from '../transforms/transform-chain.js';
-import type { PreflightGate, PostflightGate } from '../gates/gate-chain.js';
-import { PreflightGateChain, PostflightGateChain } from '../gates/gate-chain.js';
-import { MigrationPipelineBase } from './pipeline-base.js';
-import type { PipelineDb } from './pipeline-base.js';
-import type { CrudBridge } from './crud-bridge.js';
-import type { LegacyAdapter } from '../adapters/legacy-adapter.js';
-import pLimit from 'p-limit';
-
-import { withTerminalOutcome } from './with-terminal-outcome.js';
-import { PerfTracker } from './perf-tracker.js';
-import { hashCanonical } from '../audit/canonical-json.js';
+import type { DbInstance } from 'afena-database';
 
 /**
  * Concrete SQL migration pipeline.
@@ -155,7 +156,7 @@ export class SqlMigrationPipeline extends MigrationPipelineBase {
 
   // ── Transform ─────────────────────────────────────────────
 
-  protected async transformBatch(records: LegacyRecord[]): Promise<TransformedRecord[]> {
+  async transformBatch(records: LegacyRecord[]): Promise<TransformedRecord[]> {
     const results: TransformedRecord[] = [];
 
     for (const record of records) {
@@ -186,7 +187,7 @@ export class SqlMigrationPipeline extends MigrationPipelineBase {
 
   // ── Plan (Hardening 1: Bulk prefetch, no N+1) ────────────
 
-  protected async planUpserts(records: TransformedRecord[]): Promise<UpsertPlan> {
+  async planUpserts(records: TransformedRecord[]): Promise<UpsertPlan> {
     const actions: UpsertAction[] = [];
     const legacyIds = records.map((r) => r.legacyId);
     const systemName = this.resolveSystemName();
@@ -225,7 +226,8 @@ export class SqlMigrationPipeline extends MigrationPipelineBase {
     // 3. Handle already-migrated
     for (const record of alreadyMigrated) {
       const legacyKey: LegacyKey = { legacySystem: systemName, legacyId: record.legacyId };
-      const afenaId = lineageMap.get(record.legacyId)!.afenaId!;
+      const lineageEntry = lineageMap.get(record.legacyId);
+      const afenaId = lineageEntry?.afenaId ?? '';
 
       if (this.job.conflictStrategy === 'skip') {
         actions.push({ kind: 'skip', legacyKey, reason: 'Already migrated' });
@@ -263,7 +265,7 @@ export class SqlMigrationPipeline extends MigrationPipelineBase {
             break;
           case 'overwrite':
             if (conflict.matches.length > 0) {
-              const best = conflict.matches[0]!;
+              const best = conflict.matches[0];
               actions.push({
                 kind: 'update',
                 targetId: best.entityId,
@@ -274,7 +276,7 @@ export class SqlMigrationPipeline extends MigrationPipelineBase {
             break;
           case 'merge':
             if (conflict.matches.length > 0) {
-              const best = conflict.matches[0]!;
+              const best = conflict.matches[0];
               const score = best.score ?? 0;
 
               if (score >= this.conflictThresholds.autoMerge) {
@@ -331,7 +333,7 @@ export class SqlMigrationPipeline extends MigrationPipelineBase {
 
   // ── Load (Hardening 2 + OPS-01 + OPS-02 + SPD-01) ─────────
 
-  protected async loadPlan(plan: UpsertPlan): Promise<LoadResult> {
+  async loadPlan(plan: UpsertPlan): Promise<LoadResult> {
     const result: LoadResult = {
       created: [],
       updated: [],
@@ -344,10 +346,10 @@ export class SqlMigrationPipeline extends MigrationPipelineBase {
     let i = 0;
     while (i < plan.actions.length) {
       // SPD-01: Collect consecutive create actions into a parallel batch
-      if (plan.actions[i]!.kind === 'create') {
+      if (plan.actions[i].kind === 'create') {
         const createBatch: { index: number; action: UpsertAction }[] = [];
-        while (i < plan.actions.length && plan.actions[i]!.kind === 'create') {
-          createBatch.push({ index: i, action: plan.actions[i]! });
+        while (i < plan.actions.length && plan.actions[i].kind === 'create') {
+          createBatch.push({ index: i, action: plan.actions[i] });
           i++;
         }
 
@@ -358,8 +360,8 @@ export class SqlMigrationPipeline extends MigrationPipelineBase {
         );
 
         for (let b = 0; b < settledResults.length; b++) {
-          const settled = settledResults[b]!;
-          const batchAction = createBatch[b]!.action;
+          const settled = settledResults[b];
+          const batchAction = createBatch[b].action;
           const outcome: RecordOutcome = settled.status === 'fulfilled'
             ? settled.value
             : {
@@ -370,7 +372,7 @@ export class SqlMigrationPipeline extends MigrationPipelineBase {
               errorCode: settled.reason instanceof Error ? settled.reason.message.slice(0, 100) : 'UNKNOWN',
               failureStage: 'load',
             };
-          const batchIdx = createBatch[b]!.index;
+          const batchIdx = createBatch[b].index;
 
           if (outcome.status === 'quarantined') {
             await this.writeQuarantineRow(plan.jobId, plan.entityType, batchAction, outcome);
@@ -392,7 +394,7 @@ export class SqlMigrationPipeline extends MigrationPipelineBase {
       }
 
       // Sequential processing for skip, manual, update, merge
-      const action = plan.actions[i]!;
+      const action = plan.actions[i];
       const entityType = plan.entityType;
       const legacyId = action.legacyKey.legacyId;
 
@@ -467,7 +469,7 @@ export class SqlMigrationPipeline extends MigrationPipelineBase {
               return {
                 entityType, legacyId,
                 status: 'loaded' as const,
-                action: actionKind as 'update' | 'merge',
+                action: actionKind,
                 targetId: action.targetId,
               };
             } finally {
@@ -560,11 +562,11 @@ export class SqlMigrationPipeline extends MigrationPipelineBase {
             afenaId = crypto.randomUUID();
           }
 
-          await this.commitLineage(reservation.lineageId!, afenaId);
+          await this.commitLineage(reservation.lineageId ?? '', afenaId);
           result.created.push({ legacyId, afenaId });
           return { entityType, legacyId, status: 'loaded' as const, action: 'create' as const, targetId: afenaId };
         } catch (createError) {
-          await this.db.deleteReservation(reservation.lineageId!);
+          await this.db.deleteReservation(reservation.lineageId ?? '');
           throw createError;
         }
       } finally {
@@ -640,7 +642,7 @@ export class SqlMigrationPipeline extends MigrationPipelineBase {
             afenaId = crypto.randomUUID();
           }
 
-          await this.commitLineage(reservation.lineageId!, afenaId);
+          await this.commitLineage(reservation.lineageId ?? '', afenaId);
           return {
             entityType: row.entityType,
             legacyId: row.legacyId,
@@ -649,7 +651,7 @@ export class SqlMigrationPipeline extends MigrationPipelineBase {
             targetId: afenaId,
           };
         } catch (err) {
-          await this.db.deleteReservation(reservation.lineageId!);
+          await this.db.deleteReservation(reservation.lineageId ?? '');
           throw err;
         }
       },

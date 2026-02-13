@@ -6,7 +6,7 @@ import {
   mutationSpecSchema,
   RateLimitError,
 } from 'afena-canon';
-import { and, auditLogs, companies, contacts, db, entityVersions, eq } from 'afena-database';
+import { and, auditLogs, companies, contacts, db, entityVersions, eq, sql } from 'afena-database';
 import { evaluateRules, loadAndRegisterOrgRules } from 'afena-workflow';
 
 import { generateDiff } from './diff';
@@ -386,6 +386,12 @@ export async function mutate(
       channel: ctx.channel,
     }).catch(() => {
       // After-rule errors are swallowed — they must not affect the mutation response
+    });
+
+    // Refresh search_index MV (fire-and-forget, PRD Phase A #3)
+    // Uses CONCURRENTLY to avoid blocking reads. Errors are swallowed.
+    db.execute(sql`REFRESH MATERIALIZED VIEW CONCURRENTLY search_index`).catch(() => {
+      // MV refresh errors must not affect the mutation response
     });
 
     // Meter successful mutation (fire-and-forget)

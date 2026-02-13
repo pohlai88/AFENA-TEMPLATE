@@ -6,7 +6,7 @@ module.exports = [
   {
     languageOptions: {
       parserOptions: {
-        project: './tsconfig.json',
+        projectService: true,
         tsconfigRootDir: __dirname,
       },
     },
@@ -27,7 +27,7 @@ module.exports = [
     },
   },
   {
-    files: ['src/mutate.ts', 'src/handlers/**/*.ts', 'src/read.ts', 'src/metering.ts', 'src/policy-engine.ts'],
+    files: ['src/mutate.ts', 'src/handlers/**/*.ts', 'src/read.ts', 'src/metering.ts', 'src/policy-engine.ts', 'src/governor.ts', 'src/services/doc-number.ts', 'src/services/fx-lookup.ts', 'src/services/fiscal-period.ts', 'src/services/tax-calc.ts'],
     rules: {
       // Drizzle transaction typing: tx from db.transaction() loses schema type,
       // requiring intentional `as any` casts for insert/update/select within tx

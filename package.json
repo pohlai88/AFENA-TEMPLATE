@@ -15,6 +15,7 @@
     "build": "turbo run build",
     "dev": "turbo run dev",
     "lint": "turbo run lint",
+    "lint:ci": "turbo run lint:ci",
     "lint:fix": "turbo run lint:fix",
     "type-check": "turbo run type-check",
     "type-check:strict": "turbo run type-check -- --strict",

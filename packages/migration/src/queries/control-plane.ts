@@ -1,6 +1,3 @@
-import { and, count, desc, eq, sql } from 'drizzle-orm';
-
-import type { DbInstance } from 'afena-database';
 import {
   getDb,
   migrationJobs,
@@ -9,6 +6,9 @@ import {
   migrationMergeExplanations,
   migrationLineage,
 } from 'afena-database';
+import { and, count, desc, eq } from 'drizzle-orm';
+
+import type { DbInstance } from 'afena-database';
 
 /**
  * SPD-05: Create a control plane instance routed to the read replica by default.

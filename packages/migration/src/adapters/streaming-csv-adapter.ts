@@ -1,10 +1,11 @@
-import Papa from 'papaparse';
 import { createReadStream } from 'node:fs';
 
-import type { LegacyRecord, BatchResult, EntityType } from '../types/migration-job.js';
-import type { Cursor } from '../types/cursor.js';
-import type { LegacySchema } from '../types/query.js';
+import Papa from 'papaparse';
+
 import type { LegacyAdapter } from './legacy-adapter.js';
+import type { Cursor } from '../types/cursor.js';
+import type { LegacyRecord, BatchResult, EntityType } from '../types/migration-job.js';
+import type { LegacySchema } from '../types/query.js';
 
 /**
  * SPD-06: Streaming CSV adapter — reads large CSV files without loading
@@ -56,6 +57,7 @@ export class StreamingCsvAdapter implements LegacyAdapter {
     let rowIndex = 0;
 
     return new Promise<BatchResult>((resolve, reject) => {
+      // eslint-disable-next-line security/detect-non-literal-fs-filename -- filePath is from trusted constructor config, not user input
       const stream = createReadStream(this.filePath, { encoding: this.encoding });
 
       Papa.parse(stream, {
@@ -75,7 +77,7 @@ export class StreamingCsvAdapter implements LegacyAdapter {
 
           const row = result.data;
           records.push({
-            legacyId: String(row[this.idColumn] ?? ''),
+            legacyId: String((row[this.idColumn] as string) ?? ''),
             data: row,
           });
           rowIndex++;
