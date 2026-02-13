@@ -54,6 +54,10 @@ Thumbs.db
 packages/ui/engine/generated/
 packages/ui/engine/index.css
 
+# SBOM (generated artifacts)
+sbom.json
+sbom.sha256
+
 # Temporary folders
 tmp/
 temp/

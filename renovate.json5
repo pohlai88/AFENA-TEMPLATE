@@ -1,0 +1,39 @@
+{
+  $schema: 'https://docs.renovatebot.com/renovate-schema.json',
+  extends: ['config:recommended', 'group:monorepos', ':separateMajorReleases'],
+  labels: ['dependencies'],
+  vulnerabilityAlerts: {
+    labels: ['dependencies', 'security'],
+    enabled: true,
+  },
+  schedule: ['before 8am on Monday'],
+  timezone: 'Asia/Kuala_Lumpur',
+  lockFileMaintenance: {
+    enabled: true,
+    schedule: ['before 8am on Monday'],
+  },
+  packageRules: [
+    // Production deps: weekly, require manual approval
+    {
+      matchDepTypes: ['dependencies'],
+      groupName: 'production dependencies',
+      schedule: ['before 8am on Monday'],
+    },
+    // DevDeps patch: automerge
+    {
+      matchDepTypes: ['devDependencies'],
+      matchUpdateTypes: ['patch'],
+      groupName: 'devDependencies (patch)',
+      automerge: true,
+    },
+    // DevDeps minor/major: manual
+    {
+      matchDepTypes: ['devDependencies'],
+      matchUpdateTypes: ['minor', 'major'],
+      groupName: 'devDependencies (minor/major)',
+    },
+  ],
+  // NOTE: pnpm catalog support — verify Renovate behavior on this repo.
+  // Pin rules may be needed until full catalogs support lands.
+  // See: https://github.com/renovatebot/renovate/issues/
+}
