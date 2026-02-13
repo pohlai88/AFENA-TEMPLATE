@@ -119,3 +119,9 @@ export type { EntityAttachment, NewEntityAttachment } from './entity-attachments
 
 export { communications } from './communications';
 export type { Communication, NewCommunication } from './communications';
+
+// ── API Keys ────────────────────────────────────────────
+export { apiKeys } from './api-keys';
+export type { ApiKey, NewApiKey } from './api-keys';
+
+// @entity-gen:schema-barrel

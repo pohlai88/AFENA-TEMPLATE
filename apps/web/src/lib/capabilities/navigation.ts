@@ -1,9 +1,14 @@
 /**
+ * @status FUTURE — Not wired into current UI architecture.
+ *
  * Navigation generation — derive visible navigation items from capabilities.
  *
  * Phase 5, Step 40: "show all capabilities for Sales role"
  * Given a user's RBAC tier, returns the capabilities they can access,
  * grouped by domain for navigation rendering.
+ *
+ * Current architecture uses nav-config.ts (SSOT) for sidebar/breadcrumbs/command-palette.
+ * This module will be wired when capability-driven RBAC replaces the static nav config.
  */
 
 import {

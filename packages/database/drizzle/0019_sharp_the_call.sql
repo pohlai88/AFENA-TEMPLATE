@@ -1,0 +1,2 @@
+DROP INDEX "role_perms_org_role_entity_verb_idx";--> statement-breakpoint
+CREATE UNIQUE INDEX "role_perms_org_role_entity_verb_scope_idx" ON "role_permissions" USING btree ("org_id","role_id","entity_type","verb","scope");

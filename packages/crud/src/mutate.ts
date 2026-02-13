@@ -4,17 +4,21 @@ import {
   getActionFamily,
   LifecycleError,
   mutationSpecSchema,
+  RateLimitError,
 } from 'afena-canon';
-import { and, auditLogs, contacts, db, entityVersions, eq } from 'afena-database';
+import { and, auditLogs, companies, contacts, db, entityVersions, eq } from 'afena-database';
 import { evaluateRules, loadAndRegisterOrgRules } from 'afena-workflow';
 
 import { generateDiff } from './diff';
 import { err, ok } from './envelope';
 import { applyGovernor, buildGovernorConfig } from './governor';
+import { companiesHandler } from './handlers/companies';
 import { contactsHandler } from './handlers/contacts';
+// @entity-gen:handler-import
 import { enforceLifecycle } from './lifecycle';
 import { meterApiRequest, meterDbTimeout } from './metering';
 import { enforcePolicyV2 } from './policy-engine';
+import { checkRateLimit } from './rate-limiter';
 import { stripSystemColumns } from './sanitize';
 
 import type { MutationContext } from './context';
@@ -24,6 +28,8 @@ import type { ApiResponse, ErrorCode, MutationSpec, Receipt } from 'afena-canon'
 /** Entity handler registry — maps entity type to handler. */
 const HANDLER_REGISTRY: Record<string, EntityHandler> = {
   contacts: contactsHandler,
+  companies: companiesHandler,
+  // @entity-gen:handler-registry
 };
 
 /**
@@ -32,6 +38,8 @@ const HANDLER_REGISTRY: Record<string, EntityHandler> = {
  */
 const TABLE_REGISTRY: Record<string, any> = {
   contacts,
+  companies,
+  // @entity-gen:table-registry-mutate
 };
 
 /**
@@ -45,6 +53,12 @@ export async function mutate(
   ctx: MutationContext,
 ): Promise<ApiResponse> {
   const mutationId = crypto.randomUUID();
+
+  // 0. Enforce rate limit (kernel invariant — INVARIANT-RL-01)
+  const rlResult = checkRateLimit(ctx.actor.orgId, 'mutation');
+  if (!rlResult.allowed) {
+    throw new RateLimitError(rlResult.remaining, rlResult.resetMs);
+  }
 
   // 1. Validate MutationSpec with Zod
   const parsed = mutationSpecSchema.safeParse(spec);
@@ -385,6 +399,7 @@ export async function mutate(
     let errorCode: ErrorCode = 'INTERNAL_ERROR';
     if ((error as any)?.code === 'POLICY_DENIED') errorCode = 'POLICY_DENIED';
     if (error instanceof LifecycleError) errorCode = 'LIFECYCLE_DENIED';
+    if (error instanceof RateLimitError || (error as any)?.code === 'RATE_LIMITED') errorCode = 'RATE_LIMITED';
     if (message === 'NOT_FOUND') errorCode = 'NOT_FOUND';
     if (message === 'CONFLICT_VERSION') errorCode = 'CONFLICT_VERSION';
 

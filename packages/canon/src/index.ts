@@ -3,8 +3,10 @@ export type { EntityType, EntityRef, BaseEntity } from './types/entity';
 export { ENTITY_TYPES } from './types/entity';
 
 export type { ActorRef } from './types/actor';
+export { SYSTEM_ACTOR_USER_ID } from './types/actor';
 
 export type {
+  PermissionVerb,
   PolicyDecision,
   PolicyDenyReason,
   FieldRules,
@@ -48,7 +50,7 @@ export type { ReceiptStatus, Receipt } from './types/receipt';
 export type { ApiResponse } from './types/envelope';
 
 export type { ErrorCode, KernelError } from './types/errors';
-export { ERROR_CODES } from './types/errors';
+export { ERROR_CODES, RateLimitError } from './types/errors';
 
 export type { AuditLogEntry } from './types/audit';
 

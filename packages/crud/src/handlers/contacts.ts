@@ -5,6 +5,13 @@ import type { MutationContext } from '../context';
 import type { EntityHandler, HandlerResult } from './types';
 import type { NeonHttpDatabase } from 'drizzle-orm/neon-http';
 
+export const CAPABILITIES = [
+  'contacts.create',
+  'contacts.update',
+  'contacts.delete',
+  'contacts.restore',
+] as const;
+
 /**
  * K-11: Contacts allowlist — only these fields are accepted from input.
  * Unknown fields are dropped (logged in dev).

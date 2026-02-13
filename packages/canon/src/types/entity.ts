@@ -2,7 +2,11 @@
  * Entity type registry — extensible as new domain entities are added.
  * Each entity type maps to a database table and a set of namespaced actions.
  */
-export const ENTITY_TYPES = ['contacts'] as const;
+export const ENTITY_TYPES = [
+  'contacts',
+  'companies',
+  // @entity-gen:entity-types
+] as const;
 export type EntityType = (typeof ENTITY_TYPES)[number];
 
 /**

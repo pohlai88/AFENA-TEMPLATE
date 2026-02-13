@@ -8,6 +8,7 @@ export const ERROR_CODES = [
   'VALIDATION_FAILED',
   'POLICY_DENIED',
   'LIFECYCLE_DENIED',
+  'RATE_LIMITED',
   'CONFLICT_VERSION',
   'IDEMPOTENCY_REPLAY',
   'NOT_FOUND',
@@ -20,4 +21,20 @@ export interface KernelError {
   code: ErrorCode;
   message: string;
   details?: Record<string, unknown>;
+}
+
+/**
+ * Typed rate limit error — thrown by enforceRateLimit() in the kernel.
+ * Follows the same pattern as LifecycleError.
+ */
+export class RateLimitError extends Error {
+  readonly code = 'RATE_LIMITED' as const;
+  readonly remaining: number;
+  readonly resetMs: number;
+  constructor(remaining: number, resetMs: number) {
+    super(`Rate limit exceeded (resets in ${resetMs}ms)`);
+    this.name = 'RateLimitError';
+    this.remaining = remaining;
+    this.resetMs = resetMs;
+  }
 }

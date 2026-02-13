@@ -13,7 +13,8 @@
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch",
-    "meta:check": "node dist/index.js meta check"
+    "meta:check": "node dist/index.js meta check",
+    "test": "vitest run"
   },
   "dependencies": {
     "commander": "catalog:",
@@ -33,6 +34,7 @@
     "afena-typescript-config": "workspace:*",
     "ts-morph": "catalog:",
     "tsup": "catalog:",
-    "typescript": "catalog:"
+    "typescript": "catalog:",
+    "vitest": "catalog:"
   }
 }

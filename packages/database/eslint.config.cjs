@@ -11,4 +11,10 @@ module.exports = [
       },
     },
   },
+  {
+    files: ['src/scripts/**/*.ts'],
+    rules: {
+      'security/detect-non-literal-fs-filename': 'off',
+    },
+  },
 ];

@@ -3,7 +3,7 @@ import { Badge } from 'afena-ui/components/badge';
 import { Card, CardContent, CardHeader, CardTitle } from 'afena-ui/components/card';
 import { FileText, Shield, Users } from 'lucide-react';
 
-import { resolveOrg } from '@/lib/org';
+import { getOrgContext } from './_server/org-context_server';
 
 /**
  * Org dashboard — /org/[slug]
@@ -16,22 +16,22 @@ export default async function OrgDashboard({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const org = await resolveOrg(slug);
+  const ctx = await getOrgContext(slug);
 
   // Fetch stats in parallel (all reads, safe)
   const [contactCount, auditCount, advisoryCount] = await Promise.all([
-    countRows('contacts', org?.orgId),
-    countRows('audit_logs', org?.orgId),
-    countOpenAdvisories(org?.orgId),
+    countRows('contacts', ctx?.org.id),
+    countRows('audit_logs', ctx?.org.id),
+    countOpenAdvisories(ctx?.org.id),
   ]);
 
   return (
     <div className="container mx-auto max-w-4xl py-8">
       <div className="mb-8">
-        <h1 className="text-2xl font-semibold">{org?.orgName ?? slug}</h1>
-        {org?.userRole && (
+        <h1 className="text-2xl font-semibold">{ctx?.org.name ?? slug}</h1>
+        {ctx?.actor.orgRole && (
           <Badge variant="outline" className="mt-1">
-            {org.userRole}
+            {ctx.actor.orgRole}
           </Badge>
         )}
       </div>

@@ -1,6 +1,12 @@
 import type { AuthScope, AuthScopeType, AuthVerb } from '../enums/index';
 
 /**
+ * Permission verb — AuthVerb for concrete verbs, '*' for wildcard (matches all verbs).
+ * Keeps AuthVerb pure (9 concrete verbs). PermissionVerb is the DB/policy-layer type.
+ */
+export type PermissionVerb = AuthVerb | '*';
+
+/**
  * Policy decision object — returned by enforcePolicy().
  * No ad-hoc checks: every policy evaluation produces this typed result.
  */
@@ -25,7 +31,7 @@ export interface FieldRules {
  */
 export interface ResolvedPermission {
   entityType: string;
-  verb: AuthVerb;
+  verb: PermissionVerb;
   scope: AuthScope;
   fieldRules: FieldRules;
 }
@@ -57,6 +63,7 @@ export interface AuthoritySnapshotV2 {
   verb: string;
   entityType: string;
   decision: PolicyDecision;
+  decisionReason?: string;
   actor: {
     orgId: string;
     userId: string;

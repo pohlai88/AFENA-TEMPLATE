@@ -1,8 +1,13 @@
 /**
+ * @status FUTURE — Not wired into current UI architecture.
+ *
  * Permission pre-check — UI uses rbacTier + rbacScope to hide/show buttons per user role.
  *
  * Phase 5, Step 41: Client-side permission helpers that consume the
  * RBAC derivation from CAPABILITY_CATALOG to determine visibility.
+ *
+ * Current architecture uses ActionResolver (server-side) for all permission decisions.
+ * This module will be wired when capability-driven RBAC is integrated into the UI layer.
  */
 
 import { CAPABILITY_CATALOG } from 'afena-canon';

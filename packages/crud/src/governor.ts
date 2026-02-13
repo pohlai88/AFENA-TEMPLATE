@@ -1,5 +1,6 @@
 import { sql } from 'afena-database';
 
+import type { Channel, GovernorPreset } from 'afena-canon';
 import type { NeonHttpDatabase } from 'drizzle-orm/neon-http';
 
 /**
@@ -22,7 +23,12 @@ const DEFAULT_BACKGROUND: Omit<GovernorConfig, 'applicationName'> = {
   idleInTransactionTimeoutMs: 60_000,
 };
 
-export type GovernorPreset = 'interactive' | 'background' | 'reporting';
+const DEFAULT_REPORTING: Omit<GovernorConfig, 'applicationName'> = {
+  statementTimeoutMs: 5_000,
+  idleInTransactionTimeoutMs: 20_000,
+};
+
+export type { GovernorPreset };
 
 /**
  * Build governor config for a given context.
@@ -30,9 +36,19 @@ export type GovernorPreset = 'interactive' | 'background' | 'reporting';
 export function buildGovernorConfig(
   preset: GovernorPreset,
   orgId: string,
-  channel?: string,
+  channel?: Channel,
 ): GovernorConfig {
-  const base = preset === 'background' ? DEFAULT_BACKGROUND : DEFAULT_INTERACTIVE;
+  let base: Omit<GovernorConfig, 'applicationName'>;
+  switch (preset) {
+    case 'background':
+      base = DEFAULT_BACKGROUND;
+      break;
+    case 'reporting':
+      base = DEFAULT_REPORTING;
+      break;
+    default:
+      base = DEFAULT_INTERACTIVE;
+  }
   return {
     ...base,
     applicationName: `afena:${channel ?? 'web'}:org=${orgId}`,

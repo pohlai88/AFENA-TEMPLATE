@@ -119,8 +119,12 @@ export function getRateLimitConfig(routeGroup: string): RateLimitConfig {
 }
 
 /**
- * Reset rate limit state for a specific key (testing only).
+ * Reset rate limit state (testing only).
+ * Guarded: throws if called outside NODE_ENV=test.
  */
 export function _resetRateLimitStore(): void {
+  if (process.env.NODE_ENV !== 'test') {
+    throw new Error('_resetRateLimitStore is test-only');
+  }
   store.clear();
 }

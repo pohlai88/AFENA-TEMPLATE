@@ -1,4 +1,6 @@
-import type { ActorRef } from 'afena-canon';
+import { SYSTEM_ACTOR_USER_ID } from 'afena-canon';
+
+import type { ActorRef, Channel, SystemChannel } from 'afena-canon';
 
 /**
  * Mutation context — populated from the request environment.
@@ -9,5 +11,20 @@ export interface MutationContext {
   actor: ActorRef;
   ip?: string;
   userAgent?: string;
-  channel?: string;
+  channel?: Channel;
+}
+
+/**
+ * Build a MutationContext for system-initiated mutations (background jobs, cron, workflow).
+ * System bypass in policy engine requires SYSTEM_ACTOR_USER_ID + a system channel.
+ */
+export function buildSystemContext(
+  orgId: string,
+  channel: SystemChannel,
+): MutationContext {
+  return {
+    requestId: crypto.randomUUID(),
+    actor: { userId: SYSTEM_ACTOR_USER_ID, orgId, roles: ['system'] },
+    channel,
+  };
 }

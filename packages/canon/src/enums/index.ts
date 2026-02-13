@@ -60,3 +60,9 @@ export type { AuthScope } from './auth-scope';
 
 export { AUTH_SCOPE_TYPES, authScopeTypeSchema } from './auth-scope-type';
 export type { AuthScopeType } from './auth-scope-type';
+
+export { CHANNELS, channelSchema, SYSTEM_CHANNELS, isSystemChannel } from './channel';
+export type { Channel, SystemChannel } from './channel';
+
+export { GOVERNOR_PRESETS, governorPresetSchema } from './governor-preset';
+export type { GovernorPreset } from './governor-preset';

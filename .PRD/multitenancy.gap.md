@@ -2,7 +2,7 @@
 
 Ratified execution spec for 3 sealed deliverables (Policy, Lifecycle, Governors) — with concrete SQL schemas, Postgres enums, RLS policies, kernel code patterns, CI invariant gates, and the "no bypass" test suite. Designed to prevent drift between spec and repo.
 
-> **Implementation Status (2026-02-13):** All 3 sealed deliverables + Sprint 3 trust hooks are implemented and verified (125/125 tests passing). Migration 0014 applied to Neon.
+> **Implementation Status (2026-02-13):** All 3 sealed deliverables + Sprint 3 trust hooks are implemented and verified (137/137 tests passing). Migrations 0013 (policy+governors), 0014 (trust hooks), 0018 (verb CHECK fix) applied to Neon.
 >
 > **Deferred by Design (not gaps — additive when needed):**
 >
@@ -11,6 +11,12 @@ Ratified execution spec for 3 sealed deliverables (Policy, Lifecycle, Governors)
 > - **CI pipeline wiring** — Invariant tests pass locally but no GitHub Actions PR-blocking gate configured yet
 > - **Read masking** — Write field rules enforced; read masking deferred per spec §A7 ("ship write rules first")
 > - **`team` scope** — Deferred in `checkScope()` (behaves as `org`) until team membership table exists
+>
+> **Implementation Notes (deviations from original spec):**
+>
+> - **`org_id` / `user_id` types** — All columns use `text` (not `uuid`) to match Neon Auth JWT claim types and the project-wide `auth.user_id()` / `auth.org_id()` pattern
+> - **Lifecycle state machine** — Extended to 5 states (`draft`, `submitted`, `active`, `cancelled`, `amended`) beyond the original 3-state spec. See §B3.
+> - **Verb set** — Extended to 9 verbs (`+ approve`, `reject`, `restore`) beyond the original 6. Migration 0018 aligns the DB CHECK constraint.
 
 ---
 
@@ -63,25 +69,29 @@ These prevent drift between this spec and the repo. Each is a test that **fails 
 ### A1) Postgres Enums (stop string drift)
 
 ```sql
-CREATE TYPE auth_verb AS ENUM (
-  'create', 'update', 'delete', 'submit', 'cancel', 'amend'
-);
+-- Implemented as CHECK constraint (not SQL enum) for Drizzle DX:
+-- CHECK (verb IN ('create','update','delete','submit','cancel','amend','approve','reject','restore'))
+--
+-- Canon TS enum: AUTH_VERBS = ['create','update','delete','submit','cancel','amend','approve','reject','restore']
 
-CREATE TYPE auth_scope AS ENUM (
-  'org', 'self', 'company', 'site', 'team'
-);
-
-CREATE TYPE auth_scope_type AS ENUM (
-  'company', 'site', 'team'
-);
+-- Implemented as CHECK constraints (not SQL enums) for Drizzle DX:
+-- CHECK (scope IN ('org','self','company','site','team'))
+-- CHECK (scope_type IN ('company','site','team'))
+--
+-- Canon TS enums: AUTH_SCOPES, AUTH_SCOPE_TYPES
 ```
 
 ### A2) Tables (with org-scoped RLS)
 
 ```sql
+-- Rationale: org_id and user_id are text (not uuid) to match Neon Auth JWT claim types.
+-- auth.org_id() returns text from the JWT — no cast needed.
+-- Verbs/scopes use CHECK constraints (not SQL enums) for Drizzle DX.
+-- Unique index on role_permissions includes scope (future-proofs team scope).
+
 CREATE TABLE roles (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-  org_id uuid NOT NULL DEFAULT auth.require_org_id(),
+  org_id text NOT NULL DEFAULT auth.org_id() CHECK (org_id <> ''),
   key text NOT NULL,
   name text NOT NULL,
   is_system boolean NOT NULL DEFAULT false,
@@ -91,8 +101,8 @@ CREATE TABLE roles (
 
 CREATE TABLE user_roles (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-  org_id uuid NOT NULL DEFAULT auth.require_org_id(),
-  user_id uuid NOT NULL,
+  org_id text NOT NULL DEFAULT auth.org_id() CHECK (org_id <> ''),
+  user_id text NOT NULL,
   role_id uuid NOT NULL REFERENCES roles(id),
   created_at timestamptz NOT NULL DEFAULT now(),
   UNIQUE (org_id, user_id, role_id)
@@ -100,22 +110,22 @@ CREATE TABLE user_roles (
 
 CREATE TABLE role_permissions (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-  org_id uuid NOT NULL DEFAULT auth.require_org_id(),
+  org_id text NOT NULL DEFAULT auth.org_id() CHECK (org_id <> ''),
   role_id uuid NOT NULL REFERENCES roles(id),
   entity_type text NOT NULL,
-  verb auth_verb NOT NULL,
-  scope auth_scope NOT NULL DEFAULT 'org',
+  verb text NOT NULL CHECK (verb IN ('create','update','delete','submit','cancel','amend','approve','reject','restore','*')),
+  scope text NOT NULL DEFAULT 'org' CHECK (scope IN ('org','self','company','site','team')),
   field_rules_json jsonb NOT NULL DEFAULT '{}'::jsonb,
   created_at timestamptz NOT NULL DEFAULT now(),
-  UNIQUE (org_id, role_id, entity_type, verb)
+  UNIQUE (org_id, role_id, entity_type, verb, scope)
 );
 
 CREATE TABLE user_scopes (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-  org_id uuid NOT NULL DEFAULT auth.require_org_id(),
-  user_id uuid NOT NULL,
-  scope_type auth_scope_type NOT NULL,
-  scope_id uuid NOT NULL,
+  org_id text NOT NULL DEFAULT auth.org_id() CHECK (org_id <> ''),
+  user_id text NOT NULL,
+  scope_type text NOT NULL CHECK (scope_type IN ('company','site','team')),
+  scope_id text NOT NULL,
   created_at timestamptz NOT NULL DEFAULT now(),
   UNIQUE (org_id, user_id, scope_type, scope_id)
 );
@@ -137,7 +147,7 @@ CREATE POLICY roles_select ON roles
 -- INSERT within org (admin-only enforced via kernel policy, not DB)
 CREATE POLICY roles_insert ON roles
   FOR INSERT TO authenticated
-  WITH CHECK (org_id = auth.require_org_id());
+  WITH CHECK (org_id = auth.org_id());
 
 -- Same pattern for user_roles, role_permissions, user_scopes
 ```
@@ -224,7 +234,9 @@ type PolicyDecision =
 ### B1) Postgres Enum
 
 ```sql
-CREATE TYPE doc_status AS ENUM ('draft', 'submitted', 'cancelled');
+-- Implemented as CHECK constraint + canon TS enum (not SQL enum):
+-- DOC_STATUSES = ['draft', 'submitted', 'active', 'cancelled', 'amended']
+-- 5-state machine (extended from original 3-state spec)
 ```
 
 ### B2) `docEntityColumns` Helper
@@ -265,11 +277,13 @@ function enforceLifecycle(spec: MutationSpec, existing: any | null) {
 }
 ```
 
-| State         | Allowed Verbs                              | Denied Verbs           |
-| ------------- | ------------------------------------------ | ---------------------- |
-| **Draft**     | create, update, delete (subject to policy) | —                      |
-| **Submitted** | cancel, amend                              | update, delete, submit |
-| **Cancelled** | view only                                  | everything else        |
+| State         | Allowed Verbs                             | Denied Verbs            |
+| ------------- | ----------------------------------------- | ----------------------- |
+| **Draft**     | create, update, delete, submit (+ policy) | —                       |
+| **Submitted** | approve, reject, cancel, amend            | update, delete, submit  |
+| **Active**    | update, cancel, delete                    | submit, approve, reject |
+| **Cancelled** | restore only                              | everything else         |
+| **Amended**   | read-only                                 | everything              |
 
 **Amend semantics:**
 

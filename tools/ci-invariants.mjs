@@ -49,7 +49,7 @@ console.log('\n── INV-E1: No "use client" in page.tsx / layout.tsx ──');
 const pageLayoutFiles = walk(WEB_DIR, ['.tsx', '.ts']).filter((f) => {
   const name = f.split(/[\\/]/).pop();
   return name === 'page.tsx' || name === 'layout.tsx';
-}).filter((f) => !f.includes('files'));
+});
 
 for (const file of pageLayoutFiles) {
   const content = readFileSync(file, 'utf-8');

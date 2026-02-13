@@ -3,57 +3,11 @@ import { db, sql } from 'afena-database';
 import { auth } from '@/lib/auth/server';
 
 /**
- * Resolve org context server-side from a URL slug.
- * Queries neon_auth.organization + neon_auth.member directly (camelCase columns).
- * Returns null if org not found or user has no membership.
- */
-export interface ResolvedOrg {
-  orgSlug: string;
-  orgId: string;
-  orgName: string;
-  userRole: string | null;
-}
-
-export async function resolveOrg(slug: string): Promise<ResolvedOrg | null> {
-  const { data: session } = await auth.getSession();
-  if (!session?.user) return null;
-
-  const userId = session.user.id;
-
-  // Query org by slug + membership in one query
-  const result = await db.execute<{
-    org_id: string;
-    org_name: string;
-    org_slug: string;
-    role: string | null;
-  }>(sql`
-    SELECT
-      o."id" AS org_id,
-      o."name" AS org_name,
-      o."slug" AS org_slug,
-      m."role" AS role
-    FROM neon_auth.organization o
-    LEFT JOIN neon_auth.member m
-      ON m."organizationId" = o."id"
-      AND m."userId" = ${userId}::uuid
-    WHERE o."slug" = ${slug}
-    LIMIT 1
-  `);
-
-  const row = result.rows[0];
-  if (!row) return null;
-
-  return {
-    orgSlug: row.org_slug,
-    orgId: row.org_id,
-    orgName: row.org_name,
-    userRole: row.role,
-  };
-}
-
-/**
- * List all orgs the current user is a member of.
- * Used by the org switcher component.
+ * Org membership helpers — used by org index page and org switcher.
+ *
+ * NOTE: Single-org resolution (by slug) is handled by getOrgContext()
+ * in _server/org-context_server.ts (React.cache()-wrapped, richer actor context).
+ * Do NOT add a resolveOrg() here — use getOrgContext() instead.
  */
 export interface OrgListItem {
   orgId: string;

@@ -435,20 +435,20 @@ This makes the AST check deterministic — no heuristics about "which function d
 
 ```typescript
 export const VIS_POLICY = {
-  phase: 1, // bump to 2, 3 as enforcement tightens
+  phase: 3, // bumped from 1 → 3; all kinds now enforce at error severity
   rules: {
     mutation: { kernelRequired: true, appRequired: true, uiSeverity: 'error' },
-    read: { kernelRequired: false, appRequired: true, uiSeverity: 'warn' },
-    search: { kernelRequired: false, appRequired: true, uiSeverity: 'warn' },
-    admin: { kernelRequired: false, appRequired: true, uiSeverity: 'warn' },
-    system: { kernelRequired: false, appRequired: true, uiSeverity: 'warn' },
+    read: { kernelRequired: false, appRequired: true, uiSeverity: 'error' },
+    search: { kernelRequired: false, appRequired: true, uiSeverity: 'error' },
+    admin: { kernelRequired: false, appRequired: true, uiSeverity: 'error' },
+    system: { kernelRequired: false, appRequired: true, uiSeverity: 'error' },
     auth: { kernelRequired: false, appRequired: true, uiSeverity: 'error' },
-    storage: { kernelRequired: false, appRequired: true, uiSeverity: 'warn' },
+    storage: { kernelRequired: false, appRequired: true, uiSeverity: 'error' },
   },
 } as const;
 ```
 
-Bump `phase` + update `uiSeverity` when ready. "Why did CI start failing?" is always answerable by code.
+"Why did CI start failing?" is always answerable by code — check `VIS_POLICY.phase` and `uiSeverity` per kind.
 
 ### INVARIANT-VIS-03 — UI Rendering Truth
 
@@ -801,12 +801,13 @@ Protects the most dangerous class first: **hidden writes** and **phantom UI**.
 2. **`packages/canon/src/schemas/capability.ts`** — Zod validation for descriptors + exceptions + `ExceptionScope`
 3. **Export from canon barrel** (`src/index.ts`)
 4. **Annotate write surfaces** — add `CAPABILITIES` const to:
-   - `apps/web/app/actions/contacts.ts` (7 capabilities)
-   - `apps/web/app/api/search/route.ts` (1)
+   - `apps/web/app/actions/contacts.capabilities.ts` (8 capabilities) — co-located with `contacts.ts` because Next.js 16 `'use server'` files can only export async functions
+   - `apps/web/app/actions/companies.capabilities.ts` (8 capabilities) — same pattern for each entity
+   - `apps/web/app/api/search/route.ts` (2)
    - `apps/web/app/api/custom-fields/[entityType]/route.ts` (1)
    - `apps/web/app/api/views/[entityType]/route.ts` (1)
    - `apps/web/app/api/storage/presign/route.ts` (1)
-   - `apps/web/app/api/storage/metadata/route.ts` (1)
+   - `apps/web/app/api/storage/metadata/route.ts` (2)
 5. **Annotate UI pages** — add `SURFACE` const (with `surfaceId`) to contacts pages (7 pages)
 6. **Create `.afena/capability-exceptions.json`** — seed with any known gaps
 7. **`tools/afena-cli/src/meta/` scaffold** — directory + index.ts CLI wiring
@@ -945,7 +946,7 @@ All open questions from v1, v2, and v3 are now resolved:
 | Autofix safety?                           | **Safe insertion rules**: after imports, before first export, never inside functions, append-only, fix report             |
 | Autofix preview?                          | **`--dry-run`** writes report with `"dryRun": true`, edits nothing — recommended first step in CI                         |
 | Read enforcement timing?                  | **Phase 1 declares**, Phase 3 enforces via `VIS_POLICY.phase` bump                                                        |
-| SURFACE in page.tsx vs separate manifest? | **In page.tsx** with stable `surfaceId` for historical continuity                                                         |
+| SURFACE in page.tsx vs separate manifest? | **In co-located `surface.ts`** files with stable `surfaceId` — Next.js forbids arbitrary exports from page.tsx            |
 | Phase 1 scope?                            | **Declare all known capabilities** (including `planned`), annotate contacts surfaces only                                 |
 | Manifest naming?                          | **Split**: `capability.ledger.json` + `capability.matrix.md` + `codebase.manifest.json` + `meta.fix.report.json`          |
 | Verb governance?                          | **`CAPABILITY_VERBS`** — locked sets per kind, no verb in two kinds                                                       |

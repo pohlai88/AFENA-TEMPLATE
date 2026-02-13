@@ -53,6 +53,15 @@ export function getContext(): RequestContext | undefined {
 }
 
 /**
+ * Get the current request ID from ALS context.
+ * Returns `undefined` outside of any context scope or in Edge Runtime.
+ * Use this to avoid manually threading requestId through function params.
+ */
+export function getRequestId(): string | undefined {
+  return getALS()?.getStore()?.request_id;
+}
+
+/**
  * Bind a base logger to the current ALS context.
  * If context exists, returns `base.child(ctx)`.
  * If no context (or Edge Runtime), returns the base logger unchanged.

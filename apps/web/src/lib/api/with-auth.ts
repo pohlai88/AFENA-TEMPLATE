@@ -1,8 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
 
+import { checkRateLimit } from 'afena-crud';
 import { db, sql } from 'afena-database';
+import { runWithContext } from 'afena-logger';
 
 import { auth } from '@/lib/auth/server';
+
+import type { RequestContext } from 'afena-logger';
 
 /**
  * Authenticated session info passed to route handlers.
@@ -81,35 +85,68 @@ export function withAuth<T = unknown>(
       name: sessionData.user.name ?? sessionData.user.email ?? '',
     };
 
-    try {
-      const result = await handler(request, session);
-
-      if (result.ok) {
-        return NextResponse.json({
-          ok: true as const,
-          data: result.data,
-          meta: { requestId },
-        });
+    // Rate limit check (kernel invariant — INVARIANT-RL-01)
+    if (orgId) {
+      const rl = checkRateLimit(orgId, 'api');
+      if (!rl.allowed) {
+        return NextResponse.json(
+          {
+            ok: false as const,
+            error: { code: 'RATE_LIMITED', message: `Rate limit exceeded (resets in ${rl.resetMs}ms)` },
+            meta: { requestId },
+          },
+          {
+            status: 429,
+            headers: {
+              'Retry-After': String(Math.ceil(rl.resetMs / 1000)),
+              'X-RateLimit-Limit': String(rl.limit),
+              'X-RateLimit-Remaining': '0',
+            },
+          },
+        );
       }
-
-      return NextResponse.json(
-        {
-          ok: false as const,
-          error: { code: result.code, message: result.message },
-          meta: { requestId },
-        },
-        { status: result.status ?? 400 },
-      );
-    } catch (e) {
-      const message = e instanceof Error ? e.message : 'Internal server error';
-      return NextResponse.json(
-        {
-          ok: false as const,
-          error: { code: 'INTERNAL_ERROR', message },
-          meta: { requestId },
-        },
-        { status: 500 },
-      );
     }
+
+    // Establish ALS context so all downstream code can access requestId, orgId, etc.
+    const alsContext: RequestContext = {
+      request_id: requestId,
+      org_id: orgId,
+      actor_id: session.userId,
+      actor_type: 'user',
+      service: 'web',
+    };
+
+    return runWithContext(alsContext, async () => {
+      try {
+        const result = await handler(request, session);
+
+        if (result.ok) {
+          return NextResponse.json({
+            ok: true as const,
+            data: result.data,
+            meta: { requestId },
+          });
+        }
+
+        return NextResponse.json(
+          {
+            ok: false as const,
+            error: { code: result.code, message: result.message },
+            meta: { requestId },
+          },
+          { status: result.status ?? 400 },
+        );
+      } catch (e) {
+        const message = e instanceof Error ? e.message : 'Internal server error';
+        return NextResponse.json(
+          {
+            ok: false as const,
+            error: { code: 'INTERNAL_ERROR', message },
+            meta: { requestId },
+          },
+          { status: 500 },
+        );
+      }
+    });
   };
 }

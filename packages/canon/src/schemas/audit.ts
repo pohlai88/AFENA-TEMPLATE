@@ -1,5 +1,7 @@
 import { z } from 'zod';
 
+import { channelSchema } from '../enums/channel';
+
 import { actionFamilySchema } from './action';
 
 const jsonValueSchema: z.ZodType<unknown> = z.lazy(() =>
@@ -26,7 +28,7 @@ export const auditLogEntrySchema = z.object({
   batchId: z.string().uuid().nullable(),
   versionBefore: z.number().int().nullable(),
   versionAfter: z.number().int(),
-  channel: z.string(),
+  channel: channelSchema,
   ip: z.string().nullable(),
   userAgent: z.string().nullable(),
   reason: z.string().nullable(),

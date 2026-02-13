@@ -2,7 +2,9 @@
 
 Lock every ERP table into a governed template so nothing drifts — combining ERPNext's user-extensible custom fields (typed + governed), Retool's dynamic introspection via a typed index table, Neon's RW/RO dual compute for read scaling, and a LiteMetadata registry for business truth — all built on the existing CRUD-SAP kernel.
 
-> **Implementation Status (2026-02-13):** All 12 core steps complete. RW/RO dual compute, canon enums, column helpers (`baseEntityColumns`, `erpEntityColumns`, `docEntityColumns`), spine tables (companies, sites, currencies, UOM), custom fields (15 types, typed index, JSONB dual storage), entity views, LiteMetadata + aliasing + semantic terms, 8-rule schema lint, entity generator script, migrations 0010–0012 applied. 43/43 tests passing.
+> **Implementation Status (2026-02-13):** All 12 core steps complete. RW/RO dual compute, canon enums, column helpers (`baseEntityColumns`, `erpEntityColumns`, `docEntityColumns`), spine tables (companies, sites, currencies, UOM), custom fields (15 types, typed index, JSONB dual storage), entity views, LiteMetadata + aliasing + semantic terms, 8-rule schema lint, entity generator script (~20+ files + 8 registry auto-wires), migrations 0010–0012 applied. 43/43 tests passing.
+>
+> **Doc–Code Audit (2026-02-13):** 33 matches, 7 drift items fixed, 1 missing item annotated. Key corrections: `docEntityColumns` third tier documented, `schema_hash` uses djb2 (not SHA-256), `meta_aliases.search_text` is trigger-populated (not GENERATED), `statusColumn()` takes only `name` (CHECK at table level), entity generator path corrected to `src/scripts/`, Drizzle partial-index limitation annotated.
 >
 > **Deferred by Design (not gaps — additive when needed):**
 >
@@ -189,6 +191,10 @@ Current baseEntityColumns:
 New erpEntityColumns (superset):
   id, orgId, companyId?, siteId?, createdAt, updatedAt, createdBy, updatedBy,
   version, isDeleted, deletedAt, deletedBy, customData
+
+New docEntityColumns (superset of erpEntityColumns — lifecycle entities):
+  ...erpEntityColumns, docStatus, submittedAt, submittedBy,
+  cancelledAt, cancelledBy, amendedFromId
 ```
 
 **New columns:**
@@ -201,13 +207,18 @@ New erpEntityColumns (superset):
 
 **Rules:**
 
-- `baseEntityColumns` stays unchanged (contacts, existing tables keep working)
+- `baseEntityColumns` stays unchanged (system tables, simple entities without lifecycle)
 - New `erpEntityColumns` extends it with `companyId?`, `siteId?`, `customData`
-- Accounting modules MUST use `erpEntityColumns` with `companyId` required
-- Inventory modules MUST use `erpEntityColumns` with `siteId` required
-- Simple modules (contacts, notes) can keep `baseEntityColumns` but SHOULD add `customData` for extensibility
+- New `docEntityColumns` extends `erpEntityColumns` with `docStatus`, `submittedAt/By`, `cancelledAt/By`, `amendedFromId` — for entities with a lifecycle state machine (draft → submitted → active → cancelled)
+- Accounting modules MUST use `erpEntityColumns` (or `docEntityColumns`) with `companyId` required
+- Inventory modules MUST use `erpEntityColumns` (or `docEntityColumns`) with `siteId` required
+- Entities with lifecycle (contacts, invoices, purchase orders) use `docEntityColumns`
+- Simple spine entities (currencies, uom) can keep standalone columns
 
-**File:** `packages/database/src/helpers/erp-entity.ts`
+**Files:**
+
+- `packages/database/src/helpers/erp-entity.ts`
+- `packages/database/src/helpers/doc-entity.ts`
 
 ---
 
@@ -350,6 +361,8 @@ CREATE INDEX custom_fields_active_by_entity
   WHERE is_active = true AND is_deprecated = false;
 ```
 
+> **Drizzle limitation:** Partial indexes (`WHERE` clause) and expression indexes (`lower()`) cannot be expressed in the Drizzle schema builder. These indexes are created in the raw migration SQL (`0010_*.sql`) and are NOT represented in the Drizzle schema file. This is a known Drizzle ORM limitation — the same applies to partial unique indexes on `meta_alias_sets`, `meta_aliases`, `meta_value_aliases`, `meta_semantic_terms`, and the GIN search index on `meta_aliases`.
+
 **DB-level `type_config` guardrails (prevent nonsense, not full validation):**
 
 ```sql
@@ -368,7 +381,7 @@ CHECK (field_type != 'entity_ref'              OR type_config ? 'targetEntity')
 - `is_locked` prevents admin edits to system/protected fields (e.g. fields used by workflows)
 - `is_deprecated` hides field in UI but keeps reading — migration path for removing fields safely
 - `is_unique` enforces uniqueness per entity in kernel (e.g. "Customer External ID"); for `indexed` fields, a partial unique index can be added later
-- `schema_hash` is deterministic: canonical JSON stringify (sorted keys) of `{field_type, is_required, is_unique, storage_mode, type_config}` → `sha256(hex)`. Stored on every field update. Entity rows can optionally store `custom_schema_hash` at write time to detect "records written under old schema" for repair/migration
+- `schema_hash` is deterministic: JSON stringify of `{fieldType, typeConfig, isRequired, isUnique, storageMode}` → `djb2` hash (prefixed `djb2:<hex>`). Stored on every field update. Entity rows can optionally store `custom_schema_hash` at write time to detect "records written under old schema" for repair/migration
 - `field_name` regex CHECK prevents injection and ensures consistent naming
 - **Required+default invariant:** required fields must have defaults. This means you cannot have a required field that _must be explicitly entered_ (no default). UI can still prompt users to override the default. If later you need "required but no default," remove the CHECK.
 
@@ -523,24 +536,24 @@ UNIQUE: `(org_id, view_id, field_key)`
 
 **File:** `packages/database/src/helpers/field-types.ts`
 
-| Helper                           | Postgres Type                      | Usage                                                          |
-| -------------------------------- | ---------------------------------- | -------------------------------------------------------------- |
-| `moneyMinor(name)`               | `integer NOT NULL DEFAULT 0`       | All money amounts (cents/sen)                                  |
-| `currencyCode(name)`             | `text NOT NULL DEFAULT 'MYR'`      | ISO 4217 code                                                  |
-| `fxRate(name)`                   | `numeric(20,10) DEFAULT 1`         | Exchange rate                                                  |
-| `baseAmountMinor(name)`          | `integer NOT NULL DEFAULT 0`       | Converted to base currency                                     |
-| `qty(name)`                      | `numeric(18,6) NOT NULL DEFAULT 0` | Inventory/manufacturing quantities                             |
-| `uomRef(name)`                   | `uuid` FK → `uom.id`               | Unit of measure reference                                      |
-| `statusColumn(name, enumValues)` | `text NOT NULL` + CHECK            | Status fields (enum from canon)                                |
-| `emailColumn(name)`              | `text` + CHECK regex               | Email fields                                                   |
-| `phoneColumn(name)`              | `text`                             | Phone fields (no CHECK — international formats vary)           |
-| `addressJsonb(name)`             | `jsonb`                            | Structured: `{ line1, line2, city, state, postcode, country }` |
-| `tagsArray(name)`                | `text[] DEFAULT '{}'`              | Tag arrays                                                     |
-| `docNumber(name)`                | `text NOT NULL`                    | Document numbers (INV-00001)                                   |
-| `companyRef()`                   | `uuid` FK → `companies.id`         | Company reference                                              |
-| `siteRef()`                      | `uuid` FK → `sites.id`             | Site reference                                                 |
-| `contactRef(name)`               | `uuid` FK → `contacts.id`          | Contact/partner reference                                      |
-| `customData()`                   | `jsonb NOT NULL DEFAULT '{}'`      | Custom field values (JSONB blob)                               |
+| Helper                  | Postgres Type                      | Usage                                                          |
+| ----------------------- | ---------------------------------- | -------------------------------------------------------------- |
+| `moneyMinor(name)`      | `integer NOT NULL DEFAULT 0`       | All money amounts (cents/sen)                                  |
+| `currencyCode(name)`    | `text NOT NULL DEFAULT 'MYR'`      | ISO 4217 code                                                  |
+| `fxRate(name)`          | `numeric(20,10) DEFAULT 1`         | Exchange rate                                                  |
+| `baseAmountMinor(name)` | `integer NOT NULL DEFAULT 0`       | Converted to base currency                                     |
+| `qty(name)`             | `numeric(18,6) NOT NULL DEFAULT 0` | Inventory/manufacturing quantities                             |
+| `uomRef(name)`          | `uuid` FK → `uom.id`               | Unit of measure reference                                      |
+| `statusColumn(name)`    | `text NOT NULL`                    | Status fields (CHECK added at table level from canon enum)     |
+| `emailColumn(name)`     | `text` + CHECK regex               | Email fields                                                   |
+| `phoneColumn(name)`     | `text`                             | Phone fields (no CHECK — international formats vary)           |
+| `addressJsonb(name)`    | `jsonb`                            | Structured: `{ line1, line2, city, state, postcode, country }` |
+| `tagsArray(name)`       | `text[] DEFAULT '{}'`              | Tag arrays                                                     |
+| `docNumber(name)`       | `text NOT NULL`                    | Document numbers (INV-00001)                                   |
+| `companyRef()`          | `uuid` FK → `companies.id`         | Company reference                                              |
+| `siteRef()`             | `uuid` FK → `sites.id`             | Site reference                                                 |
+| `contactRef(name)`      | `uuid` FK → `contacts.id`          | Contact/partner reference                                      |
+| `customData()`          | `jsonb NOT NULL DEFAULT '{}'`      | Custom field values (JSONB blob)                               |
 
 ### Money Pattern (document with currency conversion)
 
@@ -765,8 +778,9 @@ synonyms        text[] DEFAULT '{}' -- for search: ['AR total', 'jumlah invois']
 is_primary      boolean NOT NULL DEFAULT true
 effective_from  timestamptz NOT NULL DEFAULT now()
 effective_to    timestamptz         -- null = currently active
--- Generated search column for alias-aware querying
-search_text     text GENERATED ALWAYS AS (alias || ' ' || array_to_string(synonyms, ' ') || ' ' || target_key) STORED
+-- Search column for alias-aware querying (trigger-populated, NOT generated —
+-- array_to_string() is not IMMUTABLE so Postgres rejects GENERATED ALWAYS AS)
+search_text     text  -- populated by INSERT/UPDATE trigger: alias || ' ' || array_to_string(synonyms, ' ') || ' ' || target_key
 is_deleted      boolean NOT NULL DEFAULT false
 deleted_at      timestamptz
 deleted_by      text
@@ -1017,7 +1031,7 @@ custom_field_sync_queue
 ```
 
 RLS: `tenantPolicy`
-INDEX: `(next_retry_at)` WHERE `completed_at IS NULL` — worker picks up pending jobs
+INDEX: `(next_retry_at)` WHERE `completed_at IS NULL` — worker picks up pending jobs (partial index in migration SQL only; Drizzle schema has the B-tree index without WHERE clause due to Drizzle limitation)
 
 **How it works:** if fire-and-forget sync fails, a row is inserted. A periodic worker (or next mutation on the same entity) retries. Prevents "my filter is missing records" bugs that are impossible to debug.
 
@@ -1025,7 +1039,7 @@ INDEX: `(next_retry_at)` WHERE `completed_at IS NULL` — worker picks up pendin
 
 ## A9. Schema Lint — `pnpm db:lint`
 
-**File:** `packages/database/scripts/schema-lint.ts`
+**File:** `packages/database/src/scripts/schema-lint.ts`
 
 A script that imports all schema files and validates:
 
@@ -1044,29 +1058,53 @@ A script that imports all schema files and validates:
 
 ---
 
-## A10. Entity Generator — `pnpm entity:new <name>`
+## A10. Entity Generator — `npx tsx src/scripts/entity-new.ts <name>`
 
-**File:** `packages/database/scripts/entity-new.ts`
+**File:** `packages/database/src/scripts/entity-new.ts`
 
-Generates 4 files from a template:
+Generates ~20+ files and auto-wires all registries via named markers (`@entity-gen:*`).
 
 ```
-pnpm entity:new invoices --module=accounting --company --site --doc-number
+npx tsx src/scripts/entity-new.ts invoices --doc --skip-schema
 ```
 
-**Generates:**
+**Flags:**
 
-1. `packages/database/src/schema/invoices.ts` — Drizzle table with `erpEntityColumns` + `companyRef()` + `siteRef()` + `docNumber()` + `customData` + standard indexes + tenantPolicy
-2. `packages/crud/src/handlers/invoices.ts` — Handler stub (create/update/delete/restore) with custom field validation wired in
-3. `apps/web/app/actions/invoices.ts` — Server action stubs following contacts pattern
-4. `packages/crud/src/__tests__/invoices.smoke.test.ts` — Test stub
+- `--doc` — Include lifecycle verbs (submit/cancel/approve/reject)
+- `--skip-schema` — Skip schema generation (for existing tables like companies)
 
-**Also updates:**
+**Creates (new files):**
 
-- `packages/database/src/schema/index.ts` — adds export
-- `packages/canon/src/types/entity.ts` — adds to `ENTITY_TYPES`
-- `packages/canon/src/types/action.ts` — adds to `ACTION_TYPES`
-- `packages/crud/src/mutate.ts` — adds to `HANDLER_REGISTRY`
+1. `packages/database/src/schema/<entity>.ts` — Drizzle table with `erpEntityColumns` + standard indexes + tenantPolicy
+2. `packages/crud/src/handlers/<entity>.ts` — Handler stub (create/update/delete/restore) with K-11 allowlist
+3. `packages/crud/src/__tests__/<entity>.smoke.test.ts` — Registration smoke test
+4. `packages/search/src/adapters/<entity>.ts` — Search adapter stub (FTS + ILIKE fallback)
+5. `apps/web/app/actions/<entity>.ts` — Server action wrappers via `generateEntityActions()`
+6. `apps/web/app/(app)/org/[slug]/<entity>/_components/<singular>-contract.ts` — EntityContract
+7. `apps/web/app/(app)/org/[slug]/<entity>/_components/<singular>-columns.ts` — Column defs
+8. `apps/web/app/(app)/org/[slug]/<entity>/_components/<singular>-fields.ts` — Field defs + Zod schema
+9. `apps/web/app/(app)/org/[slug]/<entity>/_server/<entity>.query_server.ts` — React.cache() loaders
+10. `apps/web/app/(app)/org/[slug]/<entity>/_server/<entity>.policy_server.ts` — Action resolver
+11. `apps/web/app/(app)/org/[slug]/<entity>/_server/<entity>.server-actions.ts` — Sealed dispatcher
+12. `apps/web/app/(app)/org/[slug]/<entity>/page.tsx` — List page
+13. `apps/web/app/(app)/org/[slug]/<entity>/[id]/page.tsx` — Detail page
+14. `apps/web/app/(app)/org/[slug]/<entity>/new/page.tsx` — Create page
+15. `apps/web/app/(app)/org/[slug]/<entity>/[id]/edit/page.tsx` — Edit page
+16. `apps/web/app/(app)/org/[slug]/<entity>/[id]/versions/page.tsx` — Versions page
+17. `apps/web/app/(app)/org/[slug]/<entity>/[id]/audit/page.tsx` — Audit page
+18. `apps/web/app/(app)/org/[slug]/<entity>/trash/page.tsx` — Trash page
+19. 7× `surface.ts` files — Capability surface annotations (co-located per page)
+
+**Auto-wires (existing files via `@entity-gen:*` markers):**
+
+- `packages/database/src/schema/index.ts` — schema barrel export
+- `packages/canon/src/types/entity.ts` — `ENTITY_TYPES`
+- `packages/canon/src/types/action.ts` — `ACTION_TYPES`
+- `packages/canon/src/types/capability.ts` — `CAPABILITY_CATALOG`
+- `packages/crud/src/mutate.ts` — `HANDLER_REGISTRY` + `TABLE_REGISTRY` + handler import
+- `packages/crud/src/read.ts` — `TABLE_REGISTRY` + table import
+- `packages/crud/src/handler-meta.ts` — `HANDLER_META`
+- `apps/web/app/(app)/org/[slug]/_components/nav-config.ts` — `NAV_ITEMS`
 
 **Also seeds:**
 
@@ -1101,8 +1139,8 @@ When a new org is created, seed these defaults so UI works on day 1:
 | **7**  | Entity views tables: entity_views, entity_view_fields                                                                                                                                                                | `packages/database/src/schema/entity-views.ts`, `entity-view-fields.ts`                                                            | Step 4          |
 | **8**  | LiteMetadata + aliasing + semantic terms: meta_assets, meta_lineage_edges, meta_quality_checks, meta_alias_sets, meta_aliases, meta_alias_resolution_rules, meta_value_aliases, meta_semantic_terms, meta_term_links | `packages/database/src/schema/meta-*.ts`                                                                                           | Step 4          |
 | **9**  | Migration: generate + apply + seed (currencies, UOM, meta_assets for existing tables)                                                                                                                                | `packages/database/drizzle/0011_*.sql`                                                                                             | Steps 5-8       |
-| **10** | Custom field validation + typed index sync in kernel; wire `dbRo` into reads/search                                                                                                                                  | `packages/crud/src/custom-fields.ts`, `packages/crud/src/read.ts`, `packages/search/src/adapters/*.ts`                             | Steps 1 + 2 + 6 |
-| **11** | Schema lint script + entity generator script                                                                                                                                                                         | `packages/database/scripts/schema-lint.ts`, `packages/database/scripts/entity-new.ts`                                              | Steps 2-8       |
+| **10** | Custom field validation + typed index sync in kernel; wire `dbRo` into reads/search                                                                                                                                  | `packages/crud/src/services/custom-field-validation.ts`, `packages/crud/src/read.ts`, `packages/search/src/adapters/*.ts`          | Steps 1 + 2 + 6 |
+| **11** | Schema lint script + entity generator script                                                                                                                                                                         | `packages/database/src/scripts/schema-lint.ts`, `packages/database/src/scripts/entity-new.ts`                                      | Steps 2-8       |
 | **12** | Tests: RW/RO routing, custom field validation, typed index sync, schema lint                                                                                                                                         | `packages/database/src/__tests__/db-routing.test.ts`, `packages/crud/src/__tests__/custom-fields.test.ts`                          | Steps 10-11     |
 
 ---
@@ -1210,7 +1248,7 @@ Applied across all Phase A tables based on PostgreSQL 18 documentation:
 | LiteMetadata       | `meta_assets` (with canonical/display names) + lineage + quality + aliases + resolution rules + value aliases + semantic terms          | Full semantic layer: business truth + aliasing + glossary                          |
 | Value provenance   | `custom_field_values.source` tracks origin (user/rule/import/system)                                                                    | Audit + lineage for every custom field change                                      |
 | Generator          | `pnpm entity:new` script (not CLI)                                                                                                      | Low overhead, deterministic, upgradeable to CLI later                              |
-| Axis keys          | `companyId` + `siteId` optional on `erpEntityColumns`                                                                                   | Multi-company + multi-site from day 1, opt-in per module                           |
+| Axis keys          | `companyId` + `siteId` optional on `erpEntityColumns`; `docEntityColumns` adds lifecycle columns                                        | Multi-company + multi-site from day 1, opt-in per module                           |
 | Priority           | Just an `enum` preset, not a special type                                                                                               | No special cases — governance wins                                                 |
 | Projections        | Convention: `projections` schema, `dbRo` only, populated by triggers/jobs                                                               | Documented now, implemented per-module                                             |
 | Partitioning       | Opt-in per table when volume exceeds thresholds                                                                                         | Documented now, implemented when needed                                            |
@@ -1220,11 +1258,11 @@ Applied across all Phase A tables based on PostgreSQL 18 documentation:
 | Alias resolution   | `meta_alias_resolution_rules` with priority-based scope matching (user > role > team > locale > org)                                    | Automatic alias set selection per context                                          |
 | Value aliases      | `meta_value_aliases` for enum/status value localization (e.g. `submitted` → "Posted")                                                   | Deep localization for dropdowns, badges, table cells                               |
 | Semantic terms     | `meta_semantic_terms` + `meta_term_links` — concept-level lineage                                                                       | "Show me all fields related to Gross Margin"                                       |
-| Alias search       | Generated `search_text` column + GIN index on `meta_aliases`                                                                            | Search by business term across aliases and synonyms                                |
+| Alias search       | Trigger-populated `search_text` column + GIN index on `meta_aliases`                                                                    | Search by business term across aliases and synonyms                                |
 | Canonical names    | `meta_assets.canonical_name` (immutable) vs `display_name` (aliasable)                                                                  | Renames never break formulas, rules, or queries                                    |
 | Typed column CHECK | `custom_field_values` enforces exactly one `value_*` column is NOT NULL via CHECK constraint                                            | Prevents silent data corruption forever                                            |
 | Field lifecycle    | `is_locked` + `is_deprecated` + `is_unique` on `custom_fields`                                                                          | Prevents admin breakage; supports integrations (unique external IDs)               |
-| Schema hash        | `custom_fields.schema_hash` tracks `{field_type, type_config, is_required, storage_mode}` hash                                          | Drift detection: find records written under old schema for repair                  |
+| Schema hash        | `custom_fields.schema_hash` tracks `{fieldType, typeConfig, isRequired, isUnique, storageMode}` via `djb2` hash (prefixed `djb2:<hex>`) | Drift detection: find records written under old schema for repair                  |
 | type_config CHECKs | DB-level guardrails: `jsonb_typeof='object'`, enum requires `choices`, short_text requires `maxLength`                                  | Prevents nonsense states even if kernel is bypassed                                |
 | FX audit           | `fx_source` (manual/rate_table/system) + `fx_as_of` (rate date) on all money documents                                                  | Reconciliation, revaluation, audit — ERPNext GL entry pattern                      |
 | dbRo write safety  | ESLint rule forbids `dbRo.insert/update/delete` + recommended read-only DB role                                                         | Prevents accidental writes to read replica                                         |
@@ -1534,9 +1572,7 @@ CREATE TABLE IF NOT EXISTS meta_aliases (
   is_primary     boolean NOT NULL DEFAULT true,
   effective_from timestamptz NOT NULL DEFAULT now(),
   effective_to   timestamptz,
-  search_text    text GENERATED ALWAYS AS (
-    alias || ' ' || array_to_string(synonyms, ' ') || ' ' || target_key
-  ) STORED,
+  search_text    text,  -- trigger-populated (array_to_string is not IMMUTABLE, cannot use GENERATED)
   is_deleted     boolean NOT NULL DEFAULT false,
   deleted_at     timestamptz,
   deleted_by     text,
@@ -1568,6 +1604,20 @@ CREATE UNIQUE INDEX IF NOT EXISTS meta_aliases_active_slug_uniq
 CREATE INDEX IF NOT EXISTS meta_aliases_search_gin
   ON meta_aliases USING GIN (to_tsvector('simple', search_text))
   WHERE is_deleted = false;
+
+-- Trigger to populate search_text (array_to_string is not IMMUTABLE,
+-- so GENERATED ALWAYS AS is rejected by Postgres)
+CREATE OR REPLACE FUNCTION meta_aliases_search_text_trigger()
+RETURNS trigger LANGUAGE plpgsql AS $$
+BEGIN
+  NEW.search_text := NEW.alias || ' ' || array_to_string(NEW.synonyms, ' ') || ' ' || NEW.target_key;
+  RETURN NEW;
+END;
+$$;
+
+CREATE TRIGGER trg_meta_aliases_search_text
+  BEFORE INSERT OR UPDATE ON meta_aliases
+  FOR EACH ROW EXECUTE FUNCTION meta_aliases_search_text_trigger();
 
 CREATE TABLE IF NOT EXISTS meta_alias_resolution_rules (
   id           uuid PRIMARY KEY DEFAULT gen_random_uuid(),

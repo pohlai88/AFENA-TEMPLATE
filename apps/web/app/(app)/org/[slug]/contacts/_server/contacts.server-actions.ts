@@ -120,7 +120,7 @@ export async function executeContactAction(
         break;
 
       default:
-        return errorResponse('VALIDATION_FAILED', `Unsupported action kind: ${envelope.kind}`);
+        return errorResponse('VALIDATION_FAILED', `Unsupported action kind: ${String(envelope.kind)}`);
     }
 
     const durationMs = Date.now() - start;

@@ -8,22 +8,21 @@ Standardize the org-scoped app shell and build an enterprise-grade action system
 
 By the end of Phase C:
 
-* Every org page inherits a **single shell**: sidebar, header, breadcrumbs, user menu, ⌘K.
-* Every entity inherits a **single action model**:
+- Every org page inherits a **single shell**: sidebar, header, breadcrumbs, user menu, ⌘K.
+- Every entity inherits a **single action model**:
+  - **Verbs** (top-level)
+  - **Update Modes** (modal under Update)
+  - **Workflow Decisions** (Approve/Reject gated)
 
-  * **Verbs** (top-level)
-  * **Update Modes** (modal under Update)
-  * **Workflow Decisions** (Approve/Reject gated)
-* All actions are **resolved on the server** (RBAC + SoD + lifecycle + entity contract).
-* UI becomes predictable:
+- All actions are **resolved on the server** (RBAC + SoD + lifecycle + entity contract).
+- UI becomes predictable:
+  - list pages ~≤ 40 lines (server fetch + render)
+  - detail pages standardized (action bar + metadata sidebar)
+  - forms standardized (RHF + Zod + server action submission)
 
-  * list pages ~≤ 40 lines (server fetch + render)
-  * detail pages standardized (action bar + metadata sidebar)
-  * forms standardized (RHF + Zod + server action submission)
-* Observability is enterprise-grade:
-
-  * every action emits **Pino logs** with correlation id
-  * no `console.*` in runtime paths
+- Observability is enterprise-grade:
+  - every action emits **Pino logs** with correlation id
+  - no `console.*` in runtime paths
 
 ---
 
@@ -39,10 +38,9 @@ By the end of Phase C:
 
 Rules:
 
-* Users see **Update** as the single entrypoint for changes → **Update Mode dialog** chooses mode.
-* **Approve/Reject are never update subclasses**.
-* Policy governs both layers:
-
+- Users see **Update** as the single entrypoint for changes → **Update Mode dialog** chooses mode.
+- **Approve/Reject are never update subclasses**.
+- Policy governs both layers:
   1. can user press Update?
   2. which update modes can they select?
   3. whether workflow decisions are allowed
@@ -53,45 +51,44 @@ Rules:
 
 ### R0 — RSC by default
 
-* `layout.tsx`, `page.tsx` are **Server Components**. No `use client`.
+- `layout.tsx`, `page.tsx` are **Server Components**. No `use client`.
 
 ### R1 — Client islands only (leaf components)
 
 Client components exist only for:
 
-* Sidebar interaction (collapse, mobile sheet)
-* Breadcrumbs (pathname parsing)
-* Action menus/dialogs (UpdateModeDialog, ConfirmActionDialog)
-* DataTable interactions (TanStack Table)
-* Forms (React Hook Form controlled inputs)
+- Sidebar interaction (collapse, mobile sheet)
+- Breadcrumbs (pathname parsing)
+- Action menus/dialogs (UpdateModeDialog, ConfirmActionDialog)
+- DataTable interactions (TanStack Table)
+- Forms (React Hook Form controlled inputs)
 
 ### R2 — State ownership (no conflicts)
 
-* **TanStack Table** owns table state (sorting/filter/pagination/selection)
-* **React Hook Form** owns form state
-* **Zustand** is reserved for **shell UX only**:
-
-  * sidebar collapsed
-  * density (compact/comfortable)
-  * last selected tab / view
-  * command palette UX preferences
+- **TanStack Table** owns table state (sorting/filter/pagination/selection)
+- **React Hook Form** owns form state
+- **Zustand** is reserved for **shell UX only**:
+  - sidebar collapsed
+  - density (compact/comfortable)
+  - last selected tab / view
+  - command palette UX preferences
     **Never** duplicate table/form state into Zustand.
 
 ### R3 — Actions execute on the server
 
-* Client orchestrates UI only (open dialog → collect reason → invoke server action).
-* Server does: policy check → mutation → logging → return result.
+- Client orchestrates UI only (open dialog → collect reason → invoke server action).
+- Server does: policy check → mutation → logging → return result.
 
 ### R4 — Observability is mandatory
 
-* Every verb/mode/decision logs:
+- Every verb/mode/decision logs:
+  - start / success / error
+  - orgId, userId, entityType, entityId
+  - actionKind (verb/decision), updateMode (optional)
+  - fromStatus/toStatus (when applicable)
+  - correlation id (`clientActionId`)
 
-  * start / success / error
-  * orgId, userId, entityType, entityId
-  * actionKind (verb/decision), updateMode (optional)
-  * fromStatus/toStatus (when applicable)
-  * correlation id (`clientActionId`)
-* No production `console.*`. Pino only.
+- No production `console.*`. Pino only.
 
 ---
 
@@ -115,11 +112,11 @@ Client components exist only for:
 
 ### 4.1 Naming conventions (enforce boundaries)
 
-* `page.tsx`, `layout.tsx` → Server only
-* `*_client.tsx` → Client only
-* `*_server.ts` → Server-only module
-* `server-actions.ts` → Server actions only
-* `contracts/*.ts` → shared types/data only (no hooks)
+- `page.tsx`, `layout.tsx` → Server only
+- `*_client.tsx` → Client only
+- `*_server.ts` → Server-only module
+- `server-actions.ts` → Server actions only
+- `*-contract.ts` → entity contract (shared types/data only, no hooks) — co-located in `_components/`
 
 ---
 
@@ -129,9 +126,9 @@ Client components exist only for:
 
 ### Goals
 
-* Canon declares the **enterprise action model**
-* CRUD lifecycle supports **approve/reject → active**
-* Entity contract defines what each entity supports
+- Canon declares the **enterprise action model**
+- CRUD lifecycle supports **approve/reject → active**
+- Entity contract defines what each entity supports
 
 ### Deliverables (Canon)
 
@@ -155,12 +152,12 @@ packages/crud/src/
 
 **Enterprise default lifecycle (baseline)**
 
-* `draft` → `submitted` (Submit)
-* `submitted` → `active` (Approve)
-* `submitted` → `draft` or `rejected` (Reject)
-* `active` → `cancelled` (Cancel)
-* `cancelled` → `active` or `draft` (Restore, entity-specific)
-* `deleted` flag remains separate (soft delete)
+- `draft` → `submitted` (Submit)
+- `submitted` → `active` (Approve)
+- `submitted` → `draft` or `rejected` (Reject)
+- `active` → `cancelled` (Cancel)
+- `cancelled` → `active` or `draft` (Restore, entity-specific)
+- `deleted` flag remains separate (soft delete)
 
 > Note: Whether “rejected” is a status or a transition back to draft is your choice. Enterprise systems do both. The contract supports either.
 
@@ -170,9 +167,9 @@ packages/crud/src/
 
 ### Goals
 
-* Replace flat layout with sidebar shell
-* Keep layout server-first, push interactivity to client islands
-* Nav config is **single source** for Sidebar + Breadcrumb labels + Command Palette entries
+- Replace flat layout with sidebar shell
+- Keep layout server-first, push interactivity to client islands
+- Nav config is **single source** for Sidebar + Breadcrumb labels + Command Palette entries
 
 ### Files
 
@@ -191,12 +188,12 @@ apps/web/app/(app)/org/[slug]/
 
 **Shell responsibilities**
 
-* Server `layout.tsx` fetches:
+- Server `layout.tsx` fetches:
+  - org context
+  - actor roles/claims
+  - feature flags (optional)
 
-  * org context
-  * actor roles/claims
-  * feature flags (optional)
-* Client sidebar/header receive only what they need (labels/links, display name, etc.)
+- Client sidebar/header receive only what they need (labels/links, display name, etc.)
 
 ---
 
@@ -204,10 +201,10 @@ apps/web/app/(app)/org/[slug]/
 
 ### Goals
 
-* One **server-side ActionResolver** governs all UI actions (no UI-invented actions)
-* One set of composables powers list/detail/forms across all entities
-* Update uses a modal to choose **Update Mode**
-* Workflow decisions render separately and are strictly gated
+- One **server-side ActionResolver** governs all UI actions (no UI-invented actions)
+- One set of composables powers list/detail/forms across all entities
+- Update uses a modal to choose **Update Mode**
+- Workflow decisions render separately and are strictly gated
 
 ### Folder split (server vs client)
 
@@ -235,18 +232,18 @@ apps/web/app/(app)/org/[slug]/_components/crud/
 
 Inputs (server-computed):
 
-* entity contract
-* doc status + flags (deleted, locked)
-* actor capabilities (allowed verbs, allowed update modes, workflow decisions)
-* optional SoD signals (submitter vs approver)
+- entity contract
+- doc status + flags (deleted, locked)
+- actor capabilities (allowed verbs, allowed update modes, workflow decisions)
+- optional SoD signals (submitter vs approver)
 
 Outputs:
 
-* Primary verbs (CTA)
-* Secondary verbs (dropdown)
-* Workflow decisions section (approve/reject…)
-* Allowed update modes for UpdateModeDialog
-* Confirm requirements (reason/typed confirmation)
+- Primary verbs (CTA)
+- Secondary verbs (dropdown)
+- Workflow decisions section (approve/reject…)
+- Allowed update modes for UpdateModeDialog
+- Confirm requirements (reason/typed confirmation)
 
 **Key rule:** client UI renders only what resolver returns.
 
@@ -256,7 +253,7 @@ Outputs:
 
 ### Goal
 
-Contacts becomes the *template* entity that proves the architecture: list/detail/new/edit/trash + approve/reject + update modes + logging.
+Contacts becomes the _template_ entity that proves the architecture: list/detail/new/edit/trash + approve/reject + update modes + logging.
 
 ```
 apps/web/app/(app)/org/[slug]/contacts/
@@ -287,40 +284,39 @@ apps/web/app/(app)/org/[slug]/contacts/
 
 Server page responsibilities:
 
-* fetch rows
-* fetch actor allowed verbs/modes (policy)
-* resolve actions server-side
-* render PageHeader + EntityToolbar client island + DataTable client island
+- fetch rows
+- fetch actor allowed verbs/modes (policy)
+- resolve actions server-side
+- render PageHeader + EntityToolbar client island + DataTable client island
 
 Client table responsibilities:
 
-* TanStack table interactions only
-* row actions use resolver output (no policy logic)
-* bulk actions (optional) follow same resolver pattern
+- TanStack table interactions only
+- row actions use resolver output (no policy logic)
+- bulk actions (optional) follow same resolver pattern
 
 ## 6.2 Detail Page Standard
 
 Must include:
 
-* Title + status badge + action bar
-* Main info section card(s)
-* Metadata sidebar card (created/updated/version/doc status/deleted)
-* Optional tabs: Audit / Versions / Related
+- Title + status badge + action bar
+- Main info section card(s)
+- Metadata sidebar card (created/updated/version/doc status/deleted)
+- Optional tabs: Audit / Versions / Related
 
 ## 6.3 Form Standard (RHF + Zod + Server Actions)
 
-* `contact-form_client.tsx` contains fields only (no layout)
-* `entity-form-shell_client.tsx` provides:
+- `contact-form_client.tsx` contains fields only (no layout)
+- `entity-form-shell_client.tsx` provides:
+  - Card wrapper
+  - error summary block
+  - footer with Cancel + Save (mode-dependent)
 
-  * Card wrapper
-  * error summary block
-  * footer with Cancel + Save (mode-dependent)
-* Submission goes to server action:
-
-  * server validates with Zod
-  * server checks policy again
-  * server logs via ActionLogger
-  * returns success/error, page refresh or redirect
+- Submission goes to server action:
+  - server validates with Zod
+  - server checks policy again
+  - server logs via ActionLogger
+  - returns success/error, page refresh or redirect
 
 ---
 
@@ -330,19 +326,19 @@ Must include:
 
 Wrap every server action with:
 
-* `action.start` log
-* `action.success` log
-* `action.error` log (include error class/message; avoid sensitive payloads)
+- `action.start` log
+- `action.success` log
+- `action.error` log (include error class/message; avoid sensitive payloads)
 
 Required fields:
 
-* orgId, userId
-* entityType, entityId (if exists)
-* actionKind (verb/decision)
-* updateMode (optional)
-* fromStatus/toStatus (optional)
-* clientActionId (required)
-* durationMs (recommended)
+- orgId, userId
+- entityType, entityId (if exists)
+- actionKind (verb/decision)
+- updateMode (optional)
+- fromStatus/toStatus (optional)
+- clientActionId (required)
+- durationMs (recommended)
 
 ### 7.2 Correlation
 
@@ -354,16 +350,16 @@ Client generates `clientActionId` (UUID) per action attempt and passes it to ser
 
 ### Allowed in Zustand
 
-* sidebar collapsed state
-* density preference
-* last selected detail tab
-* command palette UI preference
+- sidebar collapsed state
+- density preference
+- last selected detail tab
+- command palette UI preference
 
 ### Not allowed in Zustand
 
-* table filters/sorts/pagination/selection
-* form values
-* action pending states (keep local to client component)
+- table filters/sorts/pagination/selection
+- form values
+- action pending states (keep local to client component)
 
 **Rationale:** avoids two sources of truth and “fighting state machines.”
 
@@ -391,24 +387,22 @@ Client generates `clientActionId` (UUID) per action attempt and passes it to ser
 10. Implement `action-resolver_server.ts`
 11. Implement `action-logger_server.ts` (Pino wrapper)
 12. Implement client composables:
-
-    * ActionBar, ActionButton
-    * UpdateModeDialog
-    * ConfirmActionDialog
-    * StatusBadge
-    * EntityToolbar, EntityActionsCell
-    * DataTable wrapper
+    - ActionBar, ActionButton
+    - UpdateModeDialog
+    - ConfirmActionDialog
+    - StatusBadge
+    - EntityToolbar, EntityActionsCell
+    - DataTable wrapper
 
 ## Step D — Contacts refactor (reference entity)
 
 13. Rewrite contacts list/detail/new/edit/trash using composables
 14. Replace manual `useState` form with RHF
 15. Implement server actions with logging:
-
-    * create/update (with update mode)
-    * submit/cancel
-    * approve/reject
-    * delete/restore
+    - create/update (with update mode)
+    - submit/cancel
+    - approve/reject
+    - delete/restore
 
 ## Step E — Enterprise gates (CI invariants)
 
@@ -421,25 +415,25 @@ Client generates `clientActionId` (UUID) per action attempt and passes it to ser
 
 ## 10) Verification Checklist (Enterprise Acceptance)
 
-* ✅ `next build` passes
-* ✅ `tsc --noEmit` passes
-* ✅ Sidebar + breadcrumbs work on desktop + mobile
-* ✅ Contacts list has sorting/filter/pagination/row actions via DataTable
-* ✅ Update opens UpdateModeDialog; modes vary by role/status
-* ✅ Approve/Reject appear only when submitted and actor allowed
-* ✅ Every action logs start/success/error via Pino with clientActionId
-* ✅ No Zustand conflict (table/form state not mirrored)
-* ✅ No hardcoded colors; tokens only
+- ✅ `next build` passes
+- ✅ `tsc --noEmit` passes
+- ✅ Sidebar + breadcrumbs work on desktop + mobile
+- ✅ Contacts list has sorting/filter/pagination/row actions via DataTable
+- ✅ Update opens UpdateModeDialog; modes vary by role/status
+- ✅ Approve/Reject appear only when submitted and actor allowed
+- ✅ Every action logs start/success/error via Pino with clientActionId
+- ✅ No Zustand conflict (table/form state not mirrored)
+- ✅ No hardcoded colors; tokens only
 
 ---
 
 ## 11) File Count Summary (expected)
 
-* Canon: ~3 new, ~4–6 modified
-* CRUD lifecycle: 1 modified
-* Shell: ~4 new, 1 modified
-* CRUD composables: ~3 server files, ~10–12 client files
-* Contacts: ~3–5 new files, ~5–7 modified pages/components
+- Canon: ~3 new, ~4–6 modified
+- CRUD lifecycle: 1 modified
+- Shell: ~4 new, 1 modified
+- CRUD composables: ~3 server files, ~10–12 client files
+- Contacts: ~3–5 new files, ~5–7 modified pages/components
 
 ---
 
@@ -456,8 +450,8 @@ Client generates `clientActionId` (UUID) per action attempt and passes it to ser
 
 If you want the next step, paste (or upload) your current:
 
-* `packages/crud/src/lifecycle.ts`
-* one contacts page (`contacts/page.tsx`)
-* your current server mutation entrypoint (where CRUD-SAP executes)
+- `packages/crud/src/lifecycle.ts`
+- one contacts page (`contacts/page.tsx`)
+- your current server mutation entrypoint (where CRUD-SAP executes)
 
 …and I’ll translate this Phase C spec into a **file-by-file patch plan** with exact component APIs and what each page shrinks to (still token-only, shadcn-only, server-first).

@@ -1,6 +1,6 @@
 # Afena Database Architecture — Engineering Reference
 
-> **Status:** Current as of Feb 12, 2026
+> **Status:** Current as of Feb 13, 2026
 > **Neon Project:** `dark-band-87285012` (ap-southeast-1)
 > **ORM:** Drizzle ORM 0.44+ with `drizzle-orm/neon-http` driver
 > **Package:** `packages/database` (`afena-database`)
@@ -50,16 +50,17 @@ ESLint `no-restricted-syntax` also forbids `db.insert()`, `db.update()`, `db.del
 
 ---
 
-## 2. Table Inventory (30 tables)
+## 2. Table Inventory (40 tables)
 
-### 2.1 Auth & Storage (2 tables — no org_id)
+### 2.1 Auth & Storage (3 tables — no org_id)
 
 | Table      | PK          | RLS                | Notes                                                               |
 | ---------- | ----------- | ------------------ | ------------------------------------------------------------------- |
 | `users`    | `id` (UUID) | `authUid(user_id)` | Neon Auth identity. `user_id` from `auth.user_id()`                 |
 | `r2_files` | `id` (UUID) | `authUid(user_id)` | Cloudflare R2 file metadata. FK → `users.user_id` ON DELETE CASCADE |
+| `api_keys` | `id` (UUID) | `tenantPolicy`     | API key management. Scopes array, key hash/prefix, expiry tracking  |
 
-**Pattern:** User-scoped RLS via `authUid()` — no org isolation needed.
+**Pattern:** User-scoped RLS via `authUid()` for user tables, org-scoped for API keys.
 
 ### 2.2 CRUD Kernel (3 tables — append-only)
 
@@ -71,13 +72,30 @@ ESLint `no-restricted-syntax` also forbids `db.insert()`, `db.update()`, `db.del
 
 **Pattern:** No `baseEntityColumns` — these are infrastructure tables with custom column sets. All have `org_not_empty` CHECK and org-scoped crudPolicy.
 
-### 2.3 Domain Entities (1 table)
+### 2.3 Domain Entities (2 tables)
 
-| Table      | PK          | Columns                                                  | RLS            | Notes                                                         |
-| ---------- | ----------- | -------------------------------------------------------- | -------------- | ------------------------------------------------------------- |
-| `contacts` | `id` (UUID) | `baseEntityColumns` + name, email, phone, company, notes | `tenantPolicy` | First domain entity. Has `search_vector` tsvector + GIN index |
+| Table       | PK          | Columns                                                                                             | RLS            | Notes                                             |
+| ----------- | ----------- | --------------------------------------------------------------------------------------------------- | -------------- | ------------------------------------------------- |
+| `contacts`  | `id` (UUID) | `docEntityColumns` + name, email, phone, company, notes                                             | `tenantPolicy` | First domain entity. Search via `search_index` MV |
+| `companies` | `id` (UUID) | `erpEntityColumns` + name, legalName, registrationNo, taxId, baseCurrency, fiscalYearStart, address | `tenantPolicy` | Multi-company axis. ERP spine table               |
 
-**Pattern:** Uses `baseEntityColumns` (10 cols: id, orgId, createdAt, updatedAt, createdBy, updatedBy, version, isDeleted, deletedAt, deletedBy) + `tenantPolicy` + `erpIndexes`-equivalent manual indexes.
+**Pattern:** `contacts` uses `docEntityColumns` (18 cols: baseEntityColumns + companyId, siteId, customData + docStatus, submittedAt/By, cancelledAt/By, amendedFromId). `companies` uses `erpEntityColumns` (13 cols). Both have `tenantPolicy` + standard indexes.
+
+### 2.3.1 Cross-Entity Search (Materialized View)
+
+| View           | Type | Columns                                                                                | Indexes  | Notes                                             |
+| -------------- | ---- | -------------------------------------------------------------------------------------- | -------- | ------------------------------------------------- |
+| `search_index` | MV   | entity_id, entity_type, org_id, title, subtitle, search_vector, updated_at, is_deleted | 3 sealed | Unifies contacts + companies for cross-entity FTS |
+
+**Indexes (sealed):**
+
+- `search_index_uidx` — UNIQUE(entity_type, entity_id) — required for `REFRESH CONCURRENTLY`
+- `search_index_fts_gin` — GIN(search_vector) — full-text search
+- `search_index_org_idx` — (org_id, entity_type) — tenant-scoped filtering
+
+**Refresh:** `REFRESH MATERIALIZED VIEW CONCURRENTLY search_index` — run periodically or after bulk mutations.
+
+**Tenant isolation:** RLS not supported on MVs. Enforced by `WHERE org_id = ?` in all queries against this view.
 
 ### 2.4 Advisory Engine (2 tables — append-only)
 
@@ -181,6 +199,39 @@ If multiple rules match at the same priority, the one with the highest `priority
 | ----------------- | ----------- | -------------- | -------------------------------------------------------- |
 | `meta_term_links` | `id` (UUID) | `tenantPolicy` | FK → semantic_terms. UNIQUE(org_id, term_id, target_key) |
 
+### 2.12 Policy Engine (4 tables)
+
+| Table              | PK          | Columns                                                              | RLS            | Notes                                                                                            |
+| ------------------ | ----------- | -------------------------------------------------------------------- | -------------- | ------------------------------------------------------------------------------------------------ |
+| `roles`            | `id` (UUID) | orgId + key, name, isSystem, createdAt                               | `tenantPolicy` | Org-scoped role definitions. UNIQUE(org_id, key). key_not_empty CHECK                            |
+| `user_roles`       | `id` (UUID) | orgId + userId, roleId (FK → roles), createdAt                       | `tenantPolicy` | User-role assignments. UNIQUE(org_id, user_id, role_id)                                          |
+| `role_permissions` | `id` (UUID) | orgId + roleId (FK → roles), entityType, verb, scope, fieldRulesJson | `tenantPolicy` | Verb+scope grants per entity type. UNIQUE(org_id, role_id, entity_type, verb). verb/scope CHECKs |
+| `user_scopes`      | `id` (UUID) | orgId + userId, scopeType, scopeId, createdAt                        | `tenantPolicy` | Fine-grained company/site/team scope assignments. UNIQUE(org_id, user_id, scope_type, scope_id)  |
+
+**Pattern:** Lightweight RBAC tables — no `baseEntityColumns` (no soft-delete, no version). All have `org_not_empty` CHECK + `tenantPolicy`.
+
+**CHECK constraints:**
+
+- `role_permissions`: `verb IN ('create','update','delete','submit','cancel','amend','approve','reject','restore')`, `scope IN ('org','self','company','site','team')`
+- `user_scopes`: `scope_type IN ('company','site','team')`
+
+### 2.13 Governors (1 table)
+
+| Table             | PK                        | Columns                                                            | RLS            | Notes                                                    |
+| ----------------- | ------------------------- | ------------------------------------------------------------------ | -------------- | -------------------------------------------------------- |
+| `org_usage_daily` | (org_id, day) — composite | orgId + day, apiRequests, jobRuns, jobMs, dbTimeouts, storageBytes | `tenantPolicy` | Daily usage metering counters. Cheap upserts, bill later |
+
+**Pattern:** No UUID PK — composite PK `(org_id, day)`. One row per org per day. `org_not_empty` CHECK.
+
+### 2.14 Trust Hooks (2 tables)
+
+| Table                | PK          | Columns                                                                 | RLS            | Notes                                                                   |
+| -------------------- | ----------- | ----------------------------------------------------------------------- | -------------- | ----------------------------------------------------------------------- |
+| `entity_attachments` | `id` (UUID) | orgId + entityType, entityId, fileId, label, createdBy, createdAt       | `tenantPolicy` | Junction table linking files to any entity. entity_type_not_empty CHECK |
+| `communications`     | `id` (UUID) | orgId + entityType, entityId, type, subject, body, createdBy, createdAt | `tenantPolicy` | Email/comment/note/call log. type CHECK, entity_type_not_empty CHECK    |
+
+**Pattern:** Append-oriented evidence tables — no `baseEntityColumns` (no soft-delete, no version). Both have `org_not_empty` CHECK + `tenantPolicy`.
+
 ---
 
 ## 3. Column Patterns
@@ -212,7 +263,22 @@ Extends `baseEntityColumns` with:
 | `site_id`     | UUID  | null    | Optional FK → sites            |
 | `custom_data` | JSONB | `'{}'`  | Typed custom field values blob |
 
-### 3.3 Column Helpers (field-types.ts)
+### 3.3 docEntityColumns (18 columns)
+
+Extends `erpEntityColumns` with document lifecycle state machine columns:
+
+| Column            | Type        | Default   | Notes                                   |
+| ----------------- | ----------- | --------- | --------------------------------------- |
+| `doc_status`      | text        | `'draft'` | Lifecycle state (draft → submitted → …) |
+| `submitted_at`    | timestamptz | null      | Submission checkpoint                   |
+| `submitted_by`    | text        | null      | Submission actor                        |
+| `cancelled_at`    | timestamptz | null      | Cancellation record                     |
+| `cancelled_by`    | text        | null      | Cancellation actor                      |
+| `amended_from_id` | UUID        | null      | Links amended doc to its predecessor    |
+
+**Usage:** `pgTable('invoices', { ...docEntityColumns, invoiceNo: text('invoice_no') })`
+
+### 3.4 Column Helpers (field-types.ts)
 
 | Helper                         | Output Type                        | Usage                       |
 | ------------------------------ | ---------------------------------- | --------------------------- |
@@ -243,7 +309,7 @@ Every table has RLS enabled via one of three policies:
 
 | Policy            | Tables                                                                                                | Read Predicate             | Write Predicate                   |
 | ----------------- | ----------------------------------------------------------------------------------------------------- | -------------------------- | --------------------------------- |
-| `tenantPolicy`    | All domain + ERP tables (22)                                                                          | `auth.org_id() = org_id`   | `auth.org_id() = org_id`          |
+| `tenantPolicy`    | All domain + ERP + policy + trust tables (29)                                                         | `auth.org_id() = org_id`   | `auth.org_id() = org_id`          |
 | `authUid`         | users, r2_files (2)                                                                                   | `auth.user_id() = user_id` | `auth.user_id() = user_id`        |
 | Custom crudPolicy | audit_logs, entity_versions, mutation_batches, advisories, advisory_evidence, workflow_executions (6) | org-scoped                 | org-scoped + actor/channel checks |
 
@@ -273,6 +339,11 @@ Every org-scoped table has `org_not_empty` CHECK (`org_id <> ''`). Additional do
 | `meta_aliases`        | 7 CHECKs           | alias_not_empty, slug_kebab, 5 target_key format CHECKs                                                                                |
 | `meta_value_aliases`  | 2 CHECKs           | target_key LIKE 'enum:%', alias_not_empty                                                                                              |
 | `meta_semantic_terms` | term_key CHECK     | snake_case regex                                                                                                                       |
+| `roles`               | key CHECK          | `key <> ''`                                                                                                                            |
+| `role_permissions`    | 2 CHECKs           | verb enum (`create/update/delete/submit/cancel/amend`), scope enum (`org/self/company/site/team`)                                      |
+| `user_scopes`         | type CHECK         | `scope_type IN ('company','site','team')`                                                                                              |
+| `entity_attachments`  | type CHECK         | `entity_type <> ''`                                                                                                                    |
+| `communications`      | 2 CHECKs           | `entity_type <> ''`, `type IN ('email','comment','note','call')`                                                                       |
 
 ### 4.3 Append-Only Tables
 
@@ -352,10 +423,27 @@ Plus two always-on lookup indexes:
 
 ### 5.7 GIN Indexes
 
-| Table          | Expression                           | Purpose                                    |
-| -------------- | ------------------------------------ | ------------------------------------------ |
-| `meta_aliases` | `to_tsvector('simple', search_text)` | Full-text search on aliases + synonyms     |
-| `contacts`     | `search_vector` (tsvector)           | Full-text search on name + email + company |
+| Table          | Expression                           | Purpose                                |
+| -------------- | ------------------------------------ | -------------------------------------- |
+| `meta_aliases` | `to_tsvector('simple', search_text)` | Full-text search on aliases + synonyms |
+| `search_index` | `search_vector` (tsvector)           | Cross-entity FTS via materialized view |
+
+### 5.8 Phase B Indexes
+
+| Table                | Index                                         | Type   | Notes                                  |
+| -------------------- | --------------------------------------------- | ------ | -------------------------------------- |
+| `roles`              | UNIQUE(org_id, key)                           | B-tree | Role key uniqueness per org            |
+| `roles`              | (org_id)                                      | B-tree | Org lookup                             |
+| `user_roles`         | UNIQUE(org_id, user_id, role_id)              | B-tree | No duplicate assignments               |
+| `user_roles`         | (org_id, user_id)                             | B-tree | "All roles for this user"              |
+| `role_permissions`   | UNIQUE(org_id, role_id, entity_type, verb)    | B-tree | One grant per verb per entity per role |
+| `role_permissions`   | (org_id, entity_type)                         | B-tree | "All permissions for this entity type" |
+| `user_scopes`        | UNIQUE(org_id, user_id, scope_type, scope_id) | B-tree | No duplicate scope assignments         |
+| `user_scopes`        | (org_id, user_id)                             | B-tree | "All scopes for this user"             |
+| `entity_attachments` | (org_id, entity_type, entity_id)              | B-tree | "All attachments for this entity"      |
+| `entity_attachments` | (org_id, file_id)                             | B-tree | "All entities using this file"         |
+| `communications`     | (org_id, entity_type, entity_id)              | B-tree | "All comms for this entity"            |
+| `communications`     | (org_id, created_at)                          | B-tree | Timeline queries                       |
 
 ---
 
@@ -421,12 +509,18 @@ apps/web (Next.js)
 packages/crud (afena-crud)
   ├── mutate.ts → db.transaction() → handler → audit_logs + entity_versions
   ├── read.ts → getDb() (defaults to dbRo) → TABLE_REGISTRY
+  ├── policy-engine.ts → dbRo (role_permissions, user_scopes)
+  ├── rate-limiter.ts → in-memory sliding window
+  ├── job-quota.ts → in-memory concurrent job slots
+  ├── metering.ts → db (org_usage_daily upserts, fire-and-forget)
   └── services/
       ├── custom-field-validation.ts → dbRo (loadFieldDefs)
       └── custom-field-sync.ts → db (syncCustomFieldValues)
 
 packages/search (afena-search)
-  └── adapters/contacts.ts → dbRo (FTS + ILIKE fallback)
+  ├── adapters/contacts.ts → dbRo (FTS + ILIKE fallback)
+  ├── adapters/companies.ts → dbRo (FTS + ILIKE fallback)
+  └── adapters/cross-entity.ts → dbRo (search_index MV, FTS + ILIKE fallback)
 
 packages/advisory (afena-advisory)
   └── writer.ts → db (advisories + advisory_evidence)
@@ -466,23 +560,29 @@ Server Action → readEntity(type, id, requestId, { forcePrimary? })
 
 ---
 
-## 9. Migration History (13 migrations)
+## 9. Migration History (19 migrations)
 
-| #    | Tag                               | Summary                                                                                                          |
-| ---- | --------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
-| 0000 | `first_stranger`                  | Initial users table                                                                                              |
-| 0001 | `true_night_nurse`                | r2_files table                                                                                                   |
-| 0002 | `mature_carmella_unuscione`       | r2_files enhancements                                                                                            |
-| 0003 | `condemned_hellfire_club`         | r2_files FK adjustments                                                                                          |
-| 0004 | `cultured_ogun`                   | r2_files FK cascade fix                                                                                          |
-| 0005 | `mixed_abomination`               | CRUD kernel: pgcrypto, set_updated_at, audit_logs, entity_versions, mutation_batches, contacts                   |
-| 0006 | `quick_firelord`                  | Advisory engine: advisories, advisory_evidence                                                                   |
-| 0007 | `petite_corsair`                  | r2_files checksum column                                                                                         |
-| 0008 | `easy_dreaming_celestial`         | Workflow engine: workflow_rules, workflow_executions                                                             |
-| 0009 | `sparkling_namorita`              | Workflow executions enhancements, entity_versions fork fields, audit_logs actor fields                           |
-| 0010 | `unusual_korath`                  | **Phase A:** All ERP spine tables, custom fields, entity views, LiteMetadata, aliasing, semantic terms (45K SQL) |
-| 0011 | `phase_a_postgres_best_practices` | BRIN indexes, covering indexes, partial indexes for soft-delete                                                  |
-| 0012 | `phase_a_seed_defaults`           | `seed_org_defaults()` function: currencies, UOM, alias sets, meta_assets, entity views, number sequences         |
+| #    | Tag                               | Summary                                                                                                           |
+| ---- | --------------------------------- | ----------------------------------------------------------------------------------------------------------------- |
+| 0000 | `first_stranger`                  | Initial users table                                                                                               |
+| 0001 | `true_night_nurse`                | r2_files table                                                                                                    |
+| 0002 | `mature_carmella_unuscione`       | r2_files enhancements                                                                                             |
+| 0003 | `condemned_hellfire_club`         | r2_files FK adjustments                                                                                           |
+| 0004 | `cultured_ogun`                   | r2_files FK cascade fix                                                                                           |
+| 0005 | `mixed_abomination`               | CRUD kernel: pgcrypto, set_updated_at, audit_logs, entity_versions, mutation_batches, contacts                    |
+| 0006 | `quick_firelord`                  | Advisory engine: advisories, advisory_evidence                                                                    |
+| 0007 | `petite_corsair`                  | r2_files checksum column                                                                                          |
+| 0008 | `easy_dreaming_celestial`         | Workflow engine: workflow_rules, workflow_executions                                                              |
+| 0009 | `sparkling_namorita`              | Workflow executions enhancements, entity_versions fork fields, audit_logs actor fields                            |
+| 0010 | `unusual_korath`                  | **Phase A:** All ERP spine tables, custom fields, entity views, LiteMetadata, aliasing, semantic terms (45K SQL)  |
+| 0011 | `phase_a_postgres_best_practices` | BRIN indexes, covering indexes, partial indexes for soft-delete                                                   |
+| 0012 | `phase_a_seed_defaults`           | `seed_org_defaults()` function: currencies, UOM, alias sets, meta_assets, entity views, number sequences          |
+| 0013 | `sudden_korath`                   | **Phase B:** Policy engine (roles, user_roles, role_permissions, user_scopes) + governors (org_usage_daily)       |
+| 0014 | `lethal_adam_warlock`             | **Phase B:** Trust hooks (communications, entity_attachments) with indexes + RLS policies                         |
+| 0015 | `odd_union_jack`                  | Contacts upgrade: baseEntityColumns → docEntityColumns (adds companyId, siteId, customData, doc lifecycle cols)   |
+| 0016 | `search_index_mv`                 | **W5:** Cross-entity search materialized view (contacts + companies UNION ALL), 3 sealed indexes, initial REFRESH |
+| 0017 | `api_keys`                        | API key management table with org-scoped RLS, hash/prefix storage, scopes array, expiry tracking                  |
+| 0018 | `cloudy_human_robot`              | Add approve/reject/restore verbs to role_permissions CHECK constraint                                             |
 
 ---
 
@@ -520,27 +620,30 @@ Called during org creation. Seeds:
 | `has-custom-data`    | warning  | ERP entity tables have customData  |
 | `naming-convention`  | warning  | Table name is plural snake_case    |
 
-### 11.2 Entity Generator (`pnpm entity:new <name>`)
+### 11.2 Entity Generator (`pnpm entity:new <name>`) — W1 Auto-Wiring
 
-`packages/database/src/scripts/entity-new.ts` — generates 4 files:
+`packages/database/src/scripts/entity-new.ts` — generates **17+ files** and performs **10 auto-wiring insertions** via named markers.
 
-1. `packages/database/src/schema/<name>.ts` — Drizzle table
-2. `packages/crud/src/handlers/<name>.ts` — CRUD handler stub
+Supports flags: `--doc`, `--skip-schema`
+
+**Files generated:**
+
+1. `packages/database/src/schema/<name>.ts` — Drizzle table (unless `--skip-schema`)
+2. `packages/crud/src/handlers/<name>.ts` — CRUD handler
 3. `packages/crud/src/__tests__/<name>.smoke.test.ts` — Test stub
-4. `apps/web/app/actions/<name>.ts` — Server action stub
+4. `packages/search/src/adapters/<name>.ts` — FTS search adapter
+5. `apps/web/app/actions/<name>.ts` — Legacy server action file
+6. 7 page files + 7 surface.ts files + support files (contract, columns, fields, query_server, policy_server, server-actions)
 
-Supports flags: `--company`, `--site`, `--doc-number`
+**Auto-wiring (10 named markers):**
 
-**Manual wiring required after generation** (printed as instructions):
+- Schema barrel, ENTITY_TYPES, ACTION_TYPES, CAPABILITY_CATALOG
+- HANDLER_REGISTRY, TABLE_REGISTRY (mutate + read)
+- Nav items
 
-- Add export to `packages/database/src/schema/index.ts`
-- Add to `ENTITY_TYPES` in `packages/canon/src/types/entity.ts`
-- Add to `ACTION_TYPES` in `packages/canon/src/types/action.ts`
-- Add to `HANDLER_REGISTRY` in `packages/crud/src/mutate.ts`
-- Seed `meta_assets` rows for the new table + columns
-- Create default `entity_views` row
+**Remaining manual steps:** Run migration, seed meta_assets (if needed), customize stubs.
 
-> **Note:** The PRD specifies auto-updating these files. Current implementation prints manual instructions instead (safer — avoids AST manipulation bugs). Auto-update is a future enhancement.
+**Gate G2:** Zero manual wiring enforced by B1 generator acceptance test (15/15 tests).
 
 ### 11.3 Drizzle Kit Commands
 
@@ -647,10 +750,11 @@ packages/database/
     ├── helpers/
     │   ├── base-entity.ts  # baseEntityColumns (10 cols)
     │   ├── erp-entity.ts   # erpEntityColumns (13 cols)
+    │   ├── doc-entity.ts   # docEntityColumns (18 cols)
     │   ├── field-types.ts  # 16 column helpers
     │   ├── standard-indexes.ts  # erpIndexes(), docIndexes()
     │   └── tenant-policy.ts     # tenantPolicy(), ownerPolicy()
-    ├── schema/             # 30 table definitions + relations + barrel
+    ├── schema/             # 37 table definitions + relations + barrel
     ├── scripts/
     │   ├── schema-lint.ts  # 8-rule schema linter
     │   └── entity-new.ts   # Entity generator (4 files)
@@ -663,9 +767,9 @@ packages/database/
 The barrel re-exports:
 
 - **Singletons:** `db`, `dbRo`, `getDb`, `DbInstance`
-- **All 30 tables** + their inferred types (Select + Insert)
+- **All 37 tables** + their inferred types (Select + Insert)
 - **Relations:** `usersRelations`, `r2FilesRelations`
-- **Helpers:** `tenantPolicy`, `ownerPolicy`, `baseEntityColumns`, `erpEntityColumns`, `erpIndexes`, `docIndexes`
+- **Helpers:** `tenantPolicy`, `ownerPolicy`, `baseEntityColumns`, `erpEntityColumns`, `docEntityColumns`, `erpIndexes`, `docIndexes`
 - **Column helpers:** 16 functions from `field-types.ts`
 - **Drizzle operators:** `eq`, `and`, `or`, `sql`, `desc`, `asc`, `like`, `ilike`, `inArray`, `notInArray`, `isNull`, `isNotNull`
 
@@ -685,6 +789,9 @@ The barrel re-exports:
 | K-14         | Audit logs: actor check on writes                   | RLS policy with actor/channel condition                    |
 | INVARIANT-RO | No writes on `dbRo`                                 | ESLint rules + naming convention                           |
 | INVARIANT-07 | RBAC policy gate before mutation                    | `enforcePolicy()` in mutate.ts                             |
+| INVARIANT-08 | No `console.*` — use afena-logger (Pino)            | ESLint `no-console` + `no-restricted-syntax` in base.js    |
+
+> **Note on K-05:** The original invariant stated crud exports "ONLY mutate, readEntity, listEntities". The package now also exports governors (rate-limiter, job-quota), metering, custom field services, and policy engine — all infrastructure functions that support the kernel but do not bypass it.
 
 ---
 
@@ -692,12 +799,14 @@ The barrel re-exports:
 
 The current schema is designed to not block these future capabilities:
 
-| Feature                     | Phase  | Schema Ready                                                |
-| --------------------------- | ------ | ----------------------------------------------------------- |
-| Computed custom fields      | D      | `custom_fields` can add `is_computed` + `compute_expr`      |
-| Temporal truth (accounting) | D      | Ledger tables can add `effective_from/to`                   |
-| Read model projections      | D      | Convention: `projections` schema on `dbRo`                  |
-| Partitioning                | Future | audit_logs by month, custom_field_values by entity_type     |
-| CDC for analytics           | Future | Tables are CDC-ready: stable UUIDs, updated_at, soft-delete |
-| Alias resolution engine     | B/C    | Tables + indexes exist, strategy pattern in code            |
-| Format rules                | C      | Add `meta_format_rules` table                               |
+| Feature                     | Phase   | Schema Ready                                                 |
+| --------------------------- | ------- | ------------------------------------------------------------ |
+| Computed custom fields      | D       | `custom_fields` can add `is_computed` + `compute_expr`       |
+| Temporal truth (accounting) | D       | Ledger tables can add `effective_from/to`                    |
+| Read model projections      | D       | Convention: `projections` schema on `dbRo`                   |
+| Partitioning                | Future  | audit_logs by month, custom_field_values by entity_type      |
+| CDC for analytics           | Future  | Tables are CDC-ready: stable UUIDs, updated_at, soft-delete  |
+| Alias resolution engine     | ~~B/C~~ | **Implemented.** Tables, indexes, resolution rules all live  |
+| Format rules                | C       | Add `meta_format_rules` table                                |
+| RBAC scope filtering        | B+      | Policy engine tables live, scope-aware list queries pending  |
+| Usage billing               | C       | `org_usage_daily` metering live, billing integration pending |

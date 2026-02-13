@@ -1,16 +1,17 @@
 import { NextRequest } from 'next/server';
 
-import { searchContacts } from 'afena-search';
+import { searchAll } from 'afena-search';
 
 import { withAuth } from '@/lib/api/with-auth';
 
 export const CAPABILITIES = ['search.global', 'contacts.search'] as const;
 
 /**
- * GET /api/search?q=<query>&limit=<n>
+ * GET /api/search?q=<query>&limit=<n>&types=contacts,companies
  *
- * Cross-entity search endpoint. Delegates to packages/search adapters.
- * RLS enforces tenant isolation automatically.
+ * Cross-entity search endpoint using the search_index materialized view.
+ * Supports optional entity type filtering via `types` query param.
+ * Tenant isolation enforced via org_id filter in the MV query.
  */
 export const GET = withAuth(async (request: NextRequest) => {
   const q = request.nextUrl.searchParams.get('q')?.trim();
@@ -18,11 +19,13 @@ export const GET = withAuth(async (request: NextRequest) => {
     Number(request.nextUrl.searchParams.get('limit') ?? '10'),
     25,
   );
+  const typesParam = request.nextUrl.searchParams.get('types');
+  const entityTypes = typesParam ? typesParam.split(',').map((t) => t.trim()).filter(Boolean) : undefined;
 
   if (!q || q.length < 1) {
     return { ok: true as const, data: [] };
   }
 
-  const results = await searchContacts(q, limit);
+  const results = await searchAll(q, limit, entityTypes ? { entityTypes } : undefined);
   return { ok: true as const, data: results };
 });

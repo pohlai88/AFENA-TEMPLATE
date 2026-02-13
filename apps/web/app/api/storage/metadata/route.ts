@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 
-import { db, eq, r2Files } from 'afena-database';
+import { meterStorageBytes } from 'afena-crud';
+import { db, eq, r2Files, sql } from 'afena-database';
 
 import { auth } from '@/lib/auth/server';
 import { getLogger } from '@/lib/logger';
@@ -53,6 +54,17 @@ export async function POST(request: Request) {
         .where(eq(r2Files.objectKey, objectKey));
 
       return NextResponse.json({ success: true, file: existing });
+    }
+
+    // Meter storage bytes at truth point (fire-and-forget)
+    if (sizeBytes && sizeBytes > 0) {
+      db.execute(sql`SELECT auth.org_id() AS org_id`)
+        .then((res) => {
+          const rows = (res as Record<string, unknown>).rows as { org_id: string | null }[];
+          const orgId = rows?.[0]?.org_id;
+          if (orgId) meterStorageBytes(orgId, sizeBytes);
+        })
+        .catch(() => { /* metering must never fail the primary operation */ });
     }
 
     return NextResponse.json({ success: true, file });

@@ -579,6 +579,15 @@ export const CAPABILITY_CATALOG: Record<string, CapabilityDescriptor> = {
     tags: ['storage'],
     headlessOnly: true,
   },
+  'companies.create': { key: 'companies.create', intent: 'Create a new company', scope: 'org', status: 'active', entities: ['companies'], tags: ['companies'] },
+  'companies.update': { key: 'companies.update', intent: 'Update an existing company', scope: 'org', status: 'active', entities: ['companies'], tags: ['companies'] },
+  'companies.delete': { key: 'companies.delete', intent: 'Soft-delete a company', scope: 'org', status: 'active', entities: ['companies'], tags: ['companies'], risks: ['irreversible'] },
+  'companies.restore': { key: 'companies.restore', intent: 'Restore a soft-deleted company', scope: 'org', status: 'active', entities: ['companies'], tags: ['companies'] },
+  'companies.read': { key: 'companies.read', intent: 'Read a single company', scope: 'org', status: 'active', entities: ['companies'], tags: ['companies'] },
+  'companies.list': { key: 'companies.list', intent: 'List companies', scope: 'org', status: 'active', entities: ['companies'], tags: ['companies'] },
+  'companies.versions': { key: 'companies.versions', intent: 'View version history', scope: 'org', status: 'active', entities: ['companies'], tags: ['companies', 'audit'] },
+  'companies.audit': { key: 'companies.audit', intent: 'View audit trail', scope: 'org', status: 'active', entities: ['companies'], tags: ['companies', 'audit'] },
+  // @entity-gen:capability-catalog
 };
 
 // ── Catalog Validation + RBAC Derivation (module init) ──────

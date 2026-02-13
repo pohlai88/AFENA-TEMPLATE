@@ -1,5 +1,3 @@
-'use client';
-
 import { Card, CardContent, CardHeader, CardTitle } from 'afena-ui/components/card';
 import { FileUpload } from 'afena-ui/components/file-upload';
 

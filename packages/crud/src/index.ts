@@ -3,8 +3,9 @@
 export { mutate } from './mutate';
 export { readEntity, listEntities } from './read';
 
-// ── Re-export context type for callers ──
+// ── Re-export context type + system context builder for callers ──
 export type { MutationContext } from './context';
+export { buildSystemContext } from './context';
 
 // ── Governors: Rate Limiting + Job Quotas + Metering ────
 export {

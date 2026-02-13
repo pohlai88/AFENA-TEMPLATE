@@ -46,6 +46,7 @@ export const NAV_ITEMS: NavItem[] = [
     icon: FileText,
     group: 'main',
   },
+  // @entity-gen:nav-items
   {
     label: 'Trash',
     href: (slug) => `/org/${slug}/contacts/trash`,

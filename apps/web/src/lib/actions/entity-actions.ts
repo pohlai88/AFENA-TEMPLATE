@@ -1,5 +1,6 @@
 import { mutate, readEntity, listEntities } from 'afena-crud';
 import { db, auditLogs, entityVersions, eq, and, desc } from 'afena-database';
+import { getRequestId } from 'afena-logger';
 
 import { buildContext } from './context';
 
@@ -7,7 +8,7 @@ import type { ApiResponse, EntityType, JsonValue, MutationSpec } from 'afena-can
 
 /**
  * Generate standard CRUD server actions for any entity type.
- * Eliminates boilerplate — every entity gets the same 8 actions.
+ * Eliminates boilerplate — every entity gets the same 12 actions.
  *
  * NOTE: This is NOT a 'use server' file — it's a utility that returns
  * an object of async functions. The actual server action files that
@@ -69,7 +70,7 @@ export function generateEntityActions(entityType: EntityType) {
   }
 
   async function read(id: string, forcePrimary?: boolean): Promise<ApiResponse> {
-    const requestId = crypto.randomUUID();
+    const requestId = getRequestId() ?? crypto.randomUUID();
     return readEntity(entityType, id, requestId, forcePrimary ? { forcePrimary } : undefined);
   }
 
@@ -79,7 +80,7 @@ export function generateEntityActions(entityType: EntityType) {
     offset?: number;
     forcePrimary?: boolean;
   }): Promise<ApiResponse> {
-    const requestId = crypto.randomUUID();
+    const requestId = getRequestId() ?? crypto.randomUUID();
     return listEntities(entityType, requestId, options);
   }
 
@@ -97,13 +98,13 @@ export function generateEntityActions(entityType: EntityType) {
         .orderBy(desc(entityVersions.version))
         .limit(50);
 
-      return { ok: true, data: rows, meta: { requestId: crypto.randomUUID() } };
+      return { ok: true, data: rows, meta: { requestId: getRequestId() ?? crypto.randomUUID() } };
     } catch (e) {
       const message = e instanceof Error ? e.message : 'Unknown error';
       return {
         ok: false,
         error: { code: 'INTERNAL_ERROR' as const, message },
-        meta: { requestId: crypto.randomUUID() },
+        meta: { requestId: getRequestId() ?? crypto.randomUUID() },
       };
     }
   }
@@ -122,13 +123,13 @@ export function generateEntityActions(entityType: EntityType) {
         .orderBy(desc(auditLogs.createdAt))
         .limit(100);
 
-      return { ok: true, data: rows, meta: { requestId: crypto.randomUUID() } };
+      return { ok: true, data: rows, meta: { requestId: getRequestId() ?? crypto.randomUUID() } };
     } catch (e) {
       const message = e instanceof Error ? e.message : 'Unknown error';
       return {
         ok: false,
         error: { code: 'INTERNAL_ERROR' as const, message },
-        meta: { requestId: crypto.randomUUID() },
+        meta: { requestId: getRequestId() ?? crypto.randomUUID() },
       };
     }
   }

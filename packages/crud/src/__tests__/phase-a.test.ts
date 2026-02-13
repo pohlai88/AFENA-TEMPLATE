@@ -57,8 +57,8 @@ describe('Canon ERP Enums', () => {
     expect(dataTypeSchema.safeParse('invalid_type').success).toBe(false);
   });
 
-  it('DOC_STATUSES has 4 statuses', () => {
-    expect(DOC_STATUSES).toEqual(['draft', 'submitted', 'cancelled', 'amended']);
+  it('DOC_STATUSES has 5 statuses', () => {
+    expect(DOC_STATUSES).toEqual(['draft', 'submitted', 'active', 'cancelled', 'amended']);
   });
 
   it('STORAGE_MODES has 2 modes', () => {

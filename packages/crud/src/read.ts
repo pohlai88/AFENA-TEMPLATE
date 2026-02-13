@@ -1,4 +1,5 @@
-import { and, contacts, getDb, eq } from 'afena-database';
+import { and, companies, contacts, getDb, eq } from 'afena-database';
+// @entity-gen:read-import
 
 import { err, ok } from './envelope';
 
@@ -7,6 +8,8 @@ import type { ApiResponse, EntityType } from 'afena-canon';
 /** Table registry for reads — maps entity type to Drizzle table. */
 const TABLE_REGISTRY: Record<string, any> = {
   contacts,
+  companies,
+  // @entity-gen:table-registry-read
 };
 
 /**

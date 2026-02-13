@@ -29,17 +29,18 @@ export const rolePermissions = pgTable(
     createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
   },
   (table) => [
-    uniqueIndex('role_perms_org_role_entity_verb_idx').on(
+    uniqueIndex('role_perms_org_role_entity_verb_scope_idx').on(
       table.orgId,
       table.roleId,
       table.entityType,
       table.verb,
+      table.scope,
     ),
     index('role_perms_org_entity_idx').on(table.orgId, table.entityType),
     check('role_perms_org_not_empty', sql`org_id <> ''`),
     check(
       'role_perms_verb_valid',
-      sql`verb IN ('create', 'update', 'delete', 'submit', 'cancel', 'amend')`,
+      sql`verb IN ('create', 'update', 'delete', 'submit', 'cancel', 'amend', 'approve', 'reject', 'restore')`,
     ),
     check(
       'role_perms_scope_valid',

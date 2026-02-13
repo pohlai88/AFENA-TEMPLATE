@@ -9,6 +9,7 @@
     "dev": "tsup --watch",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx --fix",
+    "test": "vitest run",
     "type-check": "tsc --noEmit"
   },
   "dependencies": {

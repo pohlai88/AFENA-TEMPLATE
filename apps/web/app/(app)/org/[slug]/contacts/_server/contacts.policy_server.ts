@@ -31,3 +31,21 @@ export function resolveContactActions(
     ...(entity.submitterUserId ? { submitterUserId: entity.submitterUserId } : {}),
   });
 }
+
+/**
+ * Resolve actions for a list of contacts — returns a serializable map.
+ * Keeps the per-row resolution loop out of page.tsx.
+ */
+export function resolveContactListActions(
+  ctx: OrgContext,
+  rows: { id: string; doc_status: string | null; is_deleted: boolean }[],
+): Record<string, ResolvedActions> {
+  const result: Record<string, ResolvedActions> = {};
+  for (const row of rows) {
+    result[row.id] = resolveContactActions(ctx, {
+      docStatus: row.doc_status,
+      isDeleted: row.is_deleted,
+    });
+  }
+  return result;
+}

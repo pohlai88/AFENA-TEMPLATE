@@ -1,5 +1,6 @@
 import type { ActionFamily } from './action';
 import type { JsonValue } from './mutation';
+import type { Channel } from '../enums/channel';
 
 /**
  * TypeScript representation of an audit_logs row.
@@ -20,7 +21,7 @@ export interface AuditLogEntry {
   batchId: string | null;
   versionBefore: number | null;
   versionAfter: number;
-  channel: string;
+  channel: Channel;
   ip: string | null;
   userAgent: string | null;
   reason: string | null;

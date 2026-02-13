@@ -26,7 +26,7 @@ export const ACTION_VERBS = [
 ] as const;
 export type ActionVerb = (typeof ACTION_VERBS)[number];
 
-/** Phase 1 action types — contacts only. */
+/** Registered action types — all entity.verb pairs. */
 export const ACTION_TYPES = [
   'contacts.create',
   'contacts.update',
@@ -36,6 +36,11 @@ export const ACTION_TYPES = [
   'contacts.cancel',
   'contacts.approve',
   'contacts.reject',
+  'companies.create',
+  'companies.update',
+  'companies.delete',
+  'companies.restore',
+  // @entity-gen:action-types
 ] as const;
 export type ActionType = (typeof ACTION_TYPES)[number];
 

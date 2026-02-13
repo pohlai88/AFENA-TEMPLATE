@@ -1,7 +1,8 @@
+import { SYSTEM_ACTOR_USER_ID, isSystemChannel } from 'afena-canon';
 import {
   and,
-  db,
   eq,
+  getDb,
   rolePermissions,
   userRoles,
   userScopes,
@@ -30,7 +31,7 @@ export async function resolveActor(
   userId: string,
 ): Promise<ResolvedActor> {
   // 1. Load user's role assignments
-  const userRoleRows = await db
+  const userRoleRows = await getDb()
     .select({ roleId: userRoles.roleId })
     .from(userRoles)
     .where(and(eq(userRoles.orgId, orgId), eq(userRoles.userId, userId)));
@@ -42,7 +43,7 @@ export async function resolveActor(
   }
 
   // 2. Load permissions for all of the actor's roles
-  const allPermRows = await db
+  const allPermRows = await getDb()
     .select({
       roleId: rolePermissions.roleId,
       entityType: rolePermissions.entityType,
@@ -64,7 +65,7 @@ export async function resolveActor(
     }));
 
   // 3. Load user scopes
-  const scopeRows = await db
+  const scopeRows = await getDb()
     .select({
       scopeType: userScopes.scopeType,
       scopeId: userScopes.scopeId,
@@ -96,29 +97,28 @@ export function evaluatePolicyDecision(
   existingRow: Record<string, unknown> | null,
   inputPatch: Record<string, unknown> | null,
 ): PolicyDecision {
-  // 1. Find matching permissions (any role granting this verb on this entity)
-  const matching = actor.permissions.filter(
-    (p) => p.entityType === entityType && p.verb === verb,
+  // 1. Find matching permissions (entity + verb with wildcard support + scope in single pass)
+  const verbMatching = actor.permissions.filter(
+    (p) =>
+      (p.entityType === '*' || p.entityType === entityType) &&
+      (p.verb === '*' || p.verb === verb),
   );
 
-  if (matching.length === 0) {
+  if (verbMatching.length === 0) {
     return { ok: false, reason: 'DENY_VERB' };
   }
 
-  // 2. Check scope — at least one permission's scope must pass
-  const scopePassed = matching.some((p) =>
+  // 2. Scope check — collapsed into primary filter (wildcard entity/verb does not bypass scope)
+  const matching = verbMatching.filter((p) =>
     checkScope(p.scope, actor, existingRow),
   );
 
-  if (!scopePassed) {
+  if (matching.length === 0) {
     return { ok: false, reason: 'DENY_SCOPE' };
   }
 
   // 3. Merge field rules from all matching+scope-passing permissions
-  const passedPerms = matching.filter((p) =>
-    checkScope(p.scope, actor, existingRow),
-  );
-  const merged = mergeFieldRules(passedPerms.map((p) => p.fieldRules));
+  const merged = mergeFieldRules(matching.map((p) => p.fieldRules));
 
   // 4. Check field rules against input patch
   if (inputPatch && merged.deny_write && merged.deny_write.length > 0) {
@@ -240,6 +240,28 @@ export async function enforcePolicyV2(
   verb: string,
   existingRow: Record<string, unknown> | null,
 ): Promise<{ authoritySnapshot: AuthoritySnapshotV2; actor: ResolvedActor }> {
+  // System bypass: allow all verbs when userId is system AND channel is a system channel.
+  // No DB reads, no dependency on seeded roles. Background jobs work even if roles table is broken.
+  if (ctx.actor.userId === SYSTEM_ACTOR_USER_ID && ctx.channel && isSystemChannel(ctx.channel)) {
+    const bypassActor: ResolvedActor = {
+      orgId: ctx.actor.orgId,
+      userId: SYSTEM_ACTOR_USER_ID,
+      roleIds: [],
+      permissions: [],
+      scopes: [],
+    };
+    const authoritySnapshot: AuthoritySnapshotV2 = {
+      policyVersion: 'v2',
+      verb,
+      entityType: spec.entityRef.type,
+      decision: { ok: true },
+      decisionReason: 'SYSTEM_BYPASS',
+      actor: { orgId: ctx.actor.orgId, userId: SYSTEM_ACTOR_USER_ID, roleIds: [] },
+      matchedPermissions: [],
+    };
+    return { authoritySnapshot, actor: bypassActor };
+  }
+
   const actor = await resolveActor(ctx.actor.orgId, ctx.actor.userId);
 
   const decision = evaluatePolicyDecision(
@@ -253,7 +275,9 @@ export async function enforcePolicyV2(
   );
 
   const matchedPermissions = actor.permissions.filter(
-    (p) => p.entityType === spec.entityRef.type && p.verb === verb,
+    (p) =>
+      (p.entityType === '*' || p.entityType === spec.entityRef.type) &&
+      (p.verb === '*' || p.verb === verb),
   );
 
   const authoritySnapshot: AuthoritySnapshotV2 = {
