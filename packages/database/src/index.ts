@@ -5,13 +5,13 @@ export { tenantPolicy, ownerPolicy } from './helpers/tenant-policy';
 export { baseEntityColumns } from './helpers/base-entity';
 export { erpEntityColumns } from './helpers/erp-entity';
 export { docEntityColumns } from './helpers/doc-entity';
+export { postingColumns } from './helpers/posting-columns';
 export { erpIndexes, docIndexes } from './helpers/standard-indexes';
 export {
     moneyMinor,
     currencyCode,
     fxRate,
     baseAmountMinor,
-    moneyDocumentColumns,
     qty,
     uomRef,
     statusColumn,

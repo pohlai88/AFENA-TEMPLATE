@@ -6,7 +6,6 @@ import { ShieldCheck } from 'lucide-react';
 
 import { PageHeader } from '../../../_components/crud/client/page-header';
 import { getOrgContext } from '../../../_server/org-context_server';
-
 import { fetchRole, fetchRolePermissions } from '../_server/roles.query_server';
 
 import { PermissionsTable } from './_components/permissions-table_client';

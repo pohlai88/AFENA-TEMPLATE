@@ -1,8 +1,11 @@
 'use server';
 
-import { db, dbRo, roles, rolePermissions, userRoles, userScopes, eq, desc } from 'afena-database';
-import { getRequestId } from 'afena-logger';
+/* eslint-disable no-restricted-syntax -- roles/permissions/userRoles/userScopes are system admin tables, not domain entities managed by mutate() */
+
 import { revalidatePath } from 'next/cache';
+
+import { db, dbRo, eq, desc, roles, rolePermissions, userRoles, userScopes } from 'afena-database';
+import { getRequestId } from 'afena-logger';
 
 import type { ApiResponse } from 'afena-canon';
 

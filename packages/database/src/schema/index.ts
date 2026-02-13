@@ -6,6 +6,27 @@ export type { R2File, NewR2File } from './r2-files';
 
 export { usersRelations, r2FilesRelations } from './relations';
 
+export {
+    itemGroupsRelations,
+    itemsRelations,
+    salesInvoicesRelations,
+    salesInvoiceLinesRelations,
+    paymentsRelations,
+    salesOrdersRelations,
+    salesOrderLinesRelations,
+    deliveryNotesRelations,
+    deliveryNoteLinesRelations,
+    purchaseOrdersRelations,
+    purchaseOrderLinesRelations,
+    goodsReceiptsRelations,
+    goodsReceiptLinesRelations,
+    purchaseInvoicesRelations,
+    purchaseInvoiceLinesRelations,
+    quotationsRelations,
+    quotationLinesRelations,
+    docPostingsRelations,
+} from './spine-relations';
+
 export { auditLogs } from './audit-logs';
 export type { AuditLog, NewAuditLog } from './audit-logs';
 
@@ -273,5 +294,103 @@ export type { InventoryTraceLink, NewInventoryTraceLink } from './inventory-trac
 
 export { discountRules } from './discount-rules';
 export type { DiscountRule, NewDiscountRule } from './discount-rules';
+
+// ── Transactional Spine: Migration 0031 — Master Data ────
+export { itemGroups } from './item-groups';
+export type { ItemGroup, NewItemGroup } from './item-groups';
+
+export { items } from './items';
+export type { Item, NewItem } from './items';
+
+export { warehouses } from './warehouses';
+export type { Warehouse, NewWarehouse } from './warehouses';
+
+export { addresses } from './addresses';
+export type { Address, NewAddress } from './addresses';
+
+export { contactAddresses } from './contact-addresses';
+export type { ContactAddress, NewContactAddress } from './contact-addresses';
+
+export { companyAddresses } from './company-addresses';
+export type { CompanyAddress, NewCompanyAddress } from './company-addresses';
+
+// ── Transactional Spine: Migration 0032 — Posting Bridge ──
+export { docPostings } from './doc-postings';
+export type { DocPosting, NewDocPosting } from './doc-postings';
+
+export { docLinks } from './doc-links';
+export type { DocLink, NewDocLink } from './doc-links';
+
+// ── Transactional Spine: Migration 0033 — Sales Invoice ───
+export { salesInvoices } from './sales-invoices';
+export type { SalesInvoice, NewSalesInvoice } from './sales-invoices';
+
+export { salesInvoiceLines } from './sales-invoice-lines';
+export type { SalesInvoiceLine, NewSalesInvoiceLine } from './sales-invoice-lines';
+
+// ── Transactional Spine: Migration 0034 — Payments ────────
+export { payments } from './payments';
+export type { Payment, NewPayment } from './payments';
+
+// ── Transactional Spine: Migration 0035 — Selling Cycle ───
+export { salesOrders } from './sales-orders';
+export type { SalesOrder, NewSalesOrder } from './sales-orders';
+
+export { salesOrderLines } from './sales-order-lines';
+export type { SalesOrderLine, NewSalesOrderLine } from './sales-order-lines';
+
+export { deliveryNotes } from './delivery-notes';
+export type { DeliveryNote, NewDeliveryNote } from './delivery-notes';
+
+export { deliveryNoteLines } from './delivery-note-lines';
+export type { DeliveryNoteLine, NewDeliveryNoteLine } from './delivery-note-lines';
+
+// ── Transactional Spine: Migration 0036 — Buying Cycle ────
+export { purchaseOrders } from './purchase-orders';
+export type { PurchaseOrder, NewPurchaseOrder } from './purchase-orders';
+
+export { purchaseOrderLines } from './purchase-order-lines';
+export type { PurchaseOrderLine, NewPurchaseOrderLine } from './purchase-order-lines';
+
+export { goodsReceipts } from './goods-receipts';
+export type { GoodsReceipt, NewGoodsReceipt } from './goods-receipts';
+
+export { goodsReceiptLines } from './goods-receipt-lines';
+export type { GoodsReceiptLine, NewGoodsReceiptLine } from './goods-receipt-lines';
+
+export { purchaseInvoices } from './purchase-invoices';
+export type { PurchaseInvoice, NewPurchaseInvoice } from './purchase-invoices';
+
+export { purchaseInvoiceLines } from './purchase-invoice-lines';
+export type { PurchaseInvoiceLine, NewPurchaseInvoiceLine } from './purchase-invoice-lines';
+
+// ── Transactional Spine: Migration 0037 — Quotations ──────
+export { quotations } from './quotations';
+export type { Quotation, NewQuotation } from './quotations';
+
+export { quotationLines } from './quotation-lines';
+export type { QuotationLine, NewQuotationLine } from './quotation-lines';
+
+// ── Workflow V2: Migration 0040 — Contracted Workflow Envelope ──
+export { workflowDefinitions } from './workflow-definitions';
+export type { WorkflowDefinitionRow, NewWorkflowDefinitionRow } from './workflow-definitions';
+
+export { workflowInstances } from './workflow-instances';
+export type { WorkflowInstanceRow, NewWorkflowInstanceRow } from './workflow-instances';
+
+export { workflowStepExecutions } from './workflow-step-executions';
+export type { WorkflowStepExecutionRow, NewWorkflowStepExecutionRow } from './workflow-step-executions';
+
+export { workflowEventsOutbox } from './workflow-events-outbox';
+export type { WorkflowEventsOutboxRow, NewWorkflowEventsOutboxRow } from './workflow-events-outbox';
+
+export { workflowSideEffectsOutbox } from './workflow-side-effects-outbox';
+export type { WorkflowSideEffectsOutboxRow, NewWorkflowSideEffectsOutboxRow } from './workflow-side-effects-outbox';
+
+export { workflowStepReceipts } from './workflow-step-receipts';
+export type { WorkflowStepReceiptRow, NewWorkflowStepReceiptRow } from './workflow-step-receipts';
+
+export { workflowOutboxReceipts } from './workflow-outbox-receipts';
+export type { WorkflowOutboxReceiptRow, NewWorkflowOutboxReceiptRow } from './workflow-outbox-receipts';
 
 // @entity-gen:schema-barrel

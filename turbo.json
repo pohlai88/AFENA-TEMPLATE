@@ -1,14 +1,46 @@
 {
   "$schema": "https://turbo.build/schema.json",
   "globalDependencies": [
-    "**/.env.*local",
+    "**/.env",
+    "**/.env.*",
     "**/types/**/*"
   ],
   "globalPassThroughEnv": [
+    "NODE_ENV",
     "DATABASE_URL",
     "DATABASE_URL_RO",
+    "DATABASE_URL_MIGRATIONS",
+    "NEON_PROJECT_ID",
+    "NEON_API_KEY",
     "NEON_AUTH_BASE_URL",
-    "NEON_AUTH_COOKIE_SECRET"
+    "NEON_AUTH_COOKIE_SECRET",
+    "NEON_JWT_SECRET",
+    "NEON_DATA_API_URL",
+    "NEXT_PUBLIC_NEON_AUTH_URL",
+    "NEXT_PUBLIC_SITE_URL",
+    "NEXT_PUBLIC_APP_URL",
+    "NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY",
+    "JWKS_URL",
+    "R2_ACCOUNT_ID",
+    "R2_ACCESS_KEY_ID",
+    "R2_SECRET_ACCESS_KEY",
+    "R2_BUCKET_NAME",
+    "R2_PUBLIC_BASE_URL",
+    "STORAGE_PROVIDER",
+    "GITHUB_ID",
+    "GITHUB_SECRET",
+    "GOOGLE_CLIENT_ID",
+    "GOOGLE_CLIENT_SECRET",
+    "RESEND_API_KEY",
+    "DEFAULT_FROM_EMAIL",
+    "DEFAULT_FROM_NAME",
+    "SENTRY_DSN",
+    "STRIPE_SECRET_KEY",
+    "STRIPE_WEBHOOK_SECRET",
+    "ARCJET_KEY",
+    "LOG_LEVEL",
+    "PORT",
+    "BASE_URL"
   ],
   "tasks": {
     "build": {

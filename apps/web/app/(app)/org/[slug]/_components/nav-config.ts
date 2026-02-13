@@ -1,4 +1,4 @@
-import { FileText, Home, Settings, Shield, Trash2, Users } from 'lucide-react';
+import { FileText, GitBranch, Home, Settings, Shield, Trash2, Users } from 'lucide-react';
 
 import type { LucideIcon } from 'lucide-react';
 
@@ -53,6 +53,13 @@ export const NAV_ITEMS: NavItem[] = [
     icon: Trash2,
     group: 'system',
     commandPaletteAction: 'Open Trash',
+  },
+  {
+    label: 'Workflows',
+    href: (slug) => `/org/${slug}/settings/workflows`,
+    icon: GitBranch,
+    group: 'system',
+    commandPaletteAction: 'Open Workflows',
   },
   {
     label: 'Settings',

@@ -138,7 +138,7 @@ export class JobExecutor {
           .set({
             recordsSuccess: result.recordsCreated + result.recordsUpdated,
             recordsFailed: result.recordsFailed,
-            checkpointCursor: cursor as Cursor,
+            checkpointCursor: cursor,
           })
           .where(eq(migrationJobs.id, job.id));
 
@@ -222,7 +222,7 @@ export class JobExecutor {
   private async saveCheckpoint(jobId: string, cursor: Cursor): Promise<void> {
     await this.db
       .update(migrationJobs)
-      .set({ checkpointCursor: cursor as Cursor })
+      .set({ checkpointCursor: cursor })
       .where(eq(migrationJobs.id, jobId));
   }
 

@@ -1,7 +1,6 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { useState, useTransition } from 'react';
 
 import { Badge } from 'afena-ui/components/badge';
 import { Button } from 'afena-ui/components/button';
@@ -9,6 +8,7 @@ import { Input } from 'afena-ui/components/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from 'afena-ui/components/select';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from 'afena-ui/components/table';
 import { Plus, Trash2 } from 'lucide-react';
+import { useState, useTransition } from 'react';
 
 import { addRolePermission, removeRolePermission } from '@/app/actions/roles';
 
@@ -31,7 +31,7 @@ export function PermissionsTable({ permissions, roleId, isSystem }: PermissionsT
   const [verb, setVerb] = useState<string>('');
   const [scope, setScope] = useState<string>('org');
 
-  async function handleAdd() {
+  function handleAdd() {
     if (!entityType || !verb) return;
     startTransition(async () => {
       await addRolePermission({ roleId, entityType, verb, scope });
@@ -42,7 +42,7 @@ export function PermissionsTable({ permissions, roleId, isSystem }: PermissionsT
     });
   }
 
-  async function handleRemove(permissionId: string) {
+  function handleRemove(permissionId: string) {
     startTransition(async () => {
       await removeRolePermission(permissionId);
       router.refresh();
@@ -78,7 +78,7 @@ export function PermissionsTable({ permissions, roleId, isSystem }: PermissionsT
                     variant="ghost"
                     size="icon"
                     disabled={isPending}
-                    onClick={() => handleRemove(perm.id)}
+                    onClick={() => { handleRemove(perm.id); }}
                   >
                     <Trash2 className="h-4 w-4 text-destructive" />
                   </Button>
@@ -99,15 +99,16 @@ export function PermissionsTable({ permissions, roleId, isSystem }: PermissionsT
       {!isSystem && (
         <div className="flex items-end gap-3 rounded-lg border p-4">
           <div className="flex-1 space-y-1">
-            <label className="text-xs font-medium text-muted-foreground">Entity Type</label>
+            <label htmlFor="perm-entity-type" className="text-xs font-medium text-muted-foreground">Entity Type</label>
             <Input
+              id="perm-entity-type"
               placeholder="e.g. contacts, invoices"
               value={entityType}
               onChange={(e) => setEntityType(e.target.value)}
             />
           </div>
           <div className="w-[140px] space-y-1">
-            <label className="text-xs font-medium text-muted-foreground">Verb</label>
+            <label htmlFor="perm-verb" className="text-xs font-medium text-muted-foreground">Verb</label>
             <Select value={verb} onValueChange={setVerb}>
               <SelectTrigger>
                 <SelectValue placeholder="Select verb" />
@@ -120,7 +121,7 @@ export function PermissionsTable({ permissions, roleId, isSystem }: PermissionsT
             </Select>
           </div>
           <div className="w-[120px] space-y-1">
-            <label className="text-xs font-medium text-muted-foreground">Scope</label>
+            <label htmlFor="perm-scope" className="text-xs font-medium text-muted-foreground">Scope</label>
             <Select value={scope} onValueChange={setScope}>
               <SelectTrigger>
                 <SelectValue />

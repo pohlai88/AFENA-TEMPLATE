@@ -15,7 +15,9 @@
   },
   "dependencies": {
     "afena-canon": "workspace:*",
-    "afena-database": "workspace:*"
+    "afena-database": "workspace:*",
+    "drizzle-orm": "^0.44.0",
+    "zod": "catalog:"
   },
   "devDependencies": {
     "@types/node": "catalog:",

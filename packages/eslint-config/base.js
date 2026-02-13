@@ -133,6 +133,7 @@ module.exports = [
     languageOptions: {
       parserOptions: {
         projectService: true,
+        project: null, // explicit null — prevents IDE ESLint LS from injecting project alongside projectService
       },
     },
     rules: {

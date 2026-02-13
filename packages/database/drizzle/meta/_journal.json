@@ -218,6 +218,90 @@
       "when": 1771092000000,
       "tag": "0030_gap_fixes_webhooks_trace_discount",
       "breakpoints": true
+    },
+    {
+      "idx": 31,
+      "version": "7",
+      "when": 1771095600000,
+      "tag": "0031_master_data_spine",
+      "breakpoints": true
+    },
+    {
+      "idx": 32,
+      "version": "7",
+      "when": 1771099200000,
+      "tag": "0032_posting_bridge",
+      "breakpoints": true
+    },
+    {
+      "idx": 33,
+      "version": "7",
+      "when": 1771102800000,
+      "tag": "0033_sales_invoices",
+      "breakpoints": true
+    },
+    {
+      "idx": 34,
+      "version": "7",
+      "when": 1771106400000,
+      "tag": "0034_payments",
+      "breakpoints": true
+    },
+    {
+      "idx": 35,
+      "version": "7",
+      "when": 1771110000000,
+      "tag": "0035_selling_cycle",
+      "breakpoints": true
+    },
+    {
+      "idx": 36,
+      "version": "7",
+      "when": 1771113600000,
+      "tag": "0036_buying_cycle",
+      "breakpoints": true
+    },
+    {
+      "idx": 37,
+      "version": "7",
+      "when": 1771117200000,
+      "tag": "0037_quotations",
+      "breakpoints": true
+    },
+    {
+      "idx": 38,
+      "version": "7",
+      "when": 1771120800000,
+      "tag": "0038_doc_no_posting_guard",
+      "breakpoints": true
+    },
+    {
+      "idx": 39,
+      "version": "7",
+      "when": 1771124400000,
+      "tag": "0039_audit_partition_pre_agg",
+      "breakpoints": true
+    },
+    {
+      "idx": 40,
+      "version": "7",
+      "when": 1771128000000,
+      "tag": "0040_workflow_v2",
+      "breakpoints": true
+    },
+    {
+      "idx": 41,
+      "version": "7",
+      "when": 1771131600000,
+      "tag": "0041_audit_log_partition_cutover",
+      "breakpoints": true
+    },
+    {
+      "idx": 42,
+      "version": "7",
+      "when": 1771135200000,
+      "tag": "0042_workflow_v2_trigger_fixes",
+      "breakpoints": true
     }
   ]
 }

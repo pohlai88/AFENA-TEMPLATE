@@ -41,6 +41,36 @@ const ERP_ENTITY_TABLES = new Set([
   'companies',
   'sites',
   'contacts',
+  'sales_invoices',
+  'sales_orders',
+  'delivery_notes',
+  'purchase_orders',
+  'purchase_invoices',
+  'goods_receipts',
+  'payments',
+  'quotations',
+]);
+
+// Tables with 6-state posting_status (must have CHECK constraint)
+const POSTABLE_TABLES = new Set([
+  'sales_invoices',
+  'sales_orders',
+  'delivery_notes',
+  'purchase_orders',
+  'purchase_invoices',
+  'goods_receipts',
+  'payments',
+]);
+
+// Line tables with net_minor CHECK
+const LINE_TABLES = new Set([
+  'sales_invoice_lines',
+  'sales_order_lines',
+  'delivery_note_lines',
+  'purchase_order_lines',
+  'purchase_invoice_lines',
+  'goods_receipt_lines',
+  'quotation_lines',
 ]);
 
 // Money-related column name patterns (float is forbidden)
@@ -163,6 +193,25 @@ function lintSchema(): LintResult[] {
     // ── Rule 8: naming-convention (warning) ─────────────
     if (!PLURAL_SNAKE_RE.test(tableName)) {
       warnings.push(`[naming-convention] Table name "${tableName}" should be plural snake_case`);
+    }
+
+    // ── Rule 9: has-posting-status-check (error) ─────────
+    if (POSTABLE_TABLES.has(tableName)) {
+      if (!configStr.includes('posting_status')) {
+        errors.push('[has-posting-status-check] Postable table missing posting_status CHECK constraint');
+      }
+    }
+
+    // ── Rule 10: has-net-check (error) ───────────────────
+    if (LINE_TABLES.has(tableName)) {
+      if (!configStr.includes('net_check') && !configStr.includes('net_minor')) {
+        errors.push('[has-net-check] Line table missing net_minor CHECK constraint');
+      }
+    }
+
+    // ── Rule 11: has-updated-at (warning) ────────────────
+    if (columnNames.has('org_id') && !columnNames.has('updated_at')) {
+      warnings.push('[has-updated-at] Domain table missing updated_at column (set_updated_at trigger requires it)');
     }
 
     if (errors.length > 0 || warnings.length > 0) {

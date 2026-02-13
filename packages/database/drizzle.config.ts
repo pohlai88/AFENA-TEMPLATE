@@ -14,4 +14,5 @@ export default defineConfig({
   dbCredentials: {
     url: migrationUrl,
   },
+  tablesFilter: ['!_neon*', '!__drizzle*'],
 });

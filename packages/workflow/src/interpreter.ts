@@ -11,9 +11,9 @@ import {
 import type { ActionFn, ActionResult, ConditionFn, RuleContext } from './types';
 import type { MutationSpec } from 'afena-canon';
 
-function mustObject(x: unknown, msg: string): Record<string, any> {
+function mustObject(x: unknown, msg: string): Record<string, unknown> {
   if (!x || typeof x !== 'object' || Array.isArray(x)) throw new Error(msg);
-  return x as Record<string, any>;
+  return x as Record<string, unknown>;
 }
 
 /**
@@ -29,14 +29,14 @@ export function interpretCondition(json: unknown): ConditionFn {
     case 'never':
       return never;
     case 'fieldEquals':
-      if (!o.field) throw new Error('condition fieldEquals: missing field');
-      return fieldEquals(String(o.field), o.value);
+      if (!o.field || typeof o.field !== 'string') throw new Error('condition fieldEquals: missing field');
+      return fieldEquals(o.field, o.value);
     case 'fieldChanged':
-      if (!o.field) throw new Error('condition fieldChanged: missing field');
-      return fieldChanged(String(o.field));
+      if (!o.field || typeof o.field !== 'string') throw new Error('condition fieldChanged: missing field');
+      return fieldChanged(o.field);
     case 'actorHasRole':
-      if (!o.role) throw new Error('condition actorHasRole: missing role');
-      return actorHasRole(String(o.role));
+      if (!o.role || typeof o.role !== 'string') throw new Error('condition actorHasRole: missing role');
+      return actorHasRole(o.role);
     case 'allOf': {
       if (!Array.isArray(o.conditions))
         throw new Error('condition allOf: conditions must be array');
@@ -72,8 +72,8 @@ export function interpretAction(json: unknown): ActionFn {
       ): ActionResult => ({ ok: true, enrichedInput: fields });
     }
     case 'setField': {
-      if (!o.field) throw new Error('action setField: missing field');
-      const field = String(o.field);
+      if (!o.field || typeof o.field !== 'string') throw new Error('action setField: missing field');
+      const field = o.field;
       return (
         _spec: MutationSpec,
         _entity: Record<string, unknown> | null,
@@ -81,8 +81,8 @@ export function interpretAction(json: unknown): ActionFn {
       ): ActionResult => ({ ok: true, enrichedInput: { [field]: o.value } });
     }
     case 'block': {
-      const message = o.message
-        ? String(o.message)
+      const message = typeof o.message === 'string'
+        ? o.message
         : 'Blocked by workflow rule';
       return (
         _spec: MutationSpec,

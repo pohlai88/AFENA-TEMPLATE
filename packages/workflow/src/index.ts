@@ -25,3 +25,6 @@ export type {
   RuleEvaluationResult,
   RuleExecutionLog,
 } from './types';
+
+// ── V2: Contracted Workflow Envelope ────────────────────────
+export * from './v2';
