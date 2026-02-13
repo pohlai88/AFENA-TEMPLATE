@@ -285,9 +285,10 @@ describe('INVARIANT-GOVERNORS-01: buildGovernorConfig', () => {
     expect(config.applicationName).toBe('afena:web:org=org_1');
   });
 
-  it('reporting preset uses interactive timeouts', () => {
+  it('reporting preset uses 30s statement timeout', () => {
     const config = buildGovernorConfig('reporting', 'org_1', 'api');
-    expect(config.statementTimeoutMs).toBe(5_000);
+    expect(config.statementTimeoutMs).toBe(30_000);
+    expect(config.idleInTransactionTimeoutMs).toBe(60_000);
     expect(config.applicationName).toBe('afena:api:org=org_1');
   });
 });

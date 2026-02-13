@@ -124,4 +124,23 @@ export type { Communication, NewCommunication } from './communications';
 export { apiKeys } from './api-keys';
 export type { ApiKey, NewApiKey } from './api-keys';
 
+// ── Migration Engine ───────────────────────────────────────
+export { migrationJobs } from './migration-jobs';
+export type { MigrationJobRow, NewMigrationJobRow } from './migration-jobs';
+
+export { migrationLineage } from './migration-lineage';
+export type { MigrationLineageRow, NewMigrationLineageRow } from './migration-lineage';
+
+export { migrationRowSnapshots } from './migration-row-snapshots';
+export type { MigrationRowSnapshotRow, NewMigrationRowSnapshotRow } from './migration-row-snapshots';
+
+export { migrationConflicts } from './migration-conflicts';
+export type { MigrationConflictRow, NewMigrationConflictRow } from './migration-conflicts';
+
+export { migrationConflictResolutions } from './migration-conflict-resolutions';
+export type { MigrationConflictResolutionRow, NewMigrationConflictResolutionRow } from './migration-conflict-resolutions';
+
+export { migrationReports } from './migration-reports';
+export type { MigrationReportRow, NewMigrationReportRow } from './migration-reports';
+
 // @entity-gen:schema-barrel

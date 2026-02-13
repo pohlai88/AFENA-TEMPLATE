@@ -1,0 +1,93 @@
+# Afena Migration Engine
+
+Ratification-grade migration engine with atomicity guarantees, tightened SQL contracts, canonized writable fields, and CI seal stamps.
+
+## Architecture
+
+### 2 Global Atomicity Decisions
+
+**D0.1** — Reservation reclaim is single-statement atomic (`UPDATE ... RETURNING`)  
+**D0.2** — Delete reservation only by owned `lineageId`
+
+### 4 Surgical Fixes
+
+1. **Lineage State Machine** — Atomic winner semantics, no zombies, deterministic reclaim
+2. **Structural Identifiers** — Legacy column validation, no drift between Afena/legacy schemas
+3. **Entity-Agnostic Conflict Detection** — Strategy with `matchKeys`, total registry, auditable
+4. **Canonized Write-Shape Snapshots** — Kernel-owned writable field lists, no invalid state leaks
+
+### 4 CI Seal Stamps
+
+- **RES-01:** No zombie reservations
+- **SQL-02:** QueryBuilder rejects unknown legacy columns
+- **DET-03:** ConflictDetector registry is total
+- **SNAP-04:** Snapshot contains only writable fields
+
+## Package Structure
+
+```
+packages/migration/
+├── src/
+│   ├── types/           # Core types (Cursor, UpsertPlan, Query, etc.)
+│   ├── pipeline/        # Template Method pattern (MigrationPipelineBase)
+│   ├── adapters/        # Abstract Factory (SQL, CSV, API adapters)
+│   ├── strategies/      # Strategy pattern (ConflictDetector, ConflictStrategy)
+│   ├── transforms/      # Chain of Responsibility (TransformChain)
+│   ├── gates/           # Chain of Responsibility (PreflightGate, PostflightGate)
+│   ├── decorators/      # Decorator pattern (TimeoutAdapter, MetricsAdapter)
+│   ├── commands/        # Command pattern (RunMigrationBatchCommand)
+│   ├── builders/        # Builder pattern (MigrationJobBuilder)
+│   ├── worker/          # Graphile Worker integration
+│   ├── audit/           # Canonical JSON hashing, signed reports
+│   └── __tests__/       # CI seal stamp tests
+│       └── invariants/
+└── package.json
+```
+
+## Implementation Status
+
+- [x] Package structure created
+- [x] Core types defined
+- [x] Pipeline base with atomic reservations (Fix 1)
+- [ ] Structural QueryBuilder (Fix 2)
+- [ ] Entity-agnostic conflict detection (Fix 3)
+- [ ] Canonized write-shape snapshots (Fix 4)
+- [ ] CI seal stamp tests
+- [ ] Database schema migration
+- [ ] Dependencies wired
+
+## Usage
+
+```typescript
+import { MigrationPipelineBase } from 'afena-migration/pipeline';
+import { getConflictDetector } from 'afena-migration/strategies';
+
+// Implement concrete pipeline
+class SqlMigrationPipeline extends MigrationPipelineBase {
+  // ... implementation
+}
+
+// Run migration
+const pipeline = new SqlMigrationPipeline(job, context);
+const result = await pipeline.run();
+```
+
+## Dependencies
+
+- `afena-canon` — Entity types, canonized field lists
+- `afena-crud` — Mutate kernel
+- `afena-database` — Drizzle schema, DB connection
+- `afena-logger` — Pino logging
+- `graphile-worker` — Background job processing
+- `pg` — PostgreSQL client
+
+## Testing
+
+```bash
+pnpm test                    # All tests
+pnpm test:invariants         # CI seal stamps only
+```
+
+## License
+
+Private

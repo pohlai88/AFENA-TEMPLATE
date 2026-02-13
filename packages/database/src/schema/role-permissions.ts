@@ -40,7 +40,7 @@ export const rolePermissions = pgTable(
     check('role_perms_org_not_empty', sql`org_id <> ''`),
     check(
       'role_perms_verb_valid',
-      sql`verb IN ('create', 'update', 'delete', 'submit', 'cancel', 'amend', 'approve', 'reject', 'restore')`,
+      sql`verb IN ('create', 'update', 'delete', 'submit', 'cancel', 'amend', 'approve', 'reject', 'restore', '*')`,
     ),
     check(
       'role_perms_scope_valid',

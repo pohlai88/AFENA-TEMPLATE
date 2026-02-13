@@ -24,8 +24,8 @@ const DEFAULT_BACKGROUND: Omit<GovernorConfig, 'applicationName'> = {
 };
 
 const DEFAULT_REPORTING: Omit<GovernorConfig, 'applicationName'> = {
-  statementTimeoutMs: 5_000,
-  idleInTransactionTimeoutMs: 20_000,
+  statementTimeoutMs: 30_000,
+  idleInTransactionTimeoutMs: 60_000,
 };
 
 export type { GovernorPreset };
