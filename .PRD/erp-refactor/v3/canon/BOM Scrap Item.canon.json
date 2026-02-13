@@ -1,0 +1,263 @@
+{
+  "audit": {
+    "trackChanges": true
+  },
+  "canonVersion": "1.0.0",
+  "childTables": [],
+  "doctypeId": "erpnext:Manufacturing:BOM Scrap Item",
+  "events": [
+    {
+      "event": "validate",
+      "handlers": [
+        "erpnext.support.doctype.service_level_agreement.service_level_agreement.apply",
+        "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record.check_for_running_deletion_job"
+      ],
+      "handlersParsed": [
+        {
+          "attrPath": "apply",
+          "module": "erpnext.support.doctype.service_level_agreement.service_level_agreement"
+        },
+        {
+          "attrPath": "check_for_running_deletion_job",
+          "module": "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record"
+        }
+      ]
+    }
+  ],
+  "fieldOrder": [
+    "item_code",
+    "column_break_2",
+    "item_name",
+    "quantity_and_rate",
+    "stock_qty",
+    "rate",
+    "amount",
+    "column_break_6",
+    "stock_uom",
+    "base_rate",
+    "base_amount"
+  ],
+  "fields": [
+    {
+      "constraints": {},
+      "fieldname": "item_code",
+      "fieldtype": "link",
+      "label": "Item Code",
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Item"
+      },
+      "optionsRaw": "Item",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Item",
+        "kind": "static"
+      },
+      "requiredStatic": true,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_2",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "item_name",
+      "fieldtype": "data",
+      "label": "Item Name",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "quantity_and_rate",
+      "fieldtype": "layout:section",
+      "label": "Quantity and Rate",
+      "layout": {
+        "section": "Quantity and Rate"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "stock_qty",
+      "fieldtype": "float",
+      "label": "Qty",
+      "layout": {
+        "section": "Quantity and Rate"
+      },
+      "permlevel": 0,
+      "requiredStatic": true,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "rate",
+      "fieldtype": "currency",
+      "label": "Rate",
+      "layout": {
+        "section": "Quantity and Rate"
+      },
+      "optionsParsed": {
+        "field": "currency",
+        "kind": "currency_field"
+      },
+      "optionsRaw": "currency",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "amount",
+      "fieldtype": "currency",
+      "label": "Amount",
+      "layout": {
+        "section": "Quantity and Rate"
+      },
+      "optionsParsed": {
+        "field": "currency",
+        "kind": "currency_field"
+      },
+      "optionsRaw": "currency",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_6",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "Quantity and Rate"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "stock_uom",
+      "fieldtype": "link",
+      "label": "Stock UOM",
+      "layout": {
+        "column": 1,
+        "section": "Quantity and Rate"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "UOM"
+      },
+      "optionsRaw": "UOM",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "UOM",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "base_rate",
+      "fieldtype": "currency",
+      "label": "Basic Rate (Company Currency)",
+      "layout": {
+        "column": 1,
+        "section": "Quantity and Rate"
+      },
+      "optionsParsed": {
+        "field": "Company:company:default_currency",
+        "kind": "currency_field"
+      },
+      "optionsRaw": "Company:company:default_currency",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "base_amount",
+      "fieldtype": "currency",
+      "label": "Basic Amount (Company Currency)",
+      "layout": {
+        "column": 1,
+        "section": "Quantity and Rate"
+      },
+      "optionsParsed": {
+        "field": "Company:company:default_currency",
+        "kind": "currency_field"
+      },
+      "optionsRaw": "Company:company:default_currency",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true,
+        "readOnly": true
+      },
+      "unique": false
+    }
+  ],
+  "identity": {
+    "app": "erpnext",
+    "isSingle": false,
+    "isSubmittable": false,
+    "isTree": false,
+    "module": "Manufacturing",
+    "naming": {
+      "strategy": "hash"
+    }
+  },
+  "name": "BOM Scrap Item",
+  "permissions": [],
+  "ui": {
+    "searchFields": [],
+    "showNameInGlobalSearch": false,
+    "sortField": "creation",
+    "sortOrder": "DESC"
+  },
+  "workflows": [
+    {
+      "kind": "unavailable"
+    }
+  ]
+}

@@ -1,0 +1,463 @@
+{
+  "audit": {
+    "trackChanges": true
+  },
+  "canonVersion": "1.0.0",
+  "childTables": [],
+  "doctypeId": "erpnext:Stock:Quality Inspection Reading",
+  "events": [
+    {
+      "event": "validate",
+      "handlers": [
+        "erpnext.support.doctype.service_level_agreement.service_level_agreement.apply",
+        "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record.check_for_running_deletion_job"
+      ],
+      "handlersParsed": [
+        {
+          "attrPath": "apply",
+          "module": "erpnext.support.doctype.service_level_agreement.service_level_agreement"
+        },
+        {
+          "attrPath": "check_for_running_deletion_job",
+          "module": "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record"
+        }
+      ]
+    }
+  ],
+  "fieldOrder": [
+    "specification",
+    "parameter_group",
+    "status",
+    "value",
+    "numeric",
+    "manual_inspection",
+    "column_break_4",
+    "min_value",
+    "max_value",
+    "formula_based_criteria",
+    "acceptance_formula",
+    "section_break_3",
+    "reading_value",
+    "section_break_14",
+    "reading_1",
+    "reading_2",
+    "reading_3",
+    "reading_4",
+    "column_break_10",
+    "reading_5",
+    "reading_6",
+    "reading_7",
+    "reading_8",
+    "column_break_14",
+    "reading_9",
+    "reading_10"
+  ],
+  "fields": [
+    {
+      "constraints": {},
+      "fieldname": "specification",
+      "fieldtype": "link",
+      "label": "Parameter",
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Quality Inspection Parameter"
+      },
+      "optionsRaw": "Quality Inspection Parameter",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Quality Inspection Parameter",
+        "kind": "static"
+      },
+      "requiredStatic": true,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fetchFrom": "specification.parameter_group",
+      "fieldname": "parameter_group",
+      "fieldtype": "link",
+      "label": "Parameter Group",
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Quality Inspection Parameter Group"
+      },
+      "optionsRaw": "Quality Inspection Parameter Group",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Quality Inspection Parameter Group",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "Accepted",
+      "fieldname": "status",
+      "fieldtype": "select",
+      "label": "Status",
+      "optionsParsed": {
+        "choices": [
+          "Accepted",
+          "Rejected"
+        ],
+        "kind": "select"
+      },
+      "optionsRaw": "\nAccepted\nRejected",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:(!doc.formula_based_criteria && !doc.numeric)",
+      "fieldname": "value",
+      "fieldtype": "data",
+      "label": "Acceptance Criteria Value",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "1",
+      "fieldname": "numeric",
+      "fieldtype": "check",
+      "label": "Numeric",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "manual_inspection",
+      "fieldtype": "check",
+      "label": "Manual Inspection",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "description": "Set the status manually."
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_4",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:(!doc.formula_based_criteria && doc.numeric)",
+      "fieldname": "min_value",
+      "fieldtype": "float",
+      "label": "Minimum Value",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "description": "Applied on each reading."
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:(!doc.formula_based_criteria && doc.numeric)",
+      "fieldname": "max_value",
+      "fieldtype": "float",
+      "label": "Maximum Value",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "description": "Applied on each reading."
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "formula_based_criteria",
+      "fieldtype": "check",
+      "label": "Formula Based Criteria",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "formula_based_criteria",
+      "fieldname": "acceptance_formula",
+      "fieldtype": "code",
+      "label": "Acceptance Criteria Formula",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "description": "Simple Python formula applied on Reading fields.<br> Numeric eg. 1: <b>reading_1 &gt; 0.2 and reading_1 &lt; 0.5</b><br>\nNumeric eg. 2: <b>mean &gt; 3.5</b> (mean of populated fields)<br>\nValue based eg.:  <b>reading_value in (\"A\", \"B\", \"C\")</b>"
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:!doc.numeric",
+      "fieldname": "section_break_3",
+      "fieldtype": "layout:section",
+      "label": "Value Based Inspection",
+      "layout": {
+        "section": "Value Based Inspection"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:!doc.numeric",
+      "fieldname": "reading_value",
+      "fieldtype": "data",
+      "label": "Reading Value",
+      "layout": {
+        "section": "Value Based Inspection"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "numeric",
+      "fieldname": "section_break_14",
+      "fieldtype": "layout:section",
+      "label": "Numeric Inspection",
+      "layout": {
+        "section": "Numeric Inspection"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "reading_1",
+      "fieldtype": "data",
+      "label": "Reading 1",
+      "layout": {
+        "section": "Numeric Inspection"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "reading_2",
+      "fieldtype": "data",
+      "label": "Reading 2",
+      "layout": {
+        "section": "Numeric Inspection"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "reading_3",
+      "fieldtype": "data",
+      "label": "Reading 3",
+      "layout": {
+        "section": "Numeric Inspection"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "reading_4",
+      "fieldtype": "data",
+      "label": "Reading 4",
+      "layout": {
+        "section": "Numeric Inspection"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_10",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "Numeric Inspection"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "reading_5",
+      "fieldtype": "data",
+      "label": "Reading 5",
+      "layout": {
+        "column": 1,
+        "section": "Numeric Inspection"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "reading_6",
+      "fieldtype": "data",
+      "label": "Reading 6",
+      "layout": {
+        "column": 1,
+        "section": "Numeric Inspection"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "reading_7",
+      "fieldtype": "data",
+      "label": "Reading 7",
+      "layout": {
+        "column": 1,
+        "section": "Numeric Inspection"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "reading_8",
+      "fieldtype": "data",
+      "label": "Reading 8",
+      "layout": {
+        "column": 1,
+        "section": "Numeric Inspection"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_14",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 2,
+        "section": "Numeric Inspection"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "reading_9",
+      "fieldtype": "data",
+      "label": "Reading 9",
+      "layout": {
+        "column": 2,
+        "section": "Numeric Inspection"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "reading_10",
+      "fieldtype": "data",
+      "label": "Reading 10",
+      "layout": {
+        "column": 2,
+        "section": "Numeric Inspection"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    }
+  ],
+  "identity": {
+    "app": "erpnext",
+    "isSingle": false,
+    "isSubmittable": false,
+    "isTree": false,
+    "module": "Stock",
+    "naming": {
+      "strategy": "hash"
+    }
+  },
+  "name": "Quality Inspection Reading",
+  "permissions": [],
+  "ui": {
+    "searchFields": [],
+    "showNameInGlobalSearch": false,
+    "sortField": "creation",
+    "sortOrder": "DESC"
+  },
+  "workflows": [
+    {
+      "kind": "unavailable"
+    }
+  ]
+}

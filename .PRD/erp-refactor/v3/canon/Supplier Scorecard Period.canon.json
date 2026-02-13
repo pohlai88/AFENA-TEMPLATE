@@ -1,0 +1,304 @@
+{
+  "audit": {
+    "trackChanges": false
+  },
+  "canonVersion": "1.0.0",
+  "childTables": [
+    {
+      "childDoctype": "Supplier Scorecard Scoring Criteria",
+      "parentField": "criteria",
+      "required": true
+    },
+    {
+      "childDoctype": "Supplier Scorecard Scoring Variable",
+      "parentField": "variables",
+      "required": false
+    }
+  ],
+  "doctypeId": "erpnext:Buying:Supplier Scorecard Period",
+  "events": [
+    {
+      "event": "validate",
+      "handlers": [
+        "erpnext.support.doctype.service_level_agreement.service_level_agreement.apply",
+        "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record.check_for_running_deletion_job"
+      ],
+      "handlersParsed": [
+        {
+          "attrPath": "apply",
+          "module": "erpnext.support.doctype.service_level_agreement.service_level_agreement"
+        },
+        {
+          "attrPath": "check_for_running_deletion_job",
+          "module": "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record"
+        }
+      ]
+    }
+  ],
+  "fieldOrder": [
+    "supplier",
+    "naming_series",
+    "total_score",
+    "column_break_2",
+    "start_date",
+    "end_date",
+    "section_break_11",
+    "criteria",
+    "variables",
+    "sec_ref",
+    "scorecard",
+    "amended_from"
+  ],
+  "fields": [
+    {
+      "constraints": {},
+      "fieldname": "supplier",
+      "fieldtype": "link",
+      "label": "Supplier",
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Supplier"
+      },
+      "optionsRaw": "Supplier",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Supplier",
+        "kind": "static"
+      },
+      "requiredStatic": true,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "naming_series",
+      "fieldtype": "select",
+      "label": "Naming Series",
+      "optionsParsed": {
+        "kind": "naming_series",
+        "prefixes": [
+          "PU-SSP-.YYYY.-"
+        ]
+      },
+      "optionsRaw": "PU-SSP-.YYYY.-",
+      "permlevel": 0,
+      "requiredStatic": true,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "total_score",
+      "fieldtype": "percent",
+      "label": "Period Score",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "inListView": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_2",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "start_date",
+      "fieldtype": "date",
+      "label": "Start Date",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": true,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "end_date",
+      "fieldtype": "date",
+      "label": "End Date",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": true,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "section_break_11",
+      "fieldtype": "layout:section",
+      "label": "Calculations",
+      "layout": {
+        "section": "Calculations"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "collapsible": true
+      },
+      "unique": false
+    },
+    {
+      "childDoctype": "Supplier Scorecard Scoring Criteria",
+      "constraints": {},
+      "fieldname": "criteria",
+      "fieldtype": "table",
+      "label": "Criteria",
+      "layout": {
+        "section": "Calculations"
+      },
+      "optionsParsed": {
+        "doctype": "Supplier Scorecard Scoring Criteria",
+        "kind": "child_doctype"
+      },
+      "optionsRaw": "Supplier Scorecard Scoring Criteria",
+      "permlevel": 0,
+      "requiredStatic": true,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "childDoctype": "Supplier Scorecard Scoring Variable",
+      "constraints": {},
+      "fieldname": "variables",
+      "fieldtype": "table",
+      "label": "Variables",
+      "layout": {
+        "section": "Calculations"
+      },
+      "optionsParsed": {
+        "doctype": "Supplier Scorecard Scoring Variable",
+        "kind": "child_doctype"
+      },
+      "optionsRaw": "Supplier Scorecard Scoring Variable",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "sec_ref",
+      "fieldtype": "layout:section",
+      "label": "Reference",
+      "layout": {
+        "section": "Reference"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "collapsible": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "scorecard",
+      "fieldtype": "link",
+      "label": "Supplier Scorecard Setup",
+      "layout": {
+        "section": "Reference"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Supplier Scorecard"
+      },
+      "optionsRaw": "Supplier Scorecard",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Supplier Scorecard",
+        "kind": "static"
+      },
+      "requiredStatic": true,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "amended_from",
+      "fieldtype": "link",
+      "label": "Amended From",
+      "layout": {
+        "section": "Reference"
+      },
+      "noCopy": true,
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Supplier Scorecard Period"
+      },
+      "optionsRaw": "Supplier Scorecard Period",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Supplier Scorecard Period",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true,
+        "readOnly": true
+      },
+      "unique": false
+    }
+  ],
+  "identity": {
+    "app": "erpnext",
+    "isSingle": false,
+    "isSubmittable": true,
+    "isTree": false,
+    "module": "Buying",
+    "naming": {
+      "seriesField": "naming_series",
+      "seriesPrefix": "PU-SSP-.YYYY.-",
+      "strategy": "series"
+    }
+  },
+  "name": "Supplier Scorecard Period",
+  "permissions": [
+    {
+      "actions": {
+        "cancel": true,
+        "create": true,
+        "delete": true,
+        "email": true,
+        "export": true,
+        "print": true,
+        "read": true,
+        "report": true,
+        "share": true,
+        "submit": true,
+        "write": true
+      },
+      "permlevel": 0,
+      "role": "System Manager"
+    }
+  ],
+  "ui": {
+    "searchFields": [],
+    "showNameInGlobalSearch": false,
+    "sortField": "creation",
+    "sortOrder": "DESC"
+  },
+  "workflows": [
+    {
+      "kind": "unavailable"
+    }
+  ]
+}

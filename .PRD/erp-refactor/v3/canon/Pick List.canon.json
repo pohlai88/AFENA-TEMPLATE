@@ -1,0 +1,686 @@
+{
+  "audit": {
+    "trackChanges": true
+  },
+  "canonVersion": "1.0.0",
+  "childTables": [
+    {
+      "childDoctype": "Pick List Item",
+      "parentField": "locations",
+      "required": false
+    }
+  ],
+  "doctypeId": "erpnext:Stock:Pick List",
+  "events": [
+    {
+      "event": "validate",
+      "handlers": [
+        "erpnext.support.doctype.service_level_agreement.service_level_agreement.apply",
+        "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record.check_for_running_deletion_job"
+      ],
+      "handlersParsed": [
+        {
+          "attrPath": "apply",
+          "module": "erpnext.support.doctype.service_level_agreement.service_level_agreement"
+        },
+        {
+          "attrPath": "check_for_running_deletion_job",
+          "module": "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record"
+        }
+      ]
+    }
+  ],
+  "fieldOrder": [
+    "naming_series",
+    "company",
+    "purpose",
+    "customer",
+    "customer_name",
+    "work_order",
+    "material_request",
+    "for_qty",
+    "column_break_4",
+    "parent_warehouse",
+    "consider_rejected_warehouses",
+    "get_item_locations",
+    "pick_manually",
+    "ignore_pricing_rule",
+    "section_break_6",
+    "scan_barcode",
+    "column_break_13",
+    "scan_mode",
+    "prompt_qty",
+    "section_break_15",
+    "locations",
+    "amended_from",
+    "print_settings_section",
+    "group_same_items",
+    "status_section",
+    "status",
+    "column_break_qyam",
+    "delivery_status",
+    "per_delivered"
+  ],
+  "fields": [
+    {
+      "constraints": {},
+      "fieldname": "naming_series",
+      "fieldtype": "select",
+      "label": "Series",
+      "optionsParsed": {
+        "kind": "naming_series",
+        "prefixes": [
+          "STO-PICK-.YYYY.-"
+        ]
+      },
+      "optionsRaw": "STO-PICK-.YYYY.-",
+      "permlevel": 0,
+      "requiredStatic": true,
+      "setOnlyOnce": true,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "company",
+      "fieldtype": "link",
+      "label": "Company",
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Company"
+      },
+      "optionsRaw": "Company",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Company",
+        "kind": "static"
+      },
+      "requiredStatic": true,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "Material Transfer for Manufacture",
+      "fieldname": "purpose",
+      "fieldtype": "select",
+      "label": "Purpose",
+      "optionsParsed": {
+        "choices": [
+          "Material Transfer for Manufacture",
+          "Material Transfer",
+          "Delivery"
+        ],
+        "kind": "select"
+      },
+      "optionsRaw": "Material Transfer for Manufacture\nMaterial Transfer\nDelivery",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:doc.purpose==='Delivery'",
+      "fieldname": "customer",
+      "fieldtype": "link",
+      "label": "Customer",
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Customer"
+      },
+      "optionsRaw": "Customer",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Customer",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:doc.purpose==='Delivery' && doc.customer",
+      "fetchFrom": "customer.customer_name",
+      "fieldname": "customer_name",
+      "fieldtype": "data",
+      "label": "Customer Name",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:doc.purpose==='Material Transfer for Manufacture'",
+      "fieldname": "work_order",
+      "fieldtype": "link",
+      "label": "Work Order",
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Work Order"
+      },
+      "optionsRaw": "Work Order",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Work Order",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:['Material Transfer', 'Material Issue'].includes(doc.purpose)",
+      "fieldname": "material_request",
+      "fieldtype": "link",
+      "label": "Material Request",
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Material Request"
+      },
+      "optionsRaw": "Material Request",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Material Request",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:doc.purpose==='Material Transfer for Manufacture'",
+      "fieldname": "for_qty",
+      "fieldtype": "float",
+      "label": "Qty of Finished Goods Item",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "description": "Qty of raw materials will be decided based on the qty of the Finished Goods Item",
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_4",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "parent_warehouse",
+      "fieldtype": "link",
+      "label": "Warehouse",
+      "layout": {
+        "column": 1
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Warehouse"
+      },
+      "optionsRaw": "Warehouse",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Warehouse",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "description": "Items under this warehouse will be suggested"
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "consider_rejected_warehouses",
+      "fieldtype": "check",
+      "label": "Consider Rejected Warehouses",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "description": "Enable it if users want to consider rejected materials to dispatch."
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:doc.docstatus===0",
+      "fieldname": "get_item_locations",
+      "fieldtype": "button",
+      "label": "Get Item Locations",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "pick_manually",
+      "fieldtype": "check",
+      "label": "Pick Manually",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "description": "If enabled then system won't override the picked qty / batches / serial numbers / warehouse."
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "ignore_pricing_rule",
+      "fieldtype": "check",
+      "label": "Ignore Pricing Rule",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "description": "If enabled then system won't apply the pricing rule on the delivery note which will be create from the pick list"
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:!doc.docstatus",
+      "fieldname": "section_break_6",
+      "fieldtype": "layout:section",
+      "layout": {
+        "section": "section_break_6"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "scan_barcode",
+      "fieldtype": "data",
+      "label": "Scan Barcode",
+      "layout": {
+        "section": "section_break_6"
+      },
+      "optionsParsed": {
+        "kind": "other",
+        "value": "Barcode"
+      },
+      "optionsRaw": "Barcode",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_13",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "section_break_6"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "scan_mode",
+      "fieldtype": "check",
+      "label": "Scan Mode",
+      "layout": {
+        "column": 1,
+        "section": "section_break_6"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "description": "If checked, picked qty won't automatically be fulfilled on submit of pick list."
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "prompt_qty",
+      "fieldtype": "check",
+      "label": "Prompt Qty",
+      "layout": {
+        "column": 1,
+        "section": "section_break_6"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "section_break_15",
+      "fieldtype": "layout:section",
+      "layout": {
+        "section": "section_break_15"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "childDoctype": "Pick List Item",
+      "constraints": {},
+      "fieldname": "locations",
+      "fieldtype": "table",
+      "label": "Item Locations",
+      "layout": {
+        "section": "section_break_15"
+      },
+      "optionsParsed": {
+        "doctype": "Pick List Item",
+        "kind": "child_doctype"
+      },
+      "optionsRaw": "Pick List Item",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "amended_from",
+      "fieldtype": "link",
+      "label": "Amended From",
+      "layout": {
+        "section": "section_break_15"
+      },
+      "noCopy": true,
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Pick List"
+      },
+      "optionsRaw": "Pick List",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Pick List",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "print_settings_section",
+      "fieldtype": "layout:section",
+      "label": "Print Settings",
+      "layout": {
+        "section": "Print Settings"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "collapsible": true
+      },
+      "unique": false
+    },
+    {
+      "allowOnSubmit": true,
+      "constraints": {},
+      "default": "0",
+      "fieldname": "group_same_items",
+      "fieldtype": "check",
+      "label": "Group Same Items",
+      "layout": {
+        "section": "Print Settings"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "status_section",
+      "fieldtype": "layout:section",
+      "label": "Status",
+      "layout": {
+        "section": "Status"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "collapsible": true,
+        "printHide": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "Draft",
+      "fieldname": "status",
+      "fieldtype": "select",
+      "label": "Status",
+      "layout": {
+        "section": "Status"
+      },
+      "noCopy": true,
+      "optionsParsed": {
+        "choices": [
+          "Draft",
+          "Open",
+          "Partly Delivered",
+          "Completed",
+          "Cancelled"
+        ],
+        "kind": "select"
+      },
+      "optionsRaw": "Draft\nOpen\nPartly Delivered\nCompleted\nCancelled",
+      "permlevel": 0,
+      "requiredStatic": true,
+      "ui": {
+        "hidden": true,
+        "inStandardFilter": true,
+        "printHide": true,
+        "readOnly": true,
+        "reportHide": true,
+        "searchIndex": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_qyam",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "Status"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "delivery_status",
+      "fieldtype": "select",
+      "label": "Delivery Status",
+      "layout": {
+        "column": 1,
+        "section": "Status"
+      },
+      "noCopy": true,
+      "optionsParsed": {
+        "choices": [
+          "Not Delivered",
+          "Fully Delivered",
+          "Partly Delivered"
+        ],
+        "kind": "select"
+      },
+      "optionsRaw": "Not Delivered\nFully Delivered\nPartly Delivered",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "hidden": true,
+        "inStandardFilter": true,
+        "printHide": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:!doc.__islocal && doc.purpose === \"Delivery\"",
+      "fieldname": "per_delivered",
+      "fieldtype": "percent",
+      "label": "% Delivered",
+      "layout": {
+        "column": 1,
+        "section": "Status"
+      },
+      "noCopy": true,
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "description": "% of materials delivered against this Pick List",
+        "printHide": true,
+        "readOnly": true
+      },
+      "unique": false
+    }
+  ],
+  "identity": {
+    "app": "erpnext",
+    "isSingle": false,
+    "isSubmittable": true,
+    "isTree": false,
+    "module": "Stock",
+    "naming": {
+      "seriesField": "naming_series",
+      "seriesPrefix": "STO-PICK-.YYYY.-",
+      "strategy": "series"
+    }
+  },
+  "name": "Pick List",
+  "permissions": [
+    {
+      "actions": {
+        "amend": true,
+        "cancel": true,
+        "create": true,
+        "delete": true,
+        "email": true,
+        "export": true,
+        "print": true,
+        "read": true,
+        "report": true,
+        "share": true,
+        "submit": true,
+        "write": true
+      },
+      "permlevel": 0,
+      "role": "Manufacturing Manager"
+    },
+    {
+      "actions": {
+        "amend": true,
+        "cancel": true,
+        "create": true,
+        "delete": true,
+        "email": true,
+        "export": true,
+        "print": true,
+        "read": true,
+        "report": true,
+        "share": true,
+        "submit": true,
+        "write": true
+      },
+      "permlevel": 0,
+      "role": "Manufacturing User"
+    },
+    {
+      "actions": {
+        "amend": true,
+        "cancel": true,
+        "create": true,
+        "delete": true,
+        "email": true,
+        "export": true,
+        "print": true,
+        "read": true,
+        "report": true,
+        "share": true,
+        "submit": true,
+        "write": true
+      },
+      "permlevel": 0,
+      "role": "Stock Manager"
+    },
+    {
+      "actions": {
+        "amend": true,
+        "cancel": true,
+        "create": true,
+        "delete": true,
+        "email": true,
+        "export": true,
+        "print": true,
+        "read": true,
+        "report": true,
+        "share": true,
+        "submit": true,
+        "write": true
+      },
+      "permlevel": 0,
+      "role": "Stock User"
+    }
+  ],
+  "ui": {
+    "searchFields": [],
+    "showNameInGlobalSearch": false,
+    "sortField": "modified",
+    "sortOrder": "DESC"
+  },
+  "workflows": [
+    {
+      "kind": "unavailable"
+    }
+  ]
+}

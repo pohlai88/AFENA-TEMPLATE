@@ -1,0 +1,79 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Debug Current Vitest Test",
+      "type": "node",
+      "request": "launch",
+      "autoAttachChildProcesses": true,
+      "skipFiles": ["<node_internals>/**", "**/node_modules/**"],
+      "program": "${workspaceFolder}/node_modules/vitest/vitest.mjs",
+      "args": ["run", "${relativeFile}", "--test-timeout=0", "--no-file-parallelism"],
+      "smartStep": true,
+      "console": "integratedTerminal",
+      "env": {
+        "NODE_ENV": "test"
+      }
+    },
+    {
+      "name": "Debug Vitest Watch",
+      "type": "node",
+      "request": "launch",
+      "autoAttachChildProcesses": true,
+      "skipFiles": ["<node_internals>/**", "**/node_modules/**"],
+      "program": "${workspaceFolder}/node_modules/vitest/vitest.mjs",
+      "args": ["${relativeFile}", "--test-timeout=0", "--no-file-parallelism"],
+      "smartStep": true,
+      "console": "integratedTerminal",
+      "env": {
+        "NODE_ENV": "test"
+      }
+    },
+    {
+      "name": "Run Vitest Browser",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/node_modules/vitest/vitest.mjs",
+      "console": "integratedTerminal",
+      "args": ["--inspect-brk", "--browser", "--no-file-parallelism"],
+      "env": {
+        "NODE_ENV": "test"
+      }
+    },
+    {
+      "name": "Attach to Vitest Browser",
+      "type": "chrome",
+      "request": "attach",
+      "port": 9229
+    },
+    {
+      "name": "Debug Playwright Test",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/node_modules/.bin/playwright",
+      "args": ["test", "--debug", "${relativeFile}"],
+      "console": "integratedTerminal",
+      "env": {
+        "PWDEBUG": "1"
+      }
+    },
+    {
+      "name": "Debug Playwright (Chromium only)",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/node_modules/.bin/playwright",
+      "args": ["test", "--project=chromium", "--debug", "${relativeFile}"],
+      "console": "integratedTerminal",
+      "env": {
+        "PWDEBUG": "1"
+      }
+    }
+  ],
+  "compounds": [
+    {
+      "name": "Debug Vitest Browser",
+      "configurations": ["Attach to Vitest Browser", "Run Vitest Browser"],
+      "stopAll": true
+    }
+  ]
+}

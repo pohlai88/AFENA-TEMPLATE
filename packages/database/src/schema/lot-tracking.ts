@@ -18,7 +18,7 @@ export const lotTracking = pgTable(
   {
     ...baseEntityColumns,
     companyId: uuid('company_id').notNull(),
-    productId: uuid('product_id').notNull(),
+    itemId: uuid('item_id').notNull(),
     trackingType: text('tracking_type').notNull(),
     trackingNo: text('tracking_no').notNull(),
     productionDate: date('production_date'),
@@ -34,13 +34,13 @@ export const lotTracking = pgTable(
   },
   (table) => [
     index('lot_track_org_id_idx').on(table.orgId, table.id),
-    index('lot_track_product_idx').on(table.orgId, table.productId),
+    index('lot_track_item_idx').on(table.orgId, table.itemId),
     index('lot_track_company_idx').on(table.orgId, table.companyId),
-    index('lot_track_expiry_idx').on(table.orgId, table.productId, table.expiryDate),
+    index('lot_track_expiry_idx').on(table.orgId, table.itemId, table.expiryDate),
     uniqueIndex('lot_track_org_product_no_uniq').on(
       table.orgId,
       table.companyId,
-      table.productId,
+      table.itemId,
       table.trackingNo,
     ),
     check('lot_track_org_not_empty', sql`org_id <> ''`),

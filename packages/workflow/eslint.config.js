@@ -29,4 +29,11 @@ module.exports = [
       ],
     },
   },
+  {
+    files: ['src/v2/nodes/*.ts'],
+    rules: {
+      // Node handlers implement async WorkflowNodeHandler interface but may return sync results
+      '@typescript-eslint/require-await': 'off',
+    },
+  },
 ];

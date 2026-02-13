@@ -1,0 +1,166 @@
+{
+  "audit": {
+    "trackChanges": false
+  },
+  "canonVersion": "1.0.0",
+  "childTables": [],
+  "doctypeId": "erpnext:Manufacturing:Production Plan Sales Order",
+  "events": [
+    {
+      "event": "validate",
+      "handlers": [
+        "erpnext.support.doctype.service_level_agreement.service_level_agreement.apply",
+        "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record.check_for_running_deletion_job"
+      ],
+      "handlersParsed": [
+        {
+          "attrPath": "apply",
+          "module": "erpnext.support.doctype.service_level_agreement.service_level_agreement"
+        },
+        {
+          "attrPath": "check_for_running_deletion_job",
+          "module": "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record"
+        }
+      ]
+    }
+  ],
+  "fieldOrder": [
+    "sales_order",
+    "sales_order_date",
+    "col_break1",
+    "customer",
+    "grand_total",
+    "status"
+  ],
+  "fields": [
+    {
+      "constraints": {},
+      "fieldname": "sales_order",
+      "fieldtype": "link",
+      "label": "Sales Order",
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Sales Order"
+      },
+      "optionsRaw": "Sales Order",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Sales Order",
+        "kind": "static"
+      },
+      "requiredStatic": true,
+      "ui": {
+        "inListView": true,
+        "width": "150px"
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "sales_order_date",
+      "fieldtype": "date",
+      "label": "Sales Order Date",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "inListView": true,
+        "readOnly": true,
+        "width": "120px"
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "col_break1",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "customer",
+      "fieldtype": "link",
+      "label": "Customer",
+      "layout": {
+        "column": 1
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Customer"
+      },
+      "optionsRaw": "Customer",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Customer",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "inListView": true,
+        "readOnly": true,
+        "width": "150px"
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "grand_total",
+      "fieldtype": "currency",
+      "label": "Grand Total",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "inListView": true,
+        "readOnly": true,
+        "width": "120px"
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "status",
+      "fieldtype": "data",
+      "label": "Status",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    }
+  ],
+  "identity": {
+    "app": "erpnext",
+    "isSingle": false,
+    "isSubmittable": false,
+    "isTree": false,
+    "module": "Manufacturing",
+    "naming": {
+      "strategy": "hash"
+    }
+  },
+  "name": "Production Plan Sales Order",
+  "permissions": [],
+  "ui": {
+    "searchFields": [],
+    "showNameInGlobalSearch": false,
+    "sortField": "creation",
+    "sortOrder": "ASC"
+  },
+  "workflows": [
+    {
+      "kind": "unavailable"
+    }
+  ]
+}

@@ -107,7 +107,7 @@ export async function checkBudget(
     requestedMinor,
     enforcementMode: budget.enforcementMode as 'advisory' | 'hard_stop',
     allowed,
-    warning,
+    ...(warning ? { warning } : {}),
   };
 }
 

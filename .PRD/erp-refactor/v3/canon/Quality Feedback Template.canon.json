@@ -1,0 +1,123 @@
+{
+  "audit": {
+    "trackChanges": true
+  },
+  "canonVersion": "1.0.0",
+  "childTables": [
+    {
+      "childDoctype": "Quality Feedback Template Parameter",
+      "parentField": "parameters",
+      "required": true
+    }
+  ],
+  "doctypeId": "erpnext:Quality Management:Quality Feedback Template",
+  "events": [
+    {
+      "event": "validate",
+      "handlers": [
+        "erpnext.support.doctype.service_level_agreement.service_level_agreement.apply",
+        "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record.check_for_running_deletion_job"
+      ],
+      "handlersParsed": [
+        {
+          "attrPath": "apply",
+          "module": "erpnext.support.doctype.service_level_agreement.service_level_agreement"
+        },
+        {
+          "attrPath": "check_for_running_deletion_job",
+          "module": "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record"
+        }
+      ]
+    }
+  ],
+  "fieldOrder": [
+    "template",
+    "sb_00",
+    "parameters"
+  ],
+  "fields": [
+    {
+      "constraints": {},
+      "fieldname": "template",
+      "fieldtype": "data",
+      "label": "Template Name",
+      "permlevel": 0,
+      "requiredStatic": true,
+      "ui": {
+        "inListView": true
+      },
+      "unique": true
+    },
+    {
+      "constraints": {},
+      "fieldname": "sb_00",
+      "fieldtype": "layout:section",
+      "layout": {
+        "section": "sb_00"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "childDoctype": "Quality Feedback Template Parameter",
+      "constraints": {},
+      "fieldname": "parameters",
+      "fieldtype": "table",
+      "label": "Parameters",
+      "layout": {
+        "section": "sb_00"
+      },
+      "optionsParsed": {
+        "doctype": "Quality Feedback Template Parameter",
+        "kind": "child_doctype"
+      },
+      "optionsRaw": "Quality Feedback Template Parameter",
+      "permlevel": 0,
+      "requiredStatic": true,
+      "ui": {},
+      "unique": false
+    }
+  ],
+  "identity": {
+    "app": "erpnext",
+    "isSingle": false,
+    "isSubmittable": false,
+    "isTree": false,
+    "module": "Quality Management",
+    "naming": {
+      "expression": "field:template",
+      "strategy": "field"
+    }
+  },
+  "name": "Quality Feedback Template",
+  "permissions": [
+    {
+      "actions": {
+        "create": true,
+        "delete": true,
+        "email": true,
+        "export": true,
+        "print": true,
+        "read": true,
+        "report": true,
+        "share": true,
+        "write": true
+      },
+      "permlevel": 0,
+      "role": "System Manager"
+    }
+  ],
+  "ui": {
+    "searchFields": [],
+    "showNameInGlobalSearch": false,
+    "sortField": "creation",
+    "sortOrder": "DESC"
+  },
+  "workflows": [
+    {
+      "kind": "unavailable"
+    }
+  ]
+}

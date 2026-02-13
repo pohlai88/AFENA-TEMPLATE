@@ -1,0 +1,145 @@
+{
+  "audit": {
+    "trackChanges": true
+  },
+  "canonVersion": "1.0.0",
+  "childTables": [],
+  "doctypeId": "erpnext:Buying:Supplier Scorecard Variable",
+  "events": [
+    {
+      "event": "validate",
+      "handlers": [
+        "erpnext.support.doctype.service_level_agreement.service_level_agreement.apply",
+        "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record.check_for_running_deletion_job"
+      ],
+      "handlersParsed": [
+        {
+          "attrPath": "apply",
+          "module": "erpnext.support.doctype.service_level_agreement.service_level_agreement"
+        },
+        {
+          "attrPath": "check_for_running_deletion_job",
+          "module": "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record"
+        }
+      ]
+    }
+  ],
+  "fieldOrder": [
+    "variable_label",
+    "is_custom",
+    "param_name",
+    "path",
+    "column_break_5",
+    "description"
+  ],
+  "fields": [
+    {
+      "constraints": {},
+      "fieldname": "variable_label",
+      "fieldtype": "data",
+      "label": "Variable Name",
+      "permlevel": 0,
+      "requiredStatic": true,
+      "ui": {},
+      "unique": true
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "is_custom",
+      "fieldtype": "check",
+      "label": "Custom?",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "param_name",
+      "fieldtype": "data",
+      "label": "Parameter Name",
+      "permlevel": 0,
+      "requiredStatic": true,
+      "ui": {
+        "inListView": true
+      },
+      "unique": true
+    },
+    {
+      "constraints": {},
+      "fieldname": "path",
+      "fieldtype": "data",
+      "label": "Path",
+      "permlevel": 0,
+      "requiredStatic": true,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_5",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "description",
+      "fieldtype": "small_text",
+      "label": "Description",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    }
+  ],
+  "identity": {
+    "app": "erpnext",
+    "isSingle": false,
+    "isSubmittable": false,
+    "isTree": false,
+    "module": "Buying",
+    "naming": {
+      "expression": "field:variable_label",
+      "strategy": "field"
+    }
+  },
+  "name": "Supplier Scorecard Variable",
+  "permissions": [
+    {
+      "actions": {
+        "create": true,
+        "delete": true,
+        "email": true,
+        "export": true,
+        "print": true,
+        "read": true,
+        "report": true,
+        "share": true,
+        "write": true
+      },
+      "permlevel": 0,
+      "role": "System Manager"
+    }
+  ],
+  "ui": {
+    "searchFields": [],
+    "showNameInGlobalSearch": false,
+    "sortField": "creation",
+    "sortOrder": "DESC"
+  },
+  "workflows": [
+    {
+      "kind": "unavailable"
+    }
+  ]
+}

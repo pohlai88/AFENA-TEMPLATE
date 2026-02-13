@@ -1,0 +1,922 @@
+{
+  "audit": {
+    "trackChanges": false,
+    "trackSeen": true
+  },
+  "canonVersion": "1.0.0",
+  "childTables": [
+    {
+      "childDoctype": "Task Depends On",
+      "parentField": "depends_on",
+      "required": false
+    }
+  ],
+  "doctypeId": "erpnext:Projects:Task",
+  "events": [
+    {
+      "event": "validate",
+      "handlers": [
+        "erpnext.support.doctype.service_level_agreement.service_level_agreement.apply",
+        "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record.check_for_running_deletion_job"
+      ],
+      "handlersParsed": [
+        {
+          "attrPath": "apply",
+          "module": "erpnext.support.doctype.service_level_agreement.service_level_agreement"
+        },
+        {
+          "attrPath": "check_for_running_deletion_job",
+          "module": "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record"
+        }
+      ]
+    }
+  ],
+  "fieldOrder": [
+    "subject",
+    "project",
+    "issue",
+    "type",
+    "color",
+    "is_group",
+    "is_template",
+    "column_break0",
+    "status",
+    "priority",
+    "task_weight",
+    "parent_task",
+    "completed_by",
+    "completed_on",
+    "sb_timeline",
+    "exp_start_date",
+    "expected_time",
+    "start",
+    "column_break_11",
+    "exp_end_date",
+    "progress",
+    "duration",
+    "is_milestone",
+    "sb_details",
+    "description",
+    "sb_depends_on",
+    "depends_on",
+    "depends_on_tasks",
+    "sb_actual",
+    "act_start_date",
+    "actual_time",
+    "column_break_15",
+    "act_end_date",
+    "sb_costing",
+    "total_costing_amount",
+    "column_break_20",
+    "total_billing_amount",
+    "sb_more_info",
+    "review_date",
+    "closing_date",
+    "column_break_22",
+    "department",
+    "company",
+    "lft",
+    "rgt",
+    "old_parent",
+    "template_task"
+  ],
+  "fields": [
+    {
+      "constraints": {},
+      "fieldname": "subject",
+      "fieldtype": "data",
+      "label": "Subject",
+      "permlevel": 0,
+      "requiredStatic": true,
+      "ui": {
+        "allowInQuickEntry": true,
+        "inGlobalSearch": true,
+        "inStandardFilter": true,
+        "searchIndex": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "project",
+      "fieldtype": "link",
+      "label": "Project",
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Project"
+      },
+      "optionsRaw": "Project",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Project",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "allowInQuickEntry": true,
+        "bold": true,
+        "inGlobalSearch": true,
+        "inListView": true,
+        "inStandardFilter": true,
+        "rememberLastSelectedValue": true,
+        "searchIndex": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "issue",
+      "fieldtype": "link",
+      "label": "Issue",
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Issue"
+      },
+      "optionsRaw": "Issue",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Issue",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "type",
+      "fieldtype": "link",
+      "label": "Type",
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Task Type"
+      },
+      "optionsRaw": "Task Type",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Task Type",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "color",
+      "fieldtype": "color",
+      "label": "Color",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "is_group",
+      "fieldtype": "check",
+      "label": "Is Group",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "bold": true,
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "is_template",
+      "fieldtype": "check",
+      "label": "Is Template",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break0",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "width": "50%"
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "status",
+      "fieldtype": "select",
+      "label": "Status",
+      "layout": {
+        "column": 1
+      },
+      "noCopy": true,
+      "optionsParsed": {
+        "choices": [
+          "Open",
+          "Working",
+          "Pending Review",
+          "Overdue",
+          "Template",
+          "Completed",
+          "Cancelled"
+        ],
+        "kind": "select"
+      },
+      "optionsRaw": "Open\nWorking\nPending Review\nOverdue\nTemplate\nCompleted\nCancelled",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "bold": true,
+        "inListView": true,
+        "inStandardFilter": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "priority",
+      "fieldtype": "select",
+      "label": "Priority",
+      "layout": {
+        "column": 1
+      },
+      "optionsParsed": {
+        "choices": [
+          "Low",
+          "Medium",
+          "High",
+          "Urgent"
+        ],
+        "kind": "select"
+      },
+      "optionsRaw": "Low\nMedium\nHigh\nUrgent",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "inListView": true,
+        "inStandardFilter": true,
+        "searchIndex": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fetchFrom": "type.weight",
+      "fieldname": "task_weight",
+      "fieldtype": "float",
+      "label": "Weight",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "parent_task",
+      "fieldtype": "link",
+      "label": "Parent Task",
+      "layout": {
+        "column": 1
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Task"
+      },
+      "optionsRaw": "Task",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Task",
+        "ignoreUserPermissions": true,
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "bold": true,
+        "searchIndex": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval: doc.status == \"Completed\"",
+      "fieldname": "completed_by",
+      "fieldtype": "link",
+      "label": "Completed By",
+      "layout": {
+        "column": 1
+      },
+      "noCopy": true,
+      "optionsParsed": {
+        "kind": "link",
+        "target": "User"
+      },
+      "optionsRaw": "User",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "User",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval: doc.status == \"Completed\"",
+      "fieldname": "completed_on",
+      "fieldtype": "date",
+      "label": "Completed On",
+      "layout": {
+        "column": 1
+      },
+      "mandatoryDependsOn": "eval: doc.status == \"Completed\"",
+      "permlevel": 0,
+      "requiredDynamic": "eval: doc.status == \"Completed\"",
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "sb_timeline",
+      "fieldtype": "layout:section",
+      "label": "Timeline",
+      "layout": {
+        "section": "Timeline"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "collapsible": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "exp_start_date",
+      "fieldtype": "datetime",
+      "label": "Expected Start Date",
+      "layout": {
+        "section": "Timeline"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "bold": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "expected_time",
+      "fieldtype": "float",
+      "label": "Expected Time (in hours)",
+      "layout": {
+        "section": "Timeline"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "is_template",
+      "fieldname": "start",
+      "fieldtype": "int",
+      "label": "Begin On (Days)",
+      "layout": {
+        "section": "Timeline"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_11",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "Timeline"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "exp_end_date",
+      "fieldtype": "datetime",
+      "label": "Expected End Date",
+      "layout": {
+        "column": 1,
+        "section": "Timeline"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "bold": true,
+        "searchIndex": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "progress",
+      "fieldtype": "percent",
+      "label": "% Progress",
+      "layout": {
+        "column": 1,
+        "section": "Timeline"
+      },
+      "noCopy": true,
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "is_template",
+      "fieldname": "duration",
+      "fieldtype": "int",
+      "label": "Duration (Days)",
+      "layout": {
+        "column": 1,
+        "section": "Timeline"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "is_milestone",
+      "fieldtype": "check",
+      "label": "Is Milestone",
+      "layout": {
+        "column": 1,
+        "section": "Timeline"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "sb_details",
+      "fieldtype": "layout:section",
+      "label": "Details",
+      "layout": {
+        "section": "Details"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "description",
+      "fieldtype": "text_editor",
+      "label": "Task Description",
+      "layout": {
+        "section": "Details"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "width": "300px"
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "sb_depends_on",
+      "fieldtype": "layout:section",
+      "label": "Dependencies",
+      "layout": {
+        "section": "Dependencies"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "childDoctype": "Task Depends On",
+      "constraints": {},
+      "fieldname": "depends_on",
+      "fieldtype": "table",
+      "label": "Dependent Tasks",
+      "layout": {
+        "section": "Dependencies"
+      },
+      "optionsParsed": {
+        "doctype": "Task Depends On",
+        "kind": "child_doctype"
+      },
+      "optionsRaw": "Task Depends On",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "depends_on_tasks",
+      "fieldtype": "code",
+      "label": "Depends on Tasks",
+      "layout": {
+        "section": "Dependencies"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "hidden": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "sb_actual",
+      "fieldtype": "layout:section",
+      "layout": {
+        "section": "sb_actual"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "width": "50%"
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "act_start_date",
+      "fieldtype": "date",
+      "label": "Actual Start Date (via Timesheet)",
+      "layout": {
+        "section": "sb_actual"
+      },
+      "noCopy": true,
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "actual_time",
+      "fieldtype": "float",
+      "label": "Actual Time in Hours (via Timesheet)",
+      "layout": {
+        "section": "sb_actual"
+      },
+      "noCopy": true,
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_15",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "sb_actual"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "act_end_date",
+      "fieldtype": "date",
+      "label": "Actual End Date (via Timesheet)",
+      "layout": {
+        "column": 1,
+        "section": "sb_actual"
+      },
+      "noCopy": true,
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "sb_costing",
+      "fieldtype": "layout:section",
+      "label": "Costing",
+      "layout": {
+        "section": "Costing"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "collapsible": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "total_costing_amount",
+      "fieldtype": "currency",
+      "label": "Total Costing Amount (via Timesheet)",
+      "layout": {
+        "section": "Costing"
+      },
+      "noCopy": true,
+      "optionsParsed": {
+        "field": "Company:company:default_currency",
+        "kind": "currency_field"
+      },
+      "optionsRaw": "Company:company:default_currency",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_20",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "Costing"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "total_billing_amount",
+      "fieldtype": "currency",
+      "label": "Total Billable Amount (via Timesheet)",
+      "layout": {
+        "column": 1,
+        "section": "Costing"
+      },
+      "noCopy": true,
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "sb_more_info",
+      "fieldtype": "layout:section",
+      "label": "More Info",
+      "layout": {
+        "section": "More Info"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "collapsible": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:doc.status == \"Closed\" || doc.status == \"Pending Review\"",
+      "fieldname": "review_date",
+      "fieldtype": "date",
+      "label": "Review Date",
+      "layout": {
+        "section": "More Info"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:doc.status == \"Closed\"",
+      "fieldname": "closing_date",
+      "fieldtype": "date",
+      "label": "Closing Date",
+      "layout": {
+        "section": "More Info"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_22",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "More Info"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "department",
+      "fieldtype": "link",
+      "label": "Department",
+      "layout": {
+        "column": 1,
+        "section": "More Info"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Department"
+      },
+      "optionsRaw": "Department",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Department",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fetchFrom": "project.company",
+      "fieldname": "company",
+      "fieldtype": "link",
+      "label": "Company",
+      "layout": {
+        "column": 1,
+        "section": "More Info"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Company"
+      },
+      "optionsRaw": "Company",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Company",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "rememberLastSelectedValue": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "lft",
+      "fieldtype": "int",
+      "label": "lft",
+      "layout": {
+        "column": 1,
+        "section": "More Info"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "hidden": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "rgt",
+      "fieldtype": "int",
+      "label": "rgt",
+      "layout": {
+        "column": 1,
+        "section": "More Info"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "hidden": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "old_parent",
+      "fieldtype": "data",
+      "label": "Old Parent",
+      "layout": {
+        "column": 1,
+        "section": "More Info"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "hidden": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "template_task",
+      "fieldtype": "data",
+      "label": "Template Task",
+      "layout": {
+        "column": 1,
+        "section": "More Info"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "hidden": true
+      },
+      "unique": false
+    }
+  ],
+  "identity": {
+    "app": "erpnext",
+    "isSingle": false,
+    "isSubmittable": false,
+    "isTree": true,
+    "module": "Projects",
+    "naming": {
+      "seriesPrefix": "TASK-.YYYY.-.#####",
+      "strategy": "series"
+    },
+    "nsmParentField": "parent_task"
+  },
+  "name": "Task",
+  "permissions": [
+    {
+      "actions": {
+        "create": true,
+        "delete": true,
+        "email": true,
+        "print": true,
+        "read": true,
+        "report": true,
+        "share": true,
+        "write": true
+      },
+      "permlevel": 0,
+      "role": "Projects User"
+    }
+  ],
+  "ui": {
+    "maxAttachments": 5,
+    "searchFields": [
+      "subject"
+    ],
+    "showNameInGlobalSearch": true,
+    "sortField": "creation",
+    "sortOrder": "DESC",
+    "timelineField": "project",
+    "titleField": "subject"
+  },
+  "workflows": [
+    {
+      "kind": "unavailable"
+    }
+  ]
+}

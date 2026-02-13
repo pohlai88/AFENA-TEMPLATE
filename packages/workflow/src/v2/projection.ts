@@ -155,11 +155,12 @@ export function rebuildInstanceProjection(
   // Build final state
   const activeTokens: WorkflowToken[] = [];
   for (const [tokenId, pos] of tokenPositions) {
+    const parentId = spawnedTokens.get(tokenId);
     activeTokens.push({
       id: tokenId,
       currentNodeId: pos.nodeId,
       status: pos.status,
-      parentTokenId: spawnedTokens.get(tokenId),
+      ...(parentId ? { parentTokenId: parentId } : {}),
       createdAt: new Date().toISOString(),
     });
   }

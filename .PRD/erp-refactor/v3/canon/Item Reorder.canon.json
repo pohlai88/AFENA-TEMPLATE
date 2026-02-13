@@ -1,0 +1,147 @@
+{
+  "audit": {
+    "trackChanges": false
+  },
+  "canonVersion": "1.0.0",
+  "childTables": [],
+  "doctypeId": "erpnext:Stock:Item Reorder",
+  "events": [
+    {
+      "event": "validate",
+      "handlers": [
+        "erpnext.support.doctype.service_level_agreement.service_level_agreement.apply",
+        "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record.check_for_running_deletion_job"
+      ],
+      "handlersParsed": [
+        {
+          "attrPath": "apply",
+          "module": "erpnext.support.doctype.service_level_agreement.service_level_agreement"
+        },
+        {
+          "attrPath": "check_for_running_deletion_job",
+          "module": "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record"
+        }
+      ]
+    }
+  ],
+  "fieldOrder": [
+    "warehouse",
+    "warehouse_group",
+    "warehouse_reorder_level",
+    "warehouse_reorder_qty",
+    "material_request_type"
+  ],
+  "fields": [
+    {
+      "constraints": {},
+      "fieldname": "warehouse",
+      "fieldtype": "link",
+      "label": "Request for",
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Warehouse"
+      },
+      "optionsRaw": "Warehouse",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Warehouse",
+        "kind": "static"
+      },
+      "requiredStatic": true,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "warehouse_group",
+      "fieldtype": "link",
+      "label": "Check Availability in Warehouse",
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Warehouse"
+      },
+      "optionsRaw": "Warehouse",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Warehouse",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "warehouse_reorder_level",
+      "fieldtype": "float",
+      "label": "Re-order Level",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "warehouse_reorder_qty",
+      "fieldtype": "float",
+      "label": "Re-order Qty",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "material_request_type",
+      "fieldtype": "select",
+      "label": "Material Request Type",
+      "optionsParsed": {
+        "choices": [
+          "Purchase",
+          "Transfer",
+          "Material Issue",
+          "Manufacture"
+        ],
+        "kind": "select"
+      },
+      "optionsRaw": "Purchase\nTransfer\nMaterial Issue\nManufacture",
+      "permlevel": 0,
+      "requiredStatic": true,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    }
+  ],
+  "identity": {
+    "app": "erpnext",
+    "isSingle": false,
+    "isSubmittable": false,
+    "isTree": false,
+    "module": "Stock",
+    "naming": {
+      "strategy": "hash"
+    }
+  },
+  "name": "Item Reorder",
+  "permissions": [],
+  "ui": {
+    "searchFields": [],
+    "showNameInGlobalSearch": false,
+    "sortField": "creation",
+    "sortOrder": "ASC"
+  },
+  "workflows": [
+    {
+      "kind": "unavailable"
+    }
+  ]
+}

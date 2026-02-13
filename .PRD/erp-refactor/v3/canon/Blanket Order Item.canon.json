@@ -1,0 +1,192 @@
+{
+  "audit": {
+    "trackChanges": true
+  },
+  "canonVersion": "1.0.0",
+  "childTables": [],
+  "doctypeId": "erpnext:Manufacturing:Blanket Order Item",
+  "events": [
+    {
+      "event": "validate",
+      "handlers": [
+        "erpnext.support.doctype.service_level_agreement.service_level_agreement.apply",
+        "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record.check_for_running_deletion_job"
+      ],
+      "handlersParsed": [
+        {
+          "attrPath": "apply",
+          "module": "erpnext.support.doctype.service_level_agreement.service_level_agreement"
+        },
+        {
+          "attrPath": "check_for_running_deletion_job",
+          "module": "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record"
+        }
+      ]
+    }
+  ],
+  "fieldOrder": [
+    "item_code",
+    "item_name",
+    "party_item_code",
+    "column_break_3",
+    "qty",
+    "rate",
+    "ordered_qty",
+    "section_break_7",
+    "terms_and_conditions"
+  ],
+  "fields": [
+    {
+      "constraints": {},
+      "fieldname": "item_code",
+      "fieldtype": "link",
+      "label": "Item Code",
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Item"
+      },
+      "optionsRaw": "Item",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Item",
+        "kind": "static"
+      },
+      "requiredStatic": true,
+      "ui": {
+        "inListView": true,
+        "searchIndex": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fetchFrom": "item_code.item_name",
+      "fieldname": "item_name",
+      "fieldtype": "data",
+      "label": "Item Name",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "party_item_code",
+      "fieldtype": "data",
+      "label": "Party Item Code",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_3",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "qty",
+      "fieldtype": "float",
+      "label": "Quantity",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "rate",
+      "fieldtype": "currency",
+      "label": "Rate",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": true,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "ordered_qty",
+      "fieldtype": "float",
+      "label": "Ordered Quantity",
+      "layout": {
+        "column": 1
+      },
+      "noCopy": true,
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "inListView": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "section_break_7",
+      "fieldtype": "layout:section",
+      "layout": {
+        "section": "section_break_7"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "terms_and_conditions",
+      "fieldtype": "text",
+      "label": "Terms and Conditions",
+      "layout": {
+        "section": "section_break_7"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    }
+  ],
+  "identity": {
+    "app": "erpnext",
+    "isSingle": false,
+    "isSubmittable": false,
+    "isTree": false,
+    "module": "Manufacturing",
+    "naming": {
+      "strategy": "hash"
+    }
+  },
+  "name": "Blanket Order Item",
+  "permissions": [],
+  "ui": {
+    "searchFields": [],
+    "showNameInGlobalSearch": false,
+    "sortField": "creation",
+    "sortOrder": "DESC"
+  },
+  "workflows": [
+    {
+      "kind": "unavailable"
+    }
+  ]
+}

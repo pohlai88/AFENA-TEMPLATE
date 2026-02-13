@@ -1,0 +1,119 @@
+{
+  "audit": {
+    "trackChanges": true
+  },
+  "canonVersion": "1.0.0",
+  "childTables": [],
+  "doctypeId": "erpnext:Utilities:Video Settings",
+  "events": [
+    {
+      "event": "validate",
+      "handlers": [
+        "erpnext.support.doctype.service_level_agreement.service_level_agreement.apply",
+        "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record.check_for_running_deletion_job"
+      ],
+      "handlersParsed": [
+        {
+          "attrPath": "apply",
+          "module": "erpnext.support.doctype.service_level_agreement.service_level_agreement"
+        },
+        {
+          "attrPath": "check_for_running_deletion_job",
+          "module": "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record"
+        }
+      ]
+    }
+  ],
+  "fieldOrder": [
+    "enable_youtube_tracking",
+    "api_key",
+    "frequency"
+  ],
+  "fields": [
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "enable_youtube_tracking",
+      "fieldtype": "check",
+      "label": "Enable YouTube Tracking",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:doc.enable_youtube_tracking",
+      "fieldname": "api_key",
+      "fieldtype": "data",
+      "label": "API Key",
+      "mandatoryDependsOn": "eval:doc.enable_youtube_tracking",
+      "permlevel": 0,
+      "requiredDynamic": "eval:doc.enable_youtube_tracking",
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "1 hr",
+      "dependsOn": "eval:doc.enable_youtube_tracking",
+      "fieldname": "frequency",
+      "fieldtype": "select",
+      "label": "Frequency",
+      "mandatoryDependsOn": "eval:doc.enable_youtube_tracking",
+      "optionsParsed": {
+        "choices": [
+          "30 mins",
+          "1 hr",
+          "6 hrs",
+          "Daily"
+        ],
+        "kind": "select"
+      },
+      "optionsRaw": "30 mins\n1 hr\n6 hrs\nDaily",
+      "permlevel": 0,
+      "requiredDynamic": "eval:doc.enable_youtube_tracking",
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    }
+  ],
+  "identity": {
+    "app": "erpnext",
+    "isSingle": false,
+    "isSubmittable": false,
+    "isTree": false,
+    "module": "Utilities",
+    "naming": {
+      "strategy": "hash"
+    }
+  },
+  "name": "Video Settings",
+  "permissions": [
+    {
+      "actions": {
+        "create": true,
+        "delete": true,
+        "email": true,
+        "print": true,
+        "read": true,
+        "share": true,
+        "write": true
+      },
+      "permlevel": 0,
+      "role": "System Manager"
+    }
+  ],
+  "ui": {
+    "searchFields": [],
+    "showNameInGlobalSearch": false,
+    "sortField": "creation",
+    "sortOrder": "DESC"
+  },
+  "workflows": [
+    {
+      "kind": "unavailable"
+    }
+  ]
+}

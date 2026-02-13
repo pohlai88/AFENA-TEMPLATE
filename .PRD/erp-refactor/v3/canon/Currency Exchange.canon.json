@@ -1,0 +1,219 @@
+{
+  "audit": {
+    "trackChanges": false
+  },
+  "canonVersion": "1.0.0",
+  "childTables": [],
+  "doctypeId": "erpnext:Setup:Currency Exchange",
+  "events": [
+    {
+      "event": "validate",
+      "handlers": [
+        "erpnext.support.doctype.service_level_agreement.service_level_agreement.apply",
+        "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record.check_for_running_deletion_job"
+      ],
+      "handlersParsed": [
+        {
+          "attrPath": "apply",
+          "module": "erpnext.support.doctype.service_level_agreement.service_level_agreement"
+        },
+        {
+          "attrPath": "check_for_running_deletion_job",
+          "module": "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record"
+        }
+      ]
+    }
+  ],
+  "fieldOrder": [
+    "date",
+    "from_currency",
+    "to_currency",
+    "exchange_rate",
+    "column_break_5",
+    "for_buying",
+    "for_selling"
+  ],
+  "fields": [
+    {
+      "constraints": {},
+      "fieldname": "date",
+      "fieldtype": "date",
+      "label": "Date",
+      "permlevel": 0,
+      "requiredStatic": true,
+      "ui": {
+        "inListView": true,
+        "width": "5"
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "from_currency",
+      "fieldtype": "link",
+      "label": "From Currency",
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Currency"
+      },
+      "optionsRaw": "Currency",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Currency",
+        "kind": "static"
+      },
+      "requiredStatic": true,
+      "ui": {
+        "inListView": true,
+        "inStandardFilter": true,
+        "width": "3"
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "to_currency",
+      "fieldtype": "link",
+      "label": "To Currency",
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Currency"
+      },
+      "optionsRaw": "Currency",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Currency",
+        "kind": "static"
+      },
+      "requiredStatic": true,
+      "ui": {
+        "inListView": true,
+        "inStandardFilter": true,
+        "width": "3"
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "exchange_rate",
+      "fieldtype": "float",
+      "label": "Exchange Rate",
+      "permlevel": 0,
+      "requiredStatic": true,
+      "ui": {
+        "inListView": true,
+        "precision": "9",
+        "width": "3"
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_5",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "1",
+      "fieldname": "for_buying",
+      "fieldtype": "check",
+      "label": "For Buying",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "1",
+      "fieldname": "for_selling",
+      "fieldtype": "check",
+      "label": "For Selling",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    }
+  ],
+  "identity": {
+    "app": "erpnext",
+    "isSingle": false,
+    "isSubmittable": false,
+    "isTree": false,
+    "module": "Setup",
+    "naming": {
+      "strategy": "hash"
+    }
+  },
+  "name": "Currency Exchange",
+  "permissions": [
+    {
+      "actions": {
+        "create": true,
+        "delete": true,
+        "email": true,
+        "print": true,
+        "read": true,
+        "report": true,
+        "share": true,
+        "write": true
+      },
+      "permlevel": 0,
+      "role": "Accounts Manager"
+    },
+    {
+      "actions": {
+        "email": true,
+        "print": true,
+        "read": true,
+        "report": true
+      },
+      "permlevel": 0,
+      "role": "Accounts User"
+    },
+    {
+      "actions": {
+        "email": true,
+        "print": true,
+        "read": true,
+        "report": true
+      },
+      "permlevel": 0,
+      "role": "Purchase User"
+    },
+    {
+      "actions": {
+        "email": true,
+        "print": true,
+        "read": true,
+        "report": true
+      },
+      "permlevel": 0,
+      "role": "Sales User"
+    }
+  ],
+  "ui": {
+    "searchFields": [],
+    "showNameInGlobalSearch": false,
+    "sortField": "name",
+    "sortOrder": "DESC"
+  },
+  "workflows": [
+    {
+      "kind": "unavailable"
+    }
+  ]
+}

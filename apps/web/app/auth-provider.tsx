@@ -19,6 +19,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       replace={(href: string) => router.replace(href)}
       onSessionChange={() => router.refresh()}
       Link={Link}
+      redirectTo="/account/settings"
+      emailOTP
       social={{
         providers: ['google', 'github'],
       }}

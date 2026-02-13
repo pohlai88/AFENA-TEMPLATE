@@ -1,5 +1,5 @@
 import { sql } from 'drizzle-orm';
-import { boolean, check, index, jsonb, pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core';
+import { boolean, check, index, integer, jsonb, pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core';
 
 import { baseEntityColumns } from '../helpers/base-entity';
 import { tenantPolicy } from '../helpers/tenant-policy';
@@ -24,7 +24,7 @@ export const webhookEndpoints = pgTable(
     isActive: boolean('is_active').notNull().default(true),
     lastDeliveredAt: timestamp('last_delivered_at', { withTimezone: true }),
     lastStatusCode: text('last_status_code'),
-    failureCount: text('failure_count').notNull().default('0'),
+    failureCount: integer('failure_count').notNull().default(0),
     metadata: jsonb('metadata'),
   },
   (table) => [
@@ -54,9 +54,9 @@ export const webhookDeliveries = pgTable(
     payload: jsonb('payload').notNull(),
     statusCode: text('status_code'),
     responseBody: text('response_body'),
-    attemptNumber: text('attempt_number').notNull().default('1'),
+    attemptNumber: integer('attempt_number').notNull().default(1),
     deliveredAt: timestamp('delivered_at', { withTimezone: true }).notNull().defaultNow(),
-    durationMs: text('duration_ms'),
+    durationMs: integer('duration_ms'),
     error: text('error'),
   },
   (table) => [

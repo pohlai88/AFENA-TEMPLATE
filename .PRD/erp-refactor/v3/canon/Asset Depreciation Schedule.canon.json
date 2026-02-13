@@ -1,0 +1,583 @@
+{
+  "audit": {
+    "trackChanges": false
+  },
+  "canonVersion": "1.0.0",
+  "childTables": [
+    {
+      "childDoctype": "Depreciation Schedule",
+      "parentField": "depreciation_schedule",
+      "required": false
+    }
+  ],
+  "doctypeId": "erpnext:Assets:Asset Depreciation Schedule",
+  "events": [
+    {
+      "event": "validate",
+      "handlers": [
+        "erpnext.support.doctype.service_level_agreement.service_level_agreement.apply",
+        "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record.check_for_running_deletion_job"
+      ],
+      "handlersParsed": [
+        {
+          "attrPath": "apply",
+          "module": "erpnext.support.doctype.service_level_agreement.service_level_agreement"
+        },
+        {
+          "attrPath": "check_for_running_deletion_job",
+          "module": "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record"
+        }
+      ]
+    }
+  ],
+  "fieldOrder": [
+    "asset",
+    "naming_series",
+    "company",
+    "column_break_2",
+    "net_purchase_amount",
+    "opening_accumulated_depreciation",
+    "opening_number_of_booked_depreciations",
+    "finance_book",
+    "finance_book_id",
+    "depreciation_details_section",
+    "depreciation_method",
+    "total_number_of_depreciations",
+    "rate_of_depreciation",
+    "daily_prorata_based",
+    "shift_based",
+    "column_break_8",
+    "frequency_of_depreciation",
+    "expected_value_after_useful_life",
+    "value_after_depreciation",
+    "depreciation_schedule_section",
+    "depreciation_schedule",
+    "details_section",
+    "notes",
+    "status",
+    "amended_from"
+  ],
+  "fields": [
+    {
+      "constraints": {},
+      "fieldname": "asset",
+      "fieldtype": "link",
+      "label": "Asset",
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Asset"
+      },
+      "optionsRaw": "Asset",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Asset",
+        "kind": "static"
+      },
+      "requiredStatic": true,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "naming_series",
+      "fieldtype": "select",
+      "label": "Naming Series",
+      "optionsParsed": {
+        "kind": "naming_series",
+        "prefixes": [
+          "ACC-ADS-.YYYY.-"
+        ]
+      },
+      "optionsRaw": "ACC-ADS-.YYYY.-",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fetchFrom": "asset.company",
+      "fieldname": "company",
+      "fieldtype": "link",
+      "label": "Company",
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Company"
+      },
+      "optionsRaw": "Company",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Company",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_2",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "net_purchase_amount",
+      "fieldtype": "currency",
+      "label": "Net Purchase Amount",
+      "layout": {
+        "column": 1
+      },
+      "optionsParsed": {
+        "field": "Company:company:default_currency",
+        "kind": "currency_field"
+      },
+      "optionsRaw": "Company:company:default_currency",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "hidden": true,
+        "printHide": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "opening_accumulated_depreciation",
+      "fieldtype": "currency",
+      "label": "Opening Accumulated Depreciation",
+      "layout": {
+        "column": 1
+      },
+      "optionsParsed": {
+        "field": "Company:company:default_currency",
+        "kind": "currency_field"
+      },
+      "optionsRaw": "Company:company:default_currency",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "hidden": true,
+        "printHide": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "opening_number_of_booked_depreciations",
+      "fieldtype": "int",
+      "label": "Opening Number of Booked Depreciations",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "hidden": true,
+        "printHide": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "finance_book",
+      "fieldtype": "link",
+      "label": "Finance Book",
+      "layout": {
+        "column": 1
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Finance Book"
+      },
+      "optionsRaw": "Finance Book",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Finance Book",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "finance_book_id",
+      "fieldtype": "int",
+      "label": "Finance Book Id",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "hidden": true,
+        "printHide": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "depreciation_details_section",
+      "fieldtype": "layout:section",
+      "label": "Depreciation Details",
+      "layout": {
+        "section": "Depreciation Details"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "collapsible": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "depreciation_method",
+      "fieldtype": "select",
+      "label": "Depreciation Method",
+      "layout": {
+        "section": "Depreciation Details"
+      },
+      "optionsParsed": {
+        "choices": [
+          "Straight Line",
+          "Double Declining Balance",
+          "Written Down Value",
+          "Manual"
+        ],
+        "kind": "select"
+      },
+      "optionsRaw": "\nStraight Line\nDouble Declining Balance\nWritten Down Value\nManual",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "total_number_of_depreciations",
+      "fieldname": "total_number_of_depreciations",
+      "fieldtype": "int",
+      "label": "Total Number of Depreciations",
+      "layout": {
+        "section": "Depreciation Details"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:doc.depreciation_method == 'Written Down Value'",
+      "fieldname": "rate_of_depreciation",
+      "fieldtype": "percent",
+      "label": "Rate of Depreciation",
+      "layout": {
+        "section": "Depreciation Details"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "description": "In Percentage",
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "dependsOn": "eval:doc.depreciation_method == \"Straight Line\" || doc.depreciation_method == \"Manual\"",
+      "fieldname": "daily_prorata_based",
+      "fieldtype": "check",
+      "label": "Depreciate based on daily pro-rata",
+      "layout": {
+        "section": "Depreciation Details"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "dependsOn": "eval:doc.depreciation_method == \"Straight Line\"",
+      "fieldname": "shift_based",
+      "fieldtype": "check",
+      "label": "Depreciate based on shifts",
+      "layout": {
+        "section": "Depreciation Details"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_8",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "Depreciation Details"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "frequency_of_depreciation",
+      "fieldname": "frequency_of_depreciation",
+      "fieldtype": "int",
+      "label": "Frequency of Depreciation (Months)",
+      "layout": {
+        "column": 1,
+        "section": "Depreciation Details"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "expected_value_after_useful_life",
+      "fieldtype": "currency",
+      "label": "Expected Value After Useful Life",
+      "layout": {
+        "column": 1,
+        "section": "Depreciation Details"
+      },
+      "optionsParsed": {
+        "field": "Company:company:default_currency",
+        "kind": "currency_field"
+      },
+      "optionsRaw": "Company:company:default_currency",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "value_after_depreciation",
+      "fieldtype": "currency",
+      "label": "Value After Depreciation",
+      "layout": {
+        "column": 1,
+        "section": "Depreciation Details"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "depreciation_schedule_section",
+      "fieldtype": "layout:section",
+      "label": "Depreciation Schedule",
+      "layout": {
+        "section": "Depreciation Schedule"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "childDoctype": "Depreciation Schedule",
+      "constraints": {},
+      "fieldname": "depreciation_schedule",
+      "fieldtype": "table",
+      "label": "Depreciation Schedule",
+      "layout": {
+        "section": "Depreciation Schedule"
+      },
+      "optionsParsed": {
+        "doctype": "Depreciation Schedule",
+        "kind": "child_doctype"
+      },
+      "optionsRaw": "Depreciation Schedule",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "details_section",
+      "fieldtype": "layout:section",
+      "label": "Details",
+      "layout": {
+        "section": "Details"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "collapsible": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "notes",
+      "fieldtype": "small_text",
+      "label": "Notes",
+      "layout": {
+        "section": "Details"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "status",
+      "fieldtype": "select",
+      "label": "Status",
+      "layout": {
+        "section": "Details"
+      },
+      "optionsParsed": {
+        "choices": [
+          "Draft",
+          "Active",
+          "Cancelled"
+        ],
+        "kind": "select"
+      },
+      "optionsRaw": "Draft\nActive\nCancelled",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "hidden": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "amended_from",
+      "fieldtype": "link",
+      "label": "Amended From",
+      "layout": {
+        "section": "Details"
+      },
+      "noCopy": true,
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Asset Depreciation Schedule"
+      },
+      "optionsRaw": "Asset Depreciation Schedule",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Asset Depreciation Schedule",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true,
+        "readOnly": true
+      },
+      "unique": false
+    }
+  ],
+  "identity": {
+    "app": "erpnext",
+    "isSingle": false,
+    "isSubmittable": true,
+    "isTree": false,
+    "module": "Assets",
+    "naming": {
+      "seriesField": "naming_series",
+      "seriesPrefix": "ACC-ADS-.YYYY.-",
+      "strategy": "series"
+    }
+  },
+  "name": "Asset Depreciation Schedule",
+  "permissions": [
+    {
+      "actions": {
+        "amend": true,
+        "cancel": true,
+        "create": true,
+        "delete": true,
+        "email": true,
+        "export": true,
+        "print": true,
+        "read": true,
+        "report": true,
+        "share": true,
+        "submit": true,
+        "write": true
+      },
+      "permlevel": 0,
+      "role": "Accounts User"
+    },
+    {
+      "actions": {
+        "cancel": true,
+        "create": true,
+        "delete": true,
+        "email": true,
+        "export": true,
+        "print": true,
+        "read": true,
+        "report": true,
+        "share": true,
+        "submit": true,
+        "write": true
+      },
+      "permlevel": 0,
+      "role": "Quality Manager"
+    }
+  ],
+  "ui": {
+    "searchFields": [],
+    "showNameInGlobalSearch": false,
+    "sortField": "creation",
+    "sortOrder": "DESC"
+  },
+  "workflows": [
+    {
+      "kind": "unavailable"
+    }
+  ]
+}

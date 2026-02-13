@@ -1,0 +1,167 @@
+{
+  "audit": {
+    "trackChanges": true
+  },
+  "canonVersion": "1.0.0",
+  "childTables": [],
+  "doctypeId": "erpnext:Accounts:Dunning Letter Text",
+  "events": [
+    {
+      "event": "validate",
+      "handlers": [
+        "erpnext.support.doctype.service_level_agreement.service_level_agreement.apply",
+        "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record.check_for_running_deletion_job"
+      ],
+      "handlersParsed": [
+        {
+          "attrPath": "apply",
+          "module": "erpnext.support.doctype.service_level_agreement.service_level_agreement"
+        },
+        {
+          "attrPath": "check_for_running_deletion_job",
+          "module": "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record"
+        }
+      ]
+    }
+  ],
+  "fieldOrder": [
+    "language",
+    "is_default_language",
+    "section_break_4",
+    "body_text",
+    "closing_text",
+    "section_break_7",
+    "body_and_closing_text_help"
+  ],
+  "fields": [
+    {
+      "constraints": {},
+      "fieldname": "language",
+      "fieldtype": "link",
+      "label": "Language",
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Language"
+      },
+      "optionsRaw": "Language",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Language",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "is_default_language",
+      "fieldtype": "check",
+      "label": "Is Default Language",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "section_break_4",
+      "fieldtype": "layout:section",
+      "layout": {
+        "section": "section_break_4"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "body_text",
+      "fieldtype": "text_editor",
+      "label": "Body Text",
+      "layout": {
+        "section": "section_break_4"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "description": "Letter or Email Body Text",
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "closing_text",
+      "fieldtype": "text_editor",
+      "label": "Closing Text",
+      "layout": {
+        "section": "section_break_4"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "description": "Letter or Email Closing Text",
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "section_break_7",
+      "fieldtype": "layout:section",
+      "layout": {
+        "section": "section_break_7"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "body_and_closing_text_help",
+      "fieldtype": "text_editor",
+      "label": "Body and Closing Text Help",
+      "layout": {
+        "section": "section_break_7"
+      },
+      "optionsParsed": {
+        "kind": "other",
+        "value": "<h4>Body Text and Closing Text Example</h4>\n\n<div>We have noticed that you have not yet paid invoice {{sales_invoice}} for {{frappe.db.get_value(\"Currency\", currency, \"symbol\")}} {{outstanding_amount}}. This is a friendly reminder that the invoice was due on {{due_date}}. Please pay the amount due immediately to avoid any further dunning cost.</div>\n\n<h4>How to get fieldnames</h4>\n\n<p>The fieldnames you can use in your template are the fields in the document. You can find out the fields of any documents via Setup &gt; Customize Form View and selecting the document type (e.g. Sales Invoice)</p>\n\n<h4>Templating</h4>\n\n<p>Templates are compiled using the Jinja Templating Language. To learn more about Jinja, <a class=\"strong\" href=\"http://jinja.pocoo.org/docs/dev/templates/\">read this documentation.</a></p>"
+      },
+      "optionsRaw": "<h4>Body Text and Closing Text Example</h4>\n\n<div>We have noticed that you have not yet paid invoice {{sales_invoice}} for {{frappe.db.get_value(\"Currency\", currency, \"symbol\")}} {{outstanding_amount}}. This is a friendly reminder that the invoice was due on {{due_date}}. Please pay the amount due immediately to avoid any further dunning cost.</div>\n\n<h4>How to get fieldnames</h4>\n\n<p>The fieldnames you can use in your template are the fields in the document. You can find out the fields of any documents via Setup &gt; Customize Form View and selecting the document type (e.g. Sales Invoice)</p>\n\n<h4>Templating</h4>\n\n<p>Templates are compiled using the Jinja Templating Language. To learn more about Jinja, <a class=\"strong\" href=\"http://jinja.pocoo.org/docs/dev/templates/\">read this documentation.</a></p>",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    }
+  ],
+  "identity": {
+    "app": "erpnext",
+    "isSingle": false,
+    "isSubmittable": false,
+    "isTree": false,
+    "module": "Accounts",
+    "naming": {
+      "strategy": "hash"
+    }
+  },
+  "name": "Dunning Letter Text",
+  "permissions": [],
+  "ui": {
+    "searchFields": [],
+    "showNameInGlobalSearch": false,
+    "sortField": "creation",
+    "sortOrder": "DESC"
+  },
+  "workflows": [
+    {
+      "kind": "unavailable"
+    }
+  ]
+}

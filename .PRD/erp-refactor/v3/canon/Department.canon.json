@@ -1,0 +1,266 @@
+{
+  "audit": {
+    "trackChanges": false
+  },
+  "canonVersion": "1.0.0",
+  "childTables": [],
+  "doctypeId": "erpnext:Setup:Department",
+  "events": [
+    {
+      "event": "validate",
+      "handlers": [
+        "erpnext.support.doctype.service_level_agreement.service_level_agreement.apply",
+        "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record.check_for_running_deletion_job"
+      ],
+      "handlersParsed": [
+        {
+          "attrPath": "apply",
+          "module": "erpnext.support.doctype.service_level_agreement.service_level_agreement"
+        },
+        {
+          "attrPath": "check_for_running_deletion_job",
+          "module": "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record"
+        }
+      ]
+    }
+  ],
+  "fieldOrder": [
+    "department_name",
+    "parent_department",
+    "column_break_3",
+    "company",
+    "is_group",
+    "disabled",
+    "lft",
+    "rgt",
+    "old_parent"
+  ],
+  "fields": [
+    {
+      "constraints": {},
+      "fieldname": "department_name",
+      "fieldtype": "data",
+      "label": "Department",
+      "permlevel": 0,
+      "requiredStatic": true,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "parent_department",
+      "fieldtype": "link",
+      "label": "Parent Department",
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Department"
+      },
+      "optionsRaw": "Department",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Department",
+        "ignoreUserPermissions": true,
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_3",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "company",
+      "fieldtype": "link",
+      "label": "Company",
+      "layout": {
+        "column": 1
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Company"
+      },
+      "optionsRaw": "Company",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Company",
+        "kind": "static"
+      },
+      "requiredStatic": true,
+      "ui": {
+        "inStandardFilter": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "is_group",
+      "fieldtype": "check",
+      "label": "Is Group",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "bold": true,
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "disabled",
+      "fieldtype": "check",
+      "label": "Disabled",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "lft",
+      "fieldtype": "int",
+      "label": "lft",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "hidden": true,
+        "printHide": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "rgt",
+      "fieldtype": "int",
+      "label": "rgt",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "hidden": true,
+        "printHide": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "old_parent",
+      "fieldtype": "data",
+      "label": "Old Parent",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "hidden": true,
+        "printHide": true
+      },
+      "unique": false
+    }
+  ],
+  "identity": {
+    "app": "erpnext",
+    "isSingle": false,
+    "isSubmittable": false,
+    "isTree": true,
+    "module": "Setup",
+    "naming": {
+      "strategy": "hash"
+    },
+    "nsmParentField": "parent_department"
+  },
+  "name": "Department",
+  "permissions": [
+    {
+      "actions": {
+        "create": true,
+        "delete": true,
+        "email": true,
+        "export": true,
+        "print": true,
+        "read": true,
+        "report": true,
+        "share": true,
+        "write": true
+      },
+      "permlevel": 0,
+      "role": "Academics User"
+    },
+    {
+      "actions": {},
+      "permlevel": 0,
+      "role": "Employee"
+    },
+    {
+      "actions": {
+        "create": true,
+        "delete": true,
+        "email": true,
+        "export": true,
+        "import": true,
+        "print": true,
+        "read": true,
+        "report": true,
+        "share": true,
+        "write": true
+      },
+      "permlevel": 0,
+      "role": "HR Manager"
+    },
+    {
+      "actions": {
+        "create": true,
+        "delete": true,
+        "email": true,
+        "print": true,
+        "read": true,
+        "report": true,
+        "share": true,
+        "write": true
+      },
+      "permlevel": 0,
+      "role": "HR User"
+    }
+  ],
+  "ui": {
+    "searchFields": [],
+    "showNameInGlobalSearch": true,
+    "sortField": "creation",
+    "sortOrder": "ASC"
+  },
+  "workflows": [
+    {
+      "kind": "unavailable"
+    }
+  ]
+}

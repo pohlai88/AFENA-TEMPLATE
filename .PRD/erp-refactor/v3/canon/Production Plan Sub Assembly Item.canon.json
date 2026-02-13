@@ -1,0 +1,620 @@
+{
+  "audit": {
+    "trackChanges": true
+  },
+  "canonVersion": "1.0.0",
+  "childTables": [],
+  "doctypeId": "erpnext:Manufacturing:Production Plan Sub Assembly Item",
+  "events": [
+    {
+      "event": "validate",
+      "handlers": [
+        "erpnext.support.doctype.service_level_agreement.service_level_agreement.apply",
+        "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record.check_for_running_deletion_job"
+      ],
+      "handlersParsed": [
+        {
+          "attrPath": "apply",
+          "module": "erpnext.support.doctype.service_level_agreement.service_level_agreement"
+        },
+        {
+          "attrPath": "check_for_running_deletion_job",
+          "module": "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record"
+        }
+      ]
+    }
+  ],
+  "fieldOrder": [
+    "production_item",
+    "item_name",
+    "fg_warehouse",
+    "parent_item_code",
+    "column_break_3",
+    "bom_no",
+    "bom_level",
+    "type_of_manufacturing",
+    "section_break_4rxf",
+    "required_qty",
+    "column_break_xfhm",
+    "projected_qty",
+    "qty",
+    "subcontracting_section",
+    "supplier",
+    "purchase_order",
+    "work_order_details_section",
+    "production_plan_item",
+    "wo_produced_qty",
+    "stock_reserved_qty",
+    "column_break_7",
+    "ordered_qty",
+    "received_qty",
+    "indent",
+    "section_break_19",
+    "schedule_date",
+    "uom",
+    "stock_uom",
+    "actual_qty",
+    "column_break_22",
+    "description"
+  ],
+  "fields": [
+    {
+      "constraints": {},
+      "fieldname": "production_item",
+      "fieldtype": "link",
+      "label": "Sub Assembly Item Code",
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Item"
+      },
+      "optionsRaw": "Item",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Item",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "inListView": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fetchFrom": "sub_assembly_item_code.item_name",
+      "fieldname": "item_name",
+      "fieldtype": "data",
+      "label": "Item Name",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "fg_warehouse",
+      "fieldtype": "link",
+      "label": "Target Warehouse",
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Warehouse"
+      },
+      "optionsRaw": "Warehouse",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Warehouse",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "parent_item_code",
+      "fieldtype": "link",
+      "label": "Finished Good",
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Item"
+      },
+      "optionsRaw": "Item",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Item",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_3",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "bom_no",
+      "fieldtype": "link",
+      "label": "BOM No",
+      "layout": {
+        "column": 1
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "BOM"
+      },
+      "optionsRaw": "BOM",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "BOM",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "bom_level",
+      "fieldtype": "int",
+      "label": "Level (BOM)",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "In House",
+      "fieldname": "type_of_manufacturing",
+      "fieldtype": "select",
+      "label": "Manufacturing Type",
+      "layout": {
+        "column": 1
+      },
+      "optionsParsed": {
+        "choices": [
+          "In House",
+          "Subcontract",
+          "Material Request"
+        ],
+        "kind": "select"
+      },
+      "optionsRaw": "In House\nSubcontract\nMaterial Request",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "section_break_4rxf",
+      "fieldtype": "layout:section",
+      "label": "Quantity",
+      "layout": {
+        "section": "Quantity"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "required_qty",
+      "fieldtype": "float",
+      "label": "Required Qty",
+      "layout": {
+        "section": "Quantity"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_xfhm",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "Quantity"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "projected_qty",
+      "fieldtype": "float",
+      "label": "Projected Qty",
+      "layout": {
+        "column": 1,
+        "section": "Quantity"
+      },
+      "noCopy": true,
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "inListView": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "qty",
+      "fieldtype": "float",
+      "label": "Qty to Order",
+      "layout": {
+        "column": 1,
+        "section": "Quantity"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "inListView": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "subcontracting_section",
+      "fieldtype": "layout:section",
+      "label": "Subcontracting",
+      "layout": {
+        "section": "Subcontracting"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "supplier",
+      "fieldtype": "link",
+      "label": "Supplier",
+      "layout": {
+        "section": "Subcontracting"
+      },
+      "mandatoryDependsOn": "eval:doc.type_of_manufacturing == 'Subcontract' && doc.qty > 0",
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Supplier"
+      },
+      "optionsRaw": "Supplier",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Supplier",
+        "kind": "static"
+      },
+      "requiredDynamic": "eval:doc.type_of_manufacturing == 'Subcontract' && doc.qty > 0",
+      "requiredStatic": false,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "purchase_order",
+      "fieldtype": "link",
+      "label": "Purchase Order",
+      "layout": {
+        "section": "Subcontracting"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Purchase Order"
+      },
+      "optionsRaw": "Purchase Order",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Purchase Order",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:doc.type_of_manufacturing == \"In House\"",
+      "fieldname": "work_order_details_section",
+      "fieldtype": "layout:section",
+      "label": "Manufacturing",
+      "layout": {
+        "section": "Manufacturing"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "production_plan_item",
+      "fieldtype": "data",
+      "label": "Production Plan Item",
+      "layout": {
+        "section": "Manufacturing"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "hidden": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "wo_produced_qty",
+      "fieldtype": "float",
+      "label": "Produced Qty",
+      "layout": {
+        "section": "Manufacturing"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "stock_reserved_qty",
+      "fieldtype": "float",
+      "label": "Stock Reserved Qty",
+      "layout": {
+        "section": "Manufacturing"
+      },
+      "noCopy": true,
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_7",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "Manufacturing"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "ordered_qty",
+      "fieldtype": "float",
+      "label": "Ordered Qty",
+      "layout": {
+        "column": 1,
+        "section": "Manufacturing"
+      },
+      "noCopy": true,
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "allowOnSubmit": true,
+      "constraints": {},
+      "fieldname": "received_qty",
+      "fieldtype": "float",
+      "label": "Received Qty",
+      "layout": {
+        "column": 1,
+        "section": "Manufacturing"
+      },
+      "noCopy": true,
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "indent",
+      "fieldtype": "int",
+      "label": "Indent",
+      "layout": {
+        "column": 1,
+        "section": "Manufacturing"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "section_break_19",
+      "fieldtype": "layout:section",
+      "label": "Item Details",
+      "layout": {
+        "section": "Item Details"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "collapsible": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "schedule_date",
+      "fieldtype": "datetime",
+      "label": "Schedule Date",
+      "layout": {
+        "section": "Item Details"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "uom",
+      "fieldtype": "link",
+      "label": "UOM",
+      "layout": {
+        "section": "Item Details"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "UOM"
+      },
+      "optionsRaw": "UOM",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "UOM",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "stock_uom",
+      "fieldtype": "link",
+      "label": "Stock UOM",
+      "layout": {
+        "section": "Item Details"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "UOM"
+      },
+      "optionsRaw": "UOM",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "UOM",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "actual_qty",
+      "fieldtype": "float",
+      "label": "Actual Qty",
+      "layout": {
+        "section": "Item Details"
+      },
+      "noCopy": true,
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_22",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "Item Details"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "description",
+      "fieldtype": "small_text",
+      "label": "description",
+      "layout": {
+        "column": 1,
+        "section": "Item Details"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    }
+  ],
+  "identity": {
+    "app": "erpnext",
+    "isSingle": false,
+    "isSubmittable": false,
+    "isTree": false,
+    "module": "Manufacturing",
+    "naming": {
+      "strategy": "hash"
+    }
+  },
+  "name": "Production Plan Sub Assembly Item",
+  "permissions": [],
+  "ui": {
+    "searchFields": [],
+    "showNameInGlobalSearch": false,
+    "sortField": "creation",
+    "sortOrder": "DESC"
+  },
+  "workflows": [
+    {
+      "kind": "unavailable"
+    }
+  ]
+}

@@ -1,0 +1,231 @@
+{
+  "audit": {
+    "trackChanges": false
+  },
+  "canonVersion": "1.0.0",
+  "childTables": [
+    {
+      "childDoctype": "Process Period Closing Voucher Detail",
+      "parentField": "normal_balances",
+      "required": false
+    },
+    {
+      "childDoctype": "Process Period Closing Voucher Detail",
+      "parentField": "z_opening_balances",
+      "required": false
+    }
+  ],
+  "doctypeId": "erpnext:Accounts:Process Period Closing Voucher",
+  "events": [
+    {
+      "event": "validate",
+      "handlers": [
+        "erpnext.support.doctype.service_level_agreement.service_level_agreement.apply",
+        "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record.check_for_running_deletion_job"
+      ],
+      "handlersParsed": [
+        {
+          "attrPath": "apply",
+          "module": "erpnext.support.doctype.service_level_agreement.service_level_agreement"
+        },
+        {
+          "attrPath": "check_for_running_deletion_job",
+          "module": "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record"
+        }
+      ]
+    }
+  ],
+  "fieldOrder": [
+    "parent_pcv",
+    "status",
+    "p_l_closing_balance",
+    "normal_balances",
+    "bs_closing_balance",
+    "z_opening_balances",
+    "amended_from"
+  ],
+  "fields": [
+    {
+      "constraints": {},
+      "fieldname": "parent_pcv",
+      "fieldtype": "link",
+      "label": "PCV",
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Period Closing Voucher"
+      },
+      "optionsRaw": "Period Closing Voucher",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Period Closing Voucher",
+        "kind": "static"
+      },
+      "requiredStatic": true,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "Queued",
+      "fieldname": "status",
+      "fieldtype": "select",
+      "label": "Status",
+      "noCopy": true,
+      "optionsParsed": {
+        "choices": [
+          "Queued",
+          "Running",
+          "Paused",
+          "Completed",
+          "Cancelled"
+        ],
+        "kind": "select"
+      },
+      "optionsRaw": "Queued\nRunning\nPaused\nCompleted\nCancelled",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "p_l_closing_balance",
+      "fieldtype": "json",
+      "label": "P&L Closing Balance",
+      "noCopy": true,
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "childDoctype": "Process Period Closing Voucher Detail",
+      "constraints": {},
+      "fieldname": "normal_balances",
+      "fieldtype": "table",
+      "label": "Dates to Process",
+      "noCopy": true,
+      "optionsParsed": {
+        "doctype": "Process Period Closing Voucher Detail",
+        "kind": "child_doctype"
+      },
+      "optionsRaw": "Process Period Closing Voucher Detail",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "bs_closing_balance",
+      "fieldtype": "json",
+      "label": "Balance Sheet Closing Balance",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "childDoctype": "Process Period Closing Voucher Detail",
+      "constraints": {},
+      "fieldname": "z_opening_balances",
+      "fieldtype": "table",
+      "label": "Opening Balances",
+      "noCopy": true,
+      "optionsParsed": {
+        "doctype": "Process Period Closing Voucher Detail",
+        "kind": "child_doctype"
+      },
+      "optionsRaw": "Process Period Closing Voucher Detail",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "amended_from",
+      "fieldtype": "link",
+      "label": "Amended From",
+      "noCopy": true,
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Process Period Closing Voucher"
+      },
+      "optionsRaw": "Process Period Closing Voucher",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Process Period Closing Voucher",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true,
+        "readOnly": true,
+        "searchIndex": true
+      },
+      "unique": false
+    }
+  ],
+  "identity": {
+    "app": "erpnext",
+    "isSingle": false,
+    "isSubmittable": true,
+    "isTree": false,
+    "module": "Accounts",
+    "naming": {
+      "expression": "format:Process-PCV-{###}",
+      "strategy": "expression"
+    }
+  },
+  "name": "Process Period Closing Voucher",
+  "permissions": [
+    {
+      "actions": {
+        "cancel": true,
+        "create": true,
+        "delete": true,
+        "email": true,
+        "export": true,
+        "print": true,
+        "read": true,
+        "report": true,
+        "share": true,
+        "submit": true,
+        "write": true
+      },
+      "permlevel": 0,
+      "role": "Accounts Manager"
+    },
+    {
+      "actions": {
+        "cancel": true,
+        "create": true,
+        "delete": true,
+        "email": true,
+        "export": true,
+        "print": true,
+        "read": true,
+        "report": true,
+        "share": true,
+        "submit": true,
+        "write": true
+      },
+      "permlevel": 0,
+      "role": "System Manager"
+    }
+  ],
+  "ui": {
+    "searchFields": [],
+    "showNameInGlobalSearch": false,
+    "sortField": "creation",
+    "sortOrder": "DESC"
+  },
+  "workflows": [
+    {
+      "kind": "unavailable"
+    }
+  ]
+}

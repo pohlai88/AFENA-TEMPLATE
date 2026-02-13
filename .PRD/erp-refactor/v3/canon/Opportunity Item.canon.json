@@ -1,0 +1,397 @@
+{
+  "audit": {
+    "trackChanges": true
+  },
+  "canonVersion": "1.0.0",
+  "childTables": [],
+  "doctypeId": "erpnext:CRM:Opportunity Item",
+  "events": [
+    {
+      "event": "validate",
+      "handlers": [
+        "erpnext.support.doctype.service_level_agreement.service_level_agreement.apply",
+        "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record.check_for_running_deletion_job"
+      ],
+      "handlersParsed": [
+        {
+          "attrPath": "apply",
+          "module": "erpnext.support.doctype.service_level_agreement.service_level_agreement"
+        },
+        {
+          "attrPath": "check_for_running_deletion_job",
+          "module": "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record"
+        }
+      ]
+    }
+  ],
+  "fieldOrder": [
+    "item_code",
+    "item_name",
+    "col_break1",
+    "uom",
+    "qty",
+    "section_break_6",
+    "brand",
+    "item_group",
+    "description",
+    "column_break_8",
+    "image",
+    "image_view",
+    "quantity_and_rate_section",
+    "base_rate",
+    "base_amount",
+    "column_break_16",
+    "rate",
+    "amount"
+  ],
+  "fields": [
+    {
+      "constraints": {},
+      "fieldname": "item_code",
+      "fieldtype": "link",
+      "label": "Item Code",
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Item"
+      },
+      "optionsRaw": "Item",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Item",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "item_name",
+      "fieldtype": "data",
+      "label": "Item Name",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "inGlobalSearch": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "col_break1",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "uom",
+      "fieldtype": "link",
+      "label": "UOM",
+      "layout": {
+        "column": 1
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "UOM"
+      },
+      "optionsRaw": "UOM",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "UOM",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "1",
+      "fieldname": "qty",
+      "fieldtype": "float",
+      "label": "Qty",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "section_break_6",
+      "fieldtype": "layout:section",
+      "label": "Description",
+      "layout": {
+        "section": "Description"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "collapsible": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "brand",
+      "fieldtype": "link",
+      "label": "Brand",
+      "layout": {
+        "section": "Description"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Brand"
+      },
+      "optionsRaw": "Brand",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Brand",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "hidden": true,
+        "printHide": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "item_group",
+      "fieldtype": "link",
+      "label": "Item Group",
+      "layout": {
+        "section": "Description"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Item Group"
+      },
+      "optionsRaw": "Item Group",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Item Group",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "hidden": true,
+        "printHide": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "description",
+      "fieldtype": "text_editor",
+      "label": "Description",
+      "layout": {
+        "section": "Description"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "width": "300px"
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_8",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "Description"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fetchFrom": "item_code.image",
+      "fieldname": "image",
+      "fieldtype": "attach",
+      "label": "Image",
+      "layout": {
+        "column": 1,
+        "section": "Description"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "hidden": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "image_view",
+      "fieldtype": "attach_image",
+      "label": "Image View",
+      "layout": {
+        "column": 1,
+        "section": "Description"
+      },
+      "optionsParsed": {
+        "kind": "other",
+        "value": "image"
+      },
+      "optionsRaw": "image",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "quantity_and_rate_section",
+      "fieldtype": "layout:section",
+      "label": "Quantity and Rate",
+      "layout": {
+        "section": "Quantity and Rate"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "base_rate",
+      "fieldtype": "currency",
+      "label": "Rate (Company Currency)",
+      "layout": {
+        "section": "Quantity and Rate"
+      },
+      "optionsParsed": {
+        "field": "Company:company:default_currency",
+        "kind": "currency_field"
+      },
+      "optionsRaw": "Company:company:default_currency",
+      "permlevel": 0,
+      "requiredStatic": true,
+      "ui": {
+        "printHide": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "base_amount",
+      "fieldtype": "currency",
+      "label": "Amount (Company Currency)",
+      "layout": {
+        "section": "Quantity and Rate"
+      },
+      "optionsParsed": {
+        "field": "Company:company:default_currency",
+        "kind": "currency_field"
+      },
+      "optionsRaw": "Company:company:default_currency",
+      "permlevel": 0,
+      "requiredStatic": true,
+      "ui": {
+        "printHide": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_16",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "Quantity and Rate"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "rate",
+      "fieldtype": "currency",
+      "label": "Rate",
+      "layout": {
+        "column": 1,
+        "section": "Quantity and Rate"
+      },
+      "optionsParsed": {
+        "field": "currency",
+        "kind": "currency_field"
+      },
+      "optionsRaw": "currency",
+      "permlevel": 0,
+      "requiredStatic": true,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "amount",
+      "fieldtype": "currency",
+      "label": "Amount",
+      "layout": {
+        "column": 1,
+        "section": "Quantity and Rate"
+      },
+      "optionsParsed": {
+        "field": "currency",
+        "kind": "currency_field"
+      },
+      "optionsRaw": "currency",
+      "permlevel": 0,
+      "requiredStatic": true,
+      "ui": {
+        "inListView": true,
+        "readOnly": true
+      },
+      "unique": false
+    }
+  ],
+  "identity": {
+    "app": "erpnext",
+    "isSingle": false,
+    "isSubmittable": false,
+    "isTree": false,
+    "module": "CRM",
+    "naming": {
+      "strategy": "hash"
+    }
+  },
+  "name": "Opportunity Item",
+  "permissions": [],
+  "ui": {
+    "searchFields": [],
+    "showNameInGlobalSearch": false,
+    "sortField": "creation",
+    "sortOrder": "DESC"
+  },
+  "workflows": [
+    {
+      "kind": "unavailable"
+    }
+  ]
+}

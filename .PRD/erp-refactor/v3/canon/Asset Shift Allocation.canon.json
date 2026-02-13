@@ -1,0 +1,275 @@
+{
+  "audit": {
+    "trackChanges": false
+  },
+  "canonVersion": "1.0.0",
+  "childTables": [
+    {
+      "childDoctype": "Depreciation Schedule",
+      "parentField": "depreciation_schedule",
+      "required": false
+    }
+  ],
+  "doctypeId": "erpnext:Assets:Asset Shift Allocation",
+  "events": [
+    {
+      "event": "validate",
+      "handlers": [
+        "erpnext.support.doctype.service_level_agreement.service_level_agreement.apply",
+        "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record.check_for_running_deletion_job"
+      ],
+      "handlersParsed": [
+        {
+          "attrPath": "apply",
+          "module": "erpnext.support.doctype.service_level_agreement.service_level_agreement"
+        },
+        {
+          "attrPath": "check_for_running_deletion_job",
+          "module": "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record"
+        }
+      ]
+    }
+  ],
+  "fieldOrder": [
+    "section_break_esaa",
+    "asset",
+    "naming_series",
+    "column_break_tdae",
+    "finance_book",
+    "amended_from",
+    "depreciation_schedule_section",
+    "column_break_jomc",
+    "depreciation_schedule"
+  ],
+  "fields": [
+    {
+      "constraints": {},
+      "fieldname": "section_break_esaa",
+      "fieldtype": "layout:section",
+      "layout": {
+        "section": "section_break_esaa"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "asset",
+      "fieldtype": "link",
+      "label": "Asset",
+      "layout": {
+        "section": "section_break_esaa"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Asset"
+      },
+      "optionsRaw": "Asset",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Asset",
+        "kind": "static"
+      },
+      "requiredStatic": true,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "naming_series",
+      "fieldtype": "select",
+      "label": "Naming Series",
+      "layout": {
+        "section": "section_break_esaa"
+      },
+      "optionsParsed": {
+        "kind": "naming_series",
+        "prefixes": [
+          "ACC-ASA-.YYYY.-"
+        ]
+      },
+      "optionsRaw": "ACC-ASA-.YYYY.-",
+      "permlevel": 0,
+      "requiredStatic": true,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_tdae",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "section_break_esaa"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "finance_book",
+      "fieldtype": "link",
+      "label": "Finance Book",
+      "layout": {
+        "column": 1,
+        "section": "section_break_esaa"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Finance Book"
+      },
+      "optionsRaw": "Finance Book",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Finance Book",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "amended_from",
+      "fieldtype": "link",
+      "label": "Amended From",
+      "layout": {
+        "column": 1,
+        "section": "section_break_esaa"
+      },
+      "noCopy": true,
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Asset Shift Allocation"
+      },
+      "optionsRaw": "Asset Shift Allocation",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Asset Shift Allocation",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true,
+        "readOnly": true,
+        "searchIndex": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:!doc.__islocal",
+      "fieldname": "depreciation_schedule_section",
+      "fieldtype": "layout:section",
+      "label": "Depreciation Schedule",
+      "layout": {
+        "section": "Depreciation Schedule"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_jomc",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "Depreciation Schedule"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "childDoctype": "Depreciation Schedule",
+      "constraints": {},
+      "fieldname": "depreciation_schedule",
+      "fieldtype": "table",
+      "label": "Depreciation Schedule",
+      "layout": {
+        "column": 1,
+        "section": "Depreciation Schedule"
+      },
+      "noCopy": true,
+      "optionsParsed": {
+        "doctype": "Depreciation Schedule",
+        "kind": "child_doctype"
+      },
+      "optionsRaw": "Depreciation Schedule",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    }
+  ],
+  "identity": {
+    "app": "erpnext",
+    "isSingle": false,
+    "isSubmittable": true,
+    "isTree": false,
+    "module": "Assets",
+    "naming": {
+      "seriesField": "naming_series",
+      "seriesPrefix": "ACC-ASA-.YYYY.-",
+      "strategy": "series"
+    }
+  },
+  "name": "Asset Shift Allocation",
+  "permissions": [
+    {
+      "actions": {
+        "amend": true,
+        "cancel": true,
+        "create": true,
+        "delete": true,
+        "email": true,
+        "export": true,
+        "print": true,
+        "read": true,
+        "report": true,
+        "share": true,
+        "submit": true,
+        "write": true
+      },
+      "permlevel": 0,
+      "role": "Accounts User"
+    },
+    {
+      "actions": {
+        "create": true,
+        "delete": true,
+        "email": true,
+        "export": true,
+        "print": true,
+        "read": true,
+        "report": true,
+        "share": true,
+        "write": true
+      },
+      "permlevel": 0,
+      "role": "System Manager"
+    }
+  ],
+  "ui": {
+    "searchFields": [],
+    "showNameInGlobalSearch": false,
+    "sortField": "creation",
+    "sortOrder": "DESC"
+  },
+  "workflows": [
+    {
+      "kind": "unavailable"
+    }
+  ]
+}

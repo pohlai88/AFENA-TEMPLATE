@@ -1,0 +1,312 @@
+{
+  "audit": {
+    "trackChanges": true
+  },
+  "canonVersion": "1.0.0",
+  "childTables": [],
+  "doctypeId": "erpnext:CRM:CRM Settings",
+  "events": [
+    {
+      "event": "validate",
+      "handlers": [
+        "erpnext.support.doctype.service_level_agreement.service_level_agreement.apply",
+        "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record.check_for_running_deletion_job"
+      ],
+      "handlersParsed": [
+        {
+          "attrPath": "apply",
+          "module": "erpnext.support.doctype.service_level_agreement.service_level_agreement"
+        },
+        {
+          "attrPath": "check_for_running_deletion_job",
+          "module": "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record"
+        }
+      ]
+    }
+  ],
+  "fieldOrder": [
+    "section_break_5",
+    "campaign_naming_by",
+    "allow_lead_duplication_based_on_emails",
+    "column_break_4",
+    "auto_creation_of_contact",
+    "opportunity_section",
+    "close_opportunity_after_days",
+    "column_break_9",
+    "quotation_section",
+    "default_valid_till",
+    "section_break_13",
+    "carry_forward_communication_and_comments",
+    "column_break_junk",
+    "update_timestamp_on_new_communication"
+  ],
+  "fields": [
+    {
+      "constraints": {},
+      "fieldname": "section_break_5",
+      "fieldtype": "layout:section",
+      "label": "Lead",
+      "layout": {
+        "section": "Lead"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "campaign_naming_by",
+      "fieldtype": "select",
+      "label": "Campaign Naming By",
+      "layout": {
+        "section": "Lead"
+      },
+      "optionsParsed": {
+        "choices": [
+          "Campaign Name",
+          "Naming Series"
+        ],
+        "kind": "select"
+      },
+      "optionsRaw": "Campaign Name\nNaming Series",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "allow_lead_duplication_based_on_emails",
+      "fieldtype": "check",
+      "label": "Allow Lead Duplication based on Emails",
+      "layout": {
+        "section": "Lead"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_4",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "Lead"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "1",
+      "fieldname": "auto_creation_of_contact",
+      "fieldtype": "check",
+      "label": "Auto Creation of Contact",
+      "layout": {
+        "column": 1,
+        "section": "Lead"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "opportunity_section",
+      "fieldtype": "layout:section",
+      "label": "Opportunity",
+      "layout": {
+        "section": "Opportunity"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "15",
+      "fieldname": "close_opportunity_after_days",
+      "fieldtype": "int",
+      "label": "Close Replied Opportunity After Days",
+      "layout": {
+        "section": "Opportunity"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "description": "Auto close Opportunity Replied after the no. of days mentioned above"
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_9",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "Opportunity"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "quotation_section",
+      "fieldtype": "layout:section",
+      "label": "Quotation",
+      "layout": {
+        "section": "Quotation"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "default_valid_till",
+      "fieldtype": "data",
+      "label": "Default Quotation Validity Days",
+      "layout": {
+        "section": "Quotation"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "section_break_13",
+      "fieldtype": "layout:section",
+      "label": "Activity",
+      "layout": {
+        "section": "Activity"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "carry_forward_communication_and_comments",
+      "fieldtype": "check",
+      "label": "Carry Forward Communication and Comments",
+      "layout": {
+        "section": "Activity"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "description": "All the Comments and Emails will be copied from one document to another newly created document(Lead -> Opportunity -> Quotation) throughout the CRM documents."
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_junk",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "Activity"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "update_timestamp_on_new_communication",
+      "fieldtype": "check",
+      "label": "Update timestamp on new communication",
+      "layout": {
+        "column": 1,
+        "section": "Activity"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "description": "Update the modified timestamp on new communications received in Lead & Opportunity."
+      },
+      "unique": false
+    }
+  ],
+  "identity": {
+    "app": "erpnext",
+    "isSingle": false,
+    "isSubmittable": false,
+    "isTree": false,
+    "module": "CRM",
+    "naming": {
+      "strategy": "hash"
+    }
+  },
+  "name": "CRM Settings",
+  "permissions": [
+    {
+      "actions": {
+        "create": true,
+        "delete": true,
+        "email": true,
+        "print": true,
+        "read": true,
+        "share": true,
+        "write": true
+      },
+      "permlevel": 0,
+      "role": "Sales Manager"
+    },
+    {
+      "actions": {
+        "create": true,
+        "delete": true,
+        "email": true,
+        "print": true,
+        "read": true,
+        "share": true,
+        "write": true
+      },
+      "permlevel": 0,
+      "role": "Sales Master Manager"
+    },
+    {
+      "actions": {
+        "create": true,
+        "email": true,
+        "print": true,
+        "read": true,
+        "share": true,
+        "write": true
+      },
+      "permlevel": 0,
+      "role": "System Manager"
+    }
+  ],
+  "ui": {
+    "searchFields": [],
+    "showNameInGlobalSearch": false,
+    "sortField": "creation",
+    "sortOrder": "DESC"
+  },
+  "workflows": [
+    {
+      "kind": "unavailable"
+    }
+  ]
+}

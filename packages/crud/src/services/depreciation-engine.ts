@@ -181,7 +181,7 @@ export async function calculateDepreciation(
       ),
     );
 
-  if (!asset || asset.status !== 'in_service') return null;
+  if (asset?.status !== 'in_service') return null;
   if (asset.depreciationMethod === 'none') return null;
 
   // 2. Get prior accumulated depreciation

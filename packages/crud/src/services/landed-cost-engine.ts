@@ -1,4 +1,4 @@
-import { and, eq, landedCostAllocations, sql } from 'afena-database';
+import { landedCostAllocations } from 'afena-database';
 
 import type { NeonHttpDatabase } from 'drizzle-orm/neon-http';
 
@@ -46,8 +46,7 @@ function allocateByQty(
   const result = new Map<string, number>();
   let allocated = 0;
 
-  for (let i = 0; i < lines.length; i++) {
-    const line = lines[i];
+  for (const [i, line] of lines.entries()) {
     const isLast = i === lines.length - 1;
     const amount = isLast
       ? totalCostMinor - allocated
@@ -75,8 +74,7 @@ function allocateByValue(
   const result = new Map<string, number>();
   let allocated = 0;
 
-  for (let i = 0; i < lines.length; i++) {
-    const line = lines[i];
+  for (const [i, line] of lines.entries()) {
     const isLast = i === lines.length - 1;
     const amount = isLast
       ? totalCostMinor - allocated
@@ -104,8 +102,7 @@ function allocateByWeight(
   const result = new Map<string, number>();
   let allocated = 0;
 
-  for (let i = 0; i < lines.length; i++) {
-    const line = lines[i];
+  for (const [i, line] of lines.entries()) {
     const isLast = i === lines.length - 1;
     const weight = line.weightKg ?? 0;
     const amount = isLast

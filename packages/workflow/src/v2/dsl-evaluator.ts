@@ -190,7 +190,9 @@ function resolvePropertyPath(path: string, ctx: DslContext): unknown {
   for (let i = 1; i < parts.length; i++) {
     if (current === null || current === undefined) return undefined;
     if (typeof current !== 'object') return undefined;
-    current = (current as Record<string, unknown>)[parts[i]!];
+    const part = parts[i];
+    if (!part) return undefined;
+    current = (current as Record<string, unknown>)[part];
   }
 
   return current;
@@ -202,7 +204,13 @@ function resolvePropertyPath(path: string, ctx: DslContext): unknown {
 function evaluateTemplate(template: string, ctx: DslContext): string {
   return template.replace(/\$\{([^}]+)\}/g, (_match, expr: string) => {
     const value = resolvePropertyPath(expr.trim(), ctx);
-    return value === null || value === undefined ? '' : String(value);
+    if (value === null || value === undefined) return '';
+    // Handle primitives directly
+    if (typeof value === 'string' || typeof value === 'number' || typeof value === 'boolean') {
+      return String(value);
+    }
+    // For objects, use JSON.stringify
+    return JSON.stringify(value);
   });
 }
 

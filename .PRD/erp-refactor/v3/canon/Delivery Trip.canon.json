@@ -1,0 +1,580 @@
+{
+  "audit": {
+    "trackChanges": false
+  },
+  "canonVersion": "1.0.0",
+  "childTables": [
+    {
+      "childDoctype": "Delivery Stop",
+      "parentField": "delivery_stops",
+      "required": true
+    }
+  ],
+  "doctypeId": "erpnext:Stock:Delivery Trip",
+  "events": [
+    {
+      "event": "validate",
+      "handlers": [
+        "erpnext.support.doctype.service_level_agreement.service_level_agreement.apply",
+        "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record.check_for_running_deletion_job"
+      ],
+      "handlersParsed": [
+        {
+          "attrPath": "apply",
+          "module": "erpnext.support.doctype.service_level_agreement.service_level_agreement"
+        },
+        {
+          "attrPath": "check_for_running_deletion_job",
+          "module": "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record"
+        }
+      ]
+    }
+  ],
+  "fieldOrder": [
+    "naming_series",
+    "company",
+    "column_break_2",
+    "email_notification_sent",
+    "section_break_3",
+    "driver",
+    "driver_name",
+    "driver_email",
+    "driver_address",
+    "total_distance",
+    "uom",
+    "column_break_4",
+    "vehicle",
+    "departure_time",
+    "employee",
+    "delivery_service_stops",
+    "delivery_stops",
+    "calculate_arrival_time",
+    "optimize_route",
+    "section_break_15",
+    "status",
+    "cb_more_info",
+    "amended_from"
+  ],
+  "fields": [
+    {
+      "constraints": {},
+      "fieldname": "naming_series",
+      "fieldtype": "select",
+      "label": "Series",
+      "optionsParsed": {
+        "kind": "naming_series",
+        "prefixes": [
+          "MAT-DT-.YYYY.-"
+        ]
+      },
+      "optionsRaw": "MAT-DT-.YYYY.-",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "company",
+      "fieldtype": "link",
+      "label": "Company",
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Company"
+      },
+      "optionsRaw": "Company",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Company",
+        "kind": "static"
+      },
+      "requiredStatic": true,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_2",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "allowOnSubmit": true,
+      "constraints": {},
+      "default": "0",
+      "fieldname": "email_notification_sent",
+      "fieldtype": "check",
+      "label": "Initial Email Notification Sent",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "section_break_3",
+      "fieldtype": "layout:section",
+      "label": "Delivery Details",
+      "layout": {
+        "section": "Delivery Details"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "driver",
+      "fieldtype": "link",
+      "label": "Driver",
+      "layout": {
+        "section": "Delivery Details"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Driver"
+      },
+      "optionsRaw": "Driver",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Driver",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fetchFrom": "driver.full_name",
+      "fieldname": "driver_name",
+      "fieldtype": "data",
+      "label": "Driver Name",
+      "layout": {
+        "section": "Delivery Details"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "inListView": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "driver_email",
+      "fieldtype": "data",
+      "label": "Driver Email",
+      "layout": {
+        "section": "Delivery Details"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fetchFrom": "driver.address",
+      "fetchIfEmpty": true,
+      "fieldname": "driver_address",
+      "fieldtype": "link",
+      "label": "Driver Address",
+      "layout": {
+        "section": "Delivery Details"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Address"
+      },
+      "optionsRaw": "Address",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Address",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "total_distance",
+      "fieldtype": "float",
+      "label": "Total Estimated Distance",
+      "layout": {
+        "section": "Delivery Details"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "precision": "2",
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:doc.total_distance",
+      "fieldname": "uom",
+      "fieldtype": "link",
+      "label": "Distance UOM",
+      "layout": {
+        "section": "Delivery Details"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "UOM"
+      },
+      "optionsRaw": "UOM",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "UOM",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_4",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "Delivery Details"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "vehicle",
+      "fieldtype": "link",
+      "label": "Vehicle",
+      "layout": {
+        "column": 1,
+        "section": "Delivery Details"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Vehicle"
+      },
+      "optionsRaw": "Vehicle",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Vehicle",
+        "kind": "static"
+      },
+      "requiredStatic": true,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "departure_time",
+      "fieldtype": "datetime",
+      "label": "Departure Time",
+      "layout": {
+        "column": 1,
+        "section": "Delivery Details"
+      },
+      "permlevel": 0,
+      "requiredStatic": true,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fetchFrom": "driver.employee",
+      "fieldname": "employee",
+      "fieldtype": "link",
+      "label": "Employee",
+      "layout": {
+        "column": 1,
+        "section": "Delivery Details"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Employee"
+      },
+      "optionsRaw": "Employee",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Employee",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "delivery_service_stops",
+      "fieldtype": "layout:section",
+      "label": "Delivery Stops",
+      "layout": {
+        "section": "Delivery Stops"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "childDoctype": "Delivery Stop",
+      "constraints": {},
+      "fieldname": "delivery_stops",
+      "fieldtype": "table",
+      "label": "Delivery Stop",
+      "layout": {
+        "section": "Delivery Stops"
+      },
+      "optionsParsed": {
+        "doctype": "Delivery Stop",
+        "kind": "child_doctype"
+      },
+      "optionsRaw": "Delivery Stop",
+      "permlevel": 0,
+      "requiredStatic": true,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:!doc.__islocal",
+      "fieldname": "calculate_arrival_time",
+      "fieldtype": "button",
+      "label": "Calculate Estimated Arrival Times",
+      "layout": {
+        "section": "Delivery Stops"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "description": "Use Google Maps Direction API to calculate estimated arrival times"
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:!doc.__islocal",
+      "fieldname": "optimize_route",
+      "fieldtype": "button",
+      "label": "Optimize Route",
+      "layout": {
+        "section": "Delivery Stops"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "description": "Use Google Maps Direction API to optimize route"
+      },
+      "unique": false
+    },
+    {
+      "allowOnSubmit": true,
+      "constraints": {},
+      "fieldname": "section_break_15",
+      "fieldtype": "layout:section",
+      "layout": {
+        "section": "section_break_15"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "status",
+      "fieldtype": "select",
+      "label": "Status",
+      "layout": {
+        "section": "section_break_15"
+      },
+      "noCopy": true,
+      "optionsParsed": {
+        "choices": [
+          "Draft",
+          "Scheduled",
+          "In Transit",
+          "Completed",
+          "Cancelled"
+        ],
+        "kind": "select"
+      },
+      "optionsRaw": "Draft\nScheduled\nIn Transit\nCompleted\nCancelled",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "inStandardFilter": true,
+        "printHide": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "cb_more_info",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "section_break_15"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "amended_from",
+      "fieldtype": "link",
+      "label": "Amended From",
+      "layout": {
+        "column": 1,
+        "section": "section_break_15"
+      },
+      "noCopy": true,
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Delivery Trip"
+      },
+      "optionsRaw": "Delivery Trip",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Delivery Trip",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true,
+        "readOnly": true
+      },
+      "unique": false
+    }
+  ],
+  "identity": {
+    "app": "erpnext",
+    "isSingle": false,
+    "isSubmittable": true,
+    "isTree": false,
+    "module": "Stock",
+    "naming": {
+      "seriesField": "naming_series",
+      "seriesPrefix": "MAT-DT-.YYYY.-",
+      "strategy": "series"
+    }
+  },
+  "name": "Delivery Trip",
+  "permissions": [
+    {
+      "actions": {
+        "amend": true,
+        "cancel": true,
+        "create": true,
+        "delete": true,
+        "email": true,
+        "export": true,
+        "print": true,
+        "read": true,
+        "report": true,
+        "share": true,
+        "submit": true,
+        "write": true
+      },
+      "permlevel": 0,
+      "role": "Delivery Manager"
+    },
+    {
+      "actions": {
+        "amend": true,
+        "cancel": true,
+        "create": true,
+        "delete": true,
+        "email": true,
+        "export": true,
+        "print": true,
+        "read": true,
+        "report": true,
+        "share": true,
+        "submit": true,
+        "write": true
+      },
+      "permlevel": 0,
+      "role": "Delivery User"
+    },
+    {
+      "actions": {
+        "amend": true,
+        "cancel": true,
+        "create": true,
+        "delete": true,
+        "email": true,
+        "export": true,
+        "print": true,
+        "read": true,
+        "report": true,
+        "share": true,
+        "submit": true,
+        "write": true
+      },
+      "permlevel": 0,
+      "role": "Fulfillment User"
+    },
+    {
+      "actions": {
+        "amend": true,
+        "cancel": true,
+        "create": true,
+        "delete": true,
+        "email": true,
+        "export": true,
+        "print": true,
+        "read": true,
+        "report": true,
+        "share": true,
+        "submit": true,
+        "write": true
+      },
+      "permlevel": 0,
+      "role": "Stock User"
+    }
+  ],
+  "ui": {
+    "searchFields": [],
+    "showNameInGlobalSearch": false,
+    "sortField": "creation",
+    "sortOrder": "DESC",
+    "titleField": "driver_name"
+  },
+  "workflows": [
+    {
+      "kind": "unavailable"
+    }
+  ]
+}

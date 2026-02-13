@@ -264,7 +264,7 @@ export interface CompiledEdge {
   priority: number;
   condition?: ConditionJson;
   label?: string;
-  provenance: 'envelope' | string;
+  provenance: string; // 'envelope' or slotId
 }
 
 export interface JoinRequirement {

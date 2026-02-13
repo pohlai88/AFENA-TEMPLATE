@@ -1,0 +1,216 @@
+{
+  "audit": {
+    "trackChanges": false
+  },
+  "canonVersion": "1.0.0",
+  "childTables": [],
+  "doctypeId": "erpnext:Assets:Asset Activity",
+  "events": [
+    {
+      "event": "validate",
+      "handlers": [
+        "erpnext.support.doctype.service_level_agreement.service_level_agreement.apply",
+        "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record.check_for_running_deletion_job"
+      ],
+      "handlersParsed": [
+        {
+          "attrPath": "apply",
+          "module": "erpnext.support.doctype.service_level_agreement.service_level_agreement"
+        },
+        {
+          "attrPath": "check_for_running_deletion_job",
+          "module": "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record"
+        }
+      ]
+    }
+  ],
+  "fieldOrder": [
+    "asset",
+    "column_break_vkdy",
+    "date",
+    "column_break_kkxv",
+    "user",
+    "section_break_romx",
+    "subject"
+  ],
+  "fields": [
+    {
+      "constraints": {},
+      "fieldname": "asset",
+      "fieldtype": "link",
+      "label": "Asset",
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Asset"
+      },
+      "optionsRaw": "Asset",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Asset",
+        "kind": "static"
+      },
+      "requiredStatic": true,
+      "ui": {
+        "inListView": true,
+        "inStandardFilter": true,
+        "readOnly": true,
+        "width": "165"
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_vkdy",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "now",
+      "fieldname": "date",
+      "fieldtype": "datetime",
+      "label": "Date",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": true,
+      "ui": {
+        "inListView": true,
+        "readOnly": true,
+        "width": "158"
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_kkxv",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 2
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "user",
+      "fieldtype": "link",
+      "label": "User",
+      "layout": {
+        "column": 2
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "User"
+      },
+      "optionsRaw": "User",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "User",
+        "kind": "static"
+      },
+      "requiredStatic": true,
+      "ui": {
+        "inListView": true,
+        "readOnly": true,
+        "width": "150"
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "section_break_romx",
+      "fieldtype": "layout:section",
+      "layout": {
+        "section": "section_break_romx"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "subject",
+      "fieldtype": "small_text",
+      "label": "Subject",
+      "layout": {
+        "section": "section_break_romx"
+      },
+      "permlevel": 0,
+      "requiredStatic": true,
+      "ui": {
+        "inListView": true,
+        "readOnly": true,
+        "width": "518"
+      },
+      "unique": false
+    }
+  ],
+  "identity": {
+    "app": "erpnext",
+    "isSingle": false,
+    "isSubmittable": false,
+    "isTree": false,
+    "module": "Assets",
+    "naming": {
+      "strategy": "hash"
+    }
+  },
+  "name": "Asset Activity",
+  "permissions": [
+    {
+      "actions": {
+        "delete": true,
+        "email": true,
+        "read": true,
+        "report": true,
+        "share": true
+      },
+      "permlevel": 0,
+      "role": "Accounts User"
+    },
+    {
+      "actions": {
+        "delete": true,
+        "email": true,
+        "read": true,
+        "report": true,
+        "share": true
+      },
+      "permlevel": 0,
+      "role": "Quality Manager"
+    },
+    {
+      "actions": {
+        "delete": true,
+        "email": true,
+        "read": true,
+        "report": true,
+        "share": true
+      },
+      "permlevel": 0,
+      "role": "System Manager"
+    }
+  ],
+  "ui": {
+    "searchFields": [],
+    "showNameInGlobalSearch": false,
+    "sortField": "creation",
+    "sortOrder": "DESC"
+  },
+  "workflows": [
+    {
+      "kind": "unavailable"
+    }
+  ]
+}

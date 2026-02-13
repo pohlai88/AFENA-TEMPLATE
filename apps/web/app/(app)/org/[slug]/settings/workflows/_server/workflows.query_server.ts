@@ -2,6 +2,7 @@ import { cache } from 'react';
 
 import {
   listWorkflowDefinitions,
+  listDefinitionVersions,
   getWorkflowDefinition,
   listWorkflowInstances,
   getWorkflowInstance,
@@ -76,4 +77,10 @@ export const fetchPendingApprovals = cache(async (actorUserId: string) => {
   const response = await listPendingApprovals(actorUserId);
   if (!response.ok) return [];
   return response.data ?? [];
+});
+
+export const fetchDefinitionVersions = cache(async (entityType: string, name: string): Promise<WorkflowDefinitionSummary[]> => {
+  const response = await listDefinitionVersions(entityType, name);
+  if (!response.ok) return [];
+  return (response.data ?? []) as unknown as WorkflowDefinitionSummary[];
 });

@@ -61,6 +61,12 @@ packages/ui/engine/index.css
 sbom.json
 sbom.sha256
 
+# Playwright
+playwright-report/
+test-results/
+blob-report/
+/playwright/.cache/
+
 # Temporary folders
 tmp/
 temp/

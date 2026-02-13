@@ -1,4 +1,5 @@
 @import 'tailwindcss';
+@import '@neondatabase/auth/ui/tailwind';
 @source '../../../packages/ui/src';
 @import '../../../packages/ui/theme.css';
 @import '../../../packages/ui/src/styles/globals.css';

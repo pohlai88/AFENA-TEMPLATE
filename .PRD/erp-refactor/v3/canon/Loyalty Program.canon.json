@@ -1,0 +1,448 @@
+{
+  "audit": {
+    "trackChanges": true
+  },
+  "canonVersion": "1.0.0",
+  "childTables": [
+    {
+      "childDoctype": "Loyalty Program Collection",
+      "parentField": "collection_rules",
+      "required": true
+    }
+  ],
+  "doctypeId": "erpnext:Accounts:Loyalty Program",
+  "events": [
+    {
+      "event": "validate",
+      "handlers": [
+        "erpnext.support.doctype.service_level_agreement.service_level_agreement.apply",
+        "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record.check_for_running_deletion_job"
+      ],
+      "handlersParsed": [
+        {
+          "attrPath": "apply",
+          "module": "erpnext.support.doctype.service_level_agreement.service_level_agreement"
+        },
+        {
+          "attrPath": "check_for_running_deletion_job",
+          "module": "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record"
+        }
+      ]
+    }
+  ],
+  "fieldOrder": [
+    "loyalty_program_name",
+    "loyalty_program_type",
+    "from_date",
+    "to_date",
+    "column_break_7",
+    "customer_group",
+    "customer_territory",
+    "auto_opt_in",
+    "rules",
+    "collection_rules",
+    "redemption",
+    "conversion_factor",
+    "expiry_duration",
+    "column_break_10",
+    "expense_account",
+    "company",
+    "accounting_dimensions_section",
+    "cost_center",
+    "dimension_col_break",
+    "project",
+    "help_section",
+    "loyalty_program_help"
+  ],
+  "fields": [
+    {
+      "constraints": {},
+      "fieldname": "loyalty_program_name",
+      "fieldtype": "data",
+      "label": "Loyalty Program Name",
+      "permlevel": 0,
+      "requiredStatic": true,
+      "ui": {
+        "inListView": true
+      },
+      "unique": true
+    },
+    {
+      "constraints": {},
+      "fieldname": "loyalty_program_type",
+      "fieldtype": "select",
+      "label": "Loyalty Program Type",
+      "optionsParsed": {
+        "choices": [
+          "Single Tier Program",
+          "Multiple Tier Program"
+        ],
+        "kind": "select"
+      },
+      "optionsRaw": "Single Tier Program\nMultiple Tier Program",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "from_date",
+      "fieldtype": "date",
+      "label": "From Date",
+      "permlevel": 0,
+      "requiredStatic": true,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "to_date",
+      "fieldtype": "date",
+      "label": "To Date",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_7",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "customer_group",
+      "fieldtype": "link",
+      "label": "Customer Group",
+      "layout": {
+        "column": 1
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Customer Group"
+      },
+      "optionsRaw": "Customer Group",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Customer Group",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "customer_territory",
+      "fieldtype": "link",
+      "label": "Customer Territory",
+      "layout": {
+        "column": 1
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Territory"
+      },
+      "optionsRaw": "Territory",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Territory",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "auto_opt_in",
+      "fieldtype": "check",
+      "label": "Auto Opt In (For all customers)",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "rules",
+      "fieldtype": "layout:section",
+      "label": "Collection Tier",
+      "layout": {
+        "section": "Collection Tier"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "childDoctype": "Loyalty Program Collection",
+      "constraints": {},
+      "fieldname": "collection_rules",
+      "fieldtype": "table",
+      "label": "Collection Rules",
+      "layout": {
+        "section": "Collection Tier"
+      },
+      "optionsParsed": {
+        "doctype": "Loyalty Program Collection",
+        "kind": "child_doctype"
+      },
+      "optionsRaw": "Loyalty Program Collection",
+      "permlevel": 0,
+      "requiredStatic": true,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "redemption",
+      "fieldtype": "layout:section",
+      "label": "Redemption",
+      "layout": {
+        "section": "Redemption"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "conversion_factor",
+      "fieldtype": "float",
+      "label": "Conversion Factor",
+      "layout": {
+        "section": "Redemption"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "description": "1 Loyalty Points = How much base currency?"
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "expiry_duration",
+      "fieldtype": "int",
+      "label": "Expiry Duration (in days)",
+      "layout": {
+        "section": "Redemption"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_10",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "Redemption"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "expense_account",
+      "fieldtype": "link",
+      "label": "Expense Account",
+      "layout": {
+        "column": 1,
+        "section": "Redemption"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Account"
+      },
+      "optionsRaw": "Account",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Account",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "company",
+      "fieldtype": "link",
+      "label": "Company",
+      "layout": {
+        "column": 1,
+        "section": "Redemption"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Company"
+      },
+      "optionsRaw": "Company",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Company",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "accounting_dimensions_section",
+      "fieldtype": "layout:section",
+      "label": "Accounting Dimensions",
+      "layout": {
+        "section": "Accounting Dimensions"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "cost_center",
+      "fieldtype": "link",
+      "label": "Cost Center",
+      "layout": {
+        "section": "Accounting Dimensions"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Cost Center"
+      },
+      "optionsRaw": "Cost Center",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Cost Center",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "dimension_col_break",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "Accounting Dimensions"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "project",
+      "fieldtype": "link",
+      "label": "Project",
+      "layout": {
+        "column": 1,
+        "section": "Accounting Dimensions"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Project"
+      },
+      "optionsRaw": "Project",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Project",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "help_section",
+      "fieldtype": "layout:section",
+      "label": "Help Section",
+      "layout": {
+        "section": "Help Section"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "loyalty_program_help",
+      "fieldtype": "text_editor",
+      "label": "Loyalty Program Help",
+      "layout": {
+        "section": "Help Section"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    }
+  ],
+  "identity": {
+    "app": "erpnext",
+    "isSingle": false,
+    "isSubmittable": false,
+    "isTree": false,
+    "module": "Accounts",
+    "naming": {
+      "expression": "field:loyalty_program_name",
+      "strategy": "field"
+    }
+  },
+  "name": "Loyalty Program",
+  "permissions": [
+    {
+      "actions": {
+        "create": true,
+        "delete": true,
+        "email": true,
+        "export": true,
+        "print": true,
+        "read": true,
+        "report": true,
+        "share": true,
+        "write": true
+      },
+      "permlevel": 0,
+      "role": "System Manager"
+    }
+  ],
+  "ui": {
+    "searchFields": [],
+    "showNameInGlobalSearch": false,
+    "sortField": "creation",
+    "sortOrder": "DESC"
+  },
+  "workflows": [
+    {
+      "kind": "unavailable"
+    }
+  ]
+}

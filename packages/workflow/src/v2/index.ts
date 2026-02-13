@@ -280,6 +280,10 @@ export type {
   SuggestedAction,
 } from './stuck-detector';
 
+// ── Seed Envelopes ───────────────────────────────────────────
+export { generateSeedDefinitions, generateSeedSql } from './seed-envelopes';
+export type { SeedDefinitionPair } from './seed-envelopes';
+
 // ── Receipts Pruner (Phase 2) ──────────────────────────────
 export { pruneReceipts } from './receipts-pruner';
 export type {

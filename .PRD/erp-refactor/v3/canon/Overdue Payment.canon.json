@@ -1,0 +1,382 @@
+{
+  "audit": {
+    "trackChanges": true
+  },
+  "canonVersion": "1.0.0",
+  "childTables": [],
+  "doctypeId": "erpnext:Accounts:Overdue Payment",
+  "events": [
+    {
+      "event": "validate",
+      "handlers": [
+        "erpnext.support.doctype.service_level_agreement.service_level_agreement.apply",
+        "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record.check_for_running_deletion_job"
+      ],
+      "handlersParsed": [
+        {
+          "attrPath": "apply",
+          "module": "erpnext.support.doctype.service_level_agreement.service_level_agreement"
+        },
+        {
+          "attrPath": "check_for_running_deletion_job",
+          "module": "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record"
+        }
+      ]
+    }
+  ],
+  "fieldOrder": [
+    "sales_invoice",
+    "payment_schedule",
+    "dunning_level",
+    "payment_term",
+    "section_break_15",
+    "description",
+    "section_break_4",
+    "due_date",
+    "overdue_days",
+    "mode_of_payment",
+    "column_break_5",
+    "invoice_portion",
+    "section_break_16",
+    "payment_amount",
+    "outstanding",
+    "paid_amount",
+    "discounted_amount",
+    "interest"
+  ],
+  "fields": [
+    {
+      "constraints": {},
+      "fieldname": "sales_invoice",
+      "fieldtype": "link",
+      "label": "Sales Invoice",
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Sales Invoice"
+      },
+      "optionsRaw": "Sales Invoice",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Sales Invoice",
+        "kind": "static"
+      },
+      "requiredStatic": true,
+      "ui": {
+        "inListView": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "payment_schedule",
+      "fieldtype": "data",
+      "label": "Payment Schedule",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "1",
+      "fieldname": "dunning_level",
+      "fieldtype": "int",
+      "label": "Dunning Level",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "inListView": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "payment_term",
+      "fieldtype": "link",
+      "label": "Payment Term",
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Payment Term"
+      },
+      "optionsRaw": "Payment Term",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Payment Term",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "section_break_15",
+      "fieldtype": "layout:section",
+      "label": "Description",
+      "layout": {
+        "section": "Description"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "collapsible": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fetchFrom": "payment_term.description",
+      "fieldname": "description",
+      "fieldtype": "small_text",
+      "label": "Description",
+      "layout": {
+        "section": "Description"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "section_break_4",
+      "fieldtype": "layout:section",
+      "layout": {
+        "section": "section_break_4"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "due_date",
+      "fieldtype": "date",
+      "label": "Due Date",
+      "layout": {
+        "section": "section_break_4"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "overdue_days",
+      "fieldtype": "data",
+      "label": "Overdue Days",
+      "layout": {
+        "section": "section_break_4"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "inListView": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "mode_of_payment",
+      "fieldtype": "link",
+      "label": "Mode of Payment",
+      "layout": {
+        "section": "section_break_4"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Mode of Payment"
+      },
+      "optionsRaw": "Mode of Payment",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Mode of Payment",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_5",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "section_break_4"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "invoice_portion",
+      "fieldtype": "percent",
+      "label": "Invoice Portion",
+      "layout": {
+        "column": 1,
+        "section": "section_break_4"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "section_break_16",
+      "fieldtype": "layout:section",
+      "layout": {
+        "section": "section_break_16"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "payment_amount",
+      "fieldtype": "currency",
+      "label": "Payment Amount",
+      "layout": {
+        "section": "section_break_16"
+      },
+      "optionsParsed": {
+        "field": "currency",
+        "kind": "currency_field"
+      },
+      "optionsRaw": "currency",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fetchFrom": "payment_amount",
+      "fieldname": "outstanding",
+      "fieldtype": "currency",
+      "label": "Outstanding",
+      "layout": {
+        "section": "section_break_16"
+      },
+      "optionsParsed": {
+        "field": "currency",
+        "kind": "currency_field"
+      },
+      "optionsRaw": "currency",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "inListView": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "paid_amount",
+      "fieldname": "paid_amount",
+      "fieldtype": "currency",
+      "label": "Paid Amount",
+      "layout": {
+        "section": "section_break_16"
+      },
+      "optionsParsed": {
+        "field": "currency",
+        "kind": "currency_field"
+      },
+      "optionsRaw": "currency",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "dependsOn": "discounted_amount",
+      "fieldname": "discounted_amount",
+      "fieldtype": "currency",
+      "label": "Discounted Amount",
+      "layout": {
+        "section": "section_break_16"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "interest",
+      "fieldtype": "currency",
+      "label": "Interest",
+      "layout": {
+        "section": "section_break_16"
+      },
+      "optionsParsed": {
+        "field": "currency",
+        "kind": "currency_field"
+      },
+      "optionsRaw": "currency",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "inListView": true,
+        "readOnly": true
+      },
+      "unique": false
+    }
+  ],
+  "identity": {
+    "app": "erpnext",
+    "isSingle": false,
+    "isSubmittable": false,
+    "isTree": false,
+    "module": "Accounts",
+    "naming": {
+      "strategy": "hash"
+    }
+  },
+  "name": "Overdue Payment",
+  "permissions": [],
+  "ui": {
+    "searchFields": [],
+    "showNameInGlobalSearch": false,
+    "sortField": "creation",
+    "sortOrder": "DESC"
+  },
+  "workflows": [
+    {
+      "kind": "unavailable"
+    }
+  ]
+}

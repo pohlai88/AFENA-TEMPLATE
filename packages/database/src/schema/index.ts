@@ -393,4 +393,32 @@ export type { WorkflowStepReceiptRow, NewWorkflowStepReceiptRow } from './workfl
 export { workflowOutboxReceipts } from './workflow-outbox-receipts';
 export type { WorkflowOutboxReceiptRow, NewWorkflowOutboxReceiptRow } from './workflow-outbox-receipts';
 
+// ── Audit Gap Closure: Migration 0043 ────────────────────
+export { bankAccounts } from './bank-accounts';
+export type { BankAccount, NewBankAccount } from './bank-accounts';
+
+export { debitNotes } from './debit-notes';
+export type { DebitNote, NewDebitNote } from './debit-notes';
+
+export { customerProfiles } from './customer-profiles';
+export type { CustomerProfile, NewCustomerProfile } from './customer-profiles';
+
+export { supplierProfiles } from './supplier-profiles';
+export type { SupplierProfile, NewSupplierProfile } from './supplier-profiles';
+
+export { paymentTerms } from './payment-terms';
+export type { PaymentTerm, NewPaymentTerm } from './payment-terms';
+
+export { bankReconciliationSessions } from './bank-reconciliation-sessions';
+export type { BankReconciliationSession, NewBankReconciliationSession } from './bank-reconciliation-sessions';
+
+export { contracts } from './contracts';
+export type { Contract, NewContract } from './contracts';
+
+export { purchaseRequests } from './purchase-requests';
+export type { PurchaseRequest, NewPurchaseRequest } from './purchase-requests';
+
+export { stockBalances } from './stock-balances';
+export type { StockBalance, NewStockBalance } from './stock-balances';
+
 // @entity-gen:schema-barrel

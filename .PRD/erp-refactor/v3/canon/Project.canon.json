@@ -1,0 +1,1159 @@
+{
+  "audit": {
+    "trackChanges": false,
+    "trackSeen": true
+  },
+  "canonVersion": "1.0.0",
+  "childTables": [
+    {
+      "childDoctype": "Project User",
+      "parentField": "users",
+      "required": false
+    }
+  ],
+  "doctypeId": "erpnext:Projects:Project",
+  "events": [
+    {
+      "event": "validate",
+      "handlers": [
+        "erpnext.support.doctype.service_level_agreement.service_level_agreement.apply",
+        "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record.check_for_running_deletion_job"
+      ],
+      "handlersParsed": [
+        {
+          "attrPath": "apply",
+          "module": "erpnext.support.doctype.service_level_agreement.service_level_agreement"
+        },
+        {
+          "attrPath": "check_for_running_deletion_job",
+          "module": "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record"
+        }
+      ]
+    }
+  ],
+  "fieldOrder": [
+    "naming_series",
+    "project_name",
+    "status",
+    "project_type",
+    "is_active",
+    "percent_complete_method",
+    "percent_complete",
+    "column_break_5",
+    "project_template",
+    "expected_start_date",
+    "expected_end_date",
+    "priority",
+    "department",
+    "customer_details",
+    "customer",
+    "column_break_14",
+    "sales_order",
+    "users_section",
+    "users",
+    "copied_from",
+    "section_break0",
+    "notes",
+    "section_break_18",
+    "actual_start_date",
+    "actual_time",
+    "column_break_20",
+    "actual_end_date",
+    "project_details",
+    "estimated_costing",
+    "total_costing_amount",
+    "total_purchase_cost",
+    "company",
+    "column_break_28",
+    "total_sales_amount",
+    "total_billable_amount",
+    "total_billed_amount",
+    "total_consumed_material_cost",
+    "cost_center",
+    "margin",
+    "gross_margin",
+    "column_break_37",
+    "per_gross_margin",
+    "monitor_progress",
+    "collect_progress",
+    "holiday_list",
+    "frequency",
+    "from_time",
+    "to_time",
+    "first_email",
+    "second_email",
+    "daily_time_to_send",
+    "day_to_send",
+    "weekly_time_to_send",
+    "column_break_45",
+    "subject",
+    "message"
+  ],
+  "fields": [
+    {
+      "constraints": {},
+      "fieldname": "naming_series",
+      "fieldtype": "select",
+      "label": "Series",
+      "noCopy": true,
+      "optionsParsed": {
+        "kind": "naming_series",
+        "prefixes": [
+          "PROJ-.####"
+        ]
+      },
+      "optionsRaw": "PROJ-.####",
+      "permlevel": 0,
+      "requiredStatic": true,
+      "setOnlyOnce": true,
+      "ui": {
+        "printHide": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "project_name",
+      "fieldtype": "data",
+      "label": "Project Name",
+      "permlevel": 0,
+      "requiredStatic": true,
+      "ui": {},
+      "unique": true
+    },
+    {
+      "constraints": {},
+      "default": "Open",
+      "fieldname": "status",
+      "fieldtype": "select",
+      "label": "Status",
+      "noCopy": true,
+      "optionsParsed": {
+        "choices": [
+          "Open",
+          "Completed",
+          "Cancelled"
+        ],
+        "kind": "select"
+      },
+      "optionsRaw": "Open\nCompleted\nCancelled",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "inStandardFilter": true,
+        "searchIndex": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "project_type",
+      "fieldtype": "link",
+      "label": "Project Type",
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Project Type"
+      },
+      "optionsRaw": "Project Type",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Project Type",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "inListView": true,
+        "inStandardFilter": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "is_active",
+      "fieldtype": "select",
+      "label": "Is Active",
+      "optionsParsed": {
+        "choices": [
+          "Yes",
+          "No"
+        ],
+        "kind": "select"
+      },
+      "optionsRaw": "Yes\nNo",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "Task Completion",
+      "fieldname": "percent_complete_method",
+      "fieldtype": "select",
+      "label": "% Complete Method",
+      "optionsParsed": {
+        "choices": [
+          "Manual",
+          "Task Completion",
+          "Task Progress",
+          "Task Weight"
+        ],
+        "kind": "select"
+      },
+      "optionsRaw": "Manual\nTask Completion\nTask Progress\nTask Weight",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "percent_complete",
+      "fieldtype": "percent",
+      "label": "% Completed",
+      "noCopy": true,
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "bold": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_5",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "project_template",
+      "fieldtype": "link",
+      "label": "From Template",
+      "layout": {
+        "column": 1
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Project Template"
+      },
+      "optionsRaw": "Project Template",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Project Template",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "setOnlyOnce": true,
+      "ui": {
+        "allowInQuickEntry": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "expected_start_date",
+      "fieldtype": "date",
+      "label": "Expected Start Date",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "bold": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "expected_end_date",
+      "fieldtype": "date",
+      "label": "Expected End Date",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "bold": true,
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "priority",
+      "fieldtype": "select",
+      "label": "Priority",
+      "layout": {
+        "column": 1
+      },
+      "optionsParsed": {
+        "choices": [
+          "Medium",
+          "Low",
+          "High"
+        ],
+        "kind": "select"
+      },
+      "optionsRaw": "Medium\nLow\nHigh",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "inStandardFilter": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "department",
+      "fieldtype": "link",
+      "label": "Department",
+      "layout": {
+        "column": 1
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Department"
+      },
+      "optionsRaw": "Department",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Department",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "customer_details",
+      "fieldtype": "layout:section",
+      "label": "Customer Details",
+      "layout": {
+        "section": "Customer Details"
+      },
+      "optionsParsed": {
+        "kind": "other",
+        "value": "fa fa-user"
+      },
+      "optionsRaw": "fa fa-user",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "collapsible": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "customer",
+      "fieldtype": "link",
+      "label": "Customer",
+      "layout": {
+        "section": "Customer Details"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Customer"
+      },
+      "optionsRaw": "Customer",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Customer",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "inGlobalSearch": true,
+        "printHide": true,
+        "searchIndex": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_14",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "Customer Details"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "sales_order",
+      "fieldtype": "link",
+      "label": "Sales Order",
+      "layout": {
+        "column": 1,
+        "section": "Customer Details"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Sales Order"
+      },
+      "optionsRaw": "Sales Order",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Sales Order",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "users_section",
+      "fieldtype": "layout:section",
+      "label": "Users",
+      "layout": {
+        "section": "Users"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "collapsible": true
+      },
+      "unique": false
+    },
+    {
+      "childDoctype": "Project User",
+      "constraints": {},
+      "fieldname": "users",
+      "fieldtype": "table",
+      "label": "Users",
+      "layout": {
+        "section": "Users"
+      },
+      "optionsParsed": {
+        "doctype": "Project User",
+        "kind": "child_doctype"
+      },
+      "optionsRaw": "Project User",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "description": "Project will be accessible on the website to these users"
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "copied_from",
+      "fieldtype": "data",
+      "label": "Copied From",
+      "layout": {
+        "section": "Users"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "hidden": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "section_break0",
+      "fieldtype": "layout:section",
+      "label": "Notes",
+      "layout": {
+        "section": "Notes"
+      },
+      "optionsParsed": {
+        "kind": "other",
+        "value": "fa fa-list"
+      },
+      "optionsRaw": "fa fa-list",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "collapsible": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "notes",
+      "fieldtype": "text_editor",
+      "label": "Notes",
+      "layout": {
+        "section": "Notes"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "section_break_18",
+      "fieldtype": "layout:section",
+      "label": "Start and End Dates",
+      "layout": {
+        "section": "Start and End Dates"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "collapsible": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "actual_start_date",
+      "fieldtype": "date",
+      "label": "Actual Start Date (via Timesheet)",
+      "layout": {
+        "section": "Start and End Dates"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "actual_time",
+      "fieldtype": "float",
+      "label": "Actual Time in Hours (via Timesheet)",
+      "layout": {
+        "section": "Start and End Dates"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_20",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "Start and End Dates"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "actual_end_date",
+      "fieldtype": "date",
+      "label": "Actual End Date (via Timesheet)",
+      "layout": {
+        "column": 1,
+        "section": "Start and End Dates"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "project_details",
+      "fieldtype": "layout:section",
+      "label": "Costing and Billing",
+      "layout": {
+        "section": "Costing and Billing"
+      },
+      "optionsParsed": {
+        "kind": "other",
+        "value": "fa fa-money"
+      },
+      "optionsRaw": "fa fa-money",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "collapsible": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "estimated_costing",
+      "fieldtype": "currency",
+      "label": "Estimated Cost",
+      "layout": {
+        "section": "Costing and Billing"
+      },
+      "optionsParsed": {
+        "field": "Company:company:default_currency",
+        "kind": "currency_field"
+      },
+      "optionsRaw": "Company:company:default_currency",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "total_costing_amount",
+      "fieldtype": "currency",
+      "label": "Total Costing Amount (via Timesheet)",
+      "layout": {
+        "section": "Costing and Billing"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "total_purchase_cost",
+      "fieldtype": "currency",
+      "label": "Total Purchase Cost (via Purchase Invoice)",
+      "layout": {
+        "section": "Costing and Billing"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "company",
+      "fieldtype": "link",
+      "label": "Company",
+      "layout": {
+        "section": "Costing and Billing"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Company"
+      },
+      "optionsRaw": "Company",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Company",
+        "kind": "static"
+      },
+      "requiredStatic": true,
+      "ui": {
+        "rememberLastSelectedValue": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_28",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "Costing and Billing"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "total_sales_amount",
+      "fieldtype": "currency",
+      "label": "Total Sales Amount (via Sales Order)",
+      "layout": {
+        "column": 1,
+        "section": "Costing and Billing"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "total_billable_amount",
+      "fieldtype": "currency",
+      "label": "Total Billable Amount (via Timesheet)",
+      "layout": {
+        "column": 1,
+        "section": "Costing and Billing"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "total_billed_amount",
+      "fieldtype": "currency",
+      "label": "Total Billed Amount (via Sales Invoice)",
+      "layout": {
+        "column": 1,
+        "section": "Costing and Billing"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "total_consumed_material_cost",
+      "fieldtype": "currency",
+      "label": "Total Consumed Material Cost (via Stock Entry)",
+      "layout": {
+        "column": 1,
+        "section": "Costing and Billing"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "cost_center",
+      "fieldtype": "link",
+      "label": "Default Cost Center",
+      "layout": {
+        "column": 1,
+        "section": "Costing and Billing"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Cost Center"
+      },
+      "optionsRaw": "Cost Center",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Cost Center",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "margin",
+      "fieldtype": "layout:section",
+      "label": "Margin",
+      "layout": {
+        "section": "Margin"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "collapsible": true,
+        "width": "50%"
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "gross_margin",
+      "fieldtype": "currency",
+      "label": "Gross Margin",
+      "layout": {
+        "section": "Margin"
+      },
+      "optionsParsed": {
+        "field": "Company:company:default_currency",
+        "kind": "currency_field"
+      },
+      "optionsRaw": "Company:company:default_currency",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_37",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "Margin"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "per_gross_margin",
+      "fieldtype": "percent",
+      "label": "Gross Margin %",
+      "layout": {
+        "column": 1,
+        "section": "Margin"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "monitor_progress",
+      "fieldtype": "layout:section",
+      "label": "Monitor Progress",
+      "layout": {
+        "section": "Monitor Progress"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "collapsible": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "collect_progress",
+      "fieldtype": "check",
+      "label": "Collect Progress",
+      "layout": {
+        "section": "Monitor Progress"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "searchIndex": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "collect_progress",
+      "fieldname": "holiday_list",
+      "fieldtype": "link",
+      "label": "Holiday List",
+      "layout": {
+        "section": "Monitor Progress"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Holiday List"
+      },
+      "optionsRaw": "Holiday List",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Holiday List",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:doc.collect_progress == true",
+      "fieldname": "frequency",
+      "fieldtype": "select",
+      "label": "Frequency To Collect Progress",
+      "layout": {
+        "section": "Monitor Progress"
+      },
+      "optionsParsed": {
+        "choices": [
+          "Hourly",
+          "Twice Daily",
+          "Daily",
+          "Weekly"
+        ],
+        "kind": "select"
+      },
+      "optionsRaw": "Hourly\nTwice Daily\nDaily\nWeekly",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:(doc.frequency == \"Hourly\" && doc.collect_progress)",
+      "fieldname": "from_time",
+      "fieldtype": "time",
+      "label": "From Time",
+      "layout": {
+        "section": "Monitor Progress"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:(doc.frequency == \"Hourly\" && doc.collect_progress)",
+      "fieldname": "to_time",
+      "fieldtype": "time",
+      "label": "To Time",
+      "layout": {
+        "section": "Monitor Progress"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:(doc.frequency == \"Twice Daily\" && doc.collect_progress == true)\n\n",
+      "fieldname": "first_email",
+      "fieldtype": "time",
+      "label": "First Email",
+      "layout": {
+        "section": "Monitor Progress"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:(doc.frequency == \"Twice Daily\" && doc.collect_progress == true)",
+      "fieldname": "second_email",
+      "fieldtype": "time",
+      "label": "Second Email",
+      "layout": {
+        "section": "Monitor Progress"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:(doc.frequency == \"Daily\" && doc.collect_progress == true)",
+      "fieldname": "daily_time_to_send",
+      "fieldtype": "time",
+      "label": "Daily Time to send",
+      "layout": {
+        "section": "Monitor Progress"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:(doc.frequency == \"Weekly\" && doc.collect_progress == true)",
+      "fieldname": "day_to_send",
+      "fieldtype": "select",
+      "label": "Day to Send",
+      "layout": {
+        "section": "Monitor Progress"
+      },
+      "optionsParsed": {
+        "choices": [
+          "Monday",
+          "Tuesday",
+          "Wednesday",
+          "Thursday",
+          "Friday",
+          "Saturday",
+          "Sunday"
+        ],
+        "kind": "select"
+      },
+      "optionsRaw": "Monday\nTuesday\nWednesday\nThursday\nFriday\nSaturday\nSunday",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:(doc.frequency == \"Weekly\" && doc.collect_progress == true)",
+      "fieldname": "weekly_time_to_send",
+      "fieldtype": "time",
+      "label": "Weekly Time to send",
+      "layout": {
+        "section": "Monitor Progress"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_45",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "Monitor Progress"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "collect_progress",
+      "fieldname": "subject",
+      "fieldtype": "data",
+      "label": "Subject",
+      "layout": {
+        "column": 1,
+        "section": "Monitor Progress"
+      },
+      "mandatoryDependsOn": "collect_progress",
+      "permlevel": 0,
+      "requiredDynamic": "collect_progress",
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "collect_progress",
+      "fieldname": "message",
+      "fieldtype": "text",
+      "label": "Message",
+      "layout": {
+        "column": 1,
+        "section": "Monitor Progress"
+      },
+      "mandatoryDependsOn": "collect_progress",
+      "permlevel": 0,
+      "requiredDynamic": "collect_progress",
+      "requiredStatic": false,
+      "ui": {
+        "description": "Message will be sent to the users to get their status on the Project"
+      },
+      "unique": false
+    }
+  ],
+  "identity": {
+    "app": "erpnext",
+    "isSingle": false,
+    "isSubmittable": false,
+    "isTree": false,
+    "module": "Projects",
+    "naming": {
+      "seriesField": "naming_series",
+      "seriesPrefix": "PROJ-.####",
+      "strategy": "series"
+    }
+  },
+  "name": "Project",
+  "permissions": [
+    {
+      "actions": {
+        "read": true,
+        "report": true
+      },
+      "permlevel": 1,
+      "role": "Desk User"
+    },
+    {
+      "actions": {
+        "email": true,
+        "export": true,
+        "print": true,
+        "report": true,
+        "share": true
+      },
+      "permlevel": 0,
+      "role": "Employee"
+    },
+    {
+      "actions": {
+        "create": true,
+        "delete": true,
+        "email": true,
+        "export": true,
+        "print": true,
+        "read": true,
+        "report": true,
+        "share": true,
+        "write": true
+      },
+      "permlevel": 0,
+      "role": "Projects Manager"
+    },
+    {
+      "actions": {
+        "create": true,
+        "delete": true,
+        "email": true,
+        "print": true,
+        "read": true,
+        "report": true,
+        "share": true,
+        "write": true
+      },
+      "permlevel": 0,
+      "role": "Projects User"
+    }
+  ],
+  "ui": {
+    "maxAttachments": 4,
+    "searchFields": [
+      "project_name",
+      "customer",
+      "status",
+      "priority",
+      "is_active"
+    ],
+    "showNameInGlobalSearch": true,
+    "sortField": "creation",
+    "sortOrder": "DESC",
+    "timelineField": "customer",
+    "titleField": "project_name"
+  },
+  "workflows": [
+    {
+      "kind": "unavailable"
+    }
+  ]
+}

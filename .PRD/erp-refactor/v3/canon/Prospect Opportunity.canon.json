@@ -1,0 +1,218 @@
+{
+  "audit": {
+    "trackChanges": false
+  },
+  "canonVersion": "1.0.0",
+  "childTables": [],
+  "doctypeId": "erpnext:CRM:Prospect Opportunity",
+  "events": [
+    {
+      "event": "validate",
+      "handlers": [
+        "erpnext.support.doctype.service_level_agreement.service_level_agreement.apply",
+        "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record.check_for_running_deletion_job"
+      ],
+      "handlersParsed": [
+        {
+          "attrPath": "apply",
+          "module": "erpnext.support.doctype.service_level_agreement.service_level_agreement"
+        },
+        {
+          "attrPath": "check_for_running_deletion_job",
+          "module": "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record"
+        }
+      ]
+    }
+  ],
+  "fieldOrder": [
+    "opportunity",
+    "amount",
+    "stage",
+    "deal_owner",
+    "column_break_4",
+    "probability",
+    "expected_closing",
+    "currency",
+    "contact_person"
+  ],
+  "fields": [
+    {
+      "constraints": {},
+      "fieldname": "opportunity",
+      "fieldtype": "link",
+      "label": "Opportunity",
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Opportunity"
+      },
+      "optionsRaw": "Opportunity",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Opportunity",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fetchFrom": "opportunity.opportunity_amount",
+      "fieldname": "amount",
+      "fieldtype": "currency",
+      "label": "Amount",
+      "optionsParsed": {
+        "field": "currency",
+        "kind": "currency_field"
+      },
+      "optionsRaw": "currency",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fetchFrom": "opportunity.sales_stage",
+      "fieldname": "stage",
+      "fieldtype": "data",
+      "label": "Stage",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fetchFrom": "opportunity.opportunity_owner",
+      "fieldname": "deal_owner",
+      "fieldtype": "data",
+      "label": "Deal Owner",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_4",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fetchFrom": "opportunity.probability",
+      "fieldname": "probability",
+      "fieldtype": "percent",
+      "label": "Probability",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fetchFrom": "opportunity.expected_closing",
+      "fieldname": "expected_closing",
+      "fieldtype": "date",
+      "label": "Closing",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fetchFrom": "opportunity.currency",
+      "fieldname": "currency",
+      "fieldtype": "link",
+      "label": "Currency",
+      "layout": {
+        "column": 1
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Currency"
+      },
+      "optionsRaw": "Currency",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Currency",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fetchFrom": "opportunity.contact_person",
+      "fieldname": "contact_person",
+      "fieldtype": "link",
+      "label": "Contact Person",
+      "layout": {
+        "column": 1
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Contact"
+      },
+      "optionsRaw": "Contact",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Contact",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    }
+  ],
+  "identity": {
+    "app": "erpnext",
+    "isSingle": false,
+    "isSubmittable": false,
+    "isTree": false,
+    "module": "CRM",
+    "naming": {
+      "strategy": "hash"
+    }
+  },
+  "name": "Prospect Opportunity",
+  "permissions": [],
+  "ui": {
+    "searchFields": [],
+    "showNameInGlobalSearch": false,
+    "sortField": "creation",
+    "sortOrder": "DESC"
+  },
+  "workflows": [
+    {
+      "kind": "unavailable"
+    }
+  ]
+}

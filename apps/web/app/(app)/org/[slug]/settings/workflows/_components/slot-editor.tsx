@@ -16,13 +16,14 @@ import '@xyflow/react/dist/style.css';
 import { Badge } from 'afena-ui/components/badge';
 import { Button } from 'afena-ui/components/button';
 import { Save } from 'lucide-react';
-import { useCallback, useMemo, useRef } from 'react';
+import { useCallback, useMemo, useRef, useState } from 'react';
 
+import { EdgeConditionEditor } from './edge-condition-editor';
 import { NODE_TYPE_CATALOG } from './flow-types';
 import { WorkflowNode } from './workflow-node';
 
 import type { FlowEdge, FlowNode, SlotInfo } from './flow-types';
-import type { Connection, Edge, NodeTypes } from '@xyflow/react';
+import type { Connection, Edge, EdgeMouseHandler, NodeTypes } from '@xyflow/react';
 import type { DragEvent } from 'react';
 
 // ── Helpers ─────────────────────────────────────────────────
@@ -66,6 +67,7 @@ export function SlotEditor({
   const reactFlowWrapper = useRef<HTMLDivElement>(null);
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
+  const [selectedEdge, setSelectedEdge] = useState<FlowEdge | null>(null);
   const { screenToFlowPosition } = useReactFlow();
 
   const onConnect = useCallback(
@@ -124,6 +126,35 @@ export function SlotEditor({
       setNodes((nds) => [...nds, newNode]);
     },
     [readOnly, screenToFlowPosition, slot, setNodes],
+  );
+
+  const onEdgeClick: EdgeMouseHandler = useCallback(
+    (_event, edge) => {
+      if (readOnly) return;
+      setSelectedEdge(edge as FlowEdge);
+    },
+    [readOnly],
+  );
+
+  const handleEdgeUpdate = useCallback(
+    (edgeId: string, updates: { label?: string; condition?: { type: string; params: Record<string, unknown> }; priority?: number }) => {
+      setEdges((eds) =>
+        eds.map((e) => {
+          if (e.id !== edgeId) return e;
+          return {
+            ...e,
+            label: updates.label ?? e.label,
+            data: {
+              ...((e.data ?? {}) as Record<string, unknown>),
+              ...(updates.label ? { label: updates.label } : {}),
+              ...(updates.condition ? { condition: updates.condition } : {}),
+              ...(updates.priority !== undefined ? { priority: updates.priority } : {}),
+            },
+          } as Edge;
+        }),
+      );
+    },
+    [setEdges],
   );
 
   const handleSave = useCallback(() => {
@@ -187,6 +218,7 @@ export function SlotEditor({
           fitView
           snapToGrid
           snapGrid={[16, 16]}
+          {...(!readOnly && { onEdgeClick })}
           deleteKeyCode={readOnly ? null : 'Delete'}
           nodesDraggable={!readOnly}
           nodesConnectable={!readOnly}
@@ -217,6 +249,16 @@ export function SlotEditor({
           {readOnly && (
             <Panel position="top-center">
               <Badge variant="secondary">Read Only</Badge>
+            </Panel>
+          )}
+
+          {selectedEdge && !readOnly && (
+            <Panel position="top-right">
+              <EdgeConditionEditor
+                edge={selectedEdge}
+                onUpdate={handleEdgeUpdate}
+                onClose={() => setSelectedEdge(null)}
+              />
             </Panel>
           )}
         </ReactFlow>

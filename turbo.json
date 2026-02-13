@@ -101,6 +101,22 @@
       "outputs": [],
       "cache": false
     },
+    "test": {
+      "dependsOn": [
+        "^build"
+      ],
+      "outputs": [],
+      "cache": false
+    },
+    "test:coverage": {
+      "dependsOn": [
+        "^build"
+      ],
+      "outputs": [
+        "coverage/**"
+      ],
+      "cache": false
+    },
     "type-gen": {
       "cache": false,
       "outputs": [
@@ -109,6 +125,23 @@
       ]
     },
     "type-gen:watch": {
+      "cache": false,
+      "persistent": true
+    },
+    "test:e2e": {
+      "dependsOn": [
+        "build"
+      ],
+      "outputs": [
+        "test-results/**",
+        "playwright-report/**"
+      ],
+      "cache": false
+    },
+    "test:e2e:ui": {
+      "dependsOn": [
+        "build"
+      ],
       "cache": false,
       "persistent": true
     }

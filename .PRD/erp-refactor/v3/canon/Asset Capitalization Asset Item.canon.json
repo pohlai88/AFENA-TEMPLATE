@@ -1,0 +1,344 @@
+{
+  "audit": {
+    "trackChanges": true
+  },
+  "canonVersion": "1.0.0",
+  "childTables": [],
+  "doctypeId": "erpnext:Assets:Asset Capitalization Asset Item",
+  "events": [
+    {
+      "event": "validate",
+      "handlers": [
+        "erpnext.support.doctype.service_level_agreement.service_level_agreement.apply",
+        "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record.check_for_running_deletion_job"
+      ],
+      "handlersParsed": [
+        {
+          "attrPath": "apply",
+          "module": "erpnext.support.doctype.service_level_agreement.service_level_agreement"
+        },
+        {
+          "attrPath": "check_for_running_deletion_job",
+          "module": "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record"
+        }
+      ]
+    }
+  ],
+  "fieldOrder": [
+    "asset",
+    "asset_name",
+    "finance_book",
+    "column_break_3",
+    "item_code",
+    "item_name",
+    "section_break_6",
+    "current_asset_value",
+    "asset_value",
+    "column_break_9",
+    "accounting_dimensions_section",
+    "cost_center",
+    "dimension_col_break",
+    "project",
+    "fixed_asset_account"
+  ],
+  "fields": [
+    {
+      "constraints": {},
+      "fieldname": "asset",
+      "fieldtype": "link",
+      "label": "Asset",
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Asset"
+      },
+      "optionsRaw": "Asset",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Asset",
+        "kind": "static"
+      },
+      "requiredStatic": true,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fetchFrom": "asset.asset_name",
+      "fieldname": "asset_name",
+      "fieldtype": "data",
+      "label": "Asset Name",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "inListView": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "finance_book",
+      "fieldtype": "link",
+      "label": "Finance Book",
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Finance Book"
+      },
+      "optionsRaw": "Finance Book",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Finance Book",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_3",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fetchFrom": "asset.item_code",
+      "fieldname": "item_code",
+      "fieldtype": "link",
+      "label": "Item Code",
+      "layout": {
+        "column": 1
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Item"
+      },
+      "optionsRaw": "Item",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Item",
+        "kind": "static"
+      },
+      "requiredStatic": true,
+      "ui": {
+        "inListView": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "item_name",
+      "fieldtype": "data",
+      "label": "Item Name",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "section_break_6",
+      "fieldtype": "layout:section",
+      "label": "Value",
+      "layout": {
+        "section": "Value"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "current_asset_value",
+      "fieldtype": "currency",
+      "label": "Current Asset Value",
+      "layout": {
+        "section": "Value"
+      },
+      "optionsParsed": {
+        "field": "Company:company:default_currency",
+        "kind": "currency_field"
+      },
+      "optionsRaw": "Company:company:default_currency",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "inListView": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "asset_value",
+      "fieldtype": "currency",
+      "label": "Asset Value",
+      "layout": {
+        "section": "Value"
+      },
+      "optionsParsed": {
+        "field": "Company:company:default_currency",
+        "kind": "currency_field"
+      },
+      "optionsRaw": "Company:company:default_currency",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "inListView": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_9",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "Value"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "accounting_dimensions_section",
+      "fieldtype": "layout:section",
+      "label": "Accounting Dimensions",
+      "layout": {
+        "section": "Accounting Dimensions"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "collapsible": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "cost_center",
+      "fieldtype": "link",
+      "label": "Cost Center",
+      "layout": {
+        "section": "Accounting Dimensions"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Cost Center"
+      },
+      "optionsRaw": "Cost Center",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Cost Center",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "dimension_col_break",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "Accounting Dimensions"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "allowOnSubmit": true,
+      "constraints": {},
+      "fieldname": "project",
+      "fieldtype": "link",
+      "label": "Project",
+      "layout": {
+        "column": 1,
+        "section": "Accounting Dimensions"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Project"
+      },
+      "optionsRaw": "Project",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Project",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "fixed_asset_account",
+      "fieldtype": "link",
+      "label": "Fixed Asset Account",
+      "layout": {
+        "column": 1,
+        "section": "Accounting Dimensions"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Account"
+      },
+      "optionsRaw": "Account",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Account",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    }
+  ],
+  "identity": {
+    "app": "erpnext",
+    "isSingle": false,
+    "isSubmittable": false,
+    "isTree": false,
+    "module": "Assets",
+    "naming": {
+      "strategy": "hash"
+    }
+  },
+  "name": "Asset Capitalization Asset Item",
+  "permissions": [],
+  "ui": {
+    "searchFields": [],
+    "showNameInGlobalSearch": false,
+    "sortField": "creation",
+    "sortOrder": "DESC"
+  },
+  "workflows": [
+    {
+      "kind": "unavailable"
+    }
+  ]
+}

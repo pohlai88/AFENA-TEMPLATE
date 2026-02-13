@@ -1,0 +1,305 @@
+{
+  "audit": {
+    "trackChanges": true
+  },
+  "canonVersion": "1.0.0",
+  "childTables": [
+    {
+      "childDoctype": "Assignment Rule User",
+      "parentField": "agent_list",
+      "required": true
+    },
+    {
+      "childDoctype": "Appointment Booking Slots",
+      "parentField": "availability_of_slots",
+      "required": true
+    }
+  ],
+  "doctypeId": "erpnext:CRM:Appointment Booking Settings",
+  "events": [
+    {
+      "event": "validate",
+      "handlers": [
+        "erpnext.support.doctype.service_level_agreement.service_level_agreement.apply",
+        "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record.check_for_running_deletion_job"
+      ],
+      "handlersParsed": [
+        {
+          "attrPath": "apply",
+          "module": "erpnext.support.doctype.service_level_agreement.service_level_agreement"
+        },
+        {
+          "attrPath": "check_for_running_deletion_job",
+          "module": "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record"
+        }
+      ]
+    }
+  ],
+  "fieldOrder": [
+    "enable_scheduling",
+    "agent_detail_section",
+    "availability_of_slots",
+    "number_of_agents",
+    "agent_list",
+    "holiday_list",
+    "appointment_details_section",
+    "appointment_duration",
+    "email_reminders",
+    "advance_booking_days",
+    "success_details",
+    "success_redirect_url"
+  ],
+  "fields": [
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "enable_scheduling",
+      "fieldtype": "check",
+      "label": "Enable Appointment Scheduling",
+      "permlevel": 0,
+      "requiredStatic": true,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "agent_detail_section",
+      "fieldtype": "layout:section",
+      "label": "Agent Details",
+      "layout": {
+        "section": "Agent Details"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "childDoctype": "Appointment Booking Slots",
+      "constraints": {},
+      "fieldname": "availability_of_slots",
+      "fieldtype": "table",
+      "label": "Availability Of Slots",
+      "layout": {
+        "section": "Agent Details"
+      },
+      "optionsParsed": {
+        "doctype": "Appointment Booking Slots",
+        "kind": "child_doctype"
+      },
+      "optionsRaw": "Appointment Booking Slots",
+      "permlevel": 0,
+      "requiredStatic": true,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "1",
+      "fieldname": "number_of_agents",
+      "fieldtype": "int",
+      "label": "Number of Concurrent Appointments",
+      "layout": {
+        "section": "Agent Details"
+      },
+      "permlevel": 0,
+      "requiredStatic": true,
+      "ui": {
+        "hidden": true,
+        "inListView": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "childDoctype": "Assignment Rule User",
+      "constraints": {},
+      "fieldname": "agent_list",
+      "fieldtype": "table_multiselect",
+      "label": "Agents",
+      "layout": {
+        "section": "Agent Details"
+      },
+      "optionsParsed": {
+        "doctype": "Assignment Rule User",
+        "kind": "child_doctype"
+      },
+      "optionsRaw": "Assignment Rule User",
+      "permlevel": 0,
+      "requiredStatic": true,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "holiday_list",
+      "fieldtype": "link",
+      "label": "Holiday List",
+      "layout": {
+        "section": "Agent Details"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Holiday List"
+      },
+      "optionsRaw": "Holiday List",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Holiday List",
+        "kind": "static"
+      },
+      "requiredStatic": true,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "appointment_details_section",
+      "fieldtype": "layout:section",
+      "label": "Appointment Details",
+      "layout": {
+        "section": "Appointment Details"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "60",
+      "fieldname": "appointment_duration",
+      "fieldtype": "int",
+      "label": "Appointment Duration (In Minutes)",
+      "layout": {
+        "section": "Appointment Details"
+      },
+      "permlevel": 0,
+      "requiredStatic": true,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "email_reminders",
+      "fieldtype": "check",
+      "label": "Notify Via Email",
+      "layout": {
+        "section": "Appointment Details"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "description": "Notify customer and agent via email on the day of the appointment."
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "7",
+      "fieldname": "advance_booking_days",
+      "fieldtype": "int",
+      "label": "Number of days appointments can be booked in advance",
+      "layout": {
+        "section": "Appointment Details"
+      },
+      "permlevel": 0,
+      "requiredStatic": true,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "success_details",
+      "fieldtype": "layout:section",
+      "label": "Success Settings",
+      "layout": {
+        "section": "Success Settings"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "success_redirect_url",
+      "fieldtype": "data",
+      "label": "Success Redirect URL",
+      "layout": {
+        "section": "Success Settings"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "description": "Leave blank for home.\nThis is relative to site URL, for example \"about\" will redirect to \"https://yoursitename.com/about\""
+      },
+      "unique": false
+    }
+  ],
+  "identity": {
+    "app": "erpnext",
+    "isSingle": false,
+    "isSubmittable": false,
+    "isTree": false,
+    "module": "CRM",
+    "naming": {
+      "strategy": "hash"
+    }
+  },
+  "name": "Appointment Booking Settings",
+  "permissions": [
+    {
+      "actions": {
+        "create": true,
+        "email": true,
+        "print": true,
+        "read": true,
+        "share": true,
+        "write": true
+      },
+      "permlevel": 0,
+      "role": "HR Manager"
+    },
+    {
+      "actions": {
+        "create": true,
+        "delete": true,
+        "email": true,
+        "print": true,
+        "read": true,
+        "share": true,
+        "write": true
+      },
+      "permlevel": 0,
+      "role": "Sales Manager"
+    },
+    {
+      "actions": {
+        "create": true,
+        "delete": true,
+        "email": true,
+        "print": true,
+        "read": true,
+        "share": true,
+        "write": true
+      },
+      "permlevel": 0,
+      "role": "System Manager"
+    }
+  ],
+  "ui": {
+    "searchFields": [],
+    "showNameInGlobalSearch": false,
+    "sortField": "creation",
+    "sortOrder": "DESC"
+  },
+  "workflows": [
+    {
+      "kind": "unavailable"
+    }
+  ]
+}

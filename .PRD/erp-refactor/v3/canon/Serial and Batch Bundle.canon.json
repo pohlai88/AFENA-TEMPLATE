@@ -1,0 +1,796 @@
+{
+  "audit": {
+    "trackChanges": false
+  },
+  "canonVersion": "1.0.0",
+  "childTables": [
+    {
+      "childDoctype": "Serial and Batch Entry",
+      "parentField": "entries",
+      "required": true
+    }
+  ],
+  "doctypeId": "erpnext:Stock:Serial and Batch Bundle",
+  "events": [
+    {
+      "event": "validate",
+      "handlers": [
+        "erpnext.support.doctype.service_level_agreement.service_level_agreement.apply",
+        "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record.check_for_running_deletion_job"
+      ],
+      "handlersParsed": [
+        {
+          "attrPath": "apply",
+          "module": "erpnext.support.doctype.service_level_agreement.service_level_agreement"
+        },
+        {
+          "attrPath": "check_for_running_deletion_job",
+          "module": "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record"
+        }
+      ]
+    }
+  ],
+  "fieldOrder": [
+    "item_details_tab",
+    "naming_series",
+    "company",
+    "item_name",
+    "has_serial_no",
+    "has_batch_no",
+    "column_break_4",
+    "item_code",
+    "warehouse",
+    "type_of_transaction",
+    "serial_no_and_batch_no_tab",
+    "entries",
+    "quantity_and_rate_section",
+    "total_qty",
+    "item_group",
+    "column_break_13",
+    "avg_rate",
+    "total_amount",
+    "tab_break_12",
+    "voucher_type",
+    "voucher_no",
+    "voucher_detail_no",
+    "column_break_aouy",
+    "posting_datetime",
+    "returned_against",
+    "section_break_wzou",
+    "is_cancelled",
+    "is_packed",
+    "is_rejected",
+    "amended_from"
+  ],
+  "fields": [
+    {
+      "constraints": {},
+      "fieldname": "item_details_tab",
+      "fieldtype": "layout:tab",
+      "label": "Serial and Batch",
+      "layout": {
+        "tab": "Serial and Batch"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "SABB-.########",
+      "fieldname": "naming_series",
+      "fieldtype": "select",
+      "label": "Naming Series",
+      "layout": {
+        "tab": "Serial and Batch"
+      },
+      "optionsParsed": {
+        "kind": "naming_series",
+        "prefixes": [
+          "SABB-.########"
+        ]
+      },
+      "optionsRaw": "\nSABB-.########",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "setOnlyOnce": true,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "company",
+      "fieldtype": "link",
+      "label": "Company",
+      "layout": {
+        "tab": "Serial and Batch"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Company"
+      },
+      "optionsRaw": "Company",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Company",
+        "kind": "static"
+      },
+      "requiredStatic": true,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fetchFrom": "item_code.item_name",
+      "fieldname": "item_name",
+      "fieldtype": "data",
+      "label": "Item Name",
+      "layout": {
+        "tab": "Serial and Batch"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fetchFrom": "item_code.has_serial_no",
+      "fieldname": "has_serial_no",
+      "fieldtype": "check",
+      "label": "Has Serial No",
+      "layout": {
+        "tab": "Serial and Batch"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fetchFrom": "item_code.has_batch_no",
+      "fieldname": "has_batch_no",
+      "fieldtype": "check",
+      "label": "Has Batch No",
+      "layout": {
+        "tab": "Serial and Batch"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_4",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "tab": "Serial and Batch"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "item_code",
+      "fieldtype": "link",
+      "label": "Item Code",
+      "layout": {
+        "column": 1,
+        "tab": "Serial and Batch"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Item"
+      },
+      "optionsRaw": "Item",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Item",
+        "kind": "static"
+      },
+      "requiredStatic": true,
+      "ui": {
+        "inListView": true,
+        "inStandardFilter": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "company",
+      "fieldname": "warehouse",
+      "fieldtype": "link",
+      "label": "Warehouse",
+      "layout": {
+        "column": 1,
+        "tab": "Serial and Batch"
+      },
+      "mandatoryDependsOn": "eval:doc.type_of_transaction != \"Maintenance\"",
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Warehouse"
+      },
+      "optionsRaw": "Warehouse",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Warehouse",
+        "kind": "static"
+      },
+      "requiredDynamic": "eval:doc.type_of_transaction != \"Maintenance\"",
+      "requiredStatic": false,
+      "ui": {
+        "inListView": true,
+        "inStandardFilter": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "type_of_transaction",
+      "fieldtype": "select",
+      "label": "Type of Transaction",
+      "layout": {
+        "column": 1,
+        "tab": "Serial and Batch"
+      },
+      "optionsParsed": {
+        "choices": [
+          "Inward",
+          "Outward",
+          "Maintenance",
+          "Asset Repair"
+        ],
+        "kind": "select"
+      },
+      "optionsRaw": "\nInward\nOutward\nMaintenance\nAsset Repair",
+      "permlevel": 0,
+      "requiredStatic": true,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "serial_no_and_batch_no_tab",
+      "fieldtype": "layout:section",
+      "label": "Serial / Batch No",
+      "layout": {
+        "section": "Serial / Batch No",
+        "tab": "Serial and Batch"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "childDoctype": "Serial and Batch Entry",
+      "constraints": {},
+      "fieldname": "entries",
+      "fieldtype": "table",
+      "layout": {
+        "section": "Serial / Batch No",
+        "tab": "Serial and Batch"
+      },
+      "optionsParsed": {
+        "doctype": "Serial and Batch Entry",
+        "kind": "child_doctype"
+      },
+      "optionsRaw": "Serial and Batch Entry",
+      "permlevel": 0,
+      "requiredStatic": true,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "quantity_and_rate_section",
+      "fieldtype": "layout:tab",
+      "label": "Quantity and Rate",
+      "layout": {
+        "tab": "Quantity and Rate"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "collapsible": true
+      },
+      "unique": false
+    },
+    {
+      "allowOnSubmit": true,
+      "constraints": {},
+      "fieldname": "total_qty",
+      "fieldtype": "float",
+      "label": "Total Qty",
+      "layout": {
+        "tab": "Quantity and Rate"
+      },
+      "noCopy": true,
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fetchFrom": "item_code.item_group",
+      "fieldname": "item_group",
+      "fieldtype": "link",
+      "label": "Item Group",
+      "layout": {
+        "tab": "Quantity and Rate"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Item Group"
+      },
+      "optionsRaw": "Item Group",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Item Group",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "hidden": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_13",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "tab": "Quantity and Rate"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "allowOnSubmit": true,
+      "constraints": {},
+      "fieldname": "avg_rate",
+      "fieldtype": "float",
+      "label": "Avg Rate",
+      "layout": {
+        "column": 1,
+        "tab": "Quantity and Rate"
+      },
+      "noCopy": true,
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "allowOnSubmit": true,
+      "constraints": {},
+      "fieldname": "total_amount",
+      "fieldtype": "float",
+      "label": "Total Amount",
+      "layout": {
+        "column": 1,
+        "tab": "Quantity and Rate"
+      },
+      "noCopy": true,
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "tab_break_12",
+      "fieldtype": "layout:tab",
+      "label": "Reference",
+      "layout": {
+        "tab": "Reference"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "voucher_type",
+      "fieldtype": "link",
+      "label": "Voucher Type",
+      "layout": {
+        "tab": "Reference"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "DocType"
+      },
+      "optionsRaw": "DocType",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "DocType",
+        "kind": "static"
+      },
+      "requiredStatic": true,
+      "ui": {
+        "inListView": true,
+        "searchIndex": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "voucher_no",
+      "fieldtype": "dynamic_link",
+      "label": "Voucher No",
+      "layout": {
+        "tab": "Reference"
+      },
+      "noCopy": true,
+      "optionsRaw": "voucher_type",
+      "permlevel": 0,
+      "ref": {
+        "doctypeField": "voucher_type",
+        "kind": "dynamic"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "inStandardFilter": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "voucher_detail_no",
+      "fieldtype": "data",
+      "label": "Voucher Detail No",
+      "layout": {
+        "tab": "Reference"
+      },
+      "noCopy": true,
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true,
+        "searchIndex": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_aouy",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "tab": "Reference"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "posting_datetime",
+      "fieldtype": "datetime",
+      "label": "Posting Datetime",
+      "layout": {
+        "column": 1,
+        "tab": "Reference"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "returned_against",
+      "fieldtype": "data",
+      "label": "Returned Against",
+      "layout": {
+        "column": 1,
+        "tab": "Reference"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "section_break_wzou",
+      "fieldtype": "layout:section",
+      "layout": {
+        "section": "section_break_wzou",
+        "tab": "Reference"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "is_cancelled",
+      "fieldtype": "check",
+      "label": "Is Cancelled",
+      "layout": {
+        "section": "section_break_wzou",
+        "tab": "Reference"
+      },
+      "noCopy": true,
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "is_packed",
+      "fieldtype": "check",
+      "label": "Is Packed",
+      "layout": {
+        "section": "section_break_wzou",
+        "tab": "Reference"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "dependsOn": "eval:doc.voucher_type == \"Purchase Receipt\"",
+      "fieldname": "is_rejected",
+      "fieldtype": "check",
+      "label": "Is Rejected",
+      "layout": {
+        "section": "section_break_wzou",
+        "tab": "Reference"
+      },
+      "noCopy": true,
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "amended_from",
+      "fieldtype": "link",
+      "label": "Amended From",
+      "layout": {
+        "section": "section_break_wzou",
+        "tab": "Reference"
+      },
+      "noCopy": true,
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Serial and Batch Bundle"
+      },
+      "optionsRaw": "Serial and Batch Bundle",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Serial and Batch Bundle",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true,
+        "readOnly": true
+      },
+      "unique": false
+    }
+  ],
+  "identity": {
+    "app": "erpnext",
+    "isSingle": false,
+    "isSubmittable": true,
+    "isTree": false,
+    "module": "Stock",
+    "naming": {
+      "strategy": "hash"
+    }
+  },
+  "name": "Serial and Batch Bundle",
+  "permissions": [
+    {
+      "actions": {
+        "cancel": true,
+        "create": true,
+        "delete": true,
+        "email": true,
+        "export": true,
+        "print": true,
+        "read": true,
+        "report": true,
+        "share": true,
+        "submit": true,
+        "write": true
+      },
+      "permlevel": 0,
+      "role": "Delivery Manager"
+    },
+    {
+      "actions": {
+        "cancel": true,
+        "create": true,
+        "delete": true,
+        "email": true,
+        "export": true,
+        "print": true,
+        "read": true,
+        "report": true,
+        "share": true,
+        "submit": true,
+        "write": true
+      },
+      "permlevel": 0,
+      "role": "Delivery User"
+    },
+    {
+      "actions": {
+        "cancel": true,
+        "create": true,
+        "delete": true,
+        "email": true,
+        "export": true,
+        "print": true,
+        "read": true,
+        "report": true,
+        "share": true,
+        "submit": true,
+        "write": true
+      },
+      "permlevel": 0,
+      "role": "Manufacturing Manager"
+    },
+    {
+      "actions": {
+        "cancel": true,
+        "create": true,
+        "delete": true,
+        "email": true,
+        "export": true,
+        "print": true,
+        "read": true,
+        "report": true,
+        "share": true,
+        "submit": true,
+        "write": true
+      },
+      "permlevel": 0,
+      "role": "Manufacturing User"
+    },
+    {
+      "actions": {
+        "cancel": true,
+        "create": true,
+        "delete": true,
+        "email": true,
+        "export": true,
+        "print": true,
+        "read": true,
+        "report": true,
+        "share": true,
+        "submit": true,
+        "write": true
+      },
+      "permlevel": 0,
+      "role": "Purchase Manager"
+    },
+    {
+      "actions": {
+        "cancel": true,
+        "create": true,
+        "delete": true,
+        "email": true,
+        "export": true,
+        "print": true,
+        "read": true,
+        "report": true,
+        "share": true,
+        "submit": true,
+        "write": true
+      },
+      "permlevel": 0,
+      "role": "Purchase User"
+    },
+    {
+      "actions": {
+        "cancel": true,
+        "create": true,
+        "delete": true,
+        "email": true,
+        "export": true,
+        "print": true,
+        "read": true,
+        "report": true,
+        "share": true,
+        "submit": true,
+        "write": true
+      },
+      "permlevel": 0,
+      "role": "Stock Manager"
+    },
+    {
+      "actions": {
+        "cancel": true,
+        "create": true,
+        "delete": true,
+        "email": true,
+        "export": true,
+        "print": true,
+        "read": true,
+        "report": true,
+        "share": true,
+        "submit": true,
+        "write": true
+      },
+      "permlevel": 0,
+      "role": "Stock User"
+    },
+    {
+      "actions": {
+        "cancel": true,
+        "create": true,
+        "delete": true,
+        "email": true,
+        "export": true,
+        "print": true,
+        "read": true,
+        "report": true,
+        "share": true,
+        "submit": true,
+        "write": true
+      },
+      "permlevel": 0,
+      "role": "System Manager"
+    }
+  ],
+  "ui": {
+    "searchFields": [],
+    "showNameInGlobalSearch": false,
+    "sortField": "creation",
+    "sortOrder": "DESC",
+    "titleField": "item_code"
+  },
+  "workflows": [
+    {
+      "kind": "unavailable"
+    }
+  ]
+}

@@ -65,5 +65,23 @@
       "source": "PowerShell",
       "args": ["-NoLogo"]
     }
-  }
+  },
+
+  // ── Vitest ────────────────────────────────────────────────
+  "vitest.enable": true,
+  "vitest.nodeExecutable": "C:\\nvm4w\\nodejs\\node.exe",
+  "vitest.rootConfig": "./vitest.config.ts",
+  "vitest.debugExclude": ["**/node_modules/**", "**/dist/**", "**/coverage/**"],
+  "vitest.commandLine": "pnpm test",
+  "vitest.watchCommandLine": "pnpm test:watch",
+  "vitest.uiCommandLine": "pnpm test:ui",
+  "vitest.coverageCommandLine": "pnpm test:coverage",
+  "vitest.workspaceConfig": "./vitest.config.ts",
+  "vitest.packageConfig": "./vitest.config.ts",
+  // Enable inline test results
+  "testing.automaticallyOpenPeekView": "failureInVisibleDocument",
+  // Show test status in gutter
+  "testing.showAllTests": true,
+  // Enable code lens for tests
+  "testing.enableCodeLens": true
 }

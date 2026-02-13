@@ -1,0 +1,247 @@
+{
+  "audit": {
+    "trackChanges": false
+  },
+  "canonVersion": "1.0.0",
+  "childTables": [
+    {
+      "childDoctype": "Bank Clearance Detail",
+      "parentField": "payment_entries",
+      "required": false
+    }
+  ],
+  "doctypeId": "erpnext:Accounts:Bank Clearance",
+  "events": [
+    {
+      "event": "validate",
+      "handlers": [
+        "erpnext.support.doctype.service_level_agreement.service_level_agreement.apply",
+        "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record.check_for_running_deletion_job"
+      ],
+      "handlersParsed": [
+        {
+          "attrPath": "apply",
+          "module": "erpnext.support.doctype.service_level_agreement.service_level_agreement"
+        },
+        {
+          "attrPath": "check_for_running_deletion_job",
+          "module": "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record"
+        }
+      ]
+    }
+  ],
+  "fieldOrder": [
+    "account",
+    "account_currency",
+    "from_date",
+    "to_date",
+    "column_break_5",
+    "bank_account",
+    "include_reconciled_entries",
+    "include_pos_transactions",
+    "section_break_10",
+    "payment_entries"
+  ],
+  "fields": [
+    {
+      "constraints": {},
+      "fetchFrom": "bank_account.account",
+      "fetchIfEmpty": true,
+      "fieldname": "account",
+      "fieldtype": "link",
+      "label": "Account",
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Account"
+      },
+      "optionsRaw": "Account",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Account",
+        "kind": "static"
+      },
+      "requiredStatic": true,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "account_currency",
+      "fieldtype": "link",
+      "label": "Account Currency",
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Currency"
+      },
+      "optionsRaw": "Currency",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Currency",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "hidden": true,
+        "printHide": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "from_date",
+      "fieldtype": "date",
+      "label": "From Date",
+      "permlevel": 0,
+      "requiredStatic": true,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "to_date",
+      "fieldtype": "date",
+      "label": "To Date",
+      "permlevel": 0,
+      "requiredStatic": true,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_5",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "bank_account",
+      "fieldtype": "link",
+      "label": "Bank Account",
+      "layout": {
+        "column": 1
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Bank Account"
+      },
+      "optionsRaw": "Bank Account",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Bank Account",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "description": "Select the Bank Account to reconcile."
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "include_reconciled_entries",
+      "fieldtype": "check",
+      "label": "Include Reconciled Entries",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "include_pos_transactions",
+      "fieldtype": "check",
+      "label": "Include POS Transactions",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "section_break_10",
+      "fieldtype": "layout:section",
+      "layout": {
+        "section": "section_break_10"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "childDoctype": "Bank Clearance Detail",
+      "constraints": {},
+      "fieldname": "payment_entries",
+      "fieldtype": "table",
+      "label": "Payment Entries",
+      "layout": {
+        "section": "section_break_10"
+      },
+      "optionsParsed": {
+        "doctype": "Bank Clearance Detail",
+        "kind": "child_doctype"
+      },
+      "optionsRaw": "Bank Clearance Detail",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    }
+  ],
+  "identity": {
+    "app": "erpnext",
+    "isSingle": false,
+    "isSubmittable": false,
+    "isTree": false,
+    "module": "Accounts",
+    "naming": {
+      "strategy": "hash"
+    }
+  },
+  "name": "Bank Clearance",
+  "permissions": [
+    {
+      "actions": {
+        "create": true,
+        "read": true,
+        "share": true,
+        "write": true
+      },
+      "permlevel": 0,
+      "role": "Accounts User"
+    }
+  ],
+  "ui": {
+    "searchFields": [],
+    "showNameInGlobalSearch": false,
+    "sortField": "creation",
+    "sortOrder": "ASC"
+  },
+  "workflows": [
+    {
+      "kind": "unavailable"
+    }
+  ]
+}

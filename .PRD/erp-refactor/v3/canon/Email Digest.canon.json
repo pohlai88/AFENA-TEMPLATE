@@ -1,0 +1,786 @@
+{
+  "audit": {
+    "trackChanges": false
+  },
+  "canonVersion": "1.0.0",
+  "childTables": [
+    {
+      "childDoctype": "Email Digest Recipient",
+      "parentField": "recipients",
+      "required": true
+    }
+  ],
+  "doctypeId": "erpnext:Setup:Email Digest",
+  "events": [
+    {
+      "event": "validate",
+      "handlers": [
+        "erpnext.support.doctype.service_level_agreement.service_level_agreement.apply",
+        "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record.check_for_running_deletion_job"
+      ],
+      "handlersParsed": [
+        {
+          "attrPath": "apply",
+          "module": "erpnext.support.doctype.service_level_agreement.service_level_agreement"
+        },
+        {
+          "attrPath": "check_for_running_deletion_job",
+          "module": "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record"
+        }
+      ]
+    }
+  ],
+  "fieldOrder": [
+    "settings",
+    "column_break0",
+    "enabled",
+    "company",
+    "frequency",
+    "next_send",
+    "column_break1",
+    "recipients",
+    "accounts",
+    "accounts_module",
+    "income",
+    "expenses_booked",
+    "income_year_to_date",
+    "expense_year_to_date",
+    "column_break_16",
+    "bank_balance",
+    "credit_balance",
+    "invoiced_amount",
+    "payables",
+    "work_in_progress",
+    "sales_orders_to_bill",
+    "purchase_orders_to_bill",
+    "operation",
+    "column_break_21",
+    "sales_order",
+    "purchase_order",
+    "sales_orders_to_deliver",
+    "purchase_orders_to_receive",
+    "sales_invoice",
+    "purchase_invoice",
+    "column_break_operation",
+    "new_quotations",
+    "pending_quotations",
+    "issue",
+    "project",
+    "purchase_orders_items_overdue",
+    "other",
+    "tools",
+    "calendar_events",
+    "todo_list",
+    "notifications",
+    "column_break_32",
+    "add_quote"
+  ],
+  "fields": [
+    {
+      "constraints": {},
+      "fieldname": "settings",
+      "fieldtype": "layout:section",
+      "label": "Email Digest Settings",
+      "layout": {
+        "section": "Email Digest Settings"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break0",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "Email Digest Settings"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "enabled",
+      "fieldtype": "check",
+      "label": "Enabled",
+      "layout": {
+        "column": 1,
+        "section": "Email Digest Settings"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "company",
+      "fieldtype": "link",
+      "label": "For Company",
+      "layout": {
+        "column": 1,
+        "section": "Email Digest Settings"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Company"
+      },
+      "optionsRaw": "Company",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Company",
+        "kind": "static"
+      },
+      "requiredStatic": true,
+      "ui": {
+        "inListView": true,
+        "inStandardFilter": true,
+        "rememberLastSelectedValue": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "frequency",
+      "fieldtype": "select",
+      "label": "How frequently?",
+      "layout": {
+        "column": 1,
+        "section": "Email Digest Settings"
+      },
+      "optionsParsed": {
+        "choices": [
+          "Daily",
+          "Weekly",
+          "Monthly"
+        ],
+        "kind": "select"
+      },
+      "optionsRaw": "Daily\nWeekly\nMonthly",
+      "permlevel": 0,
+      "requiredStatic": true,
+      "ui": {
+        "inListView": true,
+        "inStandardFilter": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:doc.enabled",
+      "fieldname": "next_send",
+      "fieldtype": "data",
+      "label": "Next email will be sent on:",
+      "layout": {
+        "column": 1,
+        "section": "Email Digest Settings"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break1",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 2,
+        "section": "Email Digest Settings"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "childDoctype": "Email Digest Recipient",
+      "constraints": {},
+      "fieldname": "recipients",
+      "fieldtype": "table_multiselect",
+      "label": "Recipients",
+      "layout": {
+        "column": 2,
+        "section": "Email Digest Settings"
+      },
+      "optionsParsed": {
+        "doctype": "Email Digest Recipient",
+        "kind": "child_doctype"
+      },
+      "optionsRaw": "Email Digest Recipient",
+      "permlevel": 0,
+      "requiredStatic": true,
+      "ui": {
+        "description": "Note: Email will not be sent to disabled users"
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "accounts",
+      "fieldtype": "layout:section",
+      "label": "Accounts",
+      "layout": {
+        "section": "Accounts"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "accounts_module",
+      "fieldtype": "layout:column",
+      "label": "Profit & Loss",
+      "layout": {
+        "column": 1,
+        "section": "Accounts"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "hidden": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "income",
+      "fieldtype": "check",
+      "label": "New Income",
+      "layout": {
+        "column": 1,
+        "section": "Accounts"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "expenses_booked",
+      "fieldtype": "check",
+      "label": "New Expenses",
+      "layout": {
+        "column": 1,
+        "section": "Accounts"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "income_year_to_date",
+      "fieldtype": "check",
+      "label": "Annual Income",
+      "layout": {
+        "column": 1,
+        "section": "Accounts"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "expense_year_to_date",
+      "fieldtype": "check",
+      "label": "Annual Expenses",
+      "layout": {
+        "column": 1,
+        "section": "Accounts"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_16",
+      "fieldtype": "layout:column",
+      "label": "Balance Sheet",
+      "layout": {
+        "column": 2,
+        "section": "Accounts"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "bank_balance",
+      "fieldtype": "check",
+      "label": "Bank Balance",
+      "layout": {
+        "column": 2,
+        "section": "Accounts"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "credit_balance",
+      "fieldtype": "check",
+      "label": "Bank Credit Balance",
+      "layout": {
+        "column": 2,
+        "section": "Accounts"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "invoiced_amount",
+      "fieldtype": "check",
+      "label": "Receivables",
+      "layout": {
+        "column": 2,
+        "section": "Accounts"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "payables",
+      "fieldtype": "check",
+      "label": "Payables",
+      "layout": {
+        "column": 2,
+        "section": "Accounts"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "work_in_progress",
+      "fieldtype": "layout:column",
+      "label": "Work in Progress",
+      "layout": {
+        "column": 3,
+        "section": "Accounts"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "sales_orders_to_bill",
+      "fieldtype": "check",
+      "label": "Sales Orders to Bill",
+      "layout": {
+        "column": 3,
+        "section": "Accounts"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "purchase_orders_to_bill",
+      "fieldtype": "check",
+      "label": "Purchase Orders to Bill",
+      "layout": {
+        "column": 3,
+        "section": "Accounts"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "operation",
+      "fieldtype": "layout:section",
+      "label": "Operations",
+      "layout": {
+        "section": "Operations"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_21",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "Operations"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "sales_order",
+      "fieldtype": "check",
+      "label": "New Sales Orders",
+      "layout": {
+        "column": 1,
+        "section": "Operations"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "purchase_order",
+      "fieldtype": "check",
+      "label": "New Purchase Orders",
+      "layout": {
+        "column": 1,
+        "section": "Operations"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "sales_orders_to_deliver",
+      "fieldtype": "check",
+      "label": "Sales Orders to Deliver",
+      "layout": {
+        "column": 1,
+        "section": "Operations"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "purchase_orders_to_receive",
+      "fieldtype": "check",
+      "label": "Purchase Orders to Receive",
+      "layout": {
+        "column": 1,
+        "section": "Operations"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "sales_invoice",
+      "fieldtype": "check",
+      "label": "New Sales Invoice",
+      "layout": {
+        "column": 1,
+        "section": "Operations"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "purchase_invoice",
+      "fieldtype": "check",
+      "label": "New Purchase Invoice",
+      "layout": {
+        "column": 1,
+        "section": "Operations"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_operation",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 2,
+        "section": "Operations"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "new_quotations",
+      "fieldtype": "check",
+      "label": "New Quotations",
+      "layout": {
+        "column": 2,
+        "section": "Operations"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "pending_quotations",
+      "fieldtype": "check",
+      "label": "Open Quotations",
+      "layout": {
+        "column": 2,
+        "section": "Operations"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "issue",
+      "fieldtype": "check",
+      "label": "Open Issues",
+      "layout": {
+        "column": 2,
+        "section": "Operations"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "project",
+      "fieldtype": "check",
+      "label": "Open Projects",
+      "layout": {
+        "column": 2,
+        "section": "Operations"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "purchase_orders_items_overdue",
+      "fieldtype": "check",
+      "label": "Purchase Orders Items Overdue",
+      "layout": {
+        "column": 2,
+        "section": "Operations"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "other",
+      "fieldtype": "layout:section",
+      "label": "Other",
+      "layout": {
+        "section": "Other"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "tools",
+      "fieldtype": "layout:column",
+      "label": "Tools",
+      "layout": {
+        "column": 1,
+        "section": "Other"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "calendar_events",
+      "fieldtype": "check",
+      "label": "Upcoming Calendar Events",
+      "layout": {
+        "column": 1,
+        "section": "Other"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "todo_list",
+      "fieldtype": "check",
+      "label": "Open To Do",
+      "layout": {
+        "column": 1,
+        "section": "Other"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "notifications",
+      "fieldtype": "check",
+      "label": "Open Notifications",
+      "layout": {
+        "column": 1,
+        "section": "Other"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_32",
+      "fieldtype": "layout:column",
+      "label": "  ",
+      "layout": {
+        "column": 2,
+        "section": "Other"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "add_quote",
+      "fieldtype": "check",
+      "label": "Add Quote",
+      "layout": {
+        "column": 2,
+        "section": "Other"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    }
+  ],
+  "identity": {
+    "app": "erpnext",
+    "isSingle": false,
+    "isSubmittable": false,
+    "isTree": false,
+    "module": "Setup",
+    "naming": {
+      "expression": "Prompt",
+      "strategy": "expression"
+    }
+  },
+  "name": "Email Digest",
+  "permissions": [
+    {
+      "actions": {
+        "create": true,
+        "delete": true,
+        "email": true,
+        "print": true,
+        "read": true,
+        "report": true,
+        "share": true,
+        "write": true
+      },
+      "permlevel": 0,
+      "role": "System Manager"
+    },
+    {
+      "actions": {
+        "read": true
+      },
+      "permlevel": 1,
+      "role": "System Manager"
+    }
+  ],
+  "ui": {
+    "searchFields": [],
+    "showNameInGlobalSearch": false,
+    "sortField": "creation",
+    "sortOrder": "DESC"
+  },
+  "workflows": [
+    {
+      "kind": "unavailable"
+    }
+  ]
+}

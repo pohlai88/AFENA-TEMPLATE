@@ -1,0 +1,1708 @@
+{
+  "audit": {
+    "trackChanges": false,
+    "trackSeen": true
+  },
+  "canonVersion": "1.0.0",
+  "childTables": [
+    {
+      "childDoctype": "Competitor Detail",
+      "parentField": "competitors",
+      "required": false
+    },
+    {
+      "childDoctype": "Opportunity Item",
+      "parentField": "items",
+      "required": false
+    },
+    {
+      "childDoctype": "Opportunity Lost Reason Detail",
+      "parentField": "lost_reasons",
+      "required": false
+    },
+    {
+      "childDoctype": "CRM Note",
+      "parentField": "notes",
+      "required": false
+    }
+  ],
+  "doctypeId": "erpnext:CRM:Opportunity",
+  "events": [
+    {
+      "event": "validate",
+      "handlers": [
+        "erpnext.support.doctype.service_level_agreement.service_level_agreement.apply",
+        "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record.check_for_running_deletion_job"
+      ],
+      "handlersParsed": [
+        {
+          "attrPath": "apply",
+          "module": "erpnext.support.doctype.service_level_agreement.service_level_agreement"
+        },
+        {
+          "attrPath": "check_for_running_deletion_job",
+          "module": "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record"
+        }
+      ]
+    }
+  ],
+  "fieldOrder": [
+    "naming_series",
+    "opportunity_from",
+    "party_name",
+    "customer_name",
+    "status",
+    "column_break0",
+    "opportunity_type",
+    "opportunity_owner",
+    "column_break_10",
+    "sales_stage",
+    "expected_closing",
+    "probability",
+    "organization_details_section",
+    "no_of_employees",
+    "annual_revenue",
+    "customer_group",
+    "column_break_23",
+    "industry",
+    "market_segment",
+    "website",
+    "column_break_31",
+    "city",
+    "state",
+    "country",
+    "territory",
+    "section_break_14",
+    "currency",
+    "column_break_36",
+    "conversion_rate",
+    "column_break_17",
+    "opportunity_amount",
+    "base_opportunity_amount",
+    "section_break_analytics",
+    "utm_source",
+    "utm_content",
+    "column_break_emai",
+    "utm_campaign",
+    "column_break_whcu",
+    "utm_medium",
+    "more_info",
+    "company",
+    "transaction_date",
+    "column_break1",
+    "language",
+    "amended_from",
+    "title",
+    "first_response_time",
+    "lost_detail_section",
+    "lost_reasons",
+    "order_lost_reason",
+    "column_break_56",
+    "competitors",
+    "contact_info",
+    "primary_contact_section",
+    "contact_person",
+    "job_title",
+    "column_break_54",
+    "contact_email",
+    "contact_mobile",
+    "column_break_22",
+    "whatsapp",
+    "phone",
+    "phone_ext",
+    "address_contact_section",
+    "address_html",
+    "customer_address",
+    "address_display",
+    "column_break3",
+    "contact_html",
+    "contact_display",
+    "items_section",
+    "items",
+    "section_break_32",
+    "base_total",
+    "column_break_33",
+    "total",
+    "activities_tab",
+    "open_activities_html",
+    "all_activities_section",
+    "all_activities_html",
+    "notes_tab",
+    "notes_html",
+    "notes",
+    "dashboard_tab"
+  ],
+  "fields": [
+    {
+      "constraints": {},
+      "fieldname": "naming_series",
+      "fieldtype": "select",
+      "label": "Series",
+      "noCopy": true,
+      "optionsParsed": {
+        "kind": "naming_series",
+        "prefixes": [
+          "CRM-OPP-.YYYY.-"
+        ]
+      },
+      "optionsRaw": "CRM-OPP-.YYYY.-",
+      "permlevel": 0,
+      "requiredStatic": true,
+      "setOnlyOnce": true,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "opportunity_from",
+      "fieldtype": "link",
+      "label": "Opportunity From",
+      "optionsParsed": {
+        "kind": "link",
+        "target": "DocType"
+      },
+      "optionsRaw": "DocType",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "DocType",
+        "kind": "static"
+      },
+      "requiredStatic": true,
+      "ui": {
+        "inListView": true,
+        "inStandardFilter": true,
+        "printHide": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "party_name",
+      "fieldtype": "dynamic_link",
+      "label": "Party",
+      "optionsRaw": "opportunity_from",
+      "permlevel": 0,
+      "ref": {
+        "doctypeField": "opportunity_from",
+        "kind": "dynamic"
+      },
+      "requiredStatic": true,
+      "ui": {
+        "bold": true,
+        "inStandardFilter": true,
+        "printHide": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "customer_name",
+      "fieldtype": "data",
+      "label": "Customer Name",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "bold": true,
+        "hidden": true,
+        "inGlobalSearch": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "Open",
+      "fieldname": "status",
+      "fieldtype": "select",
+      "label": "Status",
+      "noCopy": true,
+      "optionsParsed": {
+        "choices": [
+          "Open",
+          "Quotation",
+          "Converted",
+          "Lost",
+          "Replied",
+          "Closed"
+        ],
+        "kind": "select"
+      },
+      "optionsRaw": "Open\nQuotation\nConverted\nLost\nReplied\nClosed",
+      "permlevel": 0,
+      "requiredStatic": true,
+      "ui": {
+        "inListView": true,
+        "inStandardFilter": true,
+        "printHide": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break0",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "width": "50%"
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "opportunity_type",
+      "fieldtype": "link",
+      "label": "Opportunity Type",
+      "layout": {
+        "column": 1
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Opportunity Type"
+      },
+      "optionsRaw": "Opportunity Type",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Opportunity Type",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "opportunity_owner",
+      "fieldtype": "link",
+      "label": "Opportunity Owner",
+      "layout": {
+        "column": 1
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "User"
+      },
+      "optionsRaw": "User",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "User",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_10",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 2
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "Prospecting",
+      "fieldname": "sales_stage",
+      "fieldtype": "link",
+      "label": "Sales Stage",
+      "layout": {
+        "column": 2
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Sales Stage"
+      },
+      "optionsRaw": "Sales Stage",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Sales Stage",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "expected_closing",
+      "fieldtype": "date",
+      "label": "Expected Closing Date",
+      "layout": {
+        "column": 2
+      },
+      "noCopy": true,
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "100",
+      "fieldname": "probability",
+      "fieldtype": "percent",
+      "label": "Probability (%)",
+      "layout": {
+        "column": 2
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "organization_details_section",
+      "fieldtype": "layout:section",
+      "label": "Organization",
+      "layout": {
+        "section": "Organization"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "no_of_employees",
+      "fieldtype": "select",
+      "label": "No of Employees",
+      "layout": {
+        "section": "Organization"
+      },
+      "optionsParsed": {
+        "choices": [
+          "1-10",
+          "11-50",
+          "51-200",
+          "201-500",
+          "501-1000",
+          "1000+"
+        ],
+        "kind": "select"
+      },
+      "optionsRaw": "1-10\n11-50\n51-200\n201-500\n501-1000\n1000+",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "annual_revenue",
+      "fieldtype": "currency",
+      "label": "Annual Revenue",
+      "layout": {
+        "section": "Organization"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:doc.opportunity_from=='Customer' && doc.party_name",
+      "fieldname": "customer_group",
+      "fieldtype": "link",
+      "label": "Customer Group",
+      "layout": {
+        "section": "Organization"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Customer Group"
+      },
+      "optionsRaw": "Customer Group",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Customer Group",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true,
+        "searchIndex": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_23",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "Organization"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "industry",
+      "fieldtype": "link",
+      "label": "Industry",
+      "layout": {
+        "column": 1,
+        "section": "Organization"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Industry Type"
+      },
+      "optionsRaw": "Industry Type",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Industry Type",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "market_segment",
+      "fieldtype": "link",
+      "label": "Market Segment",
+      "layout": {
+        "column": 1,
+        "section": "Organization"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Market Segment"
+      },
+      "optionsRaw": "Market Segment",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Market Segment",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "website",
+      "fieldtype": "data",
+      "label": "Website",
+      "layout": {
+        "column": 1,
+        "section": "Organization"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_31",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 2,
+        "section": "Organization"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "city",
+      "fieldtype": "data",
+      "label": "City",
+      "layout": {
+        "column": 2,
+        "section": "Organization"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "state",
+      "fieldtype": "data",
+      "label": "State/Province",
+      "layout": {
+        "column": 2,
+        "section": "Organization"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "country",
+      "fieldtype": "link",
+      "label": "Country",
+      "layout": {
+        "column": 2,
+        "section": "Organization"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Country"
+      },
+      "optionsRaw": "Country",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Country",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "territory",
+      "fieldtype": "link",
+      "label": "Territory",
+      "layout": {
+        "column": 2,
+        "section": "Organization"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Territory"
+      },
+      "optionsRaw": "Territory",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Territory",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true,
+        "searchIndex": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "section_break_14",
+      "fieldtype": "layout:section",
+      "label": "Opportunity Value",
+      "layout": {
+        "section": "Opportunity Value"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "currency",
+      "fieldtype": "link",
+      "label": "Currency",
+      "layout": {
+        "section": "Opportunity Value"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Currency"
+      },
+      "optionsRaw": "Currency",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Currency",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_36",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "Opportunity Value"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "conversion_rate",
+      "fieldtype": "float",
+      "label": "Exchange Rate",
+      "layout": {
+        "column": 1,
+        "section": "Opportunity Value"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_17",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 2,
+        "section": "Opportunity Value"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "opportunity_amount",
+      "fieldtype": "currency",
+      "label": "Opportunity Amount",
+      "layout": {
+        "column": 2,
+        "section": "Opportunity Value"
+      },
+      "optionsParsed": {
+        "field": "currency",
+        "kind": "currency_field"
+      },
+      "optionsRaw": "currency",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "base_opportunity_amount",
+      "fieldtype": "currency",
+      "label": "Opportunity Amount (Company Currency)",
+      "layout": {
+        "column": 2,
+        "section": "Opportunity Value"
+      },
+      "optionsParsed": {
+        "field": "Company:company:default_currency",
+        "kind": "currency_field"
+      },
+      "optionsRaw": "Company:company:default_currency",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "section_break_analytics",
+      "fieldtype": "layout:section",
+      "label": "Analytics",
+      "layout": {
+        "section": "Analytics"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "utm_source",
+      "fieldtype": "link",
+      "label": "Source",
+      "layout": {
+        "section": "Analytics"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "UTM Source"
+      },
+      "optionsRaw": "UTM Source",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "UTM Source",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "utm_content",
+      "fieldtype": "data",
+      "label": "Content",
+      "layout": {
+        "section": "Analytics"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_emai",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "Analytics"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "utm_campaign",
+      "fieldtype": "link",
+      "label": "Campaign",
+      "layout": {
+        "column": 1,
+        "section": "Analytics"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "UTM Campaign"
+      },
+      "optionsRaw": "UTM Campaign",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "UTM Campaign",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_whcu",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 2,
+        "section": "Analytics"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "utm_medium",
+      "fieldtype": "link",
+      "label": "Medium",
+      "layout": {
+        "column": 2,
+        "section": "Analytics"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "UTM Medium"
+      },
+      "optionsRaw": "UTM Medium",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "UTM Medium",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "more_info",
+      "fieldtype": "layout:section",
+      "label": "More Information",
+      "layout": {
+        "section": "More Information"
+      },
+      "optionsParsed": {
+        "kind": "other",
+        "value": "fa fa-file-text"
+      },
+      "optionsRaw": "fa fa-file-text",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "collapsible": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "company",
+      "fieldtype": "link",
+      "label": "Company",
+      "layout": {
+        "section": "More Information"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Company"
+      },
+      "optionsRaw": "Company",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Company",
+        "kind": "static"
+      },
+      "requiredStatic": true,
+      "ui": {
+        "printHide": true,
+        "rememberLastSelectedValue": true,
+        "searchIndex": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "Today",
+      "fieldname": "transaction_date",
+      "fieldtype": "date",
+      "label": "Opportunity Date",
+      "layout": {
+        "section": "More Information"
+      },
+      "noCopy": true,
+      "permlevel": 0,
+      "requiredStatic": true,
+      "ui": {
+        "width": "50px"
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break1",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "More Information"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "width": "50%"
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "language",
+      "fieldtype": "link",
+      "label": "Print Language",
+      "layout": {
+        "column": 1,
+        "section": "More Information"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Language"
+      },
+      "optionsRaw": "Language",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Language",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "amended_from",
+      "fieldtype": "link",
+      "label": "Amended From",
+      "layout": {
+        "column": 1,
+        "section": "More Information"
+      },
+      "noCopy": true,
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Opportunity"
+      },
+      "optionsRaw": "Opportunity",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Opportunity",
+        "ignoreUserPermissions": true,
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true,
+        "readOnly": true,
+        "width": "150px"
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "title",
+      "fieldtype": "data",
+      "label": "Title",
+      "layout": {
+        "column": 1,
+        "section": "More Information"
+      },
+      "noCopy": true,
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "hidden": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "first_response_time",
+      "fieldtype": "duration",
+      "label": "First Response Time",
+      "layout": {
+        "column": 1,
+        "section": "More Information"
+      },
+      "noCopy": true,
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "bold": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:doc.status===\"Lost\"",
+      "fieldname": "lost_detail_section",
+      "fieldtype": "layout:section",
+      "label": "Lost Reasons",
+      "layout": {
+        "section": "Lost Reasons"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "childDoctype": "Opportunity Lost Reason Detail",
+      "constraints": {},
+      "dependsOn": "eval:doc.status===\"Lost\"",
+      "fieldname": "lost_reasons",
+      "fieldtype": "table_multiselect",
+      "label": "Lost Reasons",
+      "layout": {
+        "section": "Lost Reasons"
+      },
+      "optionsParsed": {
+        "doctype": "Opportunity Lost Reason Detail",
+        "kind": "child_doctype"
+      },
+      "optionsRaw": "Opportunity Lost Reason Detail",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "order_lost_reason",
+      "fieldtype": "small_text",
+      "label": "Detailed Reason",
+      "layout": {
+        "section": "Lost Reasons"
+      },
+      "noCopy": true,
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_56",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "Lost Reasons"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "childDoctype": "Competitor Detail",
+      "constraints": {},
+      "fieldname": "competitors",
+      "fieldtype": "table_multiselect",
+      "label": "Competitors",
+      "layout": {
+        "column": 1,
+        "section": "Lost Reasons"
+      },
+      "optionsParsed": {
+        "doctype": "Competitor Detail",
+        "kind": "child_doctype"
+      },
+      "optionsRaw": "Competitor Detail",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "contact_info",
+      "fieldtype": "layout:tab",
+      "label": "Contacts",
+      "layout": {
+        "tab": "Contacts"
+      },
+      "optionsParsed": {
+        "kind": "other",
+        "value": "fa fa-bullhorn"
+      },
+      "optionsRaw": "fa fa-bullhorn",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "primary_contact_section",
+      "fieldtype": "layout:section",
+      "label": "Primary Contact",
+      "layout": {
+        "section": "Primary Contact",
+        "tab": "Contacts"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:doc.party_name",
+      "fieldname": "contact_person",
+      "fieldtype": "link",
+      "label": "Contact Person",
+      "layout": {
+        "section": "Primary Contact",
+        "tab": "Contacts"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Contact"
+      },
+      "optionsRaw": "Contact",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Contact",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "job_title",
+      "fieldtype": "data",
+      "label": "Job Title",
+      "layout": {
+        "section": "Primary Contact",
+        "tab": "Contacts"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_54",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "Primary Contact",
+        "tab": "Contacts"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "contact_email",
+      "fieldtype": "data:email",
+      "label": "Contact Email",
+      "layout": {
+        "column": 1,
+        "section": "Primary Contact",
+        "tab": "Contacts"
+      },
+      "optionsParsed": {
+        "format": "Email",
+        "kind": "data_format"
+      },
+      "optionsRaw": "Email",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "contact_mobile",
+      "fieldtype": "data:phone",
+      "label": "Contact Mobile",
+      "layout": {
+        "column": 1,
+        "section": "Primary Contact",
+        "tab": "Contacts"
+      },
+      "optionsParsed": {
+        "format": "Phone",
+        "kind": "data_format"
+      },
+      "optionsRaw": "Phone",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_22",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 2,
+        "section": "Primary Contact",
+        "tab": "Contacts"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "whatsapp",
+      "fieldtype": "data:phone",
+      "label": "WhatsApp",
+      "layout": {
+        "column": 2,
+        "section": "Primary Contact",
+        "tab": "Contacts"
+      },
+      "optionsParsed": {
+        "format": "Phone",
+        "kind": "data_format"
+      },
+      "optionsRaw": "Phone",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "phone",
+      "fieldtype": "data:phone",
+      "label": "Phone",
+      "layout": {
+        "column": 2,
+        "section": "Primary Contact",
+        "tab": "Contacts"
+      },
+      "optionsParsed": {
+        "format": "Phone",
+        "kind": "data_format"
+      },
+      "optionsRaw": "Phone",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "phone_ext",
+      "fieldtype": "data",
+      "label": "Phone Ext.",
+      "layout": {
+        "column": 2,
+        "section": "Primary Contact",
+        "tab": "Contacts"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "address_contact_section",
+      "fieldtype": "layout:section",
+      "label": "Address & Contact",
+      "layout": {
+        "section": "Address & Contact",
+        "tab": "Contacts"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "address_html",
+      "fieldtype": "text_editor",
+      "label": "Address HTML",
+      "layout": {
+        "section": "Address & Contact",
+        "tab": "Contacts"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:doc.party_name",
+      "fieldname": "customer_address",
+      "fieldtype": "link",
+      "label": "Customer / Lead Address",
+      "layout": {
+        "section": "Address & Contact",
+        "tab": "Contacts"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Address"
+      },
+      "optionsRaw": "Address",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Address",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "hidden": true,
+        "printHide": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "address_display",
+      "fieldtype": "text_editor",
+      "label": "Address",
+      "layout": {
+        "section": "Address & Contact",
+        "tab": "Contacts"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "hidden": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break3",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "Address & Contact",
+        "tab": "Contacts"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "contact_html",
+      "fieldtype": "text_editor",
+      "label": "Contact HTML",
+      "layout": {
+        "column": 1,
+        "section": "Address & Contact",
+        "tab": "Contacts"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:doc.opportunity_from=='Customer' && doc.party_name",
+      "fieldname": "contact_display",
+      "fieldtype": "small_text",
+      "label": "Contact",
+      "layout": {
+        "column": 1,
+        "section": "Address & Contact",
+        "tab": "Contacts"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "inGlobalSearch": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "items_section",
+      "fieldtype": "layout:tab",
+      "label": "Items",
+      "layout": {
+        "tab": "Items"
+      },
+      "optionsParsed": {
+        "kind": "other",
+        "value": "fa fa-shopping-cart"
+      },
+      "optionsRaw": "fa fa-shopping-cart",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "childDoctype": "Opportunity Item",
+      "constraints": {},
+      "fieldname": "items",
+      "fieldtype": "table",
+      "label": "Items",
+      "layout": {
+        "tab": "Items"
+      },
+      "optionsParsed": {
+        "doctype": "Opportunity Item",
+        "kind": "child_doctype"
+      },
+      "optionsRaw": "Opportunity Item",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "section_break_32",
+      "fieldtype": "layout:section",
+      "layout": {
+        "section": "section_break_32",
+        "tab": "Items"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "base_total",
+      "fieldtype": "currency",
+      "label": "Total (Company Currency)",
+      "layout": {
+        "section": "section_break_32",
+        "tab": "Items"
+      },
+      "optionsParsed": {
+        "field": "Company:company:default_currency",
+        "kind": "currency_field"
+      },
+      "optionsRaw": "Company:company:default_currency",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_33",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "section_break_32",
+        "tab": "Items"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "total",
+      "fieldtype": "currency",
+      "label": "Total",
+      "layout": {
+        "column": 1,
+        "section": "section_break_32",
+        "tab": "Items"
+      },
+      "optionsParsed": {
+        "field": "currency",
+        "kind": "currency_field"
+      },
+      "optionsRaw": "currency",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:!doc.__islocal",
+      "fieldname": "activities_tab",
+      "fieldtype": "layout:tab",
+      "label": "Activities",
+      "layout": {
+        "tab": "Activities"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "open_activities_html",
+      "fieldtype": "text_editor",
+      "label": "Open Activities HTML",
+      "layout": {
+        "tab": "Activities"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "all_activities_section",
+      "fieldtype": "layout:section",
+      "label": "All Activities",
+      "layout": {
+        "section": "All Activities",
+        "tab": "Activities"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "all_activities_html",
+      "fieldtype": "text_editor",
+      "label": "All Activities HTML",
+      "layout": {
+        "section": "All Activities",
+        "tab": "Activities"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:!doc.__islocal",
+      "fieldname": "notes_tab",
+      "fieldtype": "layout:tab",
+      "label": "Comments",
+      "layout": {
+        "tab": "Comments"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "notes_html",
+      "fieldtype": "text_editor",
+      "label": "Notes HTML",
+      "layout": {
+        "tab": "Comments"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "childDoctype": "CRM Note",
+      "constraints": {},
+      "fieldname": "notes",
+      "fieldtype": "table",
+      "label": "Notes",
+      "layout": {
+        "tab": "Comments"
+      },
+      "noCopy": true,
+      "optionsParsed": {
+        "doctype": "CRM Note",
+        "kind": "child_doctype"
+      },
+      "optionsRaw": "CRM Note",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "hidden": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:!doc.__islocal",
+      "fieldname": "dashboard_tab",
+      "fieldtype": "layout:tab",
+      "label": "Connections",
+      "layout": {
+        "tab": "Connections"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    }
+  ],
+  "identity": {
+    "app": "erpnext",
+    "isSingle": false,
+    "isSubmittable": false,
+    "isTree": false,
+    "module": "CRM",
+    "naming": {
+      "seriesField": "naming_series",
+      "seriesPrefix": "CRM-OPP-.YYYY.-",
+      "strategy": "series"
+    }
+  },
+  "name": "Opportunity",
+  "permissions": [
+    {
+      "actions": {
+        "create": true,
+        "delete": true,
+        "email": true,
+        "export": true,
+        "import": true,
+        "print": true,
+        "read": true,
+        "report": true,
+        "share": true,
+        "write": true
+      },
+      "permlevel": 0,
+      "role": "Sales Manager"
+    },
+    {
+      "actions": {
+        "create": true,
+        "delete": true,
+        "email": true,
+        "print": true,
+        "read": true,
+        "report": true,
+        "share": true,
+        "write": true
+      },
+      "permlevel": 0,
+      "role": "Sales User"
+    }
+  ],
+  "ui": {
+    "searchFields": [
+      "status",
+      "transaction_date",
+      "party_name",
+      "opportunity_type",
+      "territory",
+      "company"
+    ],
+    "showNameInGlobalSearch": true,
+    "sortField": "creation",
+    "sortOrder": "DESC",
+    "timelineField": "party_name",
+    "titleField": "title"
+  },
+  "workflows": [
+    {
+      "kind": "unavailable"
+    }
+  ]
+}

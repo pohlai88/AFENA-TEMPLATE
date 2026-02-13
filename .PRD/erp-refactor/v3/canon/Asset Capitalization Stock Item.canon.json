@@ -1,0 +1,476 @@
+{
+  "audit": {
+    "trackChanges": true
+  },
+  "canonVersion": "1.0.0",
+  "childTables": [],
+  "doctypeId": "erpnext:Assets:Asset Capitalization Stock Item",
+  "events": [
+    {
+      "event": "validate",
+      "handlers": [
+        "erpnext.support.doctype.service_level_agreement.service_level_agreement.apply",
+        "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record.check_for_running_deletion_job"
+      ],
+      "handlersParsed": [
+        {
+          "attrPath": "apply",
+          "module": "erpnext.support.doctype.service_level_agreement.service_level_agreement"
+        },
+        {
+          "attrPath": "check_for_running_deletion_job",
+          "module": "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record"
+        }
+      ]
+    }
+  ],
+  "fieldOrder": [
+    "item_code",
+    "item_name",
+    "column_break_3",
+    "warehouse",
+    "section_break_6",
+    "purchase_receipt_item",
+    "stock_qty",
+    "actual_qty",
+    "column_break_9",
+    "valuation_rate",
+    "amount",
+    "stock_uom",
+    "batch_and_serial_no_section",
+    "serial_and_batch_bundle",
+    "use_serial_batch_fields",
+    "column_break_13",
+    "section_break_bfqc",
+    "serial_no",
+    "column_break_mbuv",
+    "batch_no",
+    "accounting_dimensions_section",
+    "cost_center",
+    "dimension_col_break"
+  ],
+  "fields": [
+    {
+      "constraints": {},
+      "fieldname": "item_code",
+      "fieldtype": "link",
+      "label": "Item Code",
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Item"
+      },
+      "optionsRaw": "Item",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Item",
+        "kind": "static"
+      },
+      "requiredStatic": true,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fetchFrom": "item_code.item_name",
+      "fieldname": "item_name",
+      "fieldtype": "data",
+      "label": "Item Name",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_3",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "warehouse",
+      "fieldtype": "link",
+      "label": "Warehouse",
+      "layout": {
+        "column": 1
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Warehouse"
+      },
+      "optionsRaw": "Warehouse",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Warehouse",
+        "kind": "static"
+      },
+      "requiredStatic": true,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "section_break_6",
+      "fieldtype": "layout:section",
+      "label": "Purchase Details",
+      "layout": {
+        "section": "Purchase Details"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "purchase_receipt_item",
+      "fieldtype": "data",
+      "label": "Purchase Receipt Item",
+      "layout": {
+        "section": "Purchase Details"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "hidden": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "stock_qty",
+      "fieldtype": "float",
+      "label": "Quantity",
+      "layout": {
+        "section": "Purchase Details"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "actual_qty",
+      "fieldtype": "float",
+      "label": "Actual Qty in Warehouse",
+      "layout": {
+        "section": "Purchase Details"
+      },
+      "noCopy": true,
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_9",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "Purchase Details"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "valuation_rate",
+      "fieldtype": "currency",
+      "label": "Valuation Rate",
+      "layout": {
+        "column": 1,
+        "section": "Purchase Details"
+      },
+      "optionsParsed": {
+        "field": "Company:company:default_currency",
+        "kind": "currency_field"
+      },
+      "optionsRaw": "Company:company:default_currency",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "inListView": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "amount",
+      "fieldtype": "currency",
+      "label": "Amount",
+      "layout": {
+        "column": 1,
+        "section": "Purchase Details"
+      },
+      "optionsParsed": {
+        "field": "Company:company:default_currency",
+        "kind": "currency_field"
+      },
+      "optionsRaw": "Company:company:default_currency",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "inListView": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fetchFrom": "item_code.stock_uom",
+      "fieldname": "stock_uom",
+      "fieldtype": "link",
+      "label": "Stock UOM",
+      "layout": {
+        "column": 1,
+        "section": "Purchase Details"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "UOM"
+      },
+      "optionsRaw": "UOM",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "UOM",
+        "kind": "static"
+      },
+      "requiredStatic": true,
+      "ui": {
+        "inListView": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "batch_and_serial_no_section",
+      "fieldtype": "layout:section",
+      "label": "Batch and Serial No",
+      "layout": {
+        "section": "Batch and Serial No"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:doc.use_serial_batch_fields === 0 || doc.docstatus === 1",
+      "fieldname": "serial_and_batch_bundle",
+      "fieldtype": "link",
+      "label": "Serial and Batch Bundle",
+      "layout": {
+        "section": "Batch and Serial No"
+      },
+      "noCopy": true,
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Serial and Batch Bundle"
+      },
+      "optionsRaw": "Serial and Batch Bundle",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Serial and Batch Bundle",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "use_serial_batch_fields",
+      "fieldtype": "check",
+      "label": "Use Serial No / Batch Fields",
+      "layout": {
+        "section": "Batch and Serial No"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_13",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "Batch and Serial No"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:doc.use_serial_batch_fields === 1",
+      "fieldname": "section_break_bfqc",
+      "fieldtype": "layout:section",
+      "layout": {
+        "section": "section_break_bfqc"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:doc.use_serial_batch_fields === 1",
+      "fieldname": "serial_no",
+      "fieldtype": "text",
+      "label": "Serial No",
+      "layout": {
+        "section": "section_break_bfqc"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_mbuv",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "section_break_bfqc"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:doc.use_serial_batch_fields === 1",
+      "fieldname": "batch_no",
+      "fieldtype": "link",
+      "label": "Batch No",
+      "layout": {
+        "column": 1,
+        "section": "section_break_bfqc"
+      },
+      "noCopy": true,
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Batch"
+      },
+      "optionsRaw": "Batch",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Batch",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "accounting_dimensions_section",
+      "fieldtype": "layout:section",
+      "label": "Accounting Dimensions",
+      "layout": {
+        "section": "Accounting Dimensions"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "collapsible": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "cost_center",
+      "fieldtype": "link",
+      "label": "Cost Center",
+      "layout": {
+        "section": "Accounting Dimensions"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Cost Center"
+      },
+      "optionsRaw": "Cost Center",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Cost Center",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "dimension_col_break",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "Accounting Dimensions"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    }
+  ],
+  "identity": {
+    "app": "erpnext",
+    "isSingle": false,
+    "isSubmittable": false,
+    "isTree": false,
+    "module": "Assets",
+    "naming": {
+      "strategy": "hash"
+    }
+  },
+  "name": "Asset Capitalization Stock Item",
+  "permissions": [],
+  "ui": {
+    "searchFields": [],
+    "showNameInGlobalSearch": false,
+    "sortField": "creation",
+    "sortOrder": "DESC"
+  },
+  "workflows": [
+    {
+      "kind": "unavailable"
+    }
+  ]
+}

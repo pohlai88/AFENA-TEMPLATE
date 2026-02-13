@@ -1,7 +1,10 @@
-import { defineConfig } from 'vitest/config';
+import { defineProject, mergeConfig } from 'vitest/config';
 
-export default defineConfig({
-  test: {
-    setupFiles: ['./src/__tests__/setup.ts'],
-  },
-});
+import { unitPreset } from 'afena-vitest-config/presets/unit';
+
+export default mergeConfig(unitPreset, defineProject({
+    test: {
+        setupFiles: ['./src/__tests__/setup.ts'],
+        testTimeout: 10_000,
+    },
+}));

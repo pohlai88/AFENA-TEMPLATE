@@ -1,4 +1,5 @@
 import { computeEventIdempotencyKey } from './canonical-json';
+
 import type { WorkflowDbAdapter } from './engine';
 
 /**
@@ -83,7 +84,7 @@ export async function writeEventToOutbox(
     eventType: request.eventType,
     payloadJson: request.payload,
     eventIdempotencyKey,
-    traceId: request.traceId,
+    ...(request.traceId ? { traceId: request.traceId } : {}),
   });
 
   return { written: true, eventIdempotencyKey };
@@ -140,7 +141,7 @@ export async function enqueueWorkflowTrigger(
         fromStatus: params.fromStatus ?? null,
         toStatus: params.toStatus ?? null,
       },
-      traceId: params.traceId,
+      ...(params.traceId ? { traceId: params.traceId } : {}),
     },
     db,
   );

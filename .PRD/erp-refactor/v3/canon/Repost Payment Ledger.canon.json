@@ -1,0 +1,347 @@
+{
+  "audit": {
+    "trackChanges": true
+  },
+  "canonVersion": "1.0.0",
+  "childTables": [
+    {
+      "childDoctype": "Repost Payment Ledger Items",
+      "parentField": "repost_vouchers",
+      "required": false
+    }
+  ],
+  "doctypeId": "erpnext:Accounts:Repost Payment Ledger",
+  "events": [
+    {
+      "event": "validate",
+      "handlers": [
+        "erpnext.support.doctype.service_level_agreement.service_level_agreement.apply",
+        "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record.check_for_running_deletion_job"
+      ],
+      "handlersParsed": [
+        {
+          "attrPath": "apply",
+          "module": "erpnext.support.doctype.service_level_agreement.service_level_agreement"
+        },
+        {
+          "attrPath": "check_for_running_deletion_job",
+          "module": "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record"
+        }
+      ]
+    }
+  ],
+  "fieldOrder": [
+    "filters_section",
+    "company",
+    "posting_date",
+    "column_break_4",
+    "voucher_type",
+    "add_manually",
+    "status_section",
+    "repost_status",
+    "repost_error_log",
+    "selected_vouchers_section",
+    "repost_vouchers",
+    "amended_from"
+  ],
+  "fields": [
+    {
+      "constraints": {},
+      "fieldname": "filters_section",
+      "fieldtype": "layout:section",
+      "label": "Filters",
+      "layout": {
+        "section": "Filters"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "company",
+      "fieldtype": "link",
+      "label": "Company",
+      "layout": {
+        "section": "Filters"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Company"
+      },
+      "optionsRaw": "Company",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Company",
+        "kind": "static"
+      },
+      "requiredStatic": true,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "Today",
+      "fieldname": "posting_date",
+      "fieldtype": "date",
+      "label": "Posting Date",
+      "layout": {
+        "section": "Filters"
+      },
+      "permlevel": 0,
+      "requiredStatic": true,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_4",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "Filters"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "voucher_type",
+      "fieldtype": "link",
+      "label": "Voucher Type",
+      "layout": {
+        "column": 1,
+        "section": "Filters"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "DocType"
+      },
+      "optionsRaw": "DocType",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "DocType",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "add_manually",
+      "fieldtype": "check",
+      "label": "Add Manually",
+      "layout": {
+        "column": 1,
+        "section": "Filters"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "description": "Ignore Voucher Type filter and Select Vouchers Manually"
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "status_section",
+      "fieldtype": "layout:section",
+      "label": "Status",
+      "layout": {
+        "section": "Status"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "repost_status",
+      "fieldtype": "select",
+      "label": "Repost Status",
+      "layout": {
+        "section": "Status"
+      },
+      "optionsParsed": {
+        "choices": [
+          "Queued",
+          "Failed",
+          "Completed"
+        ],
+        "kind": "select"
+      },
+      "optionsRaw": "\nQueued\nFailed\nCompleted",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:doc.repost_error_log",
+      "fieldname": "repost_error_log",
+      "fieldtype": "text",
+      "label": "Repost Error Log",
+      "layout": {
+        "section": "Status"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "selected_vouchers_section",
+      "fieldtype": "layout:section",
+      "label": "Vouchers",
+      "layout": {
+        "section": "Vouchers"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "childDoctype": "Repost Payment Ledger Items",
+      "constraints": {},
+      "fieldname": "repost_vouchers",
+      "fieldtype": "table",
+      "label": "Selected Vouchers",
+      "layout": {
+        "section": "Vouchers"
+      },
+      "optionsParsed": {
+        "doctype": "Repost Payment Ledger Items",
+        "kind": "child_doctype"
+      },
+      "optionsRaw": "Repost Payment Ledger Items",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "amended_from",
+      "fieldtype": "link",
+      "label": "Amended From",
+      "layout": {
+        "section": "Vouchers"
+      },
+      "noCopy": true,
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Repost Payment Ledger"
+      },
+      "optionsRaw": "Repost Payment Ledger",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Repost Payment Ledger",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true,
+        "readOnly": true
+      },
+      "unique": false
+    }
+  ],
+  "identity": {
+    "app": "erpnext",
+    "isSingle": false,
+    "isSubmittable": true,
+    "isTree": false,
+    "module": "Accounts",
+    "naming": {
+      "strategy": "hash"
+    }
+  },
+  "name": "Repost Payment Ledger",
+  "permissions": [
+    {
+      "actions": {
+        "create": true,
+        "delete": true,
+        "email": true,
+        "export": true,
+        "print": true,
+        "read": true,
+        "report": true,
+        "share": true,
+        "submit": true,
+        "write": true
+      },
+      "permlevel": 0,
+      "role": "Accounts Manager"
+    },
+    {
+      "actions": {
+        "email": true,
+        "export": true,
+        "print": true,
+        "read": true,
+        "report": true,
+        "share": true,
+        "write": true
+      },
+      "permlevel": 1,
+      "role": "Accounts Manager"
+    },
+    {
+      "actions": {
+        "create": true,
+        "email": true,
+        "export": true,
+        "print": true,
+        "read": true,
+        "report": true,
+        "share": true,
+        "write": true
+      },
+      "permlevel": 0,
+      "role": "Accounts User"
+    },
+    {
+      "actions": {
+        "amend": true,
+        "cancel": true,
+        "create": true,
+        "delete": true,
+        "email": true,
+        "export": true,
+        "print": true,
+        "read": true,
+        "report": true,
+        "share": true,
+        "submit": true,
+        "write": true
+      },
+      "permlevel": 0,
+      "role": "System Manager"
+    }
+  ],
+  "ui": {
+    "searchFields": [],
+    "showNameInGlobalSearch": false,
+    "sortField": "creation",
+    "sortOrder": "DESC"
+  },
+  "workflows": [
+    {
+      "kind": "unavailable"
+    }
+  ]
+}

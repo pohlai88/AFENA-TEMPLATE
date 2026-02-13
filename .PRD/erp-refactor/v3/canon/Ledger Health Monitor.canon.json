@@ -1,0 +1,206 @@
+{
+  "audit": {
+    "trackChanges": true
+  },
+  "canonVersion": "1.0.0",
+  "childTables": [
+    {
+      "childDoctype": "Ledger Health Monitor Company",
+      "parentField": "companies",
+      "required": false
+    }
+  ],
+  "doctypeId": "erpnext:Accounts:Ledger Health Monitor",
+  "events": [
+    {
+      "event": "validate",
+      "handlers": [
+        "erpnext.support.doctype.service_level_agreement.service_level_agreement.apply",
+        "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record.check_for_running_deletion_job"
+      ],
+      "handlersParsed": [
+        {
+          "attrPath": "apply",
+          "module": "erpnext.support.doctype.service_level_agreement.service_level_agreement"
+        },
+        {
+          "attrPath": "check_for_running_deletion_job",
+          "module": "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record"
+        }
+      ]
+    }
+  ],
+  "fieldOrder": [
+    "enable_health_monitor",
+    "monitor_section",
+    "monitor_for_last_x_days",
+    "debit_credit_mismatch",
+    "general_and_payment_ledger_mismatch",
+    "section_break_xdsp",
+    "companies"
+  ],
+  "fields": [
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "enable_health_monitor",
+      "fieldtype": "check",
+      "label": "Enable Health Monitor",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "monitor_section",
+      "fieldtype": "layout:section",
+      "label": "Configuration",
+      "layout": {
+        "section": "Configuration"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "60",
+      "fieldname": "monitor_for_last_x_days",
+      "fieldtype": "int",
+      "label": "Monitor for Last 'X' days",
+      "layout": {
+        "section": "Configuration"
+      },
+      "permlevel": 0,
+      "requiredStatic": true,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "debit_credit_mismatch",
+      "fieldtype": "check",
+      "label": "Debit-Credit Mismatch",
+      "layout": {
+        "section": "Configuration"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "general_and_payment_ledger_mismatch",
+      "fieldtype": "check",
+      "label": "Discrepancy between General and Payment Ledger",
+      "layout": {
+        "section": "Configuration"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "section_break_xdsp",
+      "fieldtype": "layout:section",
+      "label": "Companies",
+      "layout": {
+        "section": "Companies"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "childDoctype": "Ledger Health Monitor Company",
+      "constraints": {},
+      "fieldname": "companies",
+      "fieldtype": "table",
+      "layout": {
+        "section": "Companies"
+      },
+      "optionsParsed": {
+        "doctype": "Ledger Health Monitor Company",
+        "kind": "child_doctype"
+      },
+      "optionsRaw": "Ledger Health Monitor Company",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    }
+  ],
+  "identity": {
+    "app": "erpnext",
+    "isSingle": false,
+    "isSubmittable": false,
+    "isTree": false,
+    "module": "Accounts",
+    "naming": {
+      "strategy": "hash"
+    }
+  },
+  "name": "Ledger Health Monitor",
+  "permissions": [
+    {
+      "actions": {
+        "create": true,
+        "delete": true,
+        "email": true,
+        "print": true,
+        "read": true,
+        "share": true,
+        "write": true
+      },
+      "permlevel": 0,
+      "role": "Accounts Manager"
+    },
+    {
+      "actions": {
+        "create": true,
+        "delete": true,
+        "email": true,
+        "print": true,
+        "read": true,
+        "share": true,
+        "write": true
+      },
+      "permlevel": 0,
+      "role": "Accounts User"
+    },
+    {
+      "actions": {
+        "create": true,
+        "delete": true,
+        "email": true,
+        "print": true,
+        "read": true,
+        "share": true,
+        "write": true
+      },
+      "permlevel": 0,
+      "role": "System Manager"
+    }
+  ],
+  "ui": {
+    "searchFields": [],
+    "showNameInGlobalSearch": false,
+    "sortField": "modified",
+    "sortOrder": "DESC"
+  },
+  "workflows": [
+    {
+      "kind": "unavailable"
+    }
+  ]
+}

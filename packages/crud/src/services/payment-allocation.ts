@@ -70,8 +70,8 @@ export async function allocatePayment(
     throw new Error('allocatedAmount must be positive');
   }
 
-  // Get total already allocated for this payment
-  const summary = await getPaymentAllocationSummary(tx, orgId, paymentId);
+  // TODO: use summary for over-allocation validation
+  await getPaymentAllocationSummary(tx, orgId, paymentId);
 
   // Insert allocation row — DB UNIQUE constraint prevents double-allocation
   const [row] = await (tx as any)

@@ -7,6 +7,9 @@
  * INV-E2: No console.* in apps/web (except config files)
  * INV-E3: No hardcoded hex/rgb colors in apps/web TSX
  * INV-E4: No ad-hoc action buttons (must use ResolvedActions)
+ * INV-E5: No direct CRUD imports in apps/web (boundary enforcement)
+ * INV-E6: Server actions must use withActionAuth() gateway
+ * INV-E7: Kernel Boundary Rule (no direct SQL/Drizzle/table imports)
  *
  * Usage: node tools/ci-invariants.mjs
  * Exit code 0 = pass, 1 = fail
@@ -93,6 +96,9 @@ console.log('── INV-E3: No hardcoded hex/rgb colors in TSX ──');
 const tsxFiles = walk(WEB_DIR, ['.tsx'], ['node_modules', '.next', 'dist']);
 
 for (const file of tsxFiles) {
+  // Skip node-palette.tsx - it's a color palette visualization that legitimately uses hex colors
+  if (file.includes('node-palette.tsx')) continue;
+
   const content = readFileSync(file, 'utf-8');
   const lines = content.split('\n');
   for (let i = 0; i < lines.length; i++) {
@@ -134,6 +140,118 @@ for (const file of clientFiles) {
       if (pattern.test(lines[i])) {
         fail('E4', file, i + 1, 'Ad-hoc action verb in client component — use ResolvedActions');
       }
+    }
+  }
+}
+
+// ── INV-E5: No direct CRUD imports in apps/web ─────────────────
+
+console.log('── INV-E5: No direct CRUD imports in apps/web (boundary enforcement) ──');
+
+const webSourceFiles = walk(WEB_DIR, ['.ts', '.tsx'], ['node_modules', '.next', 'dist']);
+
+for (const file of webSourceFiles) {
+  // Skip kernel packages themselves and legitimate files
+  if (file.includes('packages/')) continue;
+  if (file.includes('with-action-auth.ts')) continue; // Needs MutationContext type
+  if (file.includes('context.ts')) continue; // Legacy, will be removed
+  if (file.includes('entity-actions.ts')) continue; // Kernel wrapper, allowed
+  if (file.includes('api/storage/metadata/route.ts')) continue; // Uses meterStorageBytes
+  if (file.includes('api/webhooks/')) continue; // Webhooks are cross-cutting infrastructure
+  if (file.includes('lib/api/with-auth.ts')) continue; // API middleware needs db for auth
+
+  const content = readFileSync(file, 'utf-8');
+  const lines = content.split('\n');
+
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+    const trimmed = line.trim();
+    if (trimmed.startsWith('//') || trimmed.startsWith('*')) continue;
+
+    // Check for direct CRUD imports that bypass kernel
+    // Allow: mutate, readEntity, listEntities, MutationContext, loadFieldDefs, meterStorageBytes, verifyWebhookSignature, checkRateLimit
+    if (/from\s+['"]afena-crud['"]/.test(line)) {
+      const allowedImports = ['mutate', 'readEntity', 'listEntities', 'MutationContext', 'loadFieldDefs', 'meterStorageBytes', 'verifyWebhookSignature', 'checkRateLimit'];
+      const importMatch = line.match(/import\s*{([^}]*)}/);
+      if (importMatch) {
+        const imports = importMatch[1].split(',').map(s => s.trim().split(' as ')[0]);
+        const hasDisallowed = imports.some(imp => !allowedImports.includes(imp));
+        if (hasDisallowed) {
+          fail('E5', file, i + 1, 'Direct CRUD import — use mutate() kernel or app/actions wrappers');
+        }
+      }
+    }
+  }
+}
+
+// ── INV-E6: Server actions must use withActionAuth() gateway ─────
+
+console.log('── INV-E6: Server actions must use withActionAuth() gateway ──');
+
+const serverActionFiles = walk(WEB_DIR, ['.ts', '.tsx'], ['node_modules', '.next', 'dist'])
+  .filter(f => f.includes('server-actions') || (f.includes('_server') && f.endsWith('.ts')));
+
+for (const file of serverActionFiles) {
+  // Skip the gateway file itself
+  if (file.includes('with-action-auth.ts')) continue;
+
+  const content = readFileSync(file, 'utf-8');
+  const lines = content.split('\n');
+
+  // Check if it's a server action file
+  const hasUseServer = content.includes("'use server'");
+  if (!hasUseServer) continue;
+
+  // Check for manual auth patterns
+  const hasManualAuth = content.includes('auth.getSession()') || content.includes('randomUUID()');
+
+  // Check if it uses withActionAuth or withActionAuthPassthrough
+  const usesGateway = content.includes('withActionAuth') || content.includes('withActionAuthPassthrough');
+
+  if (hasManualAuth && !usesGateway) {
+    fail('E6', file, 1, 'Server action uses manual auth — wrap with withActionAuth() or withActionAuthPassthrough()');
+  }
+}
+
+// ── INV-E7: Kernel Boundary Rule (no direct SQL/Drizzle/table) ──
+
+console.log('── INV-E7: Kernel Boundary Rule (no direct SQL/Drizzle/table imports) ──');
+
+for (const file of webSourceFiles) {
+  // Skip allowlisted files and directories
+  if (file.includes('packages/')) continue; // Kernel packages can import anything
+  if (file.includes('with-action-auth.ts')) continue; // Needs db for auth context
+  if (file.includes('context.ts')) continue; // Legacy, will be removed
+  if (file.includes('entity-actions.ts')) continue; // Kernel wrapper, needs db for readEntity/listEntities
+  if (file.includes('api/storage/metadata/route.ts')) continue; // r2Files is cross-cutting infrastructure
+  if (file.includes('api/webhooks/')) continue; // Webhooks are cross-cutting infrastructure
+  if (file.includes('api/views/')) continue; // Views are cross-cutting infrastructure
+  if (file.includes('api/custom-fields/')) continue; // Uses loadFieldDefs from crud
+  if (file.includes('lib/actions/')) continue; // Action layer needs db for auth context
+  if (file.includes('lib/api/')) continue; // API middleware needs db for auth
+  if (file.includes('lib/org.ts')) continue; // Org utilities need raw SQL
+  if (file.includes('_server/')) continue; // Server components often need db
+  if (file.includes('app/actions/')) continue; // Action wrappers need db
+
+  const content = readFileSync(file, 'utf-8');
+  const lines = content.split('\n');
+
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+    const trimmed = line.trim();
+    if (trimmed.startsWith('//') || trimmed.startsWith('*')) continue;
+
+    // Check for direct Drizzle table imports (not just db import)
+    if (/from\s+['"][^'"]*schema[^'"]*['"]/.test(line)) {
+      // Allow specific utility imports but not table imports
+      if (/\b(eq|and|or|sql|desc|asc|table|schema)\b/.test(line)) {
+        fail('E7', file, i + 1, 'Direct Drizzle table/schema import — use kernel mutate()');
+      }
+    }
+
+    // Check for direct SQL client imports (not allowed)
+    if (/from\s+['"]@vercel\/postgres['"]|from\s+['"]postgres['"]/.test(line)) {
+      fail('E7', file, i + 1, 'Direct SQL client import — use kernel mutate()');
     }
   }
 }

@@ -1,0 +1,142 @@
+{
+  "audit": {
+    "trackChanges": false
+  },
+  "canonVersion": "1.0.0",
+  "childTables": [],
+  "doctypeId": "erpnext:Setup:Employee Education",
+  "events": [
+    {
+      "event": "validate",
+      "handlers": [
+        "erpnext.support.doctype.service_level_agreement.service_level_agreement.apply",
+        "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record.check_for_running_deletion_job"
+      ],
+      "handlersParsed": [
+        {
+          "attrPath": "apply",
+          "module": "erpnext.support.doctype.service_level_agreement.service_level_agreement"
+        },
+        {
+          "attrPath": "check_for_running_deletion_job",
+          "module": "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record"
+        }
+      ]
+    }
+  ],
+  "fieldOrder": [
+    "school_univ",
+    "qualification",
+    "level",
+    "year_of_passing",
+    "class_per",
+    "maj_opt_subj"
+  ],
+  "fields": [
+    {
+      "constraints": {},
+      "fieldname": "school_univ",
+      "fieldtype": "small_text",
+      "label": "School/University",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "qualification",
+      "fieldtype": "data",
+      "label": "Qualification",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "inListView": true,
+        "width": "100px"
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "level",
+      "fieldtype": "select",
+      "label": "Level",
+      "optionsParsed": {
+        "choices": [
+          "Graduate",
+          "Post Graduate",
+          "Under Graduate"
+        ],
+        "kind": "select"
+      },
+      "optionsRaw": "Graduate\nPost Graduate\nUnder Graduate",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "year_of_passing",
+      "fieldtype": "int",
+      "label": "Year of Passing",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "class_per",
+      "fieldtype": "data",
+      "label": "Class / Percentage",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "maj_opt_subj",
+      "fieldtype": "text",
+      "label": "Major/Optional Subjects",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    }
+  ],
+  "identity": {
+    "app": "erpnext",
+    "isSingle": false,
+    "isSubmittable": false,
+    "isTree": false,
+    "module": "Setup",
+    "naming": {
+      "strategy": "hash"
+    }
+  },
+  "name": "Employee Education",
+  "permissions": [],
+  "ui": {
+    "searchFields": [],
+    "showNameInGlobalSearch": false,
+    "sortField": "creation",
+    "sortOrder": "DESC"
+  },
+  "workflows": [
+    {
+      "kind": "unavailable"
+    }
+  ]
+}

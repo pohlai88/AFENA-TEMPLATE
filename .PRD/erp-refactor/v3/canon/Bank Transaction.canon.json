@@ -1,0 +1,750 @@
+{
+  "audit": {
+    "trackChanges": true
+  },
+  "canonVersion": "1.0.0",
+  "childTables": [
+    {
+      "childDoctype": "Bank Transaction Payments",
+      "parentField": "payment_entries",
+      "required": false
+    }
+  ],
+  "doctypeId": "erpnext:Accounts:Bank Transaction",
+  "events": [
+    {
+      "event": "validate",
+      "handlers": [
+        "erpnext.support.doctype.service_level_agreement.service_level_agreement.apply",
+        "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record.check_for_running_deletion_job"
+      ],
+      "handlersParsed": [
+        {
+          "attrPath": "apply",
+          "module": "erpnext.support.doctype.service_level_agreement.service_level_agreement"
+        },
+        {
+          "attrPath": "check_for_running_deletion_job",
+          "module": "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record"
+        }
+      ]
+    }
+  ],
+  "fieldOrder": [
+    "naming_series",
+    "date",
+    "column_break_2",
+    "status",
+    "bank_account",
+    "company",
+    "amended_from",
+    "section_break_4",
+    "deposit",
+    "withdrawal",
+    "column_break_7",
+    "currency",
+    "section_break_10",
+    "description",
+    "reference_number",
+    "column_break_10",
+    "transaction_id",
+    "transaction_type",
+    "section_break_14",
+    "column_break_oufv",
+    "payment_entries",
+    "section_break_18",
+    "allocated_amount",
+    "column_break_17",
+    "unallocated_amount",
+    "party_section",
+    "party_type",
+    "party",
+    "column_break_3czf",
+    "bank_party_name",
+    "bank_party_account_number",
+    "bank_party_iban",
+    "extended_bank_statement_section",
+    "included_fee",
+    "excluded_fee"
+  ],
+  "fields": [
+    {
+      "constraints": {},
+      "default": "ACC-BTN-.YYYY.-",
+      "fieldname": "naming_series",
+      "fieldtype": "select",
+      "label": "Series",
+      "noCopy": true,
+      "optionsParsed": {
+        "kind": "naming_series",
+        "prefixes": [
+          "ACC-BTN-.YYYY.-"
+        ]
+      },
+      "optionsRaw": "ACC-BTN-.YYYY.-",
+      "permlevel": 0,
+      "requiredStatic": true,
+      "setOnlyOnce": true,
+      "ui": {
+        "printHide": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "date",
+      "fieldtype": "date",
+      "label": "Date",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_2",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "Pending",
+      "fieldname": "status",
+      "fieldtype": "select",
+      "label": "Status",
+      "layout": {
+        "column": 1
+      },
+      "optionsParsed": {
+        "choices": [
+          "Pending",
+          "Settled",
+          "Unreconciled",
+          "Reconciled",
+          "Cancelled"
+        ],
+        "kind": "select"
+      },
+      "optionsRaw": "\nPending\nSettled\nUnreconciled\nReconciled\nCancelled",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "inStandardFilter": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "bank_account",
+      "fieldtype": "link",
+      "label": "Bank Account",
+      "layout": {
+        "column": 1
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Bank Account"
+      },
+      "optionsRaw": "Bank Account",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Bank Account",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "inStandardFilter": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fetchFrom": "bank_account.company",
+      "fieldname": "company",
+      "fieldtype": "link",
+      "label": "Company",
+      "layout": {
+        "column": 1
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Company"
+      },
+      "optionsRaw": "Company",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Company",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "inStandardFilter": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "amended_from",
+      "fieldtype": "link",
+      "label": "Amended From",
+      "layout": {
+        "column": 1
+      },
+      "noCopy": true,
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Bank Transaction"
+      },
+      "optionsRaw": "Bank Transaction",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Bank Transaction",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "section_break_4",
+      "fieldtype": "layout:section",
+      "layout": {
+        "section": "section_break_4"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "deposit",
+      "fieldtype": "currency",
+      "label": "Deposit",
+      "layout": {
+        "section": "section_break_4"
+      },
+      "optionsParsed": {
+        "field": "currency",
+        "kind": "currency_field"
+      },
+      "optionsRaw": "currency",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "withdrawal",
+      "fieldtype": "currency",
+      "label": "Withdrawal",
+      "layout": {
+        "section": "section_break_4"
+      },
+      "optionsParsed": {
+        "field": "currency",
+        "kind": "currency_field"
+      },
+      "optionsRaw": "currency",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_7",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "section_break_4"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "currency",
+      "fieldtype": "link",
+      "label": "Currency",
+      "layout": {
+        "column": 1,
+        "section": "section_break_4"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Currency"
+      },
+      "optionsRaw": "Currency",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Currency",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "section_break_10",
+      "fieldtype": "layout:section",
+      "layout": {
+        "section": "section_break_10"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "description",
+      "fieldtype": "small_text",
+      "label": "Description",
+      "layout": {
+        "section": "section_break_10"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "allowOnSubmit": true,
+      "constraints": {},
+      "fieldname": "reference_number",
+      "fieldtype": "small_text",
+      "label": "Reference Number",
+      "layout": {
+        "section": "section_break_10"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_10",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "section_break_10"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "transaction_id",
+      "fieldtype": "data",
+      "label": "Transaction ID",
+      "layout": {
+        "column": 1,
+        "section": "section_break_10"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {
+        "maxLength": 50
+      },
+      "fieldname": "transaction_type",
+      "fieldtype": "data",
+      "label": "Transaction Type",
+      "layout": {
+        "column": 1,
+        "section": "section_break_10"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "section_break_14",
+      "fieldtype": "layout:section",
+      "layout": {
+        "section": "section_break_14"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_oufv",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "section_break_14"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "allowOnSubmit": true,
+      "childDoctype": "Bank Transaction Payments",
+      "constraints": {},
+      "fieldname": "payment_entries",
+      "fieldtype": "table",
+      "label": "Payment Entries",
+      "layout": {
+        "column": 1,
+        "section": "section_break_14"
+      },
+      "optionsParsed": {
+        "doctype": "Bank Transaction Payments",
+        "kind": "child_doctype"
+      },
+      "optionsRaw": "Bank Transaction Payments",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "section_break_18",
+      "fieldtype": "layout:section",
+      "layout": {
+        "section": "section_break_18"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "allowOnSubmit": true,
+      "constraints": {},
+      "fieldname": "allocated_amount",
+      "fieldtype": "currency",
+      "label": "Allocated Amount",
+      "layout": {
+        "section": "section_break_18"
+      },
+      "optionsParsed": {
+        "field": "currency",
+        "kind": "currency_field"
+      },
+      "optionsRaw": "currency",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_17",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "section_break_18"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "allowOnSubmit": true,
+      "constraints": {},
+      "fieldname": "unallocated_amount",
+      "fieldtype": "currency",
+      "label": "Unallocated Amount",
+      "layout": {
+        "column": 1,
+        "section": "section_break_18"
+      },
+      "optionsParsed": {
+        "field": "currency",
+        "kind": "currency_field"
+      },
+      "optionsRaw": "currency",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "party_section",
+      "fieldtype": "layout:section",
+      "label": "Payment From / To",
+      "layout": {
+        "section": "Payment From / To"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "allowOnSubmit": true,
+      "constraints": {},
+      "fieldname": "party_type",
+      "fieldtype": "link",
+      "label": "Party Type",
+      "layout": {
+        "section": "Payment From / To"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "DocType"
+      },
+      "optionsRaw": "DocType",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "DocType",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "allowOnSubmit": true,
+      "constraints": {},
+      "fieldname": "party",
+      "fieldtype": "dynamic_link",
+      "label": "Party",
+      "layout": {
+        "section": "Payment From / To"
+      },
+      "optionsRaw": "party_type",
+      "permlevel": 0,
+      "ref": {
+        "doctypeField": "party_type",
+        "kind": "dynamic"
+      },
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_3czf",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "Payment From / To"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "bank_party_name",
+      "fieldtype": "data",
+      "label": "Party Name/Account Holder (Bank Statement)",
+      "layout": {
+        "column": 1,
+        "section": "Payment From / To"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "bank_party_account_number",
+      "fieldtype": "data",
+      "label": "Party Account No. (Bank Statement)",
+      "layout": {
+        "column": 1,
+        "section": "Payment From / To"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "bank_party_iban",
+      "fieldtype": "data:iban",
+      "label": "Party IBAN (Bank Statement)",
+      "layout": {
+        "column": 1,
+        "section": "Payment From / To"
+      },
+      "optionsParsed": {
+        "format": "IBAN",
+        "kind": "data_format"
+      },
+      "optionsRaw": "IBAN",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "extended_bank_statement_section",
+      "fieldtype": "layout:section",
+      "label": "Extended Bank Statement",
+      "layout": {
+        "section": "Extended Bank Statement"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "included_fee",
+      "fieldtype": "currency",
+      "label": "Included Fee",
+      "layout": {
+        "section": "Extended Bank Statement"
+      },
+      "optionsParsed": {
+        "field": "currency",
+        "kind": "currency_field"
+      },
+      "optionsRaw": "currency",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "excluded_fee",
+      "fieldtype": "currency",
+      "label": "Excluded Fee",
+      "layout": {
+        "section": "Extended Bank Statement"
+      },
+      "optionsParsed": {
+        "field": "currency",
+        "kind": "currency_field"
+      },
+      "optionsRaw": "currency",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "description": "On save, the Excluded Fee will be converted to an Included Fee."
+      },
+      "unique": false
+    }
+  ],
+  "identity": {
+    "app": "erpnext",
+    "isSingle": false,
+    "isSubmittable": true,
+    "isTree": false,
+    "module": "Accounts",
+    "naming": {
+      "seriesField": "naming_series",
+      "seriesPrefix": "ACC-BTN-.YYYY.-",
+      "strategy": "series"
+    }
+  },
+  "name": "Bank Transaction",
+  "permissions": [
+    {
+      "actions": {
+        "cancel": true,
+        "create": true,
+        "delete": true,
+        "email": true,
+        "export": true,
+        "print": true,
+        "read": true,
+        "report": true,
+        "share": true,
+        "submit": true,
+        "write": true
+      },
+      "permlevel": 0,
+      "role": "Accounts Manager"
+    },
+    {
+      "actions": {
+        "create": true,
+        "delete": true,
+        "email": true,
+        "export": true,
+        "print": true,
+        "read": true,
+        "report": true,
+        "share": true,
+        "submit": true,
+        "write": true
+      },
+      "permlevel": 0,
+      "role": "Accounts User"
+    },
+    {
+      "actions": {
+        "cancel": true,
+        "create": true,
+        "delete": true,
+        "email": true,
+        "export": true,
+        "print": true,
+        "read": true,
+        "report": true,
+        "share": true,
+        "submit": true,
+        "write": true
+      },
+      "permlevel": 0,
+      "role": "System Manager"
+    }
+  ],
+  "ui": {
+    "searchFields": [],
+    "showNameInGlobalSearch": false,
+    "sortField": "date",
+    "sortOrder": "DESC",
+    "titleField": "bank_account"
+  },
+  "workflows": [
+    {
+      "kind": "unavailable"
+    }
+  ]
+}

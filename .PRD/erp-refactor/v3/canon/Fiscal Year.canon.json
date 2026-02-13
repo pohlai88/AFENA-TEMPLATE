@@ -1,0 +1,237 @@
+{
+  "audit": {
+    "trackChanges": false
+  },
+  "canonVersion": "1.0.0",
+  "childTables": [
+    {
+      "childDoctype": "Fiscal Year Company",
+      "parentField": "companies",
+      "required": false
+    }
+  ],
+  "doctypeId": "erpnext:Accounts:Fiscal Year",
+  "events": [
+    {
+      "event": "validate",
+      "handlers": [
+        "erpnext.support.doctype.service_level_agreement.service_level_agreement.apply",
+        "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record.check_for_running_deletion_job"
+      ],
+      "handlersParsed": [
+        {
+          "attrPath": "apply",
+          "module": "erpnext.support.doctype.service_level_agreement.service_level_agreement"
+        },
+        {
+          "attrPath": "check_for_running_deletion_job",
+          "module": "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record"
+        }
+      ]
+    }
+  ],
+  "fieldOrder": [
+    "year",
+    "disabled",
+    "is_short_year",
+    "year_start_date",
+    "year_end_date",
+    "companies",
+    "auto_created"
+  ],
+  "fields": [
+    {
+      "constraints": {},
+      "fieldname": "year",
+      "fieldtype": "data",
+      "label": "Year Name",
+      "permlevel": 0,
+      "requiredStatic": true,
+      "ui": {
+        "description": "For e.g. 2012, 2012-13",
+        "inListView": true
+      },
+      "unique": true
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "disabled",
+      "fieldtype": "check",
+      "label": "Disabled",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "is_short_year",
+      "fieldtype": "check",
+      "label": "Is Short/Long Year",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "setOnlyOnce": true,
+      "ui": {
+        "description": "More/Less than 12 months."
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "year_start_date",
+      "fieldtype": "date",
+      "label": "Year Start Date",
+      "noCopy": true,
+      "permlevel": 0,
+      "requiredStatic": true,
+      "setOnlyOnce": true,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "year_end_date",
+      "fieldtype": "date",
+      "label": "Year End Date",
+      "noCopy": true,
+      "permlevel": 0,
+      "requiredStatic": true,
+      "setOnlyOnce": true,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "childDoctype": "Fiscal Year Company",
+      "constraints": {},
+      "fieldname": "companies",
+      "fieldtype": "table",
+      "label": "Companies",
+      "optionsParsed": {
+        "doctype": "Fiscal Year Company",
+        "kind": "child_doctype"
+      },
+      "optionsRaw": "Fiscal Year Company",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "auto_created",
+      "fieldtype": "check",
+      "label": "Auto Created",
+      "noCopy": true,
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "hidden": true,
+        "printHide": true,
+        "readOnly": true
+      },
+      "unique": false
+    }
+  ],
+  "identity": {
+    "app": "erpnext",
+    "isSingle": false,
+    "isSubmittable": false,
+    "isTree": false,
+    "module": "Accounts",
+    "naming": {
+      "expression": "field:year",
+      "strategy": "field"
+    }
+  },
+  "name": "Fiscal Year",
+  "permissions": [
+    {
+      "actions": {
+        "read": true
+      },
+      "permlevel": 0,
+      "role": "Accounts Manager"
+    },
+    {
+      "actions": {
+        "read": true
+      },
+      "permlevel": 0,
+      "role": "Accounts User"
+    },
+    {
+      "actions": {
+        "read": true
+      },
+      "permlevel": 0,
+      "role": "Auditor"
+    },
+    {
+      "actions": {
+        "read": true
+      },
+      "permlevel": 0,
+      "role": "Employee"
+    },
+    {
+      "actions": {
+        "read": true
+      },
+      "permlevel": 0,
+      "role": "Purchase User"
+    },
+    {
+      "actions": {
+        "read": true
+      },
+      "permlevel": 0,
+      "role": "Sales User"
+    },
+    {
+      "actions": {
+        "read": true
+      },
+      "permlevel": 0,
+      "role": "Stock Manager"
+    },
+    {
+      "actions": {
+        "read": true
+      },
+      "permlevel": 0,
+      "role": "Stock User"
+    },
+    {
+      "actions": {
+        "create": true,
+        "delete": true,
+        "email": true,
+        "print": true,
+        "read": true,
+        "report": true,
+        "share": true,
+        "write": true
+      },
+      "permlevel": 0,
+      "role": "System Manager"
+    }
+  ],
+  "ui": {
+    "searchFields": [],
+    "showNameInGlobalSearch": true,
+    "sortField": "name",
+    "sortOrder": "DESC"
+  },
+  "workflows": [
+    {
+      "kind": "unavailable"
+    }
+  ]
+}

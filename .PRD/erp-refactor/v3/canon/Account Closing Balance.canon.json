@@ -1,0 +1,374 @@
+{
+  "audit": {
+    "trackChanges": false
+  },
+  "canonVersion": "1.0.0",
+  "childTables": [],
+  "doctypeId": "erpnext:Accounts:Account Closing Balance",
+  "events": [
+    {
+      "event": "validate",
+      "handlers": [
+        "erpnext.support.doctype.service_level_agreement.service_level_agreement.apply",
+        "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record.check_for_running_deletion_job"
+      ],
+      "handlersParsed": [
+        {
+          "attrPath": "apply",
+          "module": "erpnext.support.doctype.service_level_agreement.service_level_agreement"
+        },
+        {
+          "attrPath": "check_for_running_deletion_job",
+          "module": "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record"
+        }
+      ]
+    }
+  ],
+  "fieldOrder": [
+    "closing_date",
+    "account",
+    "cost_center",
+    "debit",
+    "credit",
+    "reporting_currency_exchange_rate",
+    "debit_in_reporting_currency",
+    "credit_in_reporting_currency",
+    "account_currency",
+    "debit_in_account_currency",
+    "credit_in_account_currency",
+    "project",
+    "company",
+    "finance_book",
+    "period_closing_voucher",
+    "is_period_closing_voucher_entry"
+  ],
+  "fields": [
+    {
+      "constraints": {},
+      "fieldname": "closing_date",
+      "fieldtype": "date",
+      "label": "Closing Date",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "inListView": true,
+        "searchIndex": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "account",
+      "fieldtype": "link",
+      "label": "Account",
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Account"
+      },
+      "optionsRaw": "Account",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Account",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "inListView": true,
+        "inStandardFilter": true,
+        "searchIndex": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "cost_center",
+      "fieldtype": "link",
+      "label": "Cost Center",
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Cost Center"
+      },
+      "optionsRaw": "Cost Center",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Cost Center",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "debit",
+      "fieldtype": "currency",
+      "label": "Debit Amount",
+      "optionsParsed": {
+        "field": "Company:company:default_currency",
+        "kind": "currency_field"
+      },
+      "optionsRaw": "Company:company:default_currency",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "credit",
+      "fieldtype": "currency",
+      "label": "Credit Amount",
+      "optionsParsed": {
+        "field": "Company:company:default_currency",
+        "kind": "currency_field"
+      },
+      "optionsRaw": "Company:company:default_currency",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "reporting_currency_exchange_rate",
+      "fieldtype": "float",
+      "label": "Reporting Currency Exchange Rate",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "precision": "9"
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "debit_in_reporting_currency",
+      "fieldtype": "currency",
+      "label": "Debit Amount in Reporting Currency",
+      "optionsParsed": {
+        "field": "Company:company:reporting_currency",
+        "kind": "currency_field"
+      },
+      "optionsRaw": "Company:company:reporting_currency",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "credit_in_reporting_currency",
+      "fieldtype": "currency",
+      "label": "Credit Amount in Reporting Currency",
+      "optionsParsed": {
+        "field": "Company:company:reporting_currency",
+        "kind": "currency_field"
+      },
+      "optionsRaw": "Company:company:reporting_currency",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "account_currency",
+      "fieldtype": "link",
+      "label": "Account Currency",
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Currency"
+      },
+      "optionsRaw": "Currency",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Currency",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "debit_in_account_currency",
+      "fieldtype": "currency",
+      "label": "Debit Amount in Account Currency",
+      "optionsParsed": {
+        "field": "account_currency",
+        "kind": "currency_field"
+      },
+      "optionsRaw": "account_currency",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "credit_in_account_currency",
+      "fieldtype": "currency",
+      "label": "Credit Amount in Account Currency",
+      "optionsParsed": {
+        "field": "account_currency",
+        "kind": "currency_field"
+      },
+      "optionsRaw": "account_currency",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "project",
+      "fieldtype": "link",
+      "label": "Project",
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Project"
+      },
+      "optionsRaw": "Project",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Project",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "company",
+      "fieldtype": "link",
+      "label": "Company",
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Company"
+      },
+      "optionsRaw": "Company",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Company",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "inListView": true,
+        "inStandardFilter": true,
+        "searchIndex": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "finance_book",
+      "fieldtype": "link",
+      "label": "Finance Book",
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Finance Book"
+      },
+      "optionsRaw": "Finance Book",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Finance Book",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "period_closing_voucher",
+      "fieldtype": "link",
+      "label": "Period Closing Voucher",
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Period Closing Voucher"
+      },
+      "optionsRaw": "Period Closing Voucher",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Period Closing Voucher",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "inStandardFilter": true,
+        "searchIndex": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "is_period_closing_voucher_entry",
+      "fieldtype": "check",
+      "label": "Is Period Closing Voucher Entry",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    }
+  ],
+  "identity": {
+    "app": "erpnext",
+    "isSingle": false,
+    "isSubmittable": false,
+    "isTree": false,
+    "module": "Accounts",
+    "naming": {
+      "strategy": "hash"
+    }
+  },
+  "name": "Account Closing Balance",
+  "permissions": [
+    {
+      "actions": {
+        "email": true,
+        "export": true,
+        "print": true,
+        "read": true,
+        "report": true
+      },
+      "permlevel": 0,
+      "role": "Accounts Manager"
+    },
+    {
+      "actions": {
+        "email": true,
+        "export": true,
+        "print": true,
+        "read": true,
+        "report": true
+      },
+      "permlevel": 0,
+      "role": "Accounts User"
+    },
+    {
+      "actions": {
+        "export": true,
+        "read": true,
+        "report": true
+      },
+      "permlevel": 0,
+      "role": "Auditor"
+    }
+  ],
+  "ui": {
+    "searchFields": [],
+    "showNameInGlobalSearch": false,
+    "sortField": "creation",
+    "sortOrder": "DESC"
+  },
+  "workflows": [
+    {
+      "kind": "unavailable"
+    }
+  ]
+}

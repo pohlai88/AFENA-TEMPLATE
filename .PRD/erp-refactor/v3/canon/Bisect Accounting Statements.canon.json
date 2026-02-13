@@ -1,0 +1,478 @@
+{
+  "audit": {
+    "trackChanges": false
+  },
+  "canonVersion": "1.0.0",
+  "childTables": [],
+  "doctypeId": "erpnext:Accounts:Bisect Accounting Statements",
+  "events": [
+    {
+      "event": "validate",
+      "handlers": [
+        "erpnext.support.doctype.service_level_agreement.service_level_agreement.apply",
+        "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record.check_for_running_deletion_job"
+      ],
+      "handlersParsed": [
+        {
+          "attrPath": "apply",
+          "module": "erpnext.support.doctype.service_level_agreement.service_level_agreement"
+        },
+        {
+          "attrPath": "check_for_running_deletion_job",
+          "module": "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record"
+        }
+      ]
+    }
+  ],
+  "fieldOrder": [
+    "section_break_cvfg",
+    "company",
+    "column_break_hcam",
+    "from_date",
+    "column_break_qxbi",
+    "to_date",
+    "column_break_iwny",
+    "algorithm",
+    "section_break_8ph9",
+    "current_node",
+    "section_break_ngid",
+    "bisect_heatmap",
+    "section_break_hmsy",
+    "bisecting_from",
+    "current_from_date",
+    "column_break_uqyd",
+    "bisecting_to",
+    "current_to_date",
+    "section_break_hbyo",
+    "heading_cppb",
+    "p_l_summary",
+    "column_break_aivo",
+    "balance_sheet_summary",
+    "b_s_summary",
+    "column_break_gvwx",
+    "difference_heading",
+    "difference"
+  ],
+  "fields": [
+    {
+      "constraints": {},
+      "fieldname": "section_break_cvfg",
+      "fieldtype": "layout:section",
+      "layout": {
+        "section": "section_break_cvfg"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "company",
+      "fieldtype": "link",
+      "label": "Company",
+      "layout": {
+        "section": "section_break_cvfg"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Company"
+      },
+      "optionsRaw": "Company",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Company",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_hcam",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "section_break_cvfg"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "from_date",
+      "fieldtype": "datetime",
+      "label": "From Date",
+      "layout": {
+        "column": 1,
+        "section": "section_break_cvfg"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_qxbi",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 2,
+        "section": "section_break_cvfg"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "to_date",
+      "fieldtype": "datetime",
+      "label": "To Date",
+      "layout": {
+        "column": 2,
+        "section": "section_break_cvfg"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_iwny",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 3,
+        "section": "section_break_cvfg"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "BFS",
+      "fieldname": "algorithm",
+      "fieldtype": "select",
+      "label": "Algorithm",
+      "layout": {
+        "column": 3,
+        "section": "section_break_cvfg"
+      },
+      "optionsParsed": {
+        "choices": [
+          "BFS",
+          "DFS"
+        ],
+        "kind": "select"
+      },
+      "optionsRaw": "BFS\nDFS",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "section_break_8ph9",
+      "fieldtype": "layout:section",
+      "layout": {
+        "section": "section_break_8ph9"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "hidden": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "current_node",
+      "fieldtype": "link",
+      "label": "Current Node",
+      "layout": {
+        "section": "section_break_8ph9"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Bisect Nodes"
+      },
+      "optionsRaw": "Bisect Nodes",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Bisect Nodes",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "section_break_ngid",
+      "fieldtype": "layout:section",
+      "layout": {
+        "section": "section_break_ngid"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "bisect_heatmap",
+      "fieldtype": "text_editor",
+      "label": "Heatmap",
+      "layout": {
+        "section": "section_break_ngid"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "section_break_hmsy",
+      "fieldtype": "layout:section",
+      "layout": {
+        "section": "section_break_hmsy"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "bisecting_from",
+      "fieldtype": "layout:section",
+      "label": "Bisecting From",
+      "layout": {
+        "section": "Bisecting From"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "current_from_date",
+      "fieldtype": "datetime",
+      "layout": {
+        "section": "Bisecting From"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_uqyd",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "Bisecting From"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "bisecting_to",
+      "fieldtype": "layout:section",
+      "label": "Bisecting To",
+      "layout": {
+        "section": "Bisecting To"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "current_to_date",
+      "fieldtype": "datetime",
+      "layout": {
+        "section": "Bisecting To"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "section_break_hbyo",
+      "fieldtype": "layout:section",
+      "layout": {
+        "section": "section_break_hbyo"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "heading_cppb",
+      "fieldtype": "layout:section",
+      "label": "Profit and Loss Summary",
+      "layout": {
+        "section": "Profit and Loss Summary"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "p_l_summary",
+      "fieldtype": "float",
+      "layout": {
+        "section": "Profit and Loss Summary"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_aivo",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "Profit and Loss Summary"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "balance_sheet_summary",
+      "fieldtype": "layout:section",
+      "label": "Balance Sheet Summary",
+      "layout": {
+        "section": "Balance Sheet Summary"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "b_s_summary",
+      "fieldtype": "float",
+      "layout": {
+        "section": "Balance Sheet Summary"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_gvwx",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "Balance Sheet Summary"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "difference_heading",
+      "fieldtype": "layout:section",
+      "label": "Difference",
+      "layout": {
+        "section": "Difference"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "difference",
+      "fieldtype": "float",
+      "layout": {
+        "section": "Difference"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    }
+  ],
+  "identity": {
+    "app": "erpnext",
+    "isSingle": false,
+    "isSubmittable": false,
+    "isTree": false,
+    "module": "Accounts",
+    "naming": {
+      "strategy": "hash"
+    }
+  },
+  "name": "Bisect Accounting Statements",
+  "permissions": [
+    {
+      "actions": {
+        "create": true,
+        "delete": true,
+        "email": true,
+        "print": true,
+        "read": true,
+        "share": true,
+        "write": true
+      },
+      "permlevel": 0,
+      "role": "Administrator"
+    }
+  ],
+  "ui": {
+    "searchFields": [],
+    "showNameInGlobalSearch": false,
+    "sortField": "creation",
+    "sortOrder": "DESC"
+  },
+  "workflows": [
+    {
+      "kind": "unavailable"
+    }
+  ]
+}

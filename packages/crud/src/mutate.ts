@@ -6,9 +6,8 @@ import {
   mutationSpecSchema,
   RateLimitError,
 } from 'afena-canon';
-import { WorkflowEngineError } from 'afena-workflow';
 import { and, auditLogs, companies, contacts, db, entityVersions, eq, sql } from 'afena-database';
-import { evaluateRules, loadAndRegisterOrgRules } from 'afena-workflow';
+import { evaluateRules, loadAndRegisterOrgRules, WorkflowEngineError } from 'afena-workflow';
 
 import { generateDiff } from './diff';
 import { err, ok } from './envelope';
@@ -18,11 +17,11 @@ import { contactsHandler } from './handlers/contacts';
 // @entity-gen:handler-import
 import { enforceLifecycle } from './lifecycle';
 import { meterApiRequest, meterDbTimeout } from './metering';
-import { enforceEditWindow } from './services/workflow-edit-window';
-import { enqueueWorkflowOutboxEvent } from './services/workflow-outbox';
 import { enforcePolicyV2 } from './policy-engine';
 import { checkRateLimit } from './rate-limiter';
 import { stripSystemColumns } from './sanitize';
+import { enforceEditWindow } from './services/workflow-edit-window';
+import { enqueueWorkflowOutboxEvent } from './services/workflow-outbox';
 
 import type { MutationContext } from './context';
 import type { EntityHandler } from './handlers/types';

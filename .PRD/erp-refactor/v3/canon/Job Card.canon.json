@@ -1,0 +1,1669 @@
+{
+  "audit": {
+    "trackChanges": true
+  },
+  "canonVersion": "1.0.0",
+  "childTables": [
+    {
+      "childDoctype": "Job Card Time Log",
+      "parentField": "employee",
+      "required": false
+    },
+    {
+      "childDoctype": "Job Card Item",
+      "parentField": "items",
+      "required": false
+    },
+    {
+      "childDoctype": "Job Card Scheduled Time",
+      "parentField": "scheduled_time_logs",
+      "required": false
+    },
+    {
+      "childDoctype": "Job Card Scrap Item",
+      "parentField": "scrap_items",
+      "required": false
+    },
+    {
+      "childDoctype": "Job Card Operation",
+      "parentField": "sub_operations",
+      "required": false
+    },
+    {
+      "childDoctype": "Job Card Time Log",
+      "parentField": "time_logs",
+      "required": false
+    }
+  ],
+  "doctypeId": "erpnext:Manufacturing:Job Card",
+  "events": [
+    {
+      "event": "validate",
+      "handlers": [
+        "erpnext.support.doctype.service_level_agreement.service_level_agreement.apply",
+        "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record.check_for_running_deletion_job"
+      ],
+      "handlersParsed": [
+        {
+          "attrPath": "apply",
+          "module": "erpnext.support.doctype.service_level_agreement.service_level_agreement"
+        },
+        {
+          "attrPath": "check_for_running_deletion_job",
+          "module": "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record"
+        }
+      ]
+    }
+  ],
+  "fieldOrder": [
+    "naming_series",
+    "work_order",
+    "employee",
+    "is_subcontracted",
+    "column_break_4",
+    "posting_date",
+    "company",
+    "project",
+    "bom_no",
+    "semi_finished_good__finished_good_section",
+    "finished_good",
+    "production_item",
+    "semi_fg_bom",
+    "total_completed_qty",
+    "column_break_mcnb",
+    "for_quantity",
+    "transferred_qty",
+    "manufactured_qty",
+    "process_loss_qty",
+    "production_section",
+    "operation",
+    "source_warehouse",
+    "wip_warehouse",
+    "skip_material_transfer",
+    "backflush_from_wip_warehouse",
+    "column_break_12",
+    "workstation_type",
+    "workstation",
+    "target_warehouse",
+    "section_break_8",
+    "items",
+    "quality_inspection_section",
+    "quality_inspection_template",
+    "column_break_fcmp",
+    "quality_inspection",
+    "scheduled_time_tab",
+    "scheduled_time_section",
+    "expected_start_date",
+    "time_required",
+    "column_break_jkir",
+    "expected_end_date",
+    "section_break_rzeo",
+    "scheduled_time_logs",
+    "timing_detail",
+    "section_break_13",
+    "actual_start_date",
+    "total_time_in_mins",
+    "column_break_15",
+    "actual_end_date",
+    "section_break_jbas",
+    "time_logs",
+    "section_break_21",
+    "sub_operations",
+    "scrap_items_section",
+    "scrap_items",
+    "corrective_operation_section",
+    "for_job_card",
+    "is_corrective_job_card",
+    "column_break_33",
+    "hour_rate",
+    "for_operation",
+    "more_information",
+    "item_name",
+    "requested_qty",
+    "status",
+    "operation_row_id",
+    "is_paused",
+    "track_semi_finished_goods",
+    "column_break_20",
+    "operation_row_number",
+    "operation_id",
+    "sequence_id",
+    "remarks",
+    "serial_and_batch_bundle",
+    "batch_no",
+    "serial_no",
+    "barcode",
+    "started_time",
+    "current_time",
+    "amended_from",
+    "connections_tab"
+  ],
+  "fields": [
+    {
+      "constraints": {},
+      "default": "PO-JOB.#####",
+      "fieldname": "naming_series",
+      "fieldtype": "select",
+      "label": "Naming Series",
+      "optionsParsed": {
+        "kind": "naming_series",
+        "prefixes": [
+          "PO-JOB.#####"
+        ]
+      },
+      "optionsRaw": "PO-JOB.#####",
+      "permlevel": 0,
+      "requiredStatic": true,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "work_order",
+      "fieldtype": "link",
+      "label": "Work Order",
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Work Order"
+      },
+      "optionsRaw": "Work Order",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Work Order",
+        "kind": "static"
+      },
+      "requiredStatic": true,
+      "ui": {
+        "inListView": true,
+        "inStandardFilter": true,
+        "searchIndex": true
+      },
+      "unique": false
+    },
+    {
+      "allowOnSubmit": true,
+      "childDoctype": "Job Card Time Log",
+      "constraints": {},
+      "fieldname": "employee",
+      "fieldtype": "table_multiselect",
+      "label": "Employee",
+      "optionsParsed": {
+        "doctype": "Job Card Time Log",
+        "kind": "child_doctype"
+      },
+      "optionsRaw": "Job Card Time Log",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "is_subcontracted",
+      "fieldtype": "check",
+      "label": " Is Subcontracted",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_4",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "Today",
+      "fieldname": "posting_date",
+      "fieldtype": "date",
+      "label": "Posting Date",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "company",
+      "fieldtype": "link",
+      "label": "Company",
+      "layout": {
+        "column": 1
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Company"
+      },
+      "optionsRaw": "Company",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Company",
+        "kind": "static"
+      },
+      "requiredStatic": true,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "project",
+      "fieldtype": "link",
+      "label": "Project",
+      "layout": {
+        "column": 1
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Project"
+      },
+      "optionsRaw": "Project",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Project",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:!doc.finished_good",
+      "fetchFrom": "work_order.bom_no",
+      "fieldname": "bom_no",
+      "fieldtype": "link",
+      "label": "Final BOM",
+      "layout": {
+        "column": 1
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "BOM"
+      },
+      "optionsRaw": "BOM",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "BOM",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "semi_finished_good__finished_good_section",
+      "fieldtype": "layout:section",
+      "label": "Semi Finished Good / Finished Good",
+      "layout": {
+        "section": "Semi Finished Good / Finished Good"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "finished_good",
+      "fieldtype": "link",
+      "label": "Item to Manufacture",
+      "layout": {
+        "section": "Semi Finished Good / Finished Good"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Item"
+      },
+      "optionsRaw": "Item",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Item",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:!doc.finished_good",
+      "fetchFrom": "work_order.production_item",
+      "fieldname": "production_item",
+      "fieldtype": "link",
+      "label": "Final Product",
+      "layout": {
+        "section": "Semi Finished Good / Finished Good"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Item"
+      },
+      "optionsRaw": "Item",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Item",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "semi_fg_bom",
+      "fieldtype": "link",
+      "label": "Manufacturing BOM",
+      "layout": {
+        "section": "Semi Finished Good / Finished Good"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "BOM"
+      },
+      "optionsRaw": "BOM",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "BOM",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "allowOnSubmit": true,
+      "constraints": {},
+      "default": "0",
+      "dependsOn": "eval:doc.is_subcontracted===0",
+      "fieldname": "total_completed_qty",
+      "fieldtype": "float",
+      "label": "Total Completed Qty",
+      "layout": {
+        "section": "Semi Finished Good / Finished Good"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_mcnb",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "Semi Finished Good / Finished Good"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "for_quantity",
+      "fieldtype": "float",
+      "label": "Qty To Manufacture",
+      "layout": {
+        "column": 1,
+        "section": "Semi Finished Good / Finished Good"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "dependsOn": "items",
+      "fieldname": "transferred_qty",
+      "fieldtype": "float",
+      "label": "Transferred Raw Materials",
+      "layout": {
+        "column": 1,
+        "section": "Semi Finished Good / Finished Good"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "finished_good",
+      "fieldname": "manufactured_qty",
+      "fieldtype": "float",
+      "label": "Manufactured Qty",
+      "layout": {
+        "column": 1,
+        "section": "Semi Finished Good / Finished Good"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "process_loss_qty",
+      "fieldname": "process_loss_qty",
+      "fieldtype": "float",
+      "label": "Process Loss Qty",
+      "layout": {
+        "column": 1,
+        "section": "Semi Finished Good / Finished Good"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "production_section",
+      "fieldtype": "layout:section",
+      "label": "Operation & Materials",
+      "layout": {
+        "section": "Operation & Materials"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "operation",
+      "fieldtype": "link",
+      "label": "Operation",
+      "layout": {
+        "section": "Operation & Materials"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Operation"
+      },
+      "optionsRaw": "Operation",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Operation",
+        "kind": "static"
+      },
+      "requiredStatic": true,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "source_warehouse",
+      "fieldtype": "link",
+      "label": "Source Warehouse",
+      "layout": {
+        "section": "Operation & Materials"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Warehouse"
+      },
+      "optionsRaw": "Warehouse",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Warehouse",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "wip_warehouse",
+      "fieldtype": "link",
+      "label": "WIP Warehouse",
+      "layout": {
+        "section": "Operation & Materials"
+      },
+      "mandatoryDependsOn": "eval:!doc.finished_good || doc.skip_material_transfer === 0 || (doc.skip_material_transfer && doc.backflush_from_wip_warehouse)",
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Warehouse"
+      },
+      "optionsRaw": "Warehouse",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Warehouse",
+        "kind": "static"
+      },
+      "requiredDynamic": "eval:!doc.finished_good || doc.skip_material_transfer === 0 || (doc.skip_material_transfer && doc.backflush_from_wip_warehouse)",
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "dependsOn": "eval:doc.finished_good",
+      "fieldname": "skip_material_transfer",
+      "fieldtype": "check",
+      "label": "Skip Material Transfer to WIP",
+      "layout": {
+        "section": "Operation & Materials"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "dependsOn": "eval:doc.finished_good && doc.skip_material_transfer === 1",
+      "fieldname": "backflush_from_wip_warehouse",
+      "fieldtype": "check",
+      "label": "Backflush Materials From WIP Warehouse",
+      "layout": {
+        "section": "Operation & Materials"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_12",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "Operation & Materials"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "workstation_type",
+      "fieldtype": "link",
+      "label": "Workstation Type",
+      "layout": {
+        "column": 1,
+        "section": "Operation & Materials"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Workstation Type"
+      },
+      "optionsRaw": "Workstation Type",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Workstation Type",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "workstation",
+      "fieldtype": "link",
+      "label": "Workstation",
+      "layout": {
+        "column": 1,
+        "section": "Operation & Materials"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Workstation"
+      },
+      "optionsRaw": "Workstation",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Workstation",
+        "kind": "static"
+      },
+      "requiredStatic": true,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:doc.track_semi_finished_goods",
+      "fieldname": "target_warehouse",
+      "fieldtype": "link",
+      "label": "Target Warehouse",
+      "layout": {
+        "column": 1,
+        "section": "Operation & Materials"
+      },
+      "mandatoryDependsOn": "eval:doc.track_semi_finished_goods",
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Warehouse"
+      },
+      "optionsRaw": "Warehouse",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Warehouse",
+        "kind": "static"
+      },
+      "requiredDynamic": "eval:doc.track_semi_finished_goods",
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "section_break_8",
+      "fieldtype": "layout:section",
+      "label": "Raw Materials",
+      "layout": {
+        "section": "Raw Materials"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "childDoctype": "Job Card Item",
+      "constraints": {},
+      "fieldname": "items",
+      "fieldtype": "table",
+      "label": "Items",
+      "layout": {
+        "section": "Raw Materials"
+      },
+      "optionsParsed": {
+        "doctype": "Job Card Item",
+        "kind": "child_doctype"
+      },
+      "optionsRaw": "Job Card Item",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "quality_inspection_section",
+      "fieldtype": "layout:section",
+      "label": "Quality Inspection",
+      "layout": {
+        "section": "Quality Inspection"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fetchFrom": "operation.quality_inspection_template",
+      "fieldname": "quality_inspection_template",
+      "fieldtype": "link",
+      "label": "Quality Inspection Template",
+      "layout": {
+        "section": "Quality Inspection"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Quality Inspection Template"
+      },
+      "optionsRaw": "Quality Inspection Template",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Quality Inspection Template",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_fcmp",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "Quality Inspection"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:!doc.__islocal;",
+      "fieldname": "quality_inspection",
+      "fieldtype": "link",
+      "label": "Quality Inspection",
+      "layout": {
+        "column": 1,
+        "section": "Quality Inspection"
+      },
+      "noCopy": true,
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Quality Inspection"
+      },
+      "optionsRaw": "Quality Inspection",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Quality Inspection",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "scheduled_time_tab",
+      "fieldtype": "layout:tab",
+      "label": "Scheduled Time",
+      "layout": {
+        "tab": "Scheduled Time"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "expected_start_date",
+      "fieldname": "scheduled_time_section",
+      "fieldtype": "layout:section",
+      "label": "Scheduled Time",
+      "layout": {
+        "section": "Scheduled Time",
+        "tab": "Scheduled Time"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "expected_start_date",
+      "fieldtype": "datetime",
+      "label": "Expected Start Date",
+      "layout": {
+        "section": "Scheduled Time",
+        "tab": "Scheduled Time"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "time_required",
+      "fieldtype": "float",
+      "label": "Expected Time Required (In Mins)",
+      "layout": {
+        "section": "Scheduled Time",
+        "tab": "Scheduled Time"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_jkir",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "Scheduled Time",
+        "tab": "Scheduled Time"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "expected_end_date",
+      "fieldtype": "datetime",
+      "label": "Expected End Date",
+      "layout": {
+        "column": 1,
+        "section": "Scheduled Time",
+        "tab": "Scheduled Time"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "section_break_rzeo",
+      "fieldtype": "layout:section",
+      "layout": {
+        "section": "section_break_rzeo",
+        "tab": "Scheduled Time"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "childDoctype": "Job Card Scheduled Time",
+      "constraints": {},
+      "fieldname": "scheduled_time_logs",
+      "fieldtype": "table",
+      "label": "Scheduled Time Logs",
+      "layout": {
+        "section": "section_break_rzeo",
+        "tab": "Scheduled Time"
+      },
+      "optionsParsed": {
+        "doctype": "Job Card Scheduled Time",
+        "kind": "child_doctype"
+      },
+      "optionsRaw": "Job Card Scheduled Time",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "timing_detail",
+      "fieldtype": "layout:tab",
+      "label": "Actual Time",
+      "layout": {
+        "tab": "Actual Time"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "section_break_13",
+      "fieldtype": "layout:section",
+      "layout": {
+        "section": "section_break_13",
+        "tab": "Actual Time"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "actual_start_date",
+      "fieldtype": "datetime",
+      "label": "Actual Start Date",
+      "layout": {
+        "section": "section_break_13",
+        "tab": "Actual Time"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "total_time_in_mins",
+      "fieldtype": "float",
+      "label": "Total Time in Mins",
+      "layout": {
+        "section": "section_break_13",
+        "tab": "Actual Time"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_15",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "section_break_13",
+        "tab": "Actual Time"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "actual_end_date",
+      "fieldtype": "datetime",
+      "label": "Actual End Date",
+      "layout": {
+        "column": 1,
+        "section": "section_break_13",
+        "tab": "Actual Time"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "section_break_jbas",
+      "fieldtype": "layout:section",
+      "layout": {
+        "section": "section_break_jbas",
+        "tab": "Actual Time"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "allowOnSubmit": true,
+      "childDoctype": "Job Card Time Log",
+      "constraints": {},
+      "fieldname": "time_logs",
+      "fieldtype": "table",
+      "label": "Time Logs",
+      "layout": {
+        "section": "section_break_jbas",
+        "tab": "Actual Time"
+      },
+      "optionsParsed": {
+        "doctype": "Job Card Time Log",
+        "kind": "child_doctype"
+      },
+      "optionsRaw": "Job Card Time Log",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "section_break_21",
+      "fieldtype": "layout:tab",
+      "label": "Sub Operations",
+      "layout": {
+        "tab": "Sub Operations"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "childDoctype": "Job Card Operation",
+      "constraints": {},
+      "fieldname": "sub_operations",
+      "fieldtype": "table",
+      "label": "Sub Operations",
+      "layout": {
+        "tab": "Sub Operations"
+      },
+      "optionsParsed": {
+        "doctype": "Job Card Operation",
+        "kind": "child_doctype"
+      },
+      "optionsRaw": "Job Card Operation",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "scrap_items_section",
+      "fieldtype": "layout:tab",
+      "label": "Scrap Items",
+      "layout": {
+        "tab": "Scrap Items"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "collapsible": true
+      },
+      "unique": false
+    },
+    {
+      "childDoctype": "Job Card Scrap Item",
+      "constraints": {},
+      "fieldname": "scrap_items",
+      "fieldtype": "table",
+      "label": "Scrap Items",
+      "layout": {
+        "tab": "Scrap Items"
+      },
+      "noCopy": true,
+      "optionsParsed": {
+        "doctype": "Job Card Scrap Item",
+        "kind": "child_doctype"
+      },
+      "optionsRaw": "Job Card Scrap Item",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "is_corrective_job_card",
+      "fieldname": "corrective_operation_section",
+      "fieldtype": "layout:tab",
+      "label": "Corrective Operation",
+      "layout": {
+        "tab": "Corrective Operation"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "collapsible": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "for_job_card",
+      "fieldtype": "link",
+      "label": "For Job Card",
+      "layout": {
+        "tab": "Corrective Operation"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Job Card"
+      },
+      "optionsRaw": "Job Card",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Job Card",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "is_corrective_job_card",
+      "fieldtype": "check",
+      "label": "Is Corrective Job Card",
+      "layout": {
+        "tab": "Corrective Operation"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_33",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "tab": "Corrective Operation"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "is_corrective_job_card",
+      "fieldname": "hour_rate",
+      "fieldtype": "currency",
+      "label": "Hour Rate",
+      "layout": {
+        "column": 1,
+        "tab": "Corrective Operation"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fetchFrom": "for_job_card.operation",
+      "fetchIfEmpty": true,
+      "fieldname": "for_operation",
+      "fieldtype": "link",
+      "label": "For Operation",
+      "layout": {
+        "column": 1,
+        "tab": "Corrective Operation"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Operation"
+      },
+      "optionsRaw": "Operation",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Operation",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "more_information",
+      "fieldtype": "layout:tab",
+      "label": "More Information",
+      "layout": {
+        "tab": "More Information"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "collapsible": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fetchFrom": "production_item.item_name",
+      "fetchIfEmpty": true,
+      "fieldname": "item_name",
+      "fieldtype": "read_only",
+      "label": "Item Name",
+      "layout": {
+        "tab": "More Information"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "requested_qty",
+      "fieldtype": "float",
+      "label": "Requested Qty",
+      "layout": {
+        "tab": "More Information"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "allowOnSubmit": true,
+      "constraints": {},
+      "default": "Open",
+      "fieldname": "status",
+      "fieldtype": "select",
+      "label": "Status",
+      "layout": {
+        "tab": "More Information"
+      },
+      "noCopy": true,
+      "optionsParsed": {
+        "choices": [
+          "Open",
+          "Work In Progress",
+          "Material Transferred",
+          "On Hold",
+          "Submitted",
+          "Cancelled",
+          "Completed"
+        ],
+        "kind": "select"
+      },
+      "optionsRaw": "Open\nWork In Progress\nMaterial Transferred\nOn Hold\nSubmitted\nCancelled\nCompleted",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "operation_row_id",
+      "fieldtype": "int",
+      "label": "Operation Row ID",
+      "layout": {
+        "tab": "More Information"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "is_paused",
+      "fieldtype": "check",
+      "label": "Is Paused",
+      "layout": {
+        "tab": "More Information"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fetchFrom": "work_order.track_semi_finished_goods",
+      "fieldname": "track_semi_finished_goods",
+      "fieldtype": "check",
+      "label": "Track Semi Finished Goods",
+      "layout": {
+        "tab": "More Information"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_20",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "tab": "More Information"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "operation_row_number",
+      "fieldtype": "select",
+      "label": "Operation Row Number",
+      "layout": {
+        "column": 1,
+        "tab": "More Information"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "operation_id",
+      "fieldtype": "data",
+      "label": "Operation ID",
+      "layout": {
+        "column": 1,
+        "tab": "More Information"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "hidden": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "sequence_id",
+      "fieldtype": "int",
+      "label": "Sequence Id",
+      "layout": {
+        "column": 1,
+        "tab": "More Information"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "remarks",
+      "fieldtype": "small_text",
+      "label": "Remarks",
+      "layout": {
+        "column": 1,
+        "tab": "More Information"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "serial_and_batch_bundle",
+      "fieldtype": "link",
+      "label": "Serial and Batch Bundle",
+      "layout": {
+        "column": 1,
+        "tab": "More Information"
+      },
+      "noCopy": true,
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Serial and Batch Bundle"
+      },
+      "optionsRaw": "Serial and Batch Bundle",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Serial and Batch Bundle",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "batch_no",
+      "fieldtype": "link",
+      "label": "Batch No",
+      "layout": {
+        "column": 1,
+        "tab": "More Information"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Batch"
+      },
+      "optionsRaw": "Batch",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Batch",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "hidden": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "serial_no",
+      "fieldtype": "small_text",
+      "label": "Serial No",
+      "layout": {
+        "column": 1,
+        "tab": "More Information"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "hidden": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "barcode",
+      "fieldtype": "data",
+      "label": "Barcode",
+      "layout": {
+        "column": 1,
+        "tab": "More Information"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "allowOnSubmit": true,
+      "constraints": {},
+      "fieldname": "started_time",
+      "fieldtype": "datetime",
+      "label": "Started Time",
+      "layout": {
+        "column": 1,
+        "tab": "More Information"
+      },
+      "noCopy": true,
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "hidden": true,
+        "printHide": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "allowOnSubmit": true,
+      "constraints": {},
+      "fieldname": "current_time",
+      "fieldtype": "int",
+      "label": "Current Time",
+      "layout": {
+        "column": 1,
+        "tab": "More Information"
+      },
+      "noCopy": true,
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "hidden": true,
+        "printHide": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "amended_from",
+      "fieldtype": "link",
+      "label": "Amended From",
+      "layout": {
+        "column": 1,
+        "tab": "More Information"
+      },
+      "noCopy": true,
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Job Card"
+      },
+      "optionsRaw": "Job Card",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Job Card",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "connections_tab",
+      "fieldtype": "layout:tab",
+      "label": "Connections",
+      "layout": {
+        "tab": "Connections"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    }
+  ],
+  "identity": {
+    "app": "erpnext",
+    "isSingle": false,
+    "isSubmittable": true,
+    "isTree": false,
+    "module": "Manufacturing",
+    "naming": {
+      "seriesField": "naming_series",
+      "seriesPrefix": "PO-JOB.#####",
+      "strategy": "series"
+    }
+  },
+  "name": "Job Card",
+  "permissions": [
+    {
+      "actions": {
+        "amend": true,
+        "cancel": true,
+        "create": true,
+        "delete": true,
+        "email": true,
+        "export": true,
+        "print": true,
+        "read": true,
+        "report": true,
+        "share": true,
+        "submit": true,
+        "write": true
+      },
+      "permlevel": 0,
+      "role": "Manufacturing Manager"
+    },
+    {
+      "actions": {
+        "amend": true,
+        "cancel": true,
+        "create": true,
+        "delete": true,
+        "email": true,
+        "export": true,
+        "print": true,
+        "read": true,
+        "report": true,
+        "share": true,
+        "submit": true,
+        "write": true
+      },
+      "permlevel": 0,
+      "role": "Manufacturing User"
+    },
+    {
+      "actions": {
+        "amend": true,
+        "cancel": true,
+        "create": true,
+        "delete": true,
+        "email": true,
+        "export": true,
+        "print": true,
+        "read": true,
+        "report": true,
+        "share": true,
+        "submit": true,
+        "write": true
+      },
+      "permlevel": 0,
+      "role": "System Manager"
+    }
+  ],
+  "ui": {
+    "searchFields": [],
+    "showNameInGlobalSearch": false,
+    "sortField": "creation",
+    "sortOrder": "DESC",
+    "titleField": "operation"
+  },
+  "workflows": [
+    {
+      "kind": "unavailable"
+    }
+  ]
+}

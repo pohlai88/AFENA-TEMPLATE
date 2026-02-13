@@ -3,6 +3,8 @@
 import { db, sql } from 'afena-database';
 import { compileEffective, COMPILER_VERSION } from 'afena-workflow';
 
+import type { BodySlot, SlotGraphPatch, WorkflowEdge, WorkflowNode } from 'afena-workflow';
+
 interface ActionResult<T = unknown> {
   ok: boolean;
   data?: T;
@@ -178,10 +180,10 @@ export async function publishWorkflowDefinition(
     if (!def) return { ok: false, error: 'Draft definition not found' };
 
     // 2. Compile the effective workflow
-    const nodes = (def['nodes_json'] ?? []) as { id: string; type: string; label: string; editWindow: string; config?: unknown }[];
-    const edges = (def['edges_json'] ?? []) as { id: string; sourceNodeId: string; targetNodeId: string; priority: number; condition?: unknown; label?: string }[];
-    const slots = (def['slots_json'] ?? []) as { slotId: string; entryNodeId: string; exitNodeId: string; defaultEditWindow: string; stableRegion: boolean }[];
-    const bodyPatches = (def['body_patches_json'] ?? {}) as Record<string, unknown>;
+    const nodes = (def['nodes_json'] ?? []) as WorkflowNode[];
+    const edges = (def['edges_json'] ?? []) as WorkflowEdge[];
+    const slots = (def['slots_json'] ?? []) as BodySlot[];
+    const bodyPatches = (def['body_patches_json'] ?? {}) as Record<string, SlotGraphPatch>;
     const envelopeVersion = version;
 
     const compileResult = compileEffective(nodes, edges, slots, bodyPatches, envelopeVersion);
@@ -233,6 +235,27 @@ export async function archiveWorkflowDefinition(
     const row = result.rows?.[0];
     if (!row) return { ok: false, error: 'Published definition not found' };
     return { ok: true, data: row };
+  } catch (err) {
+    return { ok: false, error: err instanceof Error ? err.message : String(err) };
+  }
+}
+
+// ── List Definition Versions ──────────────────────────────
+
+export async function listDefinitionVersions(
+  entityType: string,
+  name: string,
+): Promise<ActionResult<Row[]>> {
+  try {
+    const result = await db.execute<Row>(sql`
+      SELECT id, entity_type, name, version, status, is_default, definition_kind,
+             compiled_hash, created_at, updated_at
+      FROM workflow_definitions
+      WHERE entity_type = ${entityType} AND name = ${name}
+      ORDER BY version DESC
+    `);
+
+    return { ok: true, data: result.rows ?? [] };
   } catch (err) {
     return { ok: false, error: err instanceof Error ? err.message : String(err) };
   }

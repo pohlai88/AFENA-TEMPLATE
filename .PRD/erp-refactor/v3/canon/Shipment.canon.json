@@ -1,0 +1,1190 @@
+{
+  "audit": {
+    "trackChanges": true
+  },
+  "canonVersion": "1.0.0",
+  "childTables": [
+    {
+      "childDoctype": "Shipment Delivery Note",
+      "parentField": "shipment_delivery_note",
+      "required": false
+    },
+    {
+      "childDoctype": "Shipment Parcel",
+      "parentField": "shipment_parcel",
+      "required": false
+    }
+  ],
+  "doctypeId": "erpnext:Stock:Shipment",
+  "events": [
+    {
+      "event": "validate",
+      "handlers": [
+        "erpnext.support.doctype.service_level_agreement.service_level_agreement.apply",
+        "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record.check_for_running_deletion_job"
+      ],
+      "handlersParsed": [
+        {
+          "attrPath": "apply",
+          "module": "erpnext.support.doctype.service_level_agreement.service_level_agreement"
+        },
+        {
+          "attrPath": "check_for_running_deletion_job",
+          "module": "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record"
+        }
+      ]
+    }
+  ],
+  "fieldOrder": [
+    "heading_pickup_from",
+    "pickup_from_type",
+    "pickup_company",
+    "pickup_customer",
+    "pickup_supplier",
+    "pickup",
+    "pickup_address_name",
+    "pickup_address",
+    "pickup_contact_person",
+    "pickup_contact_name",
+    "pickup_contact_email",
+    "pickup_contact",
+    "column_break_2",
+    "heading_delivery_to",
+    "delivery_to_type",
+    "delivery_company",
+    "delivery_customer",
+    "delivery_supplier",
+    "delivery_to",
+    "delivery_address_name",
+    "delivery_address",
+    "delivery_contact_name",
+    "delivery_contact_email",
+    "delivery_contact",
+    "parcels_section",
+    "shipment_parcel",
+    "parcel_template",
+    "add_template",
+    "total_weight",
+    "column_break_28",
+    "shipment_delivery_note",
+    "shipment_details_section",
+    "pallets",
+    "value_of_goods",
+    "pickup_date",
+    "pickup_from",
+    "pickup_to",
+    "column_break_36",
+    "shipment_type",
+    "pickup_type",
+    "incoterm",
+    "description_of_content",
+    "section_break_40",
+    "shipment_information_section",
+    "service_provider",
+    "shipment_id",
+    "shipment_amount",
+    "status",
+    "tracking_url",
+    "column_break_55",
+    "carrier",
+    "carrier_service",
+    "awb_number",
+    "tracking_status",
+    "tracking_status_info",
+    "amended_from"
+  ],
+  "fields": [
+    {
+      "constraints": {},
+      "fieldname": "heading_pickup_from",
+      "fieldtype": "layout:section",
+      "label": "Pickup from",
+      "layout": {
+        "section": "Pickup from"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "Company",
+      "fieldname": "pickup_from_type",
+      "fieldtype": "select",
+      "label": "Pickup from",
+      "layout": {
+        "section": "Pickup from"
+      },
+      "optionsParsed": {
+        "choices": [
+          "Company",
+          "Customer",
+          "Supplier"
+        ],
+        "kind": "select"
+      },
+      "optionsRaw": "Company\nCustomer\nSupplier",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:doc.pickup_from_type == 'Company'",
+      "fieldname": "pickup_company",
+      "fieldtype": "link",
+      "label": "Company",
+      "layout": {
+        "section": "Pickup from"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Company"
+      },
+      "optionsRaw": "Company",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Company",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:doc.pickup_from_type == 'Customer'",
+      "fieldname": "pickup_customer",
+      "fieldtype": "link",
+      "label": "Customer",
+      "layout": {
+        "section": "Pickup from"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Customer"
+      },
+      "optionsRaw": "Customer",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Customer",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:doc.pickup_from_type == 'Supplier'",
+      "fieldname": "pickup_supplier",
+      "fieldtype": "link",
+      "label": "Supplier",
+      "layout": {
+        "section": "Pickup from"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Supplier"
+      },
+      "optionsRaw": "Supplier",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Supplier",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "pickup",
+      "fieldtype": "data",
+      "label": "Pickup From",
+      "layout": {
+        "section": "Pickup from"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "hidden": true,
+        "inListView": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval: doc.pickup_customer || doc.pickup_supplier || doc.pickup_from_type == \"Company\"",
+      "fieldname": "pickup_address_name",
+      "fieldtype": "link",
+      "label": "Address",
+      "layout": {
+        "section": "Pickup from"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Address"
+      },
+      "optionsRaw": "Address",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Address",
+        "kind": "static"
+      },
+      "requiredStatic": true,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "pickup_address",
+      "fieldtype": "text_editor",
+      "layout": {
+        "section": "Pickup from"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:doc.pickup_from_type === 'Company'",
+      "fieldname": "pickup_contact_person",
+      "fieldtype": "link",
+      "label": "Pickup Contact Person",
+      "layout": {
+        "section": "Pickup from"
+      },
+      "mandatoryDependsOn": "eval:doc.pickup_from_type === 'Company'",
+      "optionsParsed": {
+        "kind": "link",
+        "target": "User"
+      },
+      "optionsRaw": "User",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "User",
+        "kind": "static"
+      },
+      "requiredDynamic": "eval:doc.pickup_from_type === 'Company'",
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval: doc.pickup_customer || doc.pickup_supplier || doc.pickup_from_type !== \"Company\"",
+      "fieldname": "pickup_contact_name",
+      "fieldtype": "link",
+      "label": "Contact",
+      "layout": {
+        "section": "Pickup from"
+      },
+      "mandatoryDependsOn": "eval: doc.pickup_from_type !== 'Company'",
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Contact"
+      },
+      "optionsRaw": "Contact",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Contact",
+        "kind": "static"
+      },
+      "requiredDynamic": "eval: doc.pickup_from_type !== 'Company'",
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "pickup_contact_email",
+      "fieldtype": "data",
+      "label": "Contact Email",
+      "layout": {
+        "section": "Pickup from"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "hidden": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "pickup_contact",
+      "fieldtype": "text_editor",
+      "layout": {
+        "section": "Pickup from"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_2",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "Pickup from"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "heading_delivery_to",
+      "fieldtype": "layout:section",
+      "label": "Delivery to",
+      "layout": {
+        "section": "Delivery to"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "Customer",
+      "fieldname": "delivery_to_type",
+      "fieldtype": "select",
+      "label": "Delivery to",
+      "layout": {
+        "section": "Delivery to"
+      },
+      "optionsParsed": {
+        "choices": [
+          "Company",
+          "Customer",
+          "Supplier"
+        ],
+        "kind": "select"
+      },
+      "optionsRaw": "Company\nCustomer\nSupplier",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:doc.delivery_to_type == 'Company'",
+      "fieldname": "delivery_company",
+      "fieldtype": "link",
+      "label": "Company",
+      "layout": {
+        "section": "Delivery to"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Company"
+      },
+      "optionsRaw": "Company",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Company",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:doc.delivery_to_type == 'Customer'",
+      "fieldname": "delivery_customer",
+      "fieldtype": "link",
+      "label": "Customer",
+      "layout": {
+        "section": "Delivery to"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Customer"
+      },
+      "optionsRaw": "Customer",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Customer",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:doc.delivery_to_type == 'Supplier'",
+      "fieldname": "delivery_supplier",
+      "fieldtype": "link",
+      "label": "Supplier",
+      "layout": {
+        "section": "Delivery to"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Supplier"
+      },
+      "optionsRaw": "Supplier",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Supplier",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "delivery_to",
+      "fieldtype": "data",
+      "label": "Delivery To",
+      "layout": {
+        "section": "Delivery to"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "hidden": true,
+        "inListView": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval: doc.delivery_customer || doc.delivery_supplier || doc.delivery_to_type == \"Company\"",
+      "fieldname": "delivery_address_name",
+      "fieldtype": "link",
+      "label": "Address",
+      "layout": {
+        "section": "Delivery to"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Address"
+      },
+      "optionsRaw": "Address",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Address",
+        "kind": "static"
+      },
+      "requiredStatic": true,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "delivery_address",
+      "fieldtype": "text_editor",
+      "layout": {
+        "section": "Delivery to"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval: doc.delivery_customer || doc.delivery_supplier || doc.delivery_to_type == \"Company\"",
+      "fieldname": "delivery_contact_name",
+      "fieldtype": "link",
+      "label": "Contact",
+      "layout": {
+        "section": "Delivery to"
+      },
+      "mandatoryDependsOn": "eval: doc.delivery_from_type !== 'Company'",
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Contact"
+      },
+      "optionsRaw": "Contact",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Contact",
+        "kind": "static"
+      },
+      "requiredDynamic": "eval: doc.delivery_from_type !== 'Company'",
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "delivery_contact_email",
+      "fieldtype": "data",
+      "label": "Contact Email",
+      "layout": {
+        "section": "Delivery to"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "hidden": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:doc.delivery_contact_name",
+      "fieldname": "delivery_contact",
+      "fieldtype": "text_editor",
+      "layout": {
+        "section": "Delivery to"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "parcels_section",
+      "fieldtype": "layout:section",
+      "label": "Parcels",
+      "layout": {
+        "section": "Parcels"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "childDoctype": "Shipment Parcel",
+      "constraints": {},
+      "fieldname": "shipment_parcel",
+      "fieldtype": "table",
+      "label": "Shipment Parcel",
+      "layout": {
+        "section": "Parcels"
+      },
+      "optionsParsed": {
+        "doctype": "Shipment Parcel",
+        "kind": "child_doctype"
+      },
+      "optionsRaw": "Shipment Parcel",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "parcel_template",
+      "fieldtype": "link",
+      "label": "Parcel Template",
+      "layout": {
+        "section": "Parcels"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Shipment Parcel Template"
+      },
+      "optionsRaw": "Shipment Parcel Template",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Shipment Parcel Template",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:doc.docstatus !== 1\n",
+      "fieldname": "add_template",
+      "fieldtype": "button",
+      "label": "Add Template",
+      "layout": {
+        "section": "Parcels"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "total_weight",
+      "fieldtype": "float",
+      "label": "Total Weight (kg)",
+      "layout": {
+        "section": "Parcels"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_28",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "Parcels"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "childDoctype": "Shipment Delivery Note",
+      "constraints": {},
+      "fieldname": "shipment_delivery_note",
+      "fieldtype": "table",
+      "label": "Shipment Delivery Note",
+      "layout": {
+        "column": 1,
+        "section": "Parcels"
+      },
+      "optionsParsed": {
+        "doctype": "Shipment Delivery Note",
+        "kind": "child_doctype"
+      },
+      "optionsRaw": "Shipment Delivery Note",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "shipment_details_section",
+      "fieldtype": "layout:section",
+      "label": "Shipment details",
+      "layout": {
+        "section": "Shipment details"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "No",
+      "fieldname": "pallets",
+      "fieldtype": "select",
+      "label": "Pallets",
+      "layout": {
+        "section": "Shipment details"
+      },
+      "optionsParsed": {
+        "choices": [
+          "No",
+          "Yes"
+        ],
+        "kind": "select"
+      },
+      "optionsRaw": "No\nYes",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "value_of_goods",
+      "fieldtype": "currency",
+      "label": "Value of Goods",
+      "layout": {
+        "section": "Shipment details"
+      },
+      "permlevel": 0,
+      "requiredStatic": true,
+      "ui": {
+        "precision": "2"
+      },
+      "unique": false
+    },
+    {
+      "allowOnSubmit": true,
+      "constraints": {},
+      "fieldname": "pickup_date",
+      "fieldtype": "date",
+      "label": "Pickup Date",
+      "layout": {
+        "section": "Shipment details"
+      },
+      "permlevel": 0,
+      "requiredStatic": true,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "allowOnSubmit": true,
+      "constraints": {},
+      "default": "09:00",
+      "fieldname": "pickup_from",
+      "fieldtype": "time",
+      "label": "Pickup from",
+      "layout": {
+        "section": "Shipment details"
+      },
+      "permlevel": 0,
+      "requiredStatic": true,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "allowOnSubmit": true,
+      "constraints": {},
+      "default": "17:00",
+      "fieldname": "pickup_to",
+      "fieldtype": "time",
+      "label": "Pickup to",
+      "layout": {
+        "section": "Shipment details"
+      },
+      "permlevel": 0,
+      "requiredStatic": true,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_36",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "Shipment details"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "Goods",
+      "fieldname": "shipment_type",
+      "fieldtype": "select",
+      "label": "Shipment Type",
+      "layout": {
+        "column": 1,
+        "section": "Shipment details"
+      },
+      "optionsParsed": {
+        "choices": [
+          "Goods",
+          "Documents"
+        ],
+        "kind": "select"
+      },
+      "optionsRaw": "Goods\nDocuments",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "Pickup",
+      "fieldname": "pickup_type",
+      "fieldtype": "select",
+      "label": "Pickup Type",
+      "layout": {
+        "column": 1,
+        "section": "Shipment details"
+      },
+      "optionsParsed": {
+        "choices": [
+          "Pickup",
+          "Self delivery"
+        ],
+        "kind": "select"
+      },
+      "optionsRaw": "Pickup\nSelf delivery",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "incoterm",
+      "fieldtype": "link",
+      "label": "Incoterm",
+      "layout": {
+        "column": 1,
+        "section": "Shipment details"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Incoterm"
+      },
+      "optionsRaw": "Incoterm",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Incoterm",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "description_of_content",
+      "fieldtype": "small_text",
+      "label": "Description of Content",
+      "layout": {
+        "column": 1,
+        "section": "Shipment details"
+      },
+      "permlevel": 0,
+      "requiredStatic": true,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "section_break_40",
+      "fieldtype": "layout:section",
+      "layout": {
+        "section": "section_break_40"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "shipment_information_section",
+      "fieldtype": "layout:section",
+      "label": "Shipment Information",
+      "layout": {
+        "section": "Shipment Information"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "service_provider",
+      "fieldtype": "data",
+      "label": "Service Provider",
+      "layout": {
+        "section": "Shipment Information"
+      },
+      "noCopy": true,
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "shipment_id",
+      "fieldtype": "data",
+      "label": "Shipment ID",
+      "layout": {
+        "section": "Shipment Information"
+      },
+      "noCopy": true,
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "shipment_amount",
+      "fieldtype": "currency",
+      "label": "Shipment Amount",
+      "layout": {
+        "section": "Shipment Information"
+      },
+      "noCopy": true,
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "precision": "2",
+        "printHide": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "status",
+      "fieldtype": "select",
+      "label": "Status",
+      "layout": {
+        "section": "Shipment Information"
+      },
+      "noCopy": true,
+      "optionsParsed": {
+        "choices": [
+          "Draft",
+          "Submitted",
+          "Booked",
+          "Cancelled",
+          "Completed"
+        ],
+        "kind": "select"
+      },
+      "optionsRaw": "Draft\nSubmitted\nBooked\nCancelled\nCompleted",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "tracking_url",
+      "fieldtype": "small_text",
+      "label": "Tracking URL",
+      "layout": {
+        "section": "Shipment Information"
+      },
+      "noCopy": true,
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "hidden": true,
+        "printHide": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_55",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "Shipment Information"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "carrier",
+      "fieldtype": "data",
+      "label": "Carrier",
+      "layout": {
+        "column": 1,
+        "section": "Shipment Information"
+      },
+      "noCopy": true,
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "carrier_service",
+      "fieldtype": "data",
+      "label": "Carrier Service",
+      "layout": {
+        "column": 1,
+        "section": "Shipment Information"
+      },
+      "noCopy": true,
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "awb_number",
+      "fieldtype": "data",
+      "label": "AWB Number",
+      "layout": {
+        "column": 1,
+        "section": "Shipment Information"
+      },
+      "noCopy": true,
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true
+      },
+      "unique": false
+    },
+    {
+      "allowOnSubmit": true,
+      "constraints": {},
+      "fieldname": "tracking_status",
+      "fieldtype": "select",
+      "label": "Tracking Status",
+      "layout": {
+        "column": 1,
+        "section": "Shipment Information"
+      },
+      "noCopy": true,
+      "optionsParsed": {
+        "choices": [
+          "In Progress",
+          "Delivered",
+          "Returned",
+          "Lost"
+        ],
+        "kind": "select"
+      },
+      "optionsRaw": "\nIn Progress\nDelivered\nReturned\nLost",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "tracking_status_info",
+      "fieldtype": "data",
+      "label": "Tracking Status Info",
+      "layout": {
+        "column": 1,
+        "section": "Shipment Information"
+      },
+      "noCopy": true,
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "amended_from",
+      "fieldtype": "link",
+      "label": "Amended From",
+      "layout": {
+        "column": 1,
+        "section": "Shipment Information"
+      },
+      "noCopy": true,
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Shipment"
+      },
+      "optionsRaw": "Shipment",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Shipment",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "hidden": true,
+        "printHide": true,
+        "readOnly": true
+      },
+      "unique": false
+    }
+  ],
+  "identity": {
+    "app": "erpnext",
+    "isSingle": false,
+    "isSubmittable": true,
+    "isTree": false,
+    "module": "Stock",
+    "naming": {
+      "seriesPrefix": "SHIPMENT-.#####",
+      "strategy": "series"
+    }
+  },
+  "name": "Shipment",
+  "permissions": [
+    {
+      "actions": {
+        "cancel": true,
+        "create": true,
+        "delete": true,
+        "email": true,
+        "export": true,
+        "print": true,
+        "read": true,
+        "report": true,
+        "share": true,
+        "submit": true,
+        "write": true
+      },
+      "permlevel": 0,
+      "role": "Stock Manager"
+    },
+    {
+      "actions": {
+        "cancel": true,
+        "create": true,
+        "delete": true,
+        "email": true,
+        "export": true,
+        "print": true,
+        "read": true,
+        "report": true,
+        "share": true,
+        "submit": true,
+        "write": true
+      },
+      "permlevel": 0,
+      "role": "System Manager"
+    }
+  ],
+  "ui": {
+    "searchFields": [],
+    "showNameInGlobalSearch": false,
+    "sortField": "creation",
+    "sortOrder": "DESC"
+  },
+  "workflows": [
+    {
+      "kind": "unavailable"
+    }
+  ]
+}

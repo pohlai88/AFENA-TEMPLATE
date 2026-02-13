@@ -1,6 +1,5 @@
-import type { DocStatus, EntityContract } from 'afena-canon';
-
 import type { BodySlot, WorkflowEdge, WorkflowNode } from './types';
+import type { DocStatus, EntityContract } from 'afena-canon';
 
 /**
  * Generated envelope — the immutable system skeleton for a workflow.
@@ -37,13 +36,13 @@ export function generateEnvelope(contract: EntityContract, version: number = 1):
   function ensureNode(id: string, type: WorkflowNode['type'], editWindow?: WorkflowNode['editWindow'], config?: WorkflowNode['config']): void {
     if (nodeSet.has(id)) return;
     nodeSet.add(id);
-    nodes.push({ id, type, label: id, editWindow, config });
+    nodes.push({ id, type, label: id, ...(editWindow ? { editWindow } : {}), ...(config ? { config } : {}) });
   }
 
   function ensureEdge(id: string, sourceNodeId: string, targetNodeId: string, label?: string, priority?: number): void {
     if (edgeSet.has(id)) return;
     edgeSet.add(id);
-    edges.push({ id, sourceNodeId, targetNodeId, label, priority: priority ?? 0 });
+    edges.push({ id, sourceNodeId, targetNodeId, ...(label ? { label } : {}), priority: priority ?? 0 });
   }
 
   // Always create start and end nodes
@@ -95,8 +94,8 @@ export function generateEnvelope(contract: EntityContract, version: number = 1):
 
       ensureNode(gateId, 'lifecycle_gate', gateEditWindow, {
         nodeType: 'lifecycle_gate',
-        fromStatus: t.from as DocStatus,
-        toStatus: target as DocStatus,
+        fromStatus: t.from,
+        toStatus: target,
         verb: action,
       });
 
@@ -167,7 +166,7 @@ export function generateEnvelope(contract: EntityContract, version: number = 1):
  * Resolve target status from a source status + action verb.
  * Maps Canon ActionKind verbs to their resulting DocStatus.
  */
-function resolveTargetStatus(from: string, action: string): string | null {
+function resolveTargetStatus(from: string, action: string): DocStatus | null {
   const transitionMap: Record<string, Record<string, string>> = {
     draft: {
       submit: 'submitted',
@@ -188,7 +187,7 @@ function resolveTargetStatus(from: string, action: string): string | null {
     },
   };
 
-  return transitionMap[from]?.[action] ?? null;
+  return (transitionMap[from]?.[action] as DocStatus) ?? null;
 }
 
 /**

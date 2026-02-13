@@ -1,0 +1,427 @@
+{
+  "audit": {
+    "trackChanges": true
+  },
+  "canonVersion": "1.0.0",
+  "childTables": [
+    {
+      "childDoctype": "Driving License Category",
+      "parentField": "driving_license_category",
+      "required": false
+    }
+  ],
+  "doctypeId": "erpnext:Setup:Driver",
+  "events": [
+    {
+      "event": "validate",
+      "handlers": [
+        "erpnext.support.doctype.service_level_agreement.service_level_agreement.apply",
+        "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record.check_for_running_deletion_job"
+      ],
+      "handlersParsed": [
+        {
+          "attrPath": "apply",
+          "module": "erpnext.support.doctype.service_level_agreement.service_level_agreement"
+        },
+        {
+          "attrPath": "check_for_running_deletion_job",
+          "module": "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record"
+        }
+      ]
+    }
+  ],
+  "fieldOrder": [
+    "naming_series",
+    "full_name",
+    "status",
+    "transporter",
+    "column_break_2",
+    "employee",
+    "cell_number",
+    "address",
+    "user",
+    "license_details",
+    "license_number",
+    "column_break_8",
+    "issuing_date",
+    "column_break_10",
+    "expiry_date",
+    "driving_license_categories",
+    "driving_license_category"
+  ],
+  "fields": [
+    {
+      "constraints": {},
+      "fieldname": "naming_series",
+      "fieldtype": "select",
+      "label": "Series",
+      "optionsParsed": {
+        "kind": "naming_series",
+        "prefixes": [
+          "HR-DRI-.YYYY.-"
+        ]
+      },
+      "optionsRaw": "HR-DRI-.YYYY.-",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "full_name",
+      "fieldtype": "data",
+      "label": "Full Name",
+      "permlevel": 0,
+      "requiredStatic": true,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "status",
+      "fieldtype": "select",
+      "label": "Status",
+      "optionsParsed": {
+        "choices": [
+          "Active",
+          "Suspended",
+          "Left"
+        ],
+        "kind": "select"
+      },
+      "optionsRaw": "Active\nSuspended\nLeft",
+      "permlevel": 0,
+      "requiredStatic": true,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "transporter",
+      "fieldtype": "link",
+      "label": "Transporter",
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Supplier"
+      },
+      "optionsRaw": "Supplier",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Supplier",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "allowInQuickEntry": true,
+        "description": "Applicable for external driver"
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_2",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "employee",
+      "fieldtype": "link",
+      "label": "Employee",
+      "layout": {
+        "column": 1
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Employee"
+      },
+      "optionsRaw": "Employee",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Employee",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "cell_number",
+      "fieldtype": "data",
+      "label": "Cellphone Number",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "address",
+      "fieldtype": "link",
+      "label": "Address",
+      "layout": {
+        "column": 1
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Address"
+      },
+      "optionsRaw": "Address",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Address",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "user",
+      "fieldtype": "link",
+      "label": "User",
+      "layout": {
+        "column": 1
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "User"
+      },
+      "optionsRaw": "User",
+      "permlevel": 0,
+      "readOnlyDependsOn": "employee",
+      "ref": {
+        "doctype": "User",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "license_details",
+      "fieldtype": "layout:section",
+      "label": "License Details",
+      "layout": {
+        "section": "License Details"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "license_number",
+      "fieldtype": "data",
+      "label": "License Number",
+      "layout": {
+        "section": "License Details"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_8",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "License Details"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "issuing_date",
+      "fieldtype": "date",
+      "label": "Issuing Date",
+      "layout": {
+        "column": 1,
+        "section": "License Details"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_10",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 2,
+        "section": "License Details"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "expiry_date",
+      "fieldtype": "date",
+      "label": "Expiry Date",
+      "layout": {
+        "column": 2,
+        "section": "License Details"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "driving_license_categories",
+      "fieldtype": "layout:section",
+      "label": "Driving License Categories",
+      "layout": {
+        "section": "Driving License Categories"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "childDoctype": "Driving License Category",
+      "constraints": {},
+      "fieldname": "driving_license_category",
+      "fieldtype": "table",
+      "label": "Driving License Category",
+      "layout": {
+        "section": "Driving License Categories"
+      },
+      "optionsParsed": {
+        "doctype": "Driving License Category",
+        "kind": "child_doctype"
+      },
+      "optionsRaw": "Driving License Category",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    }
+  ],
+  "identity": {
+    "app": "erpnext",
+    "isSingle": false,
+    "isSubmittable": false,
+    "isTree": false,
+    "module": "Setup",
+    "naming": {
+      "seriesField": "naming_series",
+      "seriesPrefix": "HR-DRI-.YYYY.-",
+      "strategy": "series"
+    }
+  },
+  "name": "Driver",
+  "permissions": [
+    {
+      "actions": {
+        "email": true,
+        "export": true,
+        "print": true,
+        "read": true,
+        "report": true,
+        "share": true,
+        "write": true
+      },
+      "permlevel": 0,
+      "role": "Delivery Manager"
+    },
+    {
+      "actions": {
+        "print": true,
+        "read": true,
+        "report": true
+      },
+      "permlevel": 0,
+      "role": "Delivery User"
+    },
+    {
+      "actions": {
+        "email": true,
+        "export": true,
+        "print": true,
+        "read": true,
+        "report": true,
+        "share": true
+      },
+      "permlevel": 0,
+      "role": "Fleet Manager"
+    },
+    {
+      "actions": {
+        "create": true,
+        "delete": true,
+        "email": true,
+        "export": true,
+        "print": true,
+        "read": true,
+        "report": true,
+        "share": true,
+        "write": true
+      },
+      "permlevel": 0,
+      "role": "HR Manager"
+    },
+    {
+      "actions": {
+        "create": true,
+        "delete": true,
+        "email": true,
+        "export": true,
+        "print": true,
+        "read": true,
+        "report": true,
+        "share": true,
+        "write": true
+      },
+      "permlevel": 0,
+      "role": "HR User"
+    }
+  ],
+  "ui": {
+    "searchFields": [
+      "full_name"
+    ],
+    "showNameInGlobalSearch": true,
+    "sortField": "creation",
+    "sortOrder": "DESC",
+    "titleField": "full_name"
+  },
+  "workflows": [
+    {
+      "kind": "unavailable"
+    }
+  ]
+}

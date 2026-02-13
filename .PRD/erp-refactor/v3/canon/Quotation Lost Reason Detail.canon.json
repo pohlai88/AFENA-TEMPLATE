@@ -1,0 +1,76 @@
+{
+  "audit": {
+    "trackChanges": true
+  },
+  "canonVersion": "1.0.0",
+  "childTables": [],
+  "doctypeId": "erpnext:Setup:Quotation Lost Reason Detail",
+  "events": [
+    {
+      "event": "validate",
+      "handlers": [
+        "erpnext.support.doctype.service_level_agreement.service_level_agreement.apply",
+        "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record.check_for_running_deletion_job"
+      ],
+      "handlersParsed": [
+        {
+          "attrPath": "apply",
+          "module": "erpnext.support.doctype.service_level_agreement.service_level_agreement"
+        },
+        {
+          "attrPath": "check_for_running_deletion_job",
+          "module": "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record"
+        }
+      ]
+    }
+  ],
+  "fieldOrder": [
+    "lost_reason"
+  ],
+  "fields": [
+    {
+      "constraints": {},
+      "fieldname": "lost_reason",
+      "fieldtype": "link",
+      "label": "Quotation Lost Reason",
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Quotation Lost Reason"
+      },
+      "optionsRaw": "Quotation Lost Reason",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Quotation Lost Reason",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    }
+  ],
+  "identity": {
+    "app": "erpnext",
+    "isSingle": false,
+    "isSubmittable": false,
+    "isTree": false,
+    "module": "Setup",
+    "naming": {
+      "strategy": "hash"
+    }
+  },
+  "name": "Quotation Lost Reason Detail",
+  "permissions": [],
+  "ui": {
+    "searchFields": [],
+    "showNameInGlobalSearch": false,
+    "sortField": "creation",
+    "sortOrder": "DESC"
+  },
+  "workflows": [
+    {
+      "kind": "unavailable"
+    }
+  ]
+}

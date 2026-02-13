@@ -1,7 +1,6 @@
 import { sql } from 'drizzle-orm';
 import {
   bigint,
-  integer,
   jsonb,
   numeric,
   text,

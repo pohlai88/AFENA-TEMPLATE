@@ -1,4 +1,4 @@
-import { and, eq, lotTracking, inventoryTraceLinks, sql } from 'afena-database';
+import { and, eq, lotTracking, inventoryTraceLinks } from 'afena-database';
 
 import type { NeonHttpDatabase } from 'drizzle-orm/neon-http';
 
@@ -18,7 +18,7 @@ export interface AffectedMovement {
 export interface RecallTraceResult {
   lotTrackingId: string;
   trackingNo: string;
-  productId: string;
+  itemId: string;
   direction: 'forward' | 'backward';
   affectedMovements: AffectedMovement[];
   totalAffected: number;
@@ -206,7 +206,7 @@ export async function traceRecall(
     .select({
       id: lotTracking.id,
       trackingNo: lotTracking.trackingNo,
-      productId: lotTracking.productId,
+      itemId: lotTracking.itemId,
     })
     .from(lotTracking)
     .where(
@@ -237,7 +237,7 @@ export async function traceRecall(
   return {
     lotTrackingId,
     trackingNo: lot.trackingNo,
-    productId: lot.productId,
+    itemId: lot.itemId,
     direction: 'forward',
     affectedMovements: forwardMovements,
     totalAffected: forwardMovements.length,

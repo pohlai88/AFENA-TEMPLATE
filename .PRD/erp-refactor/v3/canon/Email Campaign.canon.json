@@ -1,0 +1,222 @@
+{
+  "audit": {
+    "trackChanges": true
+  },
+  "canonVersion": "1.0.0",
+  "childTables": [],
+  "doctypeId": "erpnext:CRM:Email Campaign",
+  "events": [
+    {
+      "event": "validate",
+      "handlers": [
+        "erpnext.support.doctype.service_level_agreement.service_level_agreement.apply",
+        "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record.check_for_running_deletion_job"
+      ],
+      "handlersParsed": [
+        {
+          "attrPath": "apply",
+          "module": "erpnext.support.doctype.service_level_agreement.service_level_agreement"
+        },
+        {
+          "attrPath": "check_for_running_deletion_job",
+          "module": "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record"
+        }
+      ]
+    }
+  ],
+  "fieldOrder": [
+    "campaign_name",
+    "email_campaign_for",
+    "recipient",
+    "sender",
+    "column_break_4",
+    "start_date",
+    "end_date",
+    "status"
+  ],
+  "fields": [
+    {
+      "constraints": {},
+      "fieldname": "campaign_name",
+      "fieldtype": "link",
+      "label": "Campaign",
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Campaign"
+      },
+      "optionsRaw": "Campaign",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Campaign",
+        "kind": "static"
+      },
+      "requiredStatic": true,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "Lead",
+      "fieldname": "email_campaign_for",
+      "fieldtype": "select",
+      "label": "Email Campaign For ",
+      "optionsParsed": {
+        "choices": [
+          "Lead",
+          "Contact",
+          "Email Group"
+        ],
+        "kind": "select"
+      },
+      "optionsRaw": "\nLead\nContact\nEmail Group",
+      "permlevel": 0,
+      "requiredStatic": true,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "recipient",
+      "fieldtype": "dynamic_link",
+      "label": "Recipient",
+      "optionsRaw": "email_campaign_for",
+      "permlevel": 0,
+      "ref": {
+        "doctypeField": "email_campaign_for",
+        "kind": "dynamic"
+      },
+      "requiredStatic": true,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "__user",
+      "fieldname": "sender",
+      "fieldtype": "link",
+      "label": "Sender",
+      "optionsParsed": {
+        "kind": "link",
+        "target": "User"
+      },
+      "optionsRaw": "User",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "User",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_4",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "start_date",
+      "fieldtype": "date",
+      "label": "Start Date",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": true,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "end_date",
+      "fieldtype": "date",
+      "label": "End Date",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "status",
+      "fieldtype": "select",
+      "label": "Status",
+      "layout": {
+        "column": 1
+      },
+      "optionsParsed": {
+        "choices": [
+          "Scheduled",
+          "In Progress",
+          "Completed",
+          "Unsubscribed"
+        ],
+        "kind": "select"
+      },
+      "optionsRaw": "\nScheduled\nIn Progress\nCompleted\nUnsubscribed",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    }
+  ],
+  "identity": {
+    "app": "erpnext",
+    "isSingle": false,
+    "isSubmittable": false,
+    "isTree": false,
+    "module": "CRM",
+    "naming": {
+      "expression": "format:MAIL-CAMP-{YYYY}-{#####}",
+      "strategy": "expression"
+    }
+  },
+  "name": "Email Campaign",
+  "permissions": [
+    {
+      "actions": {
+        "create": true,
+        "delete": true,
+        "email": true,
+        "export": true,
+        "print": true,
+        "read": true,
+        "report": true,
+        "share": true,
+        "write": true
+      },
+      "permlevel": 0,
+      "role": "System Manager"
+    }
+  ],
+  "ui": {
+    "searchFields": [],
+    "showNameInGlobalSearch": false,
+    "sortField": "creation",
+    "sortOrder": "DESC"
+  },
+  "workflows": [
+    {
+      "kind": "unavailable"
+    }
+  ]
+}

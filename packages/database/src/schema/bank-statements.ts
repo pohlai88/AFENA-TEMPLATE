@@ -1,5 +1,5 @@
 import { sql } from 'drizzle-orm';
-import { bigint, boolean, check, date, index, pgTable, text, uuid } from 'drizzle-orm/pg-core';
+import { bigint, boolean, check, date, index, pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core';
 
 import { baseEntityColumns } from '../helpers/base-entity';
 import { tenantPolicy } from '../helpers/tenant-policy';
@@ -33,7 +33,8 @@ export const bankStatementLines = pgTable(
     matchedJournalEntryId: uuid('matched_journal_entry_id'),
     matchConfidence: text('match_confidence'),
     matchedBy: text('matched_by'),
-    matchedAt: text('matched_at'),
+    matchedAt: timestamp('matched_at', { withTimezone: true }),
+    reconciliationSessionId: uuid('reconciliation_session_id'),
     memo: text('memo'),
   },
   (table) => [

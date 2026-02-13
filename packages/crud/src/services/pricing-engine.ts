@@ -60,7 +60,7 @@ export async function resolvePrice(
   productId: string,
   qty: number,
   asOfDate: string | Date,
-  customerId?: string,
+  _customerId?: string,
 ): Promise<ResolvedPrice | null> {
   const dateStr = typeof asOfDate === 'string'
     ? asOfDate

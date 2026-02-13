@@ -1,0 +1,173 @@
+{
+  "audit": {
+    "trackChanges": false
+  },
+  "canonVersion": "1.0.0",
+  "childTables": [],
+  "doctypeId": "erpnext:Manufacturing:BOM Update Tool",
+  "events": [
+    {
+      "event": "validate",
+      "handlers": [
+        "erpnext.support.doctype.service_level_agreement.service_level_agreement.apply",
+        "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record.check_for_running_deletion_job"
+      ],
+      "handlersParsed": [
+        {
+          "attrPath": "apply",
+          "module": "erpnext.support.doctype.service_level_agreement.service_level_agreement"
+        },
+        {
+          "attrPath": "check_for_running_deletion_job",
+          "module": "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record"
+        }
+      ]
+    }
+  ],
+  "fieldOrder": [
+    "replace_bom_section",
+    "current_bom",
+    "new_bom",
+    "replace",
+    "update_cost_section",
+    "update_latest_price_in_all_boms"
+  ],
+  "fields": [
+    {
+      "constraints": {},
+      "fieldname": "replace_bom_section",
+      "fieldtype": "layout:section",
+      "label": "Replace BOM",
+      "layout": {
+        "section": "Replace BOM"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "current_bom",
+      "fieldtype": "link",
+      "label": "Current BOM",
+      "layout": {
+        "section": "Replace BOM"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "BOM"
+      },
+      "optionsRaw": "BOM",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "BOM",
+        "kind": "static"
+      },
+      "requiredStatic": true,
+      "ui": {
+        "description": "The BOM which will be replaced",
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "new_bom",
+      "fieldtype": "link",
+      "label": "New BOM",
+      "layout": {
+        "section": "Replace BOM"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "BOM"
+      },
+      "optionsRaw": "BOM",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "BOM",
+        "kind": "static"
+      },
+      "requiredStatic": true,
+      "ui": {
+        "description": "The new BOM after replacement",
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "replace",
+      "fieldtype": "button",
+      "label": "Replace",
+      "layout": {
+        "section": "Replace BOM"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "update_cost_section",
+      "fieldtype": "layout:section",
+      "label": "Update Cost",
+      "layout": {
+        "section": "Update Cost"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "update_latest_price_in_all_boms",
+      "fieldtype": "button",
+      "label": "Update latest price in all BOMs",
+      "layout": {
+        "section": "Update Cost"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    }
+  ],
+  "identity": {
+    "app": "erpnext",
+    "isSingle": false,
+    "isSubmittable": false,
+    "isTree": false,
+    "module": "Manufacturing",
+    "naming": {
+      "strategy": "hash"
+    }
+  },
+  "name": "BOM Update Tool",
+  "permissions": [
+    {
+      "actions": {
+        "create": true,
+        "read": true,
+        "share": true,
+        "write": true
+      },
+      "permlevel": 0,
+      "role": "Manufacturing Manager"
+    }
+  ],
+  "ui": {
+    "searchFields": [],
+    "showNameInGlobalSearch": false,
+    "sortField": "creation",
+    "sortOrder": "DESC"
+  },
+  "workflows": [
+    {
+      "kind": "unavailable"
+    }
+  ]
+}

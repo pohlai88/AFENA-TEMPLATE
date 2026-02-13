@@ -1,0 +1,470 @@
+{
+  "audit": {
+    "trackChanges": true
+  },
+  "canonVersion": "1.0.0",
+  "childTables": [],
+  "doctypeId": "erpnext:Stock:Delivery Stop",
+  "events": [
+    {
+      "event": "validate",
+      "handlers": [
+        "erpnext.support.doctype.service_level_agreement.service_level_agreement.apply",
+        "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record.check_for_running_deletion_job"
+      ],
+      "handlersParsed": [
+        {
+          "attrPath": "apply",
+          "module": "erpnext.support.doctype.service_level_agreement.service_level_agreement"
+        },
+        {
+          "attrPath": "check_for_running_deletion_job",
+          "module": "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record"
+        }
+      ]
+    }
+  ],
+  "fieldOrder": [
+    "customer",
+    "address",
+    "locked",
+    "column_break_6",
+    "customer_address",
+    "visited",
+    "order_information_section",
+    "delivery_note",
+    "cb_order",
+    "grand_total",
+    "section_break_7",
+    "contact",
+    "email_sent_to",
+    "column_break_7",
+    "customer_contact",
+    "section_break_9",
+    "distance",
+    "estimated_arrival",
+    "lat",
+    "column_break_19",
+    "uom",
+    "lng",
+    "more_information_section",
+    "details"
+  ],
+  "fields": [
+    {
+      "constraints": {},
+      "fieldname": "customer",
+      "fieldtype": "link",
+      "label": "Customer",
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Customer"
+      },
+      "optionsRaw": "Customer",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Customer",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "address",
+      "fieldtype": "link",
+      "label": "Address Name",
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Address"
+      },
+      "optionsRaw": "Address",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Address",
+        "kind": "static"
+      },
+      "requiredStatic": true,
+      "ui": {
+        "inListView": true,
+        "printHide": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "locked",
+      "fieldtype": "check",
+      "label": "Locked",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_6",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "customer_address",
+      "fieldtype": "small_text",
+      "label": "Customer Address",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "allowOnSubmit": true,
+      "constraints": {},
+      "default": "0",
+      "dependsOn": "eval:doc.docstatus==1",
+      "fieldname": "visited",
+      "fieldtype": "check",
+      "label": "Visited",
+      "layout": {
+        "column": 1
+      },
+      "noCopy": true,
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "order_information_section",
+      "fieldtype": "layout:section",
+      "label": "Order Information",
+      "layout": {
+        "section": "Order Information"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "delivery_note",
+      "fieldtype": "link",
+      "label": "Delivery Note",
+      "layout": {
+        "section": "Order Information"
+      },
+      "noCopy": true,
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Delivery Note"
+      },
+      "optionsRaw": "Delivery Note",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Delivery Note",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "inListView": true,
+        "printHide": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "cb_order",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "Order Information"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "grand_total",
+      "fieldtype": "currency",
+      "label": "Grand Total",
+      "layout": {
+        "column": 1,
+        "section": "Order Information"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "section_break_7",
+      "fieldtype": "layout:section",
+      "label": "Contact Information",
+      "layout": {
+        "section": "Contact Information"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "contact",
+      "fieldtype": "link",
+      "label": "Contact Name",
+      "layout": {
+        "section": "Contact Information"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Contact"
+      },
+      "optionsRaw": "Contact",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Contact",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "email_sent_to",
+      "fieldtype": "data",
+      "label": "Email sent to",
+      "layout": {
+        "section": "Contact Information"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_7",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "Contact Information"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "customer_contact",
+      "fieldtype": "small_text",
+      "label": "Customer Contact",
+      "layout": {
+        "column": 1,
+        "section": "Contact Information"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "section_break_9",
+      "fieldtype": "layout:section",
+      "label": "Dispatch Information",
+      "layout": {
+        "section": "Dispatch Information"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "distance",
+      "fieldtype": "float",
+      "label": "Distance",
+      "layout": {
+        "section": "Dispatch Information"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "precision": "2",
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "estimated_arrival",
+      "fieldtype": "datetime",
+      "label": "Estimated Arrival",
+      "layout": {
+        "section": "Dispatch Information"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "lat",
+      "fieldtype": "float",
+      "label": "Latitude",
+      "layout": {
+        "section": "Dispatch Information"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "hidden": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_19",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "Dispatch Information"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:doc.distance",
+      "fieldname": "uom",
+      "fieldtype": "link",
+      "label": "UOM",
+      "layout": {
+        "column": 1,
+        "section": "Dispatch Information"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "UOM"
+      },
+      "optionsRaw": "UOM",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "UOM",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "lng",
+      "fieldtype": "float",
+      "label": "Longitude",
+      "layout": {
+        "column": 1,
+        "section": "Dispatch Information"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "hidden": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "more_information_section",
+      "fieldtype": "layout:section",
+      "label": "More Information",
+      "layout": {
+        "section": "More Information"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "details",
+      "fieldtype": "text_editor",
+      "label": "Details",
+      "layout": {
+        "section": "More Information"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    }
+  ],
+  "identity": {
+    "app": "erpnext",
+    "isSingle": false,
+    "isSubmittable": false,
+    "isTree": false,
+    "module": "Stock",
+    "naming": {
+      "strategy": "hash"
+    }
+  },
+  "name": "Delivery Stop",
+  "permissions": [],
+  "ui": {
+    "searchFields": [],
+    "showNameInGlobalSearch": false,
+    "sortField": "creation",
+    "sortOrder": "DESC"
+  },
+  "workflows": [
+    {
+      "kind": "unavailable"
+    }
+  ]
+}

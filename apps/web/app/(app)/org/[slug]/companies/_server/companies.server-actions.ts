@@ -1,16 +1,12 @@
 'use server';
 
-import { randomUUID } from 'crypto';
-
-import { revalidatePath } from 'next/cache';
-
 import {
   createCompany,
   deleteCompany,
   restoreCompany,
   updateCompany,
 } from '@/app/actions/companies';
-import { auth } from '@/lib/auth/server';
+import { withActionAuthPassthrough } from '@/lib/actions/with-action-auth';
 
 import {
   logActionError,
@@ -18,62 +14,69 @@ import {
   logActionSuccess,
 } from '../../_components/crud/server/action-logger_server';
 
-import type { ActionEnvelope, ApiResponse, ErrorCode, JsonValue } from 'afena-canon';
+import type { ActionEnvelope, ApiResponse, JsonValue } from 'afena-canon';
 
-function errorResponse(code: ErrorCode, message: string): ApiResponse {
-  return { ok: false, error: { code, message }, meta: { requestId: randomUUID() } };
-}
-
+/**
+ * Enterprise company server actions — accept ActionEnvelope.
+ * Uses withActionAuthPassthrough() for ALS, auth, envelope, and cache invalidation.
+ */
 export async function executeEntityAction(
   envelope: ActionEnvelope,
   extra: { expectedVersion?: number; input?: JsonValue; orgSlug?: string },
 ): Promise<ApiResponse> {
-  const start = Date.now();
-  const { data: session } = await auth.getSession();
-  const userId = session?.user?.id ?? '';
-  if (!userId) return errorResponse('POLICY_DENIED', 'No active session');
+  return withActionAuthPassthrough(async (ctx) => {
+    const start = Date.now();
+    logActionStart(envelope, { userId: ctx.userId });
 
-  logActionStart(envelope, { userId });
+    try {
+      let result: ApiResponse;
+      switch (envelope.kind) {
+        case 'create':
+          result = await createCompany(extra.input ?? {});
+          break;
+        case 'update':
+          if (!envelope.entityId || extra.expectedVersion === undefined) {
+            return {
+              result: { ok: false, error: { code: 'VALIDATION_FAILED' as const, message: 'Missing entityId or expectedVersion' }, meta: { requestId: ctx.requestId } },
+            };
+          }
+          result = await updateCompany(envelope.entityId, extra.expectedVersion, extra.input ?? {});
+          break;
+        case 'delete':
+          if (!envelope.entityId || extra.expectedVersion === undefined) {
+            return {
+              result: { ok: false, error: { code: 'VALIDATION_FAILED' as const, message: 'Missing entityId or expectedVersion' }, meta: { requestId: ctx.requestId } },
+            };
+          }
+          result = await deleteCompany(envelope.entityId, extra.expectedVersion);
+          break;
+        case 'restore':
+          if (!envelope.entityId || extra.expectedVersion === undefined) {
+            return {
+              result: { ok: false, error: { code: 'VALIDATION_FAILED' as const, message: 'Missing entityId or expectedVersion' }, meta: { requestId: ctx.requestId } },
+            };
+          }
+          result = await restoreCompany(envelope.entityId, extra.expectedVersion);
+          break;
+        default:
+          throw new Error(`Unsupported action kind: ${envelope.kind}`);
+      }
 
-  try {
-    let result: ApiResponse;
-    switch (envelope.kind) {
-      case 'create':
-        result = await createCompany(extra.input ?? {});
-        break;
-      case 'update':
-        if (!envelope.entityId || extra.expectedVersion === undefined)
-          return errorResponse('VALIDATION_FAILED', 'Missing entityId or expectedVersion');
-        result = await updateCompany(envelope.entityId, extra.expectedVersion, extra.input ?? {});
-        break;
-      case 'delete':
-        if (!envelope.entityId || extra.expectedVersion === undefined)
-          return errorResponse('VALIDATION_FAILED', 'Missing entityId or expectedVersion');
-        result = await deleteCompany(envelope.entityId, extra.expectedVersion);
-        break;
-      case 'restore':
-        if (!envelope.entityId || extra.expectedVersion === undefined)
-          return errorResponse('VALIDATION_FAILED', 'Missing entityId or expectedVersion');
-        result = await restoreCompany(envelope.entityId, extra.expectedVersion);
-        break;
-      default:
-        return errorResponse('VALIDATION_FAILED', `Unsupported action kind: ${envelope.kind}`);
+      const durationMs = Date.now() - start;
+      if (result.ok) {
+        logActionSuccess(envelope, { userId: ctx.userId, durationMs });
+      } else {
+        logActionError(envelope, result.error, { userId: ctx.userId, durationMs });
+      }
+
+      return {
+        result,
+        ...(result.ok ? { invalidate: { entityType: 'companies' as const, ...(envelope.entityId ? { entityId: envelope.entityId } : {}) } } : {}),
+      };
+    } catch (error) {
+      const durationMs = Date.now() - start;
+      logActionError(envelope, error, { userId: ctx.userId, durationMs });
+      throw error;
     }
-
-    const durationMs = Date.now() - start;
-    if (result.ok) {
-      logActionSuccess(envelope, { userId, durationMs });
-      const slug = extra.orgSlug ?? envelope.orgId;
-      revalidatePath(`/org/${slug}/companies`);
-      if (envelope.entityId) revalidatePath(`/org/${slug}/companies/${envelope.entityId}`);
-      revalidatePath(`/org/${slug}/companies/trash`);
-    } else {
-      logActionError(envelope, result.error, { userId, durationMs });
-    }
-    return result;
-  } catch (error) {
-    const durationMs = Date.now() - start;
-    logActionError(envelope, error, { userId, durationMs });
-    return errorResponse('INTERNAL_ERROR', 'Unexpected error');
-  }
+  });
 }

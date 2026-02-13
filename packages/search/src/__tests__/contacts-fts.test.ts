@@ -16,29 +16,32 @@ const whereFn = vi.fn();
 const orderByFn = vi.fn();
 const limitFn = vi.fn(() => Promise.resolve([]));
 
-vi.mock('afena-database', () => ({
-  db: {
-    select: (...args: any[]) => {
-      selectFn(...args);
-      return {
-        from: (...a: any[]) => {
-          fromFn(...a);
-          return {
-            where: (...a2: any[]) => {
-              whereFn(...a2);
-              return {
-                orderBy: (...a3: any[]) => {
-                  orderByFn(...a3);
-                  return { limit: limitFn };
-                },
-                limit: limitFn,
-              };
-            },
-          };
-        },
-      };
-    },
+const dbChain = {
+  select: (...args: any[]) => {
+    selectFn(...args);
+    return {
+      from: (...a: any[]) => {
+        fromFn(...a);
+        return {
+          where: (...a2: any[]) => {
+            whereFn(...a2);
+            return {
+              orderBy: (...a3: any[]) => {
+                orderByFn(...a3);
+                return { limit: limitFn };
+              },
+              limit: limitFn,
+            };
+          },
+        };
+      },
+    };
   },
+};
+
+vi.mock('afena-database', () => ({
+  db: dbChain,
+  dbRo: dbChain,
   contacts: {
     id: 'id',
     name: 'name',

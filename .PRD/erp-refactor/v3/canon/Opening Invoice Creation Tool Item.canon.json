@@ -1,0 +1,318 @@
+{
+  "audit": {
+    "trackChanges": true
+  },
+  "canonVersion": "1.0.0",
+  "childTables": [],
+  "doctypeId": "erpnext:Accounts:Opening Invoice Creation Tool Item",
+  "events": [
+    {
+      "event": "validate",
+      "handlers": [
+        "erpnext.support.doctype.service_level_agreement.service_level_agreement.apply",
+        "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record.check_for_running_deletion_job"
+      ],
+      "handlersParsed": [
+        {
+          "attrPath": "apply",
+          "module": "erpnext.support.doctype.service_level_agreement.service_level_agreement"
+        },
+        {
+          "attrPath": "check_for_running_deletion_job",
+          "module": "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record"
+        }
+      ]
+    }
+  ],
+  "fieldOrder": [
+    "invoice_number",
+    "party_type",
+    "party",
+    "temporary_opening_account",
+    "column_break_3",
+    "posting_date",
+    "due_date",
+    "supplier_invoice_date",
+    "section_break_5",
+    "item_name",
+    "outstanding_amount",
+    "column_break_4",
+    "qty",
+    "accounting_dimensions_section",
+    "cost_center",
+    "dimension_col_break"
+  ],
+  "fields": [
+    {
+      "constraints": {},
+      "fieldname": "invoice_number",
+      "fieldtype": "data",
+      "label": "Invoice Number",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "description": "Reference number of the invoice from the previous system"
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "party_type",
+      "fieldtype": "link",
+      "label": "Party Type",
+      "optionsParsed": {
+        "kind": "link",
+        "target": "DocType"
+      },
+      "optionsRaw": "DocType",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "DocType",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "hidden": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "party",
+      "fieldtype": "dynamic_link",
+      "label": "Party",
+      "optionsRaw": "party_type",
+      "permlevel": 0,
+      "ref": {
+        "doctypeField": "party_type",
+        "kind": "dynamic"
+      },
+      "requiredStatic": true,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "temporary_opening_account",
+      "fieldtype": "link",
+      "label": "Temporary Opening Account",
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Account"
+      },
+      "optionsRaw": "Account",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Account",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_3",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "Today",
+      "fieldname": "posting_date",
+      "fieldtype": "date",
+      "label": "Posting Date",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "Today",
+      "fieldname": "due_date",
+      "fieldtype": "date",
+      "label": "Due Date",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval: parent.invoice_type == \"Purchase\"",
+      "fieldname": "supplier_invoice_date",
+      "fieldtype": "date",
+      "label": "Supplier Invoice Date",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "section_break_5",
+      "fieldtype": "layout:section",
+      "layout": {
+        "section": "section_break_5"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "Opening Invoice Item",
+      "fieldname": "item_name",
+      "fieldtype": "data",
+      "label": "Item Name",
+      "layout": {
+        "section": "section_break_5"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "outstanding_amount",
+      "fieldtype": "currency",
+      "label": "Outstanding Amount",
+      "layout": {
+        "section": "section_break_5"
+      },
+      "permlevel": 0,
+      "requiredStatic": true,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_4",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "section_break_5"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "1",
+      "fieldname": "qty",
+      "fieldtype": "data",
+      "label": "Quantity",
+      "layout": {
+        "column": 1,
+        "section": "section_break_5"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "accounting_dimensions_section",
+      "fieldtype": "layout:section",
+      "label": "Accounting Dimensions",
+      "layout": {
+        "section": "Accounting Dimensions"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "cost_center",
+      "fieldtype": "link",
+      "label": "Cost Center",
+      "layout": {
+        "section": "Accounting Dimensions"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Cost Center"
+      },
+      "optionsRaw": "Cost Center",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Cost Center",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "dimension_col_break",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "Accounting Dimensions"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    }
+  ],
+  "identity": {
+    "app": "erpnext",
+    "isSingle": false,
+    "isSubmittable": false,
+    "isTree": false,
+    "module": "Accounts",
+    "naming": {
+      "strategy": "hash"
+    }
+  },
+  "name": "Opening Invoice Creation Tool Item",
+  "permissions": [],
+  "ui": {
+    "searchFields": [],
+    "showNameInGlobalSearch": false,
+    "sortField": "creation",
+    "sortOrder": "DESC"
+  },
+  "workflows": [
+    {
+      "kind": "unavailable"
+    }
+  ]
+}

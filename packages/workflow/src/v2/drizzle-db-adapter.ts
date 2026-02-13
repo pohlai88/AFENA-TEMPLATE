@@ -11,7 +11,6 @@ import { and, eq, sql } from 'drizzle-orm';
 
 import type { InstanceSnapshot, StepExecutionRecord, WorkflowDbAdapter } from './engine';
 import type { CompiledWorkflow, InstanceStatus, WorkflowNode, WorkflowToken } from './types';
-
 import type { NeonHttpDatabase } from 'drizzle-orm/neon-http';
 
 /**
@@ -348,5 +347,129 @@ export class DrizzleWorkflowDbAdapter implements WorkflowDbAdapter {
       status: instance.status,
       contextJson: instance.contextJson,
     });
+  }
+
+  // ── Worker Adapter Methods ──────────────────────────────────
+  // These satisfy WorkerDbAdapter interface (duck-typed).
+
+  async pollOutboxEvents(batchSize: number): Promise<unknown[]> {
+    const result = await this.db.execute(sql`
+      SELECT
+        id, created_at AS "createdAt", org_id AS "orgId",
+        instance_id AS "instanceId", entity_version AS "entityVersion",
+        definition_version AS "definitionVersion", event_type AS "eventType",
+        payload_json AS "payloadJson", event_idempotency_key AS "eventIdempotencyKey",
+        trace_id AS "traceId", status, attempts, max_attempts AS "maxAttempts"
+      FROM workflow_events_outbox
+      WHERE status IN ('pending', 'failed')
+        AND (next_retry_at IS NULL OR next_retry_at <= now())
+        AND attempts < max_attempts
+      ORDER BY created_at ASC
+      LIMIT ${batchSize}
+      FOR UPDATE SKIP LOCKED
+    `);
+    return result.rows ?? [];
+  }
+
+  async markOutboxProcessing(id: string, createdAt: string): Promise<void> {
+    await this.db.execute(sql`
+      UPDATE workflow_events_outbox
+      SET status = 'processing', attempts = attempts + 1
+      WHERE id = ${id}::uuid AND created_at = ${createdAt}::timestamptz
+    `);
+  }
+
+  async markOutboxCompleted(id: string, createdAt: string): Promise<void> {
+    await this.db.execute(sql`
+      UPDATE workflow_events_outbox
+      SET status = 'completed', completed_at = now()
+      WHERE id = ${id}::uuid AND created_at = ${createdAt}::timestamptz
+    `);
+  }
+
+  async markOutboxFailed(id: string, createdAt: string, error: string, nextRetryAt: string | null): Promise<void> {
+    await this.db.execute(sql`
+      UPDATE workflow_events_outbox
+      SET status = 'failed', error = ${error},
+          next_retry_at = ${nextRetryAt ?? null}::timestamptz
+      WHERE id = ${id}::uuid AND created_at = ${createdAt}::timestamptz
+    `);
+  }
+
+  async markOutboxDeadLetter(id: string, createdAt: string, error: string): Promise<void> {
+    await this.db.execute(sql`
+      UPDATE workflow_events_outbox
+      SET status = 'dead_letter', error = ${error}
+      WHERE id = ${id}::uuid AND created_at = ${createdAt}::timestamptz
+    `);
+  }
+
+  async resolveActiveToken(instanceId: string): Promise<{
+    nodeId: string;
+    tokenId: string;
+    entityVersion: number;
+  } | null> {
+    const rows = await this.db
+      .select({
+        activeTokens: workflowInstances.activeTokens,
+        entityVersion: workflowInstances.entityVersion,
+      })
+      .from(workflowInstances)
+      .where(eq(workflowInstances.id, instanceId))
+      .limit(1);
+
+    const row = rows[0];
+    if (!row) return null;
+
+    const tokens = (row.activeTokens ?? []) as WorkflowToken[];
+    const activeToken = tokens.find((t) => t.status === 'active');
+    if (!activeToken) return null;
+
+    return {
+      nodeId: activeToken.currentNodeId,
+      tokenId: activeToken.id,
+      entityVersion: row.entityVersion,
+    };
+  }
+
+  async lookupPublishedDefinition(orgId: string, entityType: string): Promise<{
+    definitionId: string;
+    definitionVersion: number;
+  } | null> {
+    const rows = await this.db
+      .select({
+        id: workflowDefinitions.id,
+        version: workflowDefinitions.version,
+      })
+      .from(workflowDefinitions)
+      .where(
+        and(
+          eq(workflowDefinitions.orgId, orgId),
+          eq(workflowDefinitions.entityType, entityType),
+          eq(workflowDefinitions.status, 'published'),
+          eq(workflowDefinitions.definitionKind, 'effective'),
+        )
+      )
+      .limit(1);
+
+    const row = rows[0];
+    if (!row) return null;
+
+    return {
+      definitionId: row.id,
+      definitionVersion: row.version,
+    };
+  }
+
+  async hasActiveInstance(orgId: string, entityType: string, entityId: string): Promise<boolean> {
+    const result = await this.db.execute(sql`
+      SELECT 1 FROM workflow_instances
+      WHERE org_id = ${orgId}
+        AND entity_type = ${entityType}
+        AND entity_id = ${entityId}
+        AND status IN ('running', 'paused')
+      LIMIT 1
+    `);
+    return (result.rows?.length ?? 0) > 0;
   }
 }

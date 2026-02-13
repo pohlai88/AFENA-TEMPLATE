@@ -1,6 +1,7 @@
-import type { NodeHandlerRegistry } from './nodes/types';
-import { advanceWorkflow } from './engine';
+import { advanceWorkflow, createInstance } from './engine';
+
 import type { WorkflowDbAdapter } from './engine';
+import type { NodeHandlerRegistry } from './nodes/types';
 
 /**
  * Outbox event row — shape returned by the worker poll query.
@@ -62,6 +63,22 @@ export interface WorkerDbAdapter extends WorkflowDbAdapter {
     tokenId: string;
     entityVersion: number;
   } | null>;
+
+  /**
+   * Look up the published effective definition for an entity type.
+   * Used by the worker to create new instances on entity_created events.
+   * Returns null if no published effective definition exists.
+   */
+  lookupPublishedDefinition(orgId: string, entityType: string): Promise<{
+    definitionId: string;
+    definitionVersion: number;
+  } | null>;
+
+  /**
+   * Check if a running/paused workflow instance already exists for this entity.
+   * Prevents duplicate instance creation on retry.
+   */
+  hasActiveInstance(orgId: string, entityType: string, entityId: string): Promise<boolean>;
 }
 
 /**
@@ -84,6 +101,10 @@ const DEFAULT_CONFIG: WorkerConfig = {
 
 /**
  * Process a single outbox event.
+ *
+ * Handles two distinct flows:
+ * 1. entity_created → look up published definition → create new workflow instance
+ * 2. All other events → resolve active token → advance existing instance
  */
 export async function processOutboxEvent(
   event: OutboxEventRow,
@@ -94,25 +115,11 @@ export async function processOutboxEvent(
   await db.markOutboxProcessing(event.id, event.createdAt);
 
   try {
-    // Resolve the active token for this instance
-    const token = await db.resolveActiveToken(event.instanceId);
-    if (!token) {
-      // Instance has no active token — mark completed (nothing to advance)
-      await db.markOutboxCompleted(event.id, event.createdAt);
-      return;
+    if (event.eventType === 'entity_created') {
+      await handleEntityCreated(event, db, handlers);
+    } else {
+      await handleAdvanceEvent(event, db, handlers);
     }
-
-    // Advance the workflow
-    await advanceWorkflow({
-      instanceId: event.instanceId,
-      completedNodeId: token.nodeId,
-      tokenId: token.tokenId,
-      entityVersion: token.entityVersion,
-      actorUserId: 'system', // Worker runs as system
-      traceId: event.traceId ?? undefined,
-      db,
-      handlers,
-    });
 
     // Mark as completed
     await db.markOutboxCompleted(event.id, event.createdAt);
@@ -132,6 +139,90 @@ export async function processOutboxEvent(
       await db.markOutboxFailed(event.id, event.createdAt, errorMessage, nextRetryAt);
     }
   }
+}
+
+/**
+ * Handle entity_created events: look up published definition → create instance.
+ *
+ * PRD § Integration Points: "mutate() writes outbox event in same TX →
+ * worker creates/advances instance."
+ */
+async function handleEntityCreated(
+  event: OutboxEventRow,
+  db: WorkerDbAdapter,
+  handlers: NodeHandlerRegistry,
+): Promise<void> {
+  const entityType = event.payloadJson['entityType'] as string | undefined;
+  const entityId = event.payloadJson['entityId'] as string | undefined;
+
+  if (!entityType || !entityId) {
+    // Malformed payload — nothing to do, mark completed
+    return;
+  }
+
+  // Idempotency: check if an active instance already exists for this entity
+  const alreadyExists = await db.hasActiveInstance(event.orgId, entityType, entityId);
+  if (alreadyExists) {
+    // Already has a running/paused instance — skip (idempotent)
+    return;
+  }
+
+  // Look up the published effective definition for this entity type
+  const definition = await db.lookupPublishedDefinition(event.orgId, entityType);
+  if (!definition) {
+    // No published workflow definition for this entity type — skip
+    // This is normal for entity types without workflow (e.g., companies)
+    return;
+  }
+
+  // Create a new workflow instance and advance through start node
+  const actorUserId = (event.payloadJson['actorUserId'] as string) ?? 'system';
+
+  await createInstance(
+    {
+      orgId: event.orgId,
+      definitionId: definition.definitionId,
+      definitionVersion: definition.definitionVersion,
+      entityType,
+      entityId,
+      entityVersion: event.entityVersion,
+      actorUserId,
+      ...(event.traceId ? { traceId: event.traceId } : {}),
+      contextJson: {
+        entity: event.payloadJson['entitySnapshot'] ?? {},
+      },
+    },
+    db,
+    handlers,
+  );
+}
+
+/**
+ * Handle advance events: resolve active token → advance existing instance.
+ */
+async function handleAdvanceEvent(
+  event: OutboxEventRow,
+  db: WorkerDbAdapter,
+  handlers: NodeHandlerRegistry,
+): Promise<void> {
+  // Resolve the active token for this instance
+  const token = await db.resolveActiveToken(event.instanceId);
+  if (!token) {
+    // Instance has no active token — nothing to advance
+    return;
+  }
+
+  // Advance the workflow
+  await advanceWorkflow({
+    instanceId: event.instanceId,
+    completedNodeId: token.nodeId,
+    tokenId: token.tokenId,
+    entityVersion: token.entityVersion,
+    actorUserId: 'system',
+    ...(event.traceId ? { traceId: event.traceId } : {}),
+    db,
+    handlers,
+  });
 }
 
 /**

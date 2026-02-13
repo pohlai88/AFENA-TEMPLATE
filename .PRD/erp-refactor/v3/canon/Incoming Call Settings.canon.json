@@ -1,0 +1,187 @@
+{
+  "audit": {
+    "trackChanges": true
+  },
+  "canonVersion": "1.0.0",
+  "childTables": [
+    {
+      "childDoctype": "Incoming Call Handling Schedule",
+      "parentField": "call_handling_schedule",
+      "required": true
+    }
+  ],
+  "doctypeId": "erpnext:Telephony:Incoming Call Settings",
+  "events": [
+    {
+      "event": "validate",
+      "handlers": [
+        "erpnext.support.doctype.service_level_agreement.service_level_agreement.apply",
+        "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record.check_for_running_deletion_job"
+      ],
+      "handlersParsed": [
+        {
+          "attrPath": "apply",
+          "module": "erpnext.support.doctype.service_level_agreement.service_level_agreement"
+        },
+        {
+          "attrPath": "check_for_running_deletion_job",
+          "module": "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record"
+        }
+      ]
+    }
+  ],
+  "fieldOrder": [
+    "call_routing",
+    "column_break_2",
+    "greeting_message",
+    "agent_busy_message",
+    "agent_unavailable_message",
+    "section_break_6",
+    "call_handling_schedule"
+  ],
+  "fields": [
+    {
+      "constraints": {},
+      "default": "Sequential",
+      "fieldname": "call_routing",
+      "fieldtype": "select",
+      "label": "Call Routing",
+      "optionsParsed": {
+        "choices": [
+          "Sequential",
+          "Simultaneous"
+        ],
+        "kind": "select"
+      },
+      "optionsRaw": "Sequential\nSimultaneous",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_2",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "greeting_message",
+      "fieldtype": "data",
+      "label": "Greeting Message",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "agent_busy_message",
+      "fieldtype": "data",
+      "label": "Agent Busy Message",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "agent_unavailable_message",
+      "fieldtype": "data",
+      "label": "Agent Unavailable Message",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "section_break_6",
+      "fieldtype": "layout:section",
+      "layout": {
+        "section": "section_break_6"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "childDoctype": "Incoming Call Handling Schedule",
+      "constraints": {},
+      "fieldname": "call_handling_schedule",
+      "fieldtype": "table",
+      "label": "Call Handling Schedule",
+      "layout": {
+        "section": "section_break_6"
+      },
+      "optionsParsed": {
+        "doctype": "Incoming Call Handling Schedule",
+        "kind": "child_doctype"
+      },
+      "optionsRaw": "Incoming Call Handling Schedule",
+      "permlevel": 0,
+      "requiredStatic": true,
+      "ui": {},
+      "unique": false
+    }
+  ],
+  "identity": {
+    "app": "erpnext",
+    "isSingle": false,
+    "isSubmittable": false,
+    "isTree": false,
+    "module": "Telephony",
+    "naming": {
+      "expression": "Prompt",
+      "strategy": "expression"
+    }
+  },
+  "name": "Incoming Call Settings",
+  "permissions": [
+    {
+      "actions": {
+        "create": true,
+        "delete": true,
+        "email": true,
+        "export": true,
+        "print": true,
+        "read": true,
+        "report": true,
+        "share": true,
+        "write": true
+      },
+      "permlevel": 0,
+      "role": "System Manager"
+    }
+  ],
+  "ui": {
+    "searchFields": [],
+    "showNameInGlobalSearch": false,
+    "sortField": "creation",
+    "sortOrder": "DESC"
+  },
+  "workflows": [
+    {
+      "kind": "unavailable"
+    }
+  ]
+}

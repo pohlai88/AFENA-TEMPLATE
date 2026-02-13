@@ -1,0 +1,291 @@
+{
+  "audit": {
+    "trackChanges": false
+  },
+  "canonVersion": "1.0.0",
+  "childTables": [],
+  "doctypeId": "erpnext:Accounts:Period Closing Voucher",
+  "events": [
+    {
+      "event": "validate",
+      "handlers": [
+        "erpnext.support.doctype.service_level_agreement.service_level_agreement.apply",
+        "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record.check_for_running_deletion_job"
+      ],
+      "handlersParsed": [
+        {
+          "attrPath": "apply",
+          "module": "erpnext.support.doctype.service_level_agreement.service_level_agreement"
+        },
+        {
+          "attrPath": "check_for_running_deletion_job",
+          "module": "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record"
+        }
+      ]
+    }
+  ],
+  "fieldOrder": [
+    "transaction_date",
+    "company",
+    "fiscal_year",
+    "period_start_date",
+    "period_end_date",
+    "amended_from",
+    "column_break1",
+    "closing_account_head",
+    "gle_processing_status",
+    "remarks",
+    "error_message"
+  ],
+  "fields": [
+    {
+      "constraints": {},
+      "default": "Today",
+      "fieldname": "transaction_date",
+      "fieldtype": "date",
+      "label": "Transaction Date",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "company",
+      "fieldtype": "link",
+      "label": "Company",
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Company"
+      },
+      "optionsRaw": "Company",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Company",
+        "kind": "static"
+      },
+      "requiredStatic": true,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "fiscal_year",
+      "fieldtype": "link",
+      "label": "Fiscal Year",
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Fiscal Year"
+      },
+      "optionsRaw": "Fiscal Year",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Fiscal Year",
+        "kind": "static"
+      },
+      "requiredStatic": true,
+      "ui": {
+        "inListView": true,
+        "inStandardFilter": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "period_start_date",
+      "fieldtype": "date",
+      "label": "Period Start Date",
+      "permlevel": 0,
+      "requiredStatic": true,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "period_end_date",
+      "fieldtype": "date",
+      "label": "Period End Date",
+      "permlevel": 0,
+      "requiredStatic": true,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "amended_from",
+      "fieldtype": "link",
+      "label": "Amended From",
+      "noCopy": true,
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Period Closing Voucher"
+      },
+      "optionsRaw": "Period Closing Voucher",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Period Closing Voucher",
+        "ignoreUserPermissions": true,
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break1",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "closing_account_head",
+      "fieldtype": "link",
+      "label": "Closing Account Head",
+      "layout": {
+        "column": 1
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Account"
+      },
+      "optionsRaw": "Account",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Account",
+        "kind": "static"
+      },
+      "requiredStatic": true,
+      "ui": {
+        "description": "The account head under Liability or Equity, in which Profit/Loss will be booked"
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:doc.docstatus!=0",
+      "fieldname": "gle_processing_status",
+      "fieldtype": "select",
+      "label": "GL Entry Processing Status",
+      "layout": {
+        "column": 1
+      },
+      "optionsParsed": {
+        "choices": [
+          "In Progress",
+          "Completed",
+          "Failed"
+        ],
+        "kind": "select"
+      },
+      "optionsRaw": "In Progress\nCompleted\nFailed",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "remarks",
+      "fieldtype": "small_text",
+      "label": "Remarks",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": true,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:doc.gle_processing_status=='Failed'",
+      "fieldname": "error_message",
+      "fieldtype": "text",
+      "label": "Error Message",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    }
+  ],
+  "identity": {
+    "app": "erpnext",
+    "isSingle": false,
+    "isSubmittable": true,
+    "isTree": false,
+    "module": "Accounts",
+    "naming": {
+      "seriesPrefix": "ACC-PCV-.YYYY.-.#####",
+      "strategy": "series"
+    }
+  },
+  "name": "Period Closing Voucher",
+  "permissions": [
+    {
+      "actions": {
+        "amend": true,
+        "cancel": true,
+        "create": true,
+        "delete": true,
+        "email": true,
+        "print": true,
+        "read": true,
+        "report": true,
+        "share": true,
+        "submit": true,
+        "write": true
+      },
+      "permlevel": 0,
+      "role": "Accounts Manager"
+    },
+    {
+      "actions": {
+        "amend": true,
+        "cancel": true,
+        "create": true,
+        "delete": true,
+        "email": true,
+        "print": true,
+        "read": true,
+        "report": true,
+        "share": true,
+        "submit": true,
+        "write": true
+      },
+      "permlevel": 0,
+      "role": "System Manager"
+    }
+  ],
+  "ui": {
+    "searchFields": [
+      "fiscal_year",
+      "period_start_date",
+      "period_end_date"
+    ],
+    "showNameInGlobalSearch": false,
+    "sortField": "creation",
+    "sortOrder": "DESC",
+    "titleField": "closing_account_head"
+  },
+  "workflows": [
+    {
+      "kind": "unavailable"
+    }
+  ]
+}

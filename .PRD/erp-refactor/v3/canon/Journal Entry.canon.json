@@ -1,0 +1,1545 @@
+{
+  "audit": {
+    "trackChanges": true
+  },
+  "canonVersion": "1.0.0",
+  "childTables": [
+    {
+      "childDoctype": "Journal Entry Account",
+      "parentField": "accounts",
+      "required": true
+    },
+    {
+      "childDoctype": "Tax Withholding Entry",
+      "parentField": "tax_withholding_entries",
+      "required": false
+    }
+  ],
+  "doctypeId": "erpnext:Accounts:Journal Entry",
+  "events": [
+    {
+      "event": "validate",
+      "handlers": [
+        "erpnext.support.doctype.service_level_agreement.service_level_agreement.apply",
+        "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record.check_for_running_deletion_job"
+      ],
+      "handlersParsed": [
+        {
+          "attrPath": "apply",
+          "module": "erpnext.support.doctype.service_level_agreement.service_level_agreement"
+        },
+        {
+          "attrPath": "check_for_running_deletion_job",
+          "module": "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record"
+        }
+      ]
+    }
+  ],
+  "fieldOrder": [
+    "entry_type_and_date",
+    "company",
+    "is_system_generated",
+    "title",
+    "voucher_type",
+    "naming_series",
+    "process_deferred_accounting",
+    "reversal_of",
+    "column_break1",
+    "from_template",
+    "posting_date",
+    "finance_book",
+    "apply_tds",
+    "tax_withholding_category",
+    "section_break_tcvw",
+    "for_all_stock_asset_accounts",
+    "column_break_wpau",
+    "stock_asset_account",
+    "periodic_entry_difference_account",
+    "get_balance_for_periodic_accounting",
+    "2_add_edit_gl_entries",
+    "accounts",
+    "section_break99",
+    "cheque_no",
+    "cheque_date",
+    "user_remark",
+    "column_break99",
+    "total_debit",
+    "total_credit",
+    "difference",
+    "get_balance",
+    "multi_currency",
+    "total_amount_currency",
+    "total_amount",
+    "total_amount_in_words",
+    "section_tax_withholding_entry",
+    "tax_withholding_group",
+    "ignore_tax_withholding_threshold",
+    "override_tax_withholding_entries",
+    "tax_withholding_entries",
+    "reference",
+    "clearance_date",
+    "remark",
+    "inter_company_journal_entry_reference",
+    "column_break98",
+    "bill_no",
+    "bill_date",
+    "due_date",
+    "write_off",
+    "write_off_based_on",
+    "get_outstanding_invoices",
+    "column_break_30",
+    "write_off_amount",
+    "printing_settings",
+    "pay_to_recd_from",
+    "column_break_35",
+    "letter_head",
+    "select_print_heading",
+    "addtional_info",
+    "mode_of_payment",
+    "payment_order",
+    "party_not_required",
+    "column_break3",
+    "is_opening",
+    "stock_entry",
+    "subscription_section",
+    "auto_repeat",
+    "amended_from"
+  ],
+  "fields": [
+    {
+      "constraints": {},
+      "fieldname": "entry_type_and_date",
+      "fieldtype": "layout:section",
+      "layout": {
+        "section": "entry_type_and_date"
+      },
+      "optionsParsed": {
+        "kind": "other",
+        "value": "fa fa-flag"
+      },
+      "optionsRaw": "fa fa-flag",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "company",
+      "fieldtype": "link",
+      "label": "Company",
+      "layout": {
+        "section": "entry_type_and_date"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Company"
+      },
+      "optionsRaw": "Company",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Company",
+        "kind": "static"
+      },
+      "requiredStatic": true,
+      "ui": {
+        "inStandardFilter": true,
+        "printHide": true,
+        "rememberLastSelectedValue": true,
+        "searchIndex": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "dependsOn": "eval:doc.is_system_generated == 1;",
+      "fieldname": "is_system_generated",
+      "fieldtype": "check",
+      "label": "Is System Generated",
+      "layout": {
+        "section": "entry_type_and_date"
+      },
+      "noCopy": true,
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "allowOnSubmit": true,
+      "constraints": {},
+      "fieldname": "title",
+      "fieldtype": "data",
+      "label": "Title",
+      "layout": {
+        "section": "entry_type_and_date"
+      },
+      "noCopy": true,
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "hidden": true,
+        "printHide": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "Journal Entry",
+      "fieldname": "voucher_type",
+      "fieldtype": "select",
+      "label": "Entry Type",
+      "layout": {
+        "section": "entry_type_and_date"
+      },
+      "optionsParsed": {
+        "choices": [
+          "Journal Entry",
+          "Inter Company Journal Entry",
+          "Bank Entry",
+          "Cash Entry",
+          "Credit Card Entry",
+          "Debit Note",
+          "Credit Note",
+          "Contra Entry",
+          "Excise Entry",
+          "Write Off Entry",
+          "Opening Entry",
+          "Depreciation Entry",
+          "Asset Disposal",
+          "Periodic Accounting Entry",
+          "Exchange Rate Revaluation",
+          "Exchange Gain Or Loss",
+          "Deferred Revenue",
+          "Deferred Expense"
+        ],
+        "kind": "select"
+      },
+      "optionsRaw": "Journal Entry\nInter Company Journal Entry\nBank Entry\nCash Entry\nCredit Card Entry\nDebit Note\nCredit Note\nContra Entry\nExcise Entry\nWrite Off Entry\nOpening Entry\nDepreciation Entry\nAsset Disposal\nPeriodic Accounting Entry\nExchange Rate Revaluation\nExchange Gain Or Loss\nDeferred Revenue\nDeferred Expense",
+      "permlevel": 0,
+      "requiredStatic": true,
+      "ui": {
+        "inStandardFilter": true,
+        "searchIndex": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "naming_series",
+      "fieldtype": "select",
+      "label": "Series",
+      "layout": {
+        "section": "entry_type_and_date"
+      },
+      "noCopy": true,
+      "optionsParsed": {
+        "kind": "naming_series",
+        "prefixes": [
+          "ACC-JV-.YYYY.-"
+        ]
+      },
+      "optionsRaw": "ACC-JV-.YYYY.-",
+      "permlevel": 0,
+      "requiredStatic": true,
+      "setOnlyOnce": true,
+      "ui": {
+        "printHide": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "process_deferred_accounting",
+      "fieldtype": "link",
+      "label": "Process Deferred Accounting",
+      "layout": {
+        "section": "entry_type_and_date"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Process Deferred Accounting"
+      },
+      "optionsRaw": "Process Deferred Accounting",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Process Deferred Accounting",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:doc.docstatus",
+      "fieldname": "reversal_of",
+      "fieldtype": "link",
+      "label": "Reversal Of",
+      "layout": {
+        "section": "entry_type_and_date"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Journal Entry"
+      },
+      "optionsRaw": "Journal Entry",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Journal Entry",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break1",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "entry_type_and_date"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "width": "50%"
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "from_template",
+      "fieldtype": "link",
+      "label": "From Template",
+      "layout": {
+        "column": 1,
+        "section": "entry_type_and_date"
+      },
+      "noCopy": true,
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Journal Entry Template"
+      },
+      "optionsRaw": "Journal Entry Template",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Journal Entry Template",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true,
+        "reportHide": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "posting_date",
+      "fieldtype": "date",
+      "label": "Posting Date",
+      "layout": {
+        "column": 1,
+        "section": "entry_type_and_date"
+      },
+      "noCopy": true,
+      "permlevel": 0,
+      "requiredStatic": true,
+      "ui": {
+        "searchIndex": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "finance_book",
+      "fieldtype": "link",
+      "label": "Finance Book",
+      "layout": {
+        "column": 1,
+        "section": "entry_type_and_date"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Finance Book"
+      },
+      "optionsRaw": "Finance Book",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Finance Book",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "dependsOn": "eval:['Credit Note', 'Debit Note'].includes(doc.voucher_type)",
+      "fieldname": "apply_tds",
+      "fieldtype": "check",
+      "label": "Consider for Tax Withholding ",
+      "layout": {
+        "column": 1,
+        "section": "entry_type_and_date"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:doc.apply_tds",
+      "fieldname": "tax_withholding_category",
+      "fieldtype": "link",
+      "label": "Tax Withholding Category",
+      "layout": {
+        "column": 1,
+        "section": "entry_type_and_date"
+      },
+      "mandatoryDependsOn": "eval:doc.apply_tds",
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Tax Withholding Category"
+      },
+      "optionsRaw": "Tax Withholding Category",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Tax Withholding Category",
+        "kind": "static"
+      },
+      "requiredDynamic": "eval:doc.apply_tds",
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:doc.voucher_type === \"Periodic Accounting Entry\"",
+      "fieldname": "section_break_tcvw",
+      "fieldtype": "layout:section",
+      "label": "Periodic Accounting",
+      "layout": {
+        "section": "Periodic Accounting"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "1",
+      "fieldname": "for_all_stock_asset_accounts",
+      "fieldtype": "check",
+      "label": "For All Stock Asset Accounts",
+      "layout": {
+        "section": "Periodic Accounting"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_wpau",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "Periodic Accounting"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:doc.for_all_stock_asset_accounts === 0",
+      "fieldname": "stock_asset_account",
+      "fieldtype": "link",
+      "label": "Stock Asset Account",
+      "layout": {
+        "column": 1,
+        "section": "Periodic Accounting"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Account"
+      },
+      "optionsRaw": "Account",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Account",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:doc.voucher_type === \"Periodic Accounting Entry\"",
+      "fieldname": "periodic_entry_difference_account",
+      "fieldtype": "link",
+      "label": "Periodic Entry Difference Account",
+      "layout": {
+        "column": 1,
+        "section": "Periodic Accounting"
+      },
+      "mandatoryDependsOn": "eval:doc.voucher_type === \"Periodic Accounting Entry\"",
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Account"
+      },
+      "optionsRaw": "Account",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Account",
+        "kind": "static"
+      },
+      "requiredDynamic": "eval:doc.voucher_type === \"Periodic Accounting Entry\"",
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "get_balance_for_periodic_accounting",
+      "fieldtype": "button",
+      "label": "Get Balance",
+      "layout": {
+        "column": 1,
+        "section": "Periodic Accounting"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "2_add_edit_gl_entries",
+      "fieldtype": "layout:section",
+      "layout": {
+        "section": "2_add_edit_gl_entries"
+      },
+      "optionsParsed": {
+        "kind": "other",
+        "value": "fa fa-table"
+      },
+      "optionsRaw": "fa fa-table",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "childDoctype": "Journal Entry Account",
+      "constraints": {},
+      "fieldname": "accounts",
+      "fieldtype": "table",
+      "label": "Accounting Entries",
+      "layout": {
+        "section": "2_add_edit_gl_entries"
+      },
+      "optionsParsed": {
+        "doctype": "Journal Entry Account",
+        "kind": "child_doctype"
+      },
+      "optionsRaw": "Journal Entry Account",
+      "permlevel": 0,
+      "requiredStatic": true,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "section_break99",
+      "fieldtype": "layout:section",
+      "layout": {
+        "section": "section_break99"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "cheque_no",
+      "fieldtype": "data",
+      "label": "Reference Number",
+      "layout": {
+        "section": "section_break99"
+      },
+      "mandatoryDependsOn": "eval:doc.voucher_type == \"Bank Entry\"",
+      "noCopy": true,
+      "permlevel": 0,
+      "requiredDynamic": "eval:doc.voucher_type == \"Bank Entry\"",
+      "requiredStatic": false,
+      "ui": {
+        "inGlobalSearch": true,
+        "inListView": true,
+        "searchIndex": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "cheque_date",
+      "fieldtype": "date",
+      "label": "Reference Date",
+      "layout": {
+        "section": "section_break99"
+      },
+      "mandatoryDependsOn": "eval:doc.voucher_type == \"Bank Entry\"",
+      "noCopy": true,
+      "permlevel": 0,
+      "requiredDynamic": "eval:doc.voucher_type == \"Bank Entry\"",
+      "requiredStatic": false,
+      "ui": {
+        "searchIndex": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "user_remark",
+      "fieldtype": "small_text",
+      "label": "User Remark",
+      "layout": {
+        "section": "section_break99"
+      },
+      "noCopy": true,
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break99",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "section_break99"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "total_debit",
+      "fieldtype": "currency",
+      "label": "Total Debit",
+      "layout": {
+        "column": 1,
+        "section": "section_break99"
+      },
+      "noCopy": true,
+      "optionsParsed": {
+        "field": "Company:company:default_currency",
+        "kind": "currency_field"
+      },
+      "optionsRaw": "Company:company:default_currency",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "inListView": true,
+        "printHide": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "total_credit",
+      "fieldtype": "currency",
+      "label": "Total Credit",
+      "layout": {
+        "column": 1,
+        "section": "section_break99"
+      },
+      "noCopy": true,
+      "optionsParsed": {
+        "field": "Company:company:default_currency",
+        "kind": "currency_field"
+      },
+      "optionsRaw": "Company:company:default_currency",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "difference",
+      "fieldname": "difference",
+      "fieldtype": "currency",
+      "label": "Difference (Dr - Cr)",
+      "layout": {
+        "column": 1,
+        "section": "section_break99"
+      },
+      "noCopy": true,
+      "optionsParsed": {
+        "field": "Company:company:default_currency",
+        "kind": "currency_field"
+      },
+      "optionsRaw": "Company:company:default_currency",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "difference",
+      "fieldname": "get_balance",
+      "fieldtype": "button",
+      "label": "Make Difference Entry",
+      "layout": {
+        "column": 1,
+        "section": "section_break99"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "multi_currency",
+      "fieldtype": "check",
+      "label": "Multi Currency",
+      "layout": {
+        "column": 1,
+        "section": "section_break99"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "total_amount_currency",
+      "fieldtype": "link",
+      "label": "Total Amount Currency",
+      "layout": {
+        "column": 1,
+        "section": "section_break99"
+      },
+      "noCopy": true,
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Currency"
+      },
+      "optionsRaw": "Currency",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Currency",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "hidden": true,
+        "printHide": true,
+        "readOnly": true,
+        "reportHide": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "total_amount",
+      "fieldtype": "currency",
+      "label": "Total Amount",
+      "layout": {
+        "column": 1,
+        "section": "section_break99"
+      },
+      "noCopy": true,
+      "optionsParsed": {
+        "field": "total_amount_currency",
+        "kind": "currency_field"
+      },
+      "optionsRaw": "total_amount_currency",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "bold": true,
+        "hidden": true,
+        "printHide": true,
+        "readOnly": true,
+        "reportHide": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "total_amount_in_words",
+      "fieldtype": "data",
+      "label": "Total Amount in Words",
+      "layout": {
+        "column": 1,
+        "section": "section_break99"
+      },
+      "noCopy": true,
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "hidden": true,
+        "printHide": true,
+        "readOnly": true,
+        "reportHide": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval: doc.apply_tds",
+      "fieldname": "section_tax_withholding_entry",
+      "fieldtype": "layout:section",
+      "label": "Tax Withholding Entry",
+      "layout": {
+        "section": "Tax Withholding Entry"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "collapsible": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "tax_withholding_group",
+      "fieldtype": "link",
+      "label": "Tax Withholding Group",
+      "layout": {
+        "section": "Tax Withholding Entry"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Tax Withholding Group"
+      },
+      "optionsRaw": "Tax Withholding Group",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Tax Withholding Group",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "ignore_tax_withholding_threshold",
+      "fieldtype": "check",
+      "label": "Ignore Tax Withholding Threshold",
+      "layout": {
+        "section": "Tax Withholding Entry"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "override_tax_withholding_entries",
+      "fieldtype": "check",
+      "label": "Edit Tax Withholding Entries",
+      "layout": {
+        "section": "Tax Withholding Entry"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "childDoctype": "Tax Withholding Entry",
+      "constraints": {},
+      "fieldname": "tax_withholding_entries",
+      "fieldtype": "table",
+      "label": "Tax Withholding Entries",
+      "layout": {
+        "section": "Tax Withholding Entry"
+      },
+      "optionsParsed": {
+        "doctype": "Tax Withholding Entry",
+        "kind": "child_doctype"
+      },
+      "optionsRaw": "Tax Withholding Entry",
+      "permlevel": 0,
+      "readOnlyDependsOn": "eval: !doc.override_tax_withholding_entries",
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "reference",
+      "fieldtype": "layout:section",
+      "label": "Reference",
+      "layout": {
+        "section": "Reference"
+      },
+      "optionsParsed": {
+        "kind": "other",
+        "value": "fa fa-pushpin"
+      },
+      "optionsRaw": "fa fa-pushpin",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "collapsible": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "clearance_date",
+      "fieldtype": "date",
+      "label": "Clearance Date",
+      "layout": {
+        "section": "Reference"
+      },
+      "noCopy": true,
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true,
+        "searchIndex": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "remark",
+      "fieldtype": "small_text",
+      "label": "Remark",
+      "layout": {
+        "section": "Reference"
+      },
+      "noCopy": true,
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "inGlobalSearch": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:doc.voucher_type== \"Inter Company Journal Entry\"",
+      "fieldname": "inter_company_journal_entry_reference",
+      "fieldtype": "link",
+      "label": "Inter Company Journal Entry Reference",
+      "layout": {
+        "section": "Reference"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Journal Entry"
+      },
+      "optionsRaw": "Journal Entry",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Journal Entry",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break98",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "Reference"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "bill_no",
+      "fieldtype": "data",
+      "label": "Bill No",
+      "layout": {
+        "column": 1,
+        "section": "Reference"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "bill_date",
+      "fieldtype": "date",
+      "label": "Bill Date",
+      "layout": {
+        "column": 1,
+        "section": "Reference"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "due_date",
+      "fieldtype": "date",
+      "label": "Due Date",
+      "layout": {
+        "column": 1,
+        "section": "Reference"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:doc.voucher_type == 'Write Off Entry'",
+      "fieldname": "write_off",
+      "fieldtype": "layout:section",
+      "label": "Write Off",
+      "layout": {
+        "section": "Write Off"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "collapsible": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "Accounts Receivable",
+      "dependsOn": "eval:doc.voucher_type == 'Write Off Entry'",
+      "fieldname": "write_off_based_on",
+      "fieldtype": "select",
+      "label": "Write Off Based On",
+      "layout": {
+        "section": "Write Off"
+      },
+      "optionsParsed": {
+        "choices": [
+          "Accounts Receivable",
+          "Accounts Payable"
+        ],
+        "kind": "select"
+      },
+      "optionsRaw": "Accounts Receivable\nAccounts Payable",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true,
+        "reportHide": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:doc.voucher_type == 'Write Off Entry'",
+      "fieldname": "get_outstanding_invoices",
+      "fieldtype": "button",
+      "label": "Get Outstanding Invoices",
+      "layout": {
+        "section": "Write Off"
+      },
+      "optionsParsed": {
+        "kind": "other",
+        "value": "get_outstanding_invoices"
+      },
+      "optionsRaw": "get_outstanding_invoices",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_30",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "Write Off"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:doc.voucher_type == 'Write Off Entry'",
+      "fieldname": "write_off_amount",
+      "fieldtype": "currency",
+      "label": "Write Off Amount",
+      "layout": {
+        "column": 1,
+        "section": "Write Off"
+      },
+      "optionsParsed": {
+        "field": "Company:company:default_currency",
+        "kind": "currency_field"
+      },
+      "optionsRaw": "Company:company:default_currency",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true,
+        "reportHide": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "printing_settings",
+      "fieldtype": "layout:section",
+      "label": "Printing Settings",
+      "layout": {
+        "section": "Printing Settings"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "collapsible": true
+      },
+      "unique": false
+    },
+    {
+      "allowOnSubmit": true,
+      "constraints": {},
+      "fieldname": "pay_to_recd_from",
+      "fieldtype": "data",
+      "label": "Pay To / Recd From",
+      "layout": {
+        "section": "Printing Settings"
+      },
+      "noCopy": true,
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "reportHide": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_35",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "Printing Settings"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "allowOnSubmit": true,
+      "constraints": {},
+      "fieldname": "letter_head",
+      "fieldtype": "link",
+      "label": "Letter Head",
+      "layout": {
+        "column": 1,
+        "section": "Printing Settings"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Letter Head"
+      },
+      "optionsRaw": "Letter Head",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Letter Head",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "allowOnSubmit": true,
+      "constraints": {},
+      "fieldname": "select_print_heading",
+      "fieldtype": "link",
+      "label": "Print Heading",
+      "layout": {
+        "column": 1,
+        "section": "Printing Settings"
+      },
+      "noCopy": true,
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Print Heading"
+      },
+      "optionsRaw": "Print Heading",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Print Heading",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true,
+        "reportHide": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "addtional_info",
+      "fieldtype": "layout:section",
+      "label": "More Information",
+      "layout": {
+        "section": "More Information"
+      },
+      "optionsParsed": {
+        "kind": "other",
+        "value": "fa fa-file-text"
+      },
+      "optionsRaw": "fa fa-file-text",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "collapsible": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "mode_of_payment",
+      "fieldtype": "link",
+      "label": "Mode of Payment",
+      "layout": {
+        "section": "More Information"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Mode of Payment"
+      },
+      "optionsRaw": "Mode of Payment",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Mode of Payment",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "payment_order",
+      "fieldtype": "link",
+      "label": "Payment Order",
+      "layout": {
+        "section": "More Information"
+      },
+      "noCopy": true,
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Payment Order"
+      },
+      "optionsRaw": "Payment Order",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Payment Order",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "party_not_required",
+      "fieldtype": "check",
+      "label": "Party Not Required",
+      "layout": {
+        "section": "More Information"
+      },
+      "noCopy": true,
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "hidden": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break3",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "More Information"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "width": "50%"
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "No",
+      "fieldname": "is_opening",
+      "fieldtype": "select",
+      "label": "Is Opening",
+      "layout": {
+        "column": 1,
+        "section": "More Information"
+      },
+      "optionsParsed": {
+        "choices": [
+          "No",
+          "Yes"
+        ],
+        "kind": "select"
+      },
+      "optionsRaw": "No\nYes",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true,
+        "searchIndex": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:in_list([\"Credit Note\", \"Debit Note\"], doc.voucher_type)",
+      "fieldname": "stock_entry",
+      "fieldtype": "link",
+      "label": "Stock Entry",
+      "layout": {
+        "column": 1,
+        "section": "More Information"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Stock Entry"
+      },
+      "optionsRaw": "Stock Entry",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Stock Entry",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "subscription_section",
+      "fieldtype": "layout:section",
+      "label": "Subscription Section",
+      "layout": {
+        "section": "Subscription Section"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "allowOnSubmit": true,
+      "constraints": {},
+      "fieldname": "auto_repeat",
+      "fieldtype": "link",
+      "label": "Auto Repeat",
+      "layout": {
+        "section": "Subscription Section"
+      },
+      "noCopy": true,
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Auto Repeat"
+      },
+      "optionsRaw": "Auto Repeat",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Auto Repeat",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "amended_from",
+      "fieldtype": "link",
+      "label": "Amended From",
+      "layout": {
+        "section": "Subscription Section"
+      },
+      "noCopy": true,
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Journal Entry"
+      },
+      "optionsRaw": "Journal Entry",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Journal Entry",
+        "ignoreUserPermissions": true,
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true,
+        "readOnly": true
+      },
+      "unique": false
+    }
+  ],
+  "identity": {
+    "app": "erpnext",
+    "isSingle": false,
+    "isSubmittable": true,
+    "isTree": false,
+    "module": "Accounts",
+    "naming": {
+      "seriesField": "naming_series",
+      "seriesPrefix": "ACC-JV-.YYYY.-",
+      "strategy": "series"
+    }
+  },
+  "name": "Journal Entry",
+  "permissions": [
+    {
+      "actions": {
+        "amend": true,
+        "cancel": true,
+        "create": true,
+        "delete": true,
+        "email": true,
+        "export": true,
+        "import": true,
+        "print": true,
+        "read": true,
+        "report": true,
+        "share": true,
+        "submit": true,
+        "write": true
+      },
+      "permlevel": 0,
+      "role": "Accounts Manager"
+    },
+    {
+      "actions": {
+        "amend": true,
+        "cancel": true,
+        "create": true,
+        "delete": true,
+        "email": true,
+        "print": true,
+        "read": true,
+        "report": true,
+        "share": true,
+        "submit": true,
+        "write": true
+      },
+      "permlevel": 0,
+      "role": "Accounts User"
+    },
+    {
+      "actions": {
+        "email": true,
+        "print": true,
+        "read": true,
+        "report": true
+      },
+      "permlevel": 0,
+      "role": "Auditor"
+    }
+  ],
+  "ui": {
+    "searchFields": [
+      "voucher_type",
+      "posting_date",
+      "due_date",
+      "cheque_no"
+    ],
+    "showNameInGlobalSearch": false,
+    "sortField": "creation",
+    "sortOrder": "DESC",
+    "titleField": "title"
+  },
+  "workflows": [
+    {
+      "kind": "unavailable"
+    }
+  ]
+}

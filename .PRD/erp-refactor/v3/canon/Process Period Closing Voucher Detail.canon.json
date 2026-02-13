@@ -1,0 +1,127 @@
+{
+  "audit": {
+    "trackChanges": false
+  },
+  "canonVersion": "1.0.0",
+  "childTables": [],
+  "doctypeId": "erpnext:Accounts:Process Period Closing Voucher Detail",
+  "events": [
+    {
+      "event": "validate",
+      "handlers": [
+        "erpnext.support.doctype.service_level_agreement.service_level_agreement.apply",
+        "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record.check_for_running_deletion_job"
+      ],
+      "handlersParsed": [
+        {
+          "attrPath": "apply",
+          "module": "erpnext.support.doctype.service_level_agreement.service_level_agreement"
+        },
+        {
+          "attrPath": "check_for_running_deletion_job",
+          "module": "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record"
+        }
+      ]
+    }
+  ],
+  "fieldOrder": [
+    "processing_date",
+    "report_type",
+    "status",
+    "closing_balance"
+  ],
+  "fields": [
+    {
+      "constraints": {},
+      "fieldname": "processing_date",
+      "fieldtype": "date",
+      "label": "Processing Date",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "Profit and Loss",
+      "fieldname": "report_type",
+      "fieldtype": "select",
+      "label": "Report Type",
+      "optionsParsed": {
+        "choices": [
+          "Profit and Loss",
+          "Balance Sheet"
+        ],
+        "kind": "select"
+      },
+      "optionsRaw": "Profit and Loss\nBalance Sheet",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "Queued",
+      "fieldname": "status",
+      "fieldtype": "select",
+      "label": "Status",
+      "optionsParsed": {
+        "choices": [
+          "Queued",
+          "Running",
+          "Paused",
+          "Completed",
+          "Cancelled"
+        ],
+        "kind": "select"
+      },
+      "optionsRaw": "Queued\nRunning\nPaused\nCompleted\nCancelled",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "closing_balance",
+      "fieldtype": "json",
+      "label": "Closing Balance",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    }
+  ],
+  "identity": {
+    "app": "erpnext",
+    "isSingle": false,
+    "isSubmittable": false,
+    "isTree": false,
+    "module": "Accounts",
+    "naming": {
+      "strategy": "hash"
+    }
+  },
+  "name": "Process Period Closing Voucher Detail",
+  "permissions": [],
+  "ui": {
+    "searchFields": [],
+    "showNameInGlobalSearch": false,
+    "sortField": "creation",
+    "sortOrder": "DESC"
+  },
+  "workflows": [
+    {
+      "kind": "unavailable"
+    }
+  ]
+}

@@ -1,0 +1,268 @@
+{
+  "audit": {
+    "trackChanges": true
+  },
+  "canonVersion": "1.0.0",
+  "childTables": [],
+  "doctypeId": "erpnext:Regional:Import Supplier Invoice",
+  "events": [
+    {
+      "event": "validate",
+      "handlers": [
+        "erpnext.support.doctype.service_level_agreement.service_level_agreement.apply",
+        "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record.check_for_running_deletion_job"
+      ],
+      "handlersParsed": [
+        {
+          "attrPath": "apply",
+          "module": "erpnext.support.doctype.service_level_agreement.service_level_agreement"
+        },
+        {
+          "attrPath": "check_for_running_deletion_job",
+          "module": "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record"
+        }
+      ]
+    }
+  ],
+  "fieldOrder": [
+    "invoice_series",
+    "company",
+    "item_code",
+    "column_break_5",
+    "supplier_group",
+    "tax_account",
+    "default_buying_price_list",
+    "upload_xml_invoices_section",
+    "zip_file",
+    "import_invoices",
+    "status"
+  ],
+  "fields": [
+    {
+      "constraints": {},
+      "fieldname": "invoice_series",
+      "fieldtype": "select",
+      "label": "Invoice Series",
+      "optionsParsed": {
+        "choices": [
+          "ACC-PINV-.YYYY.-"
+        ],
+        "kind": "select"
+      },
+      "optionsRaw": "ACC-PINV-.YYYY.-",
+      "permlevel": 0,
+      "requiredStatic": true,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "company",
+      "fieldtype": "link",
+      "label": "Company",
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Company"
+      },
+      "optionsRaw": "Company",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Company",
+        "kind": "static"
+      },
+      "requiredStatic": true,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "item_code",
+      "fieldtype": "link",
+      "label": "Item Code",
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Item"
+      },
+      "optionsRaw": "Item",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Item",
+        "kind": "static"
+      },
+      "requiredStatic": true,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_5",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "supplier_group",
+      "fieldtype": "link",
+      "label": "Supplier Group",
+      "layout": {
+        "column": 1
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Supplier Group"
+      },
+      "optionsRaw": "Supplier Group",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Supplier Group",
+        "kind": "static"
+      },
+      "requiredStatic": true,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "tax_account",
+      "fieldtype": "link",
+      "label": "Tax Account",
+      "layout": {
+        "column": 1
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Account"
+      },
+      "optionsRaw": "Account",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Account",
+        "kind": "static"
+      },
+      "requiredStatic": true,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "default_buying_price_list",
+      "fieldtype": "link",
+      "label": "Default Buying Price List",
+      "layout": {
+        "column": 1
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Price List"
+      },
+      "optionsRaw": "Price List",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Price List",
+        "kind": "static"
+      },
+      "requiredStatic": true,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:!doc.__islocal",
+      "fieldname": "upload_xml_invoices_section",
+      "fieldtype": "layout:section",
+      "label": "Upload XML Invoices",
+      "layout": {
+        "section": "Upload XML Invoices"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "zip_file",
+      "fieldtype": "attach",
+      "label": "Zip File",
+      "layout": {
+        "section": "Upload XML Invoices"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "import_invoices",
+      "fieldtype": "button",
+      "label": "Import Invoices",
+      "layout": {
+        "section": "Upload XML Invoices"
+      },
+      "optionsParsed": {
+        "kind": "other",
+        "value": "process_file_data"
+      },
+      "optionsRaw": "process_file_data",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "description": "Click on Import Invoices button once the zip file has been attached to the document. Any errors related to processing will be shown in the Error Log."
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "status",
+      "fieldtype": "data",
+      "label": "Status",
+      "layout": {
+        "section": "Upload XML Invoices"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    }
+  ],
+  "identity": {
+    "app": "erpnext",
+    "isSingle": false,
+    "isSubmittable": false,
+    "isTree": false,
+    "module": "Regional",
+    "naming": {
+      "strategy": "hash"
+    }
+  },
+  "name": "Import Supplier Invoice",
+  "permissions": [],
+  "ui": {
+    "searchFields": [],
+    "showNameInGlobalSearch": false,
+    "sortField": "creation",
+    "sortOrder": "DESC"
+  },
+  "workflows": [
+    {
+      "kind": "unavailable"
+    }
+  ]
+}

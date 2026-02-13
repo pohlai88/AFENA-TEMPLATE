@@ -8,8 +8,8 @@ export const usersRelations = relations(users, ({ many }) => ({
 }));
 
 export const r2FilesRelations = relations(r2Files, ({ one }) => ({
-  user: one(users, {
-    fields: [r2Files.userId],
+  uploader: one(users, {
+    fields: [r2Files.uploadedBy],
     references: [users.userId],
   }),
 }));

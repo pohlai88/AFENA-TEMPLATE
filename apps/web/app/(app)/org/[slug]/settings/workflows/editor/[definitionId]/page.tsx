@@ -5,7 +5,7 @@ import { GitBranch } from 'lucide-react';
 
 import { PageHeader } from '../../../../_components/crud/client/page-header';
 import { getOrgContext } from '../../../../_server/org-context_server';
-import { fetchWorkflowDefinition } from '../../_server/workflows.query_server';
+import { fetchWorkflowDefinition, fetchDefinitionVersions } from '../../_server/workflows.query_server';
 
 import { EditorShell } from './editor-shell';
 
@@ -19,7 +19,6 @@ export default async function WorkflowEditorPage({
   if (!ctx) notFound();
 
   const definition = await fetchWorkflowDefinition(definitionId);
-
   if (!definition) {
     return (
       <div className="space-y-6">
@@ -50,6 +49,17 @@ export default async function WorkflowEditorPage({
   const edgesJson = (defRow['edges_json'] ?? defRow['edgesJson'] ?? []) as unknown[];
   const slotsJson = (defRow['slots_json'] ?? defRow['slotsJson'] ?? []) as unknown[];
 
+  const versionRows = await fetchDefinitionVersions(entityType, name);
+  const versions = versionRows.map((v) => ({
+    id: v.id,
+    version: v.version,
+    status: v.status as 'draft' | 'published' | 'archived',
+    name: v.name,
+    compiledHash: v.compiledHash,
+    createdAt: v.createdAt,
+    updatedAt: v.updatedAt,
+  }));
+
   return (
     <div className="flex h-[calc(100vh-4rem)] flex-col">
       <div className="shrink-0 border-b px-6 py-3">
@@ -66,11 +76,14 @@ export default async function WorkflowEditorPage({
 
       <EditorShell
         definitionId={definitionId}
+        name={name}
+        entityType={entityType}
         version={version}
         status={status}
         nodesJson={nodesJson}
         edgesJson={edgesJson}
         slotsJson={slotsJson}
+        versions={versions}
       />
     </div>
   );

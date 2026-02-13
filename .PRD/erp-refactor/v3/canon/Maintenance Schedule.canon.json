@@ -1,0 +1,597 @@
+{
+  "audit": {
+    "trackChanges": false
+  },
+  "canonVersion": "1.0.0",
+  "childTables": [
+    {
+      "childDoctype": "Maintenance Schedule Item",
+      "parentField": "items",
+      "required": true
+    },
+    {
+      "childDoctype": "Maintenance Schedule Detail",
+      "parentField": "schedules",
+      "required": false
+    }
+  ],
+  "doctypeId": "erpnext:Maintenance:Maintenance Schedule",
+  "events": [
+    {
+      "event": "validate",
+      "handlers": [
+        "erpnext.support.doctype.service_level_agreement.service_level_agreement.apply",
+        "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record.check_for_running_deletion_job"
+      ],
+      "handlersParsed": [
+        {
+          "attrPath": "apply",
+          "module": "erpnext.support.doctype.service_level_agreement.service_level_agreement"
+        },
+        {
+          "attrPath": "check_for_running_deletion_job",
+          "module": "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record"
+        }
+      ]
+    }
+  ],
+  "fieldOrder": [
+    "customer_details",
+    "naming_series",
+    "customer",
+    "column_break0",
+    "status",
+    "transaction_date",
+    "items_section",
+    "items",
+    "schedule",
+    "generate_schedule",
+    "schedules",
+    "contact_info",
+    "customer_name",
+    "contact_person",
+    "contact_mobile",
+    "contact_email",
+    "contact_display",
+    "column_break_17",
+    "customer_address",
+    "address_display",
+    "territory",
+    "customer_group",
+    "company",
+    "amended_from"
+  ],
+  "fields": [
+    {
+      "constraints": {},
+      "fieldname": "customer_details",
+      "fieldtype": "layout:section",
+      "layout": {
+        "section": "customer_details"
+      },
+      "optionsParsed": {
+        "kind": "other",
+        "value": "fa fa-user"
+      },
+      "optionsRaw": "fa fa-user",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "naming_series",
+      "fieldtype": "select",
+      "label": "Series",
+      "layout": {
+        "section": "customer_details"
+      },
+      "noCopy": true,
+      "optionsParsed": {
+        "kind": "naming_series",
+        "prefixes": [
+          "MAT-MSH-.YYYY.-"
+        ]
+      },
+      "optionsRaw": "MAT-MSH-.YYYY.-",
+      "permlevel": 0,
+      "requiredStatic": true,
+      "setOnlyOnce": true,
+      "ui": {
+        "printHide": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "customer",
+      "fieldtype": "link",
+      "label": "Customer",
+      "layout": {
+        "section": "customer_details"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Customer"
+      },
+      "optionsRaw": "Customer",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Customer",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "inStandardFilter": true,
+        "printHide": true,
+        "searchIndex": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break0",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "customer_details"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "Draft",
+      "fieldname": "status",
+      "fieldtype": "select",
+      "label": "Status",
+      "layout": {
+        "column": 1,
+        "section": "customer_details"
+      },
+      "noCopy": true,
+      "optionsParsed": {
+        "choices": [
+          "Draft",
+          "Submitted",
+          "Cancelled"
+        ],
+        "kind": "select"
+      },
+      "optionsRaw": "\nDraft\nSubmitted\nCancelled",
+      "permlevel": 0,
+      "requiredStatic": true,
+      "ui": {
+        "inStandardFilter": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "transaction_date",
+      "fieldtype": "date",
+      "label": "Transaction Date",
+      "layout": {
+        "column": 1,
+        "section": "customer_details"
+      },
+      "permlevel": 0,
+      "requiredStatic": true,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "items_section",
+      "fieldtype": "layout:section",
+      "layout": {
+        "section": "items_section"
+      },
+      "optionsParsed": {
+        "kind": "other",
+        "value": "fa fa-shopping-cart"
+      },
+      "optionsRaw": "fa fa-shopping-cart",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "childDoctype": "Maintenance Schedule Item",
+      "constraints": {},
+      "fieldname": "items",
+      "fieldtype": "table",
+      "label": "Items",
+      "layout": {
+        "section": "items_section"
+      },
+      "optionsParsed": {
+        "doctype": "Maintenance Schedule Item",
+        "kind": "child_doctype"
+      },
+      "optionsRaw": "Maintenance Schedule Item",
+      "permlevel": 0,
+      "requiredStatic": true,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "schedule",
+      "fieldtype": "layout:section",
+      "label": "Schedule",
+      "layout": {
+        "section": "Schedule"
+      },
+      "optionsParsed": {
+        "kind": "other",
+        "value": "fa fa-time"
+      },
+      "optionsRaw": "fa fa-time",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "generate_schedule",
+      "fieldtype": "button",
+      "label": "Generate Schedule",
+      "layout": {
+        "section": "Schedule"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "childDoctype": "Maintenance Schedule Detail",
+      "constraints": {},
+      "fieldname": "schedules",
+      "fieldtype": "table",
+      "label": "Schedules",
+      "layout": {
+        "section": "Schedule"
+      },
+      "optionsParsed": {
+        "doctype": "Maintenance Schedule Detail",
+        "kind": "child_doctype"
+      },
+      "optionsRaw": "Maintenance Schedule Detail",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "contact_info",
+      "fieldtype": "layout:section",
+      "label": "Contact Info",
+      "layout": {
+        "section": "Contact Info"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "customer",
+      "fieldname": "customer_name",
+      "fieldtype": "data",
+      "label": "Customer Name",
+      "layout": {
+        "section": "Contact Info"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "bold": true,
+        "inGlobalSearch": true,
+        "inListView": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "customer",
+      "fieldname": "contact_person",
+      "fieldtype": "link",
+      "label": "Contact Person",
+      "layout": {
+        "section": "Contact Info"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Contact"
+      },
+      "optionsRaw": "Contact",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Contact",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "customer",
+      "fieldname": "contact_mobile",
+      "fieldtype": "data:phone",
+      "label": "Mobile No",
+      "layout": {
+        "section": "Contact Info"
+      },
+      "optionsParsed": {
+        "format": "Phone",
+        "kind": "data_format"
+      },
+      "optionsRaw": "Phone",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "hidden": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "customer",
+      "fieldname": "contact_email",
+      "fieldtype": "data:email",
+      "label": "Contact Email",
+      "layout": {
+        "section": "Contact Info"
+      },
+      "optionsParsed": {
+        "format": "Email",
+        "kind": "data_format"
+      },
+      "optionsRaw": "Email",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "hidden": true,
+        "printHide": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "contact_display",
+      "fieldtype": "small_text",
+      "label": "Contact",
+      "layout": {
+        "section": "Contact Info"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "hidden": true,
+        "inGlobalSearch": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_17",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "Contact Info"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "customer",
+      "fieldname": "customer_address",
+      "fieldtype": "link",
+      "label": "Customer Address",
+      "layout": {
+        "column": 1,
+        "section": "Contact Info"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Address"
+      },
+      "optionsRaw": "Address",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Address",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "address_display",
+      "fieldtype": "text_editor",
+      "label": "Address",
+      "layout": {
+        "column": 1,
+        "section": "Contact Info"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "hidden": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "customer",
+      "fieldname": "territory",
+      "fieldtype": "link",
+      "label": "Territory",
+      "layout": {
+        "column": 1,
+        "section": "Contact Info"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Territory"
+      },
+      "optionsRaw": "Territory",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Territory",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "customer",
+      "fieldname": "customer_group",
+      "fieldtype": "link",
+      "label": "Customer Group",
+      "layout": {
+        "column": 1,
+        "section": "Contact Info"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Customer Group"
+      },
+      "optionsRaw": "Customer Group",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Customer Group",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "company",
+      "fieldtype": "link",
+      "label": "Company",
+      "layout": {
+        "column": 1,
+        "section": "Contact Info"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Company"
+      },
+      "optionsRaw": "Company",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Company",
+        "kind": "static"
+      },
+      "requiredStatic": true,
+      "ui": {
+        "rememberLastSelectedValue": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "amended_from",
+      "fieldtype": "link",
+      "label": "Amended From",
+      "layout": {
+        "column": 1,
+        "section": "Contact Info"
+      },
+      "noCopy": true,
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Maintenance Schedule"
+      },
+      "optionsRaw": "Maintenance Schedule",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Maintenance Schedule",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true,
+        "readOnly": true
+      },
+      "unique": false
+    }
+  ],
+  "identity": {
+    "app": "erpnext",
+    "isSingle": false,
+    "isSubmittable": true,
+    "isTree": false,
+    "module": "Maintenance",
+    "naming": {
+      "seriesField": "naming_series",
+      "seriesPrefix": "MAT-MSH-.YYYY.-",
+      "strategy": "series"
+    }
+  },
+  "name": "Maintenance Schedule",
+  "permissions": [
+    {
+      "actions": {
+        "amend": true,
+        "cancel": true,
+        "create": true,
+        "delete": true,
+        "email": true,
+        "print": true,
+        "read": true,
+        "report": true,
+        "share": true,
+        "submit": true,
+        "write": true
+      },
+      "permlevel": 0,
+      "role": "Maintenance Manager"
+    }
+  ],
+  "ui": {
+    "searchFields": [
+      "status",
+      "customer",
+      "customer_name"
+    ],
+    "showNameInGlobalSearch": false,
+    "sortField": "creation",
+    "sortOrder": "DESC",
+    "timelineField": "customer"
+  },
+  "workflows": [
+    {
+      "kind": "unavailable"
+    }
+  ]
+}

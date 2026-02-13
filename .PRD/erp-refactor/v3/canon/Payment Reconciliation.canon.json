@@ -1,0 +1,661 @@
+{
+  "audit": {
+    "trackChanges": false
+  },
+  "canonVersion": "1.0.0",
+  "childTables": [
+    {
+      "childDoctype": "Payment Reconciliation Allocation",
+      "parentField": "allocation",
+      "required": false
+    },
+    {
+      "childDoctype": "Payment Reconciliation Invoice",
+      "parentField": "invoices",
+      "required": false
+    },
+    {
+      "childDoctype": "Payment Reconciliation Payment",
+      "parentField": "payments",
+      "required": false
+    }
+  ],
+  "doctypeId": "erpnext:Accounts:Payment Reconciliation",
+  "events": [
+    {
+      "event": "validate",
+      "handlers": [
+        "erpnext.support.doctype.service_level_agreement.service_level_agreement.apply",
+        "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record.check_for_running_deletion_job"
+      ],
+      "handlersParsed": [
+        {
+          "attrPath": "apply",
+          "module": "erpnext.support.doctype.service_level_agreement.service_level_agreement"
+        },
+        {
+          "attrPath": "check_for_running_deletion_job",
+          "module": "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record"
+        }
+      ]
+    }
+  ],
+  "fieldOrder": [
+    "company",
+    "party_type",
+    "column_break_4",
+    "party",
+    "receivable_payable_account",
+    "default_advance_account",
+    "col_break1",
+    "from_invoice_date",
+    "from_payment_date",
+    "minimum_invoice_amount",
+    "minimum_payment_amount",
+    "column_break_11",
+    "to_invoice_date",
+    "to_payment_date",
+    "maximum_invoice_amount",
+    "maximum_payment_amount",
+    "column_break_13",
+    "invoice_limit",
+    "payment_limit",
+    "bank_cash_account",
+    "accounting_dimensions_section",
+    "cost_center",
+    "dimension_col_break",
+    "project",
+    "sec_break1",
+    "invoice_name",
+    "invoices",
+    "column_break_15",
+    "payment_name",
+    "payments",
+    "sec_break2",
+    "allocation"
+  ],
+  "fields": [
+    {
+      "constraints": {},
+      "fieldname": "company",
+      "fieldtype": "link",
+      "label": "Company",
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Company"
+      },
+      "optionsRaw": "Company",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Company",
+        "ignoreUserPermissions": true,
+        "kind": "static"
+      },
+      "requiredStatic": true,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "party_type",
+      "fieldtype": "link",
+      "label": "Party Type",
+      "optionsParsed": {
+        "kind": "link",
+        "target": "DocType"
+      },
+      "optionsRaw": "DocType",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "DocType",
+        "kind": "static"
+      },
+      "requiredStatic": true,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_4",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:doc.party_type",
+      "fieldname": "party",
+      "fieldtype": "dynamic_link",
+      "label": "Party",
+      "layout": {
+        "column": 1
+      },
+      "optionsRaw": "party_type",
+      "permlevel": 0,
+      "ref": {
+        "doctypeField": "party_type",
+        "kind": "dynamic"
+      },
+      "requiredStatic": true,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:doc.company && doc.party",
+      "fieldname": "receivable_payable_account",
+      "fieldtype": "link",
+      "label": "Receivable / Payable Account",
+      "layout": {
+        "column": 1
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Account"
+      },
+      "optionsRaw": "Account",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Account",
+        "kind": "static"
+      },
+      "requiredStatic": true,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:doc.party",
+      "fieldname": "default_advance_account",
+      "fieldtype": "link",
+      "label": "Default Advance Account",
+      "layout": {
+        "column": 1
+      },
+      "mandatoryDependsOn": "doc.party_type",
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Account"
+      },
+      "optionsRaw": "Account",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Account",
+        "kind": "static"
+      },
+      "requiredDynamic": "doc.party_type",
+      "requiredStatic": false,
+      "ui": {
+        "description": "Only 'Payment Entries' made against this advance account are supported."
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:doc.receivable_payable_account",
+      "fieldname": "col_break1",
+      "fieldtype": "layout:section",
+      "label": "Filters",
+      "layout": {
+        "section": "Filters"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "collapsible": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "from_invoice_date",
+      "fieldtype": "date",
+      "label": "From Invoice Date",
+      "layout": {
+        "section": "Filters"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "from_payment_date",
+      "fieldtype": "date",
+      "label": "From Payment Date",
+      "layout": {
+        "section": "Filters"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "minimum_invoice_amount",
+      "fieldtype": "currency",
+      "label": "Minimum Invoice Amount",
+      "layout": {
+        "section": "Filters"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "minimum_payment_amount",
+      "fieldtype": "currency",
+      "label": "Minimum Payment Amount",
+      "layout": {
+        "section": "Filters"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_11",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "Filters"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "to_invoice_date",
+      "fieldtype": "date",
+      "label": "To Invoice Date",
+      "layout": {
+        "column": 1,
+        "section": "Filters"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "to_payment_date",
+      "fieldtype": "date",
+      "label": "To Payment Date",
+      "layout": {
+        "column": 1,
+        "section": "Filters"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "maximum_invoice_amount",
+      "fieldtype": "currency",
+      "label": "Maximum Invoice Amount",
+      "layout": {
+        "column": 1,
+        "section": "Filters"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "maximum_payment_amount",
+      "fieldtype": "currency",
+      "label": "Maximum Payment Amount",
+      "layout": {
+        "column": 1,
+        "section": "Filters"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_13",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 2,
+        "section": "Filters"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "50",
+      "fieldname": "invoice_limit",
+      "fieldtype": "int",
+      "label": "Invoice Limit",
+      "layout": {
+        "column": 2,
+        "section": "Filters"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "description": "System will fetch all the entries if limit value is zero."
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "50",
+      "fieldname": "payment_limit",
+      "fieldtype": "int",
+      "label": "Payment Limit",
+      "layout": {
+        "column": 2,
+        "section": "Filters"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "description": "System will fetch all the entries if limit value is zero."
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "bank_cash_account",
+      "fieldtype": "link",
+      "label": "Bank / Cash Account",
+      "layout": {
+        "column": 2,
+        "section": "Filters"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Account"
+      },
+      "optionsRaw": "Account",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Account",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "description": "This filter will be applied to Journal Entry.",
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:doc.receivable_payable_account",
+      "fieldname": "accounting_dimensions_section",
+      "fieldtype": "layout:section",
+      "label": "Accounting Dimensions Filter",
+      "layout": {
+        "section": "Accounting Dimensions Filter"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "collapsible": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "cost_center",
+      "fieldtype": "link",
+      "label": "Cost Center",
+      "layout": {
+        "section": "Accounting Dimensions Filter"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Cost Center"
+      },
+      "optionsRaw": "Cost Center",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Cost Center",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "dimension_col_break",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "Accounting Dimensions Filter"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "project",
+      "fieldtype": "link",
+      "label": "Project",
+      "layout": {
+        "column": 1,
+        "section": "Accounting Dimensions Filter"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Project"
+      },
+      "optionsRaw": "Project",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Project",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:(doc.payments).length || (doc.invoices).length",
+      "fieldname": "sec_break1",
+      "fieldtype": "layout:section",
+      "label": "Unreconciled Entries",
+      "layout": {
+        "section": "Unreconciled Entries"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "description": "If you need to reconcile particular transactions against each other, then please select accordingly. If not, all the transactions will be allocated in FIFO order."
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "invoice_name",
+      "fieldtype": "data",
+      "label": "Filter on Invoice",
+      "layout": {
+        "section": "Unreconciled Entries"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "childDoctype": "Payment Reconciliation Invoice",
+      "constraints": {},
+      "fieldname": "invoices",
+      "fieldtype": "table",
+      "label": "Invoices",
+      "layout": {
+        "section": "Unreconciled Entries"
+      },
+      "optionsParsed": {
+        "doctype": "Payment Reconciliation Invoice",
+        "kind": "child_doctype"
+      },
+      "optionsRaw": "Payment Reconciliation Invoice",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_15",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "Unreconciled Entries"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "payment_name",
+      "fieldtype": "data",
+      "label": "Filter on Payment",
+      "layout": {
+        "column": 1,
+        "section": "Unreconciled Entries"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "childDoctype": "Payment Reconciliation Payment",
+      "constraints": {},
+      "fieldname": "payments",
+      "fieldtype": "table",
+      "label": "Payments",
+      "layout": {
+        "column": 1,
+        "section": "Unreconciled Entries"
+      },
+      "optionsParsed": {
+        "doctype": "Payment Reconciliation Payment",
+        "kind": "child_doctype"
+      },
+      "optionsRaw": "Payment Reconciliation Payment",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "allocation",
+      "fieldname": "sec_break2",
+      "fieldtype": "layout:section",
+      "label": "Allocated Entries",
+      "layout": {
+        "section": "Allocated Entries"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "childDoctype": "Payment Reconciliation Allocation",
+      "constraints": {},
+      "fieldname": "allocation",
+      "fieldtype": "table",
+      "label": "Allocation",
+      "layout": {
+        "section": "Allocated Entries"
+      },
+      "optionsParsed": {
+        "doctype": "Payment Reconciliation Allocation",
+        "kind": "child_doctype"
+      },
+      "optionsRaw": "Payment Reconciliation Allocation",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    }
+  ],
+  "identity": {
+    "app": "erpnext",
+    "isSingle": false,
+    "isSubmittable": false,
+    "isTree": false,
+    "module": "Accounts",
+    "naming": {
+      "strategy": "hash"
+    }
+  },
+  "name": "Payment Reconciliation",
+  "permissions": [
+    {
+      "actions": {
+        "create": true,
+        "delete": true,
+        "read": true,
+        "share": true,
+        "write": true
+      },
+      "permlevel": 0,
+      "role": "Accounts Manager"
+    },
+    {
+      "actions": {
+        "create": true,
+        "delete": true,
+        "read": true,
+        "share": true,
+        "write": true
+      },
+      "permlevel": 0,
+      "role": "Accounts User"
+    }
+  ],
+  "ui": {
+    "searchFields": [],
+    "showNameInGlobalSearch": false,
+    "sortField": "creation",
+    "sortOrder": "DESC"
+  },
+  "workflows": [
+    {
+      "kind": "unavailable"
+    }
+  ]
+}

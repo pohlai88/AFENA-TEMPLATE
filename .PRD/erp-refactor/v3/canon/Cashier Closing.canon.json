@@ -1,0 +1,275 @@
+{
+  "audit": {
+    "trackChanges": true
+  },
+  "canonVersion": "1.0.0",
+  "childTables": [
+    {
+      "childDoctype": "Cashier Closing Payments",
+      "parentField": "payments",
+      "required": false
+    }
+  ],
+  "doctypeId": "erpnext:Accounts:Cashier Closing",
+  "events": [
+    {
+      "event": "validate",
+      "handlers": [
+        "erpnext.support.doctype.service_level_agreement.service_level_agreement.apply",
+        "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record.check_for_running_deletion_job"
+      ],
+      "handlersParsed": [
+        {
+          "attrPath": "apply",
+          "module": "erpnext.support.doctype.service_level_agreement.service_level_agreement"
+        },
+        {
+          "attrPath": "check_for_running_deletion_job",
+          "module": "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record"
+        }
+      ]
+    }
+  ],
+  "fieldOrder": [
+    "naming_series",
+    "user",
+    "date",
+    "from_time",
+    "time",
+    "expense",
+    "custody",
+    "returns",
+    "outstanding_amount",
+    "payments",
+    "net_amount",
+    "amended_from"
+  ],
+  "fields": [
+    {
+      "constraints": {},
+      "default": "POS-CLO-",
+      "fieldname": "naming_series",
+      "fieldtype": "select",
+      "label": "Series",
+      "optionsParsed": {
+        "kind": "naming_series",
+        "prefixes": [
+          "POS-CLO-"
+        ]
+      },
+      "optionsRaw": "POS-CLO-",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "inGlobalSearch": true,
+        "inStandardFilter": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "user",
+      "fieldtype": "link",
+      "label": "User",
+      "optionsParsed": {
+        "kind": "link",
+        "target": "User"
+      },
+      "optionsRaw": "User",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "User",
+        "kind": "static"
+      },
+      "requiredStatic": true,
+      "ui": {
+        "inListView": true,
+        "inStandardFilter": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "Today",
+      "fieldname": "date",
+      "fieldtype": "date",
+      "label": "Date",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "inStandardFilter": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "from_time",
+      "fieldtype": "time",
+      "label": "From Time",
+      "permlevel": 0,
+      "requiredStatic": true,
+      "ui": {
+        "inStandardFilter": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "time",
+      "fieldtype": "time",
+      "label": "To Time",
+      "permlevel": 0,
+      "requiredStatic": true,
+      "ui": {
+        "inStandardFilter": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0.00",
+      "fieldname": "expense",
+      "fieldtype": "float",
+      "label": "Expense",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0.00",
+      "fieldname": "custody",
+      "fieldtype": "float",
+      "label": "Custody",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0.00",
+      "fieldname": "returns",
+      "fieldtype": "float",
+      "label": "Returns",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "precision": "2"
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0.00",
+      "fieldname": "outstanding_amount",
+      "fieldtype": "float",
+      "label": "Outstanding Amount",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "childDoctype": "Cashier Closing Payments",
+      "constraints": {},
+      "fieldname": "payments",
+      "fieldtype": "table",
+      "label": "Payments",
+      "optionsParsed": {
+        "doctype": "Cashier Closing Payments",
+        "kind": "child_doctype"
+      },
+      "optionsRaw": "Cashier Closing Payments",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "net_amount",
+      "fieldtype": "float",
+      "label": "Net Amount",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "inListView": true,
+        "inStandardFilter": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "amended_from",
+      "fieldtype": "link",
+      "label": "Amended From",
+      "noCopy": true,
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Cashier Closing"
+      },
+      "optionsRaw": "Cashier Closing",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Cashier Closing",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true,
+        "readOnly": true
+      },
+      "unique": false
+    }
+  ],
+  "identity": {
+    "app": "erpnext",
+    "isSingle": false,
+    "isSubmittable": true,
+    "isTree": false,
+    "module": "Accounts",
+    "naming": {
+      "seriesField": "naming_series",
+      "seriesPrefix": "POS-CLO-",
+      "strategy": "series"
+    }
+  },
+  "name": "Cashier Closing",
+  "permissions": [
+    {
+      "actions": {
+        "create": true,
+        "delete": true,
+        "email": true,
+        "export": true,
+        "print": true,
+        "read": true,
+        "report": true,
+        "share": true,
+        "submit": true,
+        "write": true
+      },
+      "permlevel": 0,
+      "role": "System Manager"
+    }
+  ],
+  "ui": {
+    "searchFields": [],
+    "showNameInGlobalSearch": false,
+    "sortField": "creation",
+    "sortOrder": "DESC"
+  },
+  "workflows": [
+    {
+      "kind": "unavailable"
+    }
+  ]
+}

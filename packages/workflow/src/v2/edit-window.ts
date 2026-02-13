@@ -1,5 +1,6 @@
+import { ENGINE_ERRORS, WorkflowEngineError } from './engine';
+
 import type { CompiledWorkflow, EditWindow } from './types';
-import { WorkflowEngineError, ENGINE_ERRORS } from './engine';
 
 /**
  * Edit-window precondition hook for mutate().

@@ -1,0 +1,553 @@
+{
+  "audit": {
+    "trackChanges": false
+  },
+  "canonVersion": "1.0.0",
+  "childTables": [
+    {
+      "childDoctype": "Packing Slip Item",
+      "parentField": "items",
+      "required": true
+    }
+  ],
+  "doctypeId": "erpnext:Stock:Packing Slip",
+  "events": [
+    {
+      "event": "validate",
+      "handlers": [
+        "erpnext.support.doctype.service_level_agreement.service_level_agreement.apply",
+        "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record.check_for_running_deletion_job"
+      ],
+      "handlersParsed": [
+        {
+          "attrPath": "apply",
+          "module": "erpnext.support.doctype.service_level_agreement.service_level_agreement"
+        },
+        {
+          "attrPath": "check_for_running_deletion_job",
+          "module": "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record"
+        }
+      ]
+    }
+  ],
+  "fieldOrder": [
+    "packing_slip_details",
+    "column_break0",
+    "delivery_note",
+    "column_break1",
+    "naming_series",
+    "section_break0",
+    "column_break2",
+    "from_case_no",
+    "column_break3",
+    "to_case_no",
+    "package_item_details",
+    "items",
+    "package_weight_details",
+    "net_weight_pkg",
+    "net_weight_uom",
+    "column_break4",
+    "gross_weight_pkg",
+    "gross_weight_uom",
+    "letter_head_details",
+    "letter_head",
+    "misc_details",
+    "amended_from"
+  ],
+  "fields": [
+    {
+      "constraints": {},
+      "fieldname": "packing_slip_details",
+      "fieldtype": "layout:section",
+      "layout": {
+        "section": "packing_slip_details"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break0",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "packing_slip_details"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "delivery_note",
+      "fieldtype": "link",
+      "label": "Delivery Note",
+      "layout": {
+        "column": 1,
+        "section": "packing_slip_details"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Delivery Note"
+      },
+      "optionsRaw": "Delivery Note",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Delivery Note",
+        "kind": "static"
+      },
+      "requiredStatic": true,
+      "ui": {
+        "description": "Indicates that the package is a part of this delivery (Only Draft)",
+        "inGlobalSearch": true,
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break1",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 2,
+        "section": "packing_slip_details"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "naming_series",
+      "fieldtype": "select",
+      "label": "Series",
+      "layout": {
+        "column": 2,
+        "section": "packing_slip_details"
+      },
+      "optionsParsed": {
+        "kind": "naming_series",
+        "prefixes": [
+          "MAT-PAC-.YYYY.-"
+        ]
+      },
+      "optionsRaw": "MAT-PAC-.YYYY.-",
+      "permlevel": 0,
+      "requiredStatic": true,
+      "setOnlyOnce": true,
+      "ui": {
+        "printHide": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "section_break0",
+      "fieldtype": "layout:section",
+      "layout": {
+        "section": "section_break0"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break2",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "section_break0"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "from_case_no",
+      "fieldtype": "int",
+      "label": "From Package No.",
+      "layout": {
+        "column": 1,
+        "section": "section_break0"
+      },
+      "noCopy": true,
+      "permlevel": 0,
+      "requiredStatic": true,
+      "ui": {
+        "description": "Identification of the package for the delivery (for print)",
+        "inListView": true,
+        "width": "50px"
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break3",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 2,
+        "section": "section_break0"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "to_case_no",
+      "fieldtype": "int",
+      "label": "To Package No.",
+      "layout": {
+        "column": 2,
+        "section": "section_break0"
+      },
+      "noCopy": true,
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "description": "If more than one package of the same type (for print)",
+        "inListView": true,
+        "width": "50px"
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "package_item_details",
+      "fieldtype": "layout:section",
+      "layout": {
+        "section": "package_item_details"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "childDoctype": "Packing Slip Item",
+      "constraints": {},
+      "fieldname": "items",
+      "fieldtype": "table",
+      "label": "Items",
+      "layout": {
+        "section": "package_item_details"
+      },
+      "optionsParsed": {
+        "doctype": "Packing Slip Item",
+        "kind": "child_doctype"
+      },
+      "optionsRaw": "Packing Slip Item",
+      "permlevel": 0,
+      "requiredStatic": true,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "package_weight_details",
+      "fieldtype": "layout:section",
+      "label": "Package Weight Details",
+      "layout": {
+        "section": "Package Weight Details"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "net_weight_pkg",
+      "fieldtype": "float",
+      "label": "Net Weight",
+      "layout": {
+        "section": "Package Weight Details"
+      },
+      "noCopy": true,
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "description": "The net weight of this package. (calculated automatically as sum of net weight of items)",
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "net_weight_uom",
+      "fieldtype": "link",
+      "label": "Net Weight UOM",
+      "layout": {
+        "section": "Package Weight Details"
+      },
+      "noCopy": true,
+      "optionsParsed": {
+        "kind": "link",
+        "target": "UOM"
+      },
+      "optionsRaw": "UOM",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "UOM",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break4",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "Package Weight Details"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "gross_weight_pkg",
+      "fieldtype": "float",
+      "label": "Gross Weight",
+      "layout": {
+        "column": 1,
+        "section": "Package Weight Details"
+      },
+      "noCopy": true,
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "description": "The gross weight of the package. Usually net weight + packaging material weight. (for print)"
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "gross_weight_uom",
+      "fieldtype": "link",
+      "label": "Gross Weight UOM",
+      "layout": {
+        "column": 1,
+        "section": "Package Weight Details"
+      },
+      "noCopy": true,
+      "optionsParsed": {
+        "kind": "link",
+        "target": "UOM"
+      },
+      "optionsRaw": "UOM",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "UOM",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "letter_head_details",
+      "fieldtype": "layout:section",
+      "label": "Letter Head",
+      "layout": {
+        "section": "Letter Head"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "allowOnSubmit": true,
+      "constraints": {},
+      "fieldname": "letter_head",
+      "fieldtype": "link",
+      "label": "Letter Head",
+      "layout": {
+        "section": "Letter Head"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Letter Head"
+      },
+      "optionsRaw": "Letter Head",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Letter Head",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "misc_details",
+      "fieldtype": "layout:section",
+      "layout": {
+        "section": "misc_details"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "amended_from",
+      "fieldtype": "link",
+      "label": "Amended From",
+      "layout": {
+        "section": "misc_details"
+      },
+      "noCopy": true,
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Packing Slip"
+      },
+      "optionsRaw": "Packing Slip",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Packing Slip",
+        "ignoreUserPermissions": true,
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true,
+        "readOnly": true
+      },
+      "unique": false
+    }
+  ],
+  "identity": {
+    "app": "erpnext",
+    "isSingle": false,
+    "isSubmittable": true,
+    "isTree": false,
+    "module": "Stock",
+    "naming": {
+      "seriesPrefix": "MAT-PAC-.YYYY.-.#####",
+      "strategy": "series"
+    }
+  },
+  "name": "Packing Slip",
+  "permissions": [
+    {
+      "actions": {
+        "amend": true,
+        "cancel": true,
+        "create": true,
+        "delete": true,
+        "email": true,
+        "print": true,
+        "read": true,
+        "report": true,
+        "share": true,
+        "submit": true,
+        "write": true
+      },
+      "permlevel": 0,
+      "role": "Item Manager"
+    },
+    {
+      "actions": {
+        "amend": true,
+        "cancel": true,
+        "create": true,
+        "delete": true,
+        "email": true,
+        "print": true,
+        "read": true,
+        "report": true,
+        "share": true,
+        "submit": true,
+        "write": true
+      },
+      "permlevel": 0,
+      "role": "Sales Manager"
+    },
+    {
+      "actions": {
+        "amend": true,
+        "cancel": true,
+        "create": true,
+        "delete": true,
+        "email": true,
+        "print": true,
+        "read": true,
+        "report": true,
+        "share": true,
+        "submit": true,
+        "write": true
+      },
+      "permlevel": 0,
+      "role": "Sales User"
+    },
+    {
+      "actions": {
+        "amend": true,
+        "cancel": true,
+        "create": true,
+        "delete": true,
+        "email": true,
+        "print": true,
+        "read": true,
+        "report": true,
+        "share": true,
+        "submit": true,
+        "write": true
+      },
+      "permlevel": 0,
+      "role": "Stock Manager"
+    },
+    {
+      "actions": {
+        "amend": true,
+        "cancel": true,
+        "create": true,
+        "delete": true,
+        "email": true,
+        "print": true,
+        "read": true,
+        "report": true,
+        "share": true,
+        "submit": true,
+        "write": true
+      },
+      "permlevel": 0,
+      "role": "Stock User"
+    }
+  ],
+  "ui": {
+    "searchFields": [
+      "delivery_note"
+    ],
+    "showNameInGlobalSearch": true,
+    "sortField": "creation",
+    "sortOrder": "DESC"
+  },
+  "workflows": [
+    {
+      "kind": "unavailable"
+    }
+  ]
+}

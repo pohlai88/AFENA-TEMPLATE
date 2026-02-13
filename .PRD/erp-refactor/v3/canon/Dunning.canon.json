@@ -1,0 +1,1134 @@
+{
+  "audit": {
+    "trackChanges": true
+  },
+  "canonVersion": "1.0.0",
+  "childTables": [
+    {
+      "childDoctype": "Overdue Payment",
+      "parentField": "overdue_payments",
+      "required": false
+    }
+  ],
+  "doctypeId": "erpnext:Accounts:Dunning",
+  "events": [
+    {
+      "event": "validate",
+      "handlers": [
+        "erpnext.support.doctype.service_level_agreement.service_level_agreement.apply",
+        "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record.check_for_running_deletion_job"
+      ],
+      "handlersParsed": [
+        {
+          "attrPath": "apply",
+          "module": "erpnext.support.doctype.service_level_agreement.service_level_agreement"
+        },
+        {
+          "attrPath": "check_for_running_deletion_job",
+          "module": "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record"
+        }
+      ]
+    }
+  ],
+  "fieldOrder": [
+    "naming_series",
+    "customer",
+    "customer_name",
+    "column_break_3",
+    "company",
+    "posting_date",
+    "posting_time",
+    "status",
+    "section_break_9",
+    "currency",
+    "column_break_11",
+    "conversion_rate",
+    "section_break_6",
+    "dunning_type",
+    "column_break_8",
+    "rate_of_interest",
+    "section_break_12",
+    "overdue_payments",
+    "section_break_28",
+    "total_interest",
+    "dunning_fee",
+    "column_break_17",
+    "dunning_amount",
+    "base_dunning_amount",
+    "section_break_32",
+    "spacer",
+    "column_break_33",
+    "total_outstanding",
+    "grand_total",
+    "printing_settings_section",
+    "language",
+    "body_text",
+    "column_break_22",
+    "letter_head",
+    "closing_text",
+    "accounting_details_section",
+    "income_account",
+    "column_break_48",
+    "cost_center",
+    "amended_from",
+    "address_and_contact_tab",
+    "address_and_contact_section",
+    "customer_address",
+    "address_display",
+    "column_break_vodj",
+    "contact_person",
+    "contact_display",
+    "contact_mobile",
+    "contact_email",
+    "section_break_xban",
+    "column_break_16",
+    "company_address",
+    "company_address_display",
+    "column_break_lqmf"
+  ],
+  "fields": [
+    {
+      "constraints": {},
+      "default": "DUNN-.MM.-.YY.-",
+      "fieldname": "naming_series",
+      "fieldtype": "select",
+      "label": "Series",
+      "optionsParsed": {
+        "kind": "naming_series",
+        "prefixes": [
+          "DUNN-.MM.-.YY.-"
+        ]
+      },
+      "optionsRaw": "DUNN-.MM.-.YY.-",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "customer",
+      "fieldtype": "link",
+      "label": "Customer",
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Customer"
+      },
+      "optionsRaw": "Customer",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Customer",
+        "kind": "static"
+      },
+      "requiredStatic": true,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fetchFrom": "customer.customer_name",
+      "fieldname": "customer_name",
+      "fieldtype": "data",
+      "label": "Customer Name",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "inListView": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_3",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "company",
+      "fieldtype": "link",
+      "label": "Company",
+      "layout": {
+        "column": 1
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Company"
+      },
+      "optionsRaw": "Company",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Company",
+        "kind": "static"
+      },
+      "requiredStatic": true,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "Today",
+      "fieldname": "posting_date",
+      "fieldtype": "date",
+      "label": "Date",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": true,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "posting_time",
+      "fieldtype": "time",
+      "label": "Posting Time",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "allowOnSubmit": true,
+      "constraints": {},
+      "default": "Unresolved",
+      "fieldname": "status",
+      "fieldtype": "select",
+      "label": "Status",
+      "layout": {
+        "column": 1
+      },
+      "optionsParsed": {
+        "choices": [
+          "Draft",
+          "Resolved",
+          "Unresolved",
+          "Cancelled"
+        ],
+        "kind": "select"
+      },
+      "optionsRaw": "Draft\nResolved\nUnresolved\nCancelled",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "inStandardFilter": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "section_break_9",
+      "fieldtype": "layout:section",
+      "label": "Currency",
+      "layout": {
+        "section": "Currency"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "currency",
+      "fieldtype": "link",
+      "label": "Currency",
+      "layout": {
+        "section": "Currency"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Currency"
+      },
+      "optionsRaw": "Currency",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Currency",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_11",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "Currency"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "conversion_rate",
+      "fieldtype": "float",
+      "label": "Conversion Rate",
+      "layout": {
+        "column": 1,
+        "section": "Currency"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "section_break_6",
+      "fieldtype": "layout:section",
+      "layout": {
+        "section": "section_break_6"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "dunning_type",
+      "fieldtype": "link",
+      "label": "Dunning Type",
+      "layout": {
+        "section": "section_break_6"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Dunning Type"
+      },
+      "optionsRaw": "Dunning Type",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Dunning Type",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "inListView": true,
+        "inStandardFilter": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_8",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "section_break_6"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fetchFrom": "dunning_type.rate_of_interest",
+      "fetchIfEmpty": true,
+      "fieldname": "rate_of_interest",
+      "fieldtype": "float",
+      "label": "Rate of Interest (%) Yearly",
+      "layout": {
+        "column": 1,
+        "section": "section_break_6"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "section_break_12",
+      "fieldtype": "layout:section",
+      "layout": {
+        "section": "section_break_12"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "childDoctype": "Overdue Payment",
+      "constraints": {},
+      "fieldname": "overdue_payments",
+      "fieldtype": "table",
+      "label": "Overdue Payments",
+      "layout": {
+        "section": "section_break_12"
+      },
+      "optionsParsed": {
+        "doctype": "Overdue Payment",
+        "kind": "child_doctype"
+      },
+      "optionsRaw": "Overdue Payment",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "section_break_28",
+      "fieldtype": "layout:section",
+      "layout": {
+        "section": "section_break_28"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "total_interest",
+      "fieldtype": "currency",
+      "label": "Total Interest",
+      "layout": {
+        "section": "section_break_28"
+      },
+      "optionsParsed": {
+        "field": "currency",
+        "kind": "currency_field"
+      },
+      "optionsRaw": "currency",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "precision": "2",
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fetchFrom": "dunning_type.dunning_fee",
+      "fetchIfEmpty": true,
+      "fieldname": "dunning_fee",
+      "fieldtype": "currency",
+      "label": "Dunning Fee",
+      "layout": {
+        "section": "section_break_28"
+      },
+      "optionsParsed": {
+        "field": "currency",
+        "kind": "currency_field"
+      },
+      "optionsRaw": "currency",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "precision": "2"
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_17",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "section_break_28"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "dunning_amount",
+      "fieldtype": "currency",
+      "label": "Dunning Amount",
+      "layout": {
+        "column": 1,
+        "section": "section_break_28"
+      },
+      "optionsParsed": {
+        "field": "currency",
+        "kind": "currency_field"
+      },
+      "optionsRaw": "currency",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "base_dunning_amount",
+      "fieldtype": "currency",
+      "label": "Dunning Amount (Company Currency)",
+      "layout": {
+        "column": 1,
+        "section": "section_break_28"
+      },
+      "optionsParsed": {
+        "field": "Company:company:default_currency",
+        "kind": "currency_field"
+      },
+      "optionsRaw": "Company:company:default_currency",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "section_break_32",
+      "fieldtype": "layout:section",
+      "layout": {
+        "section": "section_break_32"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "spacer",
+      "fieldtype": "data",
+      "label": "Spacer",
+      "layout": {
+        "section": "section_break_32"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "hidden": true,
+        "printHide": true,
+        "readOnly": true,
+        "reportHide": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_33",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "section_break_32"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "total_outstanding",
+      "fieldtype": "currency",
+      "label": "Total Outstanding",
+      "layout": {
+        "column": 1,
+        "section": "section_break_32"
+      },
+      "optionsParsed": {
+        "field": "currency",
+        "kind": "currency_field"
+      },
+      "optionsRaw": "currency",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "grand_total",
+      "fieldtype": "currency",
+      "label": "Grand Total",
+      "layout": {
+        "column": 1,
+        "section": "section_break_32"
+      },
+      "optionsParsed": {
+        "field": "currency",
+        "kind": "currency_field"
+      },
+      "optionsRaw": "currency",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "precision": "2",
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "printing_settings_section",
+      "fieldtype": "layout:section",
+      "label": "Printing Settings",
+      "layout": {
+        "section": "Printing Settings"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "collapsible": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "language",
+      "fieldtype": "link",
+      "label": "Print Language",
+      "layout": {
+        "section": "Printing Settings"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Language"
+      },
+      "optionsRaw": "Language",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Language",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "body_text",
+      "fieldtype": "text_editor",
+      "label": "Body Text",
+      "layout": {
+        "section": "Printing Settings"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_22",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "Printing Settings"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "letter_head",
+      "fieldtype": "link",
+      "label": "Letter Head",
+      "layout": {
+        "column": 1,
+        "section": "Printing Settings"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Letter Head"
+      },
+      "optionsRaw": "Letter Head",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Letter Head",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "closing_text",
+      "fieldtype": "text_editor",
+      "label": "Closing Text",
+      "layout": {
+        "column": 1,
+        "section": "Printing Settings"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "accounting_details_section",
+      "fieldtype": "layout:section",
+      "label": "Accounting Details",
+      "layout": {
+        "section": "Accounting Details"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "collapsible": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fetchFrom": "dunning_type.income_account",
+      "fieldname": "income_account",
+      "fieldtype": "link",
+      "label": "Income Account",
+      "layout": {
+        "section": "Accounting Details"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Account"
+      },
+      "optionsRaw": "Account",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Account",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "description": "For dunning fee and interest",
+        "printHide": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_48",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "Accounting Details"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fetchFrom": "dunning_type.cost_center",
+      "fieldname": "cost_center",
+      "fieldtype": "link",
+      "label": "Cost Center",
+      "layout": {
+        "column": 1,
+        "section": "Accounting Details"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Cost Center"
+      },
+      "optionsRaw": "Cost Center",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Cost Center",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "amended_from",
+      "fieldtype": "link",
+      "label": "Amended From",
+      "layout": {
+        "column": 1,
+        "section": "Accounting Details"
+      },
+      "noCopy": true,
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Dunning"
+      },
+      "optionsRaw": "Dunning",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Dunning",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "address_and_contact_tab",
+      "fieldtype": "layout:tab",
+      "label": "Address & Contact",
+      "layout": {
+        "tab": "Address & Contact"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "address_and_contact_section",
+      "fieldtype": "layout:section",
+      "layout": {
+        "section": "address_and_contact_section",
+        "tab": "Address & Contact"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "customer_address",
+      "fieldtype": "link",
+      "label": "Customer Address",
+      "layout": {
+        "section": "address_and_contact_section",
+        "tab": "Address & Contact"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Address"
+      },
+      "optionsRaw": "Address",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Address",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "address_display",
+      "fieldtype": "text_editor",
+      "label": "Address",
+      "layout": {
+        "section": "address_and_contact_section",
+        "tab": "Address & Contact"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_vodj",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "address_and_contact_section",
+        "tab": "Address & Contact"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "contact_person",
+      "fieldtype": "link",
+      "label": "Contact Person",
+      "layout": {
+        "column": 1,
+        "section": "address_and_contact_section",
+        "tab": "Address & Contact"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Contact"
+      },
+      "optionsRaw": "Contact",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Contact",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "contact_display",
+      "fieldtype": "small_text",
+      "label": "Contact",
+      "layout": {
+        "column": 1,
+        "section": "address_and_contact_section",
+        "tab": "Address & Contact"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "contact_mobile",
+      "fieldtype": "small_text",
+      "label": "Mobile No",
+      "layout": {
+        "column": 1,
+        "section": "address_and_contact_section",
+        "tab": "Address & Contact"
+      },
+      "optionsParsed": {
+        "kind": "other",
+        "value": "Phone"
+      },
+      "optionsRaw": "Phone",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "contact_email",
+      "fieldtype": "data:email",
+      "label": "Contact Email",
+      "layout": {
+        "column": 1,
+        "section": "address_and_contact_section",
+        "tab": "Address & Contact"
+      },
+      "optionsParsed": {
+        "format": "Email",
+        "kind": "data_format"
+      },
+      "optionsRaw": "Email",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "section_break_xban",
+      "fieldtype": "layout:section",
+      "layout": {
+        "section": "section_break_xban",
+        "tab": "Address & Contact"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_16",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "section_break_xban",
+        "tab": "Address & Contact"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "company_address",
+      "fieldtype": "link",
+      "label": "Company Address",
+      "layout": {
+        "column": 1,
+        "section": "section_break_xban",
+        "tab": "Address & Contact"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Address"
+      },
+      "optionsRaw": "Address",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Address",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "company_address_display",
+      "fieldtype": "text_editor",
+      "label": "Company Address Display",
+      "layout": {
+        "column": 1,
+        "section": "section_break_xban",
+        "tab": "Address & Contact"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_lqmf",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 2,
+        "section": "section_break_xban",
+        "tab": "Address & Contact"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    }
+  ],
+  "identity": {
+    "app": "erpnext",
+    "isSingle": false,
+    "isSubmittable": true,
+    "isTree": false,
+    "module": "Accounts",
+    "naming": {
+      "seriesField": "naming_series",
+      "seriesPrefix": "DUNN-.MM.-.YY.-",
+      "strategy": "series"
+    }
+  },
+  "name": "Dunning",
+  "permissions": [
+    {
+      "actions": {
+        "cancel": true,
+        "create": true,
+        "delete": true,
+        "email": true,
+        "export": true,
+        "print": true,
+        "read": true,
+        "report": true,
+        "share": true,
+        "submit": true,
+        "write": true
+      },
+      "permlevel": 0,
+      "role": "Accounts Manager"
+    },
+    {
+      "actions": {
+        "create": true,
+        "delete": true,
+        "email": true,
+        "export": true,
+        "print": true,
+        "read": true,
+        "report": true,
+        "share": true,
+        "write": true
+      },
+      "permlevel": 0,
+      "role": "Accounts User"
+    },
+    {
+      "actions": {
+        "amend": true,
+        "cancel": true,
+        "create": true,
+        "delete": true,
+        "email": true,
+        "export": true,
+        "print": true,
+        "read": true,
+        "report": true,
+        "share": true,
+        "submit": true,
+        "write": true
+      },
+      "permlevel": 0,
+      "role": "System Manager"
+    }
+  ],
+  "ui": {
+    "searchFields": [],
+    "showNameInGlobalSearch": false,
+    "sortField": "creation",
+    "sortOrder": "ASC",
+    "titleField": "customer_name"
+  },
+  "workflows": [
+    {
+      "kind": "unavailable"
+    }
+  ]
+}

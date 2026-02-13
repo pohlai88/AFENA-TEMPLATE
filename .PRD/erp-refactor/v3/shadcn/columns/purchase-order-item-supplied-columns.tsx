@@ -1,0 +1,42 @@
+"use client";
+
+// Column definitions for Purchase Order Item Supplied
+// Generated from Canon schema — do not edit manually
+
+import type { ColumnDef } from "@tanstack/react-table";
+import type { PurchaseOrderItemSupplied } from "../types/purchase-order-item-supplied.js";
+
+export const purchaseOrderItemSuppliedColumns: ColumnDef<PurchaseOrderItemSupplied>[] = [
+  {
+    accessorKey: "id",
+    header: "ID",
+  },
+  {
+    accessorKey: "main_item_code",
+    header: "Item Code",
+  },
+  {
+    accessorKey: "rm_item_code",
+    header: "Raw Material Item Code",
+  },
+  {
+    accessorKey: "reserve_warehouse",
+    header: "Reserve Warehouse",
+  },
+  {
+    accessorKey: "rate",
+    header: "Rate",
+    cell: ({ row }) => {
+      const val = row.getValue("rate") as number;
+      return val != null ? val.toLocaleString(undefined, { minimumFractionDigits: 2 }) : "";
+    },
+  },
+  {
+    accessorKey: "required_qty",
+    header: "Required Qty",
+  },
+  {
+    accessorKey: "supplied_qty",
+    header: "Supplied Qty",
+  },
+];

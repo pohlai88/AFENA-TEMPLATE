@@ -1,0 +1,160 @@
+{
+  "audit": {
+    "trackChanges": true
+  },
+  "canonVersion": "1.0.0",
+  "childTables": [
+    {
+      "childDoctype": "Payment Terms Template Detail",
+      "parentField": "terms",
+      "required": true
+    }
+  ],
+  "doctypeId": "erpnext:Accounts:Payment Terms Template",
+  "events": [
+    {
+      "event": "validate",
+      "handlers": [
+        "erpnext.support.doctype.service_level_agreement.service_level_agreement.apply",
+        "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record.check_for_running_deletion_job"
+      ],
+      "handlersParsed": [
+        {
+          "attrPath": "apply",
+          "module": "erpnext.support.doctype.service_level_agreement.service_level_agreement"
+        },
+        {
+          "attrPath": "check_for_running_deletion_job",
+          "module": "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record"
+        }
+      ]
+    }
+  ],
+  "fieldOrder": [
+    "template_name",
+    "allocate_payment_based_on_payment_terms",
+    "terms"
+  ],
+  "fields": [
+    {
+      "constraints": {},
+      "fieldname": "template_name",
+      "fieldtype": "data",
+      "label": "Template Name",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": true
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "allocate_payment_based_on_payment_terms",
+      "fieldtype": "check",
+      "label": "Allocate Payment Based On Payment Terms",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "description": "If this checkbox is checked, paid amount will be splitted and allocated as per the amounts in payment schedule against each payment term"
+      },
+      "unique": false
+    },
+    {
+      "childDoctype": "Payment Terms Template Detail",
+      "constraints": {},
+      "fieldname": "terms",
+      "fieldtype": "table",
+      "label": "Payment Terms",
+      "optionsParsed": {
+        "doctype": "Payment Terms Template Detail",
+        "kind": "child_doctype"
+      },
+      "optionsRaw": "Payment Terms Template Detail",
+      "permlevel": 0,
+      "requiredStatic": true,
+      "ui": {},
+      "unique": false
+    }
+  ],
+  "identity": {
+    "app": "erpnext",
+    "isSingle": false,
+    "isSubmittable": false,
+    "isTree": false,
+    "module": "Accounts",
+    "naming": {
+      "expression": "field:template_name",
+      "strategy": "field"
+    }
+  },
+  "name": "Payment Terms Template",
+  "permissions": [
+    {
+      "actions": {
+        "create": true,
+        "delete": true,
+        "email": true,
+        "export": true,
+        "print": true,
+        "read": true,
+        "report": true,
+        "share": true,
+        "write": true
+      },
+      "permlevel": 0,
+      "role": "Accounts Manager"
+    },
+    {
+      "actions": {
+        "create": true,
+        "delete": true,
+        "email": true,
+        "export": true,
+        "print": true,
+        "read": true,
+        "report": true,
+        "share": true,
+        "write": true
+      },
+      "permlevel": 0,
+      "role": "Accounts User"
+    },
+    {
+      "actions": {
+        "email": true,
+        "export": true,
+        "print": true,
+        "report": true,
+        "share": true
+      },
+      "permlevel": 0,
+      "role": "All"
+    },
+    {
+      "actions": {
+        "create": true,
+        "delete": true,
+        "email": true,
+        "export": true,
+        "print": true,
+        "read": true,
+        "report": true,
+        "share": true,
+        "write": true
+      },
+      "permlevel": 0,
+      "role": "System Manager"
+    }
+  ],
+  "ui": {
+    "searchFields": [],
+    "showNameInGlobalSearch": false,
+    "sortField": "creation",
+    "sortOrder": "DESC"
+  },
+  "workflows": [
+    {
+      "kind": "unavailable"
+    }
+  ]
+}

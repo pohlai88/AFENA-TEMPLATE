@@ -1,0 +1,356 @@
+{
+  "audit": {
+    "trackChanges": true
+  },
+  "canonVersion": "1.0.0",
+  "childTables": [],
+  "doctypeId": "erpnext:Support:Support Search Source",
+  "events": [
+    {
+      "event": "validate",
+      "handlers": [
+        "erpnext.support.doctype.service_level_agreement.service_level_agreement.apply",
+        "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record.check_for_running_deletion_job"
+      ],
+      "handlersParsed": [
+        {
+          "attrPath": "apply",
+          "module": "erpnext.support.doctype.service_level_agreement.service_level_agreement"
+        },
+        {
+          "attrPath": "check_for_running_deletion_job",
+          "module": "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record"
+        }
+      ]
+    }
+  ],
+  "fieldOrder": [
+    "source_name",
+    "source_type",
+    "api_sb",
+    "base_url",
+    "query_options_sb",
+    "query_route",
+    "cb_1",
+    "search_term_param_name",
+    "response_options_sb",
+    "response_result_key_path",
+    "post_route",
+    "post_route_key_list",
+    "response_post_cb",
+    "post_title_key",
+    "post_description_key",
+    "link_options_sb",
+    "source_doctype",
+    "result_title_field",
+    "result_preview_field",
+    "result_route_field"
+  ],
+  "fields": [
+    {
+      "constraints": {},
+      "fieldname": "source_name",
+      "fieldtype": "data",
+      "label": "Source Name",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "source_type",
+      "fieldtype": "select",
+      "label": "Source Type",
+      "optionsParsed": {
+        "choices": [
+          "API",
+          "Link"
+        ],
+        "kind": "select"
+      },
+      "optionsRaw": "API\nLink",
+      "permlevel": 0,
+      "requiredStatic": true,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:doc.source_type==\"API\"",
+      "fieldname": "api_sb",
+      "fieldtype": "layout:section",
+      "label": "API",
+      "layout": {
+        "section": "API"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "base_url",
+      "fieldtype": "data",
+      "label": "Base URL",
+      "layout": {
+        "section": "API"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:doc.source_type==\"API\"",
+      "fieldname": "query_options_sb",
+      "fieldtype": "layout:section",
+      "label": "Query Options",
+      "layout": {
+        "section": "Query Options"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "query_route",
+      "fieldtype": "data",
+      "label": "Query Route String",
+      "layout": {
+        "section": "Query Options"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "cb_1",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "Query Options"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "search_term_param_name",
+      "fieldtype": "data",
+      "label": "Search Term Param Name",
+      "layout": {
+        "column": 1,
+        "section": "Query Options"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:doc.source_type==\"API\"",
+      "fieldname": "response_options_sb",
+      "fieldtype": "layout:section",
+      "label": "Response Options",
+      "layout": {
+        "section": "Response Options"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "response_result_key_path",
+      "fieldtype": "data",
+      "label": "Response Result Key Path",
+      "layout": {
+        "section": "Response Options"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "post_route",
+      "fieldtype": "data",
+      "label": "Post Route String",
+      "layout": {
+        "section": "Response Options"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "post_route_key_list",
+      "fieldtype": "data",
+      "label": "Post Route Key List",
+      "layout": {
+        "section": "Response Options"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "response_post_cb",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "Response Options"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "post_title_key",
+      "fieldtype": "data",
+      "label": "Post Title Key",
+      "layout": {
+        "column": 1,
+        "section": "Response Options"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "post_description_key",
+      "fieldtype": "data",
+      "label": "Post Description Key",
+      "layout": {
+        "column": 1,
+        "section": "Response Options"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:doc.source_type==\"Link\"",
+      "fieldname": "link_options_sb",
+      "fieldtype": "layout:section",
+      "label": "Link Options",
+      "layout": {
+        "section": "Link Options"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "source_doctype",
+      "fieldtype": "link",
+      "label": "Source DocType",
+      "layout": {
+        "section": "Link Options"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "DocType"
+      },
+      "optionsRaw": "DocType",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "DocType",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "result_title_field",
+      "fieldtype": "data",
+      "label": "Result Title Field",
+      "layout": {
+        "section": "Link Options"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "result_preview_field",
+      "fieldtype": "data",
+      "label": "Result Preview Field",
+      "layout": {
+        "section": "Link Options"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "result_route_field",
+      "fieldtype": "data",
+      "label": "Result Route Field",
+      "layout": {
+        "section": "Link Options"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    }
+  ],
+  "identity": {
+    "app": "erpnext",
+    "isSingle": false,
+    "isSubmittable": false,
+    "isTree": false,
+    "module": "Support",
+    "naming": {
+      "strategy": "hash"
+    }
+  },
+  "name": "Support Search Source",
+  "permissions": [],
+  "ui": {
+    "searchFields": [],
+    "showNameInGlobalSearch": false,
+    "sortField": "creation",
+    "sortOrder": "DESC"
+  },
+  "workflows": [
+    {
+      "kind": "unavailable"
+    }
+  ]
+}

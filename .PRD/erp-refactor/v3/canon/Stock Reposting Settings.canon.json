@@ -1,0 +1,243 @@
+{
+  "audit": {
+    "trackChanges": true
+  },
+  "canonVersion": "1.0.0",
+  "childTables": [],
+  "doctypeId": "erpnext:Stock:Stock Reposting Settings",
+  "events": [
+    {
+      "event": "validate",
+      "handlers": [
+        "erpnext.support.doctype.service_level_agreement.service_level_agreement.apply",
+        "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record.check_for_running_deletion_job"
+      ],
+      "handlersParsed": [
+        {
+          "attrPath": "apply",
+          "module": "erpnext.support.doctype.service_level_agreement.service_level_agreement"
+        },
+        {
+          "attrPath": "check_for_running_deletion_job",
+          "module": "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record"
+        }
+      ]
+    }
+  ],
+  "fieldOrder": [
+    "scheduling_section",
+    "limit_reposting_timeslot",
+    "start_time",
+    "end_time",
+    "limits_dont_apply_on",
+    "item_based_reposting",
+    "enable_parallel_reposting",
+    "no_of_parallel_reposting",
+    "errors_notification_section",
+    "notify_reposting_error_to_role"
+  ],
+  "fields": [
+    {
+      "constraints": {},
+      "fieldname": "scheduling_section",
+      "fieldtype": "layout:section",
+      "label": "Scheduling",
+      "layout": {
+        "section": "Scheduling"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "limit_reposting_timeslot",
+      "fieldtype": "check",
+      "label": "Limit timeslot for Stock Reposting",
+      "layout": {
+        "section": "Scheduling"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "limit_reposting_timeslot",
+      "fieldname": "start_time",
+      "fieldtype": "time",
+      "label": "Start Time",
+      "layout": {
+        "section": "Scheduling"
+      },
+      "mandatoryDependsOn": "limit_reposting_timeslot",
+      "permlevel": 0,
+      "requiredDynamic": "limit_reposting_timeslot",
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "limit_reposting_timeslot",
+      "fieldname": "end_time",
+      "fieldtype": "time",
+      "label": "End Time",
+      "layout": {
+        "section": "Scheduling"
+      },
+      "mandatoryDependsOn": "limit_reposting_timeslot",
+      "permlevel": 0,
+      "requiredDynamic": "limit_reposting_timeslot",
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "limit_reposting_timeslot",
+      "fieldname": "limits_dont_apply_on",
+      "fieldtype": "select",
+      "label": "Limits don't apply on",
+      "layout": {
+        "section": "Scheduling"
+      },
+      "optionsParsed": {
+        "choices": [
+          "Monday",
+          "Tuesday",
+          "Wednesday",
+          "Thursday",
+          "Friday",
+          "Saturday",
+          "Sunday"
+        ],
+        "kind": "select"
+      },
+      "optionsRaw": "\nMonday\nTuesday\nWednesday\nThursday\nFriday\nSaturday\nSunday",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "1",
+      "fieldname": "item_based_reposting",
+      "fieldtype": "check",
+      "label": "Use Item based reposting",
+      "layout": {
+        "section": "Scheduling"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "dependsOn": "eval: doc.item_based_reposting",
+      "fieldname": "enable_parallel_reposting",
+      "fieldtype": "check",
+      "label": "Enable Parallel Reposting",
+      "layout": {
+        "section": "Scheduling"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "4",
+      "dependsOn": "eval: doc.item_based_reposting === 1 && doc.enable_parallel_reposting === 1",
+      "fieldname": "no_of_parallel_reposting",
+      "fieldtype": "int",
+      "label": "No of Parallel Reposting (Per Item)",
+      "layout": {
+        "section": "Scheduling"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "errors_notification_section",
+      "fieldtype": "layout:section",
+      "label": "Errors Notification",
+      "layout": {
+        "section": "Errors Notification"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "notify_reposting_error_to_role",
+      "fieldtype": "link",
+      "label": "Notify Reposting Error to Role",
+      "layout": {
+        "section": "Errors Notification"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Role"
+      },
+      "optionsRaw": "Role",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Role",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    }
+  ],
+  "identity": {
+    "app": "erpnext",
+    "isSingle": false,
+    "isSubmittable": false,
+    "isTree": false,
+    "module": "Stock",
+    "naming": {
+      "strategy": "hash"
+    }
+  },
+  "name": "Stock Reposting Settings",
+  "permissions": [
+    {
+      "actions": {
+        "create": true,
+        "delete": true,
+        "email": true,
+        "print": true,
+        "read": true,
+        "share": true,
+        "write": true
+      },
+      "permlevel": 0,
+      "role": "System Manager"
+    }
+  ],
+  "ui": {
+    "searchFields": [],
+    "showNameInGlobalSearch": false,
+    "sortField": "creation",
+    "sortOrder": "DESC"
+  },
+  "workflows": [
+    {
+      "kind": "unavailable"
+    }
+  ]
+}

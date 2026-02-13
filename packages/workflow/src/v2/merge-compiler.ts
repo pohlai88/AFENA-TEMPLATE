@@ -1,3 +1,8 @@
+import { canonicalJsonHash } from './canonical-json';
+import { topologicalSort, validateDag } from './dag-validator';
+import { validateSlotPatch } from './slot-validator';
+import { COMPILER_VERSION } from './types';
+
 import type {
   BodySlot,
   CompiledEdge,
@@ -7,10 +12,6 @@ import type {
   WorkflowEdge,
   WorkflowNode,
 } from './types';
-import { COMPILER_VERSION } from './types';
-import { canonicalJsonHash } from './canonical-json';
-import { topologicalSort, validateDag } from './dag-validator';
-import { validateSlotPatch } from './slot-validator';
 
 /**
  * Compile result — either success with compiled workflow, or failure with errors.
@@ -118,8 +119,13 @@ export function compileEffective(
     });
 
     // Determine first and last custom nodes based on entry/exit edge modes
-    const firstCustomNode = patch.nodes[0]!.id;
-    const lastCustomNode = patch.nodes[patch.nodes.length - 1]!.id;
+    const firstNode = patch.nodes[0];
+    const lastNode = patch.nodes[patch.nodes.length - 1];
+    if (!firstNode || !lastNode) {
+      return { ok: false, errors: [`Slot ${slotId} has no nodes`] };
+    }
+    const firstCustomNode = firstNode.id;
+    const lastCustomNode = lastNode.id;
 
     // slot:in → first custom node
     effectiveEdges.push({
@@ -215,25 +221,30 @@ export function compileEffective(
       source: edge.sourceNodeId,
       target: edge.targetNodeId,
       priority: edge.priority ?? 0,
-      condition: edge.condition,
-      label: edge.label,
+      ...(edge.condition ? { condition: edge.condition } : {}),
+      ...(edge.label ? { label: edge.label } : {}),
       provenance: resolveEdgeProvenance(edge.id, slotMap),
     };
     edgesById[edge.id] = compiledEdge;
 
-    if (adjacency[edge.sourceNodeId]) {
-      adjacency[edge.sourceNodeId]!.push(edge.id);
+    const sourceAdj = adjacency[edge.sourceNodeId];
+    if (sourceAdj) {
+      sourceAdj.push(edge.id);
     }
-    if (reverseAdjacency[edge.targetNodeId]) {
-      reverseAdjacency[edge.targetNodeId]!.push(edge.id);
+    const targetAdj = reverseAdjacency[edge.targetNodeId];
+    if (targetAdj) {
+      targetAdj.push(edge.id);
     }
   }
 
   // Sort adjacency edge lists by priority then edge ID for determinism
   for (const nodeId of Object.keys(adjacency)) {
-    adjacency[nodeId]!.sort((a, b) => {
-      const ea = edgesById[a]!;
-      const eb = edgesById[b]!;
+    const edgeList = adjacency[nodeId];
+    if (!edgeList) continue;
+    edgeList.sort((a, b) => {
+      const ea = edgesById[a];
+      const eb = edgesById[b];
+      if (!ea || !eb) return 0;
       if (ea.priority !== eb.priority) return ea.priority - eb.priority;
       return ea.id.localeCompare(eb.id);
     });
@@ -313,7 +324,7 @@ function resolveEdgeProvenance(
   if (edgeId.startsWith('sys:')) return 'envelope';
 
   // Check if edge ID contains a slot reference
-  for (const [_nodeId, slotId] of Object.entries(slotMap)) {
+  for (const slotId of Object.values(slotMap)) {
     if (edgeId.startsWith(`usr:${slotId}:`)) return slotId;
   }
 

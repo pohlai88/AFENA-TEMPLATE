@@ -1,0 +1,250 @@
+{
+  "audit": {
+    "trackChanges": false
+  },
+  "canonVersion": "1.0.0",
+  "childTables": [],
+  "doctypeId": "erpnext:Accounts:Payment Gateway Account",
+  "events": [
+    {
+      "event": "validate",
+      "handlers": [
+        "erpnext.support.doctype.service_level_agreement.service_level_agreement.apply",
+        "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record.check_for_running_deletion_job"
+      ],
+      "handlersParsed": [
+        {
+          "attrPath": "apply",
+          "module": "erpnext.support.doctype.service_level_agreement.service_level_agreement"
+        },
+        {
+          "attrPath": "check_for_running_deletion_job",
+          "module": "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record"
+        }
+      ]
+    }
+  ],
+  "fieldOrder": [
+    "payment_gateway",
+    "payment_channel",
+    "company",
+    "is_default",
+    "column_break_4",
+    "payment_account",
+    "currency",
+    "payment_request_message",
+    "message",
+    "message_examples"
+  ],
+  "fields": [
+    {
+      "constraints": {},
+      "fieldname": "payment_gateway",
+      "fieldtype": "link",
+      "label": "Payment Gateway",
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Payment Gateway"
+      },
+      "optionsRaw": "Payment Gateway",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Payment Gateway",
+        "kind": "static"
+      },
+      "requiredStatic": true,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "Email",
+      "fieldname": "payment_channel",
+      "fieldtype": "select",
+      "label": "Payment Channel",
+      "optionsParsed": {
+        "choices": [
+          "Email",
+          "Phone",
+          "Other"
+        ],
+        "kind": "select"
+      },
+      "optionsRaw": "\nEmail\nPhone\nOther",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "company",
+      "fieldtype": "link",
+      "label": "Company",
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Company"
+      },
+      "optionsRaw": "Company",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Company",
+        "kind": "static"
+      },
+      "requiredStatic": true,
+      "ui": {
+        "inListView": true,
+        "printHide": true,
+        "rememberLastSelectedValue": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "is_default",
+      "fieldtype": "check",
+      "label": "Is Default",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_4",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "payment_account",
+      "fieldtype": "link",
+      "label": "Payment Account",
+      "layout": {
+        "column": 1
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Account"
+      },
+      "optionsRaw": "Account",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Account",
+        "kind": "static"
+      },
+      "requiredStatic": true,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fetchFrom": "payment_account.account_currency",
+      "fieldname": "currency",
+      "fieldtype": "read_only",
+      "label": "Currency",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval: doc.payment_channel == 'Email' || (!doc.payment_channel)",
+      "fieldname": "payment_request_message",
+      "fieldtype": "layout:section",
+      "layout": {
+        "section": "payment_request_message"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "Please click on the link below to make your payment",
+      "fieldname": "message",
+      "fieldtype": "small_text",
+      "label": "Default Payment Request Message",
+      "layout": {
+        "section": "payment_request_message"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "message_examples",
+      "fieldtype": "text_editor",
+      "label": "Message Examples",
+      "layout": {
+        "section": "payment_request_message"
+      },
+      "optionsParsed": {
+        "kind": "other",
+        "value": "<pre><h5>Message Example</h5>\n\n&lt;p&gt; Thank You for being a part of {{ doc.company }}! We hope you are enjoying the service.&lt;/p&gt;\n\n&lt;p&gt; Please find enclosed the E Bill statement. The outstanding amount is {{ doc.grand_total }}.&lt;/p&gt;\n\n&lt;p&gt; We don't want you to be spending time running around in order to pay for your Bill.<br>After all, life is beautiful and the time you have in hand should be spent to enjoy it!<br>So here are our little ways to help you get more time for life! &lt;/p&gt;\n\n&lt;a href=\"{{ payment_url }}\"&gt; click here to pay &lt;/a&gt;\n\n</pre>"
+      },
+      "optionsRaw": "<pre><h5>Message Example</h5>\n\n&lt;p&gt; Thank You for being a part of {{ doc.company }}! We hope you are enjoying the service.&lt;/p&gt;\n\n&lt;p&gt; Please find enclosed the E Bill statement. The outstanding amount is {{ doc.grand_total }}.&lt;/p&gt;\n\n&lt;p&gt; We don't want you to be spending time running around in order to pay for your Bill.<br>After all, life is beautiful and the time you have in hand should be spent to enjoy it!<br>So here are our little ways to help you get more time for life! &lt;/p&gt;\n\n&lt;a href=\"{{ payment_url }}\"&gt; click here to pay &lt;/a&gt;\n\n</pre>\n",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    }
+  ],
+  "identity": {
+    "app": "erpnext",
+    "isSingle": false,
+    "isSubmittable": false,
+    "isTree": false,
+    "module": "Accounts",
+    "naming": {
+      "strategy": "hash"
+    }
+  },
+  "name": "Payment Gateway Account",
+  "permissions": [
+    {
+      "actions": {
+        "create": true,
+        "delete": true,
+        "email": true,
+        "export": true,
+        "print": true,
+        "read": true,
+        "report": true,
+        "share": true,
+        "write": true
+      },
+      "permlevel": 0,
+      "role": "Accounts Manager"
+    }
+  ],
+  "ui": {
+    "searchFields": [],
+    "showNameInGlobalSearch": false,
+    "sortField": "creation",
+    "sortOrder": "DESC"
+  },
+  "workflows": [
+    {
+      "kind": "unavailable"
+    }
+  ]
+}

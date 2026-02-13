@@ -1,0 +1,125 @@
+{
+  "audit": {
+    "trackChanges": true
+  },
+  "canonVersion": "1.0.0",
+  "childTables": [],
+  "doctypeId": "erpnext:Stock:Item Barcode",
+  "events": [
+    {
+      "event": "validate",
+      "handlers": [
+        "erpnext.support.doctype.service_level_agreement.service_level_agreement.apply",
+        "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record.check_for_running_deletion_job"
+      ],
+      "handlersParsed": [
+        {
+          "attrPath": "apply",
+          "module": "erpnext.support.doctype.service_level_agreement.service_level_agreement"
+        },
+        {
+          "attrPath": "check_for_running_deletion_job",
+          "module": "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record"
+        }
+      ]
+    }
+  ],
+  "fieldOrder": [
+    "barcode",
+    "barcode_type",
+    "uom"
+  ],
+  "fields": [
+    {
+      "constraints": {},
+      "fieldname": "barcode",
+      "fieldtype": "data",
+      "label": "Barcode",
+      "noCopy": true,
+      "permlevel": 0,
+      "requiredStatic": true,
+      "ui": {
+        "inGlobalSearch": true,
+        "inListView": true
+      },
+      "unique": true
+    },
+    {
+      "constraints": {},
+      "fieldname": "barcode_type",
+      "fieldtype": "select",
+      "label": "Barcode Type",
+      "optionsParsed": {
+        "choices": [
+          "EAN",
+          "UPC-A",
+          "CODE-39",
+          "EAN-13",
+          "EAN-8",
+          "GS1",
+          "GTIN",
+          "GTIN-14",
+          "ISBN",
+          "ISBN-10",
+          "ISBN-13",
+          "ISSN",
+          "JAN",
+          "PZN",
+          "UPC"
+        ],
+        "kind": "select"
+      },
+      "optionsRaw": "\nEAN\nUPC-A\nCODE-39\nEAN-13\nEAN-8\nGS1\nGTIN\nGTIN-14\nISBN\nISBN-10\nISBN-13\nISSN\nJAN\nPZN\nUPC",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "uom",
+      "fieldtype": "link",
+      "label": "UOM",
+      "optionsParsed": {
+        "kind": "link",
+        "target": "UOM"
+      },
+      "optionsRaw": "UOM",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "UOM",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    }
+  ],
+  "identity": {
+    "app": "erpnext",
+    "isSingle": false,
+    "isSubmittable": false,
+    "isTree": false,
+    "module": "Stock",
+    "naming": {
+      "strategy": "hash"
+    }
+  },
+  "name": "Item Barcode",
+  "permissions": [],
+  "ui": {
+    "searchFields": [],
+    "showNameInGlobalSearch": false,
+    "sortField": "creation",
+    "sortOrder": "DESC"
+  },
+  "workflows": [
+    {
+      "kind": "unavailable"
+    }
+  ]
+}

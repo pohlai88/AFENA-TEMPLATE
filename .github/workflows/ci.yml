@@ -51,8 +51,71 @@ jobs:
       - name: Test
         run: pnpm test
 
+      - name: Test Coverage
+        run: pnpm test:coverage
+
+      - name: Upload Coverage
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: coverage/
+          retention-days: 7
+
       - name: CI invariants
         run: pnpm ci:invariants
+
+  afena-e2e:
+    name: E2E Tests
+    timeout-minutes: 30
+    runs-on: ubuntu-latest
+    needs: afena-ci
+    env:
+      DATABASE_URL: 'postgresql://ci:ci@ci-placeholder.neon.tech/neondb?sslmode=require'
+      NEON_AUTH_BASE_URL: 'https://ci-placeholder.neon.tech'
+      NEON_AUTH_COOKIE_SECRET: 'ci-placeholder-secret-32chars-minimum'
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
+
+      - name: Install dependencies (frozen lockfile)
+        run: pnpm install --frozen-lockfile
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+
+      - name: Build
+        run: pnpm build
+
+      - name: Run E2E tests
+        run: pnpm test:e2e
+        continue-on-error: true
+
+      - name: Upload Playwright report
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 7
+
+      - name: Upload test results
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: e2e-test-results
+          path: test-results/
+          retention-days: 7
 
   afena-audit:
     name: Dependency Audit

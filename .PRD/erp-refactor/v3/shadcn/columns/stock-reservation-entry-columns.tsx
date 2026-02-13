@@ -1,0 +1,39 @@
+"use client";
+
+// Column definitions for Stock Reservation Entry
+// Generated from Canon schema — do not edit manually
+
+import type { ColumnDef } from "@tanstack/react-table";
+import type { StockReservationEntry } from "../types/stock-reservation-entry.js";
+import { Badge } from "@/components/ui/badge";
+
+export const stockReservationEntryColumns: ColumnDef<StockReservationEntry>[] = [
+  {
+    accessorKey: "id",
+    header: "ID",
+  },
+  {
+    accessorKey: "reserved_qty",
+    header: "Reserved Qty",
+  },
+  {
+    accessorKey: "item_code",
+    header: "Item Code",
+  },
+  {
+    accessorKey: "warehouse",
+    header: "Warehouse",
+  },
+  {
+    id: "docstatus",
+    header: "Status",
+    cell: ({ row }) => {
+      const status = (row.original as any).docstatus;
+      return (
+        <Badge variant={status === 1 ? "default" : "secondary"}>
+          {status === 0 ? "Draft" : status === 1 ? "Submitted" : "Cancelled"}
+        </Badge>
+      );
+    },
+  },
+];

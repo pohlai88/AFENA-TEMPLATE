@@ -145,7 +145,7 @@ export async function dispatchWebhookEvent(
         deliveryId: row.id,
         statusCode,
         success,
-        error,
+        ...(error ? { error } : {}),
         durationMs,
       });
     } catch {

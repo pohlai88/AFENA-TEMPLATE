@@ -1,0 +1,206 @@
+{
+  "audit": {
+    "trackChanges": true
+  },
+  "canonVersion": "1.0.0",
+  "childTables": [
+    {
+      "childDoctype": "Quality Feedback Parameter",
+      "parentField": "parameters",
+      "required": false
+    }
+  ],
+  "doctypeId": "erpnext:Quality Management:Quality Feedback",
+  "events": [
+    {
+      "event": "validate",
+      "handlers": [
+        "erpnext.support.doctype.service_level_agreement.service_level_agreement.apply",
+        "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record.check_for_running_deletion_job"
+      ],
+      "handlersParsed": [
+        {
+          "attrPath": "apply",
+          "module": "erpnext.support.doctype.service_level_agreement.service_level_agreement"
+        },
+        {
+          "attrPath": "check_for_running_deletion_job",
+          "module": "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record"
+        }
+      ]
+    }
+  ],
+  "fieldOrder": [
+    "template",
+    "cb_00",
+    "document_type",
+    "document_name",
+    "sb_00",
+    "parameters"
+  ],
+  "fields": [
+    {
+      "constraints": {},
+      "fieldname": "template",
+      "fieldtype": "link",
+      "label": "Template",
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Quality Feedback Template"
+      },
+      "optionsRaw": "Quality Feedback Template",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Quality Feedback Template",
+        "kind": "static"
+      },
+      "requiredStatic": true,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "cb_00",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "document_type",
+      "fieldtype": "select",
+      "label": "Type",
+      "layout": {
+        "column": 1
+      },
+      "optionsParsed": {
+        "choices": [
+          "User",
+          "Customer"
+        ],
+        "kind": "select"
+      },
+      "optionsRaw": "User\nCustomer",
+      "permlevel": 0,
+      "requiredStatic": true,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "document_name",
+      "fieldtype": "dynamic_link",
+      "label": "Feedback By",
+      "layout": {
+        "column": 1
+      },
+      "optionsRaw": "document_type",
+      "permlevel": 0,
+      "ref": {
+        "doctypeField": "document_type",
+        "kind": "dynamic"
+      },
+      "requiredStatic": true,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "sb_00",
+      "fieldtype": "layout:section",
+      "layout": {
+        "section": "sb_00"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "childDoctype": "Quality Feedback Parameter",
+      "constraints": {},
+      "fetchFrom": "template.feedback_values",
+      "fieldname": "parameters",
+      "fieldtype": "table",
+      "label": "Parameters",
+      "layout": {
+        "section": "sb_00"
+      },
+      "optionsParsed": {
+        "doctype": "Quality Feedback Parameter",
+        "kind": "child_doctype"
+      },
+      "optionsRaw": "Quality Feedback Parameter",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    }
+  ],
+  "identity": {
+    "app": "erpnext",
+    "isSingle": false,
+    "isSubmittable": false,
+    "isTree": false,
+    "module": "Quality Management",
+    "naming": {
+      "expression": "format:QA-FB-{#####}",
+      "strategy": "expression"
+    }
+  },
+  "name": "Quality Feedback",
+  "permissions": [
+    {
+      "actions": {
+        "create": true,
+        "delete": true,
+        "email": true,
+        "export": true,
+        "print": true,
+        "read": true,
+        "report": true,
+        "share": true,
+        "write": true
+      },
+      "permlevel": 0,
+      "role": "Desk User"
+    },
+    {
+      "actions": {
+        "create": true,
+        "delete": true,
+        "email": true,
+        "export": true,
+        "print": true,
+        "read": true,
+        "report": true,
+        "share": true,
+        "write": true
+      },
+      "permlevel": 0,
+      "role": "System Manager"
+    }
+  ],
+  "ui": {
+    "searchFields": [],
+    "showNameInGlobalSearch": false,
+    "sortField": "creation",
+    "sortOrder": "DESC"
+  },
+  "workflows": [
+    {
+      "kind": "unavailable"
+    }
+  ]
+}

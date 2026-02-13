@@ -1,4 +1,4 @@
-import { and, eq, matchResults, sql } from 'afena-database';
+import { and, eq, matchResults } from 'afena-database';
 
 import type { NeonHttpDatabase } from 'drizzle-orm/neon-http';
 

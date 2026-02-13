@@ -1,0 +1,483 @@
+{
+  "audit": {
+    "trackChanges": false
+  },
+  "canonVersion": "1.0.0",
+  "childTables": [
+    {
+      "childDoctype": "Target Detail",
+      "parentField": "targets",
+      "required": false
+    }
+  ],
+  "doctypeId": "erpnext:Setup:Sales Partner",
+  "events": [
+    {
+      "event": "validate",
+      "handlers": [
+        "erpnext.support.doctype.service_level_agreement.service_level_agreement.apply",
+        "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record.check_for_running_deletion_job"
+      ],
+      "handlersParsed": [
+        {
+          "attrPath": "apply",
+          "module": "erpnext.support.doctype.service_level_agreement.service_level_agreement"
+        },
+        {
+          "attrPath": "check_for_running_deletion_job",
+          "module": "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record"
+        }
+      ]
+    }
+  ],
+  "fieldOrder": [
+    "partner_name",
+    "partner_type",
+    "territory",
+    "column_break0",
+    "commission_rate",
+    "address_contacts",
+    "address_desc",
+    "address_html",
+    "column_break1",
+    "contact_desc",
+    "contact_html",
+    "partner_target_details_section_break",
+    "targets",
+    "website",
+    "show_in_website",
+    "column_break_16",
+    "referral_code",
+    "section_break_17",
+    "route",
+    "column_break_20",
+    "logo",
+    "partner_website",
+    "section_break_22",
+    "introduction",
+    "description"
+  ],
+  "fields": [
+    {
+      "constraints": {},
+      "fieldname": "partner_name",
+      "fieldtype": "data",
+      "label": "Sales Partner Name",
+      "permlevel": 0,
+      "requiredStatic": true,
+      "ui": {},
+      "unique": true
+    },
+    {
+      "constraints": {},
+      "fieldname": "partner_type",
+      "fieldtype": "link",
+      "label": "Partner Type",
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Sales Partner Type"
+      },
+      "optionsRaw": "Sales Partner Type",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Sales Partner Type",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "inListView": true,
+        "inStandardFilter": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "territory",
+      "fieldtype": "link",
+      "label": "Territory",
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Territory"
+      },
+      "optionsRaw": "Territory",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Territory",
+        "kind": "static"
+      },
+      "requiredStatic": true,
+      "ui": {
+        "inListView": true,
+        "inStandardFilter": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break0",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "width": "50%"
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "commission_rate",
+      "fieldtype": "float",
+      "label": "Commission Rate",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": true,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "address_contacts",
+      "fieldtype": "layout:section",
+      "label": "Address & Contacts",
+      "layout": {
+        "section": "Address & Contacts"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:doc.__islocal",
+      "fieldname": "address_desc",
+      "fieldtype": "text_editor",
+      "label": "Address Desc",
+      "layout": {
+        "section": "Address & Contacts"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "address_html",
+      "fieldtype": "text_editor",
+      "label": "Address HTML",
+      "layout": {
+        "section": "Address & Contacts"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break1",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "Address & Contacts"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:doc.__islocal",
+      "fieldname": "contact_desc",
+      "fieldtype": "text_editor",
+      "label": "Contact Desc",
+      "layout": {
+        "column": 1,
+        "section": "Address & Contacts"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "contact_html",
+      "fieldtype": "text_editor",
+      "label": "Contact HTML",
+      "layout": {
+        "column": 1,
+        "section": "Address & Contacts"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "partner_target_details_section_break",
+      "fieldtype": "layout:section",
+      "label": "Sales Partner Target",
+      "layout": {
+        "section": "Sales Partner Target"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "childDoctype": "Target Detail",
+      "constraints": {},
+      "fieldname": "targets",
+      "fieldtype": "table",
+      "label": "Targets",
+      "layout": {
+        "section": "Sales Partner Target"
+      },
+      "optionsParsed": {
+        "doctype": "Target Detail",
+        "kind": "child_doctype"
+      },
+      "optionsRaw": "Target Detail",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "website",
+      "fieldtype": "layout:section",
+      "label": "Website",
+      "layout": {
+        "section": "Website"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "show_in_website",
+      "fieldtype": "check",
+      "label": "Show In Website",
+      "layout": {
+        "section": "Website"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_16",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "Website"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {
+        "maxLength": 8
+      },
+      "fieldname": "referral_code",
+      "fieldtype": "data",
+      "label": "Referral Code",
+      "layout": {
+        "column": 1,
+        "section": "Website"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "description": "To Track inbound purchase"
+      },
+      "unique": true
+    },
+    {
+      "constraints": {},
+      "dependsOn": "show_in_website",
+      "fieldname": "section_break_17",
+      "fieldtype": "layout:section",
+      "layout": {
+        "section": "section_break_17"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "route",
+      "fieldtype": "data",
+      "label": "Route",
+      "layout": {
+        "section": "section_break_17"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": true
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_20",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "section_break_17"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "logo",
+      "fieldtype": "attach",
+      "label": "Logo",
+      "layout": {
+        "column": 1,
+        "section": "section_break_17"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "partner_website",
+      "fieldtype": "data",
+      "label": "Partner website",
+      "layout": {
+        "column": 1,
+        "section": "section_break_17"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "show_in_website",
+      "fieldname": "section_break_22",
+      "fieldtype": "layout:section",
+      "layout": {
+        "section": "section_break_22"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "introduction",
+      "fieldtype": "text",
+      "label": "Introduction",
+      "layout": {
+        "section": "section_break_22"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "description",
+      "fieldtype": "text_editor",
+      "label": "Description",
+      "layout": {
+        "section": "section_break_22"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    }
+  ],
+  "identity": {
+    "app": "erpnext",
+    "isSingle": false,
+    "isSubmittable": false,
+    "isTree": false,
+    "module": "Setup",
+    "naming": {
+      "expression": "field:partner_name",
+      "strategy": "field"
+    }
+  },
+  "name": "Sales Partner",
+  "permissions": [
+    {
+      "actions": {
+        "email": true,
+        "print": true,
+        "read": true,
+        "report": true
+      },
+      "permlevel": 0,
+      "role": "Sales Manager"
+    },
+    {
+      "actions": {
+        "create": true,
+        "email": true,
+        "print": true,
+        "read": true,
+        "report": true,
+        "share": true,
+        "write": true
+      },
+      "permlevel": 0,
+      "role": "Sales Master Manager"
+    },
+    {
+      "actions": {
+        "email": true,
+        "print": true,
+        "read": true,
+        "report": true
+      },
+      "permlevel": 0,
+      "role": "Sales User"
+    }
+  ],
+  "ui": {
+    "searchFields": [],
+    "showNameInGlobalSearch": true,
+    "sortField": "creation",
+    "sortOrder": "ASC"
+  },
+  "workflows": [
+    {
+      "kind": "unavailable"
+    }
+  ]
+}

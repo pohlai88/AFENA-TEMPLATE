@@ -1,0 +1,213 @@
+{
+  "audit": {
+    "trackChanges": false
+  },
+  "canonVersion": "1.0.0",
+  "childTables": [],
+  "doctypeId": "erpnext:Stock:Item Quality Inspection Parameter",
+  "events": [
+    {
+      "event": "validate",
+      "handlers": [
+        "erpnext.support.doctype.service_level_agreement.service_level_agreement.apply",
+        "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record.check_for_running_deletion_job"
+      ],
+      "handlersParsed": [
+        {
+          "attrPath": "apply",
+          "module": "erpnext.support.doctype.service_level_agreement.service_level_agreement"
+        },
+        {
+          "attrPath": "check_for_running_deletion_job",
+          "module": "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record"
+        }
+      ]
+    }
+  ],
+  "fieldOrder": [
+    "specification",
+    "parameter_group",
+    "value",
+    "numeric",
+    "column_break_3",
+    "min_value",
+    "max_value",
+    "formula_based_criteria",
+    "acceptance_formula"
+  ],
+  "fields": [
+    {
+      "constraints": {},
+      "fieldname": "specification",
+      "fieldtype": "link",
+      "label": "Parameter",
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Quality Inspection Parameter"
+      },
+      "optionsRaw": "Quality Inspection Parameter",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Quality Inspection Parameter",
+        "kind": "static"
+      },
+      "requiredStatic": true,
+      "ui": {
+        "inListView": true,
+        "width": "100px"
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fetchFrom": "specification.parameter_group",
+      "fieldname": "parameter_group",
+      "fieldtype": "link",
+      "label": "Parameter Group",
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Quality Inspection Parameter Group"
+      },
+      "optionsRaw": "Quality Inspection Parameter Group",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Quality Inspection Parameter Group",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:(!doc.formula_based_criteria && !doc.numeric)",
+      "fieldname": "value",
+      "fieldtype": "data",
+      "label": "Acceptance Criteria Value",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "1",
+      "fieldname": "numeric",
+      "fieldtype": "check",
+      "label": "Numeric",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "inListView": true,
+        "width": "80px"
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_3",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:(!doc.formula_based_criteria && doc.numeric)",
+      "fieldname": "min_value",
+      "fieldtype": "float",
+      "label": "Minimum Value",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:(!doc.formula_based_criteria && doc.numeric)",
+      "fieldname": "max_value",
+      "fieldtype": "float",
+      "label": "Maximum Value",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "formula_based_criteria",
+      "fieldtype": "check",
+      "label": "Formula Based Criteria",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "formula_based_criteria",
+      "fieldname": "acceptance_formula",
+      "fieldtype": "code",
+      "label": "Acceptance Criteria Formula",
+      "layout": {
+        "column": 1
+      },
+      "optionsParsed": {
+        "kind": "other",
+        "value": "PythonExpression"
+      },
+      "optionsRaw": "PythonExpression",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "description": "Simple Python formula applied on Reading fields.<br> Numeric eg. 1: <b>reading_1 &gt; 0.2 and reading_1 &lt; 0.5</b><br>\nNumeric eg. 2: <b>mean &gt; 3.5</b> (mean of populated fields)<br>\nValue based eg.:  <b>reading_value in (\"A\", \"B\", \"C\")</b>"
+      },
+      "unique": false
+    }
+  ],
+  "identity": {
+    "app": "erpnext",
+    "isSingle": false,
+    "isSubmittable": false,
+    "isTree": false,
+    "module": "Stock",
+    "naming": {
+      "strategy": "hash"
+    }
+  },
+  "name": "Item Quality Inspection Parameter",
+  "permissions": [],
+  "ui": {
+    "searchFields": [],
+    "showNameInGlobalSearch": false,
+    "sortField": "creation",
+    "sortOrder": "DESC"
+  },
+  "workflows": [
+    {
+      "kind": "unavailable"
+    }
+  ]
+}

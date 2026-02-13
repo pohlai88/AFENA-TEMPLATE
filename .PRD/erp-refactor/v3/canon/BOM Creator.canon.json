@@ -1,0 +1,844 @@
+{
+  "audit": {
+    "trackChanges": true
+  },
+  "canonVersion": "1.0.0",
+  "childTables": [
+    {
+      "childDoctype": "BOM Creator Item",
+      "parentField": "items",
+      "required": false
+    }
+  ],
+  "doctypeId": "erpnext:Manufacturing:BOM Creator",
+  "events": [
+    {
+      "event": "validate",
+      "handlers": [
+        "erpnext.support.doctype.service_level_agreement.service_level_agreement.apply",
+        "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record.check_for_running_deletion_job"
+      ],
+      "handlersParsed": [
+        {
+          "attrPath": "apply",
+          "module": "erpnext.support.doctype.service_level_agreement.service_level_agreement"
+        },
+        {
+          "attrPath": "check_for_running_deletion_job",
+          "module": "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record"
+        }
+      ]
+    }
+  ],
+  "fieldOrder": [
+    "tab_2_tab",
+    "bom_creator",
+    "details_tab",
+    "section_break_ylsl",
+    "item_code",
+    "item_name",
+    "item_group",
+    "column_break_ikj7",
+    "qty",
+    "project",
+    "uom",
+    "section_break_xvld",
+    "routing",
+    "raw_materials_tab",
+    "currency_detail",
+    "rm_cost_as_per",
+    "set_rate_based_on_warehouse",
+    "buying_price_list",
+    "price_list_currency",
+    "plc_conversion_rate",
+    "column_break_ivyw",
+    "currency",
+    "conversion_rate",
+    "section_break_zcfg",
+    "default_warehouse",
+    "column_break_tzot",
+    "company",
+    "materials_section",
+    "items",
+    "costing_detail",
+    "raw_material_cost",
+    "remarks_tab",
+    "remarks",
+    "section_break_yixm",
+    "status",
+    "column_break_irab",
+    "error_log",
+    "connections_tab",
+    "amended_from"
+  ],
+  "fields": [
+    {
+      "constraints": {},
+      "fieldname": "tab_2_tab",
+      "fieldtype": "layout:tab",
+      "label": "BOM Tree",
+      "layout": {
+        "tab": "BOM Tree"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "bom_creator",
+      "fieldtype": "text_editor",
+      "layout": {
+        "tab": "BOM Tree"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "details_tab",
+      "fieldtype": "layout:tab",
+      "label": "Final Product",
+      "layout": {
+        "tab": "Final Product"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "section_break_ylsl",
+      "fieldtype": "layout:section",
+      "layout": {
+        "section": "section_break_ylsl",
+        "tab": "Final Product"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "item_code",
+      "fieldtype": "link",
+      "label": "Finished Good",
+      "layout": {
+        "section": "section_break_ylsl",
+        "tab": "Final Product"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Item"
+      },
+      "optionsRaw": "Item",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Item",
+        "kind": "static"
+      },
+      "requiredStatic": true,
+      "ui": {
+        "inListView": true,
+        "inStandardFilter": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fetchFrom": "item_code.item_name",
+      "fieldname": "item_name",
+      "fieldtype": "data",
+      "label": "Item Name",
+      "layout": {
+        "section": "section_break_ylsl",
+        "tab": "Final Product"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fetchFrom": "item_code.item_group",
+      "fieldname": "item_group",
+      "fieldtype": "link",
+      "label": "Item Group",
+      "layout": {
+        "section": "section_break_ylsl",
+        "tab": "Final Product"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Item Group"
+      },
+      "optionsRaw": "Item Group",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Item Group",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_ikj7",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "section_break_ylsl",
+        "tab": "Final Product"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "qty",
+      "fieldtype": "float",
+      "label": "Quantity",
+      "layout": {
+        "column": 1,
+        "section": "section_break_ylsl",
+        "tab": "Final Product"
+      },
+      "permlevel": 0,
+      "requiredStatic": true,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "project",
+      "fieldtype": "link",
+      "label": "Project",
+      "layout": {
+        "column": 1,
+        "section": "section_break_ylsl",
+        "tab": "Final Product"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Project"
+      },
+      "optionsRaw": "Project",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Project",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fetchFrom": "item_code.stock_uom",
+      "fieldname": "uom",
+      "fieldtype": "link",
+      "label": "UOM",
+      "layout": {
+        "column": 1,
+        "section": "section_break_ylsl",
+        "tab": "Final Product"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "UOM"
+      },
+      "optionsRaw": "UOM",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "UOM",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "section_break_xvld",
+      "fieldtype": "layout:section",
+      "label": "Operations Routing",
+      "layout": {
+        "section": "Operations Routing",
+        "tab": "Final Product"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "routing",
+      "fieldtype": "link",
+      "label": "Routing",
+      "layout": {
+        "section": "Operations Routing",
+        "tab": "Final Product"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Routing"
+      },
+      "optionsRaw": "Routing",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Routing",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "raw_materials_tab",
+      "fieldtype": "layout:tab",
+      "label": "Sub Assemblies & Raw Materials",
+      "layout": {
+        "tab": "Sub Assemblies & Raw Materials"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "currency_detail",
+      "fieldtype": "layout:section",
+      "label": "Costing",
+      "layout": {
+        "section": "Costing",
+        "tab": "Sub Assemblies & Raw Materials"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "allowOnSubmit": true,
+      "constraints": {},
+      "default": "Valuation Rate",
+      "fieldname": "rm_cost_as_per",
+      "fieldtype": "select",
+      "label": "Rate Of Materials Based On",
+      "layout": {
+        "section": "Costing",
+        "tab": "Sub Assemblies & Raw Materials"
+      },
+      "optionsParsed": {
+        "choices": [
+          "Valuation Rate",
+          "Last Purchase Rate",
+          "Price List"
+        ],
+        "kind": "select"
+      },
+      "optionsRaw": "Valuation Rate\nLast Purchase Rate\nPrice List",
+      "permlevel": 0,
+      "requiredStatic": true,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "dependsOn": "eval:doc.rm_cost_as_per === \"Valuation Rate\"",
+      "fieldname": "set_rate_based_on_warehouse",
+      "fieldtype": "check",
+      "label": "Set Valuation Rate Based on Source Warehouse",
+      "layout": {
+        "section": "Costing",
+        "tab": "Sub Assemblies & Raw Materials"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "allowOnSubmit": true,
+      "constraints": {},
+      "dependsOn": "eval:doc.rm_cost_as_per===\"Price List\"",
+      "fieldname": "buying_price_list",
+      "fieldtype": "link",
+      "label": "Price List",
+      "layout": {
+        "section": "Costing",
+        "tab": "Sub Assemblies & Raw Materials"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Price List"
+      },
+      "optionsRaw": "Price List",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Price List",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "allowOnSubmit": true,
+      "constraints": {},
+      "dependsOn": "eval:doc.rm_cost_as_per=='Price List'",
+      "fieldname": "price_list_currency",
+      "fieldtype": "link",
+      "label": "Price List Currency",
+      "layout": {
+        "section": "Costing",
+        "tab": "Sub Assemblies & Raw Materials"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Currency"
+      },
+      "optionsRaw": "Currency",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Currency",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "allowOnSubmit": true,
+      "constraints": {},
+      "dependsOn": "eval:doc.rm_cost_as_per=='Price List'",
+      "fieldname": "plc_conversion_rate",
+      "fieldtype": "float",
+      "label": "Price List Exchange Rate",
+      "layout": {
+        "section": "Costing",
+        "tab": "Sub Assemblies & Raw Materials"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_ivyw",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "Costing",
+        "tab": "Sub Assemblies & Raw Materials"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "currency",
+      "fieldtype": "link",
+      "label": "Currency",
+      "layout": {
+        "column": 1,
+        "section": "Costing",
+        "tab": "Sub Assemblies & Raw Materials"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Currency"
+      },
+      "optionsRaw": "Currency",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Currency",
+        "kind": "static"
+      },
+      "requiredStatic": true,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "1",
+      "fieldname": "conversion_rate",
+      "fieldtype": "float",
+      "label": "Conversion Rate",
+      "layout": {
+        "column": 1,
+        "section": "Costing",
+        "tab": "Sub Assemblies & Raw Materials"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "precision": "9"
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "section_break_zcfg",
+      "fieldtype": "layout:section",
+      "label": "Warehouse",
+      "layout": {
+        "section": "Warehouse",
+        "tab": "Sub Assemblies & Raw Materials"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "default_warehouse",
+      "fieldtype": "link",
+      "label": "Default Source Warehouse",
+      "layout": {
+        "section": "Warehouse",
+        "tab": "Sub Assemblies & Raw Materials"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Warehouse"
+      },
+      "optionsRaw": "Warehouse",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Warehouse",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_tzot",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "Warehouse",
+        "tab": "Sub Assemblies & Raw Materials"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "company",
+      "fieldtype": "link",
+      "label": "Company",
+      "layout": {
+        "column": 1,
+        "section": "Warehouse",
+        "tab": "Sub Assemblies & Raw Materials"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Company"
+      },
+      "optionsRaw": "Company",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Company",
+        "kind": "static"
+      },
+      "requiredStatic": true,
+      "ui": {
+        "rememberLastSelectedValue": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "materials_section",
+      "fieldtype": "layout:section",
+      "layout": {
+        "section": "materials_section",
+        "tab": "Sub Assemblies & Raw Materials"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "childDoctype": "BOM Creator Item",
+      "constraints": {},
+      "fieldname": "items",
+      "fieldtype": "table",
+      "label": "Items",
+      "layout": {
+        "section": "materials_section",
+        "tab": "Sub Assemblies & Raw Materials"
+      },
+      "optionsParsed": {
+        "doctype": "BOM Creator Item",
+        "kind": "child_doctype"
+      },
+      "optionsRaw": "BOM Creator Item",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "costing_detail",
+      "fieldtype": "layout:section",
+      "label": "Costing Details",
+      "layout": {
+        "section": "Costing Details",
+        "tab": "Sub Assemblies & Raw Materials"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "raw_material_cost",
+      "fieldtype": "currency",
+      "label": "Total Cost",
+      "layout": {
+        "section": "Costing Details",
+        "tab": "Sub Assemblies & Raw Materials"
+      },
+      "noCopy": true,
+      "optionsParsed": {
+        "field": "currency",
+        "kind": "currency_field"
+      },
+      "optionsRaw": "currency",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "inListView": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "remarks_tab",
+      "fieldtype": "layout:tab",
+      "label": "Remarks",
+      "layout": {
+        "tab": "Remarks"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "remarks",
+      "fieldtype": "text_editor",
+      "label": "Remarks",
+      "layout": {
+        "tab": "Remarks"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "section_break_yixm",
+      "fieldtype": "layout:section",
+      "layout": {
+        "section": "section_break_yixm",
+        "tab": "Remarks"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "Draft",
+      "fieldname": "status",
+      "fieldtype": "select",
+      "label": "Status",
+      "layout": {
+        "section": "section_break_yixm",
+        "tab": "Remarks"
+      },
+      "noCopy": true,
+      "optionsParsed": {
+        "choices": [
+          "Draft",
+          "Submitted",
+          "In Progress",
+          "Completed",
+          "Failed",
+          "Cancelled"
+        ],
+        "kind": "select"
+      },
+      "optionsRaw": "Draft\nSubmitted\nIn Progress\nCompleted\nFailed\nCancelled",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_irab",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "section_break_yixm",
+        "tab": "Remarks"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "error_log",
+      "fieldtype": "text",
+      "label": "Error Log",
+      "layout": {
+        "column": 1,
+        "section": "section_break_yixm",
+        "tab": "Remarks"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "connections_tab",
+      "fieldtype": "layout:tab",
+      "label": "Connections",
+      "layout": {
+        "tab": "Connections"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "amended_from",
+      "fieldtype": "link",
+      "label": "Amended From",
+      "layout": {
+        "tab": "Connections"
+      },
+      "noCopy": true,
+      "optionsParsed": {
+        "kind": "link",
+        "target": "BOM Creator"
+      },
+      "optionsRaw": "BOM Creator",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "BOM Creator",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true,
+        "readOnly": true
+      },
+      "unique": false
+    }
+  ],
+  "identity": {
+    "app": "erpnext",
+    "isSingle": false,
+    "isSubmittable": true,
+    "isTree": false,
+    "module": "Manufacturing",
+    "naming": {
+      "strategy": "prompt"
+    }
+  },
+  "name": "BOM Creator",
+  "permissions": [
+    {
+      "actions": {
+        "cancel": true,
+        "create": true,
+        "delete": true,
+        "email": true,
+        "print": true,
+        "read": true,
+        "report": true,
+        "share": true,
+        "submit": true,
+        "write": true
+      },
+      "permlevel": 0,
+      "role": "Manufacturing Manager"
+    },
+    {
+      "actions": {
+        "cancel": true,
+        "create": true,
+        "delete": true,
+        "email": true,
+        "print": true,
+        "read": true,
+        "report": true,
+        "share": true,
+        "submit": true,
+        "write": true
+      },
+      "permlevel": 0,
+      "role": "Manufacturing User"
+    }
+  ],
+  "ui": {
+    "searchFields": [],
+    "showNameInGlobalSearch": true,
+    "sortField": "creation",
+    "sortOrder": "DESC"
+  },
+  "workflows": [
+    {
+      "kind": "unavailable"
+    }
+  ]
+}

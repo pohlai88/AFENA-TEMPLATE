@@ -1,0 +1,209 @@
+{
+  "audit": {
+    "trackChanges": true
+  },
+  "canonVersion": "1.0.0",
+  "childTables": [
+    {
+      "childDoctype": "POS Field",
+      "parentField": "invoice_fields",
+      "required": false
+    },
+    {
+      "childDoctype": "POS Search Fields",
+      "parentField": "pos_search_fields",
+      "required": false
+    }
+  ],
+  "doctypeId": "erpnext:Accounts:POS Settings",
+  "events": [
+    {
+      "event": "validate",
+      "handlers": [
+        "erpnext.support.doctype.service_level_agreement.service_level_agreement.apply",
+        "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record.check_for_running_deletion_job"
+      ],
+      "handlersParsed": [
+        {
+          "attrPath": "apply",
+          "module": "erpnext.support.doctype.service_level_agreement.service_level_agreement"
+        },
+        {
+          "attrPath": "check_for_running_deletion_job",
+          "module": "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record"
+        }
+      ]
+    }
+  ],
+  "fieldOrder": [
+    "invoice_type",
+    "column_break_vwwt",
+    "post_change_gl_entries",
+    "section_break_gyos",
+    "invoice_fields",
+    "pos_search_fields"
+  ],
+  "fields": [
+    {
+      "constraints": {},
+      "default": "Sales Invoice",
+      "fieldname": "invoice_type",
+      "fieldtype": "select",
+      "label": "Invoice Type Created via POS Screen",
+      "optionsParsed": {
+        "choices": [
+          "Sales Invoice",
+          "POS Invoice"
+        ],
+        "kind": "select"
+      },
+      "optionsRaw": "Sales Invoice\nPOS Invoice",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "description": "The system will create a Sales Invoice or a POS Invoice from the POS interface based on this setting. For high-volume transactions, it is recommended to use POS Invoice."
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_vwwt",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "post_change_gl_entries",
+      "fieldtype": "check",
+      "label": "Create Ledger Entries for Change Amount",
+      "layout": {
+        "column": 1
+      },
+      "optionsParsed": {
+        "kind": "other",
+        "value": "1"
+      },
+      "optionsRaw": "1",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "description": "If enabled, ledger entries will be posted for change amount in POS transactions"
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "section_break_gyos",
+      "fieldtype": "layout:section",
+      "layout": {
+        "section": "section_break_gyos"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "childDoctype": "POS Field",
+      "constraints": {},
+      "fieldname": "invoice_fields",
+      "fieldtype": "table",
+      "label": "POS Additional Fields",
+      "layout": {
+        "section": "section_break_gyos"
+      },
+      "optionsParsed": {
+        "doctype": "POS Field",
+        "kind": "child_doctype"
+      },
+      "optionsRaw": "POS Field",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "childDoctype": "POS Search Fields",
+      "constraints": {},
+      "fieldname": "pos_search_fields",
+      "fieldtype": "table",
+      "label": "POS Search Fields",
+      "layout": {
+        "section": "section_break_gyos"
+      },
+      "optionsParsed": {
+        "doctype": "POS Search Fields",
+        "kind": "child_doctype"
+      },
+      "optionsRaw": "POS Search Fields",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    }
+  ],
+  "identity": {
+    "app": "erpnext",
+    "isSingle": false,
+    "isSubmittable": false,
+    "isTree": false,
+    "module": "Accounts",
+    "naming": {
+      "strategy": "hash"
+    }
+  },
+  "name": "POS Settings",
+  "permissions": [
+    {
+      "actions": {
+        "email": true,
+        "print": true,
+        "read": true,
+        "share": true,
+        "write": true
+      },
+      "permlevel": 0,
+      "role": "Accounts User"
+    },
+    {
+      "actions": {
+        "email": true,
+        "print": true,
+        "read": true,
+        "share": true,
+        "write": true
+      },
+      "permlevel": 0,
+      "role": "Sales User"
+    },
+    {
+      "actions": {
+        "email": true,
+        "print": true,
+        "read": true,
+        "share": true,
+        "write": true
+      },
+      "permlevel": 0,
+      "role": "System Manager"
+    }
+  ],
+  "ui": {
+    "searchFields": [],
+    "showNameInGlobalSearch": false,
+    "sortField": "creation",
+    "sortOrder": "DESC"
+  },
+  "workflows": [
+    {
+      "kind": "unavailable"
+    }
+  ]
+}

@@ -1,0 +1,310 @@
+{
+  "audit": {
+    "trackChanges": true
+  },
+  "canonVersion": "1.0.0",
+  "childTables": [
+    {
+      "childDoctype": "Asset Maintenance Task",
+      "parentField": "asset_maintenance_tasks",
+      "required": true
+    }
+  ],
+  "doctypeId": "erpnext:Assets:Asset Maintenance",
+  "events": [
+    {
+      "event": "validate",
+      "handlers": [
+        "erpnext.support.doctype.service_level_agreement.service_level_agreement.apply",
+        "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record.check_for_running_deletion_job"
+      ],
+      "handlersParsed": [
+        {
+          "attrPath": "apply",
+          "module": "erpnext.support.doctype.service_level_agreement.service_level_agreement"
+        },
+        {
+          "attrPath": "check_for_running_deletion_job",
+          "module": "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record"
+        }
+      ]
+    }
+  ],
+  "fieldOrder": [
+    "asset_name",
+    "asset_category",
+    "company",
+    "column_break_3",
+    "item_code",
+    "item_name",
+    "section_break_6",
+    "maintenance_team",
+    "column_break_9",
+    "maintenance_manager",
+    "maintenance_manager_name",
+    "section_break_8",
+    "asset_maintenance_tasks"
+  ],
+  "fields": [
+    {
+      "constraints": {},
+      "fieldname": "asset_name",
+      "fieldtype": "link",
+      "label": "Asset Name",
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Asset"
+      },
+      "optionsRaw": "Asset",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Asset",
+        "kind": "static"
+      },
+      "requiredStatic": true,
+      "ui": {
+        "inListView": true
+      },
+      "unique": true
+    },
+    {
+      "constraints": {},
+      "fetchFrom": "asset_name.asset_category",
+      "fieldname": "asset_category",
+      "fieldtype": "read_only",
+      "label": "Asset Category",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "company",
+      "fieldtype": "link",
+      "label": "Company",
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Company"
+      },
+      "optionsRaw": "Company",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Company",
+        "kind": "static"
+      },
+      "requiredStatic": true,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_3",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fetchFrom": "asset_name.item_code",
+      "fieldname": "item_code",
+      "fieldtype": "read_only",
+      "label": "Item Code",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fetchFrom": "asset_name.item_name",
+      "fieldname": "item_name",
+      "fieldtype": "read_only",
+      "label": "Item Name",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "section_break_6",
+      "fieldtype": "layout:section",
+      "layout": {
+        "section": "section_break_6"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "maintenance_team",
+      "fieldtype": "link",
+      "label": "Maintenance Team",
+      "layout": {
+        "section": "section_break_6"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Asset Maintenance Team"
+      },
+      "optionsRaw": "Asset Maintenance Team",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Asset Maintenance Team",
+        "kind": "static"
+      },
+      "requiredStatic": true,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_9",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "section_break_6"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fetchFrom": "maintenance_team.maintenance_manager",
+      "fieldname": "maintenance_manager",
+      "fieldtype": "data",
+      "label": "Maintenance Manager",
+      "layout": {
+        "column": 1,
+        "section": "section_break_6"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "hidden": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fetchFrom": "maintenance_team.maintenance_manager_name",
+      "fieldname": "maintenance_manager_name",
+      "fieldtype": "read_only",
+      "label": "Maintenance Manager Name",
+      "layout": {
+        "column": 1,
+        "section": "section_break_6"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "section_break_8",
+      "fieldtype": "layout:section",
+      "label": "Tasks",
+      "layout": {
+        "section": "Tasks"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "childDoctype": "Asset Maintenance Task",
+      "constraints": {},
+      "fieldname": "asset_maintenance_tasks",
+      "fieldtype": "table",
+      "label": "Maintenance Tasks",
+      "layout": {
+        "section": "Tasks"
+      },
+      "optionsParsed": {
+        "doctype": "Asset Maintenance Task",
+        "kind": "child_doctype"
+      },
+      "optionsRaw": "Asset Maintenance Task",
+      "permlevel": 0,
+      "requiredStatic": true,
+      "ui": {},
+      "unique": false
+    }
+  ],
+  "identity": {
+    "app": "erpnext",
+    "isSingle": false,
+    "isSubmittable": false,
+    "isTree": false,
+    "module": "Assets",
+    "naming": {
+      "expression": "field:asset_name",
+      "strategy": "field"
+    }
+  },
+  "name": "Asset Maintenance",
+  "permissions": [
+    {
+      "actions": {
+        "create": true,
+        "delete": true,
+        "email": true,
+        "export": true,
+        "print": true,
+        "read": true,
+        "report": true,
+        "share": true,
+        "write": true
+      },
+      "permlevel": 0,
+      "role": "Manufacturing User"
+    },
+    {
+      "actions": {
+        "create": true,
+        "delete": true,
+        "email": true,
+        "export": true,
+        "print": true,
+        "read": true,
+        "report": true,
+        "share": true,
+        "write": true
+      },
+      "permlevel": 0,
+      "role": "Quality Manager"
+    }
+  ],
+  "ui": {
+    "searchFields": [],
+    "showNameInGlobalSearch": false,
+    "sortField": "creation",
+    "sortOrder": "DESC"
+  },
+  "workflows": [
+    {
+      "kind": "unavailable"
+    }
+  ]
+}

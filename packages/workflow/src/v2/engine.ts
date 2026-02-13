@@ -233,7 +233,7 @@ export async function createInstance(
     tokenId: startTokenId,
     entityVersion: input.entityVersion,
     actorUserId: input.actorUserId,
-    traceId: input.traceId,
+    ...(input.traceId ? { traceId: input.traceId } : {}),
     db,
     handlers,
   });
@@ -397,15 +397,15 @@ export async function advanceWorkflow(input: AdvanceWorkflowInput): Promise<Adva
     runAs: nodeRunAs as WorkflowStepContext['runAs'],
     actor: { userId: actorUserId, orgId: instance.orgId },
     orgId: instance.orgId,
-    traceId,
+    ...(traceId ? { traceId } : {}),
     compiled,
     contextJson: instance.contextJson,
-    entitySnapshot: instance.contextJson['entity'] as Record<string, unknown> | undefined,
+    ...(instance.contextJson['entity'] ? { entitySnapshot: instance.contextJson['entity'] as Record<string, unknown> } : {}),
   };
 
   let result: StepResult;
   try {
-    result = await handler.execute(stepCtx, (node.config ?? {}) as WorkflowNodeConfig);
+    result = await handler.execute(stepCtx, node.config ?? ({} as WorkflowNodeConfig));
   } catch (err) {
     const errorMessage = err instanceof Error ? err.message : String(err);
     result = { status: 'failed', error: errorMessage };
@@ -422,6 +422,7 @@ export async function advanceWorkflow(input: AdvanceWorkflowInput): Promise<Adva
       .map((edgeId) => compiled.edgesById[edgeId])
       .filter(Boolean)
       .sort((a, b) => {
+        if (!a || !b) return 0;
         if (a.priority !== b.priority) return a.priority - b.priority;
         return a.id.localeCompare(b.id);
       });
@@ -489,7 +490,7 @@ export async function advanceWorkflow(input: AdvanceWorkflowInput): Promise<Adva
         effectType: effect.effectType,
         payloadJson: effect.payload,
         eventIdempotencyKey: `${stepExecutionId}:${effect.effectType}`,
-        traceId,
+        ...(traceId ? { traceId } : {}),
       });
     }
   }
@@ -503,8 +504,6 @@ export async function advanceWorkflow(input: AdvanceWorkflowInput): Promise<Adva
     await db.updateStepExecution(stepExecutionId, now, {
       status: 'pending',
       outputJson: result.output ?? null,
-      completedAt: undefined,
-      durationMs: undefined,
     });
 
     // Update token status to 'waiting' (PRD §846: active → waiting)
@@ -679,7 +678,7 @@ export async function advanceWorkflow(input: AdvanceWorkflowInput): Promise<Adva
     status: newStatus,
     lastStepExecutionId: stepExecutionId,
     entityVersion,
-    completedAt: instanceCompleted ? completedAt : undefined,
+    ...(instanceCompleted ? { completedAt } : {}),
   });
 
   return {

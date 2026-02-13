@@ -34,7 +34,7 @@ export class CsvLegacyAdapter implements LegacyAdapter {
     this.idColumn = config.idColumn;
   }
 
-  extractBatch(
+  async extractBatch(
     entityType: EntityType,
     batchSize: number,
     cursor: Cursor

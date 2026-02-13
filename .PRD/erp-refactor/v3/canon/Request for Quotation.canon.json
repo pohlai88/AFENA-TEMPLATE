@@ -1,0 +1,837 @@
+{
+  "audit": {
+    "trackChanges": false
+  },
+  "canonVersion": "1.0.0",
+  "childTables": [
+    {
+      "childDoctype": "Request for Quotation Item",
+      "parentField": "items",
+      "required": true
+    },
+    {
+      "childDoctype": "Request for Quotation Supplier",
+      "parentField": "suppliers",
+      "required": true
+    }
+  ],
+  "doctypeId": "erpnext:Buying:Request for Quotation",
+  "events": [
+    {
+      "event": "validate",
+      "handlers": [
+        "erpnext.support.doctype.service_level_agreement.service_level_agreement.apply",
+        "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record.check_for_running_deletion_job"
+      ],
+      "handlersParsed": [
+        {
+          "attrPath": "apply",
+          "module": "erpnext.support.doctype.service_level_agreement.service_level_agreement"
+        },
+        {
+          "attrPath": "check_for_running_deletion_job",
+          "module": "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record"
+        }
+      ]
+    }
+  ],
+  "fieldOrder": [
+    "naming_series",
+    "company",
+    "billing_address",
+    "billing_address_display",
+    "vendor",
+    "column_break1",
+    "transaction_date",
+    "schedule_date",
+    "status",
+    "has_unit_price_items",
+    "amended_from",
+    "suppliers_section",
+    "suppliers",
+    "items_section",
+    "items",
+    "supplier_response_section",
+    "email_template",
+    "preview",
+    "col_break_email_1",
+    "html_llwp",
+    "send_attached_files",
+    "send_document_print",
+    "sec_break_email_2",
+    "subject",
+    "message_for_supplier",
+    "terms_section_break",
+    "incoterm",
+    "named_place",
+    "tc_name",
+    "terms",
+    "printing_settings",
+    "select_print_heading",
+    "letter_head",
+    "more_info",
+    "opportunity"
+  ],
+  "fields": [
+    {
+      "constraints": {},
+      "fieldname": "naming_series",
+      "fieldtype": "select",
+      "label": "Series",
+      "noCopy": true,
+      "optionsParsed": {
+        "kind": "naming_series",
+        "prefixes": [
+          "PUR-RFQ-.YYYY.-"
+        ]
+      },
+      "optionsRaw": "PUR-RFQ-.YYYY.-",
+      "permlevel": 0,
+      "requiredStatic": true,
+      "setOnlyOnce": true,
+      "ui": {
+        "inListView": true,
+        "printHide": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "company",
+      "fieldtype": "link",
+      "label": "Company",
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Company"
+      },
+      "optionsRaw": "Company",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Company",
+        "kind": "static"
+      },
+      "requiredStatic": true,
+      "ui": {
+        "inListView": true,
+        "printHide": true,
+        "rememberLastSelectedValue": true,
+        "searchIndex": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "billing_address",
+      "fieldtype": "link",
+      "label": "Company Billing Address",
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Address"
+      },
+      "optionsRaw": "Address",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Address",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "billing_address_display",
+      "fieldtype": "text_editor",
+      "label": "Billing Address Details",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "vendor",
+      "fieldtype": "link",
+      "label": "Supplier",
+      "noCopy": true,
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Supplier"
+      },
+      "optionsRaw": "Supplier",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Supplier",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "description": "For individual supplier",
+        "hidden": true,
+        "inStandardFilter": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break1",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "width": "50%"
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "Today",
+      "fieldname": "transaction_date",
+      "fieldtype": "date",
+      "label": "Date",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": true,
+      "ui": {
+        "inListView": true,
+        "searchIndex": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "schedule_date",
+      "fieldtype": "date",
+      "label": "Required Date",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "status",
+      "fieldtype": "select",
+      "label": "Status",
+      "layout": {
+        "column": 1
+      },
+      "noCopy": true,
+      "optionsParsed": {
+        "choices": [
+          "Draft",
+          "Submitted",
+          "Cancelled"
+        ],
+        "kind": "select"
+      },
+      "optionsRaw": "\nDraft\nSubmitted\nCancelled",
+      "permlevel": 0,
+      "requiredStatic": true,
+      "ui": {
+        "printHide": true,
+        "readOnly": true,
+        "searchIndex": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "has_unit_price_items",
+      "fieldtype": "check",
+      "label": "Has Unit Price Items",
+      "layout": {
+        "column": 1
+      },
+      "noCopy": true,
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "hidden": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "amended_from",
+      "fieldtype": "link",
+      "label": "Amended From",
+      "layout": {
+        "column": 1
+      },
+      "noCopy": true,
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Request for Quotation"
+      },
+      "optionsRaw": "Request for Quotation",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Request for Quotation",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "suppliers_section",
+      "fieldtype": "layout:section",
+      "layout": {
+        "section": "suppliers_section"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "childDoctype": "Request for Quotation Supplier",
+      "constraints": {},
+      "fieldname": "suppliers",
+      "fieldtype": "table",
+      "label": "Suppliers",
+      "layout": {
+        "section": "suppliers_section"
+      },
+      "optionsParsed": {
+        "doctype": "Request for Quotation Supplier",
+        "kind": "child_doctype"
+      },
+      "optionsRaw": "Request for Quotation Supplier",
+      "permlevel": 0,
+      "requiredStatic": true,
+      "ui": {
+        "printHide": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "items_section",
+      "fieldtype": "layout:section",
+      "layout": {
+        "section": "items_section"
+      },
+      "optionsParsed": {
+        "kind": "other",
+        "value": "fa fa-shopping-cart"
+      },
+      "optionsRaw": "fa fa-shopping-cart",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "childDoctype": "Request for Quotation Item",
+      "constraints": {},
+      "fieldname": "items",
+      "fieldtype": "table",
+      "label": "Items",
+      "layout": {
+        "section": "items_section"
+      },
+      "optionsParsed": {
+        "doctype": "Request for Quotation Item",
+        "kind": "child_doctype"
+      },
+      "optionsRaw": "Request for Quotation Item",
+      "permlevel": 0,
+      "requiredStatic": true,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:doc.suppliers.some((item) => item.send_email)",
+      "fieldname": "supplier_response_section",
+      "fieldtype": "layout:section",
+      "label": "Email Details",
+      "layout": {
+        "section": "Email Details"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "email_template",
+      "fieldtype": "link",
+      "label": "Email Template",
+      "layout": {
+        "section": "Email Details"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Email Template"
+      },
+      "optionsRaw": "Email Template",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Email Template",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:!doc.docstatus==1",
+      "fieldname": "preview",
+      "fieldtype": "button",
+      "label": "Preview Email",
+      "layout": {
+        "section": "Email Details"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "col_break_email_1",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "Email Details"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "html_llwp",
+      "fieldtype": "text_editor",
+      "layout": {
+        "column": 1,
+        "section": "Email Details"
+      },
+      "optionsParsed": {
+        "kind": "other",
+        "value": "<p>In your <b>Email Template</b>, you can use the following special variables:\n</p>\n<ul>\n        <li>\n            <code>{{ update_password_link }}</code>: A link where your supplier can set a new password to log into your portal.\n        </li>\n        <li>\n            <code>{{ portal_link }}</code>: A link to this RFQ in your supplier portal.\n        </li>\n        <li>\n            <code>{{ supplier_name }}</code>: The company name of your supplier.\n        </li>\n        <li>\n            <code>{{ contact.salutation }} {{ contact.last_name }}</code>: The contact person of your supplier.\n        </li><li>\n            <code>{{ user_fullname }}</code>: Your full name.\n        </li>\n    </ul>\n<p></p>\n<p>Apart from these, you can access all values in this RFQ, like <code>{{ message_for_supplier }}</code> or <code>{{ terms }}</code>.</p>"
+      },
+      "optionsRaw": "<p>In your <b>Email Template</b>, you can use the following special variables:\n</p>\n<ul>\n        <li>\n            <code>{{ update_password_link }}</code>: A link where your supplier can set a new password to log into your portal.\n        </li>\n        <li>\n            <code>{{ portal_link }}</code>: A link to this RFQ in your supplier portal.\n        </li>\n        <li>\n            <code>{{ supplier_name }}</code>: The company name of your supplier.\n        </li>\n        <li>\n            <code>{{ contact.salutation }} {{ contact.last_name }}</code>: The contact person of your supplier.\n        </li><li>\n            <code>{{ user_fullname }}</code>: Your full name.\n        </li>\n    </ul>\n<p></p>\n<p>Apart from these, you can access all values in this RFQ, like <code>{{ message_for_supplier }}</code> or <code>{{ terms }}</code>.</p>",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true,
+        "readOnly": true,
+        "reportHide": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "1",
+      "fieldname": "send_attached_files",
+      "fieldtype": "check",
+      "label": "Send Attached Files",
+      "layout": {
+        "column": 1,
+        "section": "Email Details"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "description": "If enabled, all files attached to this document will be attached to each email"
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "send_document_print",
+      "fieldtype": "check",
+      "label": "Send Document Print",
+      "layout": {
+        "column": 1,
+        "section": "Email Details"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "description": "If enabled, a print of this document will be attached to each email",
+        "printHide": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:doc.suppliers.some((item) => item.send_email)",
+      "fieldname": "sec_break_email_2",
+      "fieldtype": "layout:section",
+      "layout": {
+        "section": "sec_break_email_2"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "Request for Quotation",
+      "fieldname": "subject",
+      "fieldtype": "data",
+      "label": "Subject",
+      "layout": {
+        "section": "sec_break_email_2"
+      },
+      "permlevel": 0,
+      "requiredStatic": true,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "allowOnSubmit": true,
+      "constraints": {},
+      "default": "Please supply the specified items at the best possible rates",
+      "fieldname": "message_for_supplier",
+      "fieldtype": "text_editor",
+      "label": "Message for Supplier",
+      "layout": {
+        "section": "sec_break_email_2"
+      },
+      "permlevel": 0,
+      "requiredStatic": true,
+      "ui": {
+        "inListView": true,
+        "printHide": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "terms_section_break",
+      "fieldtype": "layout:section",
+      "label": "Terms and Conditions",
+      "layout": {
+        "section": "Terms and Conditions"
+      },
+      "optionsParsed": {
+        "kind": "other",
+        "value": "fa fa-legal"
+      },
+      "optionsRaw": "fa fa-legal",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "collapsible": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "incoterm",
+      "fieldtype": "link",
+      "label": "Incoterm",
+      "layout": {
+        "section": "Terms and Conditions"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Incoterm"
+      },
+      "optionsRaw": "Incoterm",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Incoterm",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "incoterm",
+      "fieldname": "named_place",
+      "fieldtype": "data",
+      "label": "Named Place",
+      "layout": {
+        "section": "Terms and Conditions"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "tc_name",
+      "fieldtype": "link",
+      "label": "Terms",
+      "layout": {
+        "section": "Terms and Conditions"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Terms and Conditions"
+      },
+      "optionsRaw": "Terms and Conditions",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Terms and Conditions",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "terms",
+      "fieldtype": "text_editor",
+      "label": "Terms and Conditions",
+      "layout": {
+        "section": "Terms and Conditions"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "printing_settings",
+      "fieldtype": "layout:section",
+      "label": "Printing Settings",
+      "layout": {
+        "section": "Printing Settings"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "collapsible": true
+      },
+      "unique": false
+    },
+    {
+      "allowOnSubmit": true,
+      "constraints": {},
+      "fieldname": "select_print_heading",
+      "fieldtype": "link",
+      "label": "Print Heading",
+      "layout": {
+        "section": "Printing Settings"
+      },
+      "noCopy": true,
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Print Heading"
+      },
+      "optionsRaw": "Print Heading",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Print Heading",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true,
+        "reportHide": true
+      },
+      "unique": false
+    },
+    {
+      "allowOnSubmit": true,
+      "constraints": {},
+      "fieldname": "letter_head",
+      "fieldtype": "link",
+      "label": "Letter Head",
+      "layout": {
+        "section": "Printing Settings"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Letter Head"
+      },
+      "optionsRaw": "Letter Head",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Letter Head",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "more_info",
+      "fieldtype": "layout:section",
+      "label": "More Information",
+      "layout": {
+        "section": "More Information"
+      },
+      "optionsParsed": {
+        "kind": "other",
+        "value": "fa fa-file-text"
+      },
+      "optionsRaw": "fa fa-file-text",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "collapsible": true,
+        "printHide": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "opportunity",
+      "fieldtype": "link",
+      "label": "Opportunity",
+      "layout": {
+        "section": "More Information"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Opportunity"
+      },
+      "optionsRaw": "Opportunity",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Opportunity",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true,
+        "readOnly": true
+      },
+      "unique": false
+    }
+  ],
+  "identity": {
+    "app": "erpnext",
+    "isSingle": false,
+    "isSubmittable": true,
+    "isTree": false,
+    "module": "Buying",
+    "naming": {
+      "seriesField": "naming_series",
+      "seriesPrefix": "PUR-RFQ-.YYYY.-",
+      "strategy": "series"
+    }
+  },
+  "name": "Request for Quotation",
+  "permissions": [
+    {
+      "actions": {
+        "read": true
+      },
+      "permlevel": 1,
+      "role": "All"
+    },
+    {
+      "actions": {
+        "amend": true,
+        "cancel": true,
+        "create": true,
+        "delete": true,
+        "email": true,
+        "print": true,
+        "read": true,
+        "report": true,
+        "share": true,
+        "submit": true,
+        "write": true
+      },
+      "permlevel": 0,
+      "role": "Manufacturing Manager"
+    },
+    {
+      "actions": {
+        "amend": true,
+        "cancel": true,
+        "create": true,
+        "delete": true,
+        "email": true,
+        "print": true,
+        "read": true,
+        "report": true,
+        "share": true,
+        "submit": true,
+        "write": true
+      },
+      "permlevel": 0,
+      "role": "Purchase Manager"
+    },
+    {
+      "actions": {
+        "read": true,
+        "write": true
+      },
+      "permlevel": 1,
+      "role": "Purchase Manager"
+    },
+    {
+      "actions": {
+        "amend": true,
+        "create": true,
+        "email": true,
+        "print": true,
+        "read": true,
+        "report": true,
+        "share": true,
+        "write": true
+      },
+      "permlevel": 0,
+      "role": "Purchase User"
+    },
+    {
+      "actions": {
+        "email": true,
+        "print": true,
+        "read": true,
+        "report": true
+      },
+      "permlevel": 0,
+      "role": "Stock User"
+    }
+  ],
+  "ui": {
+    "searchFields": [
+      "status",
+      "transaction_date"
+    ],
+    "showNameInGlobalSearch": true,
+    "sortField": "creation",
+    "sortOrder": "DESC"
+  },
+  "workflows": [
+    {
+      "kind": "unavailable"
+    }
+  ]
+}

@@ -117,9 +117,11 @@ export function validateDag(
 
   // Reachability from start
   if (startNodes.length === 1) {
+    const startNode = startNodes[0];
+    if (!startNode) return { valid: false, errors: ['Start node is undefined'] };
     const reachable = new Set<string>();
-    const bfsQueue = [startNodes[0]!.id];
-    reachable.add(startNodes[0]!.id);
+    const bfsQueue = [startNode.id];
+    reachable.add(startNode.id);
 
     while (bfsQueue.length > 0) {
       const current = bfsQueue.shift()!;
@@ -237,7 +239,8 @@ function insertSorted(arr: string[], value: string): void {
   let hi = arr.length;
   while (lo < hi) {
     const mid = (lo + hi) >>> 1;
-    if (arr[mid]! < value) {
+    const midValue = arr[mid];
+    if (midValue && midValue < value) {
       lo = mid + 1;
     } else {
       hi = mid;

@@ -1,0 +1,732 @@
+{
+  "audit": {
+    "trackChanges": true,
+    "trackSeen": true
+  },
+  "canonVersion": "1.0.0",
+  "childTables": [
+    {
+      "childDoctype": "Contract Fulfilment Checklist",
+      "parentField": "fulfilment_terms",
+      "required": false
+    }
+  ],
+  "doctypeId": "erpnext:CRM:Contract",
+  "events": [
+    {
+      "event": "validate",
+      "handlers": [
+        "erpnext.support.doctype.service_level_agreement.service_level_agreement.apply",
+        "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record.check_for_running_deletion_job"
+      ],
+      "handlersParsed": [
+        {
+          "attrPath": "apply",
+          "module": "erpnext.support.doctype.service_level_agreement.service_level_agreement"
+        },
+        {
+          "attrPath": "check_for_running_deletion_job",
+          "module": "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record"
+        }
+      ]
+    }
+  ],
+  "fieldOrder": [
+    "party_type",
+    "is_signed",
+    "cb_party",
+    "party_name",
+    "party_user",
+    "status",
+    "fulfilment_status",
+    "party_full_name",
+    "sb_terms",
+    "start_date",
+    "cb_date",
+    "end_date",
+    "sb_signee",
+    "signee",
+    "signed_on",
+    "cb_user",
+    "ip_address",
+    "sb_contract",
+    "contract_template",
+    "contract_terms",
+    "sb_fulfilment",
+    "requires_fulfilment",
+    "fulfilment_deadline",
+    "fulfilment_terms",
+    "authorised_by_section",
+    "signee_company",
+    "signed_by_company",
+    "sb_references",
+    "document_type",
+    "cb_links",
+    "document_name",
+    "amended_from"
+  ],
+  "fields": [
+    {
+      "constraints": {},
+      "default": "Customer",
+      "fieldname": "party_type",
+      "fieldtype": "select",
+      "label": "Party Type",
+      "optionsParsed": {
+        "choices": [
+          "Customer",
+          "Supplier",
+          "Employee"
+        ],
+        "kind": "select"
+      },
+      "optionsRaw": "Customer\nSupplier\nEmployee",
+      "permlevel": 0,
+      "requiredStatic": true,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "allowOnSubmit": true,
+      "constraints": {},
+      "default": "0",
+      "fieldname": "is_signed",
+      "fieldtype": "check",
+      "label": "Signed",
+      "noCopy": true,
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "cb_party",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "party_name",
+      "fieldtype": "dynamic_link",
+      "label": "Party Name",
+      "layout": {
+        "column": 1
+      },
+      "optionsRaw": "party_type",
+      "permlevel": 0,
+      "ref": {
+        "doctypeField": "party_type",
+        "kind": "dynamic"
+      },
+      "requiredStatic": true,
+      "ui": {
+        "inStandardFilter": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "party_user",
+      "fieldtype": "link",
+      "label": "Party User",
+      "layout": {
+        "column": 1
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "User"
+      },
+      "optionsRaw": "User",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "User",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "allowOnSubmit": true,
+      "constraints": {},
+      "fieldname": "status",
+      "fieldtype": "select",
+      "label": "Status",
+      "layout": {
+        "column": 1
+      },
+      "noCopy": true,
+      "optionsParsed": {
+        "choices": [
+          "Unsigned",
+          "Active",
+          "Inactive",
+          "Cancelled"
+        ],
+        "kind": "select"
+      },
+      "optionsRaw": "Unsigned\nActive\nInactive\nCancelled",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "hidden": true,
+        "inListView": true,
+        "inStandardFilter": true
+      },
+      "unique": false
+    },
+    {
+      "allowOnSubmit": true,
+      "constraints": {},
+      "fieldname": "fulfilment_status",
+      "fieldtype": "select",
+      "label": "Fulfilment Status",
+      "layout": {
+        "column": 1
+      },
+      "noCopy": true,
+      "optionsParsed": {
+        "choices": [
+          "N/A",
+          "Unfulfilled",
+          "Partially Fulfilled",
+          "Fulfilled",
+          "Lapsed"
+        ],
+        "kind": "select"
+      },
+      "optionsRaw": "N/A\nUnfulfilled\nPartially Fulfilled\nFulfilled\nLapsed",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "hidden": true,
+        "inListView": true,
+        "inStandardFilter": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "party_full_name",
+      "fieldtype": "data",
+      "label": "Party Full Name",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "sb_terms",
+      "fieldtype": "layout:section",
+      "label": "Contract Period",
+      "layout": {
+        "section": "Contract Period"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "start_date",
+      "fieldtype": "date",
+      "label": "Start Date",
+      "layout": {
+        "section": "Contract Period"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "cb_date",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "Contract Period"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "end_date",
+      "fieldtype": "date",
+      "label": "End Date",
+      "layout": {
+        "column": 1,
+        "section": "Contract Period"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:doc.is_signed==1",
+      "fieldname": "sb_signee",
+      "fieldtype": "layout:section",
+      "label": "Signee Details",
+      "layout": {
+        "section": "Signee Details"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "allowOnSubmit": true,
+      "constraints": {},
+      "fieldname": "signee",
+      "fieldtype": "data",
+      "label": "Signee",
+      "layout": {
+        "section": "Signee Details"
+      },
+      "noCopy": true,
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "inGlobalSearch": true
+      },
+      "unique": false
+    },
+    {
+      "allowOnSubmit": true,
+      "constraints": {},
+      "fieldname": "signed_on",
+      "fieldtype": "datetime",
+      "label": "Signed On",
+      "layout": {
+        "section": "Signee Details"
+      },
+      "noCopy": true,
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "cb_user",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "Signee Details"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "allowOnSubmit": true,
+      "constraints": {},
+      "fieldname": "ip_address",
+      "fieldtype": "data",
+      "label": "IP Address",
+      "layout": {
+        "column": 1,
+        "section": "Signee Details"
+      },
+      "noCopy": true,
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "sb_contract",
+      "fieldtype": "layout:section",
+      "label": "Contract Details",
+      "layout": {
+        "section": "Contract Details"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "collapsible": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "contract_template",
+      "fieldtype": "link",
+      "label": "Contract Template",
+      "layout": {
+        "section": "Contract Details"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Contract Template"
+      },
+      "optionsRaw": "Contract Template",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Contract Template",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "contract_terms",
+      "fieldtype": "text_editor",
+      "label": "Contract Terms",
+      "layout": {
+        "section": "Contract Details"
+      },
+      "permlevel": 0,
+      "requiredStatic": true,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "sb_fulfilment",
+      "fieldtype": "layout:section",
+      "label": "Fulfilment Details",
+      "layout": {
+        "section": "Fulfilment Details"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "requires_fulfilment",
+      "fieldtype": "check",
+      "label": "Requires Fulfilment",
+      "layout": {
+        "section": "Fulfilment Details"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:doc.requires_fulfilment==1",
+      "fieldname": "fulfilment_deadline",
+      "fieldtype": "date",
+      "label": "Fulfilment Deadline",
+      "layout": {
+        "section": "Fulfilment Details"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "allowOnSubmit": true,
+      "childDoctype": "Contract Fulfilment Checklist",
+      "constraints": {},
+      "dependsOn": "eval:doc.requires_fulfilment==1",
+      "fieldname": "fulfilment_terms",
+      "fieldtype": "table",
+      "label": "Fulfilment Terms",
+      "layout": {
+        "section": "Fulfilment Details"
+      },
+      "optionsParsed": {
+        "doctype": "Contract Fulfilment Checklist",
+        "kind": "child_doctype"
+      },
+      "optionsRaw": "Contract Fulfilment Checklist",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "authorised_by_section",
+      "fieldtype": "layout:section",
+      "label": "Authorised By",
+      "layout": {
+        "section": "Authorised By"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "signee_company",
+      "fieldtype": "attach_image",
+      "label": "Signee (Company)",
+      "layout": {
+        "section": "Authorised By"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "signed_by_company",
+      "fieldtype": "link",
+      "label": "Signed By (Company)",
+      "layout": {
+        "section": "Authorised By"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "User"
+      },
+      "optionsRaw": "User",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "User",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "sb_references",
+      "fieldtype": "layout:section",
+      "label": "References",
+      "layout": {
+        "section": "References"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "collapsible": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "document_type",
+      "fieldtype": "select",
+      "label": "Document Type",
+      "layout": {
+        "section": "References"
+      },
+      "optionsParsed": {
+        "choices": [
+          "Quotation",
+          "Project",
+          "Sales Order",
+          "Purchase Order",
+          "Sales Invoice",
+          "Purchase Invoice"
+        ],
+        "kind": "select"
+      },
+      "optionsRaw": "\nQuotation\nProject\nSales Order\nPurchase Order\nSales Invoice\nPurchase Invoice",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "cb_links",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "References"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "document_name",
+      "fieldtype": "dynamic_link",
+      "label": "Document Name",
+      "layout": {
+        "column": 1,
+        "section": "References"
+      },
+      "optionsRaw": "document_type",
+      "permlevel": 0,
+      "ref": {
+        "doctypeField": "document_type",
+        "kind": "dynamic"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "inGlobalSearch": true,
+        "inListView": true,
+        "inStandardFilter": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "amended_from",
+      "fieldtype": "link",
+      "label": "Amended From",
+      "layout": {
+        "column": 1,
+        "section": "References"
+      },
+      "noCopy": true,
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Contract"
+      },
+      "optionsRaw": "Contract",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Contract",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true,
+        "readOnly": true
+      },
+      "unique": false
+    }
+  ],
+  "identity": {
+    "app": "erpnext",
+    "isSingle": false,
+    "isSubmittable": true,
+    "isTree": false,
+    "module": "CRM",
+    "naming": {
+      "seriesPrefix": "CON-.YYYY.-.#####",
+      "strategy": "series"
+    }
+  },
+  "name": "Contract",
+  "permissions": [
+    {
+      "actions": {
+        "amend": true,
+        "cancel": true,
+        "create": true,
+        "delete": true,
+        "email": true,
+        "export": true,
+        "print": true,
+        "read": true,
+        "report": true,
+        "share": true,
+        "submit": true,
+        "write": true
+      },
+      "permlevel": 0,
+      "role": "HR Manager"
+    },
+    {
+      "actions": {
+        "amend": true,
+        "cancel": true,
+        "create": true,
+        "delete": true,
+        "email": true,
+        "export": true,
+        "print": true,
+        "read": true,
+        "report": true,
+        "share": true,
+        "submit": true,
+        "write": true
+      },
+      "permlevel": 0,
+      "role": "Purchase Manager"
+    },
+    {
+      "actions": {
+        "amend": true,
+        "cancel": true,
+        "create": true,
+        "delete": true,
+        "email": true,
+        "export": true,
+        "print": true,
+        "read": true,
+        "report": true,
+        "share": true,
+        "submit": true,
+        "write": true
+      },
+      "permlevel": 0,
+      "role": "Sales Manager"
+    },
+    {
+      "actions": {
+        "amend": true,
+        "cancel": true,
+        "create": true,
+        "delete": true,
+        "email": true,
+        "export": true,
+        "print": true,
+        "read": true,
+        "report": true,
+        "share": true,
+        "submit": true,
+        "write": true
+      },
+      "permlevel": 0,
+      "role": "System Manager"
+    }
+  ],
+  "ui": {
+    "searchFields": [
+      "party_type",
+      "party_name",
+      "contract_template"
+    ],
+    "showNameInGlobalSearch": true,
+    "sortField": "creation",
+    "sortOrder": "DESC",
+    "titleField": "party_name"
+  },
+  "workflows": [
+    {
+      "kind": "unavailable"
+    }
+  ]
+}

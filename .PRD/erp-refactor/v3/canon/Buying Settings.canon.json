@@ -1,0 +1,816 @@
+{
+  "audit": {
+    "trackChanges": true
+  },
+  "canonVersion": "1.0.0",
+  "childTables": [],
+  "doctypeId": "erpnext:Buying:Buying Settings",
+  "events": [
+    {
+      "event": "validate",
+      "handlers": [
+        "erpnext.support.doctype.service_level_agreement.service_level_agreement.apply",
+        "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record.check_for_running_deletion_job"
+      ],
+      "handlersParsed": [
+        {
+          "attrPath": "apply",
+          "module": "erpnext.support.doctype.service_level_agreement.service_level_agreement"
+        },
+        {
+          "attrPath": "check_for_running_deletion_job",
+          "module": "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record"
+        }
+      ]
+    }
+  ],
+  "fieldOrder": [
+    "supplier_and_price_defaults_section",
+    "supp_master_name",
+    "supplier_group",
+    "buying_price_list",
+    "column_break_4",
+    "maintain_same_rate_action",
+    "role_to_override_stop_action",
+    "section_break_xmlt",
+    "po_required",
+    "blanket_order_allowance",
+    "column_break_sbwq",
+    "pr_required",
+    "project_update_frequency",
+    "transaction_settings_section",
+    "column_break_fcyl",
+    "set_landed_cost_based_on_purchase_invoice_rate",
+    "allow_zero_qty_in_supplier_quotation",
+    "use_transaction_date_exchange_rate",
+    "allow_zero_qty_in_request_for_quotation",
+    "column_break_12",
+    "maintain_same_rate",
+    "allow_multiple_items",
+    "bill_for_rejected_quantity_in_purchase_invoice",
+    "set_valuation_rate_for_rejected_materials",
+    "disable_last_purchase_rate",
+    "show_pay_button",
+    "allow_zero_qty_in_purchase_order",
+    "subcontract",
+    "backflush_raw_materials_of_subcontract_based_on",
+    "column_break_11",
+    "over_transfer_allowance",
+    "validate_consumed_qty",
+    "section_break_xcug",
+    "auto_create_subcontracting_order",
+    "column_break_izrr",
+    "auto_create_purchase_receipt",
+    "request_for_quotation_tab",
+    "fixed_email"
+  ],
+  "fields": [
+    {
+      "constraints": {},
+      "fieldname": "supplier_and_price_defaults_section",
+      "fieldtype": "layout:tab",
+      "label": "Naming Series and Price Defaults",
+      "layout": {
+        "tab": "Naming Series and Price Defaults"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "Supplier Name",
+      "fieldname": "supp_master_name",
+      "fieldtype": "select",
+      "label": "Supplier Naming By",
+      "layout": {
+        "tab": "Naming Series and Price Defaults"
+      },
+      "optionsParsed": {
+        "choices": [
+          "Supplier Name",
+          "Naming Series",
+          "Auto Name"
+        ],
+        "kind": "select"
+      },
+      "optionsRaw": "Supplier Name\nNaming Series\nAuto Name",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "supplier_group",
+      "fieldtype": "link",
+      "label": "Default Supplier Group",
+      "layout": {
+        "tab": "Naming Series and Price Defaults"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Supplier Group"
+      },
+      "optionsRaw": "Supplier Group",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Supplier Group",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "buying_price_list",
+      "fieldtype": "link",
+      "label": "Default Buying Price List",
+      "layout": {
+        "tab": "Naming Series and Price Defaults"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Price List"
+      },
+      "optionsRaw": "Price List",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Price List",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_4",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "tab": "Naming Series and Price Defaults"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "Stop",
+      "dependsOn": "maintain_same_rate",
+      "fieldname": "maintain_same_rate_action",
+      "fieldtype": "select",
+      "label": "Action If Same Rate is Not Maintained",
+      "layout": {
+        "column": 1,
+        "tab": "Naming Series and Price Defaults"
+      },
+      "mandatoryDependsOn": "maintain_same_rate",
+      "optionsParsed": {
+        "choices": [
+          "Stop",
+          "Warn"
+        ],
+        "kind": "select"
+      },
+      "optionsRaw": "Stop\nWarn",
+      "permlevel": 0,
+      "requiredDynamic": "maintain_same_rate",
+      "requiredStatic": false,
+      "ui": {
+        "description": "Configure the action to stop the transaction or just warn if the same rate is not maintained."
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:doc.maintain_same_rate_action == 'Stop'",
+      "fieldname": "role_to_override_stop_action",
+      "fieldtype": "link",
+      "label": "Role Allowed to Override Stop Action",
+      "layout": {
+        "column": 1,
+        "tab": "Naming Series and Price Defaults"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Role"
+      },
+      "optionsRaw": "Role",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Role",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "section_break_xmlt",
+      "fieldtype": "layout:section",
+      "layout": {
+        "section": "section_break_xmlt",
+        "tab": "Naming Series and Price Defaults"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "po_required",
+      "fieldtype": "select",
+      "label": "Is Purchase Order Required for Purchase Invoice & Receipt Creation?",
+      "layout": {
+        "section": "section_break_xmlt",
+        "tab": "Naming Series and Price Defaults"
+      },
+      "optionsParsed": {
+        "choices": [
+          "No",
+          "Yes"
+        ],
+        "kind": "select"
+      },
+      "optionsRaw": "No\nYes",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "blanket_order_allowance",
+      "fieldtype": "float",
+      "label": "Blanket Order Allowance (%)",
+      "layout": {
+        "section": "section_break_xmlt",
+        "tab": "Naming Series and Price Defaults"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "description": "Percentage you are allowed to order beyond the Blanket Order quantity."
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_sbwq",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "section_break_xmlt",
+        "tab": "Naming Series and Price Defaults"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "pr_required",
+      "fieldtype": "select",
+      "label": "Is Purchase Receipt Required for Purchase Invoice Creation?",
+      "layout": {
+        "column": 1,
+        "section": "section_break_xmlt",
+        "tab": "Naming Series and Price Defaults"
+      },
+      "optionsParsed": {
+        "choices": [
+          "No",
+          "Yes"
+        ],
+        "kind": "select"
+      },
+      "optionsRaw": "No\nYes",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "Each Transaction",
+      "fieldname": "project_update_frequency",
+      "fieldtype": "select",
+      "label": "Update frequency of Project",
+      "layout": {
+        "column": 1,
+        "section": "section_break_xmlt",
+        "tab": "Naming Series and Price Defaults"
+      },
+      "optionsParsed": {
+        "choices": [
+          "Each Transaction",
+          "Manual"
+        ],
+        "kind": "select"
+      },
+      "optionsRaw": "Each Transaction\nManual",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "description": "How often should Project be updated of Total Purchase Cost ?"
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "transaction_settings_section",
+      "fieldtype": "layout:tab",
+      "label": "Transaction Settings",
+      "layout": {
+        "tab": "Transaction Settings"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_fcyl",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "tab": "Transaction Settings"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "dependsOn": "eval: !doc.maintain_same_rate",
+      "fieldname": "set_landed_cost_based_on_purchase_invoice_rate",
+      "fieldtype": "check",
+      "label": "Set Landed Cost Based on Purchase Invoice Rate",
+      "layout": {
+        "column": 1,
+        "tab": "Transaction Settings"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "description": "Users can enable the checkbox If they want to adjust the incoming rate (set using purchase receipt) based on the purchase invoice rate."
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "allow_zero_qty_in_supplier_quotation",
+      "fieldtype": "check",
+      "label": "Allow Supplier Quotation with Zero Quantity",
+      "layout": {
+        "column": 1,
+        "tab": "Transaction Settings"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "description": "Allows users to submit Supplier Quotations with zero quantity. Useful when rates are fixed but the quantities are not. Eg. Rate Contracts."
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "use_transaction_date_exchange_rate",
+      "fieldtype": "check",
+      "label": "Use Transaction Date Exchange Rate",
+      "layout": {
+        "column": 1,
+        "tab": "Transaction Settings"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "description": "While making Purchase Invoice from Purchase Order, use Exchange Rate on Invoice's transaction date rather than inheriting it from Purchase Order. Only applies for Purchase Invoice."
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "allow_zero_qty_in_request_for_quotation",
+      "fieldtype": "check",
+      "label": "Allow Request for Quotation with Zero Quantity",
+      "layout": {
+        "column": 1,
+        "tab": "Transaction Settings"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "description": "Allows users to submit Request for Quotations with zero quantity. Useful when rates are fixed but the quantities are not. Eg. Rate Contracts."
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_12",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 2,
+        "tab": "Transaction Settings"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "maintain_same_rate",
+      "fieldtype": "check",
+      "label": "Maintain Same Rate Throughout the Purchase Cycle",
+      "layout": {
+        "column": 2,
+        "tab": "Transaction Settings"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "allow_multiple_items",
+      "fieldtype": "check",
+      "label": "Allow Item To Be Added Multiple Times in a Transaction",
+      "layout": {
+        "column": 2,
+        "tab": "Transaction Settings"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "1",
+      "fieldname": "bill_for_rejected_quantity_in_purchase_invoice",
+      "fieldtype": "check",
+      "label": "Bill for Rejected Quantity in Purchase Invoice",
+      "layout": {
+        "column": 2,
+        "tab": "Transaction Settings"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "description": "If checked, Rejected Quantity will be included while making Purchase Invoice from Purchase Receipt."
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "dependsOn": "bill_for_rejected_quantity_in_purchase_invoice",
+      "fieldname": "set_valuation_rate_for_rejected_materials",
+      "fieldtype": "check",
+      "label": "Set Valuation Rate for Rejected Materials",
+      "layout": {
+        "column": 2,
+        "tab": "Transaction Settings"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "description": "If enabled, the system will generate an accounting entry for materials rejected in the Purchase Receipt."
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "disable_last_purchase_rate",
+      "fieldtype": "check",
+      "label": "Disable Last Purchase Rate",
+      "layout": {
+        "column": 2,
+        "tab": "Transaction Settings"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "1",
+      "dependsOn": "eval: frappe.boot.versions && frappe.boot.versions.payments",
+      "fieldname": "show_pay_button",
+      "fieldtype": "check",
+      "label": "Show Pay Button in Purchase Order Portal",
+      "layout": {
+        "column": 2,
+        "tab": "Transaction Settings"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "allow_zero_qty_in_purchase_order",
+      "fieldtype": "check",
+      "label": "Allow Purchase Order with Zero Quantity",
+      "layout": {
+        "column": 2,
+        "tab": "Transaction Settings"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "description": "Allows users to submit Purchase Orders with zero quantity. Useful when rates are fixed but the quantities are not. Eg. Rate Contracts."
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "subcontract",
+      "fieldtype": "layout:tab",
+      "label": "Subcontracting Settings",
+      "layout": {
+        "tab": "Subcontracting Settings"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "BOM",
+      "fieldname": "backflush_raw_materials_of_subcontract_based_on",
+      "fieldtype": "select",
+      "label": "Backflush Raw Materials of Subcontract Based On",
+      "layout": {
+        "tab": "Subcontracting Settings"
+      },
+      "optionsParsed": {
+        "choices": [
+          "BOM",
+          "Material Transferred for Subcontract"
+        ],
+        "kind": "select"
+      },
+      "optionsRaw": "BOM\nMaterial Transferred for Subcontract",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_11",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "tab": "Subcontracting Settings"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:doc.backflush_raw_materials_of_subcontract_based_on == \"BOM\"",
+      "fieldname": "over_transfer_allowance",
+      "fieldtype": "float",
+      "label": "Over Transfer Allowance (%)",
+      "layout": {
+        "column": 1,
+        "tab": "Subcontracting Settings"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "description": "Percentage you are allowed to transfer more against the quantity ordered. For example: If you have ordered 100 units. and your Allowance is 10% then you are allowed to transfer 110 units."
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "dependsOn": "eval:doc.backflush_raw_materials_of_subcontract_based_on == \"Material Transferred for Subcontract\"",
+      "fieldname": "validate_consumed_qty",
+      "fieldtype": "check",
+      "label": "Validate Consumed Qty (as per BOM)",
+      "layout": {
+        "column": 1,
+        "tab": "Subcontracting Settings"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "description": "Raw materials consumed qty will be validated based on FG BOM required qty"
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "section_break_xcug",
+      "fieldtype": "layout:section",
+      "layout": {
+        "section": "section_break_xcug",
+        "tab": "Subcontracting Settings"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "auto_create_subcontracting_order",
+      "fieldtype": "check",
+      "label": "Auto Create Subcontracting Order",
+      "layout": {
+        "section": "section_break_xcug",
+        "tab": "Subcontracting Settings"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "description": "Subcontracting Order (Draft) will be auto-created on submission of Purchase Order."
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_izrr",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "section_break_xcug",
+        "tab": "Subcontracting Settings"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "auto_create_purchase_receipt",
+      "fieldtype": "check",
+      "label": "Auto Create Purchase Receipt",
+      "layout": {
+        "column": 1,
+        "section": "section_break_xcug",
+        "tab": "Subcontracting Settings"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "description": "Purchase Receipt (Draft) will be auto-created on submission of Subcontracting Receipt."
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "request_for_quotation_tab",
+      "fieldtype": "layout:tab",
+      "label": "Request for Quotation",
+      "layout": {
+        "tab": "Request for Quotation"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "fixed_email",
+      "fieldtype": "link",
+      "label": "Fixed Outgoing Email Account",
+      "layout": {
+        "tab": "Request for Quotation"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Email Account"
+      },
+      "optionsRaw": "Email Account",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Email Account",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "description": "If set, the system does not use the user's Email or the standard outgoing Email account for sending request for quotations."
+      },
+      "unique": false
+    }
+  ],
+  "identity": {
+    "app": "erpnext",
+    "isSingle": false,
+    "isSubmittable": false,
+    "isTree": false,
+    "module": "Buying",
+    "naming": {
+      "strategy": "hash"
+    }
+  },
+  "name": "Buying Settings",
+  "permissions": [
+    {
+      "actions": {
+        "read": true
+      },
+      "permlevel": 0,
+      "role": "Accounts Manager"
+    },
+    {
+      "actions": {
+        "read": true
+      },
+      "permlevel": 0,
+      "role": "Accounts User"
+    },
+    {
+      "actions": {
+        "create": true,
+        "email": true,
+        "export": true,
+        "print": true,
+        "read": true,
+        "share": true,
+        "write": true
+      },
+      "permlevel": 0,
+      "role": "Purchase Manager"
+    },
+    {
+      "actions": {
+        "read": true
+      },
+      "permlevel": 0,
+      "role": "Purchase User"
+    },
+    {
+      "actions": {
+        "read": true
+      },
+      "permlevel": 0,
+      "role": "Stock Manager"
+    },
+    {
+      "actions": {
+        "read": true
+      },
+      "permlevel": 0,
+      "role": "Stock User"
+    },
+    {
+      "actions": {
+        "create": true,
+        "email": true,
+        "print": true,
+        "read": true,
+        "share": true,
+        "write": true
+      },
+      "permlevel": 0,
+      "role": "System Manager"
+    }
+  ],
+  "ui": {
+    "searchFields": [],
+    "showNameInGlobalSearch": false,
+    "sortField": "creation",
+    "sortOrder": "DESC"
+  },
+  "workflows": [
+    {
+      "kind": "unavailable"
+    }
+  ]
+}
