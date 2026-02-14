@@ -17,61 +17,19 @@
 
 import * as schema from '../schema/index';
 
+import { schemaLintConfig } from '../../schema-lint.config';
+
 interface LintResult {
   table: string;
   errors: string[];
   warnings: string[];
 }
 
-// Tables that are exempt from ERP entity rules (system/config tables)
-const EXEMPT_TABLES = new Set([
-  'users',
-  'r2_files',
-  'audit_logs',
-  'entity_versions',
-  'mutation_batches',
-  'workflow_rules',
-  'workflow_executions',
-  'advisories',
-  'advisory_evidence',
-]);
-
-// Tables that use erpEntityColumns (should have customData)
-const ERP_ENTITY_TABLES = new Set([
-  'companies',
-  'sites',
-  'contacts',
-  'sales_invoices',
-  'sales_orders',
-  'delivery_notes',
-  'purchase_orders',
-  'purchase_invoices',
-  'goods_receipts',
-  'payments',
-  'quotations',
-]);
-
-// Tables with 6-state posting_status (must have CHECK constraint)
-const POSTABLE_TABLES = new Set([
-  'sales_invoices',
-  'sales_orders',
-  'delivery_notes',
-  'purchase_orders',
-  'purchase_invoices',
-  'goods_receipts',
-  'payments',
-]);
-
-// Line tables with net_minor CHECK
-const LINE_TABLES = new Set([
-  'sales_invoice_lines',
-  'sales_order_lines',
-  'delivery_note_lines',
-  'purchase_order_lines',
-  'purchase_invoice_lines',
-  'goods_receipt_lines',
-  'quotation_lines',
-]);
+// Schema-derived metadata — single source in schema-lint.config.ts
+const EXEMPT_TABLES = new Set(schemaLintConfig.exemptTables);
+const ERP_ENTITY_TABLES = new Set(schemaLintConfig.erpEntityTables);
+const POSTABLE_TABLES = new Set(schemaLintConfig.postableTables);
+const LINE_TABLES = new Set(schemaLintConfig.lineTables);
 
 // Money-related column name patterns (float is forbidden)
 const MONEY_PATTERNS = /amount|price|cost|total|balance|fee|tax|discount/i;

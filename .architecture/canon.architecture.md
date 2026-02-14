@@ -1,6 +1,6 @@
 # Afena Canon (Type Authority) — Architecture Reference
 
-> **Auto-generated** by `afena readme gen` at 2026-02-13T07:32:16Z. Do not edit — regenerate instead.
+> **Auto-generated** by `afena readme gen` at 2026-02-14T08:34:54Z. Do not edit — regenerate instead.
 > **Package:** `afena-canon` (`packages/canon`)
 > **Purpose:** Single source of truth for all types, schemas, enums, and capability definitions across the monorepo.
 

@@ -1,6 +1,6 @@
 # Afena Search Engine — Architecture Reference
 
-> **Auto-generated** by `afena readme gen` at 2026-02-13T07:32:16Z. Do not edit — regenerate instead.
+> **Auto-generated** by `afena readme gen` at 2026-02-14T08:34:54Z. Do not edit — regenerate instead.
 > **Package:** `afena-search` (`packages/search`)
 > **Purpose:** Full-text search helpers, per-entity adapters, and cross-entity search registry.
 
@@ -31,7 +31,7 @@ The `search_index` materialized view provides a unified cross-entity search surf
 
 | Metric | Value |
 | ------ | ----- |
-| **Source files** | 7 |
+| **Source files** | 8 |
 | **Test files** | 1 |
 | **Source directories** | adapters |
 
@@ -57,6 +57,7 @@ packages/search/src/
 | `crossEntitySearch` | `./registry` |
 | `searchAll` | `./adapters/cross-entity` |
 | `searchContacts` | `./adapters/contacts` |
+| `refreshSearchIndex` | `./refresh` |
 
 ### Type Exports
 
@@ -75,6 +76,7 @@ packages/search/src/
 - `afena-database`
 - `afena-eslint-config`
 - `afena-typescript-config`
+- `afena-vitest-config`
 
 ### External
 
@@ -86,6 +88,7 @@ packages/search/src/
 
 ## Design Patterns Detected
 
+- **Observer**
 - **Registry**
 
 ---

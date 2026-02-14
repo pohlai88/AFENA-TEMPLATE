@@ -1,6 +1,6 @@
 # Afena UI Design System — Architecture Reference
 
-> **Auto-generated** by `afena readme gen` at 2026-02-13T07:32:16Z. Do not edit — regenerate instead.
+> **Auto-generated** by `afena readme gen` at 2026-02-14T08:34:54Z. Do not edit — regenerate instead.
 > **Package:** `afena-ui` (`packages/ui`)
 > **Purpose:** Four-layer design system: Engine tokens → CSS bridge → shadcn/ui primitives → App shell.
 

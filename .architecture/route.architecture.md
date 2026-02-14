@@ -1,6 +1,6 @@
 # Afena Web Application (Next.js) — Architecture Reference
 
-> **Auto-generated** by `afena readme gen` at 2026-02-13T07:32:16Z. Do not edit — regenerate instead.
+> **Auto-generated** by `afena readme gen` at 2026-02-14T08:34:54Z. Do not edit — regenerate instead.
 > **Package:** `web` (`apps/web`)
 > **Purpose:** BFF pattern — Server Actions for domain CRUD, API routes for cross-cutting concerns.
 
@@ -32,7 +32,7 @@ Auth: Neon Auth with middleware-level session validation. Org context resolved f
 
 | Metric | Value |
 | ------ | ----- |
-| **Source files** | 16 |
+| **Source files** | 24 |
 | **Test files** | 0 |
 | **Source directories** | lib |
 
@@ -55,6 +55,7 @@ apps/web/src/
 - `afena-search`
 - `afena-typescript-config`
 - `afena-ui`
+- `afena-workflow`
 
 ### External
 
@@ -67,6 +68,7 @@ apps/web/src/
 | `@neondatabase/auth` | `0.2.0-beta.1` |
 | `@neondatabase/neon-js` | `0.2.0-beta.1` |
 | `@tanstack/react-query` | `catalog:` |
+| `@xyflow/react` | `^12.10.0` |
 | `lucide-react` | `^0.563.0` |
 | `next` | `catalog:` |
 | `next-themes` | `^0.4.6` |

@@ -19,6 +19,7 @@
     "db:migrate": "drizzle-kit migrate",
     "db:push": "drizzle-kit push",
     "db:studio": "drizzle-kit studio",
+    "db:barrel": "npx tsx src/scripts/generate-schema-barrel.ts",
     "db:lint": "npx tsx src/scripts/schema-lint.ts",
     "test": "vitest run"
   },

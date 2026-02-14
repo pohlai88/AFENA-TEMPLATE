@@ -1,6 +1,6 @@
 # Afena Advisory Engine (Deterministic Intelligence) — Architecture Reference
 
-> **Auto-generated** by `afena readme gen` at 2026-02-13T07:32:16Z. Do not edit — regenerate instead.
+> **Auto-generated** by `afena readme gen` at 2026-02-14T08:34:54Z. Do not edit — regenerate instead.
 > **Package:** `afena-advisory` (`packages/advisory`)
 > **Purpose:** Math-first anomaly detection, forecasting, and business rule evaluation — NO LLMs.
 
@@ -120,6 +120,7 @@ packages/advisory/src/
 - `afena-database`
 - `afena-eslint-config`
 - `afena-typescript-config`
+- `afena-vitest-config`
 
 ### External
 

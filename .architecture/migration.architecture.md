@@ -1,6 +1,6 @@
 # Afena Migration Engine — Architecture Reference
 
-> **Auto-generated** by `afena readme gen` at 2026-02-13T07:32:16Z. Do not edit — regenerate instead.
+> **Auto-generated** by `afena readme gen` at 2026-02-14T08:34:54Z. Do not edit — regenerate instead.
 > **Package:** `afena-migration` (`packages/migration`)
 > **Purpose:** Legacy data migration pipeline with atomicity guarantees, conflict detection, and signed audit reports.
 
@@ -87,6 +87,7 @@ packages/migration/src/
 - `afena-eslint-config`
 - `afena-logger`
 - `afena-typescript-config`
+- `afena-vitest-config`
 
 ### External
 

@@ -1,6 +1,6 @@
 # Afena Database Layer — Architecture Reference
 
-> **Auto-generated** by `afena readme gen` at 2026-02-13T07:32:16Z. Do not edit — regenerate instead.
+> **Auto-generated** by `afena readme gen` at 2026-02-14T08:34:54Z. Do not edit — regenerate instead.
 > **Package:** `afena-database` (`packages/database`)
 > **Purpose:** Drizzle ORM schema definitions, dual RW/RO compute, migration management, and schema governance.
 
@@ -31,8 +31,8 @@ Schema governance: 8-rule lint, entity generator script, LiteMetadata registry.
 
 | Metric | Value |
 | ------ | ----- |
-| **Source files** | 59 |
-| **Test files** | 2 |
+| **Source files** | 128 |
+| **Test files** | 3 |
 | **Source directories** | helpers, schema, scripts |
 
 ```
@@ -58,13 +58,13 @@ packages/database/src/
 | `baseEntityColumns` | `./helpers/base-entity` |
 | `erpEntityColumns` | `./helpers/erp-entity` |
 | `docEntityColumns` | `./helpers/doc-entity` |
+| `postingColumns` | `./helpers/posting-columns` |
 | `erpIndexes` | `./helpers/standard-indexes` |
 | `docIndexes` | `./helpers/standard-indexes` |
 | `moneyMinor` | `./helpers/field-types` |
 | `currencyCode` | `./helpers/field-types` |
 | `fxRate` | `./helpers/field-types` |
 | `baseAmountMinor` | `./helpers/field-types` |
-| `moneyDocumentColumns` | `./helpers/field-types` |
 | `qty` | `./helpers/field-types` |
 | `uomRef` | `./helpers/field-types` |
 | `statusColumn` | `./helpers/field-types` |
@@ -103,6 +103,7 @@ packages/database/src/
 
 - `afena-eslint-config`
 - `afena-typescript-config`
+- `afena-vitest-config`
 
 ### External
 
@@ -115,21 +116,63 @@ packages/database/src/
 
 ## 6. Database Tables
 
+- `addresses`
 - `advisories`
 - `advisory_evidence`
 - `api_keys`
+- `approval_chains`
+- `approval_decisions`
+- `approval_requests`
+- `approval_steps`
+- `asset_events`
+- `assets`
 - `audit_logs`
+- `bank_accounts`
+- `bank_reconciliation_sessions`
+- `bank_statement_lines`
+- `bom_lines`
+- `boms`
+- `budget_commitments`
+- `budgets`
+- `chart_of_accounts`
 - `communications`
 - `companies`
+- `company_addresses`
+- `contact_addresses`
 - `contacts`
+- `contracts`
+- `cost_centers`
+- `credit_notes`
 - `currencies`
 - `custom_field_sync_queue`
 - `custom_field_values`
 - `custom_fields`
+- `customer_profiles`
+- `debit_notes`
+- `delivery_note_lines`
+- `delivery_notes`
+- `depreciation_schedules`
+- `discount_rules`
+- `doc_links`
+- `doc_postings`
 - `entity_attachments`
 - `entity_versions`
 - `entity_view_fields`
 - `entity_views`
+- `fiscal_periods`
+- `fx_rates`
+- `goods_receipt_lines`
+- `goods_receipts`
+- `intercompany_transactions`
+- `inventory_trace_links`
+- `item_groups`
+- `items`
+- `journal_entries`
+- `journal_lines`
+- `landed_cost_allocations`
+- `landed_cost_docs`
+- `lot_tracking`
+- `match_results`
 - `meta_alias_resolution_rules`
 - `meta_alias_sets`
 - `meta_aliases`
@@ -151,17 +194,53 @@ packages/database/src/
 - `mutation_batches`
 - `number_sequences`
 - `org_usage_daily`
+- `payment_allocations`
+- `payment_terms`
+- `payments`
+- `price_list_items`
+- `price_lists`
+- `projects`
+- `purchase_invoice_lines`
+- `purchase_invoices`
+- `purchase_order_lines`
+- `purchase_orders`
+- `purchase_requests`
+- `quotation_lines`
+- `quotations`
 - `r2_files`
+- `reporting_snapshots`
+- `revenue_schedule_lines`
+- `revenue_schedules`
 - `role_permissions`
 - `roles`
+- `sales_invoice_lines`
+- `sales_invoices`
+- `sales_order_lines`
+- `sales_orders`
 - `sites`
+- `stock_balances`
+- `stock_movements`
+- `supplier_profiles`
+- `tax_rates`
 - `uom`
 - `uom_conversions`
 - `user_roles`
 - `user_scopes`
 - `users`
+- `warehouses`
+- `webhook_deliveries`
+- `webhook_endpoints`
+- `wip_movements`
+- `work_orders`
+- `workflow_definitions`
+- `workflow_events_outbox`
 - `workflow_executions`
+- `workflow_instances`
+- `workflow_outbox_receipts`
 - `workflow_rules`
+- `workflow_side_effects_outbox`
+- `workflow_step_executions`
+- `workflow_step_receipts`
 
 ---
 
