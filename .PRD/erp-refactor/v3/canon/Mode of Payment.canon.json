@@ -1,0 +1,148 @@
+{
+  "audit": {
+    "trackChanges": false
+  },
+  "canonVersion": "1.0.0",
+  "childTables": [
+    {
+      "childDoctype": "Mode of Payment Account",
+      "parentField": "accounts",
+      "required": false
+    }
+  ],
+  "doctypeId": "erpnext:Accounts:Mode of Payment",
+  "events": [
+    {
+      "event": "validate",
+      "handlers": [
+        "erpnext.support.doctype.service_level_agreement.service_level_agreement.apply",
+        "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record.check_for_running_deletion_job"
+      ],
+      "handlersParsed": [
+        {
+          "attrPath": "apply",
+          "module": "erpnext.support.doctype.service_level_agreement.service_level_agreement"
+        },
+        {
+          "attrPath": "check_for_running_deletion_job",
+          "module": "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record"
+        }
+      ]
+    }
+  ],
+  "fieldOrder": [
+    "mode_of_payment",
+    "enabled",
+    "type",
+    "accounts"
+  ],
+  "fields": [
+    {
+      "constraints": {},
+      "fieldname": "mode_of_payment",
+      "fieldtype": "data",
+      "label": "Mode of Payment",
+      "permlevel": 0,
+      "requiredStatic": true,
+      "ui": {
+        "inListView": true
+      },
+      "unique": true
+    },
+    {
+      "constraints": {},
+      "default": "1",
+      "fieldname": "enabled",
+      "fieldtype": "check",
+      "label": "Enabled",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "type",
+      "fieldtype": "select",
+      "label": "Type",
+      "optionsParsed": {
+        "choices": [
+          "Cash",
+          "Bank",
+          "General",
+          "Phone"
+        ],
+        "kind": "select"
+      },
+      "optionsRaw": "Cash\nBank\nGeneral\nPhone",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "inStandardFilter": true
+      },
+      "unique": false
+    },
+    {
+      "childDoctype": "Mode of Payment Account",
+      "constraints": {},
+      "fieldname": "accounts",
+      "fieldtype": "table",
+      "label": "Accounts",
+      "optionsParsed": {
+        "doctype": "Mode of Payment Account",
+        "kind": "child_doctype"
+      },
+      "optionsRaw": "Mode of Payment Account",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    }
+  ],
+  "identity": {
+    "app": "erpnext",
+    "isSingle": false,
+    "isSubmittable": false,
+    "isTree": false,
+    "module": "Accounts",
+    "naming": {
+      "expression": "field:mode_of_payment",
+      "strategy": "field"
+    }
+  },
+  "name": "Mode of Payment",
+  "permissions": [
+    {
+      "actions": {
+        "create": true,
+        "email": true,
+        "print": true,
+        "read": true,
+        "report": true,
+        "share": true,
+        "write": true
+      },
+      "permlevel": 0,
+      "role": "Accounts Manager"
+    },
+    {
+      "actions": {
+        "read": true,
+        "report": true
+      },
+      "permlevel": 0,
+      "role": "Accounts User"
+    }
+  ],
+  "ui": {
+    "searchFields": [],
+    "showNameInGlobalSearch": true,
+    "sortField": "creation",
+    "sortOrder": "ASC"
+  },
+  "workflows": [
+    {
+      "kind": "unavailable"
+    }
+  ]
+}

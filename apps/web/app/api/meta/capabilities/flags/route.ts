@@ -6,6 +6,15 @@ import {
   setCapabilityFlag,
 } from '@/lib/capabilities/feature-flags';
 
+import type { RouteMetaStrict } from '@/lib/api/route-types';
+
+export const ROUTE_META = {
+  path: '/api/meta/capabilities/flags',
+  methods: ['GET', 'POST'],
+  tier: 'admin',
+  exposeInOpenApi: false,
+} as const satisfies RouteMetaStrict;
+
 export const CAPABILITIES = ['admin.views.manage'] as const;
 
 /**

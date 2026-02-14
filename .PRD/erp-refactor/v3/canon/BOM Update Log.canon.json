@@ -1,0 +1,319 @@
+{
+  "audit": {
+    "trackChanges": true
+  },
+  "canonVersion": "1.0.0",
+  "childTables": [
+    {
+      "childDoctype": "BOM Update Batch",
+      "parentField": "bom_batches",
+      "required": false
+    }
+  ],
+  "doctypeId": "erpnext:Manufacturing:BOM Update Log",
+  "events": [
+    {
+      "event": "validate",
+      "handlers": [
+        "erpnext.support.doctype.service_level_agreement.service_level_agreement.apply",
+        "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record.check_for_running_deletion_job"
+      ],
+      "handlersParsed": [
+        {
+          "attrPath": "apply",
+          "module": "erpnext.support.doctype.service_level_agreement.service_level_agreement"
+        },
+        {
+          "attrPath": "check_for_running_deletion_job",
+          "module": "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record"
+        }
+      ]
+    }
+  ],
+  "fieldOrder": [
+    "update_type",
+    "status",
+    "column_break_3",
+    "current_bom",
+    "new_bom",
+    "error_log",
+    "progress_section",
+    "current_level",
+    "processed_boms",
+    "bom_batches",
+    "amended_from"
+  ],
+  "fields": [
+    {
+      "constraints": {},
+      "fieldname": "update_type",
+      "fieldtype": "select",
+      "label": "Update Type",
+      "optionsParsed": {
+        "choices": [
+          "Replace BOM",
+          "Update Cost"
+        ],
+        "kind": "select"
+      },
+      "optionsRaw": "Replace BOM\nUpdate Cost",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "status",
+      "fieldtype": "select",
+      "label": "Status",
+      "optionsParsed": {
+        "choices": [
+          "Queued",
+          "In Progress",
+          "Completed",
+          "Failed",
+          "Cancelled"
+        ],
+        "kind": "select"
+      },
+      "optionsRaw": "Queued\nIn Progress\nCompleted\nFailed\nCancelled",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:doc.update_type === \"Replace BOM\"",
+      "fieldname": "column_break_3",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "current_bom",
+      "fieldtype": "link",
+      "label": "Current BOM",
+      "layout": {
+        "column": 1
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "BOM"
+      },
+      "optionsRaw": "BOM",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "BOM",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "inListView": true,
+        "inStandardFilter": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "new_bom",
+      "fieldtype": "link",
+      "label": "New BOM",
+      "layout": {
+        "column": 1
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "BOM"
+      },
+      "optionsRaw": "BOM",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "BOM",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "inListView": true,
+        "inStandardFilter": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "error_log",
+      "fieldtype": "link",
+      "label": "Error Log",
+      "layout": {
+        "column": 1
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Error Log"
+      },
+      "optionsRaw": "Error Log",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Error Log",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval: doc.update_type == \"Update Cost\"",
+      "fieldname": "progress_section",
+      "fieldtype": "layout:section",
+      "label": "Progress",
+      "layout": {
+        "section": "Progress"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "collapsible": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:doc.status !== \"Completed\"",
+      "fieldname": "current_level",
+      "fieldtype": "int",
+      "label": "Current Level",
+      "layout": {
+        "section": "Progress"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "processed_boms",
+      "fieldtype": "text",
+      "label": "Processed BOMs",
+      "layout": {
+        "section": "Progress"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "hidden": true
+      },
+      "unique": false
+    },
+    {
+      "childDoctype": "BOM Update Batch",
+      "constraints": {},
+      "fieldname": "bom_batches",
+      "fieldtype": "table",
+      "layout": {
+        "section": "Progress"
+      },
+      "optionsParsed": {
+        "doctype": "BOM Update Batch",
+        "kind": "child_doctype"
+      },
+      "optionsRaw": "BOM Update Batch",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "amended_from",
+      "fieldtype": "link",
+      "label": "Amended From",
+      "layout": {
+        "section": "Progress"
+      },
+      "noCopy": true,
+      "optionsParsed": {
+        "kind": "link",
+        "target": "BOM Update Log"
+      },
+      "optionsRaw": "BOM Update Log",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "BOM Update Log",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true,
+        "readOnly": true
+      },
+      "unique": false
+    }
+  ],
+  "identity": {
+    "app": "erpnext",
+    "isSingle": false,
+    "isSubmittable": true,
+    "isTree": false,
+    "module": "Manufacturing",
+    "naming": {
+      "seriesPrefix": "BOM-UPDT-LOG-.#####",
+      "strategy": "series"
+    }
+  },
+  "name": "BOM Update Log",
+  "permissions": [
+    {
+      "actions": {
+        "create": true,
+        "email": true,
+        "export": true,
+        "print": true,
+        "read": true,
+        "report": true,
+        "share": true,
+        "submit": true,
+        "write": true
+      },
+      "permlevel": 0,
+      "role": "Manufacturing Manager"
+    },
+    {
+      "actions": {
+        "create": true,
+        "delete": true,
+        "email": true,
+        "export": true,
+        "print": true,
+        "read": true,
+        "report": true,
+        "share": true,
+        "submit": true,
+        "write": true
+      },
+      "permlevel": 0,
+      "role": "System Manager"
+    }
+  ],
+  "ui": {
+    "searchFields": [],
+    "showNameInGlobalSearch": false,
+    "sortField": "creation",
+    "sortOrder": "DESC"
+  },
+  "workflows": [
+    {
+      "kind": "unavailable"
+    }
+  ]
+}

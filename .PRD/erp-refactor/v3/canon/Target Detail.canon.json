@@ -1,0 +1,149 @@
+{
+  "audit": {
+    "trackChanges": false
+  },
+  "canonVersion": "1.0.0",
+  "childTables": [],
+  "doctypeId": "erpnext:Setup:Target Detail",
+  "events": [
+    {
+      "event": "validate",
+      "handlers": [
+        "erpnext.support.doctype.service_level_agreement.service_level_agreement.apply",
+        "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record.check_for_running_deletion_job"
+      ],
+      "handlersParsed": [
+        {
+          "attrPath": "apply",
+          "module": "erpnext.support.doctype.service_level_agreement.service_level_agreement"
+        },
+        {
+          "attrPath": "check_for_running_deletion_job",
+          "module": "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record"
+        }
+      ]
+    }
+  ],
+  "fieldOrder": [
+    "item_group",
+    "fiscal_year",
+    "target_qty",
+    "target_amount",
+    "distribution_id"
+  ],
+  "fields": [
+    {
+      "constraints": {},
+      "fieldname": "item_group",
+      "fieldtype": "link",
+      "label": "Item Group",
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Item Group"
+      },
+      "optionsRaw": "Item Group",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Item Group",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "inListView": true,
+        "searchIndex": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "fiscal_year",
+      "fieldtype": "link",
+      "label": "Fiscal Year",
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Fiscal Year"
+      },
+      "optionsRaw": "Fiscal Year",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Fiscal Year",
+        "kind": "static"
+      },
+      "requiredStatic": true,
+      "ui": {
+        "inListView": true,
+        "searchIndex": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "target_qty",
+      "fieldtype": "float",
+      "label": "Target Qty",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "target_amount",
+      "fieldtype": "float",
+      "label": "Target  Amount",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "inListView": true,
+        "searchIndex": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "distribution_id",
+      "fieldtype": "link",
+      "label": "Target Distribution",
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Monthly Distribution"
+      },
+      "optionsRaw": "Monthly Distribution",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Monthly Distribution",
+        "kind": "static"
+      },
+      "requiredStatic": true,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    }
+  ],
+  "identity": {
+    "app": "erpnext",
+    "isSingle": false,
+    "isSubmittable": false,
+    "isTree": false,
+    "module": "Setup",
+    "naming": {
+      "strategy": "hash"
+    }
+  },
+  "name": "Target Detail",
+  "permissions": [],
+  "ui": {
+    "searchFields": [],
+    "showNameInGlobalSearch": false,
+    "sortField": "creation",
+    "sortOrder": "DESC"
+  },
+  "workflows": [
+    {
+      "kind": "unavailable"
+    }
+  ]
+}

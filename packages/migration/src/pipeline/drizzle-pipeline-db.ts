@@ -1,10 +1,10 @@
+import { migrationLineage } from 'afena-database';
 import { and, eq, isNull, sql } from 'drizzle-orm';
 
-import type { DbInstance } from 'afena-database';
-import { migrationLineage } from 'afena-database';
-
-import type { EntityType } from '../types/migration-job.js';
 import type { PipelineDb } from './pipeline-base.js';
+import type { EntityType } from '../types/migration-job.js';
+import type { DbInstance } from 'afena-database';
+
 
 /**
  * OPS-05: Compute a deterministic dedupe key from the composite lineage fields.
@@ -54,7 +54,7 @@ export class DrizzlePipelineDb implements PipelineDb {
       .returning({ id: migrationLineage.id });
 
     if (inserted.length > 0) {
-      return { id: inserted[0]!.id };
+      return { id: inserted[0].id };
     }
     return null;
   }
@@ -90,7 +90,7 @@ export class DrizzlePipelineDb implements PipelineDb {
       .returning({ id: migrationLineage.id });
 
     if (claimed.length > 0) {
-      return { id: claimed[0]!.id };
+      return { id: claimed[0].id };
     }
     return null;
   }

@@ -1,0 +1,892 @@
+{
+  "audit": {
+    "trackChanges": true
+  },
+  "canonVersion": "1.0.0",
+  "childTables": [
+    {
+      "childDoctype": "Pricing Rule Brand",
+      "parentField": "brands",
+      "required": false
+    },
+    {
+      "childDoctype": "Campaign Item",
+      "parentField": "campaign",
+      "required": false
+    },
+    {
+      "childDoctype": "Customer Item",
+      "parentField": "customer",
+      "required": false
+    },
+    {
+      "childDoctype": "Customer Group Item",
+      "parentField": "customer_group",
+      "required": false
+    },
+    {
+      "childDoctype": "Pricing Rule Item Group",
+      "parentField": "item_groups",
+      "required": false
+    },
+    {
+      "childDoctype": "Pricing Rule Item Code",
+      "parentField": "items",
+      "required": false
+    },
+    {
+      "childDoctype": "Promotional Scheme Price Discount",
+      "parentField": "price_discount_slabs",
+      "required": false
+    },
+    {
+      "childDoctype": "Promotional Scheme Product Discount",
+      "parentField": "product_discount_slabs",
+      "required": false
+    },
+    {
+      "childDoctype": "Sales Partner Item",
+      "parentField": "sales_partner",
+      "required": false
+    },
+    {
+      "childDoctype": "Supplier Item",
+      "parentField": "supplier",
+      "required": false
+    },
+    {
+      "childDoctype": "Supplier Group Item",
+      "parentField": "supplier_group",
+      "required": false
+    },
+    {
+      "childDoctype": "Territory Item",
+      "parentField": "territory",
+      "required": false
+    }
+  ],
+  "doctypeId": "erpnext:Accounts:Promotional Scheme",
+  "events": [
+    {
+      "event": "validate",
+      "handlers": [
+        "erpnext.support.doctype.service_level_agreement.service_level_agreement.apply",
+        "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record.check_for_running_deletion_job"
+      ],
+      "handlersParsed": [
+        {
+          "attrPath": "apply",
+          "module": "erpnext.support.doctype.service_level_agreement.service_level_agreement"
+        },
+        {
+          "attrPath": "check_for_running_deletion_job",
+          "module": "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record"
+        }
+      ]
+    }
+  ],
+  "fieldOrder": [
+    "section_break_1",
+    "apply_on",
+    "disable",
+    "column_break_3",
+    "items",
+    "item_groups",
+    "brands",
+    "mixed_conditions",
+    "is_cumulative",
+    "section_break_10",
+    "apply_rule_on_other",
+    "column_break_11",
+    "other_item_code",
+    "other_item_group",
+    "other_brand",
+    "section_break_8",
+    "selling",
+    "buying",
+    "column_break_12",
+    "applicable_for",
+    "customer",
+    "customer_group",
+    "territory",
+    "sales_partner",
+    "campaign",
+    "supplier",
+    "supplier_group",
+    "period_settings_section",
+    "valid_from",
+    "valid_upto",
+    "column_break_26",
+    "company",
+    "currency",
+    "section_break_14",
+    "price_discount_slabs",
+    "section_break_15",
+    "product_discount_slabs"
+  ],
+  "fields": [
+    {
+      "constraints": {},
+      "fieldname": "section_break_1",
+      "fieldtype": "layout:section",
+      "layout": {
+        "section": "section_break_1"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "Item Code",
+      "fieldname": "apply_on",
+      "fieldtype": "select",
+      "label": "Apply On",
+      "layout": {
+        "section": "section_break_1"
+      },
+      "optionsParsed": {
+        "choices": [
+          "Item Code",
+          "Item Group",
+          "Brand",
+          "Transaction"
+        ],
+        "kind": "select"
+      },
+      "optionsRaw": "\nItem Code\nItem Group\nBrand\nTransaction",
+      "permlevel": 0,
+      "requiredStatic": true,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "disable",
+      "fieldtype": "check",
+      "label": "Disable",
+      "layout": {
+        "section": "section_break_1"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_3",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "section_break_1"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "childDoctype": "Pricing Rule Item Code",
+      "constraints": {},
+      "dependsOn": "eval:doc.apply_on == 'Item Code'",
+      "fieldname": "items",
+      "fieldtype": "table",
+      "label": "Pricing Rule Item Code",
+      "layout": {
+        "column": 1,
+        "section": "section_break_1"
+      },
+      "optionsParsed": {
+        "doctype": "Pricing Rule Item Code",
+        "kind": "child_doctype"
+      },
+      "optionsRaw": "Pricing Rule Item Code",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "childDoctype": "Pricing Rule Item Group",
+      "constraints": {},
+      "dependsOn": "eval:doc.apply_on == 'Item Group'",
+      "fieldname": "item_groups",
+      "fieldtype": "table",
+      "label": "Pricing Rule Item Group",
+      "layout": {
+        "column": 1,
+        "section": "section_break_1"
+      },
+      "optionsParsed": {
+        "doctype": "Pricing Rule Item Group",
+        "kind": "child_doctype"
+      },
+      "optionsRaw": "Pricing Rule Item Group",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "childDoctype": "Pricing Rule Brand",
+      "constraints": {},
+      "dependsOn": "eval:doc.apply_on == 'Brand'",
+      "fieldname": "brands",
+      "fieldtype": "table",
+      "label": "Pricing Rule Brand",
+      "layout": {
+        "column": 1,
+        "section": "section_break_1"
+      },
+      "optionsParsed": {
+        "doctype": "Pricing Rule Brand",
+        "kind": "child_doctype"
+      },
+      "optionsRaw": "Pricing Rule Brand",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "dependsOn": "eval:doc.apply_on != 'Transaction'",
+      "fieldname": "mixed_conditions",
+      "fieldtype": "check",
+      "label": "Mixed Conditions",
+      "layout": {
+        "column": 1,
+        "section": "section_break_1"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "dependsOn": "eval:doc.apply_on != 'Transaction'",
+      "fieldname": "is_cumulative",
+      "fieldtype": "check",
+      "label": "Is Cumulative",
+      "layout": {
+        "column": 1,
+        "section": "section_break_1"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "section_break_10",
+      "fieldtype": "layout:section",
+      "label": "Discount on Other Item",
+      "layout": {
+        "section": "Discount on Other Item"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "collapsible": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "apply_rule_on_other",
+      "fieldtype": "select",
+      "label": "Apply Rule On Other",
+      "layout": {
+        "section": "Discount on Other Item"
+      },
+      "optionsParsed": {
+        "choices": [
+          "Item Code",
+          "Item Group",
+          "Brand"
+        ],
+        "kind": "select"
+      },
+      "optionsRaw": "\nItem Code\nItem Group\nBrand",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_11",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "Discount on Other Item"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:doc.apply_rule_on_other == 'Item Code'",
+      "fieldname": "other_item_code",
+      "fieldtype": "link",
+      "label": "Item Code",
+      "layout": {
+        "column": 1,
+        "section": "Discount on Other Item"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Item"
+      },
+      "optionsRaw": "Item",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Item",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:doc.apply_rule_on_other == 'Item Group'",
+      "fieldname": "other_item_group",
+      "fieldtype": "link",
+      "label": "Item Group",
+      "layout": {
+        "column": 1,
+        "section": "Discount on Other Item"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Item Group"
+      },
+      "optionsRaw": "Item Group",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Item Group",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:doc.apply_rule_on_other == 'Brand'",
+      "fieldname": "other_brand",
+      "fieldtype": "link",
+      "label": "Brand",
+      "layout": {
+        "column": 1,
+        "section": "Discount on Other Item"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Brand"
+      },
+      "optionsRaw": "Brand",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Brand",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "section_break_8",
+      "fieldtype": "layout:section",
+      "label": "Party Information",
+      "layout": {
+        "section": "Party Information"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "collapsible": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "selling",
+      "fieldtype": "check",
+      "label": "Selling",
+      "layout": {
+        "section": "Party Information"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "buying",
+      "fieldtype": "check",
+      "label": "Buying",
+      "layout": {
+        "section": "Party Information"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_12",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "Party Information"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval: doc.buying || doc.selling",
+      "fieldname": "applicable_for",
+      "fieldtype": "select",
+      "label": "Applicable For",
+      "layout": {
+        "column": 1,
+        "section": "Party Information"
+      },
+      "optionsParsed": {
+        "choices": [
+          "Customer",
+          "Customer Group",
+          "Territory",
+          "Sales Partner",
+          "Campaign",
+          "Supplier",
+          "Supplier Group"
+        ],
+        "kind": "select"
+      },
+      "optionsRaw": "\nCustomer\nCustomer Group\nTerritory\nSales Partner\nCampaign\nSupplier\nSupplier Group",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "childDoctype": "Customer Item",
+      "constraints": {},
+      "dependsOn": "eval:doc.applicable_for=='Customer'",
+      "fieldname": "customer",
+      "fieldtype": "table_multiselect",
+      "label": "Customer",
+      "layout": {
+        "column": 1,
+        "section": "Party Information"
+      },
+      "optionsParsed": {
+        "doctype": "Customer Item",
+        "kind": "child_doctype"
+      },
+      "optionsRaw": "Customer Item",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "childDoctype": "Customer Group Item",
+      "constraints": {},
+      "dependsOn": "eval:doc.applicable_for==\"Customer Group\"",
+      "fieldname": "customer_group",
+      "fieldtype": "table_multiselect",
+      "label": "Customer Group",
+      "layout": {
+        "column": 1,
+        "section": "Party Information"
+      },
+      "optionsParsed": {
+        "doctype": "Customer Group Item",
+        "kind": "child_doctype"
+      },
+      "optionsRaw": "Customer Group Item",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "childDoctype": "Territory Item",
+      "constraints": {},
+      "dependsOn": "eval:doc.applicable_for==\"Territory\"",
+      "fieldname": "territory",
+      "fieldtype": "table_multiselect",
+      "label": "Territory",
+      "layout": {
+        "column": 1,
+        "section": "Party Information"
+      },
+      "optionsParsed": {
+        "doctype": "Territory Item",
+        "kind": "child_doctype"
+      },
+      "optionsRaw": "Territory Item",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "childDoctype": "Sales Partner Item",
+      "constraints": {},
+      "dependsOn": "eval:doc.applicable_for==\"Sales Partner\"",
+      "fieldname": "sales_partner",
+      "fieldtype": "table_multiselect",
+      "label": "Sales Partner",
+      "layout": {
+        "column": 1,
+        "section": "Party Information"
+      },
+      "optionsParsed": {
+        "doctype": "Sales Partner Item",
+        "kind": "child_doctype"
+      },
+      "optionsRaw": "Sales Partner Item",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "childDoctype": "Campaign Item",
+      "constraints": {},
+      "dependsOn": "eval:doc.applicable_for==\"Campaign\"",
+      "fieldname": "campaign",
+      "fieldtype": "table_multiselect",
+      "label": "Campaign",
+      "layout": {
+        "column": 1,
+        "section": "Party Information"
+      },
+      "optionsParsed": {
+        "doctype": "Campaign Item",
+        "kind": "child_doctype"
+      },
+      "optionsRaw": "Campaign Item",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "childDoctype": "Supplier Item",
+      "constraints": {},
+      "dependsOn": "eval:doc.applicable_for=='Supplier'",
+      "fieldname": "supplier",
+      "fieldtype": "table_multiselect",
+      "label": "Supplier",
+      "layout": {
+        "column": 1,
+        "section": "Party Information"
+      },
+      "optionsParsed": {
+        "doctype": "Supplier Item",
+        "kind": "child_doctype"
+      },
+      "optionsRaw": "Supplier Item",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "childDoctype": "Supplier Group Item",
+      "constraints": {},
+      "dependsOn": "eval:doc.applicable_for==\"Supplier Group\"",
+      "fieldname": "supplier_group",
+      "fieldtype": "table_multiselect",
+      "label": "Supplier Group",
+      "layout": {
+        "column": 1,
+        "section": "Party Information"
+      },
+      "optionsParsed": {
+        "doctype": "Supplier Group Item",
+        "kind": "child_doctype"
+      },
+      "optionsRaw": "Supplier Group Item",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "period_settings_section",
+      "fieldtype": "layout:section",
+      "label": "Period Settings",
+      "layout": {
+        "section": "Period Settings"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "Today",
+      "fieldname": "valid_from",
+      "fieldtype": "date",
+      "label": "Valid From",
+      "layout": {
+        "section": "Period Settings"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "valid_upto",
+      "fieldtype": "date",
+      "label": "Valid Up To",
+      "layout": {
+        "section": "Period Settings"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_26",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "Period Settings"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "company",
+      "fieldtype": "link",
+      "label": "Company",
+      "layout": {
+        "column": 1,
+        "section": "Period Settings"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Company"
+      },
+      "optionsRaw": "Company",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Company",
+        "kind": "static"
+      },
+      "requiredStatic": true,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "currency",
+      "fieldtype": "link",
+      "label": "Currency",
+      "layout": {
+        "column": 1,
+        "section": "Period Settings"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Currency"
+      },
+      "optionsRaw": "Currency",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Currency",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "section_break_14",
+      "fieldtype": "layout:section",
+      "label": "Price Discount Slabs",
+      "layout": {
+        "section": "Price Discount Slabs"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "childDoctype": "Promotional Scheme Price Discount",
+      "constraints": {},
+      "fieldname": "price_discount_slabs",
+      "fieldtype": "table",
+      "label": "Promotional Scheme Price Discount",
+      "layout": {
+        "section": "Price Discount Slabs"
+      },
+      "optionsParsed": {
+        "doctype": "Promotional Scheme Price Discount",
+        "kind": "child_doctype"
+      },
+      "optionsRaw": "Promotional Scheme Price Discount",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "section_break_15",
+      "fieldtype": "layout:section",
+      "label": "Product Discount Slabs",
+      "layout": {
+        "section": "Product Discount Slabs"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "childDoctype": "Promotional Scheme Product Discount",
+      "constraints": {},
+      "fieldname": "product_discount_slabs",
+      "fieldtype": "table",
+      "label": "Promotional Scheme Product Discount",
+      "layout": {
+        "section": "Product Discount Slabs"
+      },
+      "optionsParsed": {
+        "doctype": "Promotional Scheme Product Discount",
+        "kind": "child_doctype"
+      },
+      "optionsRaw": "Promotional Scheme Product Discount",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    }
+  ],
+  "identity": {
+    "app": "erpnext",
+    "isSingle": false,
+    "isSubmittable": false,
+    "isTree": false,
+    "module": "Accounts",
+    "naming": {
+      "expression": "Prompt",
+      "strategy": "expression"
+    }
+  },
+  "name": "Promotional Scheme",
+  "permissions": [
+    {
+      "actions": {
+        "create": true,
+        "delete": true,
+        "email": true,
+        "export": true,
+        "print": true,
+        "read": true,
+        "report": true,
+        "share": true,
+        "write": true
+      },
+      "permlevel": 0,
+      "role": "Accounts Manager"
+    },
+    {
+      "actions": {
+        "create": true,
+        "delete": true,
+        "email": true,
+        "export": true,
+        "print": true,
+        "read": true,
+        "report": true,
+        "share": true,
+        "write": true
+      },
+      "permlevel": 0,
+      "role": "Accounts User"
+    },
+    {
+      "actions": {
+        "create": true,
+        "delete": true,
+        "email": true,
+        "export": true,
+        "print": true,
+        "read": true,
+        "report": true,
+        "share": true,
+        "write": true
+      },
+      "permlevel": 0,
+      "role": "Sales Manager"
+    },
+    {
+      "actions": {
+        "create": true,
+        "delete": true,
+        "email": true,
+        "export": true,
+        "print": true,
+        "read": true,
+        "report": true,
+        "share": true,
+        "write": true
+      },
+      "permlevel": 0,
+      "role": "System Manager"
+    }
+  ],
+  "ui": {
+    "searchFields": [],
+    "showNameInGlobalSearch": false,
+    "sortField": "creation",
+    "sortOrder": "DESC"
+  },
+  "workflows": [
+    {
+      "kind": "unavailable"
+    }
+  ]
+}

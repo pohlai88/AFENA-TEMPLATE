@@ -1,0 +1,734 @@
+{
+  "audit": {
+    "trackChanges": true
+  },
+  "canonVersion": "1.0.0",
+  "childTables": [],
+  "doctypeId": "erpnext:Manufacturing:Work Order Operation",
+  "events": [
+    {
+      "event": "validate",
+      "handlers": [
+        "erpnext.support.doctype.service_level_agreement.service_level_agreement.apply",
+        "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record.check_for_running_deletion_job"
+      ],
+      "handlersParsed": [
+        {
+          "attrPath": "apply",
+          "module": "erpnext.support.doctype.service_level_agreement.service_level_agreement"
+        },
+        {
+          "attrPath": "check_for_running_deletion_job",
+          "module": "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record"
+        }
+      ]
+    }
+  ],
+  "fieldOrder": [
+    "details",
+    "operation",
+    "status",
+    "completed_qty",
+    "process_loss_qty",
+    "column_break_4",
+    "bom",
+    "workstation_type",
+    "workstation",
+    "sequence_id",
+    "section_break_insy",
+    "bom_no",
+    "finished_good",
+    "is_subcontracted",
+    "skip_material_transfer",
+    "backflush_from_wip_warehouse",
+    "column_break_vjih",
+    "source_warehouse",
+    "wip_warehouse",
+    "fg_warehouse",
+    "section_break_10",
+    "description",
+    "estimated_time_and_cost",
+    "planned_start_time",
+    "hour_rate",
+    "time_in_mins",
+    "column_break_10",
+    "planned_end_time",
+    "batch_size",
+    "planned_operating_cost",
+    "section_break_9",
+    "actual_start_time",
+    "actual_operation_time",
+    "column_break_11",
+    "actual_end_time",
+    "actual_operating_cost"
+  ],
+  "fields": [
+    {
+      "constraints": {},
+      "fieldname": "details",
+      "fieldtype": "layout:section",
+      "layout": {
+        "section": "details"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "operation",
+      "fieldtype": "link",
+      "label": "Operation",
+      "layout": {
+        "section": "details"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Operation"
+      },
+      "optionsRaw": "Operation",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Operation",
+        "kind": "static"
+      },
+      "requiredStatic": true,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "Pending",
+      "fieldname": "status",
+      "fieldtype": "select",
+      "label": "Status",
+      "layout": {
+        "section": "details"
+      },
+      "noCopy": true,
+      "optionsParsed": {
+        "choices": [
+          "Pending",
+          "Work in Progress",
+          "Completed"
+        ],
+        "kind": "select"
+      },
+      "optionsRaw": "Pending\nWork in Progress\nCompleted",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "completed_qty",
+      "fieldtype": "float",
+      "label": "Completed Qty",
+      "layout": {
+        "section": "details"
+      },
+      "noCopy": true,
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "description": "Operation completed for how many finished goods?"
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "process_loss_qty",
+      "fieldtype": "float",
+      "label": "Process Loss Qty",
+      "layout": {
+        "section": "details"
+      },
+      "noCopy": true,
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_4",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "details"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "bom",
+      "fieldtype": "link",
+      "label": "BOM",
+      "layout": {
+        "column": 1,
+        "section": "details"
+      },
+      "noCopy": true,
+      "optionsParsed": {
+        "kind": "link",
+        "target": "BOM"
+      },
+      "optionsRaw": "BOM",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "BOM",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "workstation_type",
+      "fieldtype": "link",
+      "label": "Workstation Type",
+      "layout": {
+        "column": 1,
+        "section": "details"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Workstation Type"
+      },
+      "optionsRaw": "Workstation Type",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Workstation Type",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "workstation",
+      "fieldtype": "link",
+      "label": "Workstation",
+      "layout": {
+        "column": 1,
+        "section": "details"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Workstation"
+      },
+      "optionsRaw": "Workstation",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Workstation",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "sequence_id",
+      "fieldtype": "int",
+      "label": "Sequence ID",
+      "layout": {
+        "column": 1,
+        "section": "details"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:parent.track_semi_finished_goods === 1",
+      "fieldname": "section_break_insy",
+      "fieldtype": "layout:section",
+      "layout": {
+        "section": "section_break_insy"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "bom_no",
+      "fieldtype": "link",
+      "label": "BOM No (For Semi-Finished Goods)",
+      "layout": {
+        "section": "section_break_insy"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "BOM"
+      },
+      "optionsRaw": "BOM",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "BOM",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "finished_good",
+      "fieldtype": "link",
+      "label": "Semi Finished Goods / Finished Goods",
+      "layout": {
+        "section": "section_break_insy"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Item"
+      },
+      "optionsRaw": "Item",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Item",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "inListView": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "is_subcontracted",
+      "fieldtype": "check",
+      "label": "Is Subcontracted",
+      "layout": {
+        "section": "section_break_insy"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "skip_material_transfer",
+      "fieldtype": "check",
+      "label": "Skip Material Transfer",
+      "layout": {
+        "section": "section_break_insy"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "backflush_from_wip_warehouse",
+      "fieldtype": "check",
+      "label": "Backflush Materials From WIP Warehouse",
+      "layout": {
+        "section": "section_break_insy"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_vjih",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "section_break_insy"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "source_warehouse",
+      "fieldtype": "link",
+      "label": "Source Warehouse",
+      "layout": {
+        "column": 1,
+        "section": "section_break_insy"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Warehouse"
+      },
+      "optionsRaw": "Warehouse",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Warehouse",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "wip_warehouse",
+      "fieldtype": "link",
+      "label": "WIP WH",
+      "layout": {
+        "column": 1,
+        "section": "section_break_insy"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Warehouse"
+      },
+      "optionsRaw": "Warehouse",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Warehouse",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "fg_warehouse",
+      "fieldtype": "link",
+      "label": "Finished Goods Warehouse",
+      "layout": {
+        "column": 1,
+        "section": "section_break_insy"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Warehouse"
+      },
+      "optionsRaw": "Warehouse",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Warehouse",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "section_break_10",
+      "fieldtype": "layout:section",
+      "layout": {
+        "section": "section_break_10"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "description",
+      "fieldtype": "text_editor",
+      "label": "Operation Description",
+      "layout": {
+        "section": "section_break_10"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "estimated_time_and_cost",
+      "fieldtype": "layout:section",
+      "label": "Estimated Time and Cost",
+      "layout": {
+        "section": "Estimated Time and Cost"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "planned_start_time",
+      "fieldtype": "datetime",
+      "label": "Planned Start Time",
+      "layout": {
+        "section": "Estimated Time and Cost"
+      },
+      "noCopy": true,
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "hour_rate",
+      "fieldtype": "float",
+      "label": "Hour Rate",
+      "layout": {
+        "section": "Estimated Time and Cost"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "time_in_mins",
+      "fieldtype": "float",
+      "label": "Time",
+      "layout": {
+        "section": "Estimated Time and Cost"
+      },
+      "permlevel": 0,
+      "requiredStatic": true,
+      "ui": {
+        "description": "In Minutes",
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_10",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "Estimated Time and Cost"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "planned_end_time",
+      "fieldtype": "datetime",
+      "label": "Planned End Time",
+      "layout": {
+        "column": 1,
+        "section": "Estimated Time and Cost"
+      },
+      "noCopy": true,
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "batch_size",
+      "fieldtype": "float",
+      "label": "Batch Size",
+      "layout": {
+        "column": 1,
+        "section": "Estimated Time and Cost"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "planned_operating_cost",
+      "fieldtype": "currency",
+      "label": "Planned Operating Cost",
+      "layout": {
+        "column": 1,
+        "section": "Estimated Time and Cost"
+      },
+      "optionsParsed": {
+        "field": "Company:company:default_currency",
+        "kind": "currency_field"
+      },
+      "optionsRaw": "Company:company:default_currency",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "section_break_9",
+      "fieldtype": "layout:section",
+      "label": "Actual Time and Cost",
+      "layout": {
+        "section": "Actual Time and Cost"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "actual_start_time",
+      "fieldtype": "datetime",
+      "label": "Actual Start Time",
+      "layout": {
+        "section": "Actual Time and Cost"
+      },
+      "noCopy": true,
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "description": "Updated via 'Time Log' (In Minutes)",
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "actual_operation_time",
+      "fieldtype": "float",
+      "label": "Actual Operation Time",
+      "layout": {
+        "section": "Actual Time and Cost"
+      },
+      "noCopy": true,
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "description": "Updated via 'Time Log' (In Minutes)",
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_11",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "Actual Time and Cost"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "actual_end_time",
+      "fieldtype": "datetime",
+      "label": "Actual End Time",
+      "layout": {
+        "column": 1,
+        "section": "Actual Time and Cost"
+      },
+      "noCopy": true,
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "description": "Updated via 'Time Log' (In Minutes)",
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "actual_operating_cost",
+      "fieldtype": "currency",
+      "label": "Actual Operating Cost",
+      "layout": {
+        "column": 1,
+        "section": "Actual Time and Cost"
+      },
+      "noCopy": true,
+      "optionsParsed": {
+        "field": "Company:company:default_currency",
+        "kind": "currency_field"
+      },
+      "optionsRaw": "Company:company:default_currency",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "description": "(Hour Rate / 60) * Actual Operation Time",
+        "readOnly": true
+      },
+      "unique": false
+    }
+  ],
+  "identity": {
+    "app": "erpnext",
+    "isSingle": false,
+    "isSubmittable": false,
+    "isTree": false,
+    "module": "Manufacturing",
+    "naming": {
+      "strategy": "hash"
+    }
+  },
+  "name": "Work Order Operation",
+  "permissions": [],
+  "ui": {
+    "searchFields": [],
+    "showNameInGlobalSearch": false,
+    "sortField": "creation",
+    "sortOrder": "DESC"
+  },
+  "workflows": [
+    {
+      "kind": "unavailable"
+    }
+  ]
+}

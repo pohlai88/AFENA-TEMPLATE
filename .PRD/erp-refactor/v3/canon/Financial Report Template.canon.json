@@ -1,0 +1,215 @@
+{
+  "audit": {
+    "trackChanges": false
+  },
+  "canonVersion": "1.0.0",
+  "childTables": [
+    {
+      "childDoctype": "Financial Report Row",
+      "parentField": "rows",
+      "required": false
+    }
+  ],
+  "doctypeId": "erpnext:Accounts:Financial Report Template",
+  "events": [
+    {
+      "event": "validate",
+      "handlers": [
+        "erpnext.support.doctype.service_level_agreement.service_level_agreement.apply",
+        "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record.check_for_running_deletion_job"
+      ],
+      "handlersParsed": [
+        {
+          "attrPath": "apply",
+          "module": "erpnext.support.doctype.service_level_agreement.service_level_agreement"
+        },
+        {
+          "attrPath": "check_for_running_deletion_job",
+          "module": "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record"
+        }
+      ]
+    }
+  ],
+  "fieldOrder": [
+    "template_name",
+    "report_type",
+    "module",
+    "column_break_lvnq",
+    "disabled",
+    "section_break_fvlw",
+    "rows"
+  ],
+  "fields": [
+    {
+      "constraints": {},
+      "fieldname": "template_name",
+      "fieldtype": "data",
+      "label": "Template Name",
+      "permlevel": 0,
+      "requiredStatic": true,
+      "ui": {
+        "description": "Descriptive name for your template (e.g., 'Standard P&L', 'Detailed Balance Sheet')",
+        "inListView": true
+      },
+      "unique": true
+    },
+    {
+      "constraints": {},
+      "fieldname": "report_type",
+      "fieldtype": "select",
+      "label": "Report Type",
+      "optionsParsed": {
+        "choices": [
+          "Profit and Loss Statement",
+          "Balance Sheet",
+          "Cash Flow",
+          "Custom Financial Statement"
+        ],
+        "kind": "select"
+      },
+      "optionsRaw": "\nProfit and Loss Statement\nBalance Sheet\nCash Flow\nCustom Financial Statement",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "description": "Type of financial statement this template generates",
+        "inListView": true,
+        "inStandardFilter": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:frappe.boot.developer_mode",
+      "fieldname": "module",
+      "fieldtype": "link",
+      "label": "Module (for Export)",
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Module Def"
+      },
+      "optionsRaw": "Module Def",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Module Def",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_lvnq",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "disabled",
+      "fieldtype": "check",
+      "label": "Disabled",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "description": "Disable template to prevent use in reports"
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "section_break_fvlw",
+      "fieldtype": "layout:section",
+      "layout": {
+        "section": "section_break_fvlw"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "childDoctype": "Financial Report Row",
+      "constraints": {},
+      "fieldname": "rows",
+      "fieldtype": "table",
+      "label": "Report Line Items",
+      "layout": {
+        "section": "section_break_fvlw"
+      },
+      "optionsParsed": {
+        "doctype": "Financial Report Row",
+        "kind": "child_doctype"
+      },
+      "optionsRaw": "Financial Report Row",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    }
+  ],
+  "identity": {
+    "app": "erpnext",
+    "isSingle": false,
+    "isSubmittable": false,
+    "isTree": false,
+    "module": "Accounts",
+    "naming": {
+      "expression": "field:template_name",
+      "strategy": "field"
+    }
+  },
+  "name": "Financial Report Template",
+  "permissions": [
+    {
+      "actions": {
+        "create": true,
+        "delete": true,
+        "email": true,
+        "export": true,
+        "print": true,
+        "read": true,
+        "report": true,
+        "share": true,
+        "write": true
+      },
+      "permlevel": 0,
+      "role": "Accounts Manager"
+    },
+    {
+      "actions": {
+        "read": true
+      },
+      "permlevel": 0,
+      "role": "Accounts User"
+    },
+    {
+      "actions": {
+        "read": true
+      },
+      "permlevel": 0,
+      "role": "Auditor"
+    }
+  ],
+  "ui": {
+    "searchFields": [],
+    "showNameInGlobalSearch": false,
+    "sortField": "creation",
+    "sortOrder": "DESC",
+    "titleField": "template_name"
+  },
+  "workflows": [
+    {
+      "kind": "unavailable"
+    }
+  ]
+}

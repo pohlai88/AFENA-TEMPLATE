@@ -1,0 +1,130 @@
+{
+  "audit": {
+    "trackChanges": true
+  },
+  "canonVersion": "1.0.0",
+  "childTables": [],
+  "doctypeId": "erpnext:Telephony:Incoming Call Handling Schedule",
+  "events": [
+    {
+      "event": "validate",
+      "handlers": [
+        "erpnext.support.doctype.service_level_agreement.service_level_agreement.apply",
+        "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record.check_for_running_deletion_job"
+      ],
+      "handlersParsed": [
+        {
+          "attrPath": "apply",
+          "module": "erpnext.support.doctype.service_level_agreement.service_level_agreement"
+        },
+        {
+          "attrPath": "check_for_running_deletion_job",
+          "module": "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record"
+        }
+      ]
+    }
+  ],
+  "fieldOrder": [
+    "day_of_week",
+    "from_time",
+    "to_time",
+    "agent_group"
+  ],
+  "fields": [
+    {
+      "constraints": {},
+      "fieldname": "day_of_week",
+      "fieldtype": "select",
+      "label": "Day Of Week",
+      "optionsParsed": {
+        "choices": [
+          "Monday",
+          "Tuesday",
+          "Wednesday",
+          "Thursday",
+          "Friday",
+          "Saturday",
+          "Sunday"
+        ],
+        "kind": "select"
+      },
+      "optionsRaw": "Monday\nTuesday\nWednesday\nThursday\nFriday\nSaturday\nSunday",
+      "permlevel": 0,
+      "requiredStatic": true,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "9:00:00",
+      "fieldname": "from_time",
+      "fieldtype": "time",
+      "label": "From Time",
+      "permlevel": 0,
+      "requiredStatic": true,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "17:00:00",
+      "fieldname": "to_time",
+      "fieldtype": "time",
+      "label": "To Time",
+      "permlevel": 0,
+      "requiredStatic": true,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "agent_group",
+      "fieldtype": "link",
+      "label": "Agent Group",
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Employee Group"
+      },
+      "optionsRaw": "Employee Group",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Employee Group",
+        "kind": "static"
+      },
+      "requiredStatic": true,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    }
+  ],
+  "identity": {
+    "app": "erpnext",
+    "isSingle": false,
+    "isSubmittable": false,
+    "isTree": false,
+    "module": "Telephony",
+    "naming": {
+      "strategy": "hash"
+    }
+  },
+  "name": "Incoming Call Handling Schedule",
+  "permissions": [],
+  "ui": {
+    "searchFields": [],
+    "showNameInGlobalSearch": false,
+    "sortField": "creation",
+    "sortOrder": "DESC"
+  },
+  "workflows": [
+    {
+      "kind": "unavailable"
+    }
+  ]
+}

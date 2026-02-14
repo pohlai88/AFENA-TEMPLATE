@@ -1,0 +1,131 @@
+{
+  "audit": {
+    "trackChanges": true
+  },
+  "canonVersion": "1.0.0",
+  "childTables": [],
+  "doctypeId": "erpnext:Manufacturing:BOM Website Operation",
+  "events": [
+    {
+      "event": "validate",
+      "handlers": [
+        "erpnext.support.doctype.service_level_agreement.service_level_agreement.apply",
+        "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record.check_for_running_deletion_job"
+      ],
+      "handlersParsed": [
+        {
+          "attrPath": "apply",
+          "module": "erpnext.support.doctype.service_level_agreement.service_level_agreement"
+        },
+        {
+          "attrPath": "check_for_running_deletion_job",
+          "module": "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record"
+        }
+      ]
+    }
+  ],
+  "fieldOrder": [
+    "operation",
+    "workstation",
+    "time_in_mins",
+    "website_image",
+    "thumbnail"
+  ],
+  "fields": [
+    {
+      "constraints": {},
+      "fieldname": "operation",
+      "fieldtype": "link",
+      "label": "Operation",
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Operation"
+      },
+      "optionsRaw": "Operation",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Operation",
+        "kind": "static"
+      },
+      "requiredStatic": true,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "workstation",
+      "fieldtype": "link",
+      "label": "Workstation",
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Workstation"
+      },
+      "optionsRaw": "Workstation",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Workstation",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "time_in_mins",
+      "fieldtype": "float",
+      "label": "Operation Time",
+      "permlevel": 0,
+      "requiredStatic": true,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "website_image",
+      "fieldtype": "attach",
+      "label": "Image",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "thumbnail",
+      "fieldtype": "data",
+      "label": "Thumbnail",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    }
+  ],
+  "identity": {
+    "app": "erpnext",
+    "isSingle": false,
+    "isSubmittable": false,
+    "isTree": false,
+    "module": "Manufacturing",
+    "naming": {
+      "strategy": "hash"
+    }
+  },
+  "name": "BOM Website Operation",
+  "permissions": [],
+  "ui": {
+    "searchFields": [],
+    "showNameInGlobalSearch": false,
+    "sortField": "creation",
+    "sortOrder": "DESC"
+  },
+  "workflows": [
+    {
+      "kind": "unavailable"
+    }
+  ]
+}

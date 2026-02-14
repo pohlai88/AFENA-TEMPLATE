@@ -1,0 +1,975 @@
+{
+  "audit": {
+    "trackChanges": false
+  },
+  "canonVersion": "1.0.0",
+  "childTables": [],
+  "doctypeId": "erpnext:Accounts:GL Entry",
+  "events": [
+    {
+      "event": "validate",
+      "handlers": [
+        "erpnext.support.doctype.service_level_agreement.service_level_agreement.apply",
+        "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record.check_for_running_deletion_job"
+      ],
+      "handlersParsed": [
+        {
+          "attrPath": "apply",
+          "module": "erpnext.support.doctype.service_level_agreement.service_level_agreement"
+        },
+        {
+          "attrPath": "check_for_running_deletion_job",
+          "module": "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record"
+        }
+      ]
+    }
+  ],
+  "fieldOrder": [
+    "dates_section",
+    "posting_date",
+    "transaction_date",
+    "column_break_avko",
+    "fiscal_year",
+    "due_date",
+    "account_details_section",
+    "account",
+    "account_currency",
+    "column_break_ifvf",
+    "against",
+    "party_type",
+    "party",
+    "transaction_details_section",
+    "voucher_type",
+    "voucher_no",
+    "voucher_subtype",
+    "transaction_currency",
+    "column_break_dpsx",
+    "against_voucher_type",
+    "against_voucher",
+    "voucher_detail_no",
+    "transaction_exchange_rate",
+    "reporting_currency_exchange_rate",
+    "amounts_section",
+    "debit_in_account_currency",
+    "debit",
+    "debit_in_transaction_currency",
+    "debit_in_reporting_currency",
+    "column_break_bm1w",
+    "credit_in_account_currency",
+    "credit",
+    "credit_in_transaction_currency",
+    "credit_in_reporting_currency",
+    "dimensions_section",
+    "cost_center",
+    "column_break_lmnm",
+    "project",
+    "more_info_section",
+    "finance_book",
+    "company",
+    "is_opening",
+    "is_advance",
+    "column_break_8abq",
+    "to_rename",
+    "is_cancelled",
+    "remarks"
+  ],
+  "fields": [
+    {
+      "constraints": {},
+      "fieldname": "dates_section",
+      "fieldtype": "layout:section",
+      "label": "Dates",
+      "layout": {
+        "section": "Dates"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "posting_date",
+      "fieldtype": "date",
+      "label": "Posting Date",
+      "layout": {
+        "section": "Dates"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "inListView": true,
+        "searchIndex": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "transaction_date",
+      "fieldtype": "date",
+      "label": "Transaction Date",
+      "layout": {
+        "section": "Dates"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_avko",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "Dates"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "fiscal_year",
+      "fieldtype": "link",
+      "label": "Fiscal Year",
+      "layout": {
+        "column": 1,
+        "section": "Dates"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Fiscal Year"
+      },
+      "optionsRaw": "Fiscal Year",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Fiscal Year",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "due_date",
+      "fieldtype": "date",
+      "label": "Due Date",
+      "layout": {
+        "column": 1,
+        "section": "Dates"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "account_details_section",
+      "fieldtype": "layout:section",
+      "label": "Account Details",
+      "layout": {
+        "section": "Account Details"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "account",
+      "fieldtype": "link",
+      "label": "Account",
+      "layout": {
+        "section": "Account Details"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Account"
+      },
+      "optionsRaw": "Account",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Account",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "inListView": true,
+        "inStandardFilter": true,
+        "searchIndex": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "account_currency",
+      "fieldtype": "link",
+      "label": "Account Currency",
+      "layout": {
+        "section": "Account Details"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Currency"
+      },
+      "optionsRaw": "Currency",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Currency",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_ifvf",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "Account Details"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "against",
+      "fieldtype": "text",
+      "label": "Against",
+      "layout": {
+        "column": 1,
+        "section": "Account Details"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "party_type",
+      "fieldtype": "link",
+      "label": "Party Type",
+      "layout": {
+        "column": 1,
+        "section": "Account Details"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "DocType"
+      },
+      "optionsRaw": "DocType",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "DocType",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "searchIndex": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "party",
+      "fieldtype": "dynamic_link",
+      "label": "Party",
+      "layout": {
+        "column": 1,
+        "section": "Account Details"
+      },
+      "optionsRaw": "party_type",
+      "permlevel": 0,
+      "ref": {
+        "doctypeField": "party_type",
+        "kind": "dynamic"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "inStandardFilter": true,
+        "searchIndex": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "transaction_details_section",
+      "fieldtype": "layout:section",
+      "label": "Transaction Details",
+      "layout": {
+        "section": "Transaction Details"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "voucher_type",
+      "fieldtype": "link",
+      "label": "Voucher Type",
+      "layout": {
+        "section": "Transaction Details"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "DocType"
+      },
+      "optionsRaw": "DocType",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "DocType",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "voucher_no",
+      "fieldtype": "dynamic_link",
+      "label": "Voucher No",
+      "layout": {
+        "section": "Transaction Details"
+      },
+      "optionsRaw": "voucher_type",
+      "permlevel": 0,
+      "ref": {
+        "doctypeField": "voucher_type",
+        "kind": "dynamic"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "inStandardFilter": true,
+        "searchIndex": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "voucher_subtype",
+      "fieldtype": "small_text",
+      "label": "Voucher Subtype",
+      "layout": {
+        "section": "Transaction Details"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "transaction_currency",
+      "fieldtype": "link",
+      "label": "Transaction Currency",
+      "layout": {
+        "section": "Transaction Details"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Currency"
+      },
+      "optionsRaw": "Currency",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Currency",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_dpsx",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "Transaction Details"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "against_voucher_type",
+      "fieldtype": "link",
+      "label": "Against Voucher Type",
+      "layout": {
+        "column": 1,
+        "section": "Transaction Details"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "DocType"
+      },
+      "optionsRaw": "DocType",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "DocType",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "against_voucher",
+      "fieldtype": "dynamic_link",
+      "label": "Against Voucher",
+      "layout": {
+        "column": 1,
+        "section": "Transaction Details"
+      },
+      "optionsRaw": "against_voucher_type",
+      "permlevel": 0,
+      "ref": {
+        "doctypeField": "against_voucher_type",
+        "kind": "dynamic"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "searchIndex": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "voucher_detail_no",
+      "fieldtype": "data",
+      "label": "Voucher Detail No",
+      "layout": {
+        "column": 1,
+        "section": "Transaction Details"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true,
+        "searchIndex": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "transaction_exchange_rate",
+      "fieldtype": "float",
+      "label": "Transaction Exchange Rate",
+      "layout": {
+        "column": 1,
+        "section": "Transaction Details"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "precision": "9"
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "reporting_currency_exchange_rate",
+      "fieldtype": "float",
+      "label": "Reporting Currency Exchange Rate",
+      "layout": {
+        "column": 1,
+        "section": "Transaction Details"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "precision": "9"
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "amounts_section",
+      "fieldtype": "layout:section",
+      "label": "Amounts",
+      "layout": {
+        "section": "Amounts"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "debit_in_account_currency",
+      "fieldtype": "currency",
+      "label": "Debit Amount in Account Currency",
+      "layout": {
+        "section": "Amounts"
+      },
+      "optionsParsed": {
+        "field": "account_currency",
+        "kind": "currency_field"
+      },
+      "optionsRaw": "account_currency",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "debit",
+      "fieldtype": "currency",
+      "label": "Debit Amount",
+      "layout": {
+        "section": "Amounts"
+      },
+      "optionsParsed": {
+        "field": "Company:company:default_currency",
+        "kind": "currency_field"
+      },
+      "optionsRaw": "Company:company:default_currency",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "debit_in_transaction_currency",
+      "fieldtype": "currency",
+      "label": "Debit Amount in Transaction Currency",
+      "layout": {
+        "section": "Amounts"
+      },
+      "optionsParsed": {
+        "field": "transaction_currency",
+        "kind": "currency_field"
+      },
+      "optionsRaw": "transaction_currency",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "debit_in_reporting_currency",
+      "fieldtype": "currency",
+      "label": "Debit Amount in Reporting Currency",
+      "layout": {
+        "section": "Amounts"
+      },
+      "optionsParsed": {
+        "field": "Company:company:reporting_currency",
+        "kind": "currency_field"
+      },
+      "optionsRaw": "Company:company:reporting_currency",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_bm1w",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "Amounts"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "credit_in_account_currency",
+      "fieldtype": "currency",
+      "label": "Credit Amount in Account Currency",
+      "layout": {
+        "column": 1,
+        "section": "Amounts"
+      },
+      "optionsParsed": {
+        "field": "account_currency",
+        "kind": "currency_field"
+      },
+      "optionsRaw": "account_currency",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "credit",
+      "fieldtype": "currency",
+      "label": "Credit Amount",
+      "layout": {
+        "column": 1,
+        "section": "Amounts"
+      },
+      "optionsParsed": {
+        "field": "Company:company:default_currency",
+        "kind": "currency_field"
+      },
+      "optionsRaw": "Company:company:default_currency",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "credit_in_transaction_currency",
+      "fieldtype": "currency",
+      "label": "Credit Amount in Transaction Currency",
+      "layout": {
+        "column": 1,
+        "section": "Amounts"
+      },
+      "optionsParsed": {
+        "field": "transaction_currency",
+        "kind": "currency_field"
+      },
+      "optionsRaw": "transaction_currency",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "credit_in_reporting_currency",
+      "fieldtype": "currency",
+      "label": "Credit Amount in Reporting Currency",
+      "layout": {
+        "column": 1,
+        "section": "Amounts"
+      },
+      "optionsParsed": {
+        "field": "Company:company:reporting_currency",
+        "kind": "currency_field"
+      },
+      "optionsRaw": "Company:company:reporting_currency",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "dimensions_section",
+      "fieldtype": "layout:section",
+      "label": "Dimensions",
+      "layout": {
+        "section": "Dimensions"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "cost_center",
+      "fieldtype": "link",
+      "label": "Cost Center",
+      "layout": {
+        "section": "Dimensions"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Cost Center"
+      },
+      "optionsRaw": "Cost Center",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Cost Center",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "inListView": true,
+        "searchIndex": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_lmnm",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "Dimensions"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "project",
+      "fieldtype": "link",
+      "label": "Project",
+      "layout": {
+        "column": 1,
+        "section": "Dimensions"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Project"
+      },
+      "optionsRaw": "Project",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Project",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "more_info_section",
+      "fieldtype": "layout:section",
+      "label": "More Info",
+      "layout": {
+        "section": "More Info"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "finance_book",
+      "fieldtype": "link",
+      "label": "Finance Book",
+      "layout": {
+        "section": "More Info"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Finance Book"
+      },
+      "optionsRaw": "Finance Book",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Finance Book",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "company",
+      "fieldtype": "link",
+      "label": "Company",
+      "layout": {
+        "section": "More Info"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Company"
+      },
+      "optionsRaw": "Company",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Company",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "searchIndex": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "is_opening",
+      "fieldtype": "select",
+      "label": "Is Opening",
+      "layout": {
+        "section": "More Info"
+      },
+      "optionsParsed": {
+        "choices": [
+          "No",
+          "Yes"
+        ],
+        "kind": "select"
+      },
+      "optionsRaw": "No\nYes",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "is_advance",
+      "fieldtype": "select",
+      "label": "Is Advance",
+      "layout": {
+        "section": "More Info"
+      },
+      "optionsParsed": {
+        "choices": [
+          "No",
+          "Yes"
+        ],
+        "kind": "select"
+      },
+      "optionsRaw": "No\nYes",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_8abq",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "More Info"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "1",
+      "fieldname": "to_rename",
+      "fieldtype": "check",
+      "label": "To Rename",
+      "layout": {
+        "column": 1,
+        "section": "More Info"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "hidden": true,
+        "searchIndex": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "is_cancelled",
+      "fieldtype": "check",
+      "label": "Is Cancelled",
+      "layout": {
+        "column": 1,
+        "section": "More Info"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "remarks",
+      "fieldtype": "text",
+      "label": "Remarks",
+      "layout": {
+        "column": 1,
+        "section": "More Info"
+      },
+      "noCopy": true,
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    }
+  ],
+  "identity": {
+    "app": "erpnext",
+    "isSingle": false,
+    "isSubmittable": false,
+    "isTree": false,
+    "module": "Accounts",
+    "naming": {
+      "seriesPrefix": "ACC-GLE-.YYYY.-.#####",
+      "strategy": "series"
+    }
+  },
+  "name": "GL Entry",
+  "permissions": [
+    {
+      "actions": {
+        "email": true,
+        "export": true,
+        "print": true,
+        "read": true,
+        "report": true
+      },
+      "permlevel": 0,
+      "role": "Accounts Manager"
+    },
+    {
+      "actions": {
+        "email": true,
+        "export": true,
+        "print": true,
+        "read": true,
+        "report": true
+      },
+      "permlevel": 0,
+      "role": "Accounts User"
+    },
+    {
+      "actions": {
+        "export": true,
+        "read": true,
+        "report": true
+      },
+      "permlevel": 0,
+      "role": "Auditor"
+    }
+  ],
+  "ui": {
+    "searchFields": [
+      "voucher_no",
+      "account",
+      "posting_date",
+      "against_voucher"
+    ],
+    "showNameInGlobalSearch": false,
+    "sortField": "creation",
+    "sortOrder": "DESC"
+  },
+  "workflows": [
+    {
+      "kind": "unavailable"
+    }
+  ]
+}

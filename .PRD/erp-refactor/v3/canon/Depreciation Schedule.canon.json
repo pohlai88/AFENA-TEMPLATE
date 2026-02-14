@@ -1,0 +1,186 @@
+{
+  "audit": {
+    "trackChanges": false
+  },
+  "canonVersion": "1.0.0",
+  "childTables": [],
+  "doctypeId": "erpnext:Assets:Depreciation Schedule",
+  "events": [
+    {
+      "event": "validate",
+      "handlers": [
+        "erpnext.support.doctype.service_level_agreement.service_level_agreement.apply",
+        "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record.check_for_running_deletion_job"
+      ],
+      "handlersParsed": [
+        {
+          "attrPath": "apply",
+          "module": "erpnext.support.doctype.service_level_agreement.service_level_agreement"
+        },
+        {
+          "attrPath": "check_for_running_deletion_job",
+          "module": "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record"
+        }
+      ]
+    }
+  ],
+  "fieldOrder": [
+    "schedule_date",
+    "depreciation_amount",
+    "column_break_3",
+    "accumulated_depreciation_amount",
+    "journal_entry",
+    "shift",
+    "make_depreciation_entry"
+  ],
+  "fields": [
+    {
+      "constraints": {},
+      "fieldname": "schedule_date",
+      "fieldtype": "date",
+      "label": "Schedule Date",
+      "permlevel": 0,
+      "requiredStatic": true,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "depreciation_amount",
+      "fieldtype": "currency",
+      "label": "Depreciation Amount",
+      "optionsParsed": {
+        "field": "Company:company:default_currency",
+        "kind": "currency_field"
+      },
+      "optionsRaw": "Company:company:default_currency",
+      "permlevel": 0,
+      "requiredStatic": true,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_3",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "accumulated_depreciation_amount",
+      "fieldtype": "currency",
+      "label": "Accumulated Depreciation Amount",
+      "layout": {
+        "column": 1
+      },
+      "optionsParsed": {
+        "field": "Company:company:default_currency",
+        "kind": "currency_field"
+      },
+      "optionsRaw": "Company:company:default_currency",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "inListView": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:doc.docstatus==1",
+      "fieldname": "journal_entry",
+      "fieldtype": "link",
+      "label": "Journal Entry",
+      "layout": {
+        "column": 1
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Journal Entry"
+      },
+      "optionsRaw": "Journal Entry",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Journal Entry",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "inListView": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "shift",
+      "fieldtype": "link",
+      "label": "Shift",
+      "layout": {
+        "column": 1
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Asset Shift Factor"
+      },
+      "optionsRaw": "Asset Shift Factor",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Asset Shift Factor",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "allowOnSubmit": true,
+      "constraints": {},
+      "dependsOn": "eval:(doc.docstatus==1 && !doc.journal_entry && doc.schedule_date <= frappe.datetime.now_date())",
+      "fieldname": "make_depreciation_entry",
+      "fieldtype": "button",
+      "label": "Make Depreciation Entry",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    }
+  ],
+  "identity": {
+    "app": "erpnext",
+    "isSingle": false,
+    "isSubmittable": false,
+    "isTree": false,
+    "module": "Assets",
+    "naming": {
+      "strategy": "hash"
+    }
+  },
+  "name": "Depreciation Schedule",
+  "permissions": [],
+  "ui": {
+    "searchFields": [],
+    "showNameInGlobalSearch": false,
+    "sortField": "creation",
+    "sortOrder": "DESC"
+  },
+  "workflows": [
+    {
+      "kind": "unavailable"
+    }
+  ]
+}

@@ -1,0 +1,235 @@
+{
+  "audit": {
+    "trackChanges": true
+  },
+  "canonVersion": "1.0.0",
+  "childTables": [
+    {
+      "childDoctype": "Item Attribute Value",
+      "parentField": "item_attribute_values",
+      "required": false
+    }
+  ],
+  "doctypeId": "erpnext:Stock:Item Attribute",
+  "events": [
+    {
+      "event": "validate",
+      "handlers": [
+        "erpnext.support.doctype.service_level_agreement.service_level_agreement.apply",
+        "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record.check_for_running_deletion_job"
+      ],
+      "handlersParsed": [
+        {
+          "attrPath": "apply",
+          "module": "erpnext.support.doctype.service_level_agreement.service_level_agreement"
+        },
+        {
+          "attrPath": "check_for_running_deletion_job",
+          "module": "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record"
+        }
+      ]
+    }
+  ],
+  "fieldOrder": [
+    "attribute_name",
+    "numeric_values",
+    "column_break_vbik",
+    "disabled",
+    "section_break_4",
+    "from_range",
+    "increment",
+    "column_break_8",
+    "to_range",
+    "section_break_5",
+    "item_attribute_values"
+  ],
+  "fields": [
+    {
+      "constraints": {},
+      "fieldname": "attribute_name",
+      "fieldtype": "data",
+      "label": "Attribute Name",
+      "permlevel": 0,
+      "requiredStatic": true,
+      "ui": {
+        "inListView": true
+      },
+      "unique": true
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "numeric_values",
+      "fieldtype": "check",
+      "label": "Numeric Values",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_vbik",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "disabled",
+      "fieldtype": "check",
+      "label": "Disabled",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "numeric_values",
+      "fieldname": "section_break_4",
+      "fieldtype": "layout:section",
+      "layout": {
+        "section": "section_break_4"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "from_range",
+      "fieldtype": "float",
+      "label": "From Range",
+      "layout": {
+        "section": "section_break_4"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "increment",
+      "fieldtype": "float",
+      "label": "Increment",
+      "layout": {
+        "section": "section_break_4"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_8",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "section_break_4"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "to_range",
+      "fieldtype": "float",
+      "label": "To Range",
+      "layout": {
+        "column": 1,
+        "section": "section_break_4"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval: !doc.numeric_values",
+      "fieldname": "section_break_5",
+      "fieldtype": "layout:section",
+      "layout": {
+        "section": "section_break_5"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "childDoctype": "Item Attribute Value",
+      "constraints": {},
+      "fieldname": "item_attribute_values",
+      "fieldtype": "table",
+      "label": "Item Attribute Values",
+      "layout": {
+        "section": "section_break_5"
+      },
+      "optionsParsed": {
+        "doctype": "Item Attribute Value",
+        "kind": "child_doctype"
+      },
+      "optionsRaw": "Item Attribute Value",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    }
+  ],
+  "identity": {
+    "app": "erpnext",
+    "isSingle": false,
+    "isSubmittable": false,
+    "isTree": false,
+    "module": "Stock",
+    "naming": {
+      "expression": "field:attribute_name",
+      "strategy": "field"
+    }
+  },
+  "name": "Item Attribute",
+  "permissions": [
+    {
+      "actions": {
+        "create": true,
+        "delete": true,
+        "read": true,
+        "report": true,
+        "share": true,
+        "write": true
+      },
+      "permlevel": 0,
+      "role": "Item Manager"
+    }
+  ],
+  "ui": {
+    "searchFields": [],
+    "showNameInGlobalSearch": false,
+    "sortField": "creation",
+    "sortOrder": "DESC"
+  },
+  "workflows": [
+    {
+      "kind": "unavailable"
+    }
+  ]
+}

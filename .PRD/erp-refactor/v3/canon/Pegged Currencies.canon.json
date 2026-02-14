@@ -1,0 +1,106 @@
+{
+  "audit": {
+    "trackChanges": false
+  },
+  "canonVersion": "1.0.0",
+  "childTables": [
+    {
+      "childDoctype": "Pegged Currency Details",
+      "parentField": "pegged_currency_item",
+      "required": false
+    }
+  ],
+  "doctypeId": "erpnext:Accounts:Pegged Currencies",
+  "events": [
+    {
+      "event": "validate",
+      "handlers": [
+        "erpnext.support.doctype.service_level_agreement.service_level_agreement.apply",
+        "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record.check_for_running_deletion_job"
+      ],
+      "handlersParsed": [
+        {
+          "attrPath": "apply",
+          "module": "erpnext.support.doctype.service_level_agreement.service_level_agreement"
+        },
+        {
+          "attrPath": "check_for_running_deletion_job",
+          "module": "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record"
+        }
+      ]
+    }
+  ],
+  "fieldOrder": [
+    "pegged_currencies_item_section",
+    "pegged_currency_item"
+  ],
+  "fields": [
+    {
+      "constraints": {},
+      "fieldname": "pegged_currencies_item_section",
+      "fieldtype": "layout:section",
+      "layout": {
+        "section": "pegged_currencies_item_section"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "childDoctype": "Pegged Currency Details",
+      "constraints": {},
+      "fieldname": "pegged_currency_item",
+      "fieldtype": "table",
+      "layout": {
+        "section": "pegged_currencies_item_section"
+      },
+      "optionsParsed": {
+        "doctype": "Pegged Currency Details",
+        "kind": "child_doctype"
+      },
+      "optionsRaw": "Pegged Currency Details",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    }
+  ],
+  "identity": {
+    "app": "erpnext",
+    "isSingle": false,
+    "isSubmittable": false,
+    "isTree": false,
+    "module": "Accounts",
+    "naming": {
+      "strategy": "hash"
+    }
+  },
+  "name": "Pegged Currencies",
+  "permissions": [
+    {
+      "actions": {
+        "create": true,
+        "delete": true,
+        "email": true,
+        "print": true,
+        "read": true,
+        "share": true,
+        "write": true
+      },
+      "permlevel": 0,
+      "role": "System Manager"
+    }
+  ],
+  "ui": {
+    "searchFields": [],
+    "showNameInGlobalSearch": false,
+    "sortField": "creation",
+    "sortOrder": "DESC"
+  },
+  "workflows": [
+    {
+      "kind": "unavailable"
+    }
+  ]
+}

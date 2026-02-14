@@ -22,4 +22,6 @@ export const docEntityColumns = {
   cancelledAt: timestamp('cancelled_at', { withTimezone: true }),
   cancelledBy: text('cancelled_by'),
   amendedFromId: uuid('amended_from_id'),
+  externalSource: text('external_source'),
+  externalId: text('external_id'),
 } as const;

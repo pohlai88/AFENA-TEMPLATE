@@ -1,0 +1,322 @@
+{
+  "audit": {
+    "trackChanges": true
+  },
+  "canonVersion": "1.0.0",
+  "childTables": [
+    {
+      "childDoctype": "Applicable On Account",
+      "parentField": "accounts",
+      "required": true
+    },
+    {
+      "childDoctype": "Allowed Dimension",
+      "parentField": "dimensions",
+      "required": false
+    }
+  ],
+  "doctypeId": "erpnext:Accounts:Accounting Dimension Filter",
+  "events": [
+    {
+      "event": "validate",
+      "handlers": [
+        "erpnext.support.doctype.service_level_agreement.service_level_agreement.apply",
+        "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record.check_for_running_deletion_job"
+      ],
+      "handlersParsed": [
+        {
+          "attrPath": "apply",
+          "module": "erpnext.support.doctype.service_level_agreement.service_level_agreement"
+        },
+        {
+          "attrPath": "check_for_running_deletion_job",
+          "module": "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record"
+        }
+      ]
+    }
+  ],
+  "fieldOrder": [
+    "accounting_dimension",
+    "fieldname",
+    "disabled",
+    "column_break_2",
+    "company",
+    "apply_restriction_on_values",
+    "allow_or_restrict",
+    "section_break_4",
+    "accounts",
+    "column_break_6",
+    "dimensions",
+    "section_break_10",
+    "dimension_filter_help"
+  ],
+  "fields": [
+    {
+      "constraints": {},
+      "fieldname": "accounting_dimension",
+      "fieldtype": "select",
+      "label": "Accounting Dimension",
+      "permlevel": 0,
+      "requiredStatic": true,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "fieldname",
+      "fieldtype": "data",
+      "label": "Fieldname",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "hidden": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "disabled",
+      "fieldtype": "check",
+      "label": "Disabled",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_2",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "company",
+      "fieldtype": "link",
+      "label": "Company",
+      "layout": {
+        "column": 1
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Company"
+      },
+      "optionsRaw": "Company",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Company",
+        "kind": "static"
+      },
+      "requiredStatic": true,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "1",
+      "fieldname": "apply_restriction_on_values",
+      "fieldtype": "check",
+      "label": "Apply restriction on dimension values",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:doc.apply_restriction_on_values == 1;",
+      "fieldname": "allow_or_restrict",
+      "fieldtype": "select",
+      "label": "Allow Or Restrict Dimension",
+      "layout": {
+        "column": 1
+      },
+      "optionsParsed": {
+        "choices": [
+          "Allow",
+          "Restrict"
+        ],
+        "kind": "select"
+      },
+      "optionsRaw": "Allow\nRestrict",
+      "permlevel": 0,
+      "requiredStatic": true,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "section_break_4",
+      "fieldtype": "layout:section",
+      "layout": {
+        "section": "section_break_4"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "childDoctype": "Applicable On Account",
+      "constraints": {},
+      "fieldname": "accounts",
+      "fieldtype": "table",
+      "label": "Applicable On Account",
+      "layout": {
+        "section": "section_break_4"
+      },
+      "optionsParsed": {
+        "doctype": "Applicable On Account",
+        "kind": "child_doctype"
+      },
+      "optionsRaw": "Applicable On Account",
+      "permlevel": 0,
+      "requiredStatic": true,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_6",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "section_break_4"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "childDoctype": "Allowed Dimension",
+      "constraints": {},
+      "dependsOn": "eval:doc.accounting_dimension && doc.apply_restriction_on_values",
+      "fieldname": "dimensions",
+      "fieldtype": "table",
+      "label": "Applicable Dimension",
+      "layout": {
+        "column": 1,
+        "section": "section_break_4"
+      },
+      "mandatoryDependsOn": "eval:doc.apply_restriction_on_values == 1;",
+      "optionsParsed": {
+        "doctype": "Allowed Dimension",
+        "kind": "child_doctype"
+      },
+      "optionsRaw": "Allowed Dimension",
+      "permlevel": 0,
+      "requiredDynamic": "eval:doc.apply_restriction_on_values == 1;",
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "section_break_10",
+      "fieldtype": "layout:section",
+      "layout": {
+        "section": "section_break_10"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "dimension_filter_help",
+      "fieldtype": "text_editor",
+      "label": "Dimension Filter Help",
+      "layout": {
+        "section": "section_break_10"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    }
+  ],
+  "identity": {
+    "app": "erpnext",
+    "isSingle": false,
+    "isSubmittable": false,
+    "isTree": false,
+    "module": "Accounts",
+    "naming": {
+      "expression": "format:{accounting_dimension}-{#####}",
+      "strategy": "expression"
+    }
+  },
+  "name": "Accounting Dimension Filter",
+  "permissions": [
+    {
+      "actions": {
+        "create": true,
+        "delete": true,
+        "email": true,
+        "export": true,
+        "print": true,
+        "read": true,
+        "report": true,
+        "share": true,
+        "write": true
+      },
+      "permlevel": 0,
+      "role": "Accounts Manager"
+    },
+    {
+      "actions": {
+        "create": true,
+        "delete": true,
+        "email": true,
+        "export": true,
+        "print": true,
+        "read": true,
+        "report": true,
+        "share": true,
+        "write": true
+      },
+      "permlevel": 0,
+      "role": "Accounts User"
+    },
+    {
+      "actions": {
+        "create": true,
+        "delete": true,
+        "email": true,
+        "export": true,
+        "print": true,
+        "read": true,
+        "report": true,
+        "share": true,
+        "write": true
+      },
+      "permlevel": 0,
+      "role": "System Manager"
+    }
+  ],
+  "ui": {
+    "searchFields": [],
+    "showNameInGlobalSearch": false,
+    "sortField": "creation",
+    "sortOrder": "DESC"
+  },
+  "workflows": [
+    {
+      "kind": "unavailable"
+    }
+  ]
+}

@@ -1,0 +1,543 @@
+{
+  "audit": {
+    "trackChanges": false
+  },
+  "canonVersion": "1.0.0",
+  "childTables": [],
+  "doctypeId": "erpnext:Projects:Timesheet Detail",
+  "events": [
+    {
+      "event": "validate",
+      "handlers": [
+        "erpnext.support.doctype.service_level_agreement.service_level_agreement.apply",
+        "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record.check_for_running_deletion_job"
+      ],
+      "handlersParsed": [
+        {
+          "attrPath": "apply",
+          "module": "erpnext.support.doctype.service_level_agreement.service_level_agreement"
+        },
+        {
+          "attrPath": "check_for_running_deletion_job",
+          "module": "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record"
+        }
+      ]
+    }
+  ],
+  "fieldOrder": [
+    "activity_type",
+    "from_time",
+    "description",
+    "section_break_3",
+    "expected_hours",
+    "to_time",
+    "hours",
+    "completed",
+    "project_details",
+    "project",
+    "project_name",
+    "column_break_2",
+    "task",
+    "section_break_6",
+    "is_billable",
+    "sales_invoice",
+    "column_break_8",
+    "billing_hours",
+    "section_break_11",
+    "base_billing_rate",
+    "base_billing_amount",
+    "base_costing_rate",
+    "base_costing_amount",
+    "column_break_14",
+    "billing_rate",
+    "billing_amount",
+    "costing_rate",
+    "costing_amount"
+  ],
+  "fields": [
+    {
+      "constraints": {},
+      "fieldname": "activity_type",
+      "fieldtype": "link",
+      "label": "Activity Type",
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Activity Type"
+      },
+      "optionsRaw": "Activity Type",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Activity Type",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "from_time",
+      "fieldtype": "datetime",
+      "label": "From Time",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "description",
+      "fieldtype": "small_text",
+      "label": "Description",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "section_break_3",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "expected_hours",
+      "fieldtype": "float",
+      "label": "Expected Hrs",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "to_time",
+      "fieldtype": "datetime",
+      "label": "To Time",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "hours",
+      "fieldtype": "float",
+      "label": "Hrs",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "completed",
+      "fieldtype": "check",
+      "label": "Completed",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "project_details",
+      "fieldtype": "layout:section",
+      "layout": {
+        "section": "project_details"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "project",
+      "fieldtype": "link",
+      "label": "Project",
+      "layout": {
+        "section": "project_details"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Project"
+      },
+      "optionsRaw": "Project",
+      "permlevel": 0,
+      "readOnlyDependsOn": "eval: parent.parent_project",
+      "ref": {
+        "doctype": "Project",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fetchFrom": "project.project_name",
+      "fieldname": "project_name",
+      "fieldtype": "data",
+      "label": "Project Name",
+      "layout": {
+        "section": "project_details"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_2",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "project_details"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "task",
+      "fieldtype": "link",
+      "label": "Task",
+      "layout": {
+        "column": 1,
+        "section": "project_details"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Task"
+      },
+      "optionsRaw": "Task",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Task",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "rememberLastSelectedValue": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "section_break_6",
+      "fieldtype": "layout:section",
+      "layout": {
+        "section": "section_break_6"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "allowOnSubmit": true,
+      "constraints": {},
+      "default": "0",
+      "fieldname": "is_billable",
+      "fieldtype": "check",
+      "label": "Is Billable",
+      "layout": {
+        "section": "section_break_6"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "inListView": true,
+        "printHide": true
+      },
+      "unique": false
+    },
+    {
+      "allowOnSubmit": true,
+      "constraints": {},
+      "fieldname": "sales_invoice",
+      "fieldtype": "link",
+      "label": "Sales Invoice",
+      "layout": {
+        "section": "section_break_6"
+      },
+      "noCopy": true,
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Sales Invoice"
+      },
+      "optionsRaw": "Sales Invoice",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Sales Invoice",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_8",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "section_break_6"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "allowOnSubmit": true,
+      "constraints": {},
+      "dependsOn": "is_billable",
+      "fieldname": "billing_hours",
+      "fieldtype": "float",
+      "label": "Billing Hours",
+      "layout": {
+        "column": 1,
+        "section": "section_break_6"
+      },
+      "permlevel": 1,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "is_billable",
+      "fieldname": "section_break_11",
+      "fieldtype": "layout:section",
+      "layout": {
+        "section": "section_break_11"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "base_billing_rate",
+      "fieldtype": "currency",
+      "label": "Billing Rate",
+      "layout": {
+        "section": "section_break_11"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "base_billing_amount",
+      "fieldtype": "currency",
+      "label": "Billing Amount",
+      "layout": {
+        "section": "section_break_11"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "base_costing_rate",
+      "fieldtype": "currency",
+      "label": "Costing Rate",
+      "layout": {
+        "section": "section_break_11"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "base_costing_amount",
+      "fieldtype": "currency",
+      "label": "Costing Amount",
+      "layout": {
+        "section": "section_break_11"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_14",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "section_break_11"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "billing_rate",
+      "fieldtype": "currency",
+      "label": "Billing Rate",
+      "layout": {
+        "column": 1,
+        "section": "section_break_11"
+      },
+      "optionsParsed": {
+        "field": "currency",
+        "kind": "currency_field"
+      },
+      "optionsRaw": "currency",
+      "permlevel": 1,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "allowOnSubmit": true,
+      "constraints": {},
+      "default": "0",
+      "fieldname": "billing_amount",
+      "fieldtype": "currency",
+      "label": "Billing Amount",
+      "layout": {
+        "column": 1,
+        "section": "section_break_11"
+      },
+      "optionsParsed": {
+        "field": "currency",
+        "kind": "currency_field"
+      },
+      "optionsRaw": "currency",
+      "permlevel": 1,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "costing_rate",
+      "fieldtype": "currency",
+      "label": "Costing Rate",
+      "layout": {
+        "column": 1,
+        "section": "section_break_11"
+      },
+      "optionsParsed": {
+        "field": "currency",
+        "kind": "currency_field"
+      },
+      "optionsRaw": "currency",
+      "permlevel": 1,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "allowOnSubmit": true,
+      "constraints": {},
+      "default": "0",
+      "fieldname": "costing_amount",
+      "fieldtype": "currency",
+      "label": "Costing Amount",
+      "layout": {
+        "column": 1,
+        "section": "section_break_11"
+      },
+      "optionsParsed": {
+        "field": "currency",
+        "kind": "currency_field"
+      },
+      "optionsRaw": "currency",
+      "permlevel": 1,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    }
+  ],
+  "identity": {
+    "app": "erpnext",
+    "isSingle": false,
+    "isSubmittable": false,
+    "isTree": false,
+    "module": "Projects",
+    "naming": {
+      "strategy": "hash"
+    }
+  },
+  "name": "Timesheet Detail",
+  "permissions": [],
+  "ui": {
+    "searchFields": [],
+    "showNameInGlobalSearch": false,
+    "sortField": "creation",
+    "sortOrder": "ASC"
+  },
+  "workflows": [
+    {
+      "kind": "unavailable"
+    }
+  ]
+}

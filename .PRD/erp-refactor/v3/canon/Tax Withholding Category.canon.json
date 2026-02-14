@@ -1,0 +1,319 @@
+{
+  "audit": {
+    "trackChanges": true
+  },
+  "canonVersion": "1.0.0",
+  "childTables": [
+    {
+      "childDoctype": "Tax Withholding Account",
+      "parentField": "accounts",
+      "required": true
+    },
+    {
+      "childDoctype": "Tax Withholding Rate",
+      "parentField": "rates",
+      "required": true
+    }
+  ],
+  "doctypeId": "erpnext:Accounts:Tax Withholding Category",
+  "events": [
+    {
+      "event": "validate",
+      "handlers": [
+        "erpnext.support.doctype.service_level_agreement.service_level_agreement.apply",
+        "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record.check_for_running_deletion_job"
+      ],
+      "handlersParsed": [
+        {
+          "attrPath": "apply",
+          "module": "erpnext.support.doctype.service_level_agreement.service_level_agreement"
+        },
+        {
+          "attrPath": "check_for_running_deletion_job",
+          "module": "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record"
+        }
+      ]
+    }
+  ],
+  "fieldOrder": [
+    "category_details_section",
+    "category_name",
+    "tax_deduction_basis",
+    "column_break_2",
+    "round_off_tax_amount",
+    "tax_on_excess_amount",
+    "disable_cumulative_threshold",
+    "disable_transaction_threshold",
+    "section_break_8",
+    "rates",
+    "section_break_7",
+    "accounts"
+  ],
+  "fields": [
+    {
+      "constraints": {},
+      "fieldname": "category_details_section",
+      "fieldtype": "layout:section",
+      "label": "Category Details",
+      "layout": {
+        "section": "Category Details"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "category_name",
+      "fieldtype": "data",
+      "label": "Category Name",
+      "layout": {
+        "section": "Category Details"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "Net Total",
+      "fieldname": "tax_deduction_basis",
+      "fieldtype": "select",
+      "label": "Deduct Tax On Basis",
+      "layout": {
+        "section": "Category Details"
+      },
+      "optionsParsed": {
+        "choices": [
+          "Gross Total",
+          "Net Total"
+        ],
+        "kind": "select"
+      },
+      "optionsRaw": "\nGross Total\nNet Total",
+      "permlevel": 0,
+      "requiredStatic": true,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_2",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "Category Details"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "round_off_tax_amount",
+      "fieldtype": "check",
+      "label": "Round Off Tax Amount",
+      "layout": {
+        "column": 1,
+        "section": "Category Details"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "description": "Checking this will round off the tax amount to the nearest integer"
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "tax_on_excess_amount",
+      "fieldtype": "check",
+      "label": "Only Deduct Tax On Excess Amount ",
+      "layout": {
+        "column": 1,
+        "section": "Category Details"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "description": "Tax withheld only for amount exceeding cumulative threshold"
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "disable_cumulative_threshold",
+      "fieldtype": "check",
+      "label": "Disable Cumulative Threshold",
+      "layout": {
+        "column": 1,
+        "section": "Category Details"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "description": "When checked, only transaction threshold will be applied for transaction individually"
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "disable_transaction_threshold",
+      "fieldtype": "check",
+      "label": "Disable Transaction Threshold",
+      "layout": {
+        "column": 1,
+        "section": "Category Details"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "description": "When checked, only cumulative threshold will be applied"
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "section_break_8",
+      "fieldtype": "layout:section",
+      "label": "Tax Withholding Rates",
+      "layout": {
+        "section": "Tax Withholding Rates"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "childDoctype": "Tax Withholding Rate",
+      "constraints": {},
+      "fieldname": "rates",
+      "fieldtype": "table",
+      "label": "Rates",
+      "layout": {
+        "section": "Tax Withholding Rates"
+      },
+      "optionsParsed": {
+        "doctype": "Tax Withholding Rate",
+        "kind": "child_doctype"
+      },
+      "optionsRaw": "Tax Withholding Rate",
+      "permlevel": 0,
+      "requiredStatic": true,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "section_break_7",
+      "fieldtype": "layout:section",
+      "label": "Account Details",
+      "layout": {
+        "section": "Account Details"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "childDoctype": "Tax Withholding Account",
+      "constraints": {},
+      "fieldname": "accounts",
+      "fieldtype": "table",
+      "label": "Accounts",
+      "layout": {
+        "section": "Account Details"
+      },
+      "optionsParsed": {
+        "doctype": "Tax Withholding Account",
+        "kind": "child_doctype"
+      },
+      "optionsRaw": "Tax Withholding Account",
+      "permlevel": 0,
+      "requiredStatic": true,
+      "ui": {},
+      "unique": false
+    }
+  ],
+  "identity": {
+    "app": "erpnext",
+    "isSingle": false,
+    "isSubmittable": false,
+    "isTree": false,
+    "module": "Accounts",
+    "naming": {
+      "expression": "Prompt",
+      "strategy": "expression"
+    }
+  },
+  "name": "Tax Withholding Category",
+  "permissions": [
+    {
+      "actions": {
+        "create": true,
+        "delete": true,
+        "email": true,
+        "export": true,
+        "print": true,
+        "read": true,
+        "report": true,
+        "share": true,
+        "write": true
+      },
+      "permlevel": 0,
+      "role": "Accounts Manager"
+    },
+    {
+      "actions": {
+        "create": true,
+        "delete": true,
+        "email": true,
+        "export": true,
+        "print": true,
+        "read": true,
+        "report": true,
+        "share": true,
+        "write": true
+      },
+      "permlevel": 0,
+      "role": "Accounts User"
+    },
+    {
+      "actions": {
+        "create": true,
+        "delete": true,
+        "email": true,
+        "export": true,
+        "print": true,
+        "read": true,
+        "report": true,
+        "share": true,
+        "write": true
+      },
+      "permlevel": 0,
+      "role": "System Manager"
+    }
+  ],
+  "ui": {
+    "searchFields": [],
+    "showNameInGlobalSearch": false,
+    "sortField": "creation",
+    "sortOrder": "DESC"
+  },
+  "workflows": [
+    {
+      "kind": "unavailable"
+    }
+  ]
+}

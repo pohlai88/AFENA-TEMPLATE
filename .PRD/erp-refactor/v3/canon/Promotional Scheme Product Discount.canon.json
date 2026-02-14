@@ -1,0 +1,509 @@
+{
+  "audit": {
+    "trackChanges": false
+  },
+  "canonVersion": "1.0.0",
+  "childTables": [],
+  "doctypeId": "erpnext:Accounts:Promotional Scheme Product Discount",
+  "events": [
+    {
+      "event": "validate",
+      "handlers": [
+        "erpnext.support.doctype.service_level_agreement.service_level_agreement.apply",
+        "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record.check_for_running_deletion_job"
+      ],
+      "handlersParsed": [
+        {
+          "attrPath": "apply",
+          "module": "erpnext.support.doctype.service_level_agreement.service_level_agreement"
+        },
+        {
+          "attrPath": "check_for_running_deletion_job",
+          "module": "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record"
+        }
+      ]
+    }
+  ],
+  "fieldOrder": [
+    "disable",
+    "apply_multiple_pricing_rules",
+    "column_break_2",
+    "rule_description",
+    "section_break_1",
+    "min_qty",
+    "max_qty",
+    "column_break_3",
+    "min_amount",
+    "max_amount",
+    "section_break_6",
+    "same_item",
+    "free_item",
+    "free_qty",
+    "column_break_9",
+    "free_item_uom",
+    "free_item_rate",
+    "round_free_qty",
+    "section_break_12",
+    "warehouse",
+    "threshold_percentage",
+    "column_break_15",
+    "priority",
+    "is_recursive",
+    "recurse_for",
+    "apply_recursion_over"
+  ],
+  "fields": [
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "disable",
+      "fieldtype": "check",
+      "label": "Disable",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "apply_multiple_pricing_rules",
+      "fieldtype": "check",
+      "label": "Apply Multiple Pricing Rules",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_2",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "rule_description",
+      "fieldtype": "small_text",
+      "label": "Rule Description",
+      "layout": {
+        "column": 1
+      },
+      "noCopy": true,
+      "permlevel": 0,
+      "requiredStatic": true,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "section_break_1",
+      "fieldtype": "layout:section",
+      "layout": {
+        "section": "section_break_1"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "min_qty",
+      "fieldtype": "float",
+      "label": "Min Qty",
+      "layout": {
+        "section": "section_break_1"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "max_qty",
+      "fieldtype": "float",
+      "label": "Max Qty",
+      "layout": {
+        "section": "section_break_1"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_3",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "section_break_1"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "min_amount",
+      "fieldtype": "currency",
+      "label": "Min Amount",
+      "layout": {
+        "column": 1,
+        "section": "section_break_1"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "max_amount",
+      "fieldtype": "currency",
+      "label": "Max Amount",
+      "layout": {
+        "column": 1,
+        "section": "section_break_1"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "section_break_6",
+      "fieldtype": "layout:section",
+      "label": "Free Item",
+      "layout": {
+        "section": "Free Item"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "dependsOn": "eval:!parent.mixed_conditions",
+      "fieldname": "same_item",
+      "fieldtype": "check",
+      "label": "Same Item",
+      "layout": {
+        "section": "Free Item"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:!doc.same_item || parent.mixed_conditions",
+      "fieldname": "free_item",
+      "fieldtype": "link",
+      "label": "Item Code",
+      "layout": {
+        "section": "Free Item"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Item"
+      },
+      "optionsRaw": "Item",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Item",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "free_qty",
+      "fieldtype": "float",
+      "label": "Qty",
+      "layout": {
+        "section": "Free Item"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_9",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "Free Item"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "free_item_uom",
+      "fieldtype": "link",
+      "label": "UOM",
+      "layout": {
+        "column": 1,
+        "section": "Free Item"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "UOM"
+      },
+      "optionsRaw": "UOM",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "UOM",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "free_item_rate",
+      "fieldtype": "currency",
+      "label": "Rate",
+      "layout": {
+        "column": 1,
+        "section": "Free Item"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "round_free_qty",
+      "fieldtype": "check",
+      "label": "Round Free Qty",
+      "layout": {
+        "column": 1,
+        "section": "Free Item"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "section_break_12",
+      "fieldtype": "layout:section",
+      "layout": {
+        "section": "section_break_12"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "warehouse",
+      "fieldtype": "link",
+      "label": "Warehouse",
+      "layout": {
+        "section": "section_break_12"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Warehouse"
+      },
+      "optionsRaw": "Warehouse",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Warehouse",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "threshold_percentage",
+      "fieldtype": "percent",
+      "label": "Threshold for Suggestion",
+      "layout": {
+        "section": "section_break_12"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_15",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "section_break_12"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "priority",
+      "fieldtype": "select",
+      "label": "Priority",
+      "layout": {
+        "column": 1,
+        "section": "section_break_12"
+      },
+      "optionsParsed": {
+        "choices": [
+          "1",
+          "2",
+          "3",
+          "4",
+          "5",
+          "6",
+          "7",
+          "8",
+          "9",
+          "10",
+          "11",
+          "12",
+          "13",
+          "14",
+          "15",
+          "16",
+          "17",
+          "18",
+          "19",
+          "20"
+        ],
+        "kind": "select"
+      },
+      "optionsRaw": "\n1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n14\n15\n16\n17\n18\n19\n20",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "is_recursive",
+      "fieldtype": "check",
+      "label": "Is Recursive",
+      "layout": {
+        "column": 1,
+        "section": "section_break_12"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "description": "Discounts to be applied in sequential ranges like buy 1 get 1, buy 2 get 2, buy 3 get 3 and so on"
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "dependsOn": "is_recursive",
+      "fieldname": "recurse_for",
+      "fieldtype": "float",
+      "label": "Recurse Every (As Per Transaction UOM)",
+      "layout": {
+        "column": 1,
+        "section": "section_break_12"
+      },
+      "mandatoryDependsOn": "is_recursive",
+      "permlevel": 0,
+      "requiredDynamic": "is_recursive",
+      "requiredStatic": false,
+      "ui": {
+        "description": "Give free item for every N quantity"
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "dependsOn": "is_recursive",
+      "fieldname": "apply_recursion_over",
+      "fieldtype": "float",
+      "label": "Apply Recursion Over (As Per Transaction UOM)",
+      "layout": {
+        "column": 1,
+        "section": "section_break_12"
+      },
+      "mandatoryDependsOn": "is_recursive",
+      "permlevel": 0,
+      "requiredDynamic": "is_recursive",
+      "requiredStatic": false,
+      "ui": {
+        "description": "Qty for which recursion isn't applicable."
+      },
+      "unique": false
+    }
+  ],
+  "identity": {
+    "app": "erpnext",
+    "isSingle": false,
+    "isSubmittable": false,
+    "isTree": false,
+    "module": "Accounts",
+    "naming": {
+      "strategy": "hash"
+    }
+  },
+  "name": "Promotional Scheme Product Discount",
+  "permissions": [],
+  "ui": {
+    "searchFields": [],
+    "showNameInGlobalSearch": false,
+    "sortField": "creation",
+    "sortOrder": "DESC"
+  },
+  "workflows": [
+    {
+      "kind": "unavailable"
+    }
+  ]
+}

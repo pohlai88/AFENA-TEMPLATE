@@ -1,5 +1,7 @@
+import { orgEntityAuditPage } from '@/lib/routes/app-routes';
+
 export const SURFACE = {
   surfaceId: 'web.contacts.audit.page',
-  page: '/org/[slug]/contacts/[id]/audit',
+  page: orgEntityAuditPage('contacts'),
   exposes: ['contacts.audit'],
 } as const;

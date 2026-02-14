@@ -2,7 +2,7 @@ import { resolveActions } from '../../_components/crud/server/action-resolver_se
 import { COMPANIES_CONTRACT } from '../_components/company-contract';
 
 import type { OrgContext } from '../../_server/org-context_server';
-import type { ResolvedActions } from 'afena-canon';
+import type { DocStatus, ResolvedActions } from 'afena-canon';
 
 export function resolveCompanyActions(
   ctx: OrgContext,
@@ -10,7 +10,7 @@ export function resolveCompanyActions(
 ): ResolvedActions {
   return resolveActions({
     contract: COMPANIES_CONTRACT,
-    docStatus: (entity.docStatus as any) ?? null,
+    docStatus: (entity.docStatus as DocStatus | undefined) ?? null,
     isDeleted: entity.isDeleted,
     isLocked: false,
     actor: { userId: ctx.actor.userId, roles: ctx.actor.roles, orgRole: ctx.actor.orgRole },

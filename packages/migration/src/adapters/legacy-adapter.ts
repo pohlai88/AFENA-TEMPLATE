@@ -1,7 +1,7 @@
-import type { LegacyRecord, BatchResult, EntityType } from '../types/migration-job.js';
-import type { Cursor } from '../types/cursor.js';
-import type { LegacySchema } from '../types/query.js';
 import type { QueryBuilder } from './query-builder.js';
+import type { Cursor } from '../types/cursor.js';
+import type { LegacyRecord, BatchResult, EntityType } from '../types/migration-job.js';
+import type { LegacySchema } from '../types/query.js';
 
 /**
  * Legacy system adapter — read-only interface for source systems.
@@ -71,7 +71,7 @@ export class SqlLegacyAdapter implements LegacyAdapter {
     cursor: Cursor
   ): Promise<BatchResult> {
     const pool = await this.getPool();
-    const tableName = this.resolveTable(entityType);
+    this.resolveTable(entityType); // validate entity is in allowlist
 
     // Set legacy schema so QueryBuilder can validate fields
     const schema = await this.getSchema(entityType);
@@ -81,7 +81,7 @@ export class SqlLegacyAdapter implements LegacyAdapter {
 
     const result = await pool.query(query.text, query.values);
     const records: LegacyRecord[] = result.rows.map((row: Record<string, unknown>) => ({
-      legacyId: String(row['id'] ?? row['ID'] ?? row['Id'] ?? ''),
+      legacyId: String((row['id'] ?? row['ID'] ?? row['Id'] ?? '') as string),
       data: row,
     }));
 
@@ -138,9 +138,7 @@ export class SqlLegacyAdapter implements LegacyAdapter {
   }
 
   private async getPool(): Promise<LegacyPool> {
-    if (!this.pool) {
-      this.pool = await createLegacyPool(this.config);
-    }
+    this.pool ??= await createLegacyPool(this.config);
     return this.pool;
   }
 }

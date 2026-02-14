@@ -1,0 +1,415 @@
+{
+  "audit": {
+    "trackChanges": true
+  },
+  "canonVersion": "1.0.0",
+  "childTables": [
+    {
+      "childDoctype": "Support Search Source",
+      "parentField": "search_apis",
+      "required": false
+    }
+  ],
+  "doctypeId": "erpnext:Support:Support Settings",
+  "events": [
+    {
+      "event": "validate",
+      "handlers": [
+        "erpnext.support.doctype.service_level_agreement.service_level_agreement.apply",
+        "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record.check_for_running_deletion_job"
+      ],
+      "handlersParsed": [
+        {
+          "attrPath": "apply",
+          "module": "erpnext.support.doctype.service_level_agreement.service_level_agreement"
+        },
+        {
+          "attrPath": "check_for_running_deletion_job",
+          "module": "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record"
+        }
+      ]
+    }
+  ],
+  "fieldOrder": [
+    "sb_00",
+    "track_service_level_agreement",
+    "allow_resetting_service_level_agreement",
+    "issues_sb",
+    "close_issue_after_days",
+    "portal_sb",
+    "get_started_sections",
+    "show_latest_forum_posts",
+    "forum_sb",
+    "forum_url",
+    "get_latest_query",
+    "response_key_list",
+    "column_break_10",
+    "post_title_key",
+    "post_description_key",
+    "post_route_key",
+    "post_route_string",
+    "greetings_section_section",
+    "greeting_title",
+    "column_break_19",
+    "greeting_subtitle",
+    "search_apis_sb",
+    "search_apis"
+  ],
+  "fields": [
+    {
+      "constraints": {},
+      "fieldname": "sb_00",
+      "fieldtype": "layout:section",
+      "label": "Service Level Agreements",
+      "layout": {
+        "section": "Service Level Agreements"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "track_service_level_agreement",
+      "fieldtype": "check",
+      "label": "Track Service Level Agreement",
+      "layout": {
+        "section": "Service Level Agreements"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "dependsOn": "eval:doc.track_service_level_agreement;",
+      "fieldname": "allow_resetting_service_level_agreement",
+      "fieldtype": "check",
+      "label": "Allow Resetting Service Level Agreement",
+      "layout": {
+        "section": "Service Level Agreements"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "issues_sb",
+      "fieldtype": "layout:section",
+      "label": "Issues",
+      "layout": {
+        "section": "Issues"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "7",
+      "fieldname": "close_issue_after_days",
+      "fieldtype": "int",
+      "label": "Close Issue After Days",
+      "layout": {
+        "section": "Issues"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "portal_sb",
+      "fieldtype": "layout:section",
+      "label": "Support Portal",
+      "layout": {
+        "section": "Support Portal"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "get_started_sections",
+      "fieldtype": "code",
+      "label": "Get Started Sections",
+      "layout": {
+        "section": "Support Portal"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "show_latest_forum_posts",
+      "fieldtype": "check",
+      "label": "Show Latest Forum Posts",
+      "layout": {
+        "section": "Support Portal"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "show_latest_forum_posts",
+      "fieldname": "forum_sb",
+      "fieldtype": "layout:section",
+      "label": "Forum Posts",
+      "layout": {
+        "section": "Forum Posts"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "forum_url",
+      "fieldtype": "data",
+      "label": "Forum URL",
+      "layout": {
+        "section": "Forum Posts"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "get_latest_query",
+      "fieldtype": "data",
+      "label": "Get Latest Query",
+      "layout": {
+        "section": "Forum Posts"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "response_key_list",
+      "fieldtype": "data",
+      "label": "Response Key List",
+      "layout": {
+        "section": "Forum Posts"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_10",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "Forum Posts"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "post_title_key",
+      "fieldtype": "data",
+      "label": "Post Title Key",
+      "layout": {
+        "column": 1,
+        "section": "Forum Posts"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "post_description_key",
+      "fieldtype": "data",
+      "label": "Post Description Key",
+      "layout": {
+        "column": 1,
+        "section": "Forum Posts"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "post_route_key",
+      "fieldtype": "data",
+      "label": "Post Route Key",
+      "layout": {
+        "column": 1,
+        "section": "Forum Posts"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "post_route_string",
+      "fieldtype": "data",
+      "label": "Post Route String",
+      "layout": {
+        "column": 1,
+        "section": "Forum Posts"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "greetings_section_section",
+      "fieldtype": "layout:section",
+      "label": "Greetings Section",
+      "layout": {
+        "section": "Greetings Section"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "We're here to help",
+      "fieldname": "greeting_title",
+      "fieldtype": "data",
+      "label": "Greeting Title",
+      "layout": {
+        "section": "Greetings Section"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_19",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "Greetings Section"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "Browse help topics",
+      "fieldname": "greeting_subtitle",
+      "fieldtype": "data",
+      "label": "Greeting Subtitle",
+      "layout": {
+        "column": 1,
+        "section": "Greetings Section"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "search_apis_sb",
+      "fieldtype": "layout:section",
+      "label": "Search APIs",
+      "layout": {
+        "section": "Search APIs"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "childDoctype": "Support Search Source",
+      "constraints": {},
+      "fieldname": "search_apis",
+      "fieldtype": "table",
+      "label": "Search APIs",
+      "layout": {
+        "section": "Search APIs"
+      },
+      "optionsParsed": {
+        "doctype": "Support Search Source",
+        "kind": "child_doctype"
+      },
+      "optionsRaw": "Support Search Source",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    }
+  ],
+  "identity": {
+    "app": "erpnext",
+    "isSingle": false,
+    "isSubmittable": false,
+    "isTree": false,
+    "module": "Support",
+    "naming": {
+      "strategy": "hash"
+    }
+  },
+  "name": "Support Settings",
+  "permissions": [
+    {
+      "actions": {
+        "create": true,
+        "delete": true,
+        "email": true,
+        "print": true,
+        "read": true,
+        "share": true,
+        "write": true
+      },
+      "permlevel": 0,
+      "role": "System Manager"
+    }
+  ],
+  "ui": {
+    "searchFields": [],
+    "showNameInGlobalSearch": false,
+    "sortField": "creation",
+    "sortOrder": "DESC"
+  },
+  "workflows": [
+    {
+      "kind": "unavailable"
+    }
+  ]
+}

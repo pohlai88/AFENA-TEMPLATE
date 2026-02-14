@@ -14,6 +14,7 @@ export const companies = pgTable(
     taxId: text('tax_id'),
     baseCurrency: text('base_currency').notNull().default('MYR'),
     fiscalYearStart: integer('fiscal_year_start').default(1),
+    orgTimezone: text('org_timezone').notNull().default('Asia/Kuala_Lumpur'),
     address: jsonb('address'),
   },
   (table) => [

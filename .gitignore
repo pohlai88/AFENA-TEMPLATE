@@ -46,6 +46,9 @@ Thumbs.db
 # Turbo
 .turbo
 
+# ESLint cache
+.eslintcache
+
 # Afena CLI generated output (ledger, matrix, discovery, manifests)
 .afena/*
 !.afena/capability-exceptions.json
@@ -53,6 +56,16 @@ Thumbs.db
 # Tailwind engine generated output
 packages/ui/engine/generated/
 packages/ui/engine/index.css
+
+# SBOM (generated artifacts)
+sbom.json
+sbom.sha256
+
+# Playwright
+playwright-report/
+test-results/
+blob-report/
+/playwright/.cache/
 
 # Temporary folders
 tmp/

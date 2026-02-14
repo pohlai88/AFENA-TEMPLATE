@@ -1,0 +1,488 @@
+{
+  "audit": {
+    "trackChanges": false
+  },
+  "canonVersion": "1.0.0",
+  "childTables": [],
+  "doctypeId": "erpnext:Manufacturing:Production Plan Item",
+  "events": [
+    {
+      "event": "validate",
+      "handlers": [
+        "erpnext.support.doctype.service_level_agreement.service_level_agreement.apply",
+        "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record.check_for_running_deletion_job"
+      ],
+      "handlersParsed": [
+        {
+          "attrPath": "apply",
+          "module": "erpnext.support.doctype.service_level_agreement.service_level_agreement"
+        },
+        {
+          "attrPath": "check_for_running_deletion_job",
+          "module": "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record"
+        }
+      ]
+    }
+  ],
+  "fieldOrder": [
+    "include_exploded_items",
+    "item_code",
+    "bom_no",
+    "column_break_6",
+    "planned_qty",
+    "stock_uom",
+    "warehouse",
+    "planned_start_date",
+    "section_break_9",
+    "pending_qty",
+    "ordered_qty",
+    "column_break_17",
+    "description",
+    "produced_qty",
+    "reference_section",
+    "sales_order",
+    "sales_order_item",
+    "column_break_19",
+    "material_request",
+    "material_request_item",
+    "product_bundle_item",
+    "item_reference",
+    "temporary_name"
+  ],
+  "fields": [
+    {
+      "constraints": {},
+      "default": "1",
+      "fieldname": "include_exploded_items",
+      "fieldtype": "check",
+      "label": "Include Exploded Items",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "item_code",
+      "fieldtype": "link",
+      "label": "Item Code",
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Item"
+      },
+      "optionsRaw": "Item",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Item",
+        "kind": "static"
+      },
+      "requiredStatic": true,
+      "ui": {
+        "inListView": true,
+        "width": "150px"
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "bom_no",
+      "fieldtype": "link",
+      "label": "BOM No",
+      "optionsParsed": {
+        "kind": "link",
+        "target": "BOM"
+      },
+      "optionsRaw": "BOM",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "BOM",
+        "kind": "static"
+      },
+      "requiredStatic": true,
+      "ui": {
+        "inListView": true,
+        "width": "100px"
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_6",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "planned_qty",
+      "fieldtype": "float",
+      "label": "Planned Qty",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": true,
+      "ui": {
+        "inListView": true,
+        "width": "100px"
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "stock_uom",
+      "fieldtype": "link",
+      "label": "UOM",
+      "layout": {
+        "column": 1
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "UOM"
+      },
+      "optionsRaw": "UOM",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "UOM",
+        "kind": "static"
+      },
+      "requiredStatic": true,
+      "ui": {
+        "inListView": true,
+        "readOnly": true,
+        "width": "80px"
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "warehouse",
+      "fieldtype": "link",
+      "label": "Finished Goods Warehouse",
+      "layout": {
+        "column": 1
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Warehouse"
+      },
+      "optionsRaw": "Warehouse",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Warehouse",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "Today",
+      "fieldname": "planned_start_date",
+      "fieldtype": "datetime",
+      "label": "Planned Start Date",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": true,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "section_break_9",
+      "fieldtype": "layout:section",
+      "label": "Quantity and Description",
+      "layout": {
+        "section": "Quantity and Description"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "pending_qty",
+      "fieldtype": "float",
+      "label": "Pending Qty",
+      "layout": {
+        "section": "Quantity and Description"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true,
+        "width": "100px"
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "ordered_qty",
+      "fieldtype": "float",
+      "label": "Ordered Qty",
+      "layout": {
+        "section": "Quantity and Description"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_17",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "Quantity and Description"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "description",
+      "fieldtype": "text_editor",
+      "label": "Description",
+      "layout": {
+        "column": 1,
+        "section": "Quantity and Description"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true,
+        "width": "200px"
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "produced_qty",
+      "fieldtype": "float",
+      "label": "Produced Qty",
+      "layout": {
+        "column": 1,
+        "section": "Quantity and Description"
+      },
+      "noCopy": true,
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "reference_section",
+      "fieldtype": "layout:section",
+      "label": "Reference",
+      "layout": {
+        "section": "Reference"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "sales_order",
+      "fieldtype": "link",
+      "label": "Sales Order",
+      "layout": {
+        "section": "Reference"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Sales Order"
+      },
+      "optionsRaw": "Sales Order",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Sales Order",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "sales_order_item",
+      "fieldtype": "data",
+      "label": "Sales Order Item",
+      "layout": {
+        "section": "Reference"
+      },
+      "noCopy": true,
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "hidden": true,
+        "printHide": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_19",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "Reference"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "material_request",
+      "fieldtype": "link",
+      "label": "Material Request",
+      "layout": {
+        "column": 1,
+        "section": "Reference"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Material Request"
+      },
+      "optionsRaw": "Material Request",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Material Request",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "material_request_item",
+      "fieldtype": "data",
+      "label": "material_request_item",
+      "layout": {
+        "column": 1,
+        "section": "Reference"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "hidden": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "product_bundle_item",
+      "fieldtype": "link",
+      "label": "Product Bundle Item",
+      "layout": {
+        "column": 1,
+        "section": "Reference"
+      },
+      "noCopy": true,
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Item"
+      },
+      "optionsRaw": "Item",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Item",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "item_reference",
+      "fieldtype": "data",
+      "label": "Item Reference",
+      "layout": {
+        "column": 1,
+        "section": "Reference"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "hidden": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "temporary_name",
+      "fieldtype": "data",
+      "label": "temporary name",
+      "layout": {
+        "column": 1,
+        "section": "Reference"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "hidden": true
+      },
+      "unique": false
+    }
+  ],
+  "identity": {
+    "app": "erpnext",
+    "isSingle": false,
+    "isSubmittable": false,
+    "isTree": false,
+    "module": "Manufacturing",
+    "naming": {
+      "strategy": "hash"
+    }
+  },
+  "name": "Production Plan Item",
+  "permissions": [],
+  "ui": {
+    "searchFields": [],
+    "showNameInGlobalSearch": false,
+    "sortField": "creation",
+    "sortOrder": "ASC"
+  },
+  "workflows": [
+    {
+      "kind": "unavailable"
+    }
+  ]
+}

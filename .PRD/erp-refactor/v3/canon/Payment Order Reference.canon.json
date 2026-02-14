@@ -1,0 +1,298 @@
+{
+  "audit": {
+    "trackChanges": true
+  },
+  "canonVersion": "1.0.0",
+  "childTables": [],
+  "doctypeId": "erpnext:Accounts:Payment Order Reference",
+  "events": [
+    {
+      "event": "validate",
+      "handlers": [
+        "erpnext.support.doctype.service_level_agreement.service_level_agreement.apply",
+        "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record.check_for_running_deletion_job"
+      ],
+      "handlersParsed": [
+        {
+          "attrPath": "apply",
+          "module": "erpnext.support.doctype.service_level_agreement.service_level_agreement"
+        },
+        {
+          "attrPath": "check_for_running_deletion_job",
+          "module": "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record"
+        }
+      ]
+    }
+  ],
+  "fieldOrder": [
+    "reference_doctype",
+    "reference_name",
+    "amount",
+    "column_break_4",
+    "supplier",
+    "payment_request",
+    "mode_of_payment",
+    "bank_account_details",
+    "bank_account",
+    "column_break_10",
+    "account",
+    "payment_reference"
+  ],
+  "fields": [
+    {
+      "constraints": {},
+      "fieldname": "reference_doctype",
+      "fieldtype": "link",
+      "label": "Type",
+      "optionsParsed": {
+        "kind": "link",
+        "target": "DocType"
+      },
+      "optionsRaw": "DocType",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "DocType",
+        "kind": "static"
+      },
+      "requiredStatic": true,
+      "ui": {
+        "inListView": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "reference_name",
+      "fieldtype": "dynamic_link",
+      "label": "Name",
+      "optionsRaw": "reference_doctype",
+      "permlevel": 0,
+      "ref": {
+        "doctypeField": "reference_doctype",
+        "kind": "dynamic"
+      },
+      "requiredStatic": true,
+      "ui": {
+        "inListView": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "amount",
+      "fieldtype": "currency",
+      "label": "Amount",
+      "permlevel": 0,
+      "requiredStatic": true,
+      "ui": {
+        "inListView": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_4",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "supplier",
+      "fieldtype": "link",
+      "label": "Supplier",
+      "layout": {
+        "column": 1
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Supplier"
+      },
+      "optionsRaw": "Supplier",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Supplier",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "inStandardFilter": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "payment_request",
+      "fieldtype": "link",
+      "label": "Payment Request",
+      "layout": {
+        "column": 1
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Payment Request"
+      },
+      "optionsRaw": "Payment Request",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Payment Request",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fetchFrom": "payment_request.mode_of_payment",
+      "fieldname": "mode_of_payment",
+      "fieldtype": "link",
+      "label": "Mode of Payment",
+      "layout": {
+        "column": 1
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Mode of Payment"
+      },
+      "optionsRaw": "Mode of Payment",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Mode of Payment",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "bank_account_details",
+      "fieldtype": "layout:section",
+      "label": "Bank Account Details",
+      "layout": {
+        "section": "Bank Account Details"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "bank_account",
+      "fieldtype": "link",
+      "label": "Bank Account",
+      "layout": {
+        "section": "Bank Account Details"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Bank Account"
+      },
+      "optionsRaw": "Bank Account",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Bank Account",
+        "kind": "static"
+      },
+      "requiredStatic": true,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_10",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "Bank Account Details"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "account",
+      "fieldtype": "link",
+      "label": "Account",
+      "layout": {
+        "column": 1,
+        "section": "Bank Account Details"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Account"
+      },
+      "optionsRaw": "Account",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Account",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "payment_reference",
+      "fieldtype": "data",
+      "label": "Payment Reference",
+      "layout": {
+        "column": 1,
+        "section": "Bank Account Details"
+      },
+      "noCopy": true,
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true,
+        "readOnly": true
+      },
+      "unique": false
+    }
+  ],
+  "identity": {
+    "app": "erpnext",
+    "isSingle": false,
+    "isSubmittable": false,
+    "isTree": false,
+    "module": "Accounts",
+    "naming": {
+      "strategy": "hash"
+    }
+  },
+  "name": "Payment Order Reference",
+  "permissions": [],
+  "ui": {
+    "searchFields": [],
+    "showNameInGlobalSearch": false,
+    "sortField": "creation",
+    "sortOrder": "DESC"
+  },
+  "workflows": [
+    {
+      "kind": "unavailable"
+    }
+  ]
+}

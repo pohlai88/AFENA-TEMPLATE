@@ -1,0 +1,404 @@
+{
+  "audit": {
+    "trackChanges": false
+  },
+  "canonVersion": "1.0.0",
+  "childTables": [
+    {
+      "childDoctype": "Party Account",
+      "parentField": "accounts",
+      "required": false
+    },
+    {
+      "childDoctype": "Customer Credit Limit",
+      "parentField": "credit_limits",
+      "required": false
+    }
+  ],
+  "doctypeId": "erpnext:Setup:Customer Group",
+  "events": [
+    {
+      "event": "validate",
+      "handlers": [
+        "erpnext.support.doctype.service_level_agreement.service_level_agreement.apply",
+        "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record.check_for_running_deletion_job"
+      ],
+      "handlersParsed": [
+        {
+          "attrPath": "apply",
+          "module": "erpnext.support.doctype.service_level_agreement.service_level_agreement"
+        },
+        {
+          "attrPath": "check_for_running_deletion_job",
+          "module": "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record"
+        }
+      ]
+    }
+  ],
+  "fieldOrder": [
+    "customer_group_name",
+    "parent_customer_group",
+    "is_group",
+    "cb0",
+    "default_price_list",
+    "payment_terms",
+    "lft",
+    "rgt",
+    "old_parent",
+    "default_receivable_account",
+    "accounts",
+    "credit_limit_section",
+    "credit_limits"
+  ],
+  "fields": [
+    {
+      "constraints": {},
+      "fieldname": "customer_group_name",
+      "fieldtype": "data",
+      "label": "Customer Group Name",
+      "noCopy": true,
+      "permlevel": 0,
+      "requiredStatic": true,
+      "ui": {
+        "inListView": true
+      },
+      "unique": true
+    },
+    {
+      "constraints": {},
+      "fieldname": "parent_customer_group",
+      "fieldtype": "link",
+      "label": "Parent Customer Group",
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Customer Group"
+      },
+      "optionsRaw": "Customer Group",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Customer Group",
+        "ignoreUserPermissions": true,
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "bold": true,
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "is_group",
+      "fieldtype": "check",
+      "label": "Is Group",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "bold": true,
+        "description": "Only leaf nodes are allowed in transaction",
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "cb0",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "default_price_list",
+      "fieldtype": "link",
+      "label": "Default Price List",
+      "layout": {
+        "column": 1
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Price List"
+      },
+      "optionsRaw": "Price List",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Price List",
+        "ignoreUserPermissions": true,
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "payment_terms",
+      "fieldtype": "link",
+      "label": "Default Payment Terms Template",
+      "layout": {
+        "column": 1
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Payment Terms Template"
+      },
+      "optionsRaw": "Payment Terms Template",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Payment Terms Template",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "lft",
+      "fieldtype": "int",
+      "label": "lft",
+      "layout": {
+        "column": 1
+      },
+      "noCopy": true,
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "hidden": true,
+        "printHide": true,
+        "reportHide": true,
+        "searchIndex": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "rgt",
+      "fieldtype": "int",
+      "label": "rgt",
+      "layout": {
+        "column": 1
+      },
+      "noCopy": true,
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "hidden": true,
+        "printHide": true,
+        "reportHide": true,
+        "searchIndex": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "old_parent",
+      "fieldtype": "link",
+      "label": "old_parent",
+      "layout": {
+        "column": 1
+      },
+      "noCopy": true,
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Customer Group"
+      },
+      "optionsRaw": "Customer Group",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Customer Group",
+        "ignoreUserPermissions": true,
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "hidden": true,
+        "printHide": true,
+        "reportHide": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "default_receivable_account",
+      "fieldtype": "layout:section",
+      "label": "Default Accounts",
+      "layout": {
+        "section": "Default Accounts"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "childDoctype": "Party Account",
+      "constraints": {},
+      "dependsOn": "eval:!doc.__islocal",
+      "fieldname": "accounts",
+      "fieldtype": "table",
+      "label": "Accounts",
+      "layout": {
+        "section": "Default Accounts"
+      },
+      "optionsParsed": {
+        "doctype": "Party Account",
+        "kind": "child_doctype"
+      },
+      "optionsRaw": "Party Account",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "description": "Mention if non-standard receivable account applicable"
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "credit_limit_section",
+      "fieldtype": "layout:section",
+      "label": "Credit Limits",
+      "layout": {
+        "section": "Credit Limits"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "childDoctype": "Customer Credit Limit",
+      "constraints": {},
+      "fieldname": "credit_limits",
+      "fieldtype": "table",
+      "label": "Credit Limit",
+      "layout": {
+        "section": "Credit Limits"
+      },
+      "optionsParsed": {
+        "doctype": "Customer Credit Limit",
+        "kind": "child_doctype"
+      },
+      "optionsRaw": "Customer Credit Limit",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    }
+  ],
+  "identity": {
+    "app": "erpnext",
+    "isSingle": false,
+    "isSubmittable": false,
+    "isTree": true,
+    "module": "Setup",
+    "naming": {
+      "expression": "field:customer_group_name",
+      "strategy": "field"
+    },
+    "nsmParentField": "parent_customer_group"
+  },
+  "name": "Customer Group",
+  "permissions": [
+    {
+      "actions": {
+        "email": true,
+        "print": true,
+        "read": true,
+        "report": true,
+        "share": true
+      },
+      "permlevel": 0,
+      "role": "Accounts User"
+    },
+    {
+      "actions": {
+        "email": true,
+        "export": true,
+        "print": true,
+        "report": true,
+        "share": true
+      },
+      "permlevel": 0,
+      "role": "Customer"
+    },
+    {
+      "actions": {
+        "email": true,
+        "print": true,
+        "read": true,
+        "report": true
+      },
+      "permlevel": 0,
+      "role": "Sales Manager"
+    },
+    {
+      "actions": {
+        "read": true
+      },
+      "permlevel": 1,
+      "role": "Sales Manager"
+    },
+    {
+      "actions": {
+        "create": true,
+        "delete": true,
+        "email": true,
+        "export": true,
+        "import": true,
+        "print": true,
+        "read": true,
+        "report": true,
+        "share": true,
+        "write": true
+      },
+      "permlevel": 0,
+      "role": "Sales Master Manager"
+    },
+    {
+      "actions": {
+        "read": true,
+        "write": true
+      },
+      "permlevel": 1,
+      "role": "Sales Master Manager"
+    },
+    {
+      "actions": {
+        "email": true,
+        "print": true,
+        "read": true,
+        "report": true
+      },
+      "permlevel": 0,
+      "role": "Sales User"
+    },
+    {
+      "actions": {
+        "read": true
+      },
+      "permlevel": 1,
+      "role": "Sales User"
+    }
+  ],
+  "ui": {
+    "searchFields": [
+      "parent_customer_group"
+    ],
+    "showNameInGlobalSearch": true,
+    "sortField": "creation",
+    "sortOrder": "DESC"
+  },
+  "workflows": [
+    {
+      "kind": "unavailable"
+    }
+  ]
+}

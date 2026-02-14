@@ -6,7 +6,7 @@ module.exports = [
   {
     languageOptions: {
       parserOptions: {
-        project: './tsconfig.json',
+        projectService: true,
         tsconfigRootDir: __dirname,
       },
     },
@@ -27,6 +27,13 @@ module.exports = [
           message: 'Use afena-logger instead of console.* (INVARIANT-08)',
         },
       ],
+    },
+  },
+  {
+    files: ['src/v2/nodes/*.ts'],
+    rules: {
+      // Node handlers implement async WorkflowNodeHandler interface but may return sync results
+      '@typescript-eslint/require-await': 'off',
     },
   },
 ];

@@ -11,14 +11,17 @@
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch",
-    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
-    "lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx --fix",
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx --cache --concurrency=auto",
+    "lint:ci": "eslint . --ext .js,.jsx,.ts,.tsx --rule 'import/no-cycle: error'",
+    "lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx --cache --fix",
     "type-check": "tsc --noEmit",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
     "db:push": "drizzle-kit push",
     "db:studio": "drizzle-kit studio",
-    "db:lint": "npx tsx src/scripts/schema-lint.ts"
+    "db:barrel": "npx tsx src/scripts/generate-schema-barrel.ts",
+    "db:lint": "npx tsx src/scripts/schema-lint.ts",
+    "test": "vitest run"
   },
   "dependencies": {
     "@neondatabase/serverless": "^1.0.0",
@@ -33,6 +36,8 @@
     "postgres": "^3.4.8",
     "tslib": "catalog:",
     "tsup": "catalog:",
-    "typescript": "catalog:"
+    "typescript": "catalog:",
+    "vitest": "catalog:",
+    "afena-vitest-config": "workspace:*"
   }
 }

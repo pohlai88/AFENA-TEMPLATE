@@ -10,7 +10,15 @@ import {
 
 import { withAuth } from '@/lib/api/with-auth';
 
+import type { RouteMetaStrict } from '@/lib/api/route-types';
 import type { CapabilityDescriptor, CapabilityKind } from 'afena-canon';
+
+export const ROUTE_META = {
+  path: '/api/meta/capabilities',
+  methods: ['GET'],
+  tier: 'admin',
+  exposeInOpenApi: false,
+} as const satisfies RouteMetaStrict;
 
 export const CAPABILITIES = ['admin.views.manage'] as const;
 

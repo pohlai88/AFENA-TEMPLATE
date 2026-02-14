@@ -1,5 +1,5 @@
-import type { MigrationJob, GateResult } from '../types/migration-job.js';
 import type { PreflightGate } from './gate-chain.js';
+import type { MigrationJob, GateResult } from '../types/migration-job.js';
 
 /**
  * OPS-03: Preflight Migration Readiness Gate.
@@ -99,25 +99,25 @@ export class MappingCompletenessCheck implements ReadinessCheck {
     this.threshold = opts?.threshold ?? 0.8;
   }
 
-  async check(job: MigrationJob): Promise<ReadinessCheckResult> {
+  check(job: MigrationJob): Promise<ReadinessCheckResult> {
     const mappings = job.fieldMappings;
     const mappedCount = Array.isArray(mappings) ? mappings.length : 0;
 
     if (mappedCount === 0) {
-      return {
+      return Promise.resolve({
         passed: false,
         severity: 'error',
         message: 'No field mappings defined',
         details: { mappedCount: 0 },
-      };
+      });
     }
 
-    return {
+    return Promise.resolve({
       passed: true,
       severity: 'info',
       message: `${mappedCount} fields mapped`,
       details: { mappedCount },
-    };
+    });
   }
 }
 

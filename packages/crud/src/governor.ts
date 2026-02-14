@@ -10,22 +10,26 @@ import type { NeonHttpDatabase } from 'drizzle-orm/neon-http';
 export interface GovernorConfig {
   statementTimeoutMs: number;
   idleInTransactionTimeoutMs: number;
+  lockTimeoutMs: number;
   applicationName: string;
 }
 
 const DEFAULT_INTERACTIVE: Omit<GovernorConfig, 'applicationName'> = {
   statementTimeoutMs: 5_000,
   idleInTransactionTimeoutMs: 20_000,
+  lockTimeoutMs: 3_000,
 };
 
 const DEFAULT_BACKGROUND: Omit<GovernorConfig, 'applicationName'> = {
   statementTimeoutMs: 30_000,
   idleInTransactionTimeoutMs: 60_000,
+  lockTimeoutMs: 5_000,
 };
 
 const DEFAULT_REPORTING: Omit<GovernorConfig, 'applicationName'> = {
   statementTimeoutMs: 30_000,
   idleInTransactionTimeoutMs: 60_000,
+  lockTimeoutMs: 5_000,
 };
 
 export type { GovernorPreset };
@@ -71,6 +75,9 @@ export async function applyGovernor(
   );
   await (tx as any).execute(
     sql`SET LOCAL idle_in_transaction_session_timeout = ${sql.raw(String(config.idleInTransactionTimeoutMs))}`,
+  );
+  await (tx as any).execute(
+    sql`SET LOCAL lock_timeout = ${sql.raw(String(config.lockTimeoutMs))}`,
   );
   await (tx as any).execute(
     sql`SET LOCAL application_name = ${sql.raw(`'${escapeAppName(config.applicationName)}'`)}`,

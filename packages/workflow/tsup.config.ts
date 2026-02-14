@@ -7,5 +7,5 @@ export default defineConfig({
   sourcemap: true,
   clean: true,
   tsconfig: './tsconfig.build.json',
-  external: ['afena-canon'],
+  external: ['afena-canon', 'afena-database', 'drizzle-orm'],
 });

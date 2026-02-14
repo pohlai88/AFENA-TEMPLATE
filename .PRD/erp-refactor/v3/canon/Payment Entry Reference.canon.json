@@ -1,0 +1,407 @@
+{
+  "audit": {
+    "trackChanges": true
+  },
+  "canonVersion": "1.0.0",
+  "childTables": [],
+  "doctypeId": "erpnext:Accounts:Payment Entry Reference",
+  "events": [
+    {
+      "event": "validate",
+      "handlers": [
+        "erpnext.support.doctype.service_level_agreement.service_level_agreement.apply",
+        "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record.check_for_running_deletion_job"
+      ],
+      "handlersParsed": [
+        {
+          "attrPath": "apply",
+          "module": "erpnext.support.doctype.service_level_agreement.service_level_agreement"
+        },
+        {
+          "attrPath": "check_for_running_deletion_job",
+          "module": "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record"
+        }
+      ]
+    }
+  ],
+  "fieldOrder": [
+    "reference_doctype",
+    "reference_name",
+    "due_date",
+    "bill_no",
+    "payment_term",
+    "payment_term_outstanding",
+    "account_type",
+    "payment_type",
+    "reconcile_effect_on",
+    "column_break_4",
+    "total_amount",
+    "outstanding_amount",
+    "allocated_amount",
+    "exchange_rate",
+    "exchange_gain_loss",
+    "account",
+    "payment_request",
+    "payment_request_outstanding",
+    "advance_voucher_type",
+    "advance_voucher_no"
+  ],
+  "fields": [
+    {
+      "constraints": {},
+      "fieldname": "reference_doctype",
+      "fieldtype": "link",
+      "label": "Type",
+      "optionsParsed": {
+        "kind": "link",
+        "target": "DocType"
+      },
+      "optionsRaw": "DocType",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "DocType",
+        "kind": "static"
+      },
+      "requiredStatic": true,
+      "ui": {
+        "inListView": true,
+        "searchIndex": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "reference_name",
+      "fieldtype": "dynamic_link",
+      "label": "Name",
+      "optionsRaw": "reference_doctype",
+      "permlevel": 0,
+      "ref": {
+        "doctypeField": "reference_doctype",
+        "kind": "dynamic"
+      },
+      "requiredStatic": true,
+      "ui": {
+        "inGlobalSearch": true,
+        "inListView": true,
+        "searchIndex": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "due_date",
+      "fieldtype": "date",
+      "label": "Due Date",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "inListView": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "bill_no",
+      "fieldtype": "data",
+      "label": "Supplier Invoice No",
+      "noCopy": true,
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "payment_term",
+      "fieldtype": "link",
+      "label": "Payment Term",
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Payment Term"
+      },
+      "optionsRaw": "Payment Term",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Payment Term",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval: doc.payment_term",
+      "fieldname": "payment_term_outstanding",
+      "fieldtype": "float",
+      "label": "Payment Term Outstanding",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "account_type",
+      "fieldtype": "data",
+      "label": "Account Type",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "payment_type",
+      "fieldtype": "data",
+      "label": "Payment Type",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "reconcile_effect_on",
+      "fieldtype": "date",
+      "label": "Reconcile Effect On",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_4",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "total_amount",
+      "fieldtype": "currency",
+      "label": "Grand Total",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "inListView": true,
+        "printHide": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "outstanding_amount",
+      "fieldtype": "currency",
+      "label": "Outstanding",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "inListView": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "allocated_amount",
+      "fieldtype": "currency",
+      "label": "Allocated",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:(doc.reference_doctype=='Purchase Invoice')",
+      "fieldname": "exchange_rate",
+      "fieldtype": "float",
+      "label": "Exchange Rate",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "exchange_gain_loss",
+      "fieldname": "exchange_gain_loss",
+      "fieldtype": "currency",
+      "label": "Exchange Gain/Loss",
+      "layout": {
+        "column": 1
+      },
+      "optionsParsed": {
+        "field": "Company:company:default_currency",
+        "kind": "currency_field"
+      },
+      "optionsRaw": "Company:company:default_currency",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "account",
+      "fieldtype": "link",
+      "label": "Account",
+      "layout": {
+        "column": 1
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Account"
+      },
+      "optionsRaw": "Account",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Account",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "payment_request",
+      "fieldtype": "link",
+      "label": "Payment Request",
+      "layout": {
+        "column": 1
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Payment Request"
+      },
+      "optionsRaw": "Payment Request",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Payment Request",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval: doc.payment_request && doc.payment_request_outstanding",
+      "fieldname": "payment_request_outstanding",
+      "fieldtype": "float",
+      "label": "Payment Request Outstanding",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "advance_voucher_type",
+      "fieldtype": "link",
+      "label": "Advance Voucher Type",
+      "layout": {
+        "column": 1
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "DocType"
+      },
+      "optionsRaw": "DocType",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "DocType",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "advance_voucher_no",
+      "fieldtype": "dynamic_link",
+      "label": "Advance Voucher No",
+      "layout": {
+        "column": 1
+      },
+      "optionsRaw": "advance_voucher_type",
+      "permlevel": 0,
+      "ref": {
+        "doctypeField": "advance_voucher_type",
+        "kind": "dynamic"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    }
+  ],
+  "identity": {
+    "app": "erpnext",
+    "isSingle": false,
+    "isSubmittable": false,
+    "isTree": false,
+    "module": "Accounts",
+    "naming": {
+      "strategy": "hash"
+    }
+  },
+  "name": "Payment Entry Reference",
+  "permissions": [],
+  "ui": {
+    "searchFields": [],
+    "showNameInGlobalSearch": false,
+    "sortField": "creation",
+    "sortOrder": "DESC"
+  },
+  "workflows": [
+    {
+      "kind": "unavailable"
+    }
+  ]
+}

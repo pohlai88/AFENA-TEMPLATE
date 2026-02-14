@@ -73,7 +73,7 @@
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts"
   ],
-  "exclude": ["node_modules", ".next", "**/dist", "**/build"],
+  "exclude": ["node_modules", ".next", "**/dist", "**/build", "v3"],
   "references": [
     {
       "path": "./packages/ui"

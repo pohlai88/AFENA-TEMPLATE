@@ -1,0 +1,1870 @@
+{
+  "audit": {
+    "trackChanges": true
+  },
+  "canonVersion": "1.0.0",
+  "childTables": [
+    {
+      "childDoctype": "Landed Cost Taxes and Charges",
+      "parentField": "additional_costs",
+      "required": false
+    },
+    {
+      "childDoctype": "Stock Entry Detail",
+      "parentField": "items",
+      "required": true
+    }
+  ],
+  "doctypeId": "erpnext:Stock:Stock Entry",
+  "events": [
+    {
+      "event": "on_cancel",
+      "handlers": [
+        "erpnext.stock.doctype.material_request.material_request.update_completed_and_requested_qty"
+      ],
+      "handlersParsed": [
+        {
+          "attrPath": "update_completed_and_requested_qty",
+          "module": "erpnext.stock.doctype.material_request.material_request"
+        }
+      ]
+    },
+    {
+      "event": "on_submit",
+      "handlers": [
+        "erpnext.stock.doctype.material_request.material_request.update_completed_and_requested_qty"
+      ],
+      "handlersParsed": [
+        {
+          "attrPath": "update_completed_and_requested_qty",
+          "module": "erpnext.stock.doctype.material_request.material_request"
+        }
+      ]
+    },
+    {
+      "event": "validate",
+      "handlers": [
+        "erpnext.support.doctype.service_level_agreement.service_level_agreement.apply",
+        "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record.check_for_running_deletion_job"
+      ],
+      "handlersParsed": [
+        {
+          "attrPath": "apply",
+          "module": "erpnext.support.doctype.service_level_agreement.service_level_agreement"
+        },
+        {
+          "attrPath": "check_for_running_deletion_job",
+          "module": "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record"
+        }
+      ]
+    }
+  ],
+  "fieldOrder": [
+    "stock_entry_details_tab",
+    "naming_series",
+    "stock_entry_type",
+    "outgoing_stock_entry",
+    "purpose",
+    "add_to_transit",
+    "work_order",
+    "job_card",
+    "purchase_order",
+    "subcontracting_order",
+    "subcontracting_inward_order",
+    "delivery_note_no",
+    "sales_invoice_no",
+    "pick_list",
+    "purchase_receipt_no",
+    "asset_repair",
+    "col2",
+    "company",
+    "posting_date",
+    "posting_time",
+    "column_break_eaoa",
+    "set_posting_time",
+    "inspection_required",
+    "apply_putaway_rule",
+    "is_additional_transfer_entry",
+    "bom_info_section",
+    "from_bom",
+    "use_multi_level_bom",
+    "bom_no",
+    "cb1",
+    "fg_completed_qty",
+    "get_items",
+    "section_break_7qsm",
+    "process_loss_percentage",
+    "column_break_e92r",
+    "process_loss_qty",
+    "section_break_jwgn",
+    "from_warehouse",
+    "source_warehouse_address",
+    "source_address_display",
+    "cb0",
+    "to_warehouse",
+    "target_warehouse_address",
+    "target_address_display",
+    "sb0",
+    "scan_barcode",
+    "last_scanned_warehouse",
+    "items_section",
+    "items",
+    "get_stock_and_rate",
+    "section_break_19",
+    "total_outgoing_value",
+    "column_break_22",
+    "total_incoming_value",
+    "value_difference",
+    "additional_costs_section",
+    "additional_costs",
+    "total_additional_costs",
+    "supplier_info_tab",
+    "contact_section",
+    "supplier",
+    "supplier_name",
+    "supplier_address",
+    "address_display",
+    "accounting_dimensions_section",
+    "project",
+    "other_info_tab",
+    "printing_settings",
+    "select_print_heading",
+    "print_settings_col_break",
+    "letter_head",
+    "more_info",
+    "is_opening",
+    "remarks",
+    "col5",
+    "per_transferred",
+    "total_amount",
+    "amended_from",
+    "credit_note",
+    "is_return",
+    "tab_connections"
+  ],
+  "fields": [
+    {
+      "constraints": {},
+      "fieldname": "stock_entry_details_tab",
+      "fieldtype": "layout:tab",
+      "label": "Details",
+      "layout": {
+        "tab": "Details"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "naming_series",
+      "fieldtype": "select",
+      "label": "Series",
+      "layout": {
+        "tab": "Details"
+      },
+      "noCopy": true,
+      "optionsParsed": {
+        "kind": "naming_series",
+        "prefixes": [
+          "MAT-STE-.YYYY.-"
+        ]
+      },
+      "optionsRaw": "MAT-STE-.YYYY.-",
+      "permlevel": 0,
+      "requiredStatic": true,
+      "setOnlyOnce": true,
+      "ui": {
+        "printHide": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "stock_entry_type",
+      "fieldtype": "link",
+      "label": "Stock Entry Type",
+      "layout": {
+        "tab": "Details"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Stock Entry Type"
+      },
+      "optionsRaw": "Stock Entry Type",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Stock Entry Type",
+        "kind": "static"
+      },
+      "requiredStatic": true,
+      "ui": {
+        "inListView": true,
+        "inStandardFilter": true,
+        "searchIndex": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:doc.purpose == 'Material Transfer'",
+      "fieldname": "outgoing_stock_entry",
+      "fieldtype": "link",
+      "label": "Stock Entry (Outward GIT)",
+      "layout": {
+        "tab": "Details"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Stock Entry"
+      },
+      "optionsRaw": "Stock Entry",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Stock Entry",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fetchFrom": "stock_entry_type.purpose",
+      "fieldname": "purpose",
+      "fieldtype": "select",
+      "label": "Purpose",
+      "layout": {
+        "tab": "Details"
+      },
+      "optionsParsed": {
+        "choices": [
+          "Material Issue",
+          "Material Receipt",
+          "Material Transfer",
+          "Material Transfer for Manufacture",
+          "Material Consumption for Manufacture",
+          "Manufacture",
+          "Repack",
+          "Send to Subcontractor",
+          "Disassemble",
+          "Receive from Customer",
+          "Return Raw Material to Customer",
+          "Subcontracting Delivery",
+          "Subcontracting Return"
+        ],
+        "kind": "select"
+      },
+      "optionsRaw": "Material Issue\nMaterial Receipt\nMaterial Transfer\nMaterial Transfer for Manufacture\nMaterial Consumption for Manufacture\nManufacture\nRepack\nSend to Subcontractor\nDisassemble\nReceive from Customer\nReturn Raw Material to Customer\nSubcontracting Delivery\nSubcontracting Return",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "bold": true,
+        "hidden": true,
+        "inListView": true,
+        "readOnly": true,
+        "searchIndex": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "dependsOn": "eval: doc.purpose=='Material Transfer' && !doc.outgoing_stock_entry",
+      "fetchFrom": "stock_entry_type.add_to_transit",
+      "fetchIfEmpty": true,
+      "fieldname": "add_to_transit",
+      "fieldtype": "check",
+      "label": "Add to Transit",
+      "layout": {
+        "tab": "Details"
+      },
+      "noCopy": true,
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:in_list([\"Material Transfer for Manufacture\", \"Manufacture\", \"Material Consumption for Manufacture\", \"Disassemble\"], doc.purpose)",
+      "fieldname": "work_order",
+      "fieldtype": "link",
+      "label": "Work Order",
+      "layout": {
+        "tab": "Details"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Work Order"
+      },
+      "optionsRaw": "Work Order",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Work Order",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true,
+        "searchIndex": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "job_card",
+      "fieldtype": "link",
+      "label": "Job Card",
+      "layout": {
+        "tab": "Details"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Job Card"
+      },
+      "optionsRaw": "Job Card",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Job Card",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true,
+        "readOnly": true,
+        "searchIndex": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval: erpnext.stock.is_subcontracting_or_return_transfer(doc)",
+      "fieldname": "purchase_order",
+      "fieldtype": "link",
+      "label": "Purchase Order",
+      "layout": {
+        "tab": "Details"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Purchase Order"
+      },
+      "optionsRaw": "Purchase Order",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Purchase Order",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval: erpnext.stock.is_subcontracting_or_return_transfer(doc)",
+      "fieldname": "subcontracting_order",
+      "fieldtype": "link",
+      "label": "Subcontracting Order",
+      "layout": {
+        "tab": "Details"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Subcontracting Order"
+      },
+      "optionsRaw": "Subcontracting Order",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Subcontracting Order",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "subcontracting_inward_order",
+      "fieldname": "subcontracting_inward_order",
+      "fieldtype": "link",
+      "label": "Subcontracting Inward Order",
+      "layout": {
+        "tab": "Details"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Subcontracting Inward Order"
+      },
+      "optionsRaw": "Subcontracting Inward Order",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Subcontracting Inward Order",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:doc.purpose==\"Sales Return\"",
+      "fieldname": "delivery_note_no",
+      "fieldtype": "link",
+      "label": "Delivery Note No",
+      "layout": {
+        "tab": "Details"
+      },
+      "noCopy": true,
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Delivery Note"
+      },
+      "optionsRaw": "Delivery Note",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Delivery Note",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true,
+        "searchIndex": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:doc.purpose==\"Sales Return\"",
+      "fieldname": "sales_invoice_no",
+      "fieldtype": "link",
+      "label": "Sales Invoice No",
+      "layout": {
+        "tab": "Details"
+      },
+      "noCopy": true,
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Sales Invoice"
+      },
+      "optionsRaw": "Sales Invoice",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Sales Invoice",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "pick_list",
+      "fieldtype": "link",
+      "label": "Pick List",
+      "layout": {
+        "tab": "Details"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Pick List"
+      },
+      "optionsRaw": "Pick List",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Pick List",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true,
+        "searchIndex": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:doc.purpose==\"Purchase Return\"",
+      "fieldname": "purchase_receipt_no",
+      "fieldtype": "link",
+      "label": "Purchase Receipt No",
+      "layout": {
+        "tab": "Details"
+      },
+      "noCopy": true,
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Purchase Receipt"
+      },
+      "optionsRaw": "Purchase Receipt",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Purchase Receipt",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true,
+        "searchIndex": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:doc.asset_repair",
+      "fieldname": "asset_repair",
+      "fieldtype": "link",
+      "label": "Asset Repair",
+      "layout": {
+        "tab": "Details"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Asset Repair"
+      },
+      "optionsRaw": "Asset Repair",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Asset Repair",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "col2",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "tab": "Details"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "width": "50%"
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "company",
+      "fieldtype": "link",
+      "label": "Company",
+      "layout": {
+        "column": 1,
+        "tab": "Details"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Company"
+      },
+      "optionsRaw": "Company",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Company",
+        "kind": "static"
+      },
+      "requiredStatic": true,
+      "ui": {
+        "printHide": true,
+        "rememberLastSelectedValue": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "Today",
+      "fieldname": "posting_date",
+      "fieldtype": "date",
+      "label": "Posting Date",
+      "layout": {
+        "column": 1,
+        "tab": "Details"
+      },
+      "noCopy": true,
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "searchIndex": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "Now",
+      "fieldname": "posting_time",
+      "fieldtype": "time",
+      "label": "Posting Time",
+      "layout": {
+        "column": 1,
+        "tab": "Details"
+      },
+      "noCopy": true,
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_eaoa",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 2,
+        "tab": "Details"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "dependsOn": "eval:doc.docstatus==0",
+      "fieldname": "set_posting_time",
+      "fieldtype": "check",
+      "label": "Edit Posting Date and Time",
+      "layout": {
+        "column": 2,
+        "tab": "Details"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "inspection_required",
+      "fieldtype": "check",
+      "label": "Inspection Required",
+      "layout": {
+        "column": 2,
+        "tab": "Details"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "dependsOn": "eval:in_list([\"Material Transfer\", \"Material Receipt\"], doc.purpose)",
+      "fieldname": "apply_putaway_rule",
+      "fieldtype": "check",
+      "label": "Apply Putaway Rule",
+      "layout": {
+        "column": 2,
+        "tab": "Details"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "dependsOn": "eval:doc.purpose == \"Material Transfer for Manufacture\"",
+      "fieldname": "is_additional_transfer_entry",
+      "fieldtype": "check",
+      "label": "Is Additional Transfer Entry",
+      "layout": {
+        "column": 2,
+        "tab": "Details"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "bom_info_section",
+      "fieldtype": "layout:section",
+      "label": "BOM Info",
+      "layout": {
+        "section": "BOM Info",
+        "tab": "Details"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "collapsible": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "dependsOn": "eval:in_list([\"Material Issue\", \"Material Transfer\", \"Manufacture\", \"Repack\", \"Send to Subcontractor\", \"Material Transfer for Manufacture\", \"Material Consumption for Manufacture\", \"Disassemble\"], doc.purpose)",
+      "fieldname": "from_bom",
+      "fieldtype": "check",
+      "label": "From BOM",
+      "layout": {
+        "section": "BOM Info",
+        "tab": "Details"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "1",
+      "dependsOn": "from_bom",
+      "fieldname": "use_multi_level_bom",
+      "fieldtype": "check",
+      "label": "Use Multi-Level BOM",
+      "layout": {
+        "section": "BOM Info",
+        "tab": "Details"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "description": "Including items for sub assemblies",
+        "printHide": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "from_bom",
+      "fieldname": "bom_no",
+      "fieldtype": "link",
+      "label": "BOM No",
+      "layout": {
+        "section": "BOM Info",
+        "tab": "Details"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "BOM"
+      },
+      "optionsRaw": "BOM",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "BOM",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "cb1",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "BOM Info",
+        "tab": "Details"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "from_bom",
+      "fieldname": "fg_completed_qty",
+      "fieldtype": "float",
+      "label": "Finished Good Quantity ",
+      "layout": {
+        "column": 1,
+        "section": "BOM Info",
+        "tab": "Details"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "description": "As per Stock UOM",
+        "printHide": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "from_bom",
+      "fieldname": "get_items",
+      "fieldtype": "button",
+      "label": "Get Items",
+      "layout": {
+        "column": 1,
+        "section": "BOM Info",
+        "tab": "Details"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval: doc.fg_completed_qty > 0 && in_list([\"Manufacture\", \"Repack\"], doc.purpose)",
+      "fieldname": "section_break_7qsm",
+      "fieldtype": "layout:section",
+      "label": "Process Loss",
+      "layout": {
+        "section": "Process Loss",
+        "tab": "Details"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "collapsible": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:doc.from_bom && doc.fg_completed_qty",
+      "fieldname": "process_loss_percentage",
+      "fieldtype": "percent",
+      "label": "% Process Loss",
+      "layout": {
+        "section": "Process Loss",
+        "tab": "Details"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_e92r",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "Process Loss",
+        "tab": "Details"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval: doc.fg_completed_qty > 0 && in_list([\"Manufacture\", \"Repack\"], doc.purpose)",
+      "fieldname": "process_loss_qty",
+      "fieldtype": "float",
+      "label": "Process Loss Qty",
+      "layout": {
+        "column": 1,
+        "section": "Process Loss",
+        "tab": "Details"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "section_break_jwgn",
+      "fieldtype": "layout:section",
+      "label": "Default Warehouse",
+      "layout": {
+        "section": "Default Warehouse",
+        "tab": "Details"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "collapsible": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "from_warehouse",
+      "fieldtype": "link",
+      "label": "Default Source Warehouse",
+      "layout": {
+        "section": "Default Warehouse",
+        "tab": "Details"
+      },
+      "noCopy": true,
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Warehouse"
+      },
+      "optionsRaw": "Warehouse",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Warehouse",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "description": "Sets 'Source Warehouse' in each row of the items table.",
+        "inListView": true,
+        "inStandardFilter": true,
+        "printHide": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "from_warehouse",
+      "fieldname": "source_warehouse_address",
+      "fieldtype": "link",
+      "label": "Source Warehouse Address Link",
+      "layout": {
+        "section": "Default Warehouse",
+        "tab": "Details"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Address"
+      },
+      "optionsRaw": "Address",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Address",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "source_address_display",
+      "fieldtype": "text_editor",
+      "label": "Source Warehouse Address",
+      "layout": {
+        "section": "Default Warehouse",
+        "tab": "Details"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "cb0",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "Default Warehouse",
+        "tab": "Details"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "to_warehouse",
+      "fieldtype": "link",
+      "label": "Default Target Warehouse",
+      "layout": {
+        "column": 1,
+        "section": "Default Warehouse",
+        "tab": "Details"
+      },
+      "noCopy": true,
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Warehouse"
+      },
+      "optionsRaw": "Warehouse",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Warehouse",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "description": "Sets 'Target Warehouse' in each row of the items table.",
+        "inListView": true,
+        "inStandardFilter": true,
+        "printHide": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "to_warehouse",
+      "fieldname": "target_warehouse_address",
+      "fieldtype": "link",
+      "label": "Target Warehouse Address Link",
+      "layout": {
+        "column": 1,
+        "section": "Default Warehouse",
+        "tab": "Details"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Address"
+      },
+      "optionsRaw": "Address",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Address",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "target_address_display",
+      "fieldtype": "text_editor",
+      "label": "Target Warehouse Address",
+      "layout": {
+        "column": 1,
+        "section": "Default Warehouse",
+        "tab": "Details"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "sb0",
+      "fieldtype": "layout:section",
+      "layout": {
+        "section": "sb0",
+        "tab": "Details"
+      },
+      "optionsParsed": {
+        "kind": "other",
+        "value": "Simple"
+      },
+      "optionsRaw": "Simple",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "scan_barcode",
+      "fieldtype": "data",
+      "label": "Scan Barcode",
+      "layout": {
+        "section": "sb0",
+        "tab": "Details"
+      },
+      "optionsParsed": {
+        "kind": "other",
+        "value": "Barcode"
+      },
+      "optionsRaw": "Barcode",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval: doc.last_scanned_warehouse",
+      "fieldname": "last_scanned_warehouse",
+      "fieldtype": "data",
+      "label": "Last Scanned Warehouse",
+      "layout": {
+        "section": "sb0",
+        "tab": "Details"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "items_section",
+      "fieldtype": "layout:section",
+      "label": "Items",
+      "layout": {
+        "section": "Items",
+        "tab": "Details"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "childDoctype": "Stock Entry Detail",
+      "constraints": {},
+      "fieldname": "items",
+      "fieldtype": "table",
+      "label": "Items",
+      "layout": {
+        "section": "Items",
+        "tab": "Details"
+      },
+      "optionsParsed": {
+        "doctype": "Stock Entry Detail",
+        "kind": "child_doctype"
+      },
+      "optionsRaw": "Stock Entry Detail",
+      "permlevel": 0,
+      "requiredStatic": true,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "get_stock_and_rate",
+      "fieldtype": "button",
+      "label": "Update Rate and Availability",
+      "layout": {
+        "section": "Items",
+        "tab": "Details"
+      },
+      "optionsParsed": {
+        "kind": "other",
+        "value": "get_stock_and_rate"
+      },
+      "optionsRaw": "get_stock_and_rate",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "section_break_19",
+      "fieldtype": "layout:section",
+      "layout": {
+        "section": "section_break_19",
+        "tab": "Details"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "total_outgoing_value",
+      "fieldtype": "currency",
+      "label": "Total Outgoing Value (Consumption)",
+      "layout": {
+        "section": "section_break_19",
+        "tab": "Details"
+      },
+      "optionsParsed": {
+        "field": "Company:company:default_currency",
+        "kind": "currency_field"
+      },
+      "optionsRaw": "Company:company:default_currency",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_22",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "section_break_19",
+        "tab": "Details"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "total_incoming_value",
+      "fieldtype": "currency",
+      "label": "Total Incoming Value (Receipt)",
+      "layout": {
+        "column": 1,
+        "section": "section_break_19",
+        "tab": "Details"
+      },
+      "optionsParsed": {
+        "field": "Company:company:default_currency",
+        "kind": "currency_field"
+      },
+      "optionsRaw": "Company:company:default_currency",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "value_difference",
+      "fieldtype": "currency",
+      "label": "Total Value Difference (Incoming - Outgoing)",
+      "layout": {
+        "column": 1,
+        "section": "section_break_19",
+        "tab": "Details"
+      },
+      "optionsParsed": {
+        "field": "Company:company:default_currency",
+        "kind": "currency_field"
+      },
+      "optionsRaw": "Company:company:default_currency",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "additional_costs_section",
+      "fieldtype": "layout:tab",
+      "label": "Additional Costs",
+      "layout": {
+        "tab": "Additional Costs"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "collapsible": true
+      },
+      "unique": false
+    },
+    {
+      "childDoctype": "Landed Cost Taxes and Charges",
+      "constraints": {},
+      "fieldname": "additional_costs",
+      "fieldtype": "table",
+      "label": "Additional Costs",
+      "layout": {
+        "tab": "Additional Costs"
+      },
+      "optionsParsed": {
+        "doctype": "Landed Cost Taxes and Charges",
+        "kind": "child_doctype"
+      },
+      "optionsRaw": "Landed Cost Taxes and Charges",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "total_additional_costs",
+      "fieldtype": "currency",
+      "label": "Total Additional Costs",
+      "layout": {
+        "tab": "Additional Costs"
+      },
+      "optionsParsed": {
+        "field": "Company:company:default_currency",
+        "kind": "currency_field"
+      },
+      "optionsRaw": "Company:company:default_currency",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "supplier_info_tab",
+      "fieldtype": "layout:tab",
+      "label": "Supplier Info",
+      "layout": {
+        "tab": "Supplier Info"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval: erpnext.stock.is_subcontracting_or_return_transfer(doc)",
+      "fieldname": "contact_section",
+      "fieldtype": "layout:section",
+      "label": "Supplier Details",
+      "layout": {
+        "section": "Supplier Details",
+        "tab": "Supplier Info"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "collapsible": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval: erpnext.stock.is_subcontracting_or_return_transfer(doc)",
+      "fieldname": "supplier",
+      "fieldtype": "link",
+      "label": "Supplier",
+      "layout": {
+        "section": "Supplier Details",
+        "tab": "Supplier Info"
+      },
+      "noCopy": true,
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Supplier"
+      },
+      "optionsRaw": "Supplier",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Supplier",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval: erpnext.stock.is_subcontracting_or_return_transfer(doc)",
+      "fieldname": "supplier_name",
+      "fieldtype": "data",
+      "label": "Supplier Name",
+      "layout": {
+        "section": "Supplier Details",
+        "tab": "Supplier Info"
+      },
+      "noCopy": true,
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "bold": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval: erpnext.stock.is_subcontracting_or_return_transfer(doc)",
+      "fieldname": "supplier_address",
+      "fieldtype": "link",
+      "label": "Supplier Address",
+      "layout": {
+        "section": "Supplier Details",
+        "tab": "Supplier Info"
+      },
+      "noCopy": true,
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Address"
+      },
+      "optionsRaw": "Address",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Address",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "address_display",
+      "fieldtype": "text_editor",
+      "label": "Address",
+      "layout": {
+        "section": "Supplier Details",
+        "tab": "Supplier Info"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "accounting_dimensions_section",
+      "fieldtype": "layout:tab",
+      "label": "Accounting Dimensions",
+      "layout": {
+        "tab": "Accounting Dimensions"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "collapsible": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "project",
+      "fieldtype": "link",
+      "label": "Project",
+      "layout": {
+        "tab": "Accounting Dimensions"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Project"
+      },
+      "optionsRaw": "Project",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Project",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "other_info_tab",
+      "fieldtype": "layout:tab",
+      "label": "Other Info",
+      "layout": {
+        "tab": "Other Info"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "printing_settings",
+      "fieldtype": "layout:section",
+      "label": "Printing Settings",
+      "layout": {
+        "section": "Printing Settings",
+        "tab": "Other Info"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "collapsible": true
+      },
+      "unique": false
+    },
+    {
+      "allowOnSubmit": true,
+      "constraints": {},
+      "fieldname": "select_print_heading",
+      "fieldtype": "link",
+      "label": "Print Heading",
+      "layout": {
+        "section": "Printing Settings",
+        "tab": "Other Info"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Print Heading"
+      },
+      "optionsRaw": "Print Heading",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Print Heading",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "print_settings_col_break",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "Printing Settings",
+        "tab": "Other Info"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "letter_head",
+      "fieldtype": "link",
+      "label": "Letter Head",
+      "layout": {
+        "column": 1,
+        "section": "Printing Settings",
+        "tab": "Other Info"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Letter Head"
+      },
+      "optionsRaw": "Letter Head",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Letter Head",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "more_info",
+      "fieldtype": "layout:section",
+      "label": "More Information",
+      "layout": {
+        "section": "More Information",
+        "tab": "Other Info"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "collapsible": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "is_opening",
+      "fieldtype": "select",
+      "label": "Is Opening",
+      "layout": {
+        "section": "More Information",
+        "tab": "Other Info"
+      },
+      "optionsParsed": {
+        "choices": [
+          "No",
+          "Yes"
+        ],
+        "kind": "select"
+      },
+      "optionsRaw": "No\nYes",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "remarks",
+      "fieldtype": "text",
+      "label": "Remarks",
+      "layout": {
+        "section": "More Information",
+        "tab": "Other Info"
+      },
+      "noCopy": true,
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "col5",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "More Information",
+        "tab": "Other Info"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "width": "50%"
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "per_transferred",
+      "fieldtype": "percent",
+      "label": "Per Transferred",
+      "layout": {
+        "column": 1,
+        "section": "More Information",
+        "tab": "Other Info"
+      },
+      "noCopy": true,
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "inListView": true,
+        "printHide": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "total_amount",
+      "fieldname": "total_amount",
+      "fieldtype": "currency",
+      "label": "Total Amount",
+      "layout": {
+        "column": 1,
+        "section": "More Information",
+        "tab": "Other Info"
+      },
+      "optionsParsed": {
+        "field": "Company:company:default_currency",
+        "kind": "currency_field"
+      },
+      "optionsRaw": "Company:company:default_currency",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "amended_from",
+      "fieldtype": "link",
+      "label": "Amended From",
+      "layout": {
+        "column": 1,
+        "section": "More Information",
+        "tab": "Other Info"
+      },
+      "noCopy": true,
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Stock Entry"
+      },
+      "optionsRaw": "Stock Entry",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Stock Entry",
+        "ignoreUserPermissions": true,
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "credit_note",
+      "fieldtype": "link",
+      "label": "Credit Note",
+      "layout": {
+        "column": 1,
+        "section": "More Information",
+        "tab": "Other Info"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Journal Entry"
+      },
+      "optionsRaw": "Journal Entry",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Journal Entry",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "hidden": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "is_return",
+      "fieldtype": "check",
+      "label": "Is Return",
+      "layout": {
+        "column": 1,
+        "section": "More Information",
+        "tab": "Other Info"
+      },
+      "noCopy": true,
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "hidden": true,
+        "inListView": true,
+        "printHide": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "tab_connections",
+      "fieldtype": "layout:tab",
+      "label": "Connections",
+      "layout": {
+        "tab": "Connections"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    }
+  ],
+  "identity": {
+    "app": "erpnext",
+    "isSingle": false,
+    "isSubmittable": true,
+    "isTree": false,
+    "module": "Stock",
+    "naming": {
+      "seriesField": "naming_series",
+      "seriesPrefix": "MAT-STE-.YYYY.-",
+      "strategy": "series"
+    }
+  },
+  "name": "Stock Entry",
+  "permissions": [
+    {
+      "actions": {
+        "amend": true,
+        "cancel": true,
+        "create": true,
+        "delete": true,
+        "email": true,
+        "print": true,
+        "read": true,
+        "report": true,
+        "share": true,
+        "submit": true,
+        "write": true
+      },
+      "permlevel": 0,
+      "role": "Manufacturing Manager"
+    },
+    {
+      "actions": {
+        "amend": true,
+        "cancel": true,
+        "create": true,
+        "delete": true,
+        "email": true,
+        "print": true,
+        "read": true,
+        "report": true,
+        "share": true,
+        "submit": true,
+        "write": true
+      },
+      "permlevel": 0,
+      "role": "Manufacturing User"
+    },
+    {
+      "actions": {
+        "amend": true,
+        "cancel": true,
+        "create": true,
+        "delete": true,
+        "email": true,
+        "export": true,
+        "import": true,
+        "print": true,
+        "read": true,
+        "report": true,
+        "share": true,
+        "submit": true,
+        "write": true
+      },
+      "permlevel": 0,
+      "role": "Stock Manager"
+    },
+    {
+      "actions": {
+        "amend": true,
+        "cancel": true,
+        "create": true,
+        "delete": true,
+        "email": true,
+        "print": true,
+        "read": true,
+        "report": true,
+        "share": true,
+        "submit": true,
+        "write": true
+      },
+      "permlevel": 0,
+      "role": "Stock User"
+    }
+  ],
+  "ui": {
+    "searchFields": [
+      "posting_date",
+      "from_warehouse",
+      "to_warehouse",
+      "purpose",
+      "remarks"
+    ],
+    "showNameInGlobalSearch": true,
+    "sortField": "creation",
+    "sortOrder": "DESC",
+    "titleField": "stock_entry_type"
+  },
+  "workflows": [
+    {
+      "kind": "unavailable"
+    }
+  ]
+}

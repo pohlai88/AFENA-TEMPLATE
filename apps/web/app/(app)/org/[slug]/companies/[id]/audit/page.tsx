@@ -16,7 +16,7 @@ export default async function CompanyAuditPage({
   const [entityRes, auditRes] = await Promise.all([getCompany(id), getCompanyAuditLogs(id)]);
   if (!entityRes.ok) notFound();
 
-  const logs = auditRes.ok ? (auditRes.data as any[]) : [];
+  const logs = auditRes.ok ? (auditRes.data as Record<string, unknown>[]) : [];
 
   return (
     <div className="mx-auto max-w-3xl px-6 py-8">

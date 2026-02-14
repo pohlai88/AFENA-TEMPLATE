@@ -123,7 +123,8 @@ export function evaluatePolicyDecision(
   // 4. Check field rules against input patch
   if (inputPatch && merged.deny_write && merged.deny_write.length > 0) {
     const inputKeys = Object.keys(inputPatch);
-    const denied = inputKeys.filter((k) => merged.deny_write!.includes(k));
+    const denyList = merged.deny_write;
+    const denied = inputKeys.filter((k) => denyList.includes(k));
     if (denied.length > 0) {
       return { ok: false, reason: 'DENY_FIELD' };
     }
@@ -212,7 +213,7 @@ function mergeFieldRules(rules: FieldRules[]): FieldRules {
   let allow_write: string[] | undefined;
   if (allowSets && allowSets.length > 0) {
     // Intersection of all allow sets
-    const first = allowSets[0]!;
+    const first = allowSets[0] as Set<string>;
     const intersection = new Set(
       [...first].filter((f) => allowSets.every((s) => s.has(f))),
     );

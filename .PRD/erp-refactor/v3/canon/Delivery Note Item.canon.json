@@ -1,0 +1,2128 @@
+{
+  "audit": {
+    "trackChanges": false
+  },
+  "canonVersion": "1.0.0",
+  "childTables": [],
+  "doctypeId": "erpnext:Stock:Delivery Note Item",
+  "events": [
+    {
+      "event": "validate",
+      "handlers": [
+        "erpnext.support.doctype.service_level_agreement.service_level_agreement.apply",
+        "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record.check_for_running_deletion_job"
+      ],
+      "handlersParsed": [
+        {
+          "attrPath": "apply",
+          "module": "erpnext.support.doctype.service_level_agreement.service_level_agreement"
+        },
+        {
+          "attrPath": "check_for_running_deletion_job",
+          "module": "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record"
+        }
+      ]
+    }
+  ],
+  "fieldOrder": [
+    "barcode",
+    "has_item_scanned",
+    "item_code",
+    "item_name",
+    "col_break1",
+    "customer_item_code",
+    "section_break_6",
+    "description",
+    "brand",
+    "item_group",
+    "image_section",
+    "image",
+    "image_view",
+    "quantity_and_rate",
+    "qty",
+    "stock_uom",
+    "col_break2",
+    "uom",
+    "conversion_factor",
+    "stock_qty_sec_break",
+    "stock_qty",
+    "stock_qty_col_break",
+    "returned_qty",
+    "section_break_17",
+    "price_list_rate",
+    "base_price_list_rate",
+    "discount_and_margin",
+    "margin_type",
+    "margin_rate_or_amount",
+    "rate_with_margin",
+    "column_break_19",
+    "discount_percentage",
+    "discount_amount",
+    "distributed_discount_amount",
+    "base_rate_with_margin",
+    "section_break_1",
+    "rate",
+    "amount",
+    "col_break3",
+    "base_rate",
+    "base_amount",
+    "pricing_rules",
+    "stock_uom_rate",
+    "is_free_item",
+    "grant_commission",
+    "section_break_25",
+    "net_rate",
+    "net_amount",
+    "item_tax_template",
+    "column_break_28",
+    "base_net_rate",
+    "base_net_amount",
+    "billed_amt",
+    "incoming_rate",
+    "item_weight_details",
+    "weight_per_unit",
+    "total_weight",
+    "column_break_21",
+    "weight_uom",
+    "warehouse_and_reference",
+    "warehouse",
+    "target_warehouse",
+    "quality_inspection",
+    "col_break4",
+    "allow_zero_valuation_rate",
+    "against_sales_order",
+    "so_detail",
+    "against_sales_invoice",
+    "si_detail",
+    "dn_detail",
+    "against_pick_list",
+    "pick_list_item",
+    "section_break_40",
+    "pick_serial_and_batch",
+    "serial_and_batch_bundle",
+    "use_serial_batch_fields",
+    "column_break_eaoe",
+    "section_break_qyjv",
+    "serial_no",
+    "column_break_rxvc",
+    "batch_no",
+    "available_qty_section",
+    "actual_qty",
+    "actual_batch_qty",
+    "column_break_atna",
+    "company_total_stock",
+    "section_break_kejd",
+    "installed_qty",
+    "packed_qty",
+    "column_break_fguf",
+    "received_qty",
+    "accounting_details_section",
+    "expense_account",
+    "column_break_71",
+    "item_tax_rate",
+    "internal_transfer_section",
+    "material_request",
+    "purchase_order",
+    "column_break_82",
+    "purchase_order_item",
+    "material_request_item",
+    "accounting_dimensions_section",
+    "cost_center",
+    "dimension_col_break",
+    "project",
+    "section_break_72",
+    "page_break"
+  ],
+  "fields": [
+    {
+      "constraints": {},
+      "fieldname": "barcode",
+      "fieldtype": "data",
+      "label": "Barcode",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "dependsOn": "barcode",
+      "fieldname": "has_item_scanned",
+      "fieldtype": "check",
+      "label": "Has Item Scanned",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "item_code",
+      "fieldtype": "link",
+      "label": "Item Code",
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Item"
+      },
+      "optionsRaw": "Item",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Item",
+        "kind": "static"
+      },
+      "requiredStatic": true,
+      "ui": {
+        "inGlobalSearch": true,
+        "inListView": true,
+        "searchIndex": true,
+        "width": "150px"
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "item_name",
+      "fieldtype": "data",
+      "label": "Item Name",
+      "permlevel": 0,
+      "requiredStatic": true,
+      "ui": {
+        "inGlobalSearch": true,
+        "printHide": true,
+        "width": "150px"
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "col_break1",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "customer_item_code",
+      "fieldtype": "data",
+      "label": "Customer's Item Code",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "hidden": true,
+        "printHide": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "section_break_6",
+      "fieldtype": "layout:section",
+      "label": "Description",
+      "layout": {
+        "section": "Description"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "collapsible": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "description",
+      "fieldtype": "text_editor",
+      "label": "Description",
+      "layout": {
+        "section": "Description"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "width": "300px"
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "brand",
+      "fieldtype": "link",
+      "label": "Brand Name",
+      "layout": {
+        "section": "Description"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Brand"
+      },
+      "optionsRaw": "Brand",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Brand",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "hidden": true,
+        "printHide": true,
+        "readOnly": true,
+        "width": "150px"
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "item_group",
+      "fieldtype": "link",
+      "label": "Item Group",
+      "layout": {
+        "section": "Description"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Item Group"
+      },
+      "optionsRaw": "Item Group",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Item Group",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "hidden": true,
+        "printHide": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "image_section",
+      "fieldtype": "layout:section",
+      "label": "Image",
+      "layout": {
+        "section": "Image"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "collapsible": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fetchFrom": "item_code.image",
+      "fieldname": "image",
+      "fieldtype": "attach",
+      "label": "Image",
+      "layout": {
+        "section": "Image"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "hidden": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "image_view",
+      "fieldtype": "attach_image",
+      "label": "Image View",
+      "layout": {
+        "section": "Image"
+      },
+      "optionsParsed": {
+        "kind": "other",
+        "value": "image"
+      },
+      "optionsRaw": "image",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "quantity_and_rate",
+      "fieldtype": "layout:section",
+      "label": "Quantity and Rate",
+      "layout": {
+        "section": "Quantity and Rate"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "qty",
+      "fieldtype": "float",
+      "label": "Quantity",
+      "layout": {
+        "section": "Quantity and Rate"
+      },
+      "permlevel": 0,
+      "requiredStatic": true,
+      "ui": {
+        "inListView": true,
+        "width": "100px"
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:doc.uom != doc.stock_uom",
+      "fieldname": "stock_uom",
+      "fieldtype": "link",
+      "label": "Stock UOM",
+      "layout": {
+        "section": "Quantity and Rate"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "UOM"
+      },
+      "optionsRaw": "UOM",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "UOM",
+        "kind": "static"
+      },
+      "requiredStatic": true,
+      "ui": {
+        "printHide": true,
+        "readOnly": true,
+        "width": "50px"
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "col_break2",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "Quantity and Rate"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "uom",
+      "fieldtype": "link",
+      "label": "UOM",
+      "layout": {
+        "column": 1,
+        "section": "Quantity and Rate"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "UOM"
+      },
+      "optionsRaw": "UOM",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "UOM",
+        "kind": "static"
+      },
+      "requiredStatic": true,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:doc.uom != doc.stock_uom",
+      "fieldname": "conversion_factor",
+      "fieldtype": "float",
+      "label": "UOM Conversion Factor",
+      "layout": {
+        "column": 1,
+        "section": "Quantity and Rate"
+      },
+      "permlevel": 0,
+      "requiredStatic": true,
+      "ui": {
+        "printHide": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "stock_qty_sec_break",
+      "fieldtype": "layout:section",
+      "layout": {
+        "section": "stock_qty_sec_break"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:doc.uom != doc.stock_uom",
+      "fieldname": "stock_qty",
+      "fieldtype": "float",
+      "label": "Qty in Stock UOM",
+      "layout": {
+        "section": "stock_qty_sec_break"
+      },
+      "noCopy": true,
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "stock_qty_col_break",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "stock_qty_sec_break"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "returned_qty",
+      "fieldname": "returned_qty",
+      "fieldtype": "float",
+      "label": "Returned Qty in Stock UOM",
+      "layout": {
+        "column": 1,
+        "section": "stock_qty_sec_break"
+      },
+      "noCopy": true,
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "section_break_17",
+      "fieldtype": "layout:section",
+      "layout": {
+        "section": "section_break_17"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "price_list_rate",
+      "fieldtype": "currency",
+      "label": "Price List Rate",
+      "layout": {
+        "section": "section_break_17"
+      },
+      "optionsParsed": {
+        "field": "currency",
+        "kind": "currency_field"
+      },
+      "optionsRaw": "currency",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true,
+        "readOnly": true,
+        "width": "100px"
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "base_price_list_rate",
+      "fieldtype": "currency",
+      "label": "Price List Rate (Company Currency)",
+      "layout": {
+        "section": "section_break_17"
+      },
+      "optionsParsed": {
+        "field": "Company:company:default_currency",
+        "kind": "currency_field"
+      },
+      "optionsRaw": "Company:company:default_currency",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true,
+        "readOnly": true,
+        "width": "100px"
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "discount_and_margin",
+      "fieldtype": "layout:section",
+      "label": "Discount and Margin",
+      "layout": {
+        "section": "Discount and Margin"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "collapsible": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "price_list_rate",
+      "fieldname": "margin_type",
+      "fieldtype": "select",
+      "label": "Margin Type",
+      "layout": {
+        "section": "Discount and Margin"
+      },
+      "optionsParsed": {
+        "choices": [
+          "Percentage",
+          "Amount"
+        ],
+        "kind": "select"
+      },
+      "optionsRaw": "\nPercentage\nAmount",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:doc.margin_type && doc.price_list_rate",
+      "fieldname": "margin_rate_or_amount",
+      "fieldtype": "float",
+      "label": "Margin Rate or Amount",
+      "layout": {
+        "section": "Discount and Margin"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:doc.margin_type && doc.price_list_rate && doc.margin_rate_or_amount",
+      "fieldname": "rate_with_margin",
+      "fieldtype": "currency",
+      "label": "Rate With Margin",
+      "layout": {
+        "section": "Discount and Margin"
+      },
+      "optionsParsed": {
+        "field": "currency",
+        "kind": "currency_field"
+      },
+      "optionsRaw": "currency",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_19",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "Discount and Margin"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "price_list_rate",
+      "fieldname": "discount_percentage",
+      "fieldtype": "float",
+      "label": "Discount (%) on Price List Rate with Margin",
+      "layout": {
+        "column": 1,
+        "section": "Discount and Margin"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true,
+        "width": "100px"
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "price_list_rate",
+      "fieldname": "discount_amount",
+      "fieldtype": "currency",
+      "label": "Discount Amount",
+      "layout": {
+        "column": 1,
+        "section": "Discount and Margin"
+      },
+      "optionsParsed": {
+        "field": "currency",
+        "kind": "currency_field"
+      },
+      "optionsRaw": "currency",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "distributed_discount_amount",
+      "fieldtype": "currency",
+      "label": "Distributed Discount Amount",
+      "layout": {
+        "column": 1,
+        "section": "Discount and Margin"
+      },
+      "optionsParsed": {
+        "field": "currency",
+        "kind": "currency_field"
+      },
+      "optionsRaw": "currency",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:doc.margin_type && doc.price_list_rate && doc.margin_rate_or_amount",
+      "fieldname": "base_rate_with_margin",
+      "fieldtype": "currency",
+      "label": "Rate With Margin (Company Currency)",
+      "layout": {
+        "column": 1,
+        "section": "Discount and Margin"
+      },
+      "optionsParsed": {
+        "field": "Company:company:default_currency",
+        "kind": "currency_field"
+      },
+      "optionsRaw": "Company:company:default_currency",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "section_break_1",
+      "fieldtype": "layout:section",
+      "layout": {
+        "section": "section_break_1"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "rate",
+      "fieldtype": "currency",
+      "label": "Rate",
+      "layout": {
+        "section": "section_break_1"
+      },
+      "optionsParsed": {
+        "field": "currency",
+        "kind": "currency_field"
+      },
+      "optionsRaw": "currency",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "inListView": true,
+        "width": "150px"
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "amount",
+      "fieldtype": "currency",
+      "label": "Amount",
+      "layout": {
+        "section": "section_break_1"
+      },
+      "optionsParsed": {
+        "field": "currency",
+        "kind": "currency_field"
+      },
+      "optionsRaw": "currency",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "inListView": true,
+        "readOnly": true,
+        "width": "100px"
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "col_break3",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "section_break_1"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "base_rate",
+      "fieldtype": "currency",
+      "label": "Rate (Company Currency)",
+      "layout": {
+        "column": 1,
+        "section": "section_break_1"
+      },
+      "optionsParsed": {
+        "field": "Company:company:default_currency",
+        "kind": "currency_field"
+      },
+      "optionsRaw": "Company:company:default_currency",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true,
+        "readOnly": true,
+        "width": "150px"
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "base_amount",
+      "fieldtype": "currency",
+      "label": "Amount (Company Currency)",
+      "layout": {
+        "column": 1,
+        "section": "section_break_1"
+      },
+      "optionsParsed": {
+        "field": "Company:company:default_currency",
+        "kind": "currency_field"
+      },
+      "optionsRaw": "Company:company:default_currency",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true,
+        "readOnly": true,
+        "width": "100px"
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "pricing_rules",
+      "fieldtype": "small_text",
+      "label": "Pricing Rules",
+      "layout": {
+        "column": 1,
+        "section": "section_break_1"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "hidden": true,
+        "printHide": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval: doc.uom != doc.stock_uom",
+      "fieldname": "stock_uom_rate",
+      "fieldtype": "currency",
+      "label": "Rate of Stock UOM",
+      "layout": {
+        "column": 1,
+        "section": "section_break_1"
+      },
+      "noCopy": true,
+      "optionsParsed": {
+        "field": "currency",
+        "kind": "currency_field"
+      },
+      "optionsRaw": "currency",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "is_free_item",
+      "fieldtype": "check",
+      "label": "Is Free Item",
+      "layout": {
+        "column": 1,
+        "section": "section_break_1"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fetchFrom": "item_code.grant_commission",
+      "fieldname": "grant_commission",
+      "fieldtype": "check",
+      "label": "Grant Commission",
+      "layout": {
+        "column": 1,
+        "section": "section_break_1"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "section_break_25",
+      "fieldtype": "layout:section",
+      "layout": {
+        "section": "section_break_25"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "net_rate",
+      "fieldtype": "currency",
+      "label": "Net Rate",
+      "layout": {
+        "section": "section_break_25"
+      },
+      "optionsParsed": {
+        "field": "currency",
+        "kind": "currency_field"
+      },
+      "optionsRaw": "currency",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "net_amount",
+      "fieldtype": "currency",
+      "label": "Net Amount",
+      "layout": {
+        "section": "section_break_25"
+      },
+      "optionsParsed": {
+        "field": "currency",
+        "kind": "currency_field"
+      },
+      "optionsRaw": "currency",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "item_tax_template",
+      "fieldtype": "link",
+      "label": "Item Tax Template",
+      "layout": {
+        "section": "section_break_25"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Item Tax Template"
+      },
+      "optionsRaw": "Item Tax Template",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Item Tax Template",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_28",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "section_break_25"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "base_net_rate",
+      "fieldtype": "currency",
+      "label": "Net Rate (Company Currency)",
+      "layout": {
+        "column": 1,
+        "section": "section_break_25"
+      },
+      "optionsParsed": {
+        "field": "Company:company:default_currency",
+        "kind": "currency_field"
+      },
+      "optionsRaw": "Company:company:default_currency",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "base_net_amount",
+      "fieldtype": "currency",
+      "label": "Net Amount (Company Currency)",
+      "layout": {
+        "column": 1,
+        "section": "section_break_25"
+      },
+      "optionsParsed": {
+        "field": "Company:company:default_currency",
+        "kind": "currency_field"
+      },
+      "optionsRaw": "Company:company:default_currency",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "billed_amt",
+      "fieldtype": "currency",
+      "label": "Billed Amt",
+      "layout": {
+        "column": 1,
+        "section": "section_break_25"
+      },
+      "noCopy": true,
+      "optionsParsed": {
+        "field": "currency",
+        "kind": "currency_field"
+      },
+      "optionsRaw": "currency",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "incoming_rate",
+      "fieldtype": "currency",
+      "label": "Incoming Rate",
+      "layout": {
+        "column": 1,
+        "section": "section_break_25"
+      },
+      "noCopy": true,
+      "optionsParsed": {
+        "field": "Company:company:default_currency",
+        "kind": "currency_field"
+      },
+      "optionsRaw": "Company:company:default_currency",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "precision": "6",
+        "printHide": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "item_weight_details",
+      "fieldtype": "layout:section",
+      "label": "Item Weight Details",
+      "layout": {
+        "section": "Item Weight Details"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "collapsible": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "weight_per_unit",
+      "fieldtype": "float",
+      "label": "Weight Per Unit",
+      "layout": {
+        "section": "Item Weight Details"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "total_weight",
+      "fieldtype": "float",
+      "label": "Total Weight",
+      "layout": {
+        "section": "Item Weight Details"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_21",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "Item Weight Details"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "weight_uom",
+      "fieldtype": "link",
+      "label": "Weight UOM",
+      "layout": {
+        "column": 1,
+        "section": "Item Weight Details"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "UOM"
+      },
+      "optionsRaw": "UOM",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "UOM",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "warehouse_and_reference",
+      "fieldtype": "layout:section",
+      "label": "Warehouse and Reference",
+      "layout": {
+        "section": "Warehouse and Reference"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "warehouse",
+      "fieldtype": "link",
+      "label": "Warehouse",
+      "layout": {
+        "section": "Warehouse and Reference"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Warehouse"
+      },
+      "optionsRaw": "Warehouse",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Warehouse",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "inListView": true,
+        "printHide": true,
+        "width": "100px"
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:parent.is_internal_customer || doc.target_warehouse",
+      "fieldname": "target_warehouse",
+      "fieldtype": "link",
+      "label": "Target Warehouse",
+      "layout": {
+        "section": "Warehouse and Reference"
+      },
+      "noCopy": true,
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Warehouse"
+      },
+      "optionsRaw": "Warehouse",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Warehouse",
+        "ignoreUserPermissions": true,
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "hidden": true,
+        "printHide": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:!doc.__islocal",
+      "fieldname": "quality_inspection",
+      "fieldtype": "link",
+      "label": "Quality Inspection",
+      "layout": {
+        "section": "Warehouse and Reference"
+      },
+      "noCopy": true,
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Quality Inspection"
+      },
+      "optionsRaw": "Quality Inspection",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Quality Inspection",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "col_break4",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "Warehouse and Reference"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "allow_zero_valuation_rate",
+      "fieldtype": "check",
+      "label": "Allow Zero Valuation Rate",
+      "layout": {
+        "column": 1,
+        "section": "Warehouse and Reference"
+      },
+      "noCopy": true,
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "against_sales_order",
+      "fieldtype": "link",
+      "label": "Against Sales Order",
+      "layout": {
+        "column": 1,
+        "section": "Warehouse and Reference"
+      },
+      "noCopy": true,
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Sales Order"
+      },
+      "optionsRaw": "Sales Order",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Sales Order",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true,
+        "readOnly": true,
+        "searchIndex": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "so_detail",
+      "fieldtype": "data",
+      "label": "Against Sales Order Item",
+      "layout": {
+        "column": 1,
+        "section": "Warehouse and Reference"
+      },
+      "noCopy": true,
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "hidden": true,
+        "printHide": true,
+        "readOnly": true,
+        "searchIndex": true,
+        "width": "150px"
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "against_sales_invoice",
+      "fieldtype": "link",
+      "label": "Against Sales Invoice",
+      "layout": {
+        "column": 1,
+        "section": "Warehouse and Reference"
+      },
+      "noCopy": true,
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Sales Invoice"
+      },
+      "optionsRaw": "Sales Invoice",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Sales Invoice",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true,
+        "readOnly": true,
+        "searchIndex": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "si_detail",
+      "fieldtype": "data",
+      "label": "Against Sales Invoice Item",
+      "layout": {
+        "column": 1,
+        "section": "Warehouse and Reference"
+      },
+      "noCopy": true,
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "hidden": true,
+        "printHide": true,
+        "readOnly": true,
+        "searchIndex": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "dn_detail",
+      "fieldtype": "data",
+      "label": "Against Delivery Note Item",
+      "layout": {
+        "column": 1,
+        "section": "Warehouse and Reference"
+      },
+      "noCopy": true,
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "hidden": true,
+        "printHide": true,
+        "readOnly": true,
+        "searchIndex": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "against_pick_list",
+      "fieldtype": "link",
+      "label": "Against Pick List",
+      "layout": {
+        "column": 1,
+        "section": "Warehouse and Reference"
+      },
+      "noCopy": true,
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Pick List"
+      },
+      "optionsRaw": "Pick List",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Pick List",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true,
+        "readOnly": true,
+        "searchIndex": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "pick_list_item",
+      "fieldtype": "data",
+      "label": "Pick List Item",
+      "layout": {
+        "column": 1,
+        "section": "Warehouse and Reference"
+      },
+      "noCopy": true,
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "hidden": true,
+        "printHide": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "section_break_40",
+      "fieldtype": "layout:section",
+      "label": "Serial and Batch No",
+      "layout": {
+        "section": "Serial and Batch No"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:doc.use_serial_batch_fields === 0 || doc.docstatus === 1",
+      "fieldname": "pick_serial_and_batch",
+      "fieldtype": "button",
+      "label": "Pick Serial / Batch No",
+      "layout": {
+        "section": "Serial and Batch No"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:doc.use_serial_batch_fields === 0 || doc.docstatus === 1",
+      "fieldname": "serial_and_batch_bundle",
+      "fieldtype": "link",
+      "label": "Serial and Batch Bundle",
+      "layout": {
+        "section": "Serial and Batch No"
+      },
+      "noCopy": true,
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Serial and Batch Bundle"
+      },
+      "optionsRaw": "Serial and Batch Bundle",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Serial and Batch Bundle",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true,
+        "searchIndex": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "use_serial_batch_fields",
+      "fieldtype": "check",
+      "label": "Use Serial No / Batch Fields",
+      "layout": {
+        "section": "Serial and Batch No"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_eaoe",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "Serial and Batch No"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:doc.use_serial_batch_fields === 1",
+      "fieldname": "section_break_qyjv",
+      "fieldtype": "layout:section",
+      "layout": {
+        "section": "section_break_qyjv"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:doc.use_serial_batch_fields === 1",
+      "fieldname": "serial_no",
+      "fieldtype": "text",
+      "label": "Serial No",
+      "layout": {
+        "section": "section_break_qyjv"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_rxvc",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "section_break_qyjv"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:doc.use_serial_batch_fields === 1",
+      "fieldname": "batch_no",
+      "fieldtype": "link",
+      "label": "Batch No",
+      "layout": {
+        "column": 1,
+        "section": "section_break_qyjv"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Batch"
+      },
+      "optionsRaw": "Batch",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Batch",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "searchIndex": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "available_qty_section",
+      "fieldtype": "layout:section",
+      "label": "Available Qty",
+      "layout": {
+        "section": "Available Qty"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "collapsible": true
+      },
+      "unique": false
+    },
+    {
+      "allowOnSubmit": true,
+      "constraints": {},
+      "fieldname": "actual_qty",
+      "fieldtype": "float",
+      "label": "Qty (Warehouse)",
+      "layout": {
+        "section": "Available Qty"
+      },
+      "noCopy": true,
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true,
+        "readOnly": true,
+        "width": "150px"
+      },
+      "unique": false
+    },
+    {
+      "allowOnSubmit": true,
+      "constraints": {},
+      "dependsOn": "batch_no",
+      "fieldname": "actual_batch_qty",
+      "fieldtype": "float",
+      "label": "Available Batch Qty at From Warehouse",
+      "layout": {
+        "section": "Available Qty"
+      },
+      "noCopy": true,
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true,
+        "readOnly": true,
+        "width": "150px"
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_atna",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "Available Qty"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "allowOnSubmit": true,
+      "constraints": {},
+      "fieldname": "company_total_stock",
+      "fieldtype": "float",
+      "label": "Qty (Company)",
+      "layout": {
+        "column": 1,
+        "section": "Available Qty"
+      },
+      "noCopy": true,
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "section_break_kejd",
+      "fieldtype": "layout:section",
+      "layout": {
+        "section": "section_break_kejd"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "installed_qty",
+      "fieldtype": "float",
+      "label": "Installed Qty",
+      "layout": {
+        "section": "section_break_kejd"
+      },
+      "noCopy": true,
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true,
+        "readOnly": true,
+        "width": "150px"
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "dependsOn": "eval: doc.packed_qty",
+      "fieldname": "packed_qty",
+      "fieldtype": "float",
+      "label": "Packed Qty",
+      "layout": {
+        "section": "section_break_kejd"
+      },
+      "noCopy": true,
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_fguf",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "section_break_kejd"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval: parent.is_internal_customer",
+      "fieldname": "received_qty",
+      "fieldtype": "float",
+      "label": "Received Qty",
+      "layout": {
+        "column": 1,
+        "section": "section_break_kejd"
+      },
+      "noCopy": true,
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true,
+        "readOnly": true,
+        "reportHide": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "accounting_details_section",
+      "fieldtype": "layout:section",
+      "label": "Accounting Details",
+      "layout": {
+        "section": "Accounting Details"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "expense_account",
+      "fieldtype": "link",
+      "label": "Expense Account",
+      "layout": {
+        "section": "Accounting Details"
+      },
+      "noCopy": true,
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Account"
+      },
+      "optionsRaw": "Account",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Account",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true,
+        "width": "120px"
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_71",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "Accounting Details"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "item_tax_rate",
+      "fieldtype": "small_text",
+      "label": "Item Tax Rate",
+      "layout": {
+        "column": 1,
+        "section": "Accounting Details"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "hidden": true,
+        "printHide": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:parent.is_internal_customer == 1",
+      "fieldname": "internal_transfer_section",
+      "fieldtype": "layout:section",
+      "label": "Internal Transfer",
+      "layout": {
+        "section": "Internal Transfer"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "collapsible": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "material_request",
+      "fieldtype": "link",
+      "label": "Material Request",
+      "layout": {
+        "section": "Internal Transfer"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Material Request"
+      },
+      "optionsRaw": "Material Request",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Material Request",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "purchase_order",
+      "fieldtype": "link",
+      "label": "Purchase Order",
+      "layout": {
+        "section": "Internal Transfer"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Purchase Order"
+      },
+      "optionsRaw": "Purchase Order",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Purchase Order",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true,
+        "readOnly": true,
+        "searchIndex": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_82",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "Internal Transfer"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "purchase_order_item",
+      "fieldtype": "data",
+      "label": "Purchase Order Item",
+      "layout": {
+        "column": 1,
+        "section": "Internal Transfer"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "material_request_item",
+      "fieldtype": "data",
+      "label": "Material Request Item",
+      "layout": {
+        "column": 1,
+        "section": "Internal Transfer"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "accounting_dimensions_section",
+      "fieldtype": "layout:section",
+      "label": "Accounting Dimensions",
+      "layout": {
+        "section": "Accounting Dimensions"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "collapsible": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": ":Company",
+      "fieldname": "cost_center",
+      "fieldtype": "link",
+      "label": "Cost Center",
+      "layout": {
+        "section": "Accounting Dimensions"
+      },
+      "noCopy": true,
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Cost Center"
+      },
+      "optionsRaw": "Cost Center",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Cost Center",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true,
+        "width": "120px"
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "dimension_col_break",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "Accounting Dimensions"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "project",
+      "fieldtype": "link",
+      "label": "Project",
+      "layout": {
+        "column": 1,
+        "section": "Accounting Dimensions"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Project"
+      },
+      "optionsRaw": "Project",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Project",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "section_break_72",
+      "fieldtype": "layout:section",
+      "layout": {
+        "section": "section_break_72"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "allowOnSubmit": true,
+      "constraints": {},
+      "default": "0",
+      "fieldname": "page_break",
+      "fieldtype": "check",
+      "label": "Page Break",
+      "layout": {
+        "section": "section_break_72"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true
+      },
+      "unique": false
+    }
+  ],
+  "identity": {
+    "app": "erpnext",
+    "isSingle": false,
+    "isSubmittable": false,
+    "isTree": false,
+    "module": "Stock",
+    "naming": {
+      "strategy": "hash"
+    }
+  },
+  "name": "Delivery Note Item",
+  "permissions": [],
+  "ui": {
+    "searchFields": [],
+    "showNameInGlobalSearch": false,
+    "sortField": "creation",
+    "sortOrder": "DESC"
+  },
+  "workflows": [
+    {
+      "kind": "unavailable"
+    }
+  ]
+}

@@ -1,0 +1,259 @@
+{
+  "audit": {
+    "trackChanges": false
+  },
+  "canonVersion": "1.0.0",
+  "childTables": [],
+  "doctypeId": "erpnext:Buying:Supplier Scorecard Standing",
+  "events": [
+    {
+      "event": "validate",
+      "handlers": [
+        "erpnext.support.doctype.service_level_agreement.service_level_agreement.apply",
+        "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record.check_for_running_deletion_job"
+      ],
+      "handlersParsed": [
+        {
+          "attrPath": "apply",
+          "module": "erpnext.support.doctype.service_level_agreement.service_level_agreement"
+        },
+        {
+          "attrPath": "check_for_running_deletion_job",
+          "module": "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record"
+        }
+      ]
+    }
+  ],
+  "fieldOrder": [
+    "standing_name",
+    "standing_color",
+    "min_grade",
+    "max_grade",
+    "column_break_5",
+    "warn_rfqs",
+    "warn_pos",
+    "prevent_rfqs",
+    "prevent_pos",
+    "notify_supplier",
+    "notify_employee",
+    "employee_link"
+  ],
+  "fields": [
+    {
+      "constraints": {},
+      "fieldname": "standing_name",
+      "fieldtype": "data",
+      "label": "Standing Name",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": true
+    },
+    {
+      "constraints": {},
+      "fieldname": "standing_color",
+      "fieldtype": "select",
+      "label": "Color",
+      "optionsParsed": {
+        "choices": [
+          "Blue",
+          "Purple",
+          "Green",
+          "Yellow",
+          "Orange",
+          "Red"
+        ],
+        "kind": "select"
+      },
+      "optionsRaw": "Blue\nPurple\nGreen\nYellow\nOrange\nRed",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "min_grade",
+      "fieldtype": "percent",
+      "label": "Min Grade",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "max_grade",
+      "fieldtype": "percent",
+      "label": "Max Grade",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_5",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "warn_rfqs",
+      "fieldtype": "check",
+      "label": "Warn RFQs",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "warn_pos",
+      "fieldtype": "check",
+      "label": "Warn Purchase Orders",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "prevent_rfqs",
+      "fieldtype": "check",
+      "label": "Prevent RFQs",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "prevent_pos",
+      "fieldtype": "check",
+      "label": "Prevent Purchase Orders",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "notify_supplier",
+      "fieldtype": "check",
+      "label": "Notify Supplier",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "hidden": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "notify_employee",
+      "fieldtype": "check",
+      "label": "Notify Other",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "hidden": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "employee_link",
+      "fieldtype": "link",
+      "label": "Other",
+      "layout": {
+        "column": 1
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Employee"
+      },
+      "optionsRaw": "Employee",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Employee",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "hidden": true
+      },
+      "unique": false
+    }
+  ],
+  "identity": {
+    "app": "erpnext",
+    "isSingle": false,
+    "isSubmittable": false,
+    "isTree": false,
+    "module": "Buying",
+    "naming": {
+      "expression": "field:standing_name",
+      "strategy": "field"
+    }
+  },
+  "name": "Supplier Scorecard Standing",
+  "permissions": [
+    {
+      "actions": {
+        "create": true,
+        "delete": true,
+        "email": true,
+        "export": true,
+        "print": true,
+        "read": true,
+        "report": true,
+        "share": true,
+        "write": true
+      },
+      "permlevel": 0,
+      "role": "System Manager"
+    }
+  ],
+  "ui": {
+    "searchFields": [],
+    "showNameInGlobalSearch": false,
+    "sortField": "creation",
+    "sortOrder": "DESC"
+  },
+  "workflows": [
+    {
+      "kind": "unavailable"
+    }
+  ]
+}

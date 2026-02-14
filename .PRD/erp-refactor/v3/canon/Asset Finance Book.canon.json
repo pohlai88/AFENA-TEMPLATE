@@ -1,0 +1,324 @@
+{
+  "audit": {
+    "trackChanges": true
+  },
+  "canonVersion": "1.0.0",
+  "childTables": [],
+  "doctypeId": "erpnext:Assets:Asset Finance Book",
+  "events": [
+    {
+      "event": "validate",
+      "handlers": [
+        "erpnext.support.doctype.service_level_agreement.service_level_agreement.apply",
+        "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record.check_for_running_deletion_job"
+      ],
+      "handlersParsed": [
+        {
+          "attrPath": "apply",
+          "module": "erpnext.support.doctype.service_level_agreement.service_level_agreement"
+        },
+        {
+          "attrPath": "check_for_running_deletion_job",
+          "module": "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record"
+        }
+      ]
+    }
+  ],
+  "fieldOrder": [
+    "finance_book",
+    "depreciation_method",
+    "frequency_of_depreciation",
+    "total_number_of_depreciations",
+    "increase_in_asset_life",
+    "depreciation_start_date",
+    "column_break_5",
+    "salvage_value_percentage",
+    "expected_value_after_useful_life",
+    "rate_of_depreciation",
+    "daily_prorata_based",
+    "shift_based",
+    "section_break_jkdf",
+    "value_after_depreciation",
+    "column_break_sigk",
+    "total_number_of_booked_depreciations"
+  ],
+  "fields": [
+    {
+      "constraints": {},
+      "fieldname": "finance_book",
+      "fieldtype": "link",
+      "label": "Finance Book",
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Finance Book"
+      },
+      "optionsRaw": "Finance Book",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Finance Book",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "depreciation_method",
+      "fieldtype": "select",
+      "label": "Depreciation Method",
+      "optionsParsed": {
+        "choices": [
+          "Straight Line",
+          "Double Declining Balance",
+          "Written Down Value",
+          "Manual"
+        ],
+        "kind": "select"
+      },
+      "optionsRaw": "\nStraight Line\nDouble Declining Balance\nWritten Down Value\nManual",
+      "permlevel": 0,
+      "requiredStatic": true,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "frequency_of_depreciation",
+      "fieldtype": "int",
+      "label": "Frequency of Depreciation (Months)",
+      "permlevel": 0,
+      "requiredStatic": true,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "total_number_of_depreciations",
+      "fieldtype": "int",
+      "label": "Total Number of Depreciations",
+      "permlevel": 0,
+      "requiredStatic": true,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "increase_in_asset_life",
+      "fieldtype": "int",
+      "label": "Increase In Asset Life (Months)",
+      "noCopy": true,
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "description": "via Asset Repair",
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "depreciation_start_date",
+      "fieldtype": "date",
+      "label": "Depreciation Posting Date",
+      "mandatoryDependsOn": "eval:parent.doctype == 'Asset'",
+      "permlevel": 0,
+      "requiredDynamic": "eval:parent.doctype == 'Asset'",
+      "requiredStatic": false,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_5",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "salvage_value_percentage",
+      "fieldtype": "percent",
+      "label": "Salvage Value Percentage",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "dependsOn": "eval:parent.doctype == 'Asset'",
+      "fieldname": "expected_value_after_useful_life",
+      "fieldtype": "currency",
+      "label": "Salvage Value",
+      "layout": {
+        "column": 1
+      },
+      "optionsParsed": {
+        "field": "Company:company:default_currency",
+        "kind": "currency_field"
+      },
+      "optionsRaw": "Company:company:default_currency",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "description": "Expected Value After Useful Life"
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:doc.depreciation_method == 'Written Down Value'",
+      "fieldname": "rate_of_depreciation",
+      "fieldtype": "percent",
+      "label": "Rate of Depreciation (%)",
+      "layout": {
+        "column": 1
+      },
+      "mandatoryDependsOn": "eval:doc.depreciation_method == 'Written Down Value'",
+      "noCopy": true,
+      "permlevel": 0,
+      "requiredDynamic": "eval:doc.depreciation_method == 'Written Down Value'",
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "daily_prorata_based",
+      "fieldtype": "check",
+      "label": "Depreciate based on daily pro-rata",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "dependsOn": "eval:doc.depreciation_method == \"Straight Line\"",
+      "fieldname": "shift_based",
+      "fieldtype": "check",
+      "label": "Depreciate based on shifts",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "section_break_jkdf",
+      "fieldtype": "layout:section",
+      "layout": {
+        "section": "section_break_jkdf"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "value_after_depreciation",
+      "fieldtype": "currency",
+      "label": "Value After Depreciation",
+      "layout": {
+        "section": "section_break_jkdf"
+      },
+      "noCopy": true,
+      "optionsParsed": {
+        "field": "Company:company:default_currency",
+        "kind": "currency_field"
+      },
+      "optionsRaw": "Company:company:default_currency",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_sigk",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "section_break_jkdf"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "dependsOn": "total_number_of_booked_depreciations",
+      "fieldname": "total_number_of_booked_depreciations",
+      "fieldtype": "int",
+      "label": "Total Number of Booked Depreciations ",
+      "layout": {
+        "column": 1,
+        "section": "section_break_jkdf"
+      },
+      "noCopy": true,
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    }
+  ],
+  "identity": {
+    "app": "erpnext",
+    "isSingle": false,
+    "isSubmittable": false,
+    "isTree": false,
+    "module": "Assets",
+    "naming": {
+      "strategy": "hash"
+    }
+  },
+  "name": "Asset Finance Book",
+  "permissions": [],
+  "ui": {
+    "searchFields": [],
+    "showNameInGlobalSearch": false,
+    "sortField": "creation",
+    "sortOrder": "DESC"
+  },
+  "workflows": [
+    {
+      "kind": "unavailable"
+    }
+  ]
+}

@@ -270,6 +270,7 @@ describe('INVARIANT-GOVERNORS-01: buildGovernorConfig', () => {
     const config = buildGovernorConfig('interactive', 'org_1', 'web_ui');
     expect(config.statementTimeoutMs).toBe(5_000);
     expect(config.idleInTransactionTimeoutMs).toBe(20_000);
+    expect(config.lockTimeoutMs).toBe(3_000);
     expect(config.applicationName).toBe('afena:web_ui:org=org_1');
   });
 
@@ -277,6 +278,7 @@ describe('INVARIANT-GOVERNORS-01: buildGovernorConfig', () => {
     const config = buildGovernorConfig('background', 'org_1', 'background_job');
     expect(config.statementTimeoutMs).toBe(30_000);
     expect(config.idleInTransactionTimeoutMs).toBe(60_000);
+    expect(config.lockTimeoutMs).toBe(5_000);
     expect(config.applicationName).toBe('afena:background_job:org=org_1');
   });
 
@@ -289,6 +291,7 @@ describe('INVARIANT-GOVERNORS-01: buildGovernorConfig', () => {
     const config = buildGovernorConfig('reporting', 'org_1', 'api');
     expect(config.statementTimeoutMs).toBe(30_000);
     expect(config.idleInTransactionTimeoutMs).toBe(60_000);
+    expect(config.lockTimeoutMs).toBe(5_000);
     expect(config.applicationName).toBe('afena:api:org=org_1');
   });
 });

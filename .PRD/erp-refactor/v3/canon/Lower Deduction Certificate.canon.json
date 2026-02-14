@@ -1,0 +1,403 @@
+{
+  "audit": {
+    "trackChanges": true
+  },
+  "canonVersion": "1.0.0",
+  "childTables": [],
+  "doctypeId": "erpnext:Regional:Lower Deduction Certificate",
+  "events": [
+    {
+      "event": "validate",
+      "handlers": [
+        "erpnext.support.doctype.service_level_agreement.service_level_agreement.apply",
+        "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record.check_for_running_deletion_job"
+      ],
+      "handlersParsed": [
+        {
+          "attrPath": "apply",
+          "module": "erpnext.support.doctype.service_level_agreement.service_level_agreement"
+        },
+        {
+          "attrPath": "check_for_running_deletion_job",
+          "module": "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record"
+        }
+      ]
+    }
+  ],
+  "fieldOrder": [
+    "certificate_details_section",
+    "tax_withholding_category",
+    "fiscal_year",
+    "column_break_3",
+    "company",
+    "certificate_no",
+    "section_break_3",
+    "supplier",
+    "column_break_7",
+    "pan_no",
+    "validity_details_section",
+    "valid_from",
+    "column_break_10",
+    "valid_upto",
+    "section_break_9",
+    "rate",
+    "column_break_14",
+    "certificate_limit"
+  ],
+  "fields": [
+    {
+      "constraints": {},
+      "fieldname": "certificate_details_section",
+      "fieldtype": "layout:section",
+      "label": "Certificate Details",
+      "layout": {
+        "section": "Certificate Details"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "tax_withholding_category",
+      "fieldtype": "link",
+      "label": "Tax Withholding Category",
+      "layout": {
+        "section": "Certificate Details"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Tax Withholding Category"
+      },
+      "optionsRaw": "Tax Withholding Category",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Tax Withholding Category",
+        "kind": "static"
+      },
+      "requiredStatic": true,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "fiscal_year",
+      "fieldtype": "link",
+      "label": "Fiscal Year",
+      "layout": {
+        "section": "Certificate Details"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Fiscal Year"
+      },
+      "optionsRaw": "Fiscal Year",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Fiscal Year",
+        "kind": "static"
+      },
+      "requiredStatic": true,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_3",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "Certificate Details"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "company",
+      "fieldtype": "link",
+      "label": "Company",
+      "layout": {
+        "column": 1,
+        "section": "Certificate Details"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Company"
+      },
+      "optionsRaw": "Company",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Company",
+        "kind": "static"
+      },
+      "requiredStatic": true,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "certificate_no",
+      "fieldtype": "data",
+      "label": "Certificate No",
+      "layout": {
+        "column": 1,
+        "section": "Certificate Details"
+      },
+      "permlevel": 0,
+      "requiredStatic": true,
+      "ui": {
+        "inListView": true
+      },
+      "unique": true
+    },
+    {
+      "constraints": {},
+      "fieldname": "section_break_3",
+      "fieldtype": "layout:section",
+      "label": "Deductee Details",
+      "layout": {
+        "section": "Deductee Details"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "supplier",
+      "fieldtype": "link",
+      "label": "Supplier",
+      "layout": {
+        "section": "Deductee Details"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Supplier"
+      },
+      "optionsRaw": "Supplier",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Supplier",
+        "kind": "static"
+      },
+      "requiredStatic": true,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_7",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "Deductee Details"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fetchFrom": "supplier.pan",
+      "fetchIfEmpty": true,
+      "fieldname": "pan_no",
+      "fieldtype": "data",
+      "label": "PAN No",
+      "layout": {
+        "column": 1,
+        "section": "Deductee Details"
+      },
+      "permlevel": 0,
+      "requiredStatic": true,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "validity_details_section",
+      "fieldtype": "layout:section",
+      "label": "Validity Details",
+      "layout": {
+        "section": "Validity Details"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "valid_from",
+      "fieldtype": "date",
+      "label": "Valid From",
+      "layout": {
+        "section": "Validity Details"
+      },
+      "permlevel": 0,
+      "requiredStatic": true,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_10",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "Validity Details"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "valid_upto",
+      "fieldtype": "date",
+      "label": "Valid Up To",
+      "layout": {
+        "column": 1,
+        "section": "Validity Details"
+      },
+      "permlevel": 0,
+      "requiredStatic": true,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "section_break_9",
+      "fieldtype": "layout:section",
+      "layout": {
+        "section": "section_break_9"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "rate",
+      "fieldtype": "percent",
+      "label": "Rate Of TDS As Per Certificate",
+      "layout": {
+        "section": "section_break_9"
+      },
+      "permlevel": 0,
+      "requiredStatic": true,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_14",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "section_break_9"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "certificate_limit",
+      "fieldtype": "currency",
+      "label": "Certificate Limit",
+      "layout": {
+        "column": 1,
+        "section": "section_break_9"
+      },
+      "permlevel": 0,
+      "requiredStatic": true,
+      "ui": {},
+      "unique": false
+    }
+  ],
+  "identity": {
+    "app": "erpnext",
+    "isSingle": false,
+    "isSubmittable": false,
+    "isTree": false,
+    "module": "Regional",
+    "naming": {
+      "expression": "field:certificate_no",
+      "strategy": "field"
+    }
+  },
+  "name": "Lower Deduction Certificate",
+  "permissions": [
+    {
+      "actions": {
+        "create": true,
+        "delete": true,
+        "email": true,
+        "export": true,
+        "print": true,
+        "read": true,
+        "report": true,
+        "share": true,
+        "write": true
+      },
+      "permlevel": 0,
+      "role": "Accounts Manager"
+    },
+    {
+      "actions": {
+        "create": true,
+        "delete": true,
+        "email": true,
+        "export": true,
+        "print": true,
+        "read": true,
+        "report": true,
+        "share": true,
+        "write": true
+      },
+      "permlevel": 0,
+      "role": "Accounts User"
+    },
+    {
+      "actions": {
+        "create": true,
+        "delete": true,
+        "email": true,
+        "export": true,
+        "print": true,
+        "read": true,
+        "report": true,
+        "share": true,
+        "write": true
+      },
+      "permlevel": 0,
+      "role": "System Manager"
+    }
+  ],
+  "ui": {
+    "searchFields": [],
+    "showNameInGlobalSearch": false,
+    "sortField": "creation",
+    "sortOrder": "DESC"
+  },
+  "workflows": [
+    {
+      "kind": "unavailable"
+    }
+  ]
+}

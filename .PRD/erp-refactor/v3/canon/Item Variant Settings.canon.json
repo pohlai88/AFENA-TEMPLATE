@@ -1,0 +1,181 @@
+{
+  "audit": {
+    "trackChanges": true
+  },
+  "canonVersion": "1.0.0",
+  "childTables": [
+    {
+      "childDoctype": "Variant Field",
+      "parentField": "fields",
+      "required": false
+    }
+  ],
+  "doctypeId": "erpnext:Stock:Item Variant Settings",
+  "events": [
+    {
+      "event": "validate",
+      "handlers": [
+        "erpnext.support.doctype.service_level_agreement.service_level_agreement.apply",
+        "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record.check_for_running_deletion_job"
+      ],
+      "handlersParsed": [
+        {
+          "attrPath": "apply",
+          "module": "erpnext.support.doctype.service_level_agreement.service_level_agreement"
+        },
+        {
+          "attrPath": "check_for_running_deletion_job",
+          "module": "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record"
+        }
+      ]
+    }
+  ],
+  "fieldOrder": [
+    "section_break_3",
+    "do_not_update_variants",
+    "allow_rename_attribute_value",
+    "allow_different_uom",
+    "copy_fields_to_variant",
+    "fields"
+  ],
+  "fields": [
+    {
+      "constraints": {},
+      "fieldname": "section_break_3",
+      "fieldtype": "layout:section",
+      "layout": {
+        "section": "section_break_3"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "do_not_update_variants",
+      "fieldtype": "check",
+      "label": "Do not update variants on save",
+      "layout": {
+        "section": "section_break_3"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "description": "Fields will be copied over only at time of creation."
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "allow_rename_attribute_value",
+      "fieldtype": "check",
+      "label": "Allow Rename Attribute Value",
+      "layout": {
+        "section": "section_break_3"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "description": "Rename Attribute Value in Item Attribute."
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "allow_different_uom",
+      "fieldtype": "check",
+      "label": "Allow Variant UOM to be different from Template UOM",
+      "layout": {
+        "section": "section_break_3"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "copy_fields_to_variant",
+      "fieldtype": "layout:section",
+      "label": "Copy Fields to Variant",
+      "layout": {
+        "section": "Copy Fields to Variant"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "childDoctype": "Variant Field",
+      "constraints": {},
+      "fieldname": "fields",
+      "fieldtype": "table",
+      "label": "Fields",
+      "layout": {
+        "section": "Copy Fields to Variant"
+      },
+      "optionsParsed": {
+        "doctype": "Variant Field",
+        "kind": "child_doctype"
+      },
+      "optionsRaw": "Variant Field",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    }
+  ],
+  "identity": {
+    "app": "erpnext",
+    "isSingle": false,
+    "isSubmittable": false,
+    "isTree": false,
+    "module": "Stock",
+    "naming": {
+      "strategy": "hash"
+    }
+  },
+  "name": "Item Variant Settings",
+  "permissions": [
+    {
+      "actions": {
+        "create": true,
+        "email": true,
+        "print": true,
+        "read": true,
+        "share": true,
+        "write": true
+      },
+      "permlevel": 0,
+      "role": "Item Manager"
+    },
+    {
+      "actions": {
+        "create": true,
+        "email": true,
+        "print": true,
+        "read": true,
+        "share": true,
+        "write": true
+      },
+      "permlevel": 0,
+      "role": "System Manager"
+    }
+  ],
+  "ui": {
+    "searchFields": [],
+    "showNameInGlobalSearch": false,
+    "sortField": "creation",
+    "sortOrder": "DESC"
+  },
+  "workflows": [
+    {
+      "kind": "unavailable"
+    }
+  ]
+}

@@ -68,7 +68,9 @@ module.exports = [
         },
       ],
       'import/no-duplicates': 'error',
-      'import/no-cycle': 'error',
+      // import/no-cycle is expensive (does its own parsing + file tracking).
+      // Disabled locally for speed; enforced in CI via lint:ci script.
+      'import/no-cycle': 'off',
 
       // Security rules
       'security/detect-object-injection': 'off', // Too noisy for general use
@@ -130,7 +132,8 @@ module.exports = [
     files: ['**/*.ts', '**/*.tsx'],
     languageOptions: {
       parserOptions: {
-        project: true,
+        projectService: true,
+        project: null, // explicit null — prevents IDE ESLint LS from injecting project alongside projectService
       },
     },
     rules: {

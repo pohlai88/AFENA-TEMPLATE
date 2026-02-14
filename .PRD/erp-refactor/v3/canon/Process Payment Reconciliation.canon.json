@@ -1,0 +1,463 @@
+{
+  "audit": {
+    "trackChanges": false
+  },
+  "canonVersion": "1.0.0",
+  "childTables": [],
+  "doctypeId": "erpnext:Accounts:Process Payment Reconciliation",
+  "events": [
+    {
+      "event": "validate",
+      "handlers": [
+        "erpnext.support.doctype.service_level_agreement.service_level_agreement.apply",
+        "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record.check_for_running_deletion_job"
+      ],
+      "handlersParsed": [
+        {
+          "attrPath": "apply",
+          "module": "erpnext.support.doctype.service_level_agreement.service_level_agreement"
+        },
+        {
+          "attrPath": "check_for_running_deletion_job",
+          "module": "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record"
+        }
+      ]
+    }
+  ],
+  "fieldOrder": [
+    "company",
+    "party_type",
+    "column_break_io6c",
+    "party",
+    "receivable_payable_account",
+    "default_advance_account",
+    "filter_section",
+    "from_invoice_date",
+    "to_invoice_date",
+    "column_break_kegk",
+    "from_payment_date",
+    "to_payment_date",
+    "column_break_uj04",
+    "cost_center",
+    "bank_cash_account",
+    "section_break_2n02",
+    "status",
+    "error_log",
+    "section_break_a8yx",
+    "amended_from"
+  ],
+  "fields": [
+    {
+      "constraints": {},
+      "fieldname": "company",
+      "fieldtype": "link",
+      "label": "Company",
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Company"
+      },
+      "optionsRaw": "Company",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Company",
+        "kind": "static"
+      },
+      "requiredStatic": true,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "party_type",
+      "fieldtype": "link",
+      "label": "Party Type",
+      "optionsParsed": {
+        "kind": "link",
+        "target": "DocType"
+      },
+      "optionsRaw": "DocType",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "DocType",
+        "kind": "static"
+      },
+      "requiredStatic": true,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_io6c",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "party",
+      "fieldtype": "dynamic_link",
+      "label": "Party",
+      "layout": {
+        "column": 1
+      },
+      "optionsRaw": "party_type",
+      "permlevel": 0,
+      "ref": {
+        "doctypeField": "party_type",
+        "kind": "dynamic"
+      },
+      "requiredStatic": true,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "receivable_payable_account",
+      "fieldtype": "link",
+      "label": "Receivable/Payable Account",
+      "layout": {
+        "column": 1
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Account"
+      },
+      "optionsRaw": "Account",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Account",
+        "kind": "static"
+      },
+      "requiredStatic": true,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:doc.party",
+      "fieldname": "default_advance_account",
+      "fieldtype": "link",
+      "label": "Default Advance Account",
+      "layout": {
+        "column": 1
+      },
+      "mandatoryDependsOn": "doc.party_type",
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Account"
+      },
+      "optionsRaw": "Account",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Account",
+        "kind": "static"
+      },
+      "requiredDynamic": "doc.party_type",
+      "requiredStatic": false,
+      "ui": {
+        "description": "Only 'Payment Entries' made against this advance account are supported."
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "filter_section",
+      "fieldtype": "layout:section",
+      "label": "Filters",
+      "layout": {
+        "section": "Filters"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "from_invoice_date",
+      "fieldtype": "date",
+      "label": "From Invoice Date",
+      "layout": {
+        "section": "Filters"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "to_invoice_date",
+      "fieldtype": "date",
+      "label": "To Invoice Date",
+      "layout": {
+        "section": "Filters"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_kegk",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "Filters"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "from_payment_date",
+      "fieldtype": "date",
+      "label": "From Payment Date",
+      "layout": {
+        "column": 1,
+        "section": "Filters"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "to_payment_date",
+      "fieldtype": "date",
+      "label": "To Payment Date",
+      "layout": {
+        "column": 1,
+        "section": "Filters"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_uj04",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 2,
+        "section": "Filters"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "cost_center",
+      "fieldtype": "link",
+      "label": "Cost Center",
+      "layout": {
+        "column": 2,
+        "section": "Filters"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Cost Center"
+      },
+      "optionsRaw": "Cost Center",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Cost Center",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "bank_cash_account",
+      "fieldtype": "link",
+      "label": "Bank/Cash Account",
+      "layout": {
+        "column": 2,
+        "section": "Filters"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Account"
+      },
+      "optionsRaw": "Account",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Account",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "section_break_2n02",
+      "fieldtype": "layout:section",
+      "label": "Status",
+      "layout": {
+        "section": "Status"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "allowOnSubmit": true,
+      "constraints": {},
+      "fieldname": "status",
+      "fieldtype": "select",
+      "label": "Status",
+      "layout": {
+        "section": "Status"
+      },
+      "optionsParsed": {
+        "choices": [
+          "Queued",
+          "Running",
+          "Paused",
+          "Completed",
+          "Partially Reconciled",
+          "Failed",
+          "Cancelled"
+        ],
+        "kind": "select"
+      },
+      "optionsRaw": "\nQueued\nRunning\nPaused\nCompleted\nPartially Reconciled\nFailed\nCancelled",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:doc.error_log",
+      "fieldname": "error_log",
+      "fieldtype": "text",
+      "label": "Error Log",
+      "layout": {
+        "section": "Status"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "section_break_a8yx",
+      "fieldtype": "layout:section",
+      "layout": {
+        "section": "section_break_a8yx"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "amended_from",
+      "fieldtype": "link",
+      "label": "Amended From",
+      "layout": {
+        "section": "section_break_a8yx"
+      },
+      "noCopy": true,
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Process Payment Reconciliation"
+      },
+      "optionsRaw": "Process Payment Reconciliation",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Process Payment Reconciliation",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true,
+        "readOnly": true
+      },
+      "unique": false
+    }
+  ],
+  "identity": {
+    "app": "erpnext",
+    "isSingle": false,
+    "isSubmittable": true,
+    "isTree": false,
+    "module": "Accounts",
+    "naming": {
+      "expression": "format:ACC-PPR-{#####}",
+      "strategy": "expression"
+    }
+  },
+  "name": "Process Payment Reconciliation",
+  "permissions": [
+    {
+      "actions": {
+        "amend": true,
+        "cancel": true,
+        "create": true,
+        "delete": true,
+        "read": true,
+        "share": true,
+        "submit": true,
+        "write": true
+      },
+      "permlevel": 0,
+      "role": "Accounts Manager"
+    },
+    {
+      "actions": {
+        "amend": true,
+        "cancel": true,
+        "create": true,
+        "delete": true,
+        "read": true,
+        "share": true,
+        "submit": true,
+        "write": true
+      },
+      "permlevel": 0,
+      "role": "Accounts User"
+    }
+  ],
+  "ui": {
+    "searchFields": [],
+    "showNameInGlobalSearch": false,
+    "sortField": "creation",
+    "sortOrder": "DESC",
+    "titleField": "company"
+  },
+  "workflows": [
+    {
+      "kind": "unavailable"
+    }
+  ]
+}

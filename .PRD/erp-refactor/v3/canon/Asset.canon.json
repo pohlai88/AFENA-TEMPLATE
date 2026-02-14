@@ -1,0 +1,1561 @@
+{
+  "audit": {
+    "trackChanges": true
+  },
+  "canonVersion": "1.0.0",
+  "childTables": [
+    {
+      "childDoctype": "Asset Finance Book",
+      "parentField": "finance_books",
+      "required": false
+    }
+  ],
+  "doctypeId": "erpnext:Assets:Asset",
+  "events": [
+    {
+      "event": "validate",
+      "handlers": [
+        "erpnext.support.doctype.service_level_agreement.service_level_agreement.apply",
+        "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record.check_for_running_deletion_job"
+      ],
+      "handlersParsed": [
+        {
+          "attrPath": "apply",
+          "module": "erpnext.support.doctype.service_level_agreement.service_level_agreement"
+        },
+        {
+          "attrPath": "check_for_running_deletion_job",
+          "module": "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record"
+        }
+      ]
+    }
+  ],
+  "fieldOrder": [
+    "naming_series",
+    "company",
+    "item_code",
+    "item_name",
+    "asset_name",
+    "image",
+    "column_break_3",
+    "location",
+    "asset_category",
+    "asset_type",
+    "maintenance_required",
+    "calculate_depreciation",
+    "purchase_details_section",
+    "purchase_receipt",
+    "purchase_receipt_item",
+    "purchase_invoice",
+    "purchase_invoice_item",
+    "purchase_date",
+    "available_for_use_date",
+    "disposal_date",
+    "column_break_23",
+    "net_purchase_amount",
+    "purchase_amount",
+    "asset_quantity",
+    "additional_asset_cost",
+    "section_break_uiyd",
+    "column_break_bbwr",
+    "column_break_bfkm",
+    "total_asset_cost",
+    "depreciation_tab",
+    "column_break_wqzi",
+    "opening_accumulated_depreciation",
+    "is_fully_depreciated",
+    "column_break_33",
+    "opening_number_of_booked_depreciations",
+    "section_break_36",
+    "finance_books",
+    "section_break_33",
+    "depreciation_method",
+    "value_after_depreciation",
+    "frequency_of_depreciation",
+    "column_break_24",
+    "next_depreciation_date",
+    "total_number_of_depreciations",
+    "depreciation_schedule_sb",
+    "depreciation_schedule_view",
+    "other_info_tab",
+    "accounting_dimensions_section",
+    "cost_center",
+    "column_break_rjyw",
+    "asset_owner_section",
+    "asset_owner",
+    "column_break_yeds",
+    "asset_owner_company",
+    "customer",
+    "supplier",
+    "insurance_section",
+    "policy_number",
+    "insurer",
+    "insured_value",
+    "column_break_48",
+    "insurance_start_date",
+    "insurance_end_date",
+    "comprehensive_insurance",
+    "section_break_jtou",
+    "status",
+    "custodian",
+    "department",
+    "default_finance_book",
+    "depr_entry_posting_status",
+    "column_break_51",
+    "journal_entry_for_scrap",
+    "split_from",
+    "amended_from",
+    "booked_fixed_asset",
+    "connections_tab"
+  ],
+  "fields": [
+    {
+      "constraints": {},
+      "fieldname": "naming_series",
+      "fieldtype": "select",
+      "label": "Series",
+      "optionsParsed": {
+        "kind": "naming_series",
+        "prefixes": [
+          "ACC-ASS-.YYYY.-"
+        ]
+      },
+      "optionsRaw": "ACC-ASS-.YYYY.-",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "company",
+      "fieldtype": "link",
+      "label": "Company",
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Company"
+      },
+      "optionsRaw": "Company",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Company",
+        "kind": "static"
+      },
+      "requiredStatic": true,
+      "ui": {
+        "rememberLastSelectedValue": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "item_code",
+      "fieldtype": "link",
+      "label": "Item Code",
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Item"
+      },
+      "optionsRaw": "Item",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Item",
+        "kind": "static"
+      },
+      "requiredStatic": true,
+      "ui": {
+        "inStandardFilter": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fetchFrom": "item_code.item_name",
+      "fetchIfEmpty": true,
+      "fieldname": "item_name",
+      "fieldtype": "read_only",
+      "label": "Item Name",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "hidden": true
+      },
+      "unique": false
+    },
+    {
+      "allowOnSubmit": true,
+      "constraints": {},
+      "dependsOn": "item_code",
+      "fetchFrom": "item_code.item_name",
+      "fetchIfEmpty": true,
+      "fieldname": "asset_name",
+      "fieldtype": "data",
+      "label": "Asset Name",
+      "permlevel": 0,
+      "requiredStatic": true,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "allowOnSubmit": true,
+      "constraints": {},
+      "fetchFrom": "item_code.image",
+      "fetchIfEmpty": true,
+      "fieldname": "image",
+      "fieldtype": "attach_image",
+      "label": "Image",
+      "noCopy": true,
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "hidden": true,
+        "printHide": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_3",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "location",
+      "fieldtype": "link",
+      "label": "Location",
+      "layout": {
+        "column": 1
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Location"
+      },
+      "optionsRaw": "Location",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Location",
+        "kind": "static"
+      },
+      "requiredStatic": true,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "item_code",
+      "fetchFrom": "item_code.asset_category",
+      "fieldname": "asset_category",
+      "fieldtype": "link",
+      "label": "Asset Category",
+      "layout": {
+        "column": 1
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Asset Category"
+      },
+      "optionsRaw": "Asset Category",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Asset Category",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "inGlobalSearch": true,
+        "inListView": true,
+        "inStandardFilter": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "asset_type",
+      "fieldtype": "select",
+      "label": "Asset Type",
+      "layout": {
+        "column": 1
+      },
+      "optionsParsed": {
+        "choices": [
+          "Existing Asset",
+          "Composite Asset",
+          "Composite Component"
+        ],
+        "kind": "select"
+      },
+      "optionsRaw": "\nExisting Asset\nComposite Asset\nComposite Component",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "allowOnSubmit": true,
+      "constraints": {},
+      "default": "0",
+      "fieldname": "maintenance_required",
+      "fieldtype": "check",
+      "label": "Maintenance Required",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "calculate_depreciation",
+      "fieldtype": "check",
+      "label": "Calculate Depreciation",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "readOnlyDependsOn": "eval:(doc.asset_type == \"Composite Asset\" && !doc.net_purchase_amount) || doc.asset_type == \"Composite Component\"",
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "purchase_details_section",
+      "fieldtype": "layout:section",
+      "label": "Purchase Details",
+      "layout": {
+        "section": "Purchase Details"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:doc.asset_type != \"Composite Asset\" && doc.asset_type != \"Existing Asset\"",
+      "fieldname": "purchase_receipt",
+      "fieldtype": "link",
+      "label": "Purchase Receipt",
+      "layout": {
+        "section": "Purchase Details"
+      },
+      "noCopy": true,
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Purchase Receipt"
+      },
+      "optionsRaw": "Purchase Receipt",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Purchase Receipt",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "purchase_receipt_item",
+      "fieldtype": "data",
+      "label": "Purchase Receipt Item",
+      "layout": {
+        "section": "Purchase Details"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "hidden": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:doc.asset_type != \"Composite Asset\" && doc.asset_type != \"Existing Asset\"",
+      "fieldname": "purchase_invoice",
+      "fieldtype": "link",
+      "label": "Purchase Invoice",
+      "layout": {
+        "section": "Purchase Details"
+      },
+      "noCopy": true,
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Purchase Invoice"
+      },
+      "optionsRaw": "Purchase Invoice",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Purchase Invoice",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "purchase_invoice_item",
+      "fieldtype": "data",
+      "label": "Purchase Invoice Item",
+      "layout": {
+        "section": "Purchase Details"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "hidden": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "purchase_date",
+      "fieldtype": "date",
+      "label": "Purchase Date",
+      "layout": {
+        "section": "Purchase Details"
+      },
+      "permlevel": 0,
+      "readOnlyDependsOn": "eval:doc.asset_type != \"Existing Asset\" && doc.asset_type != \"Composite Asset\"",
+      "requiredStatic": true,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "available_for_use_date",
+      "fieldtype": "date",
+      "label": "Available for Use Date",
+      "layout": {
+        "section": "Purchase Details"
+      },
+      "mandatoryDependsOn": "eval:(!(doc.asset_type == \"Composite Component\" || doc.asset_type == \"Composite Asset\") || doc.docstatus==1)",
+      "permlevel": 0,
+      "requiredDynamic": "eval:(!(doc.asset_type == \"Composite Component\" || doc.asset_type == \"Composite Asset\") || doc.docstatus==1)",
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "disposal_date",
+      "fieldtype": "date",
+      "label": "Disposal Date",
+      "layout": {
+        "section": "Purchase Details"
+      },
+      "noCopy": true,
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_23",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "Purchase Details"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "net_purchase_amount",
+      "fieldtype": "currency",
+      "label": "Net Purchase Amount",
+      "layout": {
+        "column": 1,
+        "section": "Purchase Details"
+      },
+      "mandatoryDependsOn": "eval:(doc.asset_type != \"Composite Asset\" || doc.docstatus==1)",
+      "optionsParsed": {
+        "field": "Company:company:default_currency",
+        "kind": "currency_field"
+      },
+      "optionsRaw": "Company:company:default_currency",
+      "permlevel": 0,
+      "readOnlyDependsOn": "eval: doc.asset_type == \"Composite Asset\"",
+      "requiredDynamic": "eval:(doc.asset_type != \"Composite Asset\" || doc.docstatus==1)",
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "purchase_amount",
+      "fieldtype": "currency",
+      "label": "Purchase Amount",
+      "layout": {
+        "column": 1,
+        "section": "Purchase Details"
+      },
+      "noCopy": true,
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "hidden": true,
+        "printHide": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "1",
+      "fieldname": "asset_quantity",
+      "fieldtype": "int",
+      "label": "Asset Quantity",
+      "layout": {
+        "column": 1,
+        "section": "Purchase Details"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "dependsOn": "eval:doc.docstatus > 0",
+      "fieldname": "additional_asset_cost",
+      "fieldtype": "currency",
+      "label": "Additional Asset Cost",
+      "layout": {
+        "column": 1,
+        "section": "Purchase Details"
+      },
+      "noCopy": true,
+      "optionsParsed": {
+        "field": "Company:company:default_currency",
+        "kind": "currency_field"
+      },
+      "optionsRaw": "Company:company:default_currency",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "section_break_uiyd",
+      "fieldtype": "layout:section",
+      "layout": {
+        "section": "section_break_uiyd"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_bbwr",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "section_break_uiyd"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_bfkm",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 2,
+        "section": "section_break_uiyd"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:doc.docstatus > 0",
+      "fieldname": "total_asset_cost",
+      "fieldtype": "currency",
+      "label": "Total Asset Cost",
+      "layout": {
+        "column": 2,
+        "section": "section_break_uiyd"
+      },
+      "noCopy": true,
+      "optionsParsed": {
+        "field": "Company:company:default_currency",
+        "kind": "currency_field"
+      },
+      "optionsRaw": "Company:company:default_currency",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval: doc.calculate_depreciation || doc.asset_type == \"Existing Asset\"",
+      "fieldname": "depreciation_tab",
+      "fieldtype": "layout:tab",
+      "label": "Depreciation",
+      "layout": {
+        "tab": "Depreciation"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_wqzi",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "tab": "Depreciation"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:(doc.asset_type == \"Existing Asset\")",
+      "fieldname": "opening_accumulated_depreciation",
+      "fieldtype": "currency",
+      "label": "Opening Accumulated Depreciation",
+      "layout": {
+        "column": 1,
+        "tab": "Depreciation"
+      },
+      "optionsParsed": {
+        "field": "Company:company:default_currency",
+        "kind": "currency_field"
+      },
+      "optionsRaw": "Company:company:default_currency",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "is_fully_depreciated",
+      "fieldtype": "check",
+      "label": "Is Fully Depreciated",
+      "layout": {
+        "column": 1,
+        "tab": "Depreciation"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "hidden": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_33",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 2,
+        "tab": "Depreciation"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:(doc.asset_type == \"Existing Asset\")",
+      "fieldname": "opening_number_of_booked_depreciations",
+      "fieldtype": "int",
+      "label": "Opening Number of Booked Depreciations",
+      "layout": {
+        "column": 2,
+        "tab": "Depreciation"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval: doc.calculate_depreciation",
+      "fieldname": "section_break_36",
+      "fieldtype": "layout:section",
+      "layout": {
+        "section": "section_break_36",
+        "tab": "Depreciation"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "childDoctype": "Asset Finance Book",
+      "constraints": {},
+      "fieldname": "finance_books",
+      "fieldtype": "table",
+      "label": "Finance Books",
+      "layout": {
+        "section": "section_break_36",
+        "tab": "Depreciation"
+      },
+      "optionsParsed": {
+        "doctype": "Asset Finance Book",
+        "kind": "child_doctype"
+      },
+      "optionsRaw": "Asset Finance Book",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "section_break_33",
+      "fieldtype": "layout:section",
+      "label": "Depreciation Details",
+      "layout": {
+        "section": "Depreciation Details",
+        "tab": "Depreciation"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "hidden": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "depreciation_method",
+      "fieldtype": "select",
+      "label": "Depreciation Method",
+      "layout": {
+        "section": "Depreciation Details",
+        "tab": "Depreciation"
+      },
+      "optionsParsed": {
+        "choices": [
+          "Straight Line",
+          "Double Declining Balance",
+          "Written Down Value",
+          "Manual"
+        ],
+        "kind": "select"
+      },
+      "optionsRaw": "\nStraight Line\nDouble Declining Balance\nWritten Down Value\nManual",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "value_after_depreciation",
+      "fieldtype": "currency",
+      "label": "Value After Depreciation",
+      "layout": {
+        "section": "Depreciation Details",
+        "tab": "Depreciation"
+      },
+      "optionsParsed": {
+        "field": "Company:company:default_currency",
+        "kind": "currency_field"
+      },
+      "optionsRaw": "Company:company:default_currency",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "hidden": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "frequency_of_depreciation",
+      "fieldtype": "int",
+      "label": "Frequency of Depreciation (Months)",
+      "layout": {
+        "section": "Depreciation Details",
+        "tab": "Depreciation"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_24",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "Depreciation Details",
+        "tab": "Depreciation"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "next_depreciation_date",
+      "fieldtype": "date",
+      "label": "Next Depreciation Date",
+      "layout": {
+        "column": 1,
+        "section": "Depreciation Details",
+        "tab": "Depreciation"
+      },
+      "noCopy": true,
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "hidden": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "total_number_of_depreciations",
+      "fieldtype": "int",
+      "label": "Total Number of Depreciations",
+      "layout": {
+        "column": 1,
+        "section": "Depreciation Details",
+        "tab": "Depreciation"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "depreciation_schedule_sb",
+      "fieldtype": "layout:section",
+      "label": "Depreciation Schedule",
+      "layout": {
+        "section": "Depreciation Schedule",
+        "tab": "Depreciation"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "depreciation_schedule_view",
+      "fieldtype": "text_editor",
+      "label": "Depreciation Schedule View",
+      "layout": {
+        "section": "Depreciation Schedule",
+        "tab": "Depreciation"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "hidden": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "other_info_tab",
+      "fieldtype": "layout:tab",
+      "label": "More Info",
+      "layout": {
+        "tab": "More Info"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "accounting_dimensions_section",
+      "fieldtype": "layout:section",
+      "label": "Accounting Dimensions",
+      "layout": {
+        "section": "Accounting Dimensions",
+        "tab": "More Info"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "cost_center",
+      "fieldtype": "link",
+      "label": "Cost Center",
+      "layout": {
+        "section": "Accounting Dimensions",
+        "tab": "More Info"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Cost Center"
+      },
+      "optionsRaw": "Cost Center",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Cost Center",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_rjyw",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "Accounting Dimensions",
+        "tab": "More Info"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "asset_owner_section",
+      "fieldtype": "layout:section",
+      "label": "Ownership",
+      "layout": {
+        "section": "Ownership",
+        "tab": "More Info"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "Company",
+      "fieldname": "asset_owner",
+      "fieldtype": "select",
+      "label": "Asset Owner",
+      "layout": {
+        "section": "Ownership",
+        "tab": "More Info"
+      },
+      "optionsParsed": {
+        "choices": [
+          "Company",
+          "Supplier",
+          "Customer"
+        ],
+        "kind": "select"
+      },
+      "optionsRaw": "\nCompany\nSupplier\nCustomer",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_yeds",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "Ownership",
+        "tab": "More Info"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:doc.asset_owner == \"Company\"",
+      "fieldname": "asset_owner_company",
+      "fieldtype": "link",
+      "label": "Asset Owner Company",
+      "layout": {
+        "column": 1,
+        "section": "Ownership",
+        "tab": "More Info"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Company"
+      },
+      "optionsRaw": "Company",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Company",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:doc.asset_owner == \"Customer\"",
+      "fieldname": "customer",
+      "fieldtype": "link",
+      "label": "Customer",
+      "layout": {
+        "column": 1,
+        "section": "Ownership",
+        "tab": "More Info"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Customer"
+      },
+      "optionsRaw": "Customer",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Customer",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:doc.asset_owner == \"Supplier\"",
+      "fieldname": "supplier",
+      "fieldtype": "link",
+      "label": "Supplier",
+      "layout": {
+        "column": 1,
+        "section": "Ownership",
+        "tab": "More Info"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Supplier"
+      },
+      "optionsRaw": "Supplier",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Supplier",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "insurance_section",
+      "fieldtype": "layout:section",
+      "label": "Insurance",
+      "layout": {
+        "section": "Insurance",
+        "tab": "More Info"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "policy_number",
+      "fieldtype": "data",
+      "label": "Policy number",
+      "layout": {
+        "section": "Insurance",
+        "tab": "More Info"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "insurer",
+      "fieldtype": "data",
+      "label": "Insurer",
+      "layout": {
+        "section": "Insurance",
+        "tab": "More Info"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "insured_value",
+      "fieldtype": "data",
+      "label": "Insured value",
+      "layout": {
+        "section": "Insurance",
+        "tab": "More Info"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_48",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "Insurance",
+        "tab": "More Info"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "insurance_start_date",
+      "fieldtype": "date",
+      "label": "Insurance Start Date",
+      "layout": {
+        "column": 1,
+        "section": "Insurance",
+        "tab": "More Info"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "insurance_end_date",
+      "fieldtype": "date",
+      "label": "Insurance End Date",
+      "layout": {
+        "column": 1,
+        "section": "Insurance",
+        "tab": "More Info"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "comprehensive_insurance",
+      "fieldtype": "data",
+      "label": "Comprehensive Insurance",
+      "layout": {
+        "column": 1,
+        "section": "Insurance",
+        "tab": "More Info"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "section_break_jtou",
+      "fieldtype": "layout:section",
+      "label": "Additional Info",
+      "layout": {
+        "section": "Additional Info",
+        "tab": "More Info"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "Draft",
+      "fieldname": "status",
+      "fieldtype": "select",
+      "label": "Status",
+      "layout": {
+        "section": "Additional Info",
+        "tab": "More Info"
+      },
+      "noCopy": true,
+      "optionsParsed": {
+        "choices": [
+          "Draft",
+          "Submitted",
+          "Cancelled",
+          "Partially Depreciated",
+          "Fully Depreciated",
+          "Sold",
+          "Scrapped",
+          "In Maintenance",
+          "Out of Order",
+          "Issue",
+          "Receipt",
+          "Capitalized",
+          "Work In Progress"
+        ],
+        "kind": "select"
+      },
+      "optionsRaw": "Draft\nSubmitted\nCancelled\nPartially Depreciated\nFully Depreciated\nSold\nScrapped\nIn Maintenance\nOut of Order\nIssue\nReceipt\nCapitalized\nWork In Progress",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "inListView": true,
+        "inStandardFilter": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "custodian",
+      "fieldtype": "link",
+      "label": "Custodian",
+      "layout": {
+        "section": "Additional Info",
+        "tab": "More Info"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Employee"
+      },
+      "optionsRaw": "Employee",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Employee",
+        "ignoreUserPermissions": true,
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "department",
+      "fieldtype": "link",
+      "label": "Department",
+      "layout": {
+        "section": "Additional Info",
+        "tab": "More Info"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Department"
+      },
+      "optionsRaw": "Department",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Department",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fetchFrom": "company.default_finance_book",
+      "fieldname": "default_finance_book",
+      "fieldtype": "link",
+      "label": "Default Finance Book",
+      "layout": {
+        "section": "Additional Info",
+        "tab": "More Info"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Finance Book"
+      },
+      "optionsRaw": "Finance Book",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Finance Book",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "hidden": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "depr_entry_posting_status",
+      "fieldtype": "select",
+      "label": "Depreciation Entry Posting Status",
+      "layout": {
+        "section": "Additional Info",
+        "tab": "More Info"
+      },
+      "noCopy": true,
+      "optionsParsed": {
+        "choices": [
+          "Successful",
+          "Failed"
+        ],
+        "kind": "select"
+      },
+      "optionsRaw": "\nSuccessful\nFailed",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "hidden": true,
+        "printHide": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_51",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "Additional Info",
+        "tab": "More Info"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "journal_entry_for_scrap",
+      "fieldtype": "link",
+      "label": "Journal Entry for Scrap",
+      "layout": {
+        "column": 1,
+        "section": "Additional Info",
+        "tab": "More Info"
+      },
+      "noCopy": true,
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Journal Entry"
+      },
+      "optionsRaw": "Journal Entry",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Journal Entry",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "split_from",
+      "fieldtype": "link",
+      "label": "Split From",
+      "layout": {
+        "column": 1,
+        "section": "Additional Info",
+        "tab": "More Info"
+      },
+      "noCopy": true,
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Asset"
+      },
+      "optionsRaw": "Asset",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Asset",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "amended_from",
+      "fieldtype": "link",
+      "label": "Amended From",
+      "layout": {
+        "column": 1,
+        "section": "Additional Info",
+        "tab": "More Info"
+      },
+      "noCopy": true,
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Asset"
+      },
+      "optionsRaw": "Asset",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Asset",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "booked_fixed_asset",
+      "fieldtype": "check",
+      "label": "Booked Fixed Asset",
+      "layout": {
+        "column": 1,
+        "section": "Additional Info",
+        "tab": "More Info"
+      },
+      "noCopy": true,
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "hidden": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "connections_tab",
+      "fieldtype": "layout:tab",
+      "label": "Connections",
+      "layout": {
+        "tab": "Connections"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    }
+  ],
+  "identity": {
+    "app": "erpnext",
+    "isSingle": false,
+    "isSubmittable": true,
+    "isTree": false,
+    "module": "Assets",
+    "naming": {
+      "seriesField": "naming_series",
+      "seriesPrefix": "ACC-ASS-.YYYY.-",
+      "strategy": "series"
+    }
+  },
+  "name": "Asset",
+  "permissions": [
+    {
+      "actions": {
+        "amend": true,
+        "cancel": true,
+        "create": true,
+        "delete": true,
+        "email": true,
+        "export": true,
+        "import": true,
+        "print": true,
+        "read": true,
+        "report": true,
+        "share": true,
+        "submit": true,
+        "write": true
+      },
+      "permlevel": 0,
+      "role": "Accounts User"
+    },
+    {
+      "actions": {
+        "cancel": true,
+        "create": true,
+        "delete": true,
+        "email": true,
+        "export": true,
+        "print": true,
+        "read": true,
+        "report": true,
+        "share": true,
+        "submit": true,
+        "write": true
+      },
+      "permlevel": 0,
+      "role": "Quality Manager"
+    }
+  ],
+  "ui": {
+    "imageField": "image",
+    "searchFields": [],
+    "showNameInGlobalSearch": true,
+    "sortField": "modified",
+    "sortOrder": "DESC",
+    "titleField": "asset_name"
+  },
+  "workflows": [
+    {
+      "kind": "unavailable"
+    }
+  ]
+}

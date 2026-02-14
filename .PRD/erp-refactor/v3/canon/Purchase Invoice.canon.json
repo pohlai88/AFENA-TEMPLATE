@@ -1,0 +1,4150 @@
+{
+  "audit": {
+    "trackChanges": true
+  },
+  "canonVersion": "1.0.0",
+  "childTables": [
+    {
+      "childDoctype": "Purchase Invoice Advance",
+      "parentField": "advances",
+      "required": false
+    },
+    {
+      "childDoctype": "Item Wise Tax Detail",
+      "parentField": "item_wise_tax_details",
+      "required": false
+    },
+    {
+      "childDoctype": "Purchase Invoice Item",
+      "parentField": "items",
+      "required": true
+    },
+    {
+      "childDoctype": "Payment Schedule",
+      "parentField": "payment_schedule",
+      "required": false
+    },
+    {
+      "childDoctype": "Pricing Rule Detail",
+      "parentField": "pricing_rules",
+      "required": false
+    },
+    {
+      "childDoctype": "Purchase Receipt Item Supplied",
+      "parentField": "supplied_items",
+      "required": false
+    },
+    {
+      "childDoctype": "Tax Withholding Entry",
+      "parentField": "tax_withholding_entries",
+      "required": false
+    },
+    {
+      "childDoctype": "Purchase Taxes and Charges",
+      "parentField": "taxes",
+      "required": false
+    }
+  ],
+  "doctypeId": "erpnext:Accounts:Purchase Invoice",
+  "events": [
+    {
+      "event": "validate",
+      "handlers": [
+        "erpnext.regional.united_arab_emirates.utils.update_grand_total_for_rcm",
+        "erpnext.regional.united_arab_emirates.utils.validate_returns",
+        "erpnext.support.doctype.service_level_agreement.service_level_agreement.apply",
+        "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record.check_for_running_deletion_job"
+      ],
+      "handlersParsed": [
+        {
+          "attrPath": "update_grand_total_for_rcm",
+          "module": "erpnext.regional.united_arab_emirates.utils"
+        },
+        {
+          "attrPath": "validate_returns",
+          "module": "erpnext.regional.united_arab_emirates.utils"
+        },
+        {
+          "attrPath": "apply",
+          "module": "erpnext.support.doctype.service_level_agreement.service_level_agreement"
+        },
+        {
+          "attrPath": "check_for_running_deletion_job",
+          "module": "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record"
+        }
+      ]
+    }
+  ],
+  "fieldOrder": [
+    "title",
+    "naming_series",
+    "supplier",
+    "supplier_name",
+    "tax_id",
+    "company",
+    "column_break_6",
+    "posting_date",
+    "posting_time",
+    "set_posting_time",
+    "due_date",
+    "column_break1",
+    "is_paid",
+    "is_return",
+    "return_against",
+    "update_outstanding_for_self",
+    "update_billed_amount_in_purchase_order",
+    "update_billed_amount_in_purchase_receipt",
+    "apply_tds",
+    "amended_from",
+    "supplier_invoice_details",
+    "bill_no",
+    "column_break_15",
+    "bill_date",
+    "accounting_dimensions_section",
+    "cost_center",
+    "dimension_col_break",
+    "project",
+    "currency_and_price_list",
+    "currency",
+    "conversion_rate",
+    "use_transaction_date_exchange_rate",
+    "column_break2",
+    "buying_price_list",
+    "price_list_currency",
+    "plc_conversion_rate",
+    "ignore_pricing_rule",
+    "sec_warehouse",
+    "scan_barcode",
+    "last_scanned_warehouse",
+    "col_break_warehouse",
+    "update_stock",
+    "set_warehouse",
+    "set_from_warehouse",
+    "is_subcontracted",
+    "rejected_warehouse",
+    "supplier_warehouse",
+    "items_section",
+    "items",
+    "section_break_26",
+    "total_qty",
+    "total_net_weight",
+    "column_break_50",
+    "base_total",
+    "base_net_total",
+    "claimed_landed_cost_amount",
+    "column_break_28",
+    "total",
+    "net_total",
+    "taxes_section",
+    "tax_category",
+    "taxes_and_charges",
+    "column_break_58",
+    "shipping_rule",
+    "column_break_49",
+    "incoterm",
+    "named_place",
+    "section_break_51",
+    "taxes",
+    "totals",
+    "base_taxes_and_charges_added",
+    "base_taxes_and_charges_deducted",
+    "base_total_taxes_and_charges",
+    "column_break_40",
+    "taxes_and_charges_added",
+    "taxes_and_charges_deducted",
+    "total_taxes_and_charges",
+    "totals_section",
+    "grand_total",
+    "disable_rounded_total",
+    "rounding_adjustment",
+    "column_break8",
+    "use_company_roundoff_cost_center",
+    "in_words",
+    "rounded_total",
+    "base_totals_section",
+    "base_grand_total",
+    "base_rounding_adjustment",
+    "column_break_hcca",
+    "base_in_words",
+    "base_rounded_total",
+    "section_break_ttrv",
+    "total_advance",
+    "column_break_peap",
+    "outstanding_amount",
+    "section_tax_withholding_entry",
+    "tax_withholding_group",
+    "ignore_tax_withholding_threshold",
+    "override_tax_withholding_entries",
+    "tax_withholding_entries",
+    "section_break_44",
+    "apply_discount_on",
+    "base_discount_amount",
+    "column_break_46",
+    "additional_discount_percentage",
+    "discount_amount",
+    "sec_tax_breakup",
+    "other_charges_calculation",
+    "item_wise_tax_details",
+    "pricing_rule_details",
+    "pricing_rules",
+    "raw_materials_supplied",
+    "supplied_items",
+    "payments_tab",
+    "payments_section",
+    "mode_of_payment",
+    "base_paid_amount",
+    "clearance_date",
+    "col_br_payments",
+    "cash_bank_account",
+    "paid_amount",
+    "advances_section",
+    "allocate_advances_automatically",
+    "only_include_allocated_payments",
+    "get_advances",
+    "advances",
+    "write_off",
+    "write_off_amount",
+    "base_write_off_amount",
+    "column_break_61",
+    "write_off_account",
+    "write_off_cost_center",
+    "address_and_contact_tab",
+    "section_addresses",
+    "supplier_address",
+    "address_display",
+    "col_break_address",
+    "contact_person",
+    "contact_display",
+    "contact_mobile",
+    "contact_email",
+    "company_shipping_address_section",
+    "dispatch_address",
+    "dispatch_address_display",
+    "column_break_126",
+    "shipping_address",
+    "shipping_address_display",
+    "company_billing_address_section",
+    "billing_address",
+    "column_break_130",
+    "billing_address_display",
+    "terms_tab",
+    "payment_schedule_section",
+    "payment_terms_template",
+    "ignore_default_payment_terms_template",
+    "payment_schedule",
+    "terms_section_break",
+    "tc_name",
+    "terms",
+    "more_info_tab",
+    "status_section",
+    "status",
+    "column_break_177",
+    "per_received",
+    "accounting_details_section",
+    "credit_to",
+    "party_account_currency",
+    "is_opening",
+    "against_expense_account",
+    "column_break_63",
+    "unrealized_profit_loss_account",
+    "subscription_section",
+    "subscription",
+    "auto_repeat",
+    "update_auto_repeat_reference",
+    "column_break_114",
+    "from_date",
+    "to_date",
+    "printing_settings",
+    "letter_head",
+    "group_same_items",
+    "column_break_112",
+    "select_print_heading",
+    "language",
+    "sb_14",
+    "on_hold",
+    "release_date",
+    "cb_17",
+    "hold_comment",
+    "additional_info_section",
+    "is_internal_supplier",
+    "represents_company",
+    "supplier_group",
+    "sender",
+    "column_break_147",
+    "inter_company_invoice_reference",
+    "is_old_subcontracting_flow",
+    "remarks",
+    "connections_tab"
+  ],
+  "fields": [
+    {
+      "allowOnSubmit": true,
+      "constraints": {},
+      "default": "{supplier_name}",
+      "fieldname": "title",
+      "fieldtype": "data",
+      "label": "Title",
+      "noCopy": true,
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "hidden": true,
+        "printHide": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "naming_series",
+      "fieldtype": "select",
+      "label": "Series",
+      "noCopy": true,
+      "optionsParsed": {
+        "kind": "naming_series",
+        "prefixes": [
+          "ACC-PINV-.YYYY.-",
+          "ACC-PINV-RET-.YYYY.-"
+        ]
+      },
+      "optionsRaw": "ACC-PINV-.YYYY.-\nACC-PINV-RET-.YYYY.-",
+      "permlevel": 0,
+      "requiredStatic": true,
+      "setOnlyOnce": true,
+      "ui": {
+        "printHide": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "supplier",
+      "fieldtype": "link",
+      "label": "Supplier",
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Supplier"
+      },
+      "optionsRaw": "Supplier",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Supplier",
+        "kind": "static"
+      },
+      "requiredStatic": true,
+      "ui": {
+        "inStandardFilter": true,
+        "printHide": true,
+        "searchIndex": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "supplier",
+      "fetchFrom": "supplier.supplier_name",
+      "fieldname": "supplier_name",
+      "fieldtype": "data",
+      "label": "Supplier Name",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "bold": true,
+        "inGlobalSearch": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fetchFrom": "supplier.tax_id",
+      "fieldname": "tax_id",
+      "fieldtype": "read_only",
+      "label": "Tax Id",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "company",
+      "fieldtype": "link",
+      "label": "Company",
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Company"
+      },
+      "optionsRaw": "Company",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Company",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "inStandardFilter": true,
+        "printHide": true,
+        "rememberLastSelectedValue": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_6",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "Today",
+      "fieldname": "posting_date",
+      "fieldtype": "date",
+      "label": "Date",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": true,
+      "ui": {
+        "inListView": true,
+        "printHide": true,
+        "searchIndex": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "Now",
+      "fieldname": "posting_time",
+      "fieldtype": "time",
+      "label": "Posting Time",
+      "layout": {
+        "column": 1
+      },
+      "noCopy": true,
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true,
+        "width": "100px"
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "dependsOn": "eval:doc.docstatus==0",
+      "fieldname": "set_posting_time",
+      "fieldtype": "check",
+      "label": "Edit Posting Date and Time",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "due_date",
+      "fieldtype": "date",
+      "label": "Due Date",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break1",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 2
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "width": "50%"
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "is_paid",
+      "fieldtype": "check",
+      "label": "Is Paid",
+      "layout": {
+        "column": 2
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "is_return",
+      "fieldtype": "check",
+      "label": "Is Return (Debit Note)",
+      "layout": {
+        "column": 2
+      },
+      "noCopy": true,
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "return_against",
+      "fieldname": "return_against",
+      "fieldtype": "link",
+      "label": "Return Against Purchase Invoice",
+      "layout": {
+        "column": 2
+      },
+      "noCopy": true,
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Purchase Invoice"
+      },
+      "optionsRaw": "Purchase Invoice",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Purchase Invoice",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true,
+        "readOnly": true,
+        "searchIndex": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "1",
+      "dependsOn": "eval: doc.is_return && doc.return_against",
+      "fieldname": "update_outstanding_for_self",
+      "fieldtype": "check",
+      "label": "Update Outstanding for Self",
+      "layout": {
+        "column": 2
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "description": "Debit Note will update it's own outstanding amount, even if 'Return Against' is specified."
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "dependsOn": "eval: doc.is_return",
+      "fieldname": "update_billed_amount_in_purchase_order",
+      "fieldtype": "check",
+      "label": "Update Billed Amount in Purchase Order",
+      "layout": {
+        "column": 2
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "1",
+      "dependsOn": "eval: doc.is_return",
+      "fieldname": "update_billed_amount_in_purchase_receipt",
+      "fieldtype": "check",
+      "label": "Update Billed Amount in Purchase Receipt",
+      "layout": {
+        "column": 2
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "apply_tds",
+      "fieldtype": "check",
+      "label": "Consider for Tax Withholding",
+      "layout": {
+        "column": 2
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "amended_from",
+      "fieldtype": "link",
+      "label": "Amended From",
+      "layout": {
+        "column": 2
+      },
+      "noCopy": true,
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Purchase Invoice"
+      },
+      "optionsRaw": "Purchase Invoice",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Purchase Invoice",
+        "ignoreUserPermissions": true,
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "supplier_invoice_details",
+      "fieldtype": "layout:section",
+      "label": "Supplier Invoice",
+      "layout": {
+        "section": "Supplier Invoice"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "collapsible": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "bill_no",
+      "fieldtype": "data",
+      "label": "Supplier Invoice No",
+      "layout": {
+        "section": "Supplier Invoice"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true,
+        "searchIndex": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_15",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "Supplier Invoice"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "bill_date",
+      "fieldtype": "date",
+      "label": "Supplier Invoice Date",
+      "layout": {
+        "column": 1,
+        "section": "Supplier Invoice"
+      },
+      "noCopy": true,
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "accounting_dimensions_section",
+      "fieldtype": "layout:section",
+      "label": "Accounting Dimensions ",
+      "layout": {
+        "section": "Accounting Dimensions "
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "collapsible": true
+      },
+      "unique": false
+    },
+    {
+      "allowOnSubmit": true,
+      "constraints": {},
+      "fieldname": "cost_center",
+      "fieldtype": "link",
+      "label": "Cost Center",
+      "layout": {
+        "section": "Accounting Dimensions "
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Cost Center"
+      },
+      "optionsRaw": "Cost Center",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Cost Center",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "dimension_col_break",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "Accounting Dimensions "
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "allowOnSubmit": true,
+      "constraints": {},
+      "fieldname": "project",
+      "fieldtype": "link",
+      "label": "Project",
+      "layout": {
+        "column": 1,
+        "section": "Accounting Dimensions "
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Project"
+      },
+      "optionsRaw": "Project",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Project",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "currency_and_price_list",
+      "fieldtype": "layout:section",
+      "label": "Currency and Price List",
+      "layout": {
+        "section": "Currency and Price List"
+      },
+      "optionsParsed": {
+        "kind": "other",
+        "value": "fa fa-tag"
+      },
+      "optionsRaw": "fa fa-tag",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "collapsible": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "currency",
+      "fieldtype": "link",
+      "label": "Currency",
+      "layout": {
+        "section": "Currency and Price List"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Currency"
+      },
+      "optionsRaw": "Currency",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Currency",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "conversion_rate",
+      "fieldtype": "float",
+      "label": "Exchange Rate",
+      "layout": {
+        "section": "Currency and Price List"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "precision": "9",
+        "printHide": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "use_transaction_date_exchange_rate",
+      "fieldtype": "check",
+      "label": "Use Transaction Date Exchange Rate",
+      "layout": {
+        "section": "Currency and Price List"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break2",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "Currency and Price List"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "buying_price_list",
+      "fieldtype": "link",
+      "label": "Price List",
+      "layout": {
+        "column": 1,
+        "section": "Currency and Price List"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Price List"
+      },
+      "optionsRaw": "Price List",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Price List",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "price_list_currency",
+      "fieldtype": "link",
+      "label": "Price List Currency",
+      "layout": {
+        "column": 1,
+        "section": "Currency and Price List"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Currency"
+      },
+      "optionsRaw": "Currency",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Currency",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "plc_conversion_rate",
+      "fieldtype": "float",
+      "label": "Price List Exchange Rate",
+      "layout": {
+        "column": 1,
+        "section": "Currency and Price List"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "precision": "9",
+        "printHide": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "ignore_pricing_rule",
+      "fieldtype": "check",
+      "label": "Ignore Pricing Rule",
+      "layout": {
+        "column": 1,
+        "section": "Currency and Price List"
+      },
+      "permlevel": 1,
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "sec_warehouse",
+      "fieldtype": "layout:section",
+      "label": "Items",
+      "layout": {
+        "section": "Items"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "scan_barcode",
+      "fieldtype": "data",
+      "label": "Scan Barcode",
+      "layout": {
+        "section": "Items"
+      },
+      "optionsParsed": {
+        "kind": "other",
+        "value": "Barcode"
+      },
+      "optionsRaw": "Barcode",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval: doc.last_scanned_warehouse",
+      "fieldname": "last_scanned_warehouse",
+      "fieldtype": "data",
+      "label": "Last Scanned Warehouse",
+      "layout": {
+        "section": "Items"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "col_break_warehouse",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "Items"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "dependsOn": "eval:doc.items.every((item) => !item.pr_detail)",
+      "fieldname": "update_stock",
+      "fieldtype": "check",
+      "label": "Update Stock",
+      "layout": {
+        "column": 1,
+        "section": "Items"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "update_stock",
+      "fieldname": "set_warehouse",
+      "fieldtype": "link",
+      "label": "Set Accepted Warehouse",
+      "layout": {
+        "column": 1,
+        "section": "Items"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Warehouse"
+      },
+      "optionsRaw": "Warehouse",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Warehouse",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:doc.update_stock && doc.is_internal_supplier",
+      "fieldname": "set_from_warehouse",
+      "fieldtype": "link",
+      "label": "Set From Warehouse",
+      "layout": {
+        "column": 1,
+        "section": "Items"
+      },
+      "noCopy": true,
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Warehouse"
+      },
+      "optionsRaw": "Warehouse",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Warehouse",
+        "ignoreUserPermissions": true,
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true,
+        "width": "50px"
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "is_subcontracted",
+      "fieldtype": "check",
+      "label": "Is Subcontracted",
+      "layout": {
+        "column": 1,
+        "section": "Items"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "update_stock",
+      "fieldname": "rejected_warehouse",
+      "fieldtype": "link",
+      "label": "Rejected Warehouse",
+      "layout": {
+        "column": 1,
+        "section": "Items"
+      },
+      "noCopy": true,
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Warehouse"
+      },
+      "optionsRaw": "Warehouse",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Warehouse",
+        "ignoreUserPermissions": true,
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:doc.is_subcontracted",
+      "fieldname": "supplier_warehouse",
+      "fieldtype": "link",
+      "label": "Supplier Warehouse",
+      "layout": {
+        "column": 1,
+        "section": "Items"
+      },
+      "noCopy": true,
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Warehouse"
+      },
+      "optionsRaw": "Warehouse",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Warehouse",
+        "ignoreUserPermissions": true,
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true,
+        "width": "50px"
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "items_section",
+      "fieldtype": "layout:section",
+      "layout": {
+        "section": "items_section"
+      },
+      "optionsParsed": {
+        "kind": "other",
+        "value": "fa fa-shopping-cart"
+      },
+      "optionsRaw": "fa fa-shopping-cart",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "childDoctype": "Purchase Invoice Item",
+      "constraints": {},
+      "fieldname": "items",
+      "fieldtype": "table",
+      "label": "Items",
+      "layout": {
+        "section": "items_section"
+      },
+      "optionsParsed": {
+        "doctype": "Purchase Invoice Item",
+        "kind": "child_doctype"
+      },
+      "optionsRaw": "Purchase Invoice Item",
+      "permlevel": 0,
+      "requiredStatic": true,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "section_break_26",
+      "fieldtype": "layout:section",
+      "layout": {
+        "section": "section_break_26"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "total_qty",
+      "fieldtype": "float",
+      "label": "Total Quantity",
+      "layout": {
+        "section": "section_break_26"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "total_net_weight",
+      "fieldname": "total_net_weight",
+      "fieldtype": "float",
+      "label": "Total Net Weight",
+      "layout": {
+        "section": "section_break_26"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_50",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "section_break_26"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "base_total",
+      "fieldtype": "currency",
+      "label": "Total (Company Currency)",
+      "layout": {
+        "column": 1,
+        "section": "section_break_26"
+      },
+      "optionsParsed": {
+        "field": "Company:company:default_currency",
+        "kind": "currency_field"
+      },
+      "optionsRaw": "Company:company:default_currency",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "base_net_total",
+      "fieldtype": "currency",
+      "label": "Net Total (Company Currency)",
+      "layout": {
+        "column": 1,
+        "section": "section_break_26"
+      },
+      "optionsParsed": {
+        "field": "Company:company:default_currency",
+        "kind": "currency_field"
+      },
+      "optionsRaw": "Company:company:default_currency",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "claimed_landed_cost_amount",
+      "fieldtype": "currency",
+      "label": "Claimed Landed Cost Amount (Company Currency)",
+      "layout": {
+        "column": 1,
+        "section": "section_break_26"
+      },
+      "noCopy": true,
+      "optionsParsed": {
+        "field": "Company:company:default_currency",
+        "kind": "currency_field"
+      },
+      "optionsRaw": "Company:company:default_currency",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_28",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 2,
+        "section": "section_break_26"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "total",
+      "fieldtype": "currency",
+      "label": "Total",
+      "layout": {
+        "column": 2,
+        "section": "section_break_26"
+      },
+      "optionsParsed": {
+        "field": "currency",
+        "kind": "currency_field"
+      },
+      "optionsRaw": "currency",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "net_total",
+      "fieldtype": "currency",
+      "label": "Net Total",
+      "layout": {
+        "column": 2,
+        "section": "section_break_26"
+      },
+      "optionsParsed": {
+        "field": "currency",
+        "kind": "currency_field"
+      },
+      "optionsRaw": "currency",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "taxes_section",
+      "fieldtype": "layout:section",
+      "label": "Taxes and Charges",
+      "layout": {
+        "section": "Taxes and Charges"
+      },
+      "optionsParsed": {
+        "kind": "other",
+        "value": "fa fa-money"
+      },
+      "optionsRaw": "fa fa-money",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "tax_category",
+      "fieldtype": "link",
+      "label": "Tax Category",
+      "layout": {
+        "section": "Taxes and Charges"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Tax Category"
+      },
+      "optionsRaw": "Tax Category",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Tax Category",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "taxes_and_charges",
+      "fieldtype": "link",
+      "label": "Purchase Taxes and Charges Template",
+      "layout": {
+        "section": "Taxes and Charges"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Purchase Taxes and Charges Template"
+      },
+      "optionsRaw": "Purchase Taxes and Charges Template",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Purchase Taxes and Charges Template",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_58",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "Taxes and Charges"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "shipping_rule",
+      "fieldtype": "link",
+      "label": "Shipping Rule",
+      "layout": {
+        "column": 1,
+        "section": "Taxes and Charges"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Shipping Rule"
+      },
+      "optionsRaw": "Shipping Rule",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Shipping Rule",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_49",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 2,
+        "section": "Taxes and Charges"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "incoterm",
+      "fieldtype": "link",
+      "label": "Incoterm",
+      "layout": {
+        "column": 2,
+        "section": "Taxes and Charges"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Incoterm"
+      },
+      "optionsRaw": "Incoterm",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Incoterm",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "incoterm",
+      "fieldname": "named_place",
+      "fieldtype": "data",
+      "label": "Named Place",
+      "layout": {
+        "column": 2,
+        "section": "Taxes and Charges"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "section_break_51",
+      "fieldtype": "layout:section",
+      "layout": {
+        "section": "section_break_51"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "childDoctype": "Purchase Taxes and Charges",
+      "constraints": {},
+      "fieldname": "taxes",
+      "fieldtype": "table",
+      "label": "Purchase Taxes and Charges",
+      "layout": {
+        "section": "section_break_51"
+      },
+      "optionsParsed": {
+        "doctype": "Purchase Taxes and Charges",
+        "kind": "child_doctype"
+      },
+      "optionsRaw": "Purchase Taxes and Charges",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "totals",
+      "fieldtype": "layout:section",
+      "layout": {
+        "section": "totals"
+      },
+      "optionsParsed": {
+        "kind": "other",
+        "value": "fa fa-money"
+      },
+      "optionsRaw": "fa fa-money",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "base_taxes_and_charges_added",
+      "fieldtype": "currency",
+      "label": "Taxes and Charges Added (Company Currency)",
+      "layout": {
+        "section": "totals"
+      },
+      "optionsParsed": {
+        "field": "Company:company:default_currency",
+        "kind": "currency_field"
+      },
+      "optionsRaw": "Company:company:default_currency",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "base_taxes_and_charges_deducted",
+      "fieldtype": "currency",
+      "label": "Taxes and Charges Deducted (Company Currency)",
+      "layout": {
+        "section": "totals"
+      },
+      "optionsParsed": {
+        "field": "Company:company:default_currency",
+        "kind": "currency_field"
+      },
+      "optionsRaw": "Company:company:default_currency",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "base_total_taxes_and_charges",
+      "fieldtype": "currency",
+      "label": "Total Taxes and Charges (Company Currency)",
+      "layout": {
+        "section": "totals"
+      },
+      "optionsParsed": {
+        "field": "Company:company:default_currency",
+        "kind": "currency_field"
+      },
+      "optionsRaw": "Company:company:default_currency",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_40",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "totals"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "taxes_and_charges_added",
+      "fieldtype": "currency",
+      "label": "Taxes and Charges Added",
+      "layout": {
+        "column": 1,
+        "section": "totals"
+      },
+      "optionsParsed": {
+        "field": "currency",
+        "kind": "currency_field"
+      },
+      "optionsRaw": "currency",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "taxes_and_charges_deducted",
+      "fieldtype": "currency",
+      "label": "Taxes and Charges Deducted",
+      "layout": {
+        "column": 1,
+        "section": "totals"
+      },
+      "optionsParsed": {
+        "field": "currency",
+        "kind": "currency_field"
+      },
+      "optionsRaw": "currency",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "total_taxes_and_charges",
+      "fieldtype": "currency",
+      "label": "Total Taxes and Charges",
+      "layout": {
+        "column": 1,
+        "section": "totals"
+      },
+      "optionsParsed": {
+        "field": "currency",
+        "kind": "currency_field"
+      },
+      "optionsRaw": "currency",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "totals_section",
+      "fieldtype": "layout:section",
+      "label": "Totals",
+      "layout": {
+        "section": "Totals"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "grand_total",
+      "fieldtype": "currency",
+      "label": "Grand Total",
+      "layout": {
+        "section": "Totals"
+      },
+      "optionsParsed": {
+        "field": "currency",
+        "kind": "currency_field"
+      },
+      "optionsRaw": "currency",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "inListView": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "dependsOn": "grand_total",
+      "fieldname": "disable_rounded_total",
+      "fieldtype": "check",
+      "label": "Disable Rounded Total",
+      "layout": {
+        "section": "Totals"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:!doc.disable_rounded_total",
+      "fieldname": "rounding_adjustment",
+      "fieldtype": "currency",
+      "label": "Rounding Adjustment",
+      "layout": {
+        "section": "Totals"
+      },
+      "noCopy": true,
+      "optionsParsed": {
+        "field": "currency",
+        "kind": "currency_field"
+      },
+      "optionsRaw": "currency",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break8",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "Totals"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true,
+        "width": "50%"
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "use_company_roundoff_cost_center",
+      "fieldtype": "check",
+      "label": "Use Company Default Round Off Cost Center",
+      "layout": {
+        "column": 1,
+        "section": "Totals"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {
+        "maxLength": 240
+      },
+      "fieldname": "in_words",
+      "fieldtype": "data",
+      "label": "In Words",
+      "layout": {
+        "column": 1,
+        "section": "Totals"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:!doc.disable_rounded_total",
+      "fieldname": "rounded_total",
+      "fieldtype": "currency",
+      "label": "Rounded Total",
+      "layout": {
+        "column": 1,
+        "section": "Totals"
+      },
+      "noCopy": true,
+      "optionsParsed": {
+        "field": "currency",
+        "kind": "currency_field"
+      },
+      "optionsRaw": "currency",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "base_totals_section",
+      "fieldtype": "layout:section",
+      "label": "Totals (Company Currency)",
+      "layout": {
+        "section": "Totals (Company Currency)"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "base_grand_total",
+      "fieldtype": "currency",
+      "label": "Grand Total",
+      "layout": {
+        "section": "Totals (Company Currency)"
+      },
+      "optionsParsed": {
+        "field": "Company:company:default_currency",
+        "kind": "currency_field"
+      },
+      "optionsRaw": "Company:company:default_currency",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:!doc.disable_rounded_total",
+      "fieldname": "base_rounding_adjustment",
+      "fieldtype": "currency",
+      "label": "Rounding Adjustment",
+      "layout": {
+        "section": "Totals (Company Currency)"
+      },
+      "noCopy": true,
+      "optionsParsed": {
+        "field": "Company:company:default_currency",
+        "kind": "currency_field"
+      },
+      "optionsRaw": "Company:company:default_currency",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_hcca",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "Totals (Company Currency)"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {
+        "maxLength": 240
+      },
+      "fieldname": "base_in_words",
+      "fieldtype": "data",
+      "label": "In Words",
+      "layout": {
+        "column": 1,
+        "section": "Totals (Company Currency)"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:!doc.disable_rounded_total",
+      "fieldname": "base_rounded_total",
+      "fieldtype": "currency",
+      "label": "Rounded Total",
+      "layout": {
+        "column": 1,
+        "section": "Totals (Company Currency)"
+      },
+      "noCopy": true,
+      "optionsParsed": {
+        "field": "Company:company:default_currency",
+        "kind": "currency_field"
+      },
+      "optionsRaw": "Company:company:default_currency",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "section_break_ttrv",
+      "fieldtype": "layout:section",
+      "layout": {
+        "section": "section_break_ttrv"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "total_advance",
+      "fieldtype": "currency",
+      "label": "Total Advance",
+      "layout": {
+        "section": "section_break_ttrv"
+      },
+      "noCopy": true,
+      "optionsParsed": {
+        "field": "party_account_currency",
+        "kind": "currency_field"
+      },
+      "optionsRaw": "party_account_currency",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_peap",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "section_break_ttrv"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "outstanding_amount",
+      "fieldtype": "currency",
+      "label": "Outstanding Amount",
+      "layout": {
+        "column": 1,
+        "section": "section_break_ttrv"
+      },
+      "noCopy": true,
+      "optionsParsed": {
+        "field": "party_account_currency",
+        "kind": "currency_field"
+      },
+      "optionsRaw": "party_account_currency",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval: doc.apply_tds",
+      "fieldname": "section_tax_withholding_entry",
+      "fieldtype": "layout:section",
+      "label": "Tax Withholding Entry",
+      "layout": {
+        "section": "Tax Withholding Entry"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "collapsible": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "tax_withholding_group",
+      "fieldtype": "link",
+      "label": "Tax Withholding Group",
+      "layout": {
+        "section": "Tax Withholding Entry"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Tax Withholding Group"
+      },
+      "optionsRaw": "Tax Withholding Group",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Tax Withholding Group",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "ignore_tax_withholding_threshold",
+      "fieldtype": "check",
+      "label": "Ignore Tax Withholding Threshold",
+      "layout": {
+        "section": "Tax Withholding Entry"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "override_tax_withholding_entries",
+      "fieldtype": "check",
+      "label": "Edit Tax Withholding Entries",
+      "layout": {
+        "section": "Tax Withholding Entry"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "childDoctype": "Tax Withholding Entry",
+      "constraints": {},
+      "fieldname": "tax_withholding_entries",
+      "fieldtype": "table",
+      "label": "Tax Withholding Entries",
+      "layout": {
+        "section": "Tax Withholding Entry"
+      },
+      "optionsParsed": {
+        "doctype": "Tax Withholding Entry",
+        "kind": "child_doctype"
+      },
+      "optionsRaw": "Tax Withholding Entry",
+      "permlevel": 0,
+      "readOnlyDependsOn": "eval: !doc.override_tax_withholding_entries",
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "section_break_44",
+      "fieldtype": "layout:section",
+      "label": "Additional Discount",
+      "layout": {
+        "section": "Additional Discount"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "collapsible": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "Grand Total",
+      "fieldname": "apply_discount_on",
+      "fieldtype": "select",
+      "label": "Apply Additional Discount On",
+      "layout": {
+        "section": "Additional Discount"
+      },
+      "optionsParsed": {
+        "choices": [
+          "Grand Total",
+          "Net Total"
+        ],
+        "kind": "select"
+      },
+      "optionsRaw": "\nGrand Total\nNet Total",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "base_discount_amount",
+      "fieldtype": "currency",
+      "label": "Additional Discount Amount (Company Currency)",
+      "layout": {
+        "section": "Additional Discount"
+      },
+      "optionsParsed": {
+        "field": "Company:company:default_currency",
+        "kind": "currency_field"
+      },
+      "optionsRaw": "Company:company:default_currency",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_46",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "Additional Discount"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "additional_discount_percentage",
+      "fieldtype": "float",
+      "label": "Additional Discount Percentage",
+      "layout": {
+        "column": 1,
+        "section": "Additional Discount"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "discount_amount",
+      "fieldtype": "currency",
+      "label": "Additional Discount Amount",
+      "layout": {
+        "column": 1,
+        "section": "Additional Discount"
+      },
+      "optionsParsed": {
+        "field": "currency",
+        "kind": "currency_field"
+      },
+      "optionsRaw": "currency",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "sec_tax_breakup",
+      "fieldtype": "layout:section",
+      "label": "Tax Breakup",
+      "layout": {
+        "section": "Tax Breakup"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "collapsible": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "other_charges_calculation",
+      "fieldtype": "text_editor",
+      "label": "Taxes and Charges Calculation",
+      "layout": {
+        "section": "Tax Breakup"
+      },
+      "noCopy": true,
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "childDoctype": "Item Wise Tax Detail",
+      "constraints": {},
+      "fieldname": "item_wise_tax_details",
+      "fieldtype": "table",
+      "label": "Item Wise Tax Details",
+      "layout": {
+        "section": "Tax Breakup"
+      },
+      "noCopy": true,
+      "optionsParsed": {
+        "doctype": "Item Wise Tax Detail",
+        "kind": "child_doctype"
+      },
+      "optionsRaw": "Item Wise Tax Detail",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "hidden": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "pricing_rule_details",
+      "fieldtype": "layout:section",
+      "label": "Pricing Rules",
+      "layout": {
+        "section": "Pricing Rules"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "collapsible": true
+      },
+      "unique": false
+    },
+    {
+      "childDoctype": "Pricing Rule Detail",
+      "constraints": {},
+      "fieldname": "pricing_rules",
+      "fieldtype": "table",
+      "label": "Pricing Rule Detail",
+      "layout": {
+        "section": "Pricing Rules"
+      },
+      "optionsParsed": {
+        "doctype": "Pricing Rule Detail",
+        "kind": "child_doctype"
+      },
+      "optionsRaw": "Pricing Rule Detail",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "raw_materials_supplied",
+      "fieldtype": "layout:section",
+      "label": "Raw Materials Supplied",
+      "layout": {
+        "section": "Raw Materials Supplied"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "collapsible": true
+      },
+      "unique": false
+    },
+    {
+      "childDoctype": "Purchase Receipt Item Supplied",
+      "constraints": {},
+      "dependsOn": "update_stock",
+      "fieldname": "supplied_items",
+      "fieldtype": "table",
+      "label": "Supplied Items",
+      "layout": {
+        "section": "Raw Materials Supplied"
+      },
+      "noCopy": true,
+      "optionsParsed": {
+        "doctype": "Purchase Receipt Item Supplied",
+        "kind": "child_doctype"
+      },
+      "optionsRaw": "Purchase Receipt Item Supplied",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "payments_tab",
+      "fieldtype": "layout:tab",
+      "label": "Payments",
+      "layout": {
+        "tab": "Payments"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:doc.is_paid===1||(doc.advances && doc.advances.length>0)",
+      "fieldname": "payments_section",
+      "fieldtype": "layout:section",
+      "label": "Payments",
+      "layout": {
+        "section": "Payments",
+        "tab": "Payments"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "collapsible": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "mode_of_payment",
+      "fieldtype": "link",
+      "label": "Mode of Payment",
+      "layout": {
+        "section": "Payments",
+        "tab": "Payments"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Mode of Payment"
+      },
+      "optionsRaw": "Mode of Payment",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Mode of Payment",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "base_paid_amount",
+      "fieldtype": "currency",
+      "label": "Paid Amount (Company Currency)",
+      "layout": {
+        "section": "Payments",
+        "tab": "Payments"
+      },
+      "noCopy": true,
+      "optionsParsed": {
+        "field": "Company:company:default_currency",
+        "kind": "currency_field"
+      },
+      "optionsRaw": "Company:company:default_currency",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "clearance_date",
+      "fieldtype": "date",
+      "label": "Clearance Date",
+      "layout": {
+        "section": "Payments",
+        "tab": "Payments"
+      },
+      "noCopy": true,
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "col_br_payments",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "Payments",
+        "tab": "Payments"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "allowOnSubmit": true,
+      "constraints": {},
+      "fieldname": "cash_bank_account",
+      "fieldtype": "link",
+      "label": "Cash/Bank Account",
+      "layout": {
+        "column": 1,
+        "section": "Payments",
+        "tab": "Payments"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Account"
+      },
+      "optionsRaw": "Account",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Account",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "is_paid",
+      "fieldname": "paid_amount",
+      "fieldtype": "currency",
+      "label": "Paid Amount",
+      "layout": {
+        "column": 1,
+        "section": "Payments",
+        "tab": "Payments"
+      },
+      "noCopy": true,
+      "optionsParsed": {
+        "field": "currency",
+        "kind": "currency_field"
+      },
+      "optionsRaw": "currency",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "advances_section",
+      "fieldtype": "layout:section",
+      "label": "Advance Payments",
+      "layout": {
+        "section": "Advance Payments",
+        "tab": "Payments"
+      },
+      "optionsParsed": {
+        "kind": "other",
+        "value": "fa fa-money"
+      },
+      "optionsRaw": "fa fa-money",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "collapsible": true,
+        "printHide": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "allocate_advances_automatically",
+      "fieldtype": "check",
+      "label": "Set Advances and Allocate (FIFO)",
+      "layout": {
+        "section": "Advance Payments",
+        "tab": "Payments"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "dependsOn": "allocate_advances_automatically",
+      "fieldname": "only_include_allocated_payments",
+      "fieldtype": "check",
+      "label": "Only Include Allocated Payments",
+      "layout": {
+        "section": "Advance Payments",
+        "tab": "Payments"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "description": "Advance payments allocated against orders will only be fetched"
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:!doc.allocate_advances_automatically",
+      "fieldname": "get_advances",
+      "fieldtype": "button",
+      "label": "Get Advances Paid",
+      "layout": {
+        "section": "Advance Payments",
+        "tab": "Payments"
+      },
+      "optionsParsed": {
+        "kind": "other",
+        "value": "set_advances"
+      },
+      "optionsRaw": "set_advances",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true
+      },
+      "unique": false
+    },
+    {
+      "childDoctype": "Purchase Invoice Advance",
+      "constraints": {},
+      "fieldname": "advances",
+      "fieldtype": "table",
+      "label": "Advances",
+      "layout": {
+        "section": "Advance Payments",
+        "tab": "Payments"
+      },
+      "noCopy": true,
+      "optionsParsed": {
+        "doctype": "Purchase Invoice Advance",
+        "kind": "child_doctype"
+      },
+      "optionsRaw": "Purchase Invoice Advance",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "write_off",
+      "fieldtype": "layout:section",
+      "label": "Write Off",
+      "layout": {
+        "section": "Write Off",
+        "tab": "Payments"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "collapsible": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "write_off_amount",
+      "fieldtype": "currency",
+      "label": "Write Off Amount",
+      "layout": {
+        "section": "Write Off",
+        "tab": "Payments"
+      },
+      "noCopy": true,
+      "optionsParsed": {
+        "field": "currency",
+        "kind": "currency_field"
+      },
+      "optionsRaw": "currency",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "base_write_off_amount",
+      "fieldtype": "currency",
+      "label": "Write Off Amount (Company Currency)",
+      "layout": {
+        "section": "Write Off",
+        "tab": "Payments"
+      },
+      "noCopy": true,
+      "optionsParsed": {
+        "field": "Company:company:default_currency",
+        "kind": "currency_field"
+      },
+      "optionsRaw": "Company:company:default_currency",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_61",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "Write Off",
+        "tab": "Payments"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "allowOnSubmit": true,
+      "constraints": {},
+      "dependsOn": "eval:flt(doc.write_off_amount)!=0",
+      "fieldname": "write_off_account",
+      "fieldtype": "link",
+      "label": "Write Off Account",
+      "layout": {
+        "column": 1,
+        "section": "Write Off",
+        "tab": "Payments"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Account"
+      },
+      "optionsRaw": "Account",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Account",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:flt(doc.write_off_amount)!=0",
+      "fieldname": "write_off_cost_center",
+      "fieldtype": "link",
+      "label": "Write Off Cost Center",
+      "layout": {
+        "column": 1,
+        "section": "Write Off",
+        "tab": "Payments"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Cost Center"
+      },
+      "optionsRaw": "Cost Center",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Cost Center",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "address_and_contact_tab",
+      "fieldtype": "layout:tab",
+      "label": "Address & Contact",
+      "layout": {
+        "tab": "Address & Contact"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "section_addresses",
+      "fieldtype": "layout:section",
+      "label": "Supplier Address",
+      "layout": {
+        "section": "Supplier Address",
+        "tab": "Address & Contact"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "supplier_address",
+      "fieldtype": "link",
+      "label": "Select Supplier Address",
+      "layout": {
+        "section": "Supplier Address",
+        "tab": "Address & Contact"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Address"
+      },
+      "optionsRaw": "Address",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Address",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "address_display",
+      "fieldtype": "text_editor",
+      "label": "Address",
+      "layout": {
+        "section": "Supplier Address",
+        "tab": "Address & Contact"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "col_break_address",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "Supplier Address",
+        "tab": "Address & Contact"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "contact_person",
+      "fieldtype": "link",
+      "label": "Contact Person",
+      "layout": {
+        "column": 1,
+        "section": "Supplier Address",
+        "tab": "Address & Contact"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Contact"
+      },
+      "optionsRaw": "Contact",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Contact",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "inGlobalSearch": true,
+        "printHide": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "contact_display",
+      "fieldtype": "small_text",
+      "label": "Contact",
+      "layout": {
+        "column": 1,
+        "section": "Supplier Address",
+        "tab": "Address & Contact"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "contact_mobile",
+      "fieldtype": "small_text",
+      "label": "Mobile No",
+      "layout": {
+        "column": 1,
+        "section": "Supplier Address",
+        "tab": "Address & Contact"
+      },
+      "optionsParsed": {
+        "kind": "other",
+        "value": "Phone"
+      },
+      "optionsRaw": "Phone",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "contact_email",
+      "fieldtype": "small_text",
+      "label": "Contact Email",
+      "layout": {
+        "column": 1,
+        "section": "Supplier Address",
+        "tab": "Address & Contact"
+      },
+      "optionsParsed": {
+        "kind": "other",
+        "value": "Email"
+      },
+      "optionsRaw": "Email",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "company_shipping_address_section",
+      "fieldtype": "layout:section",
+      "label": "Shipping Address",
+      "layout": {
+        "section": "Shipping Address",
+        "tab": "Address & Contact"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "dispatch_address",
+      "fieldtype": "link",
+      "label": "Select Dispatch Address ",
+      "layout": {
+        "section": "Shipping Address",
+        "tab": "Address & Contact"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Address"
+      },
+      "optionsRaw": "Address",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Address",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "dispatch_address_display",
+      "fieldtype": "text_editor",
+      "label": "Dispatch Address",
+      "layout": {
+        "section": "Shipping Address",
+        "tab": "Address & Contact"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_126",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "Shipping Address",
+        "tab": "Address & Contact"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "shipping_address",
+      "fieldtype": "link",
+      "label": "Select Shipping Address",
+      "layout": {
+        "column": 1,
+        "section": "Shipping Address",
+        "tab": "Address & Contact"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Address"
+      },
+      "optionsRaw": "Address",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Address",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "shipping_address_display",
+      "fieldtype": "text_editor",
+      "label": "Shipping Address",
+      "layout": {
+        "column": 1,
+        "section": "Shipping Address",
+        "tab": "Address & Contact"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "company_billing_address_section",
+      "fieldtype": "layout:section",
+      "label": "Company Billing Address",
+      "layout": {
+        "section": "Company Billing Address",
+        "tab": "Address & Contact"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "billing_address",
+      "fieldtype": "link",
+      "label": "Select Billing Address",
+      "layout": {
+        "section": "Company Billing Address",
+        "tab": "Address & Contact"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Address"
+      },
+      "optionsRaw": "Address",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Address",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_130",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "Company Billing Address",
+        "tab": "Address & Contact"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "billing_address_display",
+      "fieldtype": "text_editor",
+      "label": "Billing Address",
+      "layout": {
+        "column": 1,
+        "section": "Company Billing Address",
+        "tab": "Address & Contact"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "terms_tab",
+      "fieldtype": "layout:tab",
+      "label": "Terms",
+      "layout": {
+        "tab": "Terms"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "payment_schedule_section",
+      "fieldtype": "layout:section",
+      "label": "Payment Terms",
+      "layout": {
+        "section": "Payment Terms",
+        "tab": "Terms"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:(!doc.is_paid && !doc.is_return)",
+      "fieldname": "payment_terms_template",
+      "fieldtype": "link",
+      "label": "Payment Terms Template",
+      "layout": {
+        "section": "Payment Terms",
+        "tab": "Terms"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Payment Terms Template"
+      },
+      "optionsRaw": "Payment Terms Template",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Payment Terms Template",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "ignore_default_payment_terms_template",
+      "fieldtype": "check",
+      "label": "Ignore Default Payment Terms Template",
+      "layout": {
+        "section": "Payment Terms",
+        "tab": "Terms"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "hidden": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "childDoctype": "Payment Schedule",
+      "constraints": {},
+      "dependsOn": "eval:(!doc.is_paid && !doc.is_return)",
+      "fieldname": "payment_schedule",
+      "fieldtype": "table",
+      "label": "Payment Schedule",
+      "layout": {
+        "section": "Payment Terms",
+        "tab": "Terms"
+      },
+      "noCopy": true,
+      "optionsParsed": {
+        "doctype": "Payment Schedule",
+        "kind": "child_doctype"
+      },
+      "optionsRaw": "Payment Schedule",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "terms_section_break",
+      "fieldtype": "layout:section",
+      "label": "Terms and Conditions",
+      "layout": {
+        "section": "Terms and Conditions",
+        "tab": "Terms"
+      },
+      "optionsParsed": {
+        "kind": "other",
+        "value": "fa fa-legal"
+      },
+      "optionsRaw": "fa fa-legal",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "tc_name",
+      "fieldtype": "link",
+      "label": "Terms",
+      "layout": {
+        "section": "Terms and Conditions",
+        "tab": "Terms"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Terms and Conditions"
+      },
+      "optionsRaw": "Terms and Conditions",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Terms and Conditions",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "terms",
+      "fieldtype": "text_editor",
+      "label": "Terms and Conditions",
+      "layout": {
+        "section": "Terms and Conditions",
+        "tab": "Terms"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "more_info_tab",
+      "fieldtype": "layout:tab",
+      "label": "More Info",
+      "layout": {
+        "tab": "More Info"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "status_section",
+      "fieldtype": "layout:section",
+      "label": "Status",
+      "layout": {
+        "section": "Status",
+        "tab": "More Info"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "collapsible": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "Draft",
+      "fieldname": "status",
+      "fieldtype": "select",
+      "label": "Status",
+      "layout": {
+        "section": "Status",
+        "tab": "More Info"
+      },
+      "noCopy": true,
+      "optionsParsed": {
+        "choices": [
+          "Draft",
+          "Return",
+          "Debit Note Issued",
+          "Submitted",
+          "Paid",
+          "Partly Paid",
+          "Unpaid",
+          "Overdue",
+          "Cancelled",
+          "Internal Transfer"
+        ],
+        "kind": "select"
+      },
+      "optionsRaw": "\nDraft\nReturn\nDebit Note Issued\nSubmitted\nPaid\nPartly Paid\nUnpaid\nOverdue\nCancelled\nInternal Transfer",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "inStandardFilter": true,
+        "printHide": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_177",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "Status",
+        "tab": "More Info"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "per_received",
+      "fieldtype": "percent",
+      "label": "Per Received",
+      "layout": {
+        "column": 1,
+        "section": "Status",
+        "tab": "More Info"
+      },
+      "noCopy": true,
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "hidden": true,
+        "printHide": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "accounting_details_section",
+      "fieldtype": "layout:section",
+      "label": "Accounting Details",
+      "layout": {
+        "section": "Accounting Details",
+        "tab": "More Info"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "collapsible": true,
+        "printHide": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "credit_to",
+      "fieldtype": "link",
+      "label": "Credit To",
+      "layout": {
+        "section": "Accounting Details",
+        "tab": "More Info"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Account"
+      },
+      "optionsRaw": "Account",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Account",
+        "kind": "static"
+      },
+      "requiredStatic": true,
+      "ui": {
+        "printHide": true,
+        "searchIndex": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "party_account_currency",
+      "fieldtype": "link",
+      "label": "Party Account Currency",
+      "layout": {
+        "section": "Accounting Details",
+        "tab": "More Info"
+      },
+      "noCopy": true,
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Currency"
+      },
+      "optionsRaw": "Currency",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Currency",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "hidden": true,
+        "printHide": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "allowOnSubmit": true,
+      "constraints": {},
+      "default": "No",
+      "fieldname": "is_opening",
+      "fieldtype": "select",
+      "label": "Is Opening Entry",
+      "layout": {
+        "section": "Accounting Details",
+        "tab": "More Info"
+      },
+      "optionsParsed": {
+        "choices": [
+          "No",
+          "Yes"
+        ],
+        "kind": "select"
+      },
+      "optionsRaw": "No\nYes",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "against_expense_account",
+      "fieldtype": "small_text",
+      "label": "Against Expense Account",
+      "layout": {
+        "section": "Accounting Details",
+        "tab": "More Info"
+      },
+      "noCopy": true,
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "hidden": true,
+        "printHide": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_63",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "Accounting Details",
+        "tab": "More Info"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "allowOnSubmit": true,
+      "constraints": {},
+      "dependsOn": "eval:doc.is_internal_supplier",
+      "fieldname": "unrealized_profit_loss_account",
+      "fieldtype": "link",
+      "label": "Unrealized Profit / Loss Account",
+      "layout": {
+        "column": 1,
+        "section": "Accounting Details",
+        "tab": "More Info"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Account"
+      },
+      "optionsRaw": "Account",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Account",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "description": "Unrealized Profit/Loss account for intra-company transfers"
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "subscription_section",
+      "fieldtype": "layout:section",
+      "label": "Subscription",
+      "layout": {
+        "section": "Subscription",
+        "tab": "More Info"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "collapsible": true,
+        "printHide": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "subscription",
+      "fieldtype": "link",
+      "label": "Subscription",
+      "layout": {
+        "section": "Subscription",
+        "tab": "More Info"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Subscription"
+      },
+      "optionsRaw": "Subscription",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Subscription",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "auto_repeat",
+      "fieldtype": "link",
+      "label": "Auto Repeat",
+      "layout": {
+        "section": "Subscription",
+        "tab": "More Info"
+      },
+      "noCopy": true,
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Auto Repeat"
+      },
+      "optionsRaw": "Auto Repeat",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Auto Repeat",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "allowOnSubmit": true,
+      "constraints": {},
+      "dependsOn": "eval: doc.auto_repeat",
+      "fieldname": "update_auto_repeat_reference",
+      "fieldtype": "button",
+      "label": "Update Auto Repeat Reference",
+      "layout": {
+        "section": "Subscription",
+        "tab": "More Info"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_114",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "Subscription",
+        "tab": "More Info"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "allowOnSubmit": true,
+      "constraints": {},
+      "fieldname": "from_date",
+      "fieldtype": "date",
+      "label": "From Date",
+      "layout": {
+        "column": 1,
+        "section": "Subscription",
+        "tab": "More Info"
+      },
+      "noCopy": true,
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "description": "Start date of current invoice's period",
+        "printHide": true
+      },
+      "unique": false
+    },
+    {
+      "allowOnSubmit": true,
+      "constraints": {},
+      "fieldname": "to_date",
+      "fieldtype": "date",
+      "label": "To Date",
+      "layout": {
+        "column": 1,
+        "section": "Subscription",
+        "tab": "More Info"
+      },
+      "noCopy": true,
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "description": "End date of current invoice's period",
+        "printHide": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "printing_settings",
+      "fieldtype": "layout:section",
+      "label": "Print Settings",
+      "layout": {
+        "section": "Print Settings",
+        "tab": "More Info"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "collapsible": true
+      },
+      "unique": false
+    },
+    {
+      "allowOnSubmit": true,
+      "constraints": {},
+      "fieldname": "letter_head",
+      "fieldtype": "link",
+      "label": "Letter Head",
+      "layout": {
+        "section": "Print Settings",
+        "tab": "More Info"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Letter Head"
+      },
+      "optionsRaw": "Letter Head",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Letter Head",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true
+      },
+      "unique": false
+    },
+    {
+      "allowOnSubmit": true,
+      "constraints": {},
+      "default": "0",
+      "fieldname": "group_same_items",
+      "fieldtype": "check",
+      "label": "Group same items",
+      "layout": {
+        "section": "Print Settings",
+        "tab": "More Info"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_112",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "Print Settings",
+        "tab": "More Info"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "allowOnSubmit": true,
+      "constraints": {},
+      "fieldname": "select_print_heading",
+      "fieldtype": "link",
+      "label": "Print Heading",
+      "layout": {
+        "column": 1,
+        "section": "Print Settings",
+        "tab": "More Info"
+      },
+      "noCopy": true,
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Print Heading"
+      },
+      "optionsRaw": "Print Heading",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Print Heading",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true,
+        "reportHide": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "language",
+      "fieldtype": "data",
+      "label": "Print Language",
+      "layout": {
+        "column": 1,
+        "section": "Print Settings",
+        "tab": "More Info"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "sb_14",
+      "fieldtype": "layout:section",
+      "label": "Hold Invoice",
+      "layout": {
+        "section": "Hold Invoice",
+        "tab": "More Info"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "collapsible": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "on_hold",
+      "fieldtype": "check",
+      "label": "Hold Invoice",
+      "layout": {
+        "section": "Hold Invoice",
+        "tab": "More Info"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:doc.on_hold",
+      "fieldname": "release_date",
+      "fieldtype": "date",
+      "label": "Release Date",
+      "layout": {
+        "section": "Hold Invoice",
+        "tab": "More Info"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "description": "Once set, this invoice will be on hold till the set date",
+        "searchIndex": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "cb_17",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "Hold Invoice",
+        "tab": "More Info"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:doc.on_hold",
+      "fieldname": "hold_comment",
+      "fieldtype": "small_text",
+      "label": "Reason For Putting On Hold",
+      "layout": {
+        "column": 1,
+        "section": "Hold Invoice",
+        "tab": "More Info"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "additional_info_section",
+      "fieldtype": "layout:section",
+      "label": "Additional Info",
+      "layout": {
+        "section": "Additional Info",
+        "tab": "More Info"
+      },
+      "optionsParsed": {
+        "kind": "other",
+        "value": "fa fa-file-text"
+      },
+      "optionsRaw": "fa fa-file-text",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "collapsible": true,
+        "printHide": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fetchFrom": "supplier.is_internal_supplier",
+      "fieldname": "is_internal_supplier",
+      "fieldtype": "check",
+      "label": "Is Internal Supplier",
+      "layout": {
+        "section": "Additional Info",
+        "tab": "More Info"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:doc.is_internal_supplier",
+      "fetchFrom": "supplier.represents_company",
+      "fieldname": "represents_company",
+      "fieldtype": "link",
+      "label": "Represents Company",
+      "layout": {
+        "section": "Additional Info",
+        "tab": "More Info"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Company"
+      },
+      "optionsRaw": "Company",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Company",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "description": "Company which internal supplier represents"
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fetchFrom": "supplier.supplier_group",
+      "fieldname": "supplier_group",
+      "fieldtype": "link",
+      "label": "Supplier Group",
+      "layout": {
+        "section": "Additional Info",
+        "tab": "More Info"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Supplier Group"
+      },
+      "optionsRaw": "Supplier Group",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Supplier Group",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "sender",
+      "fieldtype": "data:email",
+      "label": "Sender",
+      "layout": {
+        "section": "Additional Info",
+        "tab": "More Info"
+      },
+      "optionsParsed": {
+        "format": "Email",
+        "kind": "data_format"
+      },
+      "optionsRaw": "Email",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_147",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "Additional Info",
+        "tab": "More Info"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "inter_company_invoice_reference",
+      "fieldtype": "link",
+      "label": "Inter Company Invoice Reference",
+      "layout": {
+        "column": 1,
+        "section": "Additional Info",
+        "tab": "More Info"
+      },
+      "noCopy": true,
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Sales Invoice"
+      },
+      "optionsRaw": "Sales Invoice",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Sales Invoice",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "is_old_subcontracting_flow",
+      "fieldtype": "check",
+      "label": "Is Old Subcontracting Flow",
+      "layout": {
+        "column": 1,
+        "section": "Additional Info",
+        "tab": "More Info"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "hidden": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "remarks",
+      "fieldtype": "small_text",
+      "label": "Remarks",
+      "layout": {
+        "column": 1,
+        "section": "Additional Info",
+        "tab": "More Info"
+      },
+      "noCopy": true,
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "connections_tab",
+      "fieldtype": "layout:tab",
+      "label": "Connections",
+      "layout": {
+        "tab": "Connections"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    }
+  ],
+  "identity": {
+    "app": "erpnext",
+    "isSingle": false,
+    "isSubmittable": true,
+    "isTree": false,
+    "module": "Accounts",
+    "naming": {
+      "seriesField": "naming_series",
+      "seriesPrefix": "ACC-PINV-.YYYY.-",
+      "strategy": "series"
+    }
+  },
+  "name": "Purchase Invoice",
+  "permissions": [
+    {
+      "actions": {
+        "amend": true,
+        "cancel": true,
+        "create": true,
+        "delete": true,
+        "email": true,
+        "print": true,
+        "read": true,
+        "report": true,
+        "share": true,
+        "submit": true,
+        "write": true
+      },
+      "permlevel": 0,
+      "role": "Accounts Manager"
+    },
+    {
+      "actions": {
+        "read": true,
+        "write": true
+      },
+      "permlevel": 1,
+      "role": "Accounts Manager"
+    },
+    {
+      "actions": {
+        "amend": true,
+        "cancel": true,
+        "create": true,
+        "email": true,
+        "print": true,
+        "read": true,
+        "report": true,
+        "share": true,
+        "submit": true,
+        "write": true
+      },
+      "permlevel": 0,
+      "role": "Accounts User"
+    },
+    {
+      "actions": {
+        "email": true,
+        "print": true,
+        "read": true,
+        "report": true
+      },
+      "permlevel": 0,
+      "role": "Auditor"
+    },
+    {
+      "actions": {
+        "email": true,
+        "print": true,
+        "read": true,
+        "report": true
+      },
+      "permlevel": 0,
+      "role": "Purchase User"
+    }
+  ],
+  "ui": {
+    "searchFields": [
+      "posting_date",
+      "supplier",
+      "bill_no",
+      "base_grand_total",
+      "outstanding_amount"
+    ],
+    "showNameInGlobalSearch": true,
+    "sortField": "creation",
+    "sortOrder": "DESC",
+    "timelineField": "supplier",
+    "titleField": "title"
+  },
+  "workflows": [
+    {
+      "kind": "unavailable"
+    }
+  ]
+}

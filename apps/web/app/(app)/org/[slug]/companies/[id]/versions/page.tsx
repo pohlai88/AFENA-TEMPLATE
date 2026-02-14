@@ -20,7 +20,7 @@ export default async function CompanyVersionsPage({
   ]);
   if (!entityRes.ok || !ctx) notFound();
 
-  const versions = versionsRes.ok ? (versionsRes.data as any[]) : [];
+  const versions = versionsRes.ok ? (versionsRes.data as Record<string, unknown>[]) : [];
 
   return (
     <div className="mx-auto max-w-3xl px-6 py-8">

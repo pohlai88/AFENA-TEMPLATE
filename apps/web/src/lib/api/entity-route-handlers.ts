@@ -1,6 +1,7 @@
 import { NextRequest } from 'next/server';
 
 import { ENTITY_TYPES } from 'afena-canon';
+import { loadFieldDefs } from 'afena-crud';
 
 import { generateEntityActions } from '@/lib/actions/entity-actions';
 
@@ -229,3 +230,15 @@ export const auditHandler = withAuthOrApiKey(async (request: NextRequest, _sessi
   }
   return { ok: true as const, data: result.data };
 });
+
+// ── Custom fields: GET /api/custom-fields/:entityType ──
+
+export async function customFieldsHandler(request: NextRequest, session: AuthSession) {
+  const entityType = request.nextUrl.pathname.split('/').pop();
+  if (!entityType) {
+    return { ok: false as const, code: 'VALIDATION_FAILED', message: 'entityType is required' };
+  }
+
+  const fieldDefs = await loadFieldDefs(session.orgId, entityType);
+  return { ok: true as const, data: fieldDefs };
+}

@@ -1,0 +1,139 @@
+{
+  "audit": {
+    "trackChanges": false
+  },
+  "canonVersion": "1.0.0",
+  "childTables": [
+    {
+      "childDoctype": "Monthly Distribution Percentage",
+      "parentField": "percentages",
+      "required": false
+    }
+  ],
+  "doctypeId": "erpnext:Accounts:Monthly Distribution",
+  "events": [
+    {
+      "event": "validate",
+      "handlers": [
+        "erpnext.support.doctype.service_level_agreement.service_level_agreement.apply",
+        "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record.check_for_running_deletion_job"
+      ],
+      "handlersParsed": [
+        {
+          "attrPath": "apply",
+          "module": "erpnext.support.doctype.service_level_agreement.service_level_agreement"
+        },
+        {
+          "attrPath": "check_for_running_deletion_job",
+          "module": "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record"
+        }
+      ]
+    }
+  ],
+  "fieldOrder": [
+    "distribution_id",
+    "fiscal_year",
+    "percentages"
+  ],
+  "fields": [
+    {
+      "constraints": {},
+      "fieldname": "distribution_id",
+      "fieldtype": "data",
+      "label": "Distribution Name",
+      "permlevel": 0,
+      "requiredStatic": true,
+      "ui": {
+        "description": "Name of the Monthly Distribution",
+        "inListView": true
+      },
+      "unique": true
+    },
+    {
+      "constraints": {},
+      "fieldname": "fiscal_year",
+      "fieldtype": "link",
+      "label": "Fiscal Year",
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Fiscal Year"
+      },
+      "optionsRaw": "Fiscal Year",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Fiscal Year",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "inListView": true,
+        "inStandardFilter": true,
+        "searchIndex": true
+      },
+      "unique": false
+    },
+    {
+      "childDoctype": "Monthly Distribution Percentage",
+      "constraints": {},
+      "fieldname": "percentages",
+      "fieldtype": "table",
+      "label": "Monthly Distribution Percentages",
+      "optionsParsed": {
+        "doctype": "Monthly Distribution Percentage",
+        "kind": "child_doctype"
+      },
+      "optionsRaw": "Monthly Distribution Percentage",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    }
+  ],
+  "identity": {
+    "app": "erpnext",
+    "isSingle": false,
+    "isSubmittable": false,
+    "isTree": false,
+    "module": "Accounts",
+    "naming": {
+      "expression": "field:distribution_id",
+      "strategy": "field"
+    }
+  },
+  "name": "Monthly Distribution",
+  "permissions": [
+    {
+      "actions": {
+        "create": true,
+        "delete": true,
+        "email": true,
+        "print": true,
+        "read": true,
+        "report": true,
+        "share": true,
+        "write": true
+      },
+      "permlevel": 0,
+      "role": "Accounts Manager"
+    },
+    {
+      "actions": {
+        "read": true,
+        "report": true
+      },
+      "permlevel": 2,
+      "role": "Accounts Manager"
+    }
+  ],
+  "ui": {
+    "searchFields": [],
+    "showNameInGlobalSearch": false,
+    "sortField": "creation",
+    "sortOrder": "DESC"
+  },
+  "workflows": [
+    {
+      "kind": "unavailable"
+    }
+  ]
+}

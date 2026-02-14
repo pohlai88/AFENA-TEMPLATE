@@ -1,12 +1,12 @@
 const baseConfig = require('afena-eslint-config/base');
 
 module.exports = [
-  { ignores: ['dist/**', '*.config.*'] },
+  { ignores: ['dist/**', '*.config.*', 'src/__tests__/**'] },
   ...baseConfig,
   {
     languageOptions: {
       parserOptions: {
-        project: './tsconfig.json',
+        projectService: true,
         tsconfigRootDir: __dirname,
       },
     },

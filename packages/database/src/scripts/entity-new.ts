@@ -16,6 +16,7 @@
  * Run from packages/database directory.
  */
 
+import { execSync } from 'node:child_process';
 import * as fs from 'node:fs';
 import * as path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -161,6 +162,11 @@ export type ${pascalSingular} = InferSelectModel<typeof ${camelPlural}>;
 export type New${pascalSingular} = InferInsertModel<typeof ${camelPlural}>;
 `;
   writeIfNotExists(path.join(DB_SCHEMA, `${entityName}.ts`), schemaContent, 'Drizzle schema');
+  // Regenerate schema barrel so new table is exported (Drizzle utilization)
+  execSync('npx tsx src/scripts/generate-schema-barrel.ts', {
+    cwd: path.join(ROOT, 'packages', 'database'),
+    stdio: 'inherit',
+  });
 }
 
 // ══════════════════════════════════════════════════════════
@@ -958,7 +964,8 @@ if (ledger.actionTypes.length > 0) {
 console.log(`╠══════════════════════════════════════════════════════════╣
 ║  Manual steps remaining:                                 ║
 ║    1. pnpm db:generate && pnpm db:push                   ║
-║    2. Seed meta_assets (if needed)                       ║
-║    3. Customize stubs (columns, fields, handler allowlist)║
+║    2. pnpm db:barrel (if schema added manually)          ║
+║    3. Seed meta_assets (if needed)                       ║
+║    4. Customize stubs (columns, fields, handler allowlist)║
 ╚══════════════════════════════════════════════════════════╝
 `);

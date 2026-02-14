@@ -1,0 +1,748 @@
+{
+  "audit": {
+    "trackChanges": false
+  },
+  "canonVersion": "1.0.0",
+  "childTables": [],
+  "doctypeId": "erpnext:Accounts:Cheque Print Template",
+  "events": [
+    {
+      "event": "validate",
+      "handlers": [
+        "erpnext.support.doctype.service_level_agreement.service_level_agreement.apply",
+        "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record.check_for_running_deletion_job"
+      ],
+      "handlersParsed": [
+        {
+          "attrPath": "apply",
+          "module": "erpnext.support.doctype.service_level_agreement.service_level_agreement"
+        },
+        {
+          "attrPath": "check_for_running_deletion_job",
+          "module": "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record"
+        }
+      ]
+    }
+  ],
+  "fieldOrder": [
+    "settings",
+    "has_print_format",
+    "primary_settings",
+    "bank_name",
+    "cheque_size",
+    "starting_position_from_top_edge",
+    "cheque_width",
+    "cheque_height",
+    "scanned_cheque",
+    "column_break_5",
+    "is_account_payable",
+    "acc_pay_dist_from_top_edge",
+    "acc_pay_dist_from_left_edge",
+    "message_to_show",
+    "date_and_payer_settings",
+    "date_settings",
+    "date_dist_from_top_edge",
+    "date_dist_from_left_edge",
+    "payer_settings",
+    "payer_name_from_top_edge",
+    "payer_name_from_left_edge",
+    "amount_in_words_and_figure_settings",
+    "html_19",
+    "amt_in_words_from_top_edge",
+    "amt_in_words_from_left_edge",
+    "amt_in_word_width",
+    "amt_in_words_line_spacing",
+    "amount_in_figure",
+    "amt_in_figures_from_top_edge",
+    "amt_in_figures_from_left_edge",
+    "account_number_and_signatory_settings",
+    "account_no_settings",
+    "acc_no_dist_from_top_edge",
+    "acc_no_dist_from_left_edge",
+    "signatory_position",
+    "signatory_from_top_edge",
+    "signatory_from_left_edge",
+    "preview",
+    "cheque_print_preview"
+  ],
+  "fields": [
+    {
+      "constraints": {},
+      "fieldname": "settings",
+      "fieldtype": "text_editor",
+      "optionsParsed": {
+        "kind": "other",
+        "value": "<div>\n<h3> All dimensions in centimeter only </h3>\n</div>"
+      },
+      "optionsRaw": "<div>\n<h3> All dimensions in centimeter only </h3>\n</div>",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "has_print_format",
+      "fieldtype": "check",
+      "label": "Has Print Format",
+      "noCopy": true,
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "hidden": true,
+        "printHide": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "primary_settings",
+      "fieldtype": "layout:section",
+      "label": "Primary Settings",
+      "layout": {
+        "section": "Primary Settings"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "bank_name",
+      "fieldtype": "data",
+      "label": "Bank Name",
+      "layout": {
+        "section": "Primary Settings"
+      },
+      "noCopy": true,
+      "permlevel": 0,
+      "requiredStatic": true,
+      "ui": {
+        "inListView": true
+      },
+      "unique": true
+    },
+    {
+      "constraints": {},
+      "default": "Regular",
+      "fieldname": "cheque_size",
+      "fieldtype": "select",
+      "label": "Cheque Size",
+      "layout": {
+        "section": "Primary Settings"
+      },
+      "optionsParsed": {
+        "choices": [
+          "Regular",
+          "A4"
+        ],
+        "kind": "select"
+      },
+      "optionsRaw": "\nRegular\nA4",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:doc.cheque_size==\"A4\"",
+      "fieldname": "starting_position_from_top_edge",
+      "fieldtype": "float",
+      "label": "Starting position from top edge",
+      "layout": {
+        "section": "Primary Settings"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "precision": "2"
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "20.00",
+      "fieldname": "cheque_width",
+      "fieldtype": "float",
+      "label": "Cheque Width",
+      "layout": {
+        "section": "Primary Settings"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "precision": "2"
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "9.00",
+      "fieldname": "cheque_height",
+      "fieldtype": "float",
+      "label": "Cheque Height",
+      "layout": {
+        "section": "Primary Settings"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "precision": "2"
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "scanned_cheque",
+      "fieldtype": "attach",
+      "label": "Scanned Cheque",
+      "layout": {
+        "section": "Primary Settings"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_5",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "Primary Settings"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "1",
+      "fieldname": "is_account_payable",
+      "fieldtype": "check",
+      "label": "Is Account Payable",
+      "layout": {
+        "column": 1,
+        "section": "Primary Settings"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "1.00",
+      "dependsOn": "eval:doc.is_account_payable",
+      "fieldname": "acc_pay_dist_from_top_edge",
+      "fieldtype": "float",
+      "label": "Distance from top edge",
+      "layout": {
+        "column": 1,
+        "section": "Primary Settings"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "precision": "2"
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "9.00",
+      "dependsOn": "eval:doc.is_account_payable",
+      "fieldname": "acc_pay_dist_from_left_edge",
+      "fieldtype": "float",
+      "label": "Distance from left edge",
+      "layout": {
+        "column": 1,
+        "section": "Primary Settings"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "precision": "2"
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "Acc. Payee",
+      "dependsOn": "eval:doc.is_account_payable",
+      "fieldname": "message_to_show",
+      "fieldtype": "data",
+      "label": "Message to show",
+      "layout": {
+        "column": 1,
+        "section": "Primary Settings"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "date_and_payer_settings",
+      "fieldtype": "layout:section",
+      "layout": {
+        "section": "date_and_payer_settings"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "date_settings",
+      "fieldtype": "text_editor",
+      "label": "Date Settings",
+      "layout": {
+        "section": "date_and_payer_settings"
+      },
+      "optionsParsed": {
+        "kind": "other",
+        "value": "<label class=\"control-label\" style=\"margin-bottom: 0px;\">Date Settings</label>"
+      },
+      "optionsRaw": "<label class=\"control-label\" style=\"margin-bottom: 0px;\">Date Settings</label>",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "1.00",
+      "fieldname": "date_dist_from_top_edge",
+      "fieldtype": "float",
+      "label": "Distance from top edge",
+      "layout": {
+        "section": "date_and_payer_settings"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "precision": "2"
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "15.00",
+      "fieldname": "date_dist_from_left_edge",
+      "fieldtype": "float",
+      "label": "Starting location from left edge",
+      "layout": {
+        "section": "date_and_payer_settings"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "precision": "2"
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "payer_settings",
+      "fieldtype": "layout:column",
+      "label": "Payer Settings",
+      "layout": {
+        "column": 1,
+        "section": "date_and_payer_settings"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "2.00",
+      "fieldname": "payer_name_from_top_edge",
+      "fieldtype": "float",
+      "label": "Distance from top edge",
+      "layout": {
+        "column": 1,
+        "section": "date_and_payer_settings"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "precision": "2"
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "3.00",
+      "fieldname": "payer_name_from_left_edge",
+      "fieldtype": "float",
+      "label": "Starting location from left edge",
+      "layout": {
+        "column": 1,
+        "section": "date_and_payer_settings"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "precision": "2"
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "amount_in_words_and_figure_settings",
+      "fieldtype": "layout:section",
+      "layout": {
+        "section": "amount_in_words_and_figure_settings"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "html_19",
+      "fieldtype": "text_editor",
+      "layout": {
+        "section": "amount_in_words_and_figure_settings"
+      },
+      "optionsParsed": {
+        "kind": "other",
+        "value": "<label class=\"control-label\" style=\"margin-bottom: 0px;\">Amount In Words</label>"
+      },
+      "optionsRaw": "<label class=\"control-label\" style=\"margin-bottom: 0px;\">Amount In Words</label>",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "3.00",
+      "fieldname": "amt_in_words_from_top_edge",
+      "fieldtype": "float",
+      "label": "Distance from top edge",
+      "layout": {
+        "section": "amount_in_words_and_figure_settings"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "precision": "2"
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "4.00",
+      "fieldname": "amt_in_words_from_left_edge",
+      "fieldtype": "float",
+      "label": "Starting location from left edge",
+      "layout": {
+        "section": "amount_in_words_and_figure_settings"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "precision": "2"
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "15.00",
+      "fieldname": "amt_in_word_width",
+      "fieldtype": "float",
+      "label": "Width of amount in word",
+      "layout": {
+        "section": "amount_in_words_and_figure_settings"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "precision": "2"
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0.50",
+      "fieldname": "amt_in_words_line_spacing",
+      "fieldtype": "float",
+      "label": "Line spacing for amount in words",
+      "layout": {
+        "section": "amount_in_words_and_figure_settings"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "precision": "2"
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "amount_in_figure",
+      "fieldtype": "layout:column",
+      "label": "Amount In Figure",
+      "layout": {
+        "column": 1,
+        "section": "amount_in_words_and_figure_settings"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "3.50",
+      "fieldname": "amt_in_figures_from_top_edge",
+      "fieldtype": "float",
+      "label": "Distance from top edge",
+      "layout": {
+        "column": 1,
+        "section": "amount_in_words_and_figure_settings"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "precision": "2"
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "16.00",
+      "fieldname": "amt_in_figures_from_left_edge",
+      "fieldtype": "float",
+      "label": "Starting location from left edge",
+      "layout": {
+        "column": 1,
+        "section": "amount_in_words_and_figure_settings"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "precision": "2"
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "account_number_and_signatory_settings",
+      "fieldtype": "layout:section",
+      "layout": {
+        "section": "account_number_and_signatory_settings"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "account_no_settings",
+      "fieldtype": "text_editor",
+      "layout": {
+        "section": "account_number_and_signatory_settings"
+      },
+      "optionsParsed": {
+        "kind": "other",
+        "value": "<label class=\"control-label\" style=\"margin-bottom: 0px;\">Account Number Settings</label>"
+      },
+      "optionsRaw": "<label class=\"control-label\" style=\"margin-bottom: 0px;\">Account Number Settings</label>",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "5.00",
+      "fieldname": "acc_no_dist_from_top_edge",
+      "fieldtype": "float",
+      "label": "Distance from top edge",
+      "layout": {
+        "section": "account_number_and_signatory_settings"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "precision": "2"
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "4.00",
+      "fieldname": "acc_no_dist_from_left_edge",
+      "fieldtype": "float",
+      "label": "Starting location from left edge",
+      "layout": {
+        "section": "account_number_and_signatory_settings"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "precision": "2"
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "signatory_position",
+      "fieldtype": "layout:column",
+      "label": "Signatory Position",
+      "layout": {
+        "column": 1,
+        "section": "account_number_and_signatory_settings"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "6.00",
+      "fieldname": "signatory_from_top_edge",
+      "fieldtype": "float",
+      "label": "Distance from top edge",
+      "layout": {
+        "column": 1,
+        "section": "account_number_and_signatory_settings"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "precision": "2"
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "15.00",
+      "fieldname": "signatory_from_left_edge",
+      "fieldtype": "float",
+      "label": "Starting location from left edge",
+      "layout": {
+        "column": 1,
+        "section": "account_number_and_signatory_settings"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "precision": "2"
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "preview",
+      "fieldtype": "layout:section",
+      "label": "Preview",
+      "layout": {
+        "section": "Preview"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "cheque_print_preview",
+      "fieldtype": "text_editor",
+      "layout": {
+        "section": "Preview"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    }
+  ],
+  "identity": {
+    "app": "erpnext",
+    "isSingle": false,
+    "isSubmittable": false,
+    "isTree": false,
+    "module": "Accounts",
+    "naming": {
+      "expression": "field:bank_name",
+      "strategy": "field"
+    }
+  },
+  "name": "Cheque Print Template",
+  "permissions": [
+    {
+      "actions": {
+        "create": true,
+        "delete": true,
+        "email": true,
+        "export": true,
+        "print": true,
+        "read": true,
+        "report": true,
+        "share": true,
+        "write": true
+      },
+      "permlevel": 0,
+      "role": "Accounts Manager"
+    },
+    {
+      "actions": {
+        "create": true,
+        "delete": true,
+        "email": true,
+        "export": true,
+        "print": true,
+        "read": true,
+        "report": true,
+        "share": true,
+        "write": true
+      },
+      "permlevel": 0,
+      "role": "Accounts User"
+    },
+    {
+      "actions": {
+        "create": true,
+        "delete": true,
+        "email": true,
+        "export": true,
+        "print": true,
+        "read": true,
+        "report": true,
+        "share": true,
+        "write": true
+      },
+      "permlevel": 0,
+      "role": "System Manager"
+    }
+  ],
+  "ui": {
+    "maxAttachments": 1,
+    "searchFields": [],
+    "showNameInGlobalSearch": false,
+    "sortField": "creation",
+    "sortOrder": "DESC"
+  },
+  "workflows": [
+    {
+      "kind": "unavailable"
+    }
+  ]
+}

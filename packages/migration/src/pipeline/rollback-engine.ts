@@ -1,14 +1,13 @@
-import { and, eq } from 'drizzle-orm';
-
-import type { DbInstance } from 'afena-database';
 import {
   migrationJobs,
   migrationLineage,
   migrationRowSnapshots,
 } from 'afena-database';
+import { and, eq } from 'drizzle-orm';
 
-import type { EntityType } from '../types/migration-job.js';
 import type { CrudBridge } from './crud-bridge.js';
+import type { DbInstance } from 'afena-database';
+
 
 /**
  * Rollback result for a single migration job.
@@ -57,12 +56,12 @@ export class RollbackEngine {
       throw new Error(`Migration job '${jobId}' not found`);
     }
 
-    const job = jobs[0]!;
+    const job = jobs[0];
     if (job.status === 'rolled_back') {
       throw new Error(`Migration job '${jobId}' already rolled back`);
     }
 
-    const entityType = job.entityType as EntityType;
+    const entityType = job.entityType;
     const result: RollbackResult = {
       jobId,
       entityType,

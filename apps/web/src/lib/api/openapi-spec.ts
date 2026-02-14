@@ -1,5 +1,46 @@
 import { ENTITY_TYPES } from 'afena-canon';
 
+import { toOpenApiPath } from './route-types';
+
+import type { RouteFileEntry } from './route-types';
+
+/**
+ * Generate OpenAPI 3.1 spec from manifest (SSOT).
+ * For contract entries, ensures every path+method is in the spec.
+ * Falls back to ENTITY_TYPES for entity paths (legacy); manifest drives validation.
+ */
+export function generateOpenApiFromManifest(manifest: RouteFileEntry[]) {
+  const spec = generateOpenApiSpec();
+  const paths = spec.paths as Record<string, Record<string, unknown>>;
+
+  const errorResponse = {
+    description: 'Error response',
+    content: {
+      'application/json': {
+        schema: { $ref: '#/components/schemas/ErrorResponse' },
+      },
+    },
+  };
+
+  for (const e of manifest) {
+    if (e.tier !== 'contract' || !e.exposeInOpenApi) continue;
+
+    const openApiPath = toOpenApiPath(e.path);
+    paths[openApiPath] ??= {};
+
+    for (const m of e.methods) {
+      const methodKey = m.toLowerCase();
+      paths[openApiPath][methodKey] ??= {
+        summary: `${m} ${e.path}`,
+        tags: [e.kind === 'webhook' ? 'Webhooks' : 'Entities'],
+        responses: { '200': { description: 'Success' }, '401': errorResponse },
+      };
+    }
+  }
+
+  return spec;
+}
+
 /**
  * Generate OpenAPI 3.1 spec from ENTITY_TYPES registry.
  * Auto-derives all CRUD endpoints for every registered entity.

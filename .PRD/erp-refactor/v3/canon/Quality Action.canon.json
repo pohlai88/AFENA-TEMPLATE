@@ -1,0 +1,295 @@
+{
+  "audit": {
+    "trackChanges": true
+  },
+  "canonVersion": "1.0.0",
+  "childTables": [
+    {
+      "childDoctype": "Quality Action Resolution",
+      "parentField": "resolutions",
+      "required": false
+    }
+  ],
+  "doctypeId": "erpnext:Quality Management:Quality Action",
+  "events": [
+    {
+      "event": "validate",
+      "handlers": [
+        "erpnext.support.doctype.service_level_agreement.service_level_agreement.apply",
+        "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record.check_for_running_deletion_job"
+      ],
+      "handlersParsed": [
+        {
+          "attrPath": "apply",
+          "module": "erpnext.support.doctype.service_level_agreement.service_level_agreement"
+        },
+        {
+          "attrPath": "check_for_running_deletion_job",
+          "module": "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record"
+        }
+      ]
+    }
+  ],
+  "fieldOrder": [
+    "corrective_preventive",
+    "review",
+    "feedback",
+    "status",
+    "cb_00",
+    "date",
+    "goal",
+    "procedure",
+    "sb_00",
+    "resolutions"
+  ],
+  "fields": [
+    {
+      "constraints": {},
+      "default": "Corrective",
+      "fieldname": "corrective_preventive",
+      "fieldtype": "select",
+      "label": "Corrective/Preventive",
+      "optionsParsed": {
+        "choices": [
+          "Corrective",
+          "Preventive"
+        ],
+        "kind": "select"
+      },
+      "optionsRaw": "Corrective\nPreventive",
+      "permlevel": 0,
+      "requiredStatic": true,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "review",
+      "fieldtype": "link",
+      "label": "Review",
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Quality Review"
+      },
+      "optionsRaw": "Quality Review",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Quality Review",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "feedback",
+      "fieldtype": "link",
+      "label": "Feedback",
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Quality Feedback"
+      },
+      "optionsRaw": "Quality Feedback",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Quality Feedback",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "Open",
+      "fieldname": "status",
+      "fieldtype": "select",
+      "label": "Status",
+      "optionsParsed": {
+        "choices": [
+          "Open",
+          "Completed"
+        ],
+        "kind": "select"
+      },
+      "optionsRaw": "Open\nCompleted",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "inListView": true,
+        "inStandardFilter": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "cb_00",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "Today",
+      "fieldname": "date",
+      "fieldtype": "date",
+      "label": "Date",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "inListView": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fetchFrom": "review.goal",
+      "fieldname": "goal",
+      "fieldtype": "link",
+      "label": "Goal",
+      "layout": {
+        "column": 1
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Quality Goal"
+      },
+      "optionsRaw": "Quality Goal",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Quality Goal",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "inListView": true,
+        "inStandardFilter": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "procedure",
+      "fieldtype": "link",
+      "label": "Procedure",
+      "layout": {
+        "column": 1
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Quality Procedure"
+      },
+      "optionsRaw": "Quality Procedure",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Quality Procedure",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "sb_00",
+      "fieldtype": "layout:section",
+      "label": "Resolution",
+      "layout": {
+        "section": "Resolution"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "childDoctype": "Quality Action Resolution",
+      "constraints": {},
+      "fieldname": "resolutions",
+      "fieldtype": "table",
+      "label": "Resolutions",
+      "layout": {
+        "section": "Resolution"
+      },
+      "optionsParsed": {
+        "doctype": "Quality Action Resolution",
+        "kind": "child_doctype"
+      },
+      "optionsRaw": "Quality Action Resolution",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    }
+  ],
+  "identity": {
+    "app": "erpnext",
+    "isSingle": false,
+    "isSubmittable": false,
+    "isTree": false,
+    "module": "Quality Management",
+    "naming": {
+      "expression": "format:QA-ACT-{#####}",
+      "strategy": "expression"
+    }
+  },
+  "name": "Quality Action",
+  "permissions": [
+    {
+      "actions": {
+        "create": true,
+        "delete": true,
+        "email": true,
+        "export": true,
+        "print": true,
+        "read": true,
+        "report": true,
+        "share": true,
+        "write": true
+      },
+      "permlevel": 0,
+      "role": "Desk User"
+    },
+    {
+      "actions": {
+        "create": true,
+        "delete": true,
+        "email": true,
+        "export": true,
+        "print": true,
+        "read": true,
+        "report": true,
+        "share": true,
+        "write": true
+      },
+      "permlevel": 0,
+      "role": "System Manager"
+    }
+  ],
+  "ui": {
+    "searchFields": [],
+    "showNameInGlobalSearch": false,
+    "sortField": "creation",
+    "sortOrder": "DESC"
+  },
+  "workflows": [
+    {
+      "kind": "unavailable"
+    }
+  ]
+}

@@ -1,0 +1,355 @@
+{
+  "audit": {
+    "trackChanges": true
+  },
+  "canonVersion": "1.0.0",
+  "childTables": [],
+  "doctypeId": "erpnext:Accounts:Payment Term",
+  "events": [
+    {
+      "event": "validate",
+      "handlers": [
+        "erpnext.support.doctype.service_level_agreement.service_level_agreement.apply",
+        "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record.check_for_running_deletion_job"
+      ],
+      "handlersParsed": [
+        {
+          "attrPath": "apply",
+          "module": "erpnext.support.doctype.service_level_agreement.service_level_agreement"
+        },
+        {
+          "attrPath": "check_for_running_deletion_job",
+          "module": "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record"
+        }
+      ]
+    }
+  ],
+  "fieldOrder": [
+    "payment_term_name",
+    "invoice_portion",
+    "mode_of_payment",
+    "column_break_3",
+    "due_date_based_on",
+    "credit_days",
+    "credit_months",
+    "section_break_8",
+    "discount_type",
+    "discount",
+    "column_break_11",
+    "discount_validity_based_on",
+    "discount_validity",
+    "section_break_6",
+    "description"
+  ],
+  "fields": [
+    {
+      "constraints": {},
+      "fieldname": "payment_term_name",
+      "fieldtype": "data",
+      "label": "Payment Term Name",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "bold": true
+      },
+      "unique": true
+    },
+    {
+      "constraints": {},
+      "fieldname": "invoice_portion",
+      "fieldtype": "float",
+      "label": "Invoice Portion (%)",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "bold": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "mode_of_payment",
+      "fieldtype": "link",
+      "label": "Mode of Payment",
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Mode of Payment"
+      },
+      "optionsRaw": "Mode of Payment",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Mode of Payment",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_3",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "due_date_based_on",
+      "fieldtype": "select",
+      "label": "Due Date Based On",
+      "layout": {
+        "column": 1
+      },
+      "optionsParsed": {
+        "choices": [
+          "Day(s) after invoice date",
+          "Day(s) after the end of the invoice month",
+          "Month(s) after the end of the invoice month"
+        ],
+        "kind": "select"
+      },
+      "optionsRaw": "Day(s) after invoice date\nDay(s) after the end of the invoice month\nMonth(s) after the end of the invoice month",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "bold": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:in_list(['Day(s) after invoice date', 'Day(s) after the end of the invoice month'], doc.due_date_based_on)",
+      "fieldname": "credit_days",
+      "fieldtype": "int",
+      "label": "Credit Days",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "bold": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:doc.due_date_based_on=='Month(s) after the end of the invoice month'",
+      "fieldname": "credit_months",
+      "fieldtype": "int",
+      "label": "Credit Months",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "section_break_8",
+      "fieldtype": "layout:section",
+      "label": "Discount Settings",
+      "layout": {
+        "section": "Discount Settings"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "Percentage",
+      "fieldname": "discount_type",
+      "fieldtype": "select",
+      "label": "Discount Type",
+      "layout": {
+        "section": "Discount Settings"
+      },
+      "optionsParsed": {
+        "choices": [
+          "Percentage",
+          "Amount"
+        ],
+        "kind": "select"
+      },
+      "optionsRaw": "Percentage\nAmount",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "discount",
+      "fieldtype": "float",
+      "label": "Discount",
+      "layout": {
+        "section": "Discount Settings"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_11",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "Discount Settings"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "Day(s) after invoice date",
+      "dependsOn": "discount",
+      "fieldname": "discount_validity_based_on",
+      "fieldtype": "select",
+      "label": "Discount Validity Based On",
+      "layout": {
+        "column": 1,
+        "section": "Discount Settings"
+      },
+      "optionsParsed": {
+        "choices": [
+          "Day(s) after invoice date",
+          "Day(s) after the end of the invoice month",
+          "Month(s) after the end of the invoice month"
+        ],
+        "kind": "select"
+      },
+      "optionsRaw": "Day(s) after invoice date\nDay(s) after the end of the invoice month\nMonth(s) after the end of the invoice month",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "discount",
+      "fieldname": "discount_validity",
+      "fieldtype": "int",
+      "label": "Discount Validity",
+      "layout": {
+        "column": 1,
+        "section": "Discount Settings"
+      },
+      "mandatoryDependsOn": "discount",
+      "permlevel": 0,
+      "requiredDynamic": "discount",
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "section_break_6",
+      "fieldtype": "layout:section",
+      "layout": {
+        "section": "section_break_6"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "description",
+      "fieldtype": "small_text",
+      "label": "Description",
+      "layout": {
+        "section": "section_break_6"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "bold": true
+      },
+      "unique": false
+    }
+  ],
+  "identity": {
+    "app": "erpnext",
+    "isSingle": false,
+    "isSubmittable": false,
+    "isTree": false,
+    "module": "Accounts",
+    "naming": {
+      "expression": "field:payment_term_name",
+      "strategy": "field"
+    }
+  },
+  "name": "Payment Term",
+  "permissions": [
+    {
+      "actions": {
+        "create": true,
+        "delete": true,
+        "email": true,
+        "export": true,
+        "print": true,
+        "read": true,
+        "report": true,
+        "share": true,
+        "write": true
+      },
+      "permlevel": 0,
+      "role": "Accounts Manager"
+    },
+    {
+      "actions": {
+        "create": true,
+        "delete": true,
+        "email": true,
+        "export": true,
+        "print": true,
+        "read": true,
+        "report": true,
+        "share": true,
+        "write": true
+      },
+      "permlevel": 0,
+      "role": "Accounts User"
+    },
+    {
+      "actions": {
+        "create": true,
+        "delete": true,
+        "email": true,
+        "export": true,
+        "print": true,
+        "read": true,
+        "report": true,
+        "share": true,
+        "write": true
+      },
+      "permlevel": 0,
+      "role": "System Manager"
+    }
+  ],
+  "ui": {
+    "searchFields": [],
+    "showNameInGlobalSearch": false,
+    "sortField": "creation",
+    "sortOrder": "DESC"
+  },
+  "workflows": [
+    {
+      "kind": "unavailable"
+    }
+  ]
+}

@@ -36,7 +36,7 @@ export async function proxy(request: NextRequest) {
   // Auth middleware still runs on protected routes to validate sessions & refresh tokens
   const authResponse = isPublicRoute(request.nextUrl.pathname)
     ? null
-    : await auth.middleware()(request);
+    : await auth.middleware({ loginUrl: '/auth/sign-in' })(request);
 
   // Use the auth response if it returned one (e.g. redirect), otherwise continue
   const response = authResponse ?? NextResponse.next({

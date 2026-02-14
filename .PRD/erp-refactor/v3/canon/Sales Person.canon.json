@@ -1,0 +1,374 @@
+{
+  "audit": {
+    "trackChanges": false
+  },
+  "canonVersion": "1.0.0",
+  "childTables": [
+    {
+      "childDoctype": "Target Detail",
+      "parentField": "targets",
+      "required": false
+    }
+  ],
+  "doctypeId": "erpnext:Setup:Sales Person",
+  "events": [
+    {
+      "event": "validate",
+      "handlers": [
+        "erpnext.support.doctype.service_level_agreement.service_level_agreement.apply",
+        "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record.check_for_running_deletion_job"
+      ],
+      "handlersParsed": [
+        {
+          "attrPath": "apply",
+          "module": "erpnext.support.doctype.service_level_agreement.service_level_agreement"
+        },
+        {
+          "attrPath": "check_for_running_deletion_job",
+          "module": "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record"
+        }
+      ]
+    }
+  ],
+  "fieldOrder": [
+    "name_and_employee_id",
+    "sales_person_name",
+    "parent_sales_person",
+    "commission_rate",
+    "is_group",
+    "enabled",
+    "cb0",
+    "employee",
+    "department",
+    "lft",
+    "rgt",
+    "old_parent",
+    "target_details_section_break",
+    "targets"
+  ],
+  "fields": [
+    {
+      "constraints": {},
+      "fieldname": "name_and_employee_id",
+      "fieldtype": "layout:section",
+      "label": "Name and Employee ID",
+      "layout": {
+        "section": "Name and Employee ID"
+      },
+      "optionsParsed": {
+        "kind": "other",
+        "value": "icon-user"
+      },
+      "optionsRaw": "icon-user",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "sales_person_name",
+      "fieldtype": "data",
+      "label": "Sales Person Name",
+      "layout": {
+        "section": "Name and Employee ID"
+      },
+      "permlevel": 0,
+      "requiredStatic": true,
+      "ui": {
+        "inListView": true
+      },
+      "unique": true
+    },
+    {
+      "constraints": {},
+      "fieldname": "parent_sales_person",
+      "fieldtype": "link",
+      "label": "Parent Sales Person",
+      "layout": {
+        "section": "Name and Employee ID"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Sales Person"
+      },
+      "optionsRaw": "Sales Person",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Sales Person",
+        "ignoreUserPermissions": true,
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "description": "Select company name first.",
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "commission_rate",
+      "fieldtype": "data",
+      "label": "Commission Rate",
+      "layout": {
+        "section": "Name and Employee ID"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "printHide": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "is_group",
+      "fieldtype": "check",
+      "label": "Is Group",
+      "layout": {
+        "section": "Name and Employee ID"
+      },
+      "permlevel": 0,
+      "requiredStatic": true,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "1",
+      "fieldname": "enabled",
+      "fieldtype": "check",
+      "label": "Enabled",
+      "layout": {
+        "section": "Name and Employee ID"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "cb0",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "Name and Employee ID"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "employee",
+      "fieldtype": "link",
+      "label": "Employee",
+      "layout": {
+        "column": 1,
+        "section": "Name and Employee ID"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Employee"
+      },
+      "optionsRaw": "Employee",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Employee",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fetchFrom": "employee.department",
+      "fieldname": "department",
+      "fieldtype": "link",
+      "label": "Department",
+      "layout": {
+        "column": 1,
+        "section": "Name and Employee ID"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Department"
+      },
+      "optionsRaw": "Department",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Department",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "lft",
+      "fieldtype": "int",
+      "label": "lft",
+      "layout": {
+        "column": 1,
+        "section": "Name and Employee ID"
+      },
+      "noCopy": true,
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "hidden": true,
+        "printHide": true,
+        "searchIndex": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "rgt",
+      "fieldtype": "int",
+      "label": "rgt",
+      "layout": {
+        "column": 1,
+        "section": "Name and Employee ID"
+      },
+      "noCopy": true,
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "hidden": true,
+        "printHide": true,
+        "searchIndex": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "old_parent",
+      "fieldtype": "data",
+      "label": "old_parent",
+      "layout": {
+        "column": 1,
+        "section": "Name and Employee ID"
+      },
+      "noCopy": true,
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "hidden": true,
+        "printHide": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "target_details_section_break",
+      "fieldtype": "layout:section",
+      "label": "Sales Person Targets",
+      "layout": {
+        "section": "Sales Person Targets"
+      },
+      "optionsParsed": {
+        "kind": "other",
+        "value": "icon-bullseye"
+      },
+      "optionsRaw": "icon-bullseye",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "description": "Set targets Item Group-wise for this Sales Person."
+      },
+      "unique": false
+    },
+    {
+      "childDoctype": "Target Detail",
+      "constraints": {},
+      "fieldname": "targets",
+      "fieldtype": "table",
+      "label": "Targets",
+      "layout": {
+        "section": "Sales Person Targets"
+      },
+      "optionsParsed": {
+        "doctype": "Target Detail",
+        "kind": "child_doctype"
+      },
+      "optionsRaw": "Target Detail",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    }
+  ],
+  "identity": {
+    "app": "erpnext",
+    "isSingle": false,
+    "isSubmittable": false,
+    "isTree": true,
+    "module": "Setup",
+    "naming": {
+      "expression": "field:sales_person_name",
+      "strategy": "field"
+    },
+    "nsmParentField": "parent_sales_person"
+  },
+  "name": "Sales Person",
+  "permissions": [
+    {
+      "actions": {
+        "email": true,
+        "print": true,
+        "read": true,
+        "report": true
+      },
+      "permlevel": 0,
+      "role": "Sales Manager"
+    },
+    {
+      "actions": {
+        "create": true,
+        "delete": true,
+        "email": true,
+        "print": true,
+        "read": true,
+        "report": true,
+        "share": true,
+        "write": true
+      },
+      "permlevel": 0,
+      "role": "Sales Master Manager"
+    },
+    {
+      "actions": {
+        "email": true,
+        "print": true,
+        "read": true,
+        "report": true
+      },
+      "permlevel": 0,
+      "role": "Sales User"
+    }
+  ],
+  "ui": {
+    "searchFields": [
+      "parent_sales_person"
+    ],
+    "showNameInGlobalSearch": true,
+    "sortField": "creation",
+    "sortOrder": "ASC"
+  },
+  "workflows": [
+    {
+      "kind": "unavailable"
+    }
+  ]
+}

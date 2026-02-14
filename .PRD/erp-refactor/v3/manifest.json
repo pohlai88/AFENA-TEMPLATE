@@ -1,0 +1,324 @@
+{
+  "canonVersion": "1.0.0",
+  "db": {
+    "dbNameMap": {
+      "Appointment": {
+        "status": "status_col"
+      },
+      "Asset": {
+        "status": "status_col"
+      },
+      "Asset Activity": {
+        "user": "user_col"
+      },
+      "Asset Depreciation Schedule": {
+        "status": "status_col"
+      },
+      "Asset Shift Factor": {
+        "default": "default_col"
+      },
+      "Authorization Rule": {
+        "system_user": "system_user_col"
+      },
+      "BOM Creator": {
+        "status": "status_col"
+      },
+      "BOM Update Batch": {
+        "status": "status_col"
+      },
+      "BOM Update Log": {
+        "status": "status_col"
+      },
+      "Bank Statement Import": {
+        "status": "status_col"
+      },
+      "Bank Transaction": {
+        "status": "status_col"
+      },
+      "Bulk Transaction Log Detail": {
+        "time": "time_col"
+      },
+      "Call Log": {
+        "from": "from_col",
+        "status": "status_col",
+        "to": "to_col",
+        "type": "type_col"
+      },
+      "Cashier Closing": {
+        "time": "time_col",
+        "user": "user_col"
+      },
+      "Contract": {
+        "status": "status_col"
+      },
+      "Delivery Note": {
+        "status": "status_col"
+      },
+      "Delivery Trip": {
+        "status": "status_col"
+      },
+      "Driver": {
+        "status": "status_col",
+        "user": "user_col"
+      },
+      "Dunning": {
+        "status": "status_col"
+      },
+      "Email Campaign": {
+        "status": "status_col"
+      },
+      "Employee": {
+        "status": "status_col"
+      },
+      "Import Supplier Invoice": {
+        "status": "status_col"
+      },
+      "Installation Note": {
+        "status": "status_col"
+      },
+      "Invoice Discounting": {
+        "status": "status_col"
+      },
+      "Issue": {
+        "status": "status_col"
+      },
+      "Item Quality Inspection Parameter": {
+        "numeric": "numeric_col"
+      },
+      "Job Card": {
+        "current_time": "current_time_col",
+        "status": "status_col"
+      },
+      "Job Card Operation": {
+        "status": "status_col"
+      },
+      "Lead": {
+        "status": "status_col",
+        "type": "type_col"
+      },
+      "Ledger Merge": {
+        "status": "status_col"
+      },
+      "Maintenance Schedule": {
+        "status": "status_col"
+      },
+      "Maintenance Visit": {
+        "status": "status_col"
+      },
+      "Material Request": {
+        "status": "status_col"
+      },
+      "Mode of Payment": {
+        "type": "type_col"
+      },
+      "Non Conformance": {
+        "status": "status_col"
+      },
+      "Opportunity": {
+        "status": "status_col"
+      },
+      "POS Closing Entry": {
+        "status": "status_col",
+        "user": "user_col"
+      },
+      "POS Invoice": {
+        "status": "status_col"
+      },
+      "POS Opening Entry": {
+        "status": "status_col",
+        "user": "user_col"
+      },
+      "POS Payment Method": {
+        "default": "default_col"
+      },
+      "POS Profile User": {
+        "default": "default_col",
+        "user": "user_col"
+      },
+      "Pause SLA On Status": {
+        "status": "status_col"
+      },
+      "Payment Entry": {
+        "references": "references_col",
+        "status": "status_col"
+      },
+      "Payment Order": {
+        "references": "references_col"
+      },
+      "Payment Request": {
+        "status": "status_col"
+      },
+      "Pick List": {
+        "status": "status_col"
+      },
+      "Portal User": {
+        "user": "user_col"
+      },
+      "Process Deferred Accounting": {
+        "type": "type_col"
+      },
+      "Process Payment Reconciliation": {
+        "status": "status_col"
+      },
+      "Process Payment Reconciliation Log": {
+        "status": "status_col"
+      },
+      "Process Period Closing Voucher": {
+        "status": "status_col"
+      },
+      "Process Period Closing Voucher Detail": {
+        "status": "status_col"
+      },
+      "Production Plan": {
+        "status": "status_col"
+      },
+      "Production Plan Sales Order": {
+        "status": "status_col"
+      },
+      "Project": {
+        "status": "status_col"
+      },
+      "Project Update": {
+        "time": "time_col"
+      },
+      "Project User": {
+        "user": "user_col"
+      },
+      "Prospect Lead": {
+        "status": "status_col"
+      },
+      "Purchase Invoice": {
+        "status": "status_col"
+      },
+      "Purchase Order": {
+        "status": "status_col"
+      },
+      "Purchase Receipt": {
+        "status": "status_col"
+      },
+      "Quality Action": {
+        "status": "status_col"
+      },
+      "Quality Action Resolution": {
+        "status": "status_col"
+      },
+      "Quality Inspection": {
+        "status": "status_col"
+      },
+      "Quality Inspection Reading": {
+        "numeric": "numeric_col",
+        "status": "status_col"
+      },
+      "Quality Meeting": {
+        "status": "status_col"
+      },
+      "Quality Review": {
+        "status": "status_col"
+      },
+      "Quality Review Objective": {
+        "status": "status_col"
+      },
+      "Quotation": {
+        "status": "status_col"
+      },
+      "Repost Item Valuation": {
+        "status": "status_col"
+      },
+      "Request for Quotation": {
+        "status": "status_col"
+      },
+      "SLA Fulfilled On Status": {
+        "status": "status_col"
+      },
+      "Sales Forecast": {
+        "status": "status_col"
+      },
+      "Sales Invoice": {
+        "status": "status_col"
+      },
+      "Sales Invoice Payment": {
+        "default": "default_col",
+        "type": "type_col"
+      },
+      "Sales Order": {
+        "status": "status_col"
+      },
+      "Serial No": {
+        "status": "status_col"
+      },
+      "Shipment": {
+        "status": "status_col"
+      },
+      "Stock Closing Entry": {
+        "status": "status_col"
+      },
+      "Stock Reservation Entry": {
+        "status": "status_col"
+      },
+      "Subcontracting Inward Order": {
+        "status": "status_col"
+      },
+      "Subcontracting Order": {
+        "status": "status_col"
+      },
+      "Subcontracting Receipt": {
+        "status": "status_col"
+      },
+      "Subscription": {
+        "status": "status_col"
+      },
+      "Supplier Quotation": {
+        "status": "status_col"
+      },
+      "Supplier Scorecard": {
+        "status": "status_col"
+      },
+      "Task": {
+        "status": "status_col",
+        "type": "type_col"
+      },
+      "Tax Withholding Entry": {
+        "status": "status_col"
+      },
+      "Timesheet": {
+        "status": "status_col",
+        "user": "user_col"
+      },
+      "Transaction Deletion Record": {
+        "status": "status_col"
+      },
+      "Voice Call Settings": {
+        "user": "user_col"
+      },
+      "Warranty Claim": {
+        "status": "status_col"
+      },
+      "Work Order": {
+        "status": "status_col",
+        "time": "time_col"
+      },
+      "Work Order Operation": {
+        "status": "status_col"
+      },
+      "Workstation": {
+        "status": "status_col"
+      }
+    },
+    "dialect": "postgres",
+    "reservedWordsVersion": "pg-16"
+  },
+  "generatedAt": "2026-02-09T00:49:25.336Z",
+  "inputHash": "326e60db3ad0db84ea81061a388885496f315863ae3b604df94fca68749a4a7b",
+  "outputHash": "8a17168d8e3d908ac8db90c7b9720a7fa436547b76892b5e8ef68007a66a099b",
+  "packages": {
+    "api": true,
+    "db": true,
+    "hooks": true,
+    "neon": true,
+    "openapi": true,
+    "rls": true,
+    "shadcn": true,
+    "ui": true,
+    "zod": true
+  }
+}

@@ -4,6 +4,15 @@ import { searchAll } from 'afena-search';
 
 import { withAuth } from '@/lib/api/with-auth';
 
+import type { RouteMetaStrict } from '@/lib/api/route-types';
+
+export const ROUTE_META = {
+  path: '/api/search',
+  methods: ['GET'],
+  tier: 'bff',
+  exposeInOpenApi: false,
+} as const satisfies RouteMetaStrict;
+
 export const CAPABILITIES = ['search.global', 'contacts.search'] as const;
 
 /**

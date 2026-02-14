@@ -1,0 +1,197 @@
+{
+  "audit": {
+    "trackChanges": false
+  },
+  "canonVersion": "1.0.0",
+  "childTables": [],
+  "doctypeId": "erpnext:Accounts:Bisect Nodes",
+  "events": [
+    {
+      "event": "validate",
+      "handlers": [
+        "erpnext.support.doctype.service_level_agreement.service_level_agreement.apply",
+        "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record.check_for_running_deletion_job"
+      ],
+      "handlersParsed": [
+        {
+          "attrPath": "apply",
+          "module": "erpnext.support.doctype.service_level_agreement.service_level_agreement"
+        },
+        {
+          "attrPath": "check_for_running_deletion_job",
+          "module": "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record"
+        }
+      ]
+    }
+  ],
+  "fieldOrder": [
+    "root",
+    "left_child",
+    "right_child",
+    "period_from_date",
+    "period_to_date",
+    "difference",
+    "balance_sheet_summary",
+    "profit_loss_summary",
+    "generated"
+  ],
+  "fields": [
+    {
+      "constraints": {},
+      "fieldname": "root",
+      "fieldtype": "link",
+      "label": "Root",
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Bisect Nodes"
+      },
+      "optionsRaw": "Bisect Nodes",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Bisect Nodes",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "left_child",
+      "fieldtype": "link",
+      "label": "Left Child",
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Bisect Nodes"
+      },
+      "optionsRaw": "Bisect Nodes",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Bisect Nodes",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "right_child",
+      "fieldtype": "link",
+      "label": "Right Child",
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Bisect Nodes"
+      },
+      "optionsRaw": "Bisect Nodes",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Bisect Nodes",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "period_from_date",
+      "fieldtype": "datetime",
+      "label": "Period_from_date",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "period_to_date",
+      "fieldtype": "datetime",
+      "label": "Period To Date",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "difference",
+      "fieldtype": "float",
+      "label": "Difference",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "balance_sheet_summary",
+      "fieldtype": "float",
+      "label": "Balance Sheet Summary",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "profit_loss_summary",
+      "fieldtype": "float",
+      "label": "Profit and Loss Summary",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "generated",
+      "fieldtype": "check",
+      "label": "Generated",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    }
+  ],
+  "identity": {
+    "app": "erpnext",
+    "isSingle": false,
+    "isSubmittable": false,
+    "isTree": false,
+    "module": "Accounts",
+    "naming": {
+      "strategy": "hash"
+    }
+  },
+  "name": "Bisect Nodes",
+  "permissions": [
+    {
+      "actions": {
+        "create": true,
+        "delete": true,
+        "email": true,
+        "export": true,
+        "print": true,
+        "read": true,
+        "report": true,
+        "share": true,
+        "write": true
+      },
+      "permlevel": 0,
+      "role": "Administrator"
+    }
+  ],
+  "ui": {
+    "searchFields": [],
+    "showNameInGlobalSearch": false,
+    "sortField": "creation",
+    "sortOrder": "DESC"
+  },
+  "workflows": [
+    {
+      "kind": "unavailable"
+    }
+  ]
+}

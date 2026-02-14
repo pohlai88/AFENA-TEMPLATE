@@ -1,0 +1,446 @@
+{
+  "audit": {
+    "trackChanges": false
+  },
+  "canonVersion": "1.0.0",
+  "childTables": [
+    {
+      "childDoctype": "Supplier Scorecard Scoring Criteria",
+      "parentField": "criteria",
+      "required": true
+    },
+    {
+      "childDoctype": "Supplier Scorecard Scoring Standing",
+      "parentField": "standings",
+      "required": true
+    }
+  ],
+  "doctypeId": "erpnext:Buying:Supplier Scorecard",
+  "events": [
+    {
+      "event": "validate",
+      "handlers": [
+        "erpnext.support.doctype.service_level_agreement.service_level_agreement.apply",
+        "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record.check_for_running_deletion_job"
+      ],
+      "handlersParsed": [
+        {
+          "attrPath": "apply",
+          "module": "erpnext.support.doctype.service_level_agreement.service_level_agreement"
+        },
+        {
+          "attrPath": "check_for_running_deletion_job",
+          "module": "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record"
+        }
+      ]
+    }
+  ],
+  "fieldOrder": [
+    "supplier",
+    "supplier_score",
+    "indicator_color",
+    "status",
+    "column_break_2",
+    "period",
+    "scoring_setup",
+    "weighting_function",
+    "standings",
+    "criteria_setup",
+    "load_criteria",
+    "criteria",
+    "scorecard_actions",
+    "warn_rfqs",
+    "warn_pos",
+    "prevent_rfqs",
+    "prevent_pos",
+    "column_break_16",
+    "notify_supplier",
+    "notify_employee",
+    "employee"
+  ],
+  "fields": [
+    {
+      "constraints": {},
+      "fieldname": "supplier",
+      "fieldtype": "link",
+      "label": "Supplier",
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Supplier"
+      },
+      "optionsRaw": "Supplier",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Supplier",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {},
+      "unique": true
+    },
+    {
+      "constraints": {},
+      "fieldname": "supplier_score",
+      "fieldtype": "data",
+      "label": "Supplier Score",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "indicator_color",
+      "fieldtype": "data",
+      "label": "Indicator Color",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "hidden": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "status",
+      "fieldtype": "data",
+      "label": "Status",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "hidden": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_2",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "Per Month",
+      "fieldname": "period",
+      "fieldtype": "select",
+      "label": "Evaluation Period",
+      "layout": {
+        "column": 1
+      },
+      "optionsParsed": {
+        "choices": [
+          "Per Week",
+          "Per Month",
+          "Per Year"
+        ],
+        "kind": "select"
+      },
+      "optionsRaw": "Per Week\nPer Month\nPer Year",
+      "permlevel": 0,
+      "requiredStatic": true,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "scoring_setup",
+      "fieldtype": "layout:section",
+      "label": "Scoring Setup",
+      "layout": {
+        "section": "Scoring Setup"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "collapsible": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "{total_score} * max( 0, min ( 1 , (12 - {period_number}) / 12) )",
+      "fieldname": "weighting_function",
+      "fieldtype": "small_text",
+      "label": "Weighting Function",
+      "layout": {
+        "section": "Scoring Setup"
+      },
+      "permlevel": 0,
+      "requiredStatic": true,
+      "ui": {
+        "description": "Scorecard variables can be used, as well as:\n{total_score} (the total score from that period),\n{period_number} (the number of periods to present day)\n"
+      },
+      "unique": false
+    },
+    {
+      "childDoctype": "Supplier Scorecard Scoring Standing",
+      "constraints": {},
+      "fieldname": "standings",
+      "fieldtype": "table",
+      "label": "Scoring Standings",
+      "layout": {
+        "section": "Scoring Setup"
+      },
+      "optionsParsed": {
+        "doctype": "Supplier Scorecard Scoring Standing",
+        "kind": "child_doctype"
+      },
+      "optionsRaw": "Supplier Scorecard Scoring Standing",
+      "permlevel": 0,
+      "requiredStatic": true,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "criteria_setup",
+      "fieldtype": "layout:section",
+      "label": "Criteria Setup",
+      "layout": {
+        "section": "Criteria Setup"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "collapsible": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "load_criteria",
+      "fieldtype": "button",
+      "label": "Load All Criteria",
+      "layout": {
+        "section": "Criteria Setup"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "childDoctype": "Supplier Scorecard Scoring Criteria",
+      "constraints": {},
+      "fieldname": "criteria",
+      "fieldtype": "table",
+      "label": "Scoring Criteria",
+      "layout": {
+        "section": "Criteria Setup"
+      },
+      "optionsParsed": {
+        "doctype": "Supplier Scorecard Scoring Criteria",
+        "kind": "child_doctype"
+      },
+      "optionsRaw": "Supplier Scorecard Scoring Criteria",
+      "permlevel": 0,
+      "requiredStatic": true,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "scorecard_actions",
+      "fieldtype": "layout:section",
+      "label": "Scorecard Actions",
+      "layout": {
+        "section": "Scorecard Actions"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "collapsible": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "warn_rfqs",
+      "fieldtype": "check",
+      "label": "Warn for new Request for Quotations",
+      "layout": {
+        "section": "Scorecard Actions"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "warn_pos",
+      "fieldtype": "check",
+      "label": "Warn for new Purchase Orders",
+      "layout": {
+        "section": "Scorecard Actions"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "prevent_rfqs",
+      "fieldtype": "check",
+      "label": "Prevent RFQs",
+      "layout": {
+        "section": "Scorecard Actions"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "prevent_pos",
+      "fieldtype": "check",
+      "label": "Prevent POs",
+      "layout": {
+        "section": "Scorecard Actions"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_16",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "Scorecard Actions"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "notify_supplier",
+      "fieldtype": "check",
+      "label": "Notify Supplier",
+      "layout": {
+        "column": 1,
+        "section": "Scorecard Actions"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "hidden": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "notify_employee",
+      "fieldtype": "check",
+      "label": "Notify Employee",
+      "layout": {
+        "column": 1,
+        "section": "Scorecard Actions"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "hidden": true,
+        "readOnly": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "employee",
+      "fieldtype": "link",
+      "label": "Employee",
+      "layout": {
+        "column": 1,
+        "section": "Scorecard Actions"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Employee"
+      },
+      "optionsRaw": "Employee",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Employee",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "hidden": true,
+        "readOnly": true
+      },
+      "unique": false
+    }
+  ],
+  "identity": {
+    "app": "erpnext",
+    "isSingle": false,
+    "isSubmittable": false,
+    "isTree": false,
+    "module": "Buying",
+    "naming": {
+      "expression": "field:supplier",
+      "strategy": "field"
+    }
+  },
+  "name": "Supplier Scorecard",
+  "permissions": [
+    {
+      "actions": {
+        "create": true,
+        "delete": true,
+        "email": true,
+        "export": true,
+        "print": true,
+        "read": true,
+        "report": true,
+        "share": true,
+        "write": true
+      },
+      "permlevel": 0,
+      "role": "System Manager"
+    }
+  ],
+  "ui": {
+    "searchFields": [],
+    "showNameInGlobalSearch": false,
+    "sortField": "creation",
+    "sortOrder": "DESC"
+  },
+  "workflows": [
+    {
+      "kind": "unavailable"
+    }
+  ]
+}

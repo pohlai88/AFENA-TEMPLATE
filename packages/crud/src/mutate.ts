@@ -6,8 +6,8 @@ import {
   mutationSpecSchema,
   RateLimitError,
 } from 'afena-canon';
-import { and, auditLogs, companies, contacts, db, entityVersions, eq } from 'afena-database';
-import { evaluateRules, loadAndRegisterOrgRules } from 'afena-workflow';
+import { and, auditLogs, companies, contacts, db, entityVersions, eq, sql } from 'afena-database';
+import { evaluateRules, loadAndRegisterOrgRules, WorkflowEngineError } from 'afena-workflow';
 
 import { generateDiff } from './diff';
 import { err, ok } from './envelope';
@@ -20,6 +20,8 @@ import { meterApiRequest, meterDbTimeout } from './metering';
 import { enforcePolicyV2 } from './policy-engine';
 import { checkRateLimit } from './rate-limiter';
 import { stripSystemColumns } from './sanitize';
+import { enforceEditWindow } from './services/workflow-edit-window';
+import { enqueueWorkflowOutboxEvent } from './services/workflow-outbox';
 
 import type { MutationContext } from './context';
 import type { EntityHandler } from './handlers/types';
@@ -189,6 +191,12 @@ export async function mutate(
 
   // 7. enforceLifecycle() — BEFORE policy, absolute (INVARIANT-LIFECYCLE-01)
   enforceLifecycle(validSpec as MutationSpec, verb, targetRow);
+
+  // 7b. enforceEditWindow() — workflow edit-window precondition (PRD § Edit Windows)
+  // Runs before policy/handler. If workflow engine is down, locked docs stay locked.
+  if (verb !== 'create' && entityId) {
+    await enforceEditWindow(validSpec.entityRef.type, entityId, verb);
+  }
 
   // 8. enforcePolicyV2() — DB-backed RBAC (INVARIANT-POLICY-01)
   const { authoritySnapshot } = await enforcePolicyV2(
@@ -362,6 +370,24 @@ export async function mutate(
         })
         .returning();
 
+      // Enqueue workflow outbox event in same TX (PRD § Event Outbox Pattern)
+      // Fire-and-forget within TX: errors here should NOT fail the mutation
+      try {
+        await enqueueWorkflowOutboxEvent(tx, {
+          orgId: ctx.actor.orgId,
+          entityType: validSpec.entityRef.type,
+          entityId: handlerResult.entityId,
+          entityVersion: handlerResult.versionAfter,
+          actionType: validSpec.actionType,
+          fromStatus: (handlerResult.before as Record<string, unknown> | null)?.docStatus as string | undefined ?? null,
+          toStatus: (handlerResult.after as Record<string, unknown> | null)?.docStatus as string | undefined ?? null,
+          traceId: ctx.requestId,
+        });
+      } catch {
+        // Outbox write failure must not abort the mutation TX.
+        // The workflow will be triggered on the next mutation or manual retry.
+      }
+
       return { handlerResult, auditRow };
     });
 
@@ -388,6 +414,12 @@ export async function mutate(
       // After-rule errors are swallowed — they must not affect the mutation response
     });
 
+    // Refresh search_index MV (fire-and-forget, PRD Phase A #3)
+    // Uses CONCURRENTLY to avoid blocking reads. Errors are swallowed.
+    db.execute(sql`REFRESH MATERIALIZED VIEW CONCURRENTLY search_index`).catch(() => {
+      // MV refresh errors must not affect the mutation response
+    });
+
     // Meter successful mutation (fire-and-forget)
     meterApiRequest(ctx.actor.orgId);
 
@@ -399,6 +431,7 @@ export async function mutate(
     let errorCode: ErrorCode = 'INTERNAL_ERROR';
     if ((error as any)?.code === 'POLICY_DENIED') errorCode = 'POLICY_DENIED';
     if (error instanceof LifecycleError) errorCode = 'LIFECYCLE_DENIED';
+    if (error instanceof WorkflowEngineError) errorCode = 'LIFECYCLE_DENIED';
     if (error instanceof RateLimitError || (error as any)?.code === 'RATE_LIMITED') errorCode = 'RATE_LIMITED';
     if (message === 'NOT_FOUND') errorCode = 'NOT_FOUND';
     if (message === 'CONFLICT_VERSION') errorCode = 'CONFLICT_VERSION';

@@ -1,0 +1,363 @@
+{
+  "audit": {
+    "trackChanges": true
+  },
+  "canonVersion": "1.0.0",
+  "childTables": [],
+  "doctypeId": "erpnext:Accounts:Payment Terms Template Detail",
+  "events": [
+    {
+      "event": "validate",
+      "handlers": [
+        "erpnext.support.doctype.service_level_agreement.service_level_agreement.apply",
+        "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record.check_for_running_deletion_job"
+      ],
+      "handlersParsed": [
+        {
+          "attrPath": "apply",
+          "module": "erpnext.support.doctype.service_level_agreement.service_level_agreement"
+        },
+        {
+          "attrPath": "check_for_running_deletion_job",
+          "module": "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record"
+        }
+      ]
+    }
+  ],
+  "fieldOrder": [
+    "payment_term",
+    "section_break_13",
+    "description",
+    "section_break_4",
+    "invoice_portion",
+    "mode_of_payment",
+    "column_break_3",
+    "due_date_based_on",
+    "credit_days",
+    "credit_months",
+    "section_break_8",
+    "discount_type",
+    "discount",
+    "column_break_11",
+    "discount_validity_based_on",
+    "discount_validity"
+  ],
+  "fields": [
+    {
+      "constraints": {},
+      "fieldname": "payment_term",
+      "fieldtype": "link",
+      "label": "Payment Term",
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Payment Term"
+      },
+      "optionsRaw": "Payment Term",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Payment Term",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "section_break_13",
+      "fieldtype": "layout:section",
+      "label": "Description",
+      "layout": {
+        "section": "Description"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "collapsible": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fetchFrom": "payment_term.description",
+      "fieldname": "description",
+      "fieldtype": "small_text",
+      "label": "Description",
+      "layout": {
+        "section": "Description"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "section_break_4",
+      "fieldtype": "layout:section",
+      "layout": {
+        "section": "section_break_4"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fetchFrom": "payment_term.invoice_portion",
+      "fetchIfEmpty": true,
+      "fieldname": "invoice_portion",
+      "fieldtype": "float",
+      "label": "Invoice Portion (%)",
+      "layout": {
+        "section": "section_break_4"
+      },
+      "permlevel": 0,
+      "requiredStatic": true,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fetchFrom": "payment_term.mode_of_payment",
+      "fieldname": "mode_of_payment",
+      "fieldtype": "link",
+      "label": "Mode of Payment",
+      "layout": {
+        "section": "section_break_4"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Mode of Payment"
+      },
+      "optionsRaw": "Mode of Payment",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Mode of Payment",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_3",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "section_break_4"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fetchFrom": "payment_term.due_date_based_on",
+      "fetchIfEmpty": true,
+      "fieldname": "due_date_based_on",
+      "fieldtype": "select",
+      "label": "Due Date Based On",
+      "layout": {
+        "column": 1,
+        "section": "section_break_4"
+      },
+      "optionsParsed": {
+        "choices": [
+          "Day(s) after invoice date",
+          "Day(s) after the end of the invoice month",
+          "Month(s) after the end of the invoice month"
+        ],
+        "kind": "select"
+      },
+      "optionsRaw": "Day(s) after invoice date\nDay(s) after the end of the invoice month\nMonth(s) after the end of the invoice month",
+      "permlevel": 0,
+      "requiredStatic": true,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "dependsOn": "eval:in_list(['Day(s) after invoice date', 'Day(s) after the end of the invoice month'], doc.due_date_based_on)",
+      "fetchFrom": "payment_term.credit_days",
+      "fetchIfEmpty": true,
+      "fieldname": "credit_days",
+      "fieldtype": "int",
+      "label": "Credit Days",
+      "layout": {
+        "column": 1,
+        "section": "section_break_4"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "dependsOn": "eval:doc.due_date_based_on=='Month(s) after the end of the invoice month'",
+      "fetchFrom": "payment_term.credit_months",
+      "fetchIfEmpty": true,
+      "fieldname": "credit_months",
+      "fieldtype": "int",
+      "label": "Credit Months",
+      "layout": {
+        "column": 1,
+        "section": "section_break_4"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "section_break_8",
+      "fieldtype": "layout:section",
+      "label": "Discount Settings",
+      "layout": {
+        "section": "Discount Settings"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "Percentage",
+      "fetchFrom": "payment_term.discount_type",
+      "fetchIfEmpty": true,
+      "fieldname": "discount_type",
+      "fieldtype": "select",
+      "label": "Discount Type",
+      "layout": {
+        "section": "Discount Settings"
+      },
+      "optionsParsed": {
+        "choices": [
+          "Percentage",
+          "Amount"
+        ],
+        "kind": "select"
+      },
+      "optionsRaw": "Percentage\nAmount",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fetchFrom": "payment_term.discount",
+      "fetchIfEmpty": true,
+      "fieldname": "discount",
+      "fieldtype": "float",
+      "label": "Discount",
+      "layout": {
+        "section": "Discount Settings"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_11",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "Discount Settings"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "Day(s) after invoice date",
+      "dependsOn": "discount",
+      "fetchFrom": "payment_term.discount_validity_based_on",
+      "fetchIfEmpty": true,
+      "fieldname": "discount_validity_based_on",
+      "fieldtype": "select",
+      "label": "Discount Validity Based On",
+      "layout": {
+        "column": 1,
+        "section": "Discount Settings"
+      },
+      "optionsParsed": {
+        "choices": [
+          "Day(s) after invoice date",
+          "Day(s) after the end of the invoice month",
+          "Month(s) after the end of the invoice month"
+        ],
+        "kind": "select"
+      },
+      "optionsRaw": "Day(s) after invoice date\nDay(s) after the end of the invoice month\nMonth(s) after the end of the invoice month",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "discount",
+      "fetchFrom": "payment_term.discount_validity",
+      "fetchIfEmpty": true,
+      "fieldname": "discount_validity",
+      "fieldtype": "int",
+      "label": "Discount Validity",
+      "layout": {
+        "column": 1,
+        "section": "Discount Settings"
+      },
+      "mandatoryDependsOn": "discount",
+      "permlevel": 0,
+      "requiredDynamic": "discount",
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    }
+  ],
+  "identity": {
+    "app": "erpnext",
+    "isSingle": false,
+    "isSubmittable": false,
+    "isTree": false,
+    "module": "Accounts",
+    "naming": {
+      "strategy": "hash"
+    }
+  },
+  "name": "Payment Terms Template Detail",
+  "permissions": [],
+  "ui": {
+    "searchFields": [],
+    "showNameInGlobalSearch": false,
+    "sortField": "creation",
+    "sortOrder": "DESC"
+  },
+  "workflows": [
+    {
+      "kind": "unavailable"
+    }
+  ]
+}

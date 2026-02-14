@@ -1,0 +1,467 @@
+{
+  "audit": {
+    "trackChanges": false
+  },
+  "canonVersion": "1.0.0",
+  "childTables": [],
+  "doctypeId": "erpnext:Accounts:Promotional Scheme Price Discount",
+  "events": [
+    {
+      "event": "validate",
+      "handlers": [
+        "erpnext.support.doctype.service_level_agreement.service_level_agreement.apply",
+        "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record.check_for_running_deletion_job"
+      ],
+      "handlersParsed": [
+        {
+          "attrPath": "apply",
+          "module": "erpnext.support.doctype.service_level_agreement.service_level_agreement"
+        },
+        {
+          "attrPath": "check_for_running_deletion_job",
+          "module": "erpnext.setup.doctype.transaction_deletion_record.transaction_deletion_record"
+        }
+      ]
+    }
+  ],
+  "fieldOrder": [
+    "disable",
+    "apply_multiple_pricing_rules",
+    "column_break_2",
+    "rule_description",
+    "section_break_2",
+    "min_qty",
+    "max_qty",
+    "column_break_3",
+    "min_amount",
+    "max_amount",
+    "section_break_6",
+    "rate_or_discount",
+    "column_break_10",
+    "rate",
+    "discount_amount",
+    "discount_percentage",
+    "for_price_list",
+    "section_break_11",
+    "warehouse",
+    "threshold_percentage",
+    "validate_applied_rule",
+    "column_break_14",
+    "priority",
+    "apply_discount_on_rate"
+  ],
+  "fields": [
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "disable",
+      "fieldtype": "check",
+      "label": "Disable",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "dependsOn": "priority",
+      "fieldname": "apply_multiple_pricing_rules",
+      "fieldtype": "check",
+      "label": "Apply Multiple Pricing Rules",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_2",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "rule_description",
+      "fieldtype": "small_text",
+      "label": "Rule Description",
+      "layout": {
+        "column": 1
+      },
+      "noCopy": true,
+      "permlevel": 0,
+      "requiredStatic": true,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "section_break_2",
+      "fieldtype": "layout:section",
+      "layout": {
+        "section": "section_break_2"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "min_qty",
+      "fieldtype": "float",
+      "label": "Min Qty",
+      "layout": {
+        "section": "section_break_2"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "max_qty",
+      "fieldtype": "float",
+      "label": "Max Qty",
+      "layout": {
+        "section": "section_break_2"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_3",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "section_break_2"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "min_amount",
+      "fieldtype": "currency",
+      "label": "Min Amount",
+      "layout": {
+        "column": 1,
+        "section": "section_break_2"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "max_amount",
+      "fieldtype": "currency",
+      "label": "Max Amount",
+      "layout": {
+        "column": 1,
+        "section": "section_break_2"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "section_break_6",
+      "fieldtype": "layout:section",
+      "layout": {
+        "section": "section_break_6"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "Discount Percentage",
+      "fieldname": "rate_or_discount",
+      "fieldtype": "select",
+      "label": "Discount Type",
+      "layout": {
+        "section": "section_break_6"
+      },
+      "optionsParsed": {
+        "choices": [
+          "Rate",
+          "Discount Percentage",
+          "Discount Amount"
+        ],
+        "kind": "select"
+      },
+      "optionsRaw": "\nRate\nDiscount Percentage\nDiscount Amount",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {
+        "inListView": true
+      },
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_10",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "section_break_6"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:doc.rate_or_discount==\"Rate\"",
+      "fieldname": "rate",
+      "fieldtype": "currency",
+      "label": "Rate",
+      "layout": {
+        "column": 1,
+        "section": "section_break_6"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:doc.rate_or_discount==\"Discount Amount\"",
+      "fieldname": "discount_amount",
+      "fieldtype": "currency",
+      "label": "Discount Amount",
+      "layout": {
+        "column": 1,
+        "section": "section_break_6"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:doc.rate_or_discount==\"Discount Percentage\"",
+      "fieldname": "discount_percentage",
+      "fieldtype": "float",
+      "label": "Discount Percentage",
+      "layout": {
+        "column": 1,
+        "section": "section_break_6"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "dependsOn": "eval:doc.rate_or_discount!=\"Rate\"",
+      "fieldname": "for_price_list",
+      "fieldtype": "link",
+      "label": "For Price List",
+      "layout": {
+        "column": 1,
+        "section": "section_break_6"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Price List"
+      },
+      "optionsRaw": "Price List",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Price List",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "section_break_11",
+      "fieldtype": "layout:section",
+      "layout": {
+        "section": "section_break_11"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "warehouse",
+      "fieldtype": "link",
+      "label": "Warehouse",
+      "layout": {
+        "section": "section_break_11"
+      },
+      "optionsParsed": {
+        "kind": "link",
+        "target": "Warehouse"
+      },
+      "optionsRaw": "Warehouse",
+      "permlevel": 0,
+      "ref": {
+        "doctype": "Warehouse",
+        "kind": "static"
+      },
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "threshold_percentage",
+      "fieldtype": "percent",
+      "label": "Threshold for Suggestion",
+      "layout": {
+        "section": "section_break_11"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "fieldname": "validate_applied_rule",
+      "fieldtype": "check",
+      "label": "Validate Applied Rule",
+      "layout": {
+        "section": "section_break_11"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "column_break_14",
+      "fieldtype": "layout:column",
+      "layout": {
+        "column": 1,
+        "section": "section_break_11"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "fieldname": "priority",
+      "fieldtype": "select",
+      "label": "Priority",
+      "layout": {
+        "column": 1,
+        "section": "section_break_11"
+      },
+      "optionsParsed": {
+        "choices": [
+          "1",
+          "2",
+          "3",
+          "4",
+          "5",
+          "6",
+          "7",
+          "8",
+          "9",
+          "10",
+          "11",
+          "12",
+          "13",
+          "14",
+          "15",
+          "16",
+          "17",
+          "18",
+          "19",
+          "20"
+        ],
+        "kind": "select"
+      },
+      "optionsRaw": "\n1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n14\n15\n16\n17\n18\n19\n20",
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    },
+    {
+      "constraints": {},
+      "default": "0",
+      "dependsOn": "eval:in_list(['Discount Percentage', 'Discount Amount'], doc.rate_or_discount) && doc.apply_multiple_pricing_rules",
+      "fieldname": "apply_discount_on_rate",
+      "fieldtype": "check",
+      "label": "Apply Discount on Rate",
+      "layout": {
+        "column": 1,
+        "section": "section_break_11"
+      },
+      "permlevel": 0,
+      "requiredStatic": false,
+      "ui": {},
+      "unique": false
+    }
+  ],
+  "identity": {
+    "app": "erpnext",
+    "isSingle": false,
+    "isSubmittable": false,
+    "isTree": false,
+    "module": "Accounts",
+    "naming": {
+      "strategy": "hash"
+    }
+  },
+  "name": "Promotional Scheme Price Discount",
+  "permissions": [],
+  "ui": {
+    "searchFields": [],
+    "showNameInGlobalSearch": false,
+    "sortField": "creation",
+    "sortOrder": "DESC"
+  },
+  "workflows": [
+    {
+      "kind": "unavailable"
+    }
+  ]
+}

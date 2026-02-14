@@ -2,6 +2,15 @@ import { NextResponse } from 'next/server';
 
 import { generateOpenApiSpec } from '@/lib/api/openapi-spec';
 
+import type { RouteMetaStrict } from '@/lib/api/route-types';
+
+export const ROUTE_META = {
+  path: '/api/docs',
+  methods: ['GET'],
+  tier: 'admin',
+  exposeInOpenApi: false,
+} as const satisfies RouteMetaStrict;
+
 /**
  * GET /api/docs — OpenAPI 3.1 JSON spec
  *
