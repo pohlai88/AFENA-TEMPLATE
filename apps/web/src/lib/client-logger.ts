@@ -11,11 +11,11 @@
 
 const isDev = process.env.NODE_ENV === 'development';
 
-/* eslint-disable no-console, no-restricted-syntax */
+/* eslint-disable no-console */
 export const clientLogger = {
   debug: (...args: unknown[]) => { if (isDev) console.debug('[afena]', ...args); },
   info: (...args: unknown[]) => { if (isDev) console.info('[afena]', ...args); },
   warn: (...args: unknown[]) => { if (isDev) console.warn('[afena]', ...args); },
   error: (...args: unknown[]) => { if (isDev) console.error('[afena]', ...args); },
 } as const;
-/* eslint-enable no-console, no-restricted-syntax */
+/* eslint-enable no-console */

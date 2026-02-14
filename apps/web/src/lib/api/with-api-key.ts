@@ -47,7 +47,7 @@ async function validateApiKey(request: NextRequest): Promise<AuthSession | null>
   if (row.expiresAt && row.expiresAt < new Date()) return null;
 
   // Update last_used_at (fire-and-forget) — infrastructure, not domain data
-  // eslint-disable-next-line no-restricted-syntax -- infrastructure update, not domain data
+   
   db.update(apiKeys)
     .set({ lastUsedAt: sql`now()` })
     .where(eq(apiKeys.id, row.id))

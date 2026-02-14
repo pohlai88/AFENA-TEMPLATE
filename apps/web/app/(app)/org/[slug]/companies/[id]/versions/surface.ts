@@ -1,5 +1,7 @@
+import { orgEntityVersionsPage } from '@/lib/routes/app-routes';
+
 export const SURFACE = {
   surfaceId: 'web.companies.versions.page',
-  page: '/org/[slug]/companies/[id]/versions',
+  page: orgEntityVersionsPage('companies'),
   exposes: ['companies.versions'],
 } as const;

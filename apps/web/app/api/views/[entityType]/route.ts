@@ -4,6 +4,15 @@ import { dbRo, entityViews, entityViewFields, eq, and } from 'afena-database';
 
 import { type AuthSession, withAuth } from '@/lib/api/with-auth';
 
+import type { RouteMetaStrict } from '@/lib/api/route-types';
+
+export const ROUTE_META = {
+  path: '/api/views/[entityType]',
+  methods: ['GET'],
+  tier: 'bff',
+  exposeInOpenApi: false,
+} as const satisfies RouteMetaStrict;
+
 export const CAPABILITIES = ['views.read'] as const;
 
 /**

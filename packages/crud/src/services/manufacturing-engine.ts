@@ -170,6 +170,7 @@ export async function explodeBomFromDb(
   const bom = bomRows[0];
   if (!bom) return null;
 
+  const bomId = String(bom.id);
   // Fetch BOM lines
   const lines = await (db as any)
     .select()
@@ -177,13 +178,13 @@ export async function explodeBomFromDb(
     .where(
       and(
         eq(bomLines.orgId, orgId),
-        eq(bomLines.bomId, bom.id),
+        eq(bomLines.bomId, bomId),
       ),
     );
 
   return explodeBom(
     {
-      bomId: bom.id,
+      bomId,
       productId: bom.productId,
       bomVersion: bom.bomVersion,
       yieldQty: Number(bom.yieldQty),
@@ -304,13 +305,13 @@ export async function getCostRollup(
       ),
     );
 
-  const rollup = calculateCostRollup(
-    movements.map((m: any) => ({
+  const typedMovements: Array<{ movementType: WipMovementType; costMinor: number }> = movements.map(
+    (m: { movementType: string; costMinor: unknown }) => ({
       movementType: m.movementType as WipMovementType,
       costMinor: Number(m.costMinor),
-    })),
-    Number(wo.completedQty),
+    }),
   );
+  const rollup = calculateCostRollup(typedMovements, Number(wo.completedQty));
 
   return {
     workOrderId,

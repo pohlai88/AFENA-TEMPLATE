@@ -205,12 +205,13 @@ export async function calculateDepreciation(
   let depreciationMinor: number;
   const method = asset.depreciationMethod as 'straight_line' | 'declining_balance';
 
+  const usefulLifeMonths = Number(asset.usefulLifeMonths);
   switch (method) {
     case 'declining_balance':
       depreciationMinor = decliningBalanceDepreciation(
         Number(asset.acquisitionCostMinor),
         Number(asset.residualValueMinor),
-        asset.usefulLifeMonths,
+        usefulLifeMonths,
         periodIndex,
         priorAccum,
       );
@@ -220,7 +221,7 @@ export async function calculateDepreciation(
       depreciationMinor = straightLineDepreciation(
         Number(asset.acquisitionCostMinor),
         Number(asset.residualValueMinor),
-        asset.usefulLifeMonths,
+        usefulLifeMonths,
         periodIndex,
         priorAccum,
       );

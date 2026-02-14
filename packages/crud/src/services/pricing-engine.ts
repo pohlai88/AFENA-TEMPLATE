@@ -170,8 +170,17 @@ export async function evaluateDiscounts(
     .where(and(...scopeConditions))
     .orderBy(asc(discountRules.precedence));
 
-  // Filter by scope match
-  const applicable = rows.filter((r: any) => {
+  type DiscountRuleRow = {
+    id: string;
+    code: string;
+    discountType: string;
+    discountValue: string;
+    stackable: boolean;
+    scope?: string;
+    customerId?: string;
+    productId?: string;
+  };
+  const applicable = rows.filter((r: DiscountRuleRow) => {
     if (r.scope === 'global') return true;
     if (r.scope === 'customer' && r.customerId === customerId) return true;
     if (r.scope === 'product' && r.productId === productId) return true;
@@ -180,6 +189,7 @@ export async function evaluateDiscounts(
 
   if (applicable.length === 0) return [];
 
+  type DiscountType = AppliedDiscount['discountType'];
   // Apply discount stacking logic
   const result: AppliedDiscount[] = [];
   let runningAmount = amountMinor;
@@ -188,19 +198,21 @@ export async function evaluateDiscounts(
   for (const rule of applicable) {
     if (foundNonStackable && !rule.stackable) continue;
 
+    const discountType = rule.discountType as DiscountType;
+    const discountValueNum = parseFloat(String(rule.discountValue));
     const discountMinor = calculateDiscountAmount(
       runningAmount,
-      rule.discountType,
-      parseFloat(rule.discountValue),
+      discountType,
+      discountValueNum,
     );
 
     result.push({
-      ruleId: rule.id,
-      code: rule.code,
-      discountType: rule.discountType,
-      discountValue: parseFloat(rule.discountValue),
+      ruleId: String(rule.id),
+      code: String(rule.code),
+      discountType,
+      discountValue: discountValueNum,
       discountMinor,
-      stackable: rule.stackable,
+      stackable: Boolean(rule.stackable),
     });
 
     if (rule.stackable) {

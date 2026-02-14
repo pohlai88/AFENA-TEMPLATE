@@ -86,10 +86,13 @@ export async function dispatchWebhookEvent(
     return { eventType, endpointCount: 0, deliveries: [] };
   }
 
+  type EndpointRow = { id: string; url: string; secret: string };
+  const typedEndpoints = endpoints as EndpointRow[];
+
   // 2. Dispatch to each endpoint
   const deliveries: WebhookDeliveryResult[] = [];
 
-  for (const ep of endpoints) {
+  for (const ep of typedEndpoints) {
     const payloadStr = JSON.stringify(payload);
     const start = Date.now();
     let statusCode: number | null = null;
@@ -160,7 +163,7 @@ export async function dispatchWebhookEvent(
       });
     }
 
-    // 4. Update endpoint last delivery stats
+    // 4. Update endpoint last delivery stats (ep.id is string from EndpointRow)
     try {
       await (db as any)
         .update(webhookEndpoints)

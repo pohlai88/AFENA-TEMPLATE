@@ -72,9 +72,8 @@ export function validateDag(
     adjacency.set(node.id, []);
   }
   for (const edge of edges) {
-    if (adjacency.has(edge.sourceNodeId)) {
-      adjacency.get(edge.sourceNodeId)!.push(edge.targetNodeId);
-    }
+    const arr = adjacency.get(edge.sourceNodeId);
+    if (arr) arr.push(edge.targetNodeId);
   }
 
   // Cycle detection via DFS (Kahn's algorithm)
@@ -83,9 +82,8 @@ export function validateDag(
     inDegree.set(node.id, 0);
   }
   for (const edge of edges) {
-    if (inDegree.has(edge.targetNodeId)) {
-      inDegree.set(edge.targetNodeId, inDegree.get(edge.targetNodeId)! + 1);
-    }
+    const deg = inDegree.get(edge.targetNodeId);
+    if (deg !== undefined) inDegree.set(edge.targetNodeId, deg + 1);
   }
 
   const queue: string[] = [];
@@ -97,11 +95,13 @@ export function validateDag(
 
   let processedCount = 0;
   while (queue.length > 0) {
-    const current = queue.shift()!;
+    const current = queue.shift();
+    if (current === undefined) break;
     processedCount++;
     const neighbors = adjacency.get(current) ?? [];
     for (const neighbor of neighbors) {
-      const newDegree = inDegree.get(neighbor)! - 1;
+      const prevDegree = inDegree.get(neighbor);
+      const newDegree = prevDegree !== undefined ? prevDegree - 1 : -1;
       inDegree.set(neighbor, newDegree);
       if (newDegree === 0) {
         queue.push(neighbor);
@@ -124,7 +124,8 @@ export function validateDag(
     reachable.add(startNode.id);
 
     while (bfsQueue.length > 0) {
-      const current = bfsQueue.shift()!;
+      const current = bfsQueue.shift();
+      if (current === undefined) break;
       const neighbors = adjacency.get(current) ?? [];
       for (const neighbor of neighbors) {
         if (!reachable.has(neighbor)) {
@@ -182,12 +183,10 @@ export function topologicalSort(
   }
 
   for (const edge of edges) {
-    if (adjacency.has(edge.sourceNodeId)) {
-      adjacency.get(edge.sourceNodeId)!.push(edge.targetNodeId);
-    }
-    if (inDegree.has(edge.targetNodeId)) {
-      inDegree.set(edge.targetNodeId, inDegree.get(edge.targetNodeId)! + 1);
-    }
+    const arr = adjacency.get(edge.sourceNodeId);
+    if (arr) arr.push(edge.targetNodeId);
+    const deg = inDegree.get(edge.targetNodeId);
+    if (deg !== undefined) inDegree.set(edge.targetNodeId, deg + 1);
   }
 
   // Use sorted queue for deterministic tie-breaking (WF-13)
@@ -201,13 +200,15 @@ export function topologicalSort(
 
   const result: string[] = [];
   while (queue.length > 0) {
-    const current = queue.shift()!;
+    const current = queue.shift();
+    if (current === undefined) break;
     result.push(current);
 
     const neighbors = adjacency.get(current) ?? [];
     const readyNeighbors: string[] = [];
     for (const neighbor of neighbors) {
-      const newDegree = inDegree.get(neighbor)! - 1;
+      const prevDegree = inDegree.get(neighbor);
+      const newDegree = prevDegree !== undefined ? prevDegree - 1 : -1;
       inDegree.set(neighbor, newDegree);
       if (newDegree === 0) {
         readyNeighbors.push(neighbor);

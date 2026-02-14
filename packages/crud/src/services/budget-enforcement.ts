@@ -203,7 +203,8 @@ export async function releaseBudgetCommitment(
       ),
     );
 
-  // Reduce committed total
+  // Reduce committed total (budgetId from DB is UUID string)
+  const budgetId = String(commitment.budgetId);
   await (tx as any)
     .update(budgets)
     .set({
@@ -212,7 +213,7 @@ export async function releaseBudgetCommitment(
     .where(
       and(
         eq(budgets.orgId, orgId),
-        eq(budgets.id, commitment.budgetId),
+        eq(budgets.id, budgetId),
       ),
     );
 }

@@ -60,8 +60,8 @@ export async function traceForward(
 
   const visited = new Set<string>();
   const result: AffectedMovement[] = [];
-  let frontier = seedLinks.map((l: any) => ({
-    movementId: l.toMovementId,
+  let frontier: AffectedMovement[] = seedLinks.map((l: { toMovementId: unknown; qty: string; traceType: string }) => ({
+    movementId: String(l.toMovementId),
     qty: l.qty,
     traceType: l.traceType,
     depth: 1,
@@ -91,9 +91,10 @@ export async function traceForward(
         );
 
       for (const d of downstream) {
-        if (!visited.has(d.toMovementId)) {
+        const toId = String(d.toMovementId);
+        if (!visited.has(toId)) {
           nextFrontier.push({
-            movementId: d.toMovementId,
+            movementId: toId,
             qty: d.qty,
             traceType: d.traceType,
             depth: item.depth + 1,
@@ -139,8 +140,8 @@ export async function traceBackward(
 
   const visited = new Set<string>();
   const result: AffectedMovement[] = [];
-  let frontier = seedLinks.map((l: any) => ({
-    movementId: l.fromMovementId,
+  let frontier: AffectedMovement[] = seedLinks.map((l: { fromMovementId: unknown; qty: string; traceType: string }) => ({
+    movementId: String(l.fromMovementId),
     qty: l.qty,
     traceType: l.traceType,
     depth: 1,
@@ -170,9 +171,10 @@ export async function traceBackward(
         );
 
       for (const u of upstream) {
-        if (!visited.has(u.fromMovementId)) {
+        const fromId = String(u.fromMovementId);
+        if (!visited.has(fromId)) {
           nextFrontier.push({
-            movementId: u.fromMovementId,
+            movementId: fromId,
             qty: u.qty,
             traceType: u.traceType,
             depth: item.depth + 1,

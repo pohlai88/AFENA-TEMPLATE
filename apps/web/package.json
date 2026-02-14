@@ -10,7 +10,8 @@
     "lint:ci": "eslint . --ext .js,.jsx,.ts,.tsx --rule 'import/no-cycle: error'",
     "lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx --cache --fix",
     "type-check": "tsc --noEmit",
-    "db:gen-types": "npx @neondatabase/neon-js gen-types --db-url \"$DATABASE_URL\" --output src/types/database.ts"
+    "db:gen-types": "npx @neondatabase/neon-js gen-types --db-url \"$DATABASE_URL\" --output src/types/database.ts",
+    "ci:routes": "tsx tools/route-governance/index.ts"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.987.0",
@@ -24,10 +25,10 @@
     "afena-canon": "workspace:*",
     "afena-crud": "workspace:*",
     "afena-database": "workspace:^",
-    "afena-workflow": "workspace:*",
     "afena-logger": "workspace:*",
     "afena-search": "workspace:*",
     "afena-ui": "workspace:*",
+    "afena-workflow": "workspace:*",
     "lucide-react": "^0.563.0",
     "next": "catalog:",
     "next-themes": "^0.4.6",
@@ -47,8 +48,10 @@
     "afena-typescript-config": "workspace:*",
     "eslint": "catalog:",
     "eslint-config-next": "catalog:",
+    "fast-glob": "^3.3.3",
     "postcss": "catalog:",
     "tailwindcss": "catalog:",
+    "tsx": "^4.21.0",
     "typescript": "catalog:"
   }
 }

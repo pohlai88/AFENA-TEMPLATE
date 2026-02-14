@@ -116,21 +116,21 @@ export async function resolveConversion(
     return {
       fromUomId,
       toUomId,
-      factor: 1 / parseFloat(rev.factor),
-      roundingMethod: rev.roundingMethod,
-      roundingPrecision: rev.roundingPrecision,
-      scope: rev.scope,
+      factor: 1 / parseFloat(String(rev.factor)),
+      roundingMethod: String(rev.roundingMethod),
+      roundingPrecision: Number(rev.roundingPrecision),
+      scope: rev.scope === 'product' ? 'product' : 'global',
     };
   }
 
   const row = rows[0];
   return {
-    fromUomId: row.fromUomId,
-    toUomId: row.toUomId,
-    factor: parseFloat(row.factor),
-    roundingMethod: row.roundingMethod,
-    roundingPrecision: row.roundingPrecision,
-    scope: row.scope,
+    fromUomId: String(row.fromUomId),
+    toUomId: String(row.toUomId),
+    factor: parseFloat(String(row.factor)),
+    roundingMethod: String(row.roundingMethod),
+    roundingPrecision: Number(row.roundingPrecision),
+    scope: row.scope === 'product' ? 'product' : 'global',
   };
 }
 

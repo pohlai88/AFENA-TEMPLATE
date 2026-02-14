@@ -4,6 +4,15 @@ import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { withAuth } from '@/lib/api/with-auth';
 import { getR2, R2_BUCKET, R2_PUBLIC_BASE_URL } from '@/lib/r2';
 
+import type { RouteMetaStrict } from '@/lib/api/route-types';
+
+export const ROUTE_META = {
+  path: '/api/storage/presign',
+  methods: ['POST'],
+  tier: 'bff',
+  exposeInOpenApi: false,
+} as const satisfies RouteMetaStrict;
+
 export const CAPABILITIES = ['storage.files.upload'] as const;
 
 const MAX_FILE_SIZE = 50 * 1024 * 1024; // 50 MB

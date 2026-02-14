@@ -3,6 +3,15 @@ import { db, eq, r2Files, sql } from 'afena-database';
 
 import { withAuth } from '@/lib/api/with-auth';
 
+import type { RouteMetaStrict } from '@/lib/api/route-types';
+
+export const ROUTE_META = {
+  path: '/api/storage/metadata',
+  methods: ['GET', 'POST'],
+  tier: 'bff',
+  exposeInOpenApi: false,
+} as const satisfies RouteMetaStrict;
+
 export const CAPABILITIES = ['storage.files.save', 'storage.files.metadata'] as const;
 
 export const POST = withAuth(async (request) => {

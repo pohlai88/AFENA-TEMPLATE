@@ -4,9 +4,20 @@ import { verifyWebhookSignature } from 'afena-crud';
 
 import { withApiKey } from '@/lib/api/with-api-key';
 
+import type { RouteMetaStrict } from '@/lib/api/route-types';
+
 /**
  * POST /api/webhooks/[source] — Webhook ingestion endpoint.
- *
+ */
+export const ROUTE_META = {
+  path: '/api/webhooks/[source]',
+  methods: ['POST'],
+  tier: 'contract',
+  version: 'v1',
+  exposeInOpenApi: true,
+} as const satisfies RouteMetaStrict;
+
+/**
  * PRD Phase C #11 + G0.4:
  * - Accepts incoming webhooks from external systems
  * - Validates API key via Authorization header

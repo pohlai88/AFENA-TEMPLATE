@@ -1,5 +1,13 @@
 import { FileText, GitBranch, Home, Settings, Shield, Trash2, Users } from 'lucide-react';
 
+import {
+  org,
+  orgEntity,
+  orgEntityTrash,
+  orgSettings,
+  orgSettingsWorkflows,
+} from '@/lib/routes/app-routes';
+
 import type { LucideIcon } from 'lucide-react';
 
 /**
@@ -23,47 +31,47 @@ export interface NavGroup {
 export const NAV_ITEMS: NavItem[] = [
   {
     label: 'Dashboard',
-    href: (slug) => `/org/${slug}`,
+    href: (slug) => org(slug),
     icon: Home,
     group: 'main',
   },
   {
     label: 'Contacts',
-    href: (slug) => `/org/${slug}/contacts`,
+    href: (slug) => orgEntity(slug, 'contacts'),
     icon: Users,
     group: 'main',
     commandPaletteAction: 'Open Contacts',
   },
   {
     label: 'Advisories',
-    href: (slug) => `/org/${slug}/advisories`,
+    href: (slug) => orgEntity(slug, 'advisories'),
     icon: Shield,
     group: 'main',
   },
   {
     label: 'Files',
-    href: (slug) => `/org/${slug}/files`,
+    href: (slug) => orgEntity(slug, 'files'),
     icon: FileText,
     group: 'main',
   },
   // @entity-gen:nav-items
   {
     label: 'Trash',
-    href: (slug) => `/org/${slug}/contacts/trash`,
+    href: (slug) => orgEntityTrash(slug, 'contacts'),
     icon: Trash2,
     group: 'system',
     commandPaletteAction: 'Open Trash',
   },
   {
     label: 'Workflows',
-    href: (slug) => `/org/${slug}/settings/workflows`,
+    href: (slug) => orgSettingsWorkflows(slug),
     icon: GitBranch,
     group: 'system',
     commandPaletteAction: 'Open Workflows',
   },
   {
     label: 'Settings',
-    href: (slug) => `/org/${slug}/settings`,
+    href: (slug) => orgSettings(slug),
     icon: Settings,
     group: 'system',
   },

@@ -1,5 +1,7 @@
+import { orgEntityEditPage } from '@/lib/routes/app-routes';
+
 export const SURFACE = {
   surfaceId: 'web.companies.edit.page',
-  page: '/org/[slug]/companies/[id]/edit',
+  page: orgEntityEditPage('companies'),
   exposes: ['companies.update'],
 } as const;
