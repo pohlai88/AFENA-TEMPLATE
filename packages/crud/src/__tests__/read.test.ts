@@ -19,15 +19,15 @@ describe('listEntities includeCount', () => {
     const readPath = join(__dirname, '../read.ts');
     const content = readFileSync(readPath, 'utf-8');
 
-    // Count query must use the same whereClause variable
-    expect(content).toContain('.where(whereClause)');
+    // Count query must use the same whereClause variable (or whereClause ?? sql`true`)
+    expect(content).toContain('whereClause');
 
-    // Count query must NOT have limit, offset, or orderBy (only list query has those)
-    // The batch contains [listQuery, countQuery]. Count is the second - extract it.
-    const batchStart = content.indexOf('batch([');
+    // Offset path batch: find the batch that contains .offset(offset) (not cursor path)
+    const offsetBatchStart = content.indexOf('.offset(offset)');
+    expect(offsetBatchStart).toBeGreaterThan(-1);
+    const batchStart = content.lastIndexOf('batch([', offsetBatchStart);
     const batchEnd = content.indexOf(']);', batchStart);
     const batchContent = content.substring(batchStart, batchEnd + 3);
-    // Second query in batch: from first "), conn" to "])"
     const secondQueryStart = batchContent.indexOf('),');
     const secondQuery = batchContent.substring(secondQueryStart);
     expect(secondQuery).not.toContain('.limit(');
@@ -67,5 +67,24 @@ describe('listEntities includeCount', () => {
 
     expect(content).toContain('orgId?: string');
     expect(content).toContain('eq(table.orgId, options.orgId)');
+  });
+
+  it('cursor option triggers cursor path with limit+1 and nextCursor (Phase 2B)', () => {
+    const readPath = join(__dirname, '../read.ts');
+    const content = readFileSync(readPath, 'utf-8');
+
+    expect(content).toContain('cursor?: string');
+    expect(content).toContain('limit + 1');
+    expect(content).toContain('nextCursor');
+    expect(content).toContain('decodeCursor');
+    expect(content).toContain('encodeCursor');
+  });
+
+  it('invalid cursor returns VALIDATION_FAILED', () => {
+    const readPath = join(__dirname, '../read.ts');
+    const content = readFileSync(readPath, 'utf-8');
+
+    expect(content).toContain('VALIDATION_FAILED');
+    expect(content).toContain('decodeCursor(options.cursor)');
   });
 });

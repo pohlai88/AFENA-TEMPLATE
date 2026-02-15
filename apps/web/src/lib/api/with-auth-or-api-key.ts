@@ -86,7 +86,10 @@ export function withAuthOrApiKey<T = unknown>(
   handler: (
     request: NextRequest,
     session: AuthSession,
-  ) => Promise<{ ok: true; data: T } | { ok: false; code: string; message: string; status?: number }>,
+  ) => Promise<
+    | { ok: true; data: T; meta?: { totalCount?: number; nextCursor?: string } }
+    | { ok: false; code: string; message: string; status?: number }
+  >,
 ) {
   return async function routeHandler(request: NextRequest): Promise<NextResponse> {
     const requestId = crypto.randomUUID();
@@ -125,7 +128,7 @@ export function withAuthOrApiKey<T = unknown>(
           return NextResponse.json({
             ok: true as const,
             data: result.data,
-            meta: { requestId },
+            meta: { requestId, ...result.meta },
           });
         }
 

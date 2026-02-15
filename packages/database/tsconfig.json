@@ -16,6 +16,6 @@
     "resolveJsonModule": true,
     "isolatedModules": true
   },
-  "include": ["src/**/*", "schema-lint.config.ts"],
+  "include": ["src/**/*", "schema-lint.config.ts", "table-registry.config.ts", "revoke.config.ts"],
   "exclude": ["node_modules", "dist", "build", "**/*.test.*", "**/*.spec.*"]
 }

@@ -5,6 +5,7 @@
  * - Count query reuses same where clause as list (no limit/offset/orderBy)
  * - totalCount matches filtered row count
  * - orgId filter narrows results
+ * - Cursor pagination returns correct page and nextCursor when more data exists (Phase 2B)
  *
  * Requires DATABASE_URL. Uses raw pg with SET LOCAL for tenant context
  * (same pattern as cross-tenant.integration.test.ts).
@@ -102,5 +103,58 @@ describeIf('listEntities list+count integration', () => {
     expect(countA).toBe(countB);
 
     await execSql('ROLLBACK');
+  });
+
+  it('cursor pagination returns page and nextCursor when more data exists (Phase 2B)', async () => {
+    const { listEntities } = await import('../read');
+
+    await execSql('BEGIN');
+    await setTenantContext(ORG_X, USER_X);
+
+    // Insert 5 contacts
+    for (let i = 0; i < 5; i++) {
+      await execSql(
+        `INSERT INTO contacts (id, org_id, name, contact_type, doc_status)
+         VALUES (gen_random_uuid(), $1, $2, 'customer', 'draft')`,
+        [ORG_X, `Cursor Contact ${i}`],
+      );
+    }
+    await execSql('COMMIT');
+
+    const requestId = crypto.randomUUID();
+
+    // First page: limit 2
+    const page1 = await listEntities('contacts', requestId, {
+      orgId: ORG_X,
+      limit: 2,
+    });
+    expect(page1.ok).toBe(true);
+    expect(page1.data).toBeDefined();
+    const data1 = page1.data as unknown[];
+    expect(data1.length).toBe(2);
+    expect(page1.meta?.nextCursor).toBeDefined();
+
+    // Second page: use cursor
+    const page2 = await listEntities('contacts', requestId, {
+      orgId: ORG_X,
+      limit: 2,
+      cursor: page1.meta!.nextCursor!,
+    });
+    expect(page2.ok).toBe(true);
+    expect(page2.data).toBeDefined();
+    const data2 = page2.data as unknown[];
+    expect(data2.length).toBe(2);
+
+    // No overlap
+    const ids1 = new Set(data1.map((r: any) => r.id));
+    const ids2 = new Set(data2.map((r: any) => r.id));
+    for (const id of ids2) {
+      expect(ids1.has(id)).toBe(false);
+    }
+
+    // Cleanup
+    await execSql('BEGIN');
+    await execSql(`DELETE FROM contacts WHERE org_id = $1 AND name LIKE 'Cursor Contact %'`, [ORG_X]);
+    await execSql('COMMIT');
   });
 });

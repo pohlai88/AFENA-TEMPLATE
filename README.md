@@ -118,6 +118,8 @@ A modern monorepo powered by Turborepo, Next.js 16 with Turbopack, and TypeScrip
 3. Use `pnpm build` to verify changes
 4. Use `pnpm lint` and `pnpm type-check` to ensure code quality
 
+**Lint & type debugging:** Cursor skill at `.cursor/skills/lint-types-debug/` — use when lint or type-check fails, or when debugging INVARIANT/EX-LINT issues.
+
 ## Adding New Packages
 
 1. Create a new directory in `packages/` or `tools/`

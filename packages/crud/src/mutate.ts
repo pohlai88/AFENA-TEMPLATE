@@ -17,6 +17,7 @@ import { companiesHandler } from './handlers/companies';
 import { contactsHandler } from './handlers/contacts';
 // @entity-gen:handler-import
 import { enforceLifecycle } from './lifecycle';
+import { invalidateListCache } from './list-cache';
 import { meterApiRequest, meterDbTimeout } from './metering';
 import { enforcePolicyV2 } from './policy-engine';
 import { checkRateLimit } from './rate-limiter';
@@ -406,6 +407,9 @@ export async function mutate(
       return { handlerResult, auditRow };
     }),
     );
+
+    // Phase 2C: Invalidate list cache for this entity type + org (fire-and-forget)
+    invalidateListCache(validSpec.entityRef.type, ctx.actor.orgId).catch(() => {});
 
     // Build success receipt
     const receipt: Receipt = {

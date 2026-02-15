@@ -29,7 +29,7 @@ type TableKind = 'truth' | 'control' | 'projection' | 'evidence' | 'link' | 'sys
 
 function validateAndBuild(): Map<string, TableKind> {
   const tableNames = [...__TABLE_NAMES__];
-  const tableSet = new Set(tableNames);
+  const tableSet = new Set<string>(tableNames);
 
   // No duplicates
   if (tableSet.size !== tableNames.length) {

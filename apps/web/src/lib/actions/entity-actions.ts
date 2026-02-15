@@ -98,6 +98,7 @@ export function generateEntityActions(entityType: EntityType) {
     limit?: number;
     offset?: number;
     orgId?: string;
+    cursor?: string;
     forcePrimary?: boolean;
   }): Promise<ApiResponse> {
     const requestId = getRequestId() ?? crypto.randomUUID();

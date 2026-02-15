@@ -200,7 +200,10 @@ function lintSchema(): LintResult[] {
     // ── Gate 2: composite-pk-for-truth (warning) ──────────
     // Truth tables SHOULD have composite PK (org_id, id) — GAP-DB-001 target
     // Currently warning-only until migration is complete
-    const tableKind = TABLE_REGISTRY[tableName];
+    const tableKind =
+      tableName in TABLE_REGISTRY
+        ? TABLE_REGISTRY[tableName as keyof typeof TABLE_REGISTRY]
+        : undefined;
     if (tableKind === 'truth') {
       // Check for composite PK pattern in config
       const hasCompositePK =

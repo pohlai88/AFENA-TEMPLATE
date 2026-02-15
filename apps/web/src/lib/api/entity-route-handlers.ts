@@ -35,7 +35,7 @@ function parseEntityPath(pathname: string): { entityType: string | undefined; id
 
 // ── Collection routes: GET /api/entities/:type + POST /api/entities/:type ──
 
-export const listEntitiesHandler = withAuthOrApiKey(async (request: NextRequest, _session: AuthSession) => {
+export const listEntitiesHandler = withAuthOrApiKey(async (request: NextRequest, session: AuthSession) => {
   const { entityType: raw } = parseEntityPath(request.nextUrl.pathname);
   const entityType = parseEntityType(raw);
   if (!entityType) {
@@ -44,12 +44,28 @@ export const listEntitiesHandler = withAuthOrApiKey(async (request: NextRequest,
 
   const actions = generateEntityActions(entityType);
   const includeDeleted = request.nextUrl.searchParams.get('includeDeleted') === 'true';
+  const includeCount = request.nextUrl.searchParams.get('includeCount') === 'true';
   const limit = Math.min(Number(request.nextUrl.searchParams.get('limit') ?? '50'), 200);
   const offset = Number(request.nextUrl.searchParams.get('offset') ?? '0');
+  const cursor = request.nextUrl.searchParams.get('cursor');
 
-  const result = await actions.list({ includeDeleted, limit, offset });
-  if (!result.ok) return { ok: false as const, code: 'INTERNAL_ERROR', message: 'Failed to list entities' };
-  return { ok: true as const, data: result.data };
+  const result = await actions.list({
+    includeDeleted,
+    includeCount,
+    limit,
+    offset,
+    ...(cursor ? { cursor } : {}),
+    orgId: session.orgId,
+  });
+  if (!result.ok) {
+    const code = result.error?.code ?? 'INTERNAL_ERROR';
+    const message = result.error?.message ?? 'Failed to list entities';
+    return { ok: false as const, code, message, ...(code === 'VALIDATION_FAILED' ? { status: 400 } : {}) };
+  }
+  const meta: { totalCount?: number; nextCursor?: string } = {};
+  if (result.meta?.totalCount !== undefined) meta.totalCount = result.meta.totalCount;
+  if (result.meta?.nextCursor) meta.nextCursor = result.meta.nextCursor;
+  return { ok: true as const, data: result.data, ...(Object.keys(meta).length ? { meta } : {}) };
 });
 
 export const createEntityHandler = withAuthOrApiKey(async (request: NextRequest, _session: AuthSession) => {
