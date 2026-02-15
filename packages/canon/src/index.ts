@@ -135,5 +135,16 @@ export {
 } from './validators/custom-field-value';
 export type { FieldValidationResult } from './validators/custom-field-value';
 
+// ── Contracts (LocalEntitySpec) ───────────────────────────
+export {
+  localEntitySpecSchema,
+  validateLocalEntitySpec,
+  safeParseLocalEntitySpec,
+} from './contracts';
+export type { LocalEntitySpec, EntityKind, FieldType, FieldDef } from './contracts';
+
 // ── Utilities ────────────────────────────────────────────
 export { invariant } from './invariant';
+
+// ── Adapter policies (ERP refactor) ──────────────────────
+export { MONEY_POLICY, RESERVED_WORD_POLICY } from './adapters/erpnext';

@@ -70,6 +70,9 @@ jobs:
             exit 1
           )
 
+      - name: Adapter gates (N2 contract, spine denylist)
+        run: pnpm ci:adapter-gates
+
   afena-e2e:
     name: E2E Tests
     timeout-minutes: 30

@@ -1,0 +1,19 @@
+{
+  "entityTypes": {
+    "db": [
+      "sales-orders",
+      "purchase-orders",
+      "quotations",
+      "delivery-notes",
+      "goods-receipts",
+      "sales-invoices",
+      "purchase-invoices",
+      "payments",
+      "items",
+      "item-groups",
+      "warehouses",
+      "addresses"
+    ],
+    "db+ui": ["contacts", "companies"]
+  }
+}

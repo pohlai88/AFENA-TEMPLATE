@@ -1,0 +1,19 @@
+{
+  "fieldRenames": {
+    "creation": "created_at",
+    "modified": "updated_at",
+    "docstatus": "posting_status",
+    "deleted": "is_deleted",
+    "owner": "created_by",
+    "modified_by": "updated_by"
+  },
+  "reservedWords": {
+    "status": "status_col",
+    "type": "type_col",
+    "from": "from_col",
+    "to": "to_col",
+    "user": "user_col"
+  },
+  "injectedFields": ["org_id", "id", "created_at", "updated_at", "is_deleted", "version"],
+  "routePrefix": "/org/[slug]"
+}

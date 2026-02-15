@@ -1,0 +1,265 @@
+{
+  "entityType": "account-closing-balances",
+  "kind": "master",
+  "table": {
+    "name": "account_closing_balances",
+    "pk": [
+      "org_id",
+      "id"
+    ],
+    "tenancy": true,
+    "reservedWordMap": {
+      "status": "status_col",
+      "type": "type_col",
+      "from": "from_col",
+      "to": "to_col",
+      "user": "user_col"
+    },
+    "indexes": []
+  },
+  "fields": [
+    {
+      "fieldname": "is_deleted",
+      "fieldType": "boolean",
+      "label": "Deleted",
+      "required": false,
+      "dbName": "is_deleted",
+      "source": "local"
+    },
+    {
+      "fieldname": "version",
+      "fieldType": "int",
+      "label": "Version",
+      "required": false,
+      "dbName": "version",
+      "source": "local"
+    },
+    {
+      "fieldname": "updated_at",
+      "fieldType": "timestamptz",
+      "label": "Updated",
+      "required": false,
+      "dbName": "updated_at",
+      "source": "local"
+    },
+    {
+      "fieldname": "created_at",
+      "fieldType": "timestamptz",
+      "label": "Created",
+      "required": false,
+      "dbName": "created_at",
+      "source": "local"
+    },
+    {
+      "fieldname": "id",
+      "fieldType": "uuid",
+      "label": "ID",
+      "required": true,
+      "dbName": "id",
+      "source": "local"
+    },
+    {
+      "fieldname": "org_id",
+      "fieldType": "uuid",
+      "label": "Organization",
+      "required": true,
+      "dbName": "org_id",
+      "source": "local"
+    },
+    {
+      "fieldname": "closing_date",
+      "fieldType": "date",
+      "label": "Closing Date",
+      "required": false,
+      "dbName": "closing_date",
+      "source": "refactor"
+    },
+    {
+      "fieldname": "account",
+      "fieldType": {
+        "type": "link",
+        "targetEntityType": "accounts",
+        "cardinality": "one",
+        "staged": false
+      },
+      "label": "Account",
+      "required": false,
+      "dbName": "account",
+      "source": "refactor"
+    },
+    {
+      "fieldname": "cost_center",
+      "fieldType": {
+        "type": "link",
+        "targetEntityType": "cost-centers",
+        "cardinality": "one",
+        "staged": false
+      },
+      "label": "Cost Center",
+      "required": false,
+      "dbName": "cost_center",
+      "source": "refactor"
+    },
+    {
+      "fieldname": "debit",
+      "fieldType": "bigint",
+      "label": "Debit Amount",
+      "required": false,
+      "dbName": "debit",
+      "source": "refactor"
+    },
+    {
+      "fieldname": "credit",
+      "fieldType": "bigint",
+      "label": "Credit Amount",
+      "required": false,
+      "dbName": "credit",
+      "source": "refactor"
+    },
+    {
+      "fieldname": "reporting_currency_exchange_rate",
+      "fieldType": "decimal",
+      "label": "Reporting Currency Exchange Rate",
+      "required": false,
+      "dbName": "reporting_currency_exchange_rate",
+      "source": "refactor"
+    },
+    {
+      "fieldname": "debit_in_reporting_currency",
+      "fieldType": "bigint",
+      "label": "Debit Amount in Reporting Currency",
+      "required": false,
+      "dbName": "debit_in_reporting_currency",
+      "source": "refactor"
+    },
+    {
+      "fieldname": "credit_in_reporting_currency",
+      "fieldType": "bigint",
+      "label": "Credit Amount in Reporting Currency",
+      "required": false,
+      "dbName": "credit_in_reporting_currency",
+      "source": "refactor"
+    },
+    {
+      "fieldname": "account_currency",
+      "fieldType": {
+        "type": "link",
+        "targetEntityType": "currencies",
+        "cardinality": "one",
+        "staged": true
+      },
+      "label": "Account Currency",
+      "required": false,
+      "dbName": "account_currency",
+      "source": "refactor"
+    },
+    {
+      "fieldname": "debit_in_account_currency",
+      "fieldType": "bigint",
+      "label": "Debit Amount in Account Currency",
+      "required": false,
+      "dbName": "debit_in_account_currency",
+      "source": "refactor"
+    },
+    {
+      "fieldname": "credit_in_account_currency",
+      "fieldType": "bigint",
+      "label": "Credit Amount in Account Currency",
+      "required": false,
+      "dbName": "credit_in_account_currency",
+      "source": "refactor"
+    },
+    {
+      "fieldname": "project",
+      "fieldType": {
+        "type": "link",
+        "targetEntityType": "projects",
+        "cardinality": "one",
+        "staged": false
+      },
+      "label": "Project",
+      "required": false,
+      "dbName": "project",
+      "source": "refactor"
+    },
+    {
+      "fieldname": "company",
+      "fieldType": {
+        "type": "link",
+        "targetEntityType": "companies",
+        "cardinality": "one",
+        "staged": false
+      },
+      "label": "Company",
+      "required": false,
+      "dbName": "company",
+      "source": "refactor"
+    },
+    {
+      "fieldname": "finance_book",
+      "fieldType": {
+        "type": "link",
+        "targetEntityType": "finance-books",
+        "cardinality": "one",
+        "staged": false
+      },
+      "label": "Finance Book",
+      "required": false,
+      "dbName": "finance_book",
+      "source": "refactor"
+    },
+    {
+      "fieldname": "period_closing_voucher",
+      "fieldType": {
+        "type": "link",
+        "targetEntityType": "period-closing-vouchers",
+        "cardinality": "one",
+        "staged": false
+      },
+      "label": "Period Closing Voucher",
+      "required": false,
+      "dbName": "period_closing_voucher",
+      "source": "refactor"
+    },
+    {
+      "fieldname": "is_period_closing_voucher_entry",
+      "fieldType": "boolean",
+      "label": "Is Period Closing Voucher Entry",
+      "required": false,
+      "dbName": "is_period_closing_voucher_entry",
+      "source": "refactor"
+    }
+  ],
+  "ui": {
+    "groups": [],
+    "order": [
+      "closing_date",
+      "account",
+      "cost_center",
+      "debit",
+      "credit",
+      "reporting_currency_exchange_rate",
+      "debit_in_reporting_currency",
+      "credit_in_reporting_currency",
+      "account_currency",
+      "debit_in_account_currency",
+      "credit_in_account_currency",
+      "project",
+      "company",
+      "finance_book",
+      "period_closing_voucher",
+      "is_period_closing_voucher_entry"
+    ],
+    "dependsOn": []
+  },
+  "sourceMap": {},
+  "meta": {
+    "adapterVersion": "e1a427779077",
+    "inputsHash": "bc0afa460bbaefa86fda8b787bb4e377a8fefa3b9b3f9bf43834312395793125",
+    "generatedAt": "2026-02-15T21:11:51.535Z",
+    "source": {
+      "doctypeId": "erpnext:Accounts:Account Closing Balance",
+      "name": "Account Closing Balance"
+    }
+  }
+}

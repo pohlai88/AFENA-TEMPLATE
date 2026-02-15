@@ -33,6 +33,7 @@ import { generateCapabilityMermaid, generateDependencyMermaid, writeMermaid } fr
 import { generateAiContext, writeAiContext } from './emitters/ai-context';
 import { scanAstCapabilities } from './collectors/ast-scanner';
 import { runAutofix } from './autofix';
+import { registerAdapterCommands } from './adapter';
 
 /**
  * Step 23 — Kind inference validation.
@@ -365,6 +366,9 @@ export function registerMetaCommand(program: Command): void {
       writeMatrix(repoRoot, matrix);
       console.log(matrix);
     });
+
+  // ── Adapter pipeline (ERP refactor adoption) ────────────
+  registerAdapterCommands(meta);
 
   // ── afena meta manifest ────────────────────────────────
   meta

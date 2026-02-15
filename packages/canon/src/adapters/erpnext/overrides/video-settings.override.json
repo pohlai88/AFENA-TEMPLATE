@@ -1,0 +1,4 @@
+{
+  "collisionExpected": ["routePathExists"],
+  "uiAdoptMode": "integrate"
+}

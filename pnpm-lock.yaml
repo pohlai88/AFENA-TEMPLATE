@@ -780,6 +780,9 @@ importers:
       afena-canon:
         specifier: workspace:*
         version: link:../../packages/canon
+      afena-database:
+        specifier: workspace:*
+        version: link:../../packages/database
       commander:
         specifier: 'catalog:'
         version: 14.0.3

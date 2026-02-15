@@ -1,0 +1,10 @@
+{
+  "batch": "batches",
+  "company": "companies",
+  "address": "addresses",
+  "series": "series",
+  "status": "statuses",
+  "analysis": "analyses",
+  "currency": "currencies",
+  "branch": "branches"
+}

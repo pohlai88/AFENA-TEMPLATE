@@ -1,0 +1,104 @@
+{
+  "entityType": "account-category",
+  "kind": "master",
+  "table": {
+    "name": "account_category",
+    "pk": [
+      "org_id",
+      "id"
+    ],
+    "tenancy": true,
+    "reservedWordMap": {
+      "status": "status_col",
+      "type": "type_col",
+      "from": "from_col",
+      "to": "to_col",
+      "user": "user_col"
+    },
+    "indexes": []
+  },
+  "fields": [
+    {
+      "fieldname": "is_deleted",
+      "fieldType": "boolean",
+      "label": "Deleted",
+      "required": false,
+      "dbName": "is_deleted",
+      "source": "local"
+    },
+    {
+      "fieldname": "version",
+      "fieldType": "int",
+      "label": "Version",
+      "required": false,
+      "dbName": "version",
+      "source": "local"
+    },
+    {
+      "fieldname": "updated_at",
+      "fieldType": "timestamptz",
+      "label": "Updated",
+      "required": false,
+      "dbName": "updated_at",
+      "source": "local"
+    },
+    {
+      "fieldname": "created_at",
+      "fieldType": "timestamptz",
+      "label": "Created",
+      "required": false,
+      "dbName": "created_at",
+      "source": "local"
+    },
+    {
+      "fieldname": "id",
+      "fieldType": "uuid",
+      "label": "ID",
+      "required": true,
+      "dbName": "id",
+      "source": "local"
+    },
+    {
+      "fieldname": "org_id",
+      "fieldType": "uuid",
+      "label": "Organization",
+      "required": true,
+      "dbName": "org_id",
+      "source": "local"
+    },
+    {
+      "fieldname": "account_category_name",
+      "fieldType": "string",
+      "label": "Account Category Name",
+      "required": true,
+      "dbName": "account_category_name",
+      "source": "refactor"
+    },
+    {
+      "fieldname": "description",
+      "fieldType": "text",
+      "label": "Description",
+      "required": false,
+      "dbName": "description",
+      "source": "refactor"
+    }
+  ],
+  "ui": {
+    "groups": [],
+    "order": [
+      "account_category_name",
+      "description"
+    ],
+    "dependsOn": []
+  },
+  "sourceMap": {},
+  "meta": {
+    "adapterVersion": "e1a427779077",
+    "inputsHash": "f0204a83b6c173bf07ae331f45541f93650772ffcfaf6a921a11828b61e20af2",
+    "generatedAt": "2026-02-15T20:44:02.539Z",
+    "source": {
+      "doctypeId": "erpnext:Accounts:Account Category",
+      "name": "Account Category"
+    }
+  }
+}
