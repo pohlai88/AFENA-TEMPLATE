@@ -1,16 +1,21 @@
 import { sql } from 'drizzle-orm';
-import { boolean, check, date, index, pgTable, text, uniqueIndex, uuid } from 'drizzle-orm/pg-core';
+import { boolean, check, date, foreignKey, index, pgTable, primaryKey, text, uniqueIndex, uuid } from 'drizzle-orm/pg-core';
 
 import { baseEntityColumns } from '../helpers/base-entity';
 import { tenantPolicy } from '../helpers/tenant-policy';
 
+import { companies } from './companies';
+
 /**
  * Projects — ledger dimension for project-based costing/revenue tracking.
  *
+ * RULE C-01: Projects are LEGAL-scoped (company-specific project tracking).
  * PRD Phase D #14 + G0.3:
  * - Typed column approach (project_id on journal_lines)
  * - status lifecycle: active → completed → archived
  * - UNIQUE(org_id, company_id, code)
+ * 
+ * GAP-DB-001: Composite PK (org_id, id) for data integrity and tenant isolation.
  */
 export const projects = pgTable(
   'projects',
@@ -27,6 +32,12 @@ export const projects = pgTable(
     description: text('description'),
   },
   (table) => [
+    primaryKey({ columns: [table.orgId, table.id] }),
+    foreignKey({
+      columns: [table.orgId, table.companyId],
+      foreignColumns: [companies.orgId, companies.id],
+      name: 'projects_company_fk',
+    }),
     index('projects_org_id_idx').on(table.orgId, table.id),
     index('projects_org_company_idx').on(table.orgId, table.companyId),
     uniqueIndex('projects_org_company_code_uniq').on(

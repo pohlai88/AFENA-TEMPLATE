@@ -1,0 +1,174 @@
+# ERP Refactor — Generated Code from Canon Schema
+
+This directory contains **generated code** that translates ERPNext DocTypes into a modern stack (PostgreSQL, Drizzle, React, shadcn/ui, Zod, OpenAPI). **Do not edit generated files manually** — changes will be overwritten on regeneration.
+
+---
+
+## Purpose
+
+The ERP refactor converts ERPNext's Frappe/JSON-based schema into:
+
+- **Canon schema** (`.canon.json`) — normalized entity definitions
+- **Database** — Drizzle schema + migrations for PostgreSQL
+- **Types** — Zod schemas for validation
+- **UI** — React forms, columns, list/detail pages (shadcn + TanStack Table)
+- **API** — OpenAPI spec and route handlers
+- **RLS** — Row-level security policies
+- **Hooks** — Data-fetching and mutation hooks
+
+This enables AFENDA-NEXUS to adopt ERPNext's domain model while using a modern TypeScript/PostgreSQL stack instead of Frappe.
+
+---
+
+## Directory Layout
+
+```
+.PRD/erp-refactor/
+├── README.md           ← You are here
+└── v3/                 ← Generated output (version 3)
+    ├── manifest.json   ← Generator metadata, dbNameMap, package flags
+    ├── canon/          ← Canon schema (input to generator)
+    │   └── *.canon.json
+    ├── db/             ← Drizzle schema + migration
+    │   ├── schema.ts
+    │   └── migration.sql
+    ├── types/         ← Zod schemas (one per entity)
+    │   └── *.ts
+    ├── openapi/        ← OpenAPI 3.1 spec
+    │   └── spec.yaml
+    ├── shadcn/         ← React UI components
+    │   ├── forms/      ← *-form.tsx
+    │   ├── columns/    ← *-columns.tsx (table columns)
+    │   ├── pages/      ← *-list-page.tsx, *-detail-page.tsx
+    │   └── lib/        ← form-utils.ts, data-table.tsx
+    ├── api/            ← API route handlers
+    ├── hooks/          ← React Query hooks
+    ├── rls/            ← Row-level security policies
+    ├── neon/           ← Neon-specific config
+    └── ui/             ← Legacy UI components (if any)
+```
+
+---
+
+## Canon Schema (Input)
+
+Each `*.canon.json` defines one entity (DocType). Key sections:
+
+| Section      | Purpose                                                                 |
+|-------------|-------------------------------------------------------------------------|
+| `doctypeId` | Source identifier, e.g. `erpnext:Utilities:Video Settings`             |
+| `fields`    | Field definitions: `fieldname`, `fieldtype`, `label`, `dependsOn`, etc. |
+| `identity` | `app`, `module`, `naming` (hash, field, expression), `isSingle`, etc. |
+| `permissions` | Role-based access (create, read, write, delete, etc.)                 |
+| `childTables` | Child table references                                                |
+| `events`   | Validation handlers (ERPNext module paths)                             |
+| `ui`       | Search fields, sort, image field                                        |
+
+**Example field with conditional visibility (ERPNext `depends_on`):**
+
+```json
+{
+  "fieldname": "api_key",
+  "fieldtype": "data",
+  "label": "API Key",
+  "dependsOn": "eval:doc.enable_youtube_tracking",
+  "requiredDynamic": "eval:doc.enable_youtube_tracking"
+}
+```
+
+---
+
+## Generated Outputs
+
+### Database (`db/`)
+
+- **schema.ts** — Drizzle ORM tables, enums, relations
+- **migration.sql** — Raw SQL migration (PostgreSQL)
+- Uses `dbNameMap` from `manifest.json` to avoid reserved words (e.g. `status` → `status_col`)
+
+### Types (`types/`)
+
+- One file per entity: `video-settings.ts`, `video.ts`, etc.
+- Exports: `*Schema`, `*InsertSchema`, `*Insert` type
+- Used by forms and API for validation
+
+### UI (`shadcn/`)
+
+- **forms/** — React Hook Form + Zod, conditional fields via `dependsOn`
+- **columns/** — TanStack Table column definitions
+- **pages/** — List (DataTable) and detail pages
+- **lib/form-utils.ts** — `parseDependsOn()` converts ERPNext `eval:doc.x == 'y'` to JS
+
+### OpenAPI (`openapi/`)
+
+- CRUD endpoints per entity: `GET/POST /entity`, `GET/PUT/DELETE /entity/{id}`
+- Schemas reference Zod-derived types
+
+### API, Hooks, RLS, Neon
+
+- **api/** — Route handlers
+- **hooks/** — React Query hooks for data fetching/mutations
+- **rls/** — Row-level security policies
+- **neon/** — Neon database integration
+
+---
+
+## Key Patterns
+
+### 1. Per-entity file naming
+
+Entity names are slugified (e.g. `Video Settings` → `video-settings`):
+
+- `video-settings-form.tsx`
+- `video-settings-columns.tsx`
+- `video-settings-list-page.tsx`
+- `video-settings-detail-page.tsx`
+- `video-settings.ts` (Zod)
+
+### 2. Conditional fields (`dependsOn`)
+
+ERPNext uses expressions like `eval:doc.status == 'Active'`. The generator:
+
+1. Parses them via `parseDependsOn()` in `form-utils.ts`
+2. Renders fields inside `{ condition && <FormField ... /> }` in forms
+
+### 3. Reserved column names
+
+PostgreSQL reserves words like `status`, `user`, `type`, `from`, `to`. The `dbNameMap` in `manifest.json` maps these to safe names (e.g. `status_col`, `user_col`).
+
+---
+
+## Regeneration
+
+Code is generated by **@go4/generate-stack** (or equivalent Canon-based generator). To regenerate:
+
+1. Ensure Canon schema (`.canon.json`) is up to date
+2. Run the generator with the same `manifest.json` config
+3. Regenerated files will overwrite existing output
+
+**Manifest fields:**
+
+- `canonVersion` — Schema version
+- `db.dbNameMap` — Reserved-word mappings
+- `db.dialect` — `postgres`
+- `packages` — Which packages to generate (api, db, hooks, neon, openapi, rls, shadcn, ui, zod)
+- `generatedAt`, `inputHash`, `outputHash` — For change tracking
+
+---
+
+## Extending Generated Code
+
+- **Do not edit** files with the header: `// Generated from Canon schema — do not edit manually`
+- **Extend** by:
+  - Wrapping generated components in your own
+  - Adding custom routes/hooks that call generated APIs
+  - Overriding styles or layout in parent components
+- **Customize schema** by editing Canon JSON and regenerating
+
+---
+
+## References
+
+- **ERPNext** — [frappe.io/erpnext](https://frappe.io/erpnext), [docs.frappe.io](https://docs.frappe.io)
+- **Domain architecture** — `.PRD/domain.md` (0–19 Purpose Stack, ERPNext comparison)
+- **AFENDA-NEXUS** — Main app packages in `packages/` consume or adapt this generated code

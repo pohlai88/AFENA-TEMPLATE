@@ -43,8 +43,8 @@ function deepEqualSubsetManifestVsMeta(e: RouteFileEntry, meta: unknown): void {
   const same =
     m.path === expected.path &&
     Array.isArray(m.methods) &&
-    m.methods.length === expected.methods.length &&
-    (expected.methods as string[]).every((x, i) => m.methods[i] === x) &&
+    (m.methods as string[]).length === expected.methods.length &&
+    (expected.methods as string[]).every((x, i) => (m.methods as string[])[i] === x) &&
     m.tier === expected.tier &&
     m.exposeInOpenApi === expected.exposeInOpenApi &&
     (expected as Record<string, unknown>).version === m.version;
@@ -79,7 +79,10 @@ function assertManifestUniqueness(manifest: RouteFileEntry[]): void {
   for (const [p, entries] of byPath) {
     for (let i = 0; i < entries.length; i++) {
       for (let j = i + 1; j < entries.length; j++) {
-        const ov = overlap(entries[i].methods, entries[j].methods);
+        const ei = entries[i];
+        const ej = entries[j];
+        if (!ei || !ej) continue;
+        const ov = overlap(ei.methods, ej.methods);
         if (ov.length) fail(`Manifest method overlap for path ${p}: ${ov.join(', ')}`);
       }
     }

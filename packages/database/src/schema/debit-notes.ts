@@ -1,12 +1,15 @@
 import { sql } from 'drizzle-orm';
-import { bigint, check, index, jsonb, pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core';
+import { bigint, check, foreignKey, index, jsonb, pgTable, primaryKey, text, timestamp, uuid } from 'drizzle-orm/pg-core';
 
 import { docEntityColumns } from '../helpers/doc-entity';
 import { tenantPolicy } from '../helpers/tenant-policy';
 
+import { companies } from './companies';
+
 /**
  * Debit notes — supplier-side correction documents (AP equivalent of credit notes).
  *
+ * RULE C-01: Debit notes are ISSUER-scoped (company issues debit notes).
  * Audit P0-4:
  * - Referenced by credit_notes.reverses_type CHECK ('debit_note')
  * - Referenced by payment_allocations.target_type CHECK ('debit_note')
@@ -14,6 +17,8 @@ import { tenantPolicy } from '../helpers/tenant-policy';
  * - References source doc via reverses_type + reverses_id
  * - reason_code for audit trail
  * - Uses docEntity lifecycle (draft → submitted → active → cancelled)
+ * 
+ * GAP-DB-001: Composite PK (org_id, id) for data integrity and tenant isolation.
  */
 export const debitNotes = pgTable(
   'debit_notes',
@@ -39,6 +44,12 @@ export const debitNotes = pgTable(
     tags: jsonb('tags').default(sql`'[]'::jsonb`),
   },
   (table) => [
+    primaryKey({ columns: [table.orgId, table.id] }),
+    foreignKey({
+      columns: [table.orgId, table.companyId],
+      foreignColumns: [companies.orgId, companies.id],
+      name: 'debit_notes_company_fk',
+    }),
     index('debit_notes_org_id_idx').on(table.orgId, table.id),
     index('debit_notes_org_company_idx').on(table.orgId, table.companyId),
     index('debit_notes_reverses_idx').on(table.orgId, table.reversesType, table.reversesId),

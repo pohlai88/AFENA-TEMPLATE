@@ -1,5 +1,5 @@
 import { sql } from 'drizzle-orm';
-import { check, index, pgTable, text, uniqueIndex, uuid } from 'drizzle-orm/pg-core';
+import { check, index, pgTable, primaryKey, text, uniqueIndex, uuid } from 'drizzle-orm/pg-core';
 
 import { baseEntityColumns } from '../helpers/base-entity';
 import { tenantPolicy } from '../helpers/tenant-policy';
@@ -11,6 +11,8 @@ import { tenantPolicy } from '../helpers/tenant-policy';
  * - Tracks relationships between documents (SO→DN→SI, PI→GR, etc.)
  * - Line-level traceability via sourceLineId/targetLineId
  * - Cross-org guard enforced at application level (§3.10)
+ * 
+ * GAP-DB-001: Composite PK (org_id, id) for data integrity and tenant isolation.
  */
 export const docLinks = pgTable(
   'doc_links',
@@ -25,6 +27,7 @@ export const docLinks = pgTable(
     targetLineId: uuid('target_line_id'),
   },
   (table) => [
+    primaryKey({ columns: [table.orgId, table.id] }),
     uniqueIndex('doc_links_org_src_tgt_type_uniq').on(
       table.orgId,
       table.sourceType,

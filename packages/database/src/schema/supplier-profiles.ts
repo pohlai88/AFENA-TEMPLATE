@@ -1,16 +1,21 @@
 import { sql } from 'drizzle-orm';
-import { check, index, integer, pgTable, text, uniqueIndex, uuid } from 'drizzle-orm/pg-core';
+import { check, foreignKey, index, integer, pgTable, primaryKey, text, uniqueIndex, uuid } from 'drizzle-orm/pg-core';
 
 import { baseEntityColumns } from '../helpers/base-entity';
 import { tenantPolicy } from '../helpers/tenant-policy';
 
+import { companies } from './companies';
+
 /**
  * Supplier profiles — supplier-specific settings linked to contacts.
  *
+ * RULE C-01: Supplier profiles are LEGAL-scoped (company-specific supplier settings).
  * Audit P1-5:
  * - Lead times, preferred currency, default warehouse per supplier
  * - A contact can be both customer AND supplier (separate profile rows)
  * - UNIQUE(org_id, contact_id) — one supplier profile per contact
+ * 
+ * GAP-DB-001: Composite PK (org_id, id) for data integrity and tenant isolation.
  */
 export const supplierProfiles = pgTable(
   'supplier_profiles',
@@ -30,6 +35,12 @@ export const supplierProfiles = pgTable(
     memo: text('memo'),
   },
   (table) => [
+    primaryKey({ columns: [table.orgId, table.id] }),
+    foreignKey({
+      columns: [table.orgId, table.companyId],
+      foreignColumns: [companies.orgId, companies.id],
+      name: 'supplier_profiles_company_fk',
+    }).onDelete('set null'),
     index('supp_prof_org_id_idx').on(table.orgId, table.id),
     index('supp_prof_org_company_idx').on(table.orgId, table.companyId),
     uniqueIndex('supp_prof_org_contact_uniq').on(table.orgId, table.contactId),

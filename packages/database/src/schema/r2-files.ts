@@ -1,12 +1,15 @@
 import { sql } from 'drizzle-orm';
-import { bigint, check, index, pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core';
+import { bigint, check, foreignKey, index, pgTable, primaryKey, text, timestamp, uuid } from 'drizzle-orm/pg-core';
 
 import { baseEntityColumns } from '../helpers/base-entity';
 import { tenantPolicy } from '../helpers/tenant-policy';
 
+import { companies } from './companies';
+
 /**
  * R2 files — org-scoped file metadata for cloud storage.
  *
+ * RULE C-01: R2 files are LEGAL-scoped (company owns files, nullable for org-wide).
  * Audit P0-1 rebuild:
  * - org_id + tenantPolicy for multi-tenant isolation
  * - company_id for legal entity scoping
@@ -16,6 +19,8 @@ import { tenantPolicy } from '../helpers/tenant-policy';
  * - uploaded_by for ownership tracking (separate from created_by)
  * - version for optimistic locking via baseEntityColumns
  * - replaced_by for file versioning chain
+ * 
+ * GAP-DB-001: Composite PK (org_id, id) for data integrity and tenant isolation.
  */
 export const r2Files = pgTable(
   'r2_files',
@@ -39,6 +44,12 @@ export const r2Files = pgTable(
     description: text('description'),
   },
   (table) => [
+    primaryKey({ columns: [table.orgId, table.id] }),
+    foreignKey({
+      columns: [table.orgId, table.companyId],
+      foreignColumns: [companies.orgId, companies.id],
+      name: 'r2_files_company_fk',
+    }).onDelete('set null'),
     index('r2_files_org_id_idx').on(table.orgId, table.id),
     index('r2_files_org_company_idx').on(table.orgId, table.companyId),
     index('r2_files_org_folder_idx').on(table.orgId, table.folderPath),

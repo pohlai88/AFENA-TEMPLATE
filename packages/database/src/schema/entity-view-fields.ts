@@ -1,14 +1,17 @@
 import { sql } from 'drizzle-orm';
-import { boolean, check, index, integer, pgTable, text, uniqueIndex, uuid } from 'drizzle-orm/pg-core';
+import { boolean, check, index, integer, pgTable, primaryKey, text, uniqueIndex, uuid } from 'drizzle-orm/pg-core';
 
 import { tenantPolicy } from '../helpers/tenant-policy';
 
 import { entityViews } from './entity-views';
 
+/**
+ * GAP-DB-001: Composite PK (org_id, id) for data integrity and tenant isolation.
+ */
 export const entityViewFields = pgTable(
   'entity_view_fields',
   {
-    id: uuid('id').defaultRandom().primaryKey(),
+    id: uuid('id').defaultRandom().notNull(),
     orgId: text('org_id')
       .notNull()
       .default(sql`(auth.require_org_id())`),
@@ -25,6 +28,7 @@ export const entityViewFields = pgTable(
     componentOverride: text('component_override'),
   },
   (table) => [
+    primaryKey({ columns: [table.orgId, table.id] }),
     index('entity_view_fields_org_id_idx').on(table.orgId, table.id),
     uniqueIndex('entity_view_fields_org_view_field_key_uniq').on(
       table.orgId,

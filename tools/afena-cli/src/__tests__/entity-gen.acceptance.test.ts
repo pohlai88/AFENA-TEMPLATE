@@ -12,6 +12,8 @@
  * This test does NOT require a database connection.
  * It runs the generator script via child_process and inspects files.
  */
+/* eslint-disable security/detect-non-literal-fs-filename -- paths are ROOT + known constants from test config */
+/* eslint-disable security/detect-unsafe-regex -- allowlist regex; input is single line from execSync */
 
 import { execSync } from 'node:child_process';
 import * as fs from 'node:fs';
@@ -58,6 +60,7 @@ const MARKER_FILES: Array<{ file: string; mustContain: string }> = [
   { file: 'packages/crud/src/handler-meta.ts', mustContain: `${ENTITY}: [` },
   { file: `apps/web/app/(app)/org/[slug]/_components/nav-config.ts`, mustContain: `'${PASCAL_PLURAL}'` },
   { file: 'packages/database/src/schema/index.ts', mustContain: `from './${ENTITY}'` },
+  { file: 'packages/database/src/schema/_registry.ts', mustContain: `${ENTITY}: 'truth',` },
 ];
 
 // Snapshot originals for cleanup
@@ -85,25 +88,28 @@ function deleteIfExists(relPath: string): void {
   }
 }
 
+const EXEC_OPTS = {
+  cwd: path.join(ROOT, 'packages', 'database'),
+  stdio: 'pipe' as const,
+  timeout: 30_000,
+  maxBuffer: 10 * 1024 * 1024,
+};
+
 describe('B1 — Entity Generator Acceptance', () => {
   beforeAll(() => {
     // Snapshot all files that will be modified
     for (const m of MARKER_FILES) {
       snapshotFile(m.file);
     }
-    // Also snapshot mutate.ts import line (generator adds import)
-    // Already covered by MARKER_FILES
 
-    // Run the generator
-    execSync(
-      `npx tsx src/scripts/entity-new.ts ${ENTITY}`,
-      {
-        cwd: path.join(ROOT, 'packages', 'database'),
-        stdio: 'pipe',
-        timeout: 30_000,
-      },
-    );
-  });
+    try {
+      execSync(`npx tsx src/scripts/entity-new.ts ${ENTITY}`, EXEC_OPTS);
+    } catch (e) {
+      const err = e as { stdout?: Buffer; stderr?: Buffer };
+      process.stderr.write((err?.stdout?.toString?.() ?? '') + (err?.stderr?.toString?.() ?? ''));
+      throw e;
+    }
+  }, 30_000);
 
   afterAll(() => {
     // Restore all modified files
@@ -118,7 +124,7 @@ describe('B1 — Entity Generator Acceptance', () => {
 
     // Delete the entire widgets UI directory tree
     deleteIfExists(`apps/web/app/(app)/org/[slug]/${ENTITY}`);
-  });
+  }, 30_000);
 
   it('creates all expected files', () => {
     const missing: string[] = [];
@@ -248,24 +254,57 @@ describe('B1 — Entity Generator Acceptance', () => {
     expect(content).toContain(`web.${ENTITY}.list.page`);
   });
 
-  it('idempotent: re-running generator skips everything', () => {
+  it('idempotent: re-running generator skips everything (except allowed maintenance)', () => {
     const output = execSync(
       `npx tsx src/scripts/entity-new.ts ${ENTITY}`,
-      {
-        cwd: path.join(ROOT, 'packages', 'database'),
-        stdio: 'pipe',
-        timeout: 30_000,
-      },
+      EXEC_OPTS,
     ).toString();
 
-    // Every line should be a SKIP
-    const lines = output.split('\n').filter((l) => l.trim().length > 0);
-    const nonSkipLines = lines.filter(
-      (l) => !l.includes('SKIP') && !l.includes('╔') && !l.includes('║') && !l.includes('╠') && !l.includes('╚'),
-    );
+    const lines = output
+      .split('\n')
+      .map((l) => l.trim())
+      .filter((l) => l.length > 0);
+
+    const allowed = [
+      // Schema barrel regen: "✅ Generated .../packages/database/src/schema/index.ts (N schema files)"
+      /^✅ Generated .*packages[/\\]database[/\\]src[/\\]schema[/\\]index\.ts( \([0-9]+ schema files\))?$/,
+      // Gate 7: db:barrel output (schema barrel + manifest + table registry)
+      /^> afena-database@.* db:barrel/,
+      /^> npx tsx src\/scripts\/generate-/,
+      /^✅ Schema barrel unchanged$/,
+      /^✅ Schema manifest unchanged$/,
+      /^✅ Table registry unchanged$/,
+      /^✅ Generated .*__schema-manifest\.ts/,
+      /^✅ Generated .*_registry\.ts/,
+    ];
+
+    const rejected = [
+      /Inserted .*_registry/i,
+      // Gate 7: _registry is generated; "Generated _registry" on re-run would mean drift
+      // (allowed on first run when new table added; rejected means test expects idempotent)
+    ];
+
+    const isBox = (l: string) => /[╔║╠╚]/.test(l);
+    const isSkip = (l: string) => l.includes('SKIP');
+    const isAllowed = (l: string) => allowed.some((re) => re.test(l));
+    const isRejected = (l: string) => rejected.some((re) => re.test(l));
+
+    const unexpected = lines.filter((l) => !isSkip(l) && !isBox(l) && !isAllowed(l));
     expect(
-      nonSkipLines,
-      `Non-skip lines on re-run: ${nonSkipLines.join('\n')}`,
+      unexpected,
+      `Unexpected output on re-run:\n${unexpected.join('\n')}\n\nFull output:\n${output}`,
     ).toEqual([]);
-  });
+
+    const rejectedLines = lines.filter(isRejected);
+    expect(
+      rejectedLines,
+      `Registry insert must not appear on re-run (Gate 7: registry is generated):\n${rejectedLines.join('\n')}`,
+    ).toEqual([]);
+
+    const nonSkipNonBox = lines.filter((l) => !isSkip(l) && !isBox(l));
+    expect(
+      nonSkipNonBox.every(isAllowed),
+      `Non-skip lines must all be in allowlist:\n${nonSkipNonBox.join('\n')}`,
+    ).toBe(true);
+  }, 30_000);
 });

@@ -65,6 +65,21 @@ jobs:
       - name: CI invariants
         run: pnpm ci:invariants
 
+      - name: DB barrel + registry (Gate 7)
+        run: pnpm --filter afena-database db:barrel
+
+      - name: DB schema lint (Gate 0 + schema rules)
+        run: pnpm --filter afena-database db:lint
+
+      - name: Generated files up to date (Gate 7 diff)
+        run: |
+          git diff --exit-code packages/database/src/schema/index.ts \
+            packages/database/src/schema/__schema-manifest.ts \
+            packages/database/src/schema/_registry.ts || (
+            echo "::error::Generated schema files are stale. Run 'pnpm --filter afena-database db:barrel' and commit."
+            exit 1
+          )
+
   afena-e2e:
     name: E2E Tests
     timeout-minutes: 30

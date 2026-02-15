@@ -16,6 +16,6 @@
     "resolveJsonModule": true,
     "isolatedModules": true
   },
-  "include": ["src/**/*"],
+  "include": ["src/**/*", "schema-lint.config.ts"],
   "exclude": ["node_modules", "dist", "build", "**/*.test.*", "**/*.spec.*"]
 }

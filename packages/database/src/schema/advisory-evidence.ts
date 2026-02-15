@@ -1,6 +1,6 @@
 import { sql } from 'drizzle-orm';
 import { crudPolicy, authenticatedRole } from 'drizzle-orm/neon';
-import { check, index, jsonb, pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core';
+import { check, index, jsonb, pgTable, primaryKey, text, timestamp, uuid } from 'drizzle-orm/pg-core';
 
 import { advisories } from './advisories';
 
@@ -10,11 +10,13 @@ import { advisories } from './advisories';
  *
  * org_id is duplicated from parent advisory for simple RLS (no join inheritance).
  * Optional DB trigger validates org_id consistency with parent advisory.
+ * 
+ * GAP-DB-001: Composite PK (org_id, id) for data integrity and tenant isolation.
  */
 export const advisoryEvidence = pgTable(
   'advisory_evidence',
   {
-    id: uuid('id').defaultRandom().primaryKey(),
+    id: uuid('id').defaultRandom().notNull(),
     orgId: text('org_id')
       .notNull()
       .default(sql`(auth.require_org_id())`),
@@ -28,6 +30,7 @@ export const advisoryEvidence = pgTable(
     createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
   },
   (table) => [
+    primaryKey({ columns: [table.orgId, table.id] }),
     // CHECK constraints
     check('advisory_evidence_org_not_empty', sql`org_id <> ''`),
     check('advisory_evidence_type_enum', sql`evidence_type IN ('query','snapshot','metric_series','calculation')`),

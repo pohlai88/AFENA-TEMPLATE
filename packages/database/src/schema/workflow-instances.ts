@@ -1,6 +1,6 @@
 import { sql } from 'drizzle-orm';
 import { crudPolicy, authenticatedRole } from 'drizzle-orm/neon';
-import { check, index, integer, jsonb, pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core';
+import { check, index, integer, jsonb, pgTable, primaryKey, text, timestamp, uuid } from 'drizzle-orm/pg-core';
 
 /**
  * Workflow V2 Instances — one per active workflow run per document.
@@ -11,11 +11,13 @@ import { check, index, integer, jsonb, pgTable, text, timestamp, uuid } from 'dr
  * Triggers (from migration 0040):
  * - restrict_status_regression: terminal states are final
  * - set_updated_at
+ * 
+ * GAP-DB-001: Composite PK (org_id, id) for data integrity and tenant isolation.
  */
 export const workflowInstances = pgTable(
   'workflow_instances',
   {
-    id: uuid('id').defaultRandom().primaryKey(),
+    id: uuid('id').defaultRandom().notNull(),
     orgId: text('org_id').notNull().default(sql`(auth.require_org_id())`),
     definitionId: uuid('definition_id').notNull(),
     definitionVersion: integer('definition_version').notNull(),
@@ -32,6 +34,7 @@ export const workflowInstances = pgTable(
     contextJson: jsonb('context_json').default(sql`'{}'::jsonb`),
   },
   (table) => [
+    primaryKey({ columns: [table.orgId, table.id] }),
     // Constraints
     check('wf_inst_org_not_empty', sql`org_id <> ''`),
     check('wf_inst_status_valid', sql`status IN ('running', 'paused', 'completed', 'failed', 'cancelled')`),

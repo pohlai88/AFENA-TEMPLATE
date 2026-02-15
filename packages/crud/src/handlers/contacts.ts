@@ -1,4 +1,4 @@
-import { contacts } from 'afena-database';
+import { contacts, pickWritable } from 'afena-database';
 import { eq, and, sql } from 'drizzle-orm';
 
 import type { MutationContext } from '../context';
@@ -12,19 +12,9 @@ export const CAPABILITIES = [
   'contacts.restore',
 ] as const;
 
-/**
- * K-11: Contacts allowlist — only these fields are accepted from input.
- * Unknown fields are dropped (logged in dev).
- */
+/** GAP-DB-007 / SAN-01: Schema-derived allowlist. */
 function pickAllowed(input: Record<string, unknown>): Record<string, unknown> {
-  const ALLOWED = ['name', 'email', 'phone', 'company', 'notes'] as const;
-  const result: Record<string, unknown> = {};
-  for (const key of ALLOWED) {
-    if (key in input) {
-      result[key] = input[key];
-    }
-  }
-  return result;
+  return pickWritable(contacts, input) as Record<string, unknown>;
 }
 
 /** Convert a Drizzle row to a plain record for snapshots. */

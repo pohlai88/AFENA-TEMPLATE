@@ -12,5 +12,7 @@ export interface ApiResponse<T = unknown> {
   meta: {
     requestId: string;
     receipt?: Receipt | undefined;
+    totalCount?: number;
+    nextCursor?: string;
   };
 }

@@ -1,17 +1,22 @@
 import { sql } from 'drizzle-orm';
-import { bigint, check, index, pgTable, text, uuid } from 'drizzle-orm/pg-core';
+import { bigint, check, foreignKey, index, pgTable, primaryKey, text, uuid } from 'drizzle-orm/pg-core';
 
 import { baseEntityColumns } from '../helpers/base-entity';
 import { docEntityColumns } from '../helpers/doc-entity';
 import { tenantPolicy } from '../helpers/tenant-policy';
 
+import { companies } from './companies';
+
 /**
  * Landed cost documents — captures additional costs for inventory valuation.
  *
+ * RULE C-01: Landed costs are ISSUER-scoped (company incurs landed costs).
  * PRD Phase E #24 + G0.13:
  * - Allocation basis: qty, value, weight, custom
  * - Posts immediately or on bill receipt
  * - Links to purchase receipt for cost allocation
+ * 
+ * GAP-DB-001: Composite PK (org_id, id) for data integrity and tenant isolation.
  */
 export const landedCostDocs = pgTable(
   'landed_cost_docs',
@@ -27,6 +32,12 @@ export const landedCostDocs = pgTable(
     memo: text('memo'),
   },
   (table) => [
+    primaryKey({ columns: [table.orgId, table.id] }),
+    foreignKey({
+      columns: [table.orgId, table.companyId],
+      foreignColumns: [companies.orgId, companies.id],
+      name: 'landed_cost_docs_company_fk',
+    }),
     index('lc_docs_org_id_idx').on(table.orgId, table.id),
     index('lc_docs_company_idx').on(table.orgId, table.companyId),
     index('lc_docs_receipt_idx').on(table.orgId, table.receiptId),

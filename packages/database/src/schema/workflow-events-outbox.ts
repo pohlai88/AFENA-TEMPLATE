@@ -13,6 +13,8 @@ import { check, index, integer, jsonb, pgTable, text, timestamp, uuid } from 'dr
  *
  * Triggers (from migration 0042):
  * - restrict_outbox_status_regression: allows failed→pending retry, dead_letter→pending admin override
+ * 
+ * GAP-DB-001: Composite PK (created_at, id) for partitioning (not org_id, id pattern).
  */
 export const workflowEventsOutbox = pgTable(
   'workflow_events_outbox',

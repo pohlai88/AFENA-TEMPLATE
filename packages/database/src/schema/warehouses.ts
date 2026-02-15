@@ -1,16 +1,21 @@
 import { sql } from 'drizzle-orm';
-import { boolean, check, index, pgTable, text, uniqueIndex, uuid } from 'drizzle-orm/pg-core';
+import { boolean, check, foreignKey, index, pgTable, primaryKey, text, uniqueIndex, uuid } from 'drizzle-orm/pg-core';
 
 import { baseEntityColumns } from '../helpers/base-entity';
 import { tenantPolicy } from '../helpers/tenant-policy';
 
+import { companies } from './companies';
+
 /**
  * Warehouses — stock storage locations scoped to company.
  *
+ * RULE C-01: Warehouses are OPERATIONS-scoped (company operates warehouses).
  * Transactional Spine Migration 0031: Master Data.
  * - company_id NOT NULL: warehouse always belongs to a legal entity
  * - warehouse_type: store/transit/scrap/wip/finished/returns (consignment added later)
  * - Tree structure via parent_warehouse_id + is_group
+ * 
+ * GAP-DB-001: Composite PK (org_id, id) for data integrity and tenant isolation.
  */
 export const warehouses = pgTable(
   'warehouses',
@@ -25,6 +30,12 @@ export const warehouses = pgTable(
     isGroup: boolean('is_group').notNull().default(false),
   },
   (table) => [
+    primaryKey({ columns: [table.orgId, table.id] }),
+    foreignKey({
+      columns: [table.orgId, table.companyId],
+      foreignColumns: [companies.orgId, companies.id],
+      name: 'warehouses_company_fk',
+    }),
     uniqueIndex('warehouses_org_code_uniq').on(table.orgId, table.code),
     index('warehouses_org_company_idx').on(table.orgId, table.companyId),
     index('warehouses_org_parent_idx').on(table.orgId, table.parentWarehouseId),

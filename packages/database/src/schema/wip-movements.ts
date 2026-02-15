@@ -1,16 +1,21 @@
 import { sql } from 'drizzle-orm';
-import { bigint, check, index, numeric, pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core';
+import { bigint, check, foreignKey, index, numeric, pgTable, primaryKey, text, timestamp, uuid } from 'drizzle-orm/pg-core';
 
 import { baseEntityColumns } from '../helpers/base-entity';
 import { tenantPolicy } from '../helpers/tenant-policy';
 
+import { companies } from './companies';
+
 /**
  * WIP movements — append-only ledger for work-in-progress accounting.
  *
+ * RULE C-01: WIP movements are OPERATIONS-scoped (company tracks manufacturing WIP).
  * PRD Phase E #19 + G0.21:
  * - Tracks material consumption, labor, overhead into WIP
  * - Append-only: REVOKE UPDATE/DELETE
  * - Links to work_order and optionally to stock_movements
+ * 
+ * GAP-DB-001: Composite PK (org_id, id) for data integrity and tenant isolation.
  */
 export const wipMovements = pgTable(
   'wip_movements',
@@ -30,6 +35,12 @@ export const wipMovements = pgTable(
     memo: text('memo'),
   },
   (table) => [
+    primaryKey({ columns: [table.orgId, table.id] }),
+    foreignKey({
+      columns: [table.orgId, table.companyId],
+      foreignColumns: [companies.orgId, companies.id],
+      name: 'wip_movements_company_fk',
+    }),
     index('wip_mv_org_id_idx').on(table.orgId, table.id),
     index('wip_mv_work_order_idx').on(table.orgId, table.workOrderId),
     index('wip_mv_posted_idx').on(table.orgId, table.companyId, table.postedAt),

@@ -4,9 +4,11 @@ import {
   boolean,
   check,
   date,
+  foreignKey,
   index,
   numeric,
   pgTable,
+  primaryKey,
   text,
   uniqueIndex,
   uuid,
@@ -16,9 +18,12 @@ import { docEntityColumns } from '../helpers/doc-entity';
 import { postingColumns } from '../helpers/posting-columns';
 import { tenantPolicy } from '../helpers/tenant-policy';
 
+import { companies } from './companies';
+
 /**
  * Sales invoices — AR document, proves posting engine + GL + outstanding.
  *
+ * RULE C-01: Sales invoices are ISSUER-scoped (company issues invoices).
  * Transactional Spine Migration 0033.
  * - 6-state posting_status (P-08)
  * - company_id NOT NULL (§3.12)
@@ -27,6 +32,8 @@ import { tenantPolicy } from '../helpers/tenant-policy';
  * - Statement index for customer statements
  * - Header-side customer analytics index (v6.2 nit)
  * - Totals computed from SUM(lines) on every save (P-09, P-09a)
+ * 
+ * GAP-DB-001: Composite PK (org_id, id) for data integrity and tenant isolation.
  */
 export const salesInvoices = pgTable(
   'sales_invoices',
@@ -52,6 +59,12 @@ export const salesInvoices = pgTable(
     memo: text('memo'),
   },
   (table) => [
+    primaryKey({ columns: [table.orgId, table.id] }),
+    foreignKey({
+      columns: [table.orgId, table.companyId],
+      foreignColumns: [companies.orgId, companies.id],
+      name: 'sales_invoices_company_fk',
+    }),
     uniqueIndex('si_org_doc_no_uniq').on(table.orgId, table.docNo),
     index('si_org_customer_posting_idx').on(table.orgId, table.customerId, table.postingDate),
     index('si_org_posting_date_idx').on(table.orgId, table.postingDate),

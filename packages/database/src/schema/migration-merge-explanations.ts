@@ -1,5 +1,5 @@
 import { sql } from 'drizzle-orm';
-import { check, index, integer, jsonb, pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core';
+import { check, index, integer, jsonb, pgTable, primaryKey, text, timestamp, uuid } from 'drizzle-orm/pg-core';
 
 import { tenantPolicy } from '../helpers/tenant-policy';
 
@@ -8,11 +8,13 @@ import { migrationJobs } from './migration-jobs';
 /**
  * Migration merge explanations — queryable "why" for conflict decisions.
  * ACC-05: The "why" behind every merge must be queryable.
+ * 
+ * GAP-DB-001: Composite PK (org_id, id) for data integrity and tenant isolation.
  */
 export const migrationMergeExplanations = pgTable(
   'migration_merge_explanations',
   {
-    id: uuid('id').defaultRandom().primaryKey(),
+    id: uuid('id').defaultRandom().notNull(),
     orgId: text('org_id').notNull(),
     migrationJobId: uuid('migration_job_id').notNull().references(() => migrationJobs.id),
 
@@ -27,6 +29,7 @@ export const migrationMergeExplanations = pgTable(
     createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
   },
   (table) => [
+    primaryKey({ columns: [table.orgId, table.id] }),
     index('migration_merge_explanations_job_idx').on(table.migrationJobId),
     index('migration_merge_explanations_decision_idx').on(table.migrationJobId, table.decision),
     check('migration_merge_explanations_decision_chk', sql`decision IN ('merged', 'manual_review', 'created_new')`),

@@ -1,5 +1,5 @@
 import { sql } from 'drizzle-orm';
-import { check, index, pgTable, text } from 'drizzle-orm/pg-core';
+import { check, index, pgTable, primaryKey, text } from 'drizzle-orm/pg-core';
 
 import { baseEntityColumns } from '../helpers/base-entity';
 import { tenantPolicy } from '../helpers/tenant-policy';
@@ -10,6 +10,8 @@ import { tenantPolicy } from '../helpers/tenant-policy';
  * Transactional Spine Migration 0031: Master Data.
  * - address_type: billing/shipping/registered/warehouse
  * - Linked to contacts via contact_addresses, to companies via company_addresses
+ * 
+ * GAP-DB-001: Composite PK (org_id, id) for data integrity and tenant isolation.
  */
 export const addresses = pgTable(
   'addresses',
@@ -26,6 +28,7 @@ export const addresses = pgTable(
     email: text('email'),
   },
   (table) => [
+    primaryKey({ columns: [table.orgId, table.id] }),
     index('addresses_org_id_idx').on(table.orgId, table.id),
     check('addresses_org_not_empty', sql`org_id <> ''`),
     check(

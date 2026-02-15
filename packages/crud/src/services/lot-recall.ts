@@ -67,7 +67,9 @@ export async function traceForward(
     depth: 1,
   }));
 
-  while (frontier.length > 0 && frontier[0].depth <= maxDepth) {
+  while (frontier.length > 0) {
+    const nextDepth = frontier[0]?.depth ?? Infinity;
+    if (nextDepth > maxDepth) break;
     const nextFrontier: AffectedMovement[] = [];
 
     for (const item of frontier) {
@@ -147,7 +149,9 @@ export async function traceBackward(
     depth: 1,
   }));
 
-  while (frontier.length > 0 && frontier[0].depth <= maxDepth) {
+  while (frontier.length > 0) {
+    const nextDepth = frontier[0]?.depth ?? Infinity;
+    if (nextDepth > maxDepth) break;
     const nextFrontier: AffectedMovement[] = [];
 
     for (const item of frontier) {

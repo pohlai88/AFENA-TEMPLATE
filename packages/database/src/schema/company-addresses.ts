@@ -1,19 +1,24 @@
 import { sql } from 'drizzle-orm';
-import { boolean, check, pgTable, text, timestamp, uniqueIndex, uuid } from 'drizzle-orm/pg-core';
+import { boolean, check, foreignKey, pgTable, primaryKey, text, timestamp, uniqueIndex, uuid } from 'drizzle-orm/pg-core';
 
 import { tenantPolicy } from '../helpers/tenant-policy';
+
+import { companies } from './companies';
 
 /**
  * Company addresses — lightweight link between companies and addresses.
  *
+ * RULE C-01: Company addresses are LEGAL-scoped (company has addresses).
  * Transactional Spine Migration 0031: Master Data.
  * - One primary per (company, address_type) via partial unique index
  * - Minimal columns: no baseEntityColumns overhead, just the link + audit fields
+ * 
+ * GAP-DB-001: Composite PK (org_id, id) for data integrity and tenant isolation.
  */
 export const companyAddresses = pgTable(
   'company_addresses',
   {
-    id: uuid('id').defaultRandom().primaryKey(),
+    id: uuid('id').defaultRandom().notNull(),
     orgId: text('org_id')
       .notNull()
       .default(sql`(auth.require_org_id())`),
@@ -27,6 +32,12 @@ export const companyAddresses = pgTable(
       .default(sql`(auth.user_id())`),
   },
   (table) => [
+    primaryKey({ columns: [table.orgId, table.id] }),
+    foreignKey({
+      columns: [table.orgId, table.companyId],
+      foreignColumns: [companies.orgId, companies.id],
+      name: 'company_addresses_company_fk',
+    }),
     uniqueIndex('company_addr_org_company_addr_uniq').on(
       table.orgId,
       table.companyId,

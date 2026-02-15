@@ -1,17 +1,22 @@
 import { sql } from 'drizzle-orm';
-import { bigint, check, index, numeric, pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core';
+import { bigint, check, foreignKey, index, numeric, pgTable, primaryKey, text, timestamp, uuid } from 'drizzle-orm/pg-core';
 
 import { baseEntityColumns } from '../helpers/base-entity';
 import { tenantPolicy } from '../helpers/tenant-policy';
 
+import { companies } from './companies';
+
 /**
  * Stock movements — perpetual inventory ledger (append-only).
  *
+ * RULE C-01: Stock movements are OPERATIONS-scoped (company owns inventory movements).
  * PRD Phase D #15 + G0.1:
  * - Append-only movements: receipts, issues, transfers, adjustments
  * - Costing: unit_cost stored per movement for FIFO/weighted average
  * - posted_at: partition key candidate (monthly range, insert-time-only)
  * - REVOKE UPDATE/DELETE enforced at DB level
+ * 
+ * GAP-DB-001: Composite PK (org_id, id) for data integrity and tenant isolation.
  */
 export const stockMovements = pgTable(
   'stock_movements',
@@ -39,6 +44,12 @@ export const stockMovements = pgTable(
     memo: text('memo'),
   },
   (table) => [
+    primaryKey({ columns: [table.orgId, table.id] }),
+    foreignKey({
+      columns: [table.orgId, table.companyId],
+      foreignColumns: [companies.orgId, companies.id],
+      name: 'stock_movements_company_fk',
+    }),
     index('stock_mv_org_id_idx').on(table.orgId, table.id),
     index('stock_mv_org_company_idx').on(table.orgId, table.companyId),
     index('stock_mv_item_idx').on(table.orgId, table.siteId, table.itemId),

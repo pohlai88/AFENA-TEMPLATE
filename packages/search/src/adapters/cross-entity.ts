@@ -5,9 +5,9 @@ import { toTsQuery } from '../fts';
 import type { SearchResult } from '../types';
 
 /**
- * Cross-entity search using the search_index materialized view.
- * Queries all entity types in a single SQL statement.
- * Tenant isolation via org_id filter (MV does not support RLS).
+ * Cross-entity search using search_documents (GAP-DB-004).
+ * Incremental index populated by search worker from search_outbox.
+ * Tenant isolation via RLS on search_documents.
  *
  * Falls back to ILIKE on title/subtitle for short queries or email searches.
  */
@@ -36,7 +36,7 @@ export async function searchAll(
         title,
         subtitle,
         ts_rank(search_vector, to_tsquery('simple', ${tsquery})) AS rank
-      FROM search_index
+      FROM search_documents
       WHERE search_vector @@ to_tsquery('simple', ${tsquery})
         AND is_deleted = false
         ${entityFilter}
@@ -74,7 +74,7 @@ export async function searchAll(
       entity_type,
       title,
       subtitle
-    FROM search_index
+    FROM search_documents
     WHERE (title ILIKE ${pattern} OR subtitle ILIKE ${pattern})
       AND is_deleted = false
       ${entityFilter}

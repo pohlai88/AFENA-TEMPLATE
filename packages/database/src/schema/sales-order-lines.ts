@@ -6,6 +6,7 @@ import {
   integer,
   numeric,
   pgTable,
+  primaryKey,
   text,
   timestamp,
   uniqueIndex,
@@ -22,6 +23,8 @@ import { tenantPolicy } from '../helpers/tenant-policy';
  * - Shared line contract with net CHECK
  * - deliveredQty / billedQty for fulfillment tracking
  * - posting_date denormalized for partition readiness
+ * 
+ * GAP-DB-001: Composite PK (org_id, id) for data integrity and tenant isolation.
  */
 export const salesOrderLines = pgTable(
   'sales_order_lines',
@@ -53,6 +56,7 @@ export const salesOrderLines = pgTable(
     memo: text('memo'),
   },
   (table) => [
+    primaryKey({ columns: [table.orgId, table.id] }),
     uniqueIndex('sol_org_order_line_uniq').on(table.orgId, table.salesOrderId, table.lineNo),
     index('sol_org_order_idx').on(table.orgId, table.salesOrderId),
     index('sol_org_item_idx').on(table.orgId, table.itemId),

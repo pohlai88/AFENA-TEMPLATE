@@ -6,6 +6,7 @@ import {
   integer,
   numeric,
   pgTable,
+  primaryKey,
   text,
   uniqueIndex,
   uuid,
@@ -20,6 +21,8 @@ import { tenantPolicy } from '../helpers/tenant-policy';
  * Transactional Spine Migration 0037.
  * - No posting_date (quotations are never posted)
  * - net CHECK still applies
+ * 
+ * GAP-DB-001: Composite PK (org_id, id) for data integrity and tenant isolation.
  */
 export const quotationLines = pgTable(
   'quotation_lines',
@@ -42,6 +45,7 @@ export const quotationLines = pgTable(
     memo: text('memo'),
   },
   (table) => [
+    primaryKey({ columns: [table.orgId, table.id] }),
     uniqueIndex('qtnl_org_quotation_line_uniq').on(table.orgId, table.quotationId, table.lineNo),
     index('qtnl_org_quotation_idx').on(table.orgId, table.quotationId),
     index('qtnl_org_item_idx').on(table.orgId, table.itemId),

@@ -1,5 +1,5 @@
 import { sql } from 'drizzle-orm';
-import { check, index, jsonb, pgTable, text, timestamp, uniqueIndex, uuid } from 'drizzle-orm/pg-core';
+import { check, index, jsonb, pgTable, primaryKey, text, timestamp, uniqueIndex, uuid } from 'drizzle-orm/pg-core';
 
 import { tenantPolicy } from '../helpers/tenant-policy';
 
@@ -9,11 +9,13 @@ import { roles } from './roles';
  * Role permissions — org-scoped verb+scope grants per entity type.
  * field_rules_json: { deny_write?: string[], mask_read?: {...}[], allow_write?: string[] }
  * deny_write beats allow_write.
+ * 
+ * GAP-DB-001: Composite PK (org_id, id) for data integrity and tenant isolation.
  */
 export const rolePermissions = pgTable(
   'role_permissions',
   {
-    id: uuid('id').defaultRandom().primaryKey(),
+    id: uuid('id').defaultRandom().notNull(),
     orgId: text('org_id')
       .notNull()
       .default(sql`(auth.require_org_id())`),
@@ -29,6 +31,7 @@ export const rolePermissions = pgTable(
     createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
   },
   (table) => [
+    primaryKey({ columns: [table.orgId, table.id] }),
     uniqueIndex('role_perms_org_role_entity_verb_scope_idx').on(
       table.orgId,
       table.roleId,

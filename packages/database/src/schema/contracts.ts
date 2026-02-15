@@ -1,18 +1,23 @@
 import { sql } from 'drizzle-orm';
-import { bigint, boolean, check, date, index, pgTable, text, uniqueIndex, uuid } from 'drizzle-orm/pg-core';
+import { bigint, boolean, check, date, foreignKey, index, pgTable, primaryKey, text, uniqueIndex, uuid } from 'drizzle-orm/pg-core';
 
 import { docEntityColumns } from '../helpers/doc-entity';
 import { tenantPolicy } from '../helpers/tenant-policy';
 
+import { companies } from './companies';
+
 /**
  * Contracts — recurring billing and subscription management.
  *
+ * RULE C-01: Contracts are ISSUER-scoped (company issues contracts).
  * Audit P1-10:
  * - Referenced by revenue_schedules.source_type ('contract')
  * - Supports recurring billing terms and auto-invoice generation
  * - Contract start/end/renewal dates
  * - Links to contact (customer) and price list
  * - Uses docEntity lifecycle (draft → submitted → active → cancelled)
+ * 
+ * GAP-DB-001: Composite PK (org_id, id) for data integrity and tenant isolation.
  */
 export const contracts = pgTable(
   'contracts',
@@ -36,6 +41,12 @@ export const contracts = pgTable(
     memo: text('memo'),
   },
   (table) => [
+    primaryKey({ columns: [table.orgId, table.id] }),
+    foreignKey({
+      columns: [table.orgId, table.companyId],
+      foreignColumns: [companies.orgId, companies.id],
+      name: 'contracts_company_fk',
+    }),
     index('contracts_org_id_idx').on(table.orgId, table.id),
     index('contracts_org_company_idx').on(table.orgId, table.companyId),
     index('contracts_contact_idx').on(table.orgId, table.contactId),

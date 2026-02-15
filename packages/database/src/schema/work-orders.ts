@@ -1,16 +1,21 @@
 import { sql } from 'drizzle-orm';
-import { bigint, check, index, numeric, pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core';
+import { bigint, check, foreignKey, index, numeric, pgTable, primaryKey, text, timestamp, uuid } from 'drizzle-orm/pg-core';
 
 import { docEntityColumns } from '../helpers/doc-entity';
 import { tenantPolicy } from '../helpers/tenant-policy';
 
+import { companies } from './companies';
+
 /**
  * Work orders — manufacturing execution documents.
  *
+ * RULE C-01: Work orders are ISSUER-scoped (company manufactures products).
  * PRD Phase E #19 + G0.21:
  * - Links to BOM for material requirements
  * - WIP posts to GL and stock via wip_movements
  * - docEntity lifecycle: draft → submitted → active → completed → cancelled
+ * 
+ * GAP-DB-001: Composite PK (org_id, id) for data integrity and tenant isolation.
  */
 export const workOrders = pgTable(
   'work_orders',
@@ -33,6 +38,12 @@ export const workOrders = pgTable(
     memo: text('memo'),
   },
   (table) => [
+    primaryKey({ columns: [table.orgId, table.id] }),
+    foreignKey({
+      columns: [table.orgId, table.companyId],
+      foreignColumns: [companies.orgId, companies.id],
+      name: 'work_orders_company_fk',
+    }),
     index('work_orders_org_id_idx').on(table.orgId, table.id),
     index('work_orders_org_company_idx').on(table.orgId, table.companyId),
     index('work_orders_product_idx').on(table.orgId, table.productId),

@@ -1,7 +1,7 @@
 const nextConfig = require('afena-eslint-config/next');
 
 module.exports = [
-  { ignores: ['.next/**', 'dist/**', '*.config.*', 'src/types/**'] },
+  { ignores: ['.next/**', 'dist/**', '*.config.*', 'src/types/**', 'scripts/**'] },
   ...nextConfig,
   {
     languageOptions: {
@@ -96,7 +96,7 @@ module.exports = [
   // Route handlers — must use entity-route-handlers only (stricter message)
   {
     files: ['app/api/**/route.ts'],
-    ignores: ['app/api/storage/**', 'app/api/views/**', 'app/api/webhooks/**'],
+    ignores: ['app/api/storage/**', 'app/api/views/**', 'app/api/webhooks/**', 'app/api/internal/search/**'],
     rules: {
       'no-restricted-imports': [
         'error',
@@ -193,6 +193,7 @@ module.exports = [
       'app/api/storage/**/*.ts',
       'app/api/views/**/*.ts',
       'app/api/webhooks/**/*.ts',
+      'app/api/internal/search/**/*.ts',
       'app/(app)/org/**/page.tsx',
     ],
     rules: {

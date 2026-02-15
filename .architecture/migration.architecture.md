@@ -1,6 +1,6 @@
 # Afena Migration Engine — Architecture Reference
 
-> **Auto-generated** by `afena readme gen` at 2026-02-14T08:34:54Z. Do not edit — regenerate instead.
+> **Auto-generated** by `afena readme gen` at 2026-02-14T09:51:23Z. Do not edit — regenerate instead.
 > **Package:** `afena-migration` (`packages/migration`)
 > **Purpose:** Legacy data migration pipeline with atomicity guarantees, conflict detection, and signed audit reports.
 

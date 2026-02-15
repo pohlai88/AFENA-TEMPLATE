@@ -1,17 +1,22 @@
 import { sql } from 'drizzle-orm';
-import { bigint, boolean, check, date, index, pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core';
+import { bigint, boolean, check, date, foreignKey, index, pgTable, primaryKey, text, timestamp, uuid } from 'drizzle-orm/pg-core';
 
 import { baseEntityColumns } from '../helpers/base-entity';
 import { tenantPolicy } from '../helpers/tenant-policy';
 
+import { companies } from './companies';
+
 /**
  * Bank statement lines — append-only evidence for reconciliation.
  *
+ * RULE C-01: Bank statements are LEGAL-scoped (company-specific statements).
  * PRD G0.12 + Phase C #13.5:
  * - Statement lines are append-only evidence (REVOKE UPDATE/DELETE)
  * - Matching is auditable (who matched, when, how confident)
  * - Each line can be matched to a payment, journal entry, or left unmatched
  * - import_batch_id groups lines from a single statement import
+ * 
+ * GAP-DB-001: Composite PK (org_id, id) for data integrity and tenant isolation.
  */
 export const bankStatementLines = pgTable(
   'bank_statement_lines',
@@ -38,6 +43,12 @@ export const bankStatementLines = pgTable(
     memo: text('memo'),
   },
   (table) => [
+    primaryKey({ columns: [table.orgId, table.id] }),
+    foreignKey({
+      columns: [table.orgId, table.companyId],
+      foreignColumns: [companies.orgId, companies.id],
+      name: 'bank_statement_lines_company_fk',
+    }),
     index('bsl_org_id_idx').on(table.orgId, table.id),
     index('bsl_company_idx').on(table.orgId, table.companyId),
     index('bsl_bank_account_idx').on(table.orgId, table.bankAccountId),

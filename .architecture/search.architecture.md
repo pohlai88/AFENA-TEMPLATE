@@ -1,6 +1,6 @@
 # Afena Search Engine — Architecture Reference
 
-> **Auto-generated** by `afena readme gen` at 2026-02-14T08:34:54Z. Do not edit — regenerate instead.
+> **Auto-generated** by `afena readme gen` at 2026-02-14T09:51:23Z. Do not edit — regenerate instead.
 > **Package:** `afena-search` (`packages/search`)
 > **Purpose:** Full-text search helpers, per-entity adapters, and cross-entity search registry.
 

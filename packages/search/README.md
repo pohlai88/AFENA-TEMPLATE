@@ -85,6 +85,15 @@ registerSearchableEntity({ type: 'contacts', adapter: searchContacts });
 const results = await crossEntitySearch('acme', { limit: 10 });
 ```
 
+## GAP-DB-004: Incremental Search (Vercel)
+
+Search uses `search_documents` + `search_outbox`. On Vercel:
+
+- **Cron** (every 5 min): `GET /api/internal/search/drain` — self-healing backfill + drain
+- **Poke** (after mutation): `after()` fires `POST /api/internal/search/drain` for near-real-time updates
+- **Env**: `CRON_SECRET` (required for drain), `VERCEL_URL` or `NEXT_PUBLIC_APP_URL` (for poke)
+- **DB**: Use worker role (BYPASSRLS) for drain so it can process all orgs
+
 ## Dependencies
 
-`afena-database`, `drizzle-orm`
+`afena-database`, `drizzle-orm`, `afena-logger`

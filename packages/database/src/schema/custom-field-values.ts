@@ -9,6 +9,7 @@ import {
   jsonb,
   numeric,
   pgTable,
+  primaryKey,
   text,
   timestamp,
   uniqueIndex,
@@ -19,10 +20,13 @@ import { tenantPolicy } from '../helpers/tenant-policy';
 
 import { customFields } from './custom-fields';
 
+/**
+ * GAP-DB-001: Composite PK (org_id, id) for data integrity and tenant isolation.
+ */
 export const customFieldValues = pgTable(
   'custom_field_values',
   {
-    id: uuid('id').defaultRandom().primaryKey(),
+    id: uuid('id').defaultRandom().notNull(),
     orgId: text('org_id')
       .notNull()
       .default(sql`(auth.require_org_id())`),
@@ -44,6 +48,7 @@ export const customFieldValues = pgTable(
     source: text('source').notNull().default('user'),
   },
   (table) => [
+    primaryKey({ columns: [table.orgId, table.id] }),
     // Composite FK: prevents cross-entity field corruption
     foreignKey({
       columns: [table.orgId, table.entityType, table.fieldId],

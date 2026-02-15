@@ -1,5 +1,5 @@
 import { sql } from 'drizzle-orm';
-import { check, index, integer, numeric, pgTable, text, uniqueIndex, uuid } from 'drizzle-orm/pg-core';
+import { check, index, integer, numeric, pgTable, primaryKey, text, uniqueIndex, uuid } from 'drizzle-orm/pg-core';
 
 import { tenantPolicy } from '../helpers/tenant-policy';
 
@@ -11,11 +11,13 @@ import { tenantPolicy } from '../helpers/tenant-policy';
  * - Per-product overrides via scope: 'global' or 'product'
  * - factor: multiply from_uom qty by factor to get to_uom qty
  * - UNIQUE(org_id, from_uom_id, to_uom_id, product_id) — allows product-specific overrides
+ * 
+ * GAP-DB-001: Composite PK (org_id, id) for data integrity and tenant isolation.
  */
 export const uomConversions = pgTable(
   'uom_conversions',
   {
-    id: uuid('id').defaultRandom().primaryKey(),
+    id: uuid('id').defaultRandom().notNull(),
     orgId: text('org_id')
       .notNull()
       .default(sql`(auth.require_org_id())`),
@@ -28,6 +30,7 @@ export const uomConversions = pgTable(
     productId: uuid('product_id'),
   },
   (table) => [
+    primaryKey({ columns: [table.orgId, table.id] }),
     index('uom_conversions_org_id_idx').on(table.orgId, table.id),
     check('uom_conversions_org_not_empty', sql`org_id <> ''`),
     check('uom_conversions_rounding_valid', sql`rounding_method IN ('half_up', 'half_down', 'ceil', 'floor', 'banker')`),

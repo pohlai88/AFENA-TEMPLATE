@@ -1,5 +1,5 @@
 import { sql } from 'drizzle-orm';
-import { check, index, integer, jsonb, pgTable, text, timestamp, uniqueIndex, uuid } from 'drizzle-orm/pg-core';
+import { check, index, integer, jsonb, pgTable, primaryKey, text, timestamp, uniqueIndex, uuid } from 'drizzle-orm/pg-core';
 
 import { tenantPolicy } from '../helpers/tenant-policy';
 
@@ -8,11 +8,13 @@ import { migrationJobs } from './migration-jobs';
 /**
  * Migration quarantine — per-record retry + error isolation.
  * OPS-01: One bad row must never poison a batch.
+ * 
+ * GAP-DB-001: Composite PK (org_id, id) for data integrity and tenant isolation.
  */
 export const migrationQuarantine = pgTable(
   'migration_quarantine',
   {
-    id: uuid('id').defaultRandom().primaryKey(),
+    id: uuid('id').defaultRandom().notNull(),
     attemptId: uuid('attempt_id').defaultRandom().notNull(),
 
     orgId: text('org_id').notNull(),
@@ -39,6 +41,7 @@ export const migrationQuarantine = pgTable(
     resolvedAt: timestamp('resolved_at', { withTimezone: true }),
   },
   (table) => [
+    primaryKey({ columns: [table.orgId, table.id] }),
     index('migration_quarantine_job_idx').on(table.migrationJobId),
     index('migration_quarantine_status_idx').on(table.migrationJobId, table.status),
     check('migration_quarantine_status_chk', sql`status IN ('quarantined', 'retrying', 'resolved', 'abandoned')`),

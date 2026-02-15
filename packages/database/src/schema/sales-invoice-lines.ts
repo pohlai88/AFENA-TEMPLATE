@@ -6,6 +6,7 @@ import {
   integer,
   numeric,
   pgTable,
+  primaryKey,
   text,
   timestamp,
   uniqueIndex,
@@ -24,6 +25,8 @@ import { tenantPolicy } from '../helpers/tenant-policy';
  * - posting_date denormalized for partition readiness (§3.14)
  * - company_id denormalized for line analytics index
  * - Line analytics index: (org_id, company_id, posting_date DESC, item_id)
+ * 
+ * GAP-DB-001: Composite PK (org_id, id) for data integrity and tenant isolation.
  */
 export const salesInvoiceLines = pgTable(
   'sales_invoice_lines',
@@ -54,6 +57,7 @@ export const salesInvoiceLines = pgTable(
     memo: text('memo'),
   },
   (table) => [
+    primaryKey({ columns: [table.orgId, table.id] }),
     uniqueIndex('sil_org_invoice_line_uniq').on(
       table.orgId,
       table.salesInvoiceId,

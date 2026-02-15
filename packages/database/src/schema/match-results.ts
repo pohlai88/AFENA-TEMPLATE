@@ -1,17 +1,22 @@
 import { sql } from 'drizzle-orm';
-import { bigint, check, index, numeric, pgTable, text, uuid } from 'drizzle-orm/pg-core';
+import { bigint, check, foreignKey, index, numeric, pgTable, primaryKey, text, uuid } from 'drizzle-orm/pg-core';
 
 import { baseEntityColumns } from '../helpers/base-entity';
 import { tenantPolicy } from '../helpers/tenant-policy';
 
+import { companies } from './companies';
+
 /**
  * Match results — 3-way match for PO–GRN–Invoice reconciliation.
  *
+ * RULE C-01: Match results are OPERATIONS-scoped (company matches documents).
  * PRD Phase D #18.5 + G0.17:
  * - Tolerance thresholds (qty/price variance)
  * - Match status machine: matched → exception → disputed → approved_override
  * - Links PO line, GRN line, and invoice line
  * - Variance tracked in both qty and minor units
+ * 
+ * GAP-DB-001: Composite PK (org_id, id) for data integrity and tenant isolation.
  */
 export const matchResults = pgTable(
   'match_results',
@@ -32,6 +37,12 @@ export const matchResults = pgTable(
     memo: text('memo'),
   },
   (table) => [
+    primaryKey({ columns: [table.orgId, table.id] }),
+    foreignKey({
+      columns: [table.orgId, table.companyId],
+      foreignColumns: [companies.orgId, companies.id],
+      name: 'match_results_company_fk',
+    }),
     index('match_results_org_id_idx').on(table.orgId, table.id),
     index('match_results_company_idx').on(table.orgId, table.companyId),
     index('match_results_po_idx').on(table.orgId, table.poLineId),

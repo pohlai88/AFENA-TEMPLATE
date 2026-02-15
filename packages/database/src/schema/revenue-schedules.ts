@@ -1,17 +1,22 @@
 import { sql } from 'drizzle-orm';
-import { bigint, check, date, index, pgTable, text, uuid } from 'drizzle-orm/pg-core';
+import { bigint, check, date, foreignKey, index, pgTable, primaryKey, text, uuid } from 'drizzle-orm/pg-core';
 
 import { baseEntityColumns } from '../helpers/base-entity';
 import { tenantPolicy } from '../helpers/tenant-policy';
 
+import { companies } from './companies';
+
 /**
  * Revenue recognition schedules — deferred revenue amortization.
  *
+ * RULE C-01: Revenue schedules are LEGAL-scoped (company recognizes revenue).
  * PRD Phase E #21 + G0.19:
  * - Generated at invoice post or contract creation
  * - Modifications create new schedules, never edit history
  * - Each line represents one period's recognized revenue
  * - Append-only: schedules are evidence
+ * 
+ * GAP-DB-001: Composite PK (org_id, id) for data integrity and tenant isolation.
  */
 export const revenueSchedules = pgTable(
   'revenue_schedules',
@@ -33,6 +38,12 @@ export const revenueSchedules = pgTable(
     memo: text('memo'),
   },
   (table) => [
+    primaryKey({ columns: [table.orgId, table.id] }),
+    foreignKey({
+      columns: [table.orgId, table.companyId],
+      foreignColumns: [companies.orgId, companies.id],
+      name: 'revenue_schedules_company_fk',
+    }),
     index('rev_sched_org_id_idx').on(table.orgId, table.id),
     index('rev_sched_company_idx').on(table.orgId, table.companyId),
     index('rev_sched_source_idx').on(table.orgId, table.sourceType, table.sourceId),

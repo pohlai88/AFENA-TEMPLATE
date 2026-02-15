@@ -1,17 +1,22 @@
 import { sql } from 'drizzle-orm';
-import { bigint, check, date, index, jsonb, pgTable, text, timestamp, uniqueIndex, uuid } from 'drizzle-orm/pg-core';
+import { bigint, check, date, foreignKey, index, jsonb, pgTable, primaryKey, text, timestamp, uniqueIndex, uuid } from 'drizzle-orm/pg-core';
 
 import { baseEntityColumns } from '../helpers/base-entity';
 import { tenantPolicy } from '../helpers/tenant-policy';
 
+import { companies } from './companies';
+
 /**
  * Reporting snapshots — point-in-time financial state captures.
  *
+ * RULE C-01: Reporting snapshots are LEGAL-scoped (company financial reports).
  * PRD Phase D #18.5 + G0.10:
  * - Captured at period close for reproducible historical financials
  * - snapshot_type: trial_balance, balance_sheet, income_statement, aging
  * - data stored as JSONB (flexible for different report structures)
  * - Append-only: snapshots are evidence, never modified
+ * 
+ * GAP-DB-001: Composite PK (org_id, id) for data integrity and tenant isolation.
  */
 export const reportingSnapshots = pgTable(
   'reporting_snapshots',
@@ -30,6 +35,12 @@ export const reportingSnapshots = pgTable(
     memo: text('memo'),
   },
   (table) => [
+    primaryKey({ columns: [table.orgId, table.id] }),
+    foreignKey({
+      columns: [table.orgId, table.companyId],
+      foreignColumns: [companies.orgId, companies.id],
+      name: 'reporting_snapshots_company_fk',
+    }),
     index('rpt_snap_org_id_idx').on(table.orgId, table.id),
     index('rpt_snap_company_idx').on(table.orgId, table.companyId),
     index('rpt_snap_period_idx').on(table.orgId, table.fiscalPeriodId),

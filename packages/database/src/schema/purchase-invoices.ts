@@ -4,9 +4,11 @@ import {
   boolean,
   check,
   date,
+  foreignKey,
   index,
   numeric,
   pgTable,
+  primaryKey,
   text,
   uniqueIndex,
   uuid,
@@ -16,14 +18,19 @@ import { docEntityColumns } from '../helpers/doc-entity';
 import { postingColumns } from '../helpers/posting-columns';
 import { tenantPolicy } from '../helpers/tenant-policy';
 
+import { companies } from './companies';
+
 /**
  * Purchase invoices — AP document (mirror of sales_invoices).
  *
+ * RULE C-01: Purchase invoices are ISSUER-scoped (company receives/pays invoices).
  * Transactional Spine Migration 0036: Buying Cycle.
  * - 6-state posting_status (P-08)
  * - company_id NOT NULL (§3.12)
  * - AP aging indexes (mirror of AR)
  * - Statement index for supplier statements
+ * 
+ * GAP-DB-001: Composite PK (org_id, id) for data integrity and tenant isolation.
  */
 export const purchaseInvoices = pgTable(
   'purchase_invoices',
@@ -48,6 +55,12 @@ export const purchaseInvoices = pgTable(
     memo: text('memo'),
   },
   (table) => [
+    primaryKey({ columns: [table.orgId, table.id] }),
+    foreignKey({
+      columns: [table.orgId, table.companyId],
+      foreignColumns: [companies.orgId, companies.id],
+      name: 'purchase_invoices_company_fk',
+    }),
     uniqueIndex('pi_org_doc_no_uniq').on(table.orgId, table.docNo),
     index('pi_org_supplier_posting_idx').on(table.orgId, table.supplierId, table.postingDate),
     index('pi_org_posting_date_idx').on(table.orgId, table.postingDate),

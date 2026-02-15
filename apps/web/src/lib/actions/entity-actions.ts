@@ -1,10 +1,20 @@
+import { after } from 'next/server';
+
 import { mutate, readEntity, listEntities } from 'afena-crud';
 import { db, auditLogs, entityVersions, eq, and, desc } from 'afena-database';
 import { getRequestId } from 'afena-logger';
 
+import { pokeSearchDrain, shouldPokeSearchDrain } from '@/lib/api/poke-search-drain';
+
 import { buildContext } from './context';
 
 import type { ApiResponse, EntityType, JsonValue, MutationSpec } from 'afena-canon';
+
+function maybePokeSearchDrain(entityType: EntityType): void {
+  if (shouldPokeSearchDrain(entityType)) {
+    after(() => pokeSearchDrain());
+  }
+}
 
 /**
  * Generate standard CRUD server actions for any entity type.
@@ -23,7 +33,9 @@ export function generateEntityActions(entityType: EntityType) {
       input,
       idempotencyKey: crypto.randomUUID(),
     };
-    return mutate(spec, ctx);
+    const result = await mutate(spec, ctx);
+    if (result.ok) maybePokeSearchDrain(entityType);
+    return result;
   }
 
   async function update(
@@ -38,7 +50,9 @@ export function generateEntityActions(entityType: EntityType) {
       input,
       expectedVersion,
     };
-    return mutate(spec, ctx);
+    const result = await mutate(spec, ctx);
+    if (result.ok) maybePokeSearchDrain(entityType);
+    return result;
   }
 
   async function remove(
@@ -52,7 +66,9 @@ export function generateEntityActions(entityType: EntityType) {
       input: {},
       expectedVersion,
     };
-    return mutate(spec, ctx);
+    const result = await mutate(spec, ctx);
+    if (result.ok) maybePokeSearchDrain(entityType);
+    return result;
   }
 
   async function restore(
@@ -66,7 +82,9 @@ export function generateEntityActions(entityType: EntityType) {
       input: {},
       expectedVersion,
     };
-    return mutate(spec, ctx);
+    const result = await mutate(spec, ctx);
+    if (result.ok) maybePokeSearchDrain(entityType);
+    return result;
   }
 
   async function read(id: string, forcePrimary?: boolean): Promise<ApiResponse> {
@@ -76,8 +94,10 @@ export function generateEntityActions(entityType: EntityType) {
 
   async function list(options?: {
     includeDeleted?: boolean;
+    includeCount?: boolean;
     limit?: number;
     offset?: number;
+    orgId?: string;
     forcePrimary?: boolean;
   }): Promise<ApiResponse> {
     const requestId = getRequestId() ?? crypto.randomUUID();
@@ -145,7 +165,9 @@ export function generateEntityActions(entityType: EntityType) {
       input: {},
       expectedVersion,
     };
-    return mutate(spec, ctx);
+    const result = await mutate(spec, ctx);
+    if (result.ok) maybePokeSearchDrain(entityType);
+    return result;
   }
 
   async function cancel(
@@ -159,7 +181,9 @@ export function generateEntityActions(entityType: EntityType) {
       input: {},
       expectedVersion,
     };
-    return mutate(spec, ctx);
+    const result = await mutate(spec, ctx);
+    if (result.ok) maybePokeSearchDrain(entityType);
+    return result;
   }
 
   async function approve(
@@ -173,7 +197,9 @@ export function generateEntityActions(entityType: EntityType) {
       input: {},
       expectedVersion,
     };
-    return mutate(spec, ctx);
+    const result = await mutate(spec, ctx);
+    if (result.ok) maybePokeSearchDrain(entityType);
+    return result;
   }
 
   async function reject(
@@ -187,7 +213,9 @@ export function generateEntityActions(entityType: EntityType) {
       input: {},
       expectedVersion,
     };
-    return mutate(spec, ctx);
+    const result = await mutate(spec, ctx);
+    if (result.ok) maybePokeSearchDrain(entityType);
+    return result;
   }
 
   return {

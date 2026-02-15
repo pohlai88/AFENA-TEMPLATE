@@ -6,6 +6,7 @@ import {
   integer,
   numeric,
   pgTable,
+  primaryKey,
   text,
   timestamp,
   uniqueIndex,
@@ -22,6 +23,8 @@ import { tenantPolicy } from '../helpers/tenant-policy';
  * - Shared line contract with net CHECK
  * - lot_tracking_id + serial_no for traceability
  * - posting_date denormalized for partition readiness
+ * 
+ * GAP-DB-001: Composite PK (org_id, id) for data integrity and tenant isolation.
  */
 export const deliveryNoteLines = pgTable(
   'delivery_note_lines',
@@ -51,6 +54,7 @@ export const deliveryNoteLines = pgTable(
     memo: text('memo'),
   },
   (table) => [
+    primaryKey({ columns: [table.orgId, table.id] }),
     uniqueIndex('dnl_org_note_line_uniq').on(table.orgId, table.deliveryNoteId, table.lineNo),
     index('dnl_org_note_idx').on(table.orgId, table.deliveryNoteId),
     index('dnl_org_item_idx').on(table.orgId, table.itemId),

@@ -56,11 +56,8 @@ export default defineConfig({
       junit: './test-results/junit.xml',
     },
 
-    // Global setup files (if needed)
-    // globalSetup: ['./test/setup.ts'],
-
-    // Setup files for each test file
-    // setupFiles: ['./test/setup-each.ts'],
+    // Load apps/web/.env so integration tests get DATABASE_URL (single source)
+    setupFiles: ['./vitest.setup.ts'],
   },
 
   // Vite configuration

@@ -86,18 +86,31 @@ export function validateDslSafety(expr: string): DslSafetyResult {
  * Count total property dereferences in an expression.
  * Each dot-separated path segment counts as one dereference.
  * e.g. "entity.a.b.c" = 3 dereferences, "entity.x > context.y.z" = 3 dereferences total.
+ * Uses character-by-character scan to avoid ReDoS from nested regex quantifiers.
  */
 function countDereferences(expr: string): number {
-  // Match property access patterns: word.word.word...
-  const pathPattern = /[a-zA-Z_]\w*(?:\.[a-zA-Z_]\w*)*/g;
   let total = 0;
-  let match: RegExpExecArray | null;
+  const len = expr.length;
+  let i = 0;
+  const isIdentStart = (c: string) => /[a-zA-Z_]/.test(c);
+  const isIdentPart = (c: string) => /[a-zA-Z0-9_]/.test(c);
 
-  while ((match = pathPattern.exec(expr)) !== null) {
-    const dots = match[0].split('.').length - 1;
+  while (i < len) {
+    if (!isIdentStart(expr[i] ?? '')) {
+      i++;
+      continue;
+    }
+    let dots = 0;
+    while (i < len) {
+      while (i < len && isIdentPart(expr[i] ?? '')) i++;
+      if (i < len && expr[i] === '.') {
+        dots++;
+        i++;
+        if (i >= len || !isIdentStart(expr[i] ?? '')) break;
+      } else break;
+    }
     total += dots;
   }
-
   return total;
 }
 

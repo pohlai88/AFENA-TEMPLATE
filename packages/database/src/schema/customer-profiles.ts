@@ -1,17 +1,22 @@
 import { sql } from 'drizzle-orm';
-import { bigint, check, index, pgTable, text, uniqueIndex, uuid } from 'drizzle-orm/pg-core';
+import { bigint, check, foreignKey, index, pgTable, primaryKey, text, uniqueIndex, uuid } from 'drizzle-orm/pg-core';
 
 import { baseEntityColumns } from '../helpers/base-entity';
 import { tenantPolicy } from '../helpers/tenant-policy';
 
+import { companies } from './companies';
+
 /**
  * Customer profiles — customer-specific settings linked to contacts.
  *
+ * RULE C-01: Customer profiles are LEGAL-scoped (company-specific customer settings).
  * Audit P1-5:
  * - Credit limits, payment terms, default price list per customer
  * - Default currency and tax settings
  * - A contact can be both customer AND supplier (separate profile rows)
  * - UNIQUE(org_id, contact_id) — one customer profile per contact
+ * 
+ * GAP-DB-001: Composite PK (org_id, id) for data integrity and tenant isolation.
  */
 export const customerProfiles = pgTable(
   'customer_profiles',
@@ -32,6 +37,12 @@ export const customerProfiles = pgTable(
     memo: text('memo'),
   },
   (table) => [
+    primaryKey({ columns: [table.orgId, table.id] }),
+    foreignKey({
+      columns: [table.orgId, table.companyId],
+      foreignColumns: [companies.orgId, companies.id],
+      name: 'customer_profiles_company_fk',
+    }).onDelete('set null'),
     index('cust_prof_org_id_idx').on(table.orgId, table.id),
     index('cust_prof_org_company_idx').on(table.orgId, table.companyId),
     uniqueIndex('cust_prof_org_contact_uniq').on(table.orgId, table.contactId),

@@ -2,6 +2,7 @@
 // Internal handlers, audit writer, version helpers are NEVER exported.
 export { mutate } from './mutate';
 export { readEntity, listEntities } from './read';
+export { readDeliveryNoteWithLines } from './read-delivery-note';
 
 // ── Re-export context type + system context builder for callers ──
 export type { MutationContext } from './context';

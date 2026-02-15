@@ -1,5 +1,5 @@
 import { sql } from 'drizzle-orm';
-import { boolean, check, index, integer, jsonb, pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core';
+import { boolean, check, index, integer, jsonb, pgTable, primaryKey, text, timestamp, uuid } from 'drizzle-orm/pg-core';
 
 import { baseEntityColumns } from '../helpers/base-entity';
 import { tenantPolicy } from '../helpers/tenant-policy';
@@ -41,11 +41,13 @@ export type NewWebhookEndpoint = typeof webhookEndpoints.$inferInsert;
 
 /**
  * Webhook deliveries — append-only log of delivery attempts.
+ * 
+ * GAP-DB-001: Composite PK (org_id, id) for data integrity and tenant isolation.
  */
 export const webhookDeliveries = pgTable(
   'webhook_deliveries',
   {
-    id: uuid('id').defaultRandom().primaryKey(),
+    id: uuid('id').defaultRandom().notNull(),
     orgId: text('org_id')
       .notNull()
       .default(sql`(auth.require_org_id())`),
@@ -60,6 +62,7 @@ export const webhookDeliveries = pgTable(
     error: text('error'),
   },
   (table) => [
+    primaryKey({ columns: [table.orgId, table.id] }),
     index('webhook_del_org_id_idx').on(table.orgId, table.id),
     index('webhook_del_endpoint_idx').on(table.orgId, table.endpointId),
     index('webhook_del_event_idx').on(table.orgId, table.eventType),

@@ -1,5 +1,5 @@
 import { sql } from 'drizzle-orm';
-import { check, index, pgTable, text, timestamp, uniqueIndex, uuid } from 'drizzle-orm/pg-core';
+import { check, index, pgTable, primaryKey, text, timestamp, uniqueIndex, uuid } from 'drizzle-orm/pg-core';
 
 import { tenantPolicy } from '../helpers/tenant-policy';
 
@@ -8,11 +8,13 @@ import { roles } from './roles';
 /**
  * User-role assignments — org-scoped.
  * Maps users to roles within their org.
+ * 
+ * GAP-DB-001: Composite PK (org_id, id) for data integrity and tenant isolation.
  */
 export const userRoles = pgTable(
   'user_roles',
   {
-    id: uuid('id').defaultRandom().primaryKey(),
+    id: uuid('id').defaultRandom().notNull(),
     orgId: text('org_id')
       .notNull()
       .default(sql`(auth.require_org_id())`),
@@ -23,6 +25,7 @@ export const userRoles = pgTable(
     createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
   },
   (table) => [
+    primaryKey({ columns: [table.orgId, table.id] }),
     uniqueIndex('user_roles_org_user_role_idx').on(table.orgId, table.userId, table.roleId),
     index('user_roles_org_user_idx').on(table.orgId, table.userId),
     check('user_roles_org_not_empty', sql`org_id <> ''`),

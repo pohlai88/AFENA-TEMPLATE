@@ -1,5 +1,5 @@
 import { sql } from 'drizzle-orm';
-import { check, index, pgTable, text, timestamp, unique, uniqueIndex, uuid } from 'drizzle-orm/pg-core';
+import { check, index, pgTable, primaryKey, text, timestamp, unique, uniqueIndex, uuid } from 'drizzle-orm/pg-core';
 
 import { tenantPolicy } from '../helpers/tenant-policy';
 
@@ -14,11 +14,13 @@ import { migrationJobs } from './migration-jobs';
  *
  * D0.1: Reclaim is single-statement atomic (UPDATE … RETURNING)
  * D0.2: Delete only by lineageId (never by composite key)
+ * 
+ * GAP-DB-001: Composite PK (org_id, id) for data integrity and tenant isolation.
  */
 export const migrationLineage = pgTable(
   'migration_lineage',
   {
-    id: uuid('id').defaultRandom().primaryKey(),
+    id: uuid('id').defaultRandom().notNull(),
     orgId: text('org_id').notNull(),
     migrationJobId: uuid('migration_job_id').notNull().references(() => migrationJobs.id),
     entityType: text('entity_type').notNull(),
@@ -33,6 +35,7 @@ export const migrationLineage = pgTable(
     dedupeKey: text('dedupe_key'),
   },
   (table) => [
+    primaryKey({ columns: [table.orgId, table.id] }),
     index('migration_lineage_job_idx').on(table.migrationJobId),
     index('migration_lineage_reservations_idx')
       .on(table.orgId, table.entityType, table.legacySystem, table.reservedAt)

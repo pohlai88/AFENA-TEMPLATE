@@ -1,8 +1,18 @@
 const baseConfig = require('afena-eslint-config/base');
 
 module.exports = [
-  { ignores: ['dist/**', '*.config.*', '**/*.test.*', '**/*.spec.*'] },
   ...baseConfig,
+
+  {
+    ignores: [
+      'dist/**',
+      '*.config.*',
+      '**/*.test.*',
+      '**/*.spec.*',
+      'src/**/__tests__/**/*.bench.*',
+    ],
+  },
+
   {
     languageOptions: {
       parserOptions: {
@@ -18,26 +28,43 @@ module.exports = [
           selector: "CallExpression[callee.object.name='console']",
           message: 'Use afena-logger instead of console.* (INVARIANT-08)',
         },
-        {
-          selector: "CallExpression[callee.object.property.name='console']",
-          message: 'Use afena-logger instead of console.* (INVARIANT-08)',
-        },
         // INVARIANT-01 db.insert/update/delete rules intentionally omitted here
       ],
     },
   },
+
+  // Override A: Core files that require tx typing exceptions (explicit list)
   {
-    files: ['src/mutate.ts', 'src/handlers/**/*.ts', 'src/read.ts', 'src/metering.ts', 'src/policy-engine.ts', 'src/governor.ts', 'src/services/doc-number.ts', 'src/services/fx-lookup.ts', 'src/services/fiscal-period.ts', 'src/services/tax-calc.ts', 'src/services/workflow-edit-window.ts', 'src/services/workflow-outbox.ts'],
+    files: [
+      'src/mutate.ts',
+      'src/handlers/**/*.ts',
+      'src/read.ts',
+      'src/metering.ts',
+      'src/policy-engine.ts',
+      'src/governor.ts',
+    ],
     rules: {
-      // Drizzle transaction typing: tx from db.transaction() loses schema type,
-      // requiring intentional `as any` casts for insert/update/select within tx
+      // EX-LINT-DRZ-TX-001: Drizzle tx typing loses schema; allow intentional any-casts
       '@typescript-eslint/no-unsafe-argument': 'off',
       '@typescript-eslint/no-explicit-any': 'off',
       '@typescript-eslint/no-unsafe-call': 'off',
       '@typescript-eslint/no-unsafe-member-access': 'off',
       '@typescript-eslint/no-unsafe-assignment': 'off',
       '@typescript-eslint/no-unsafe-return': 'off',
-      '@typescript-eslint/no-unnecessary-type-assertion': 'off',
+    },
+  },
+
+  // Override B: Services only (no-unnecessary-type-assertion kept ON)
+  {
+    files: ['src/services/**/*.ts'],
+    rules: {
+      // EX-LINT-DRZ-TX-001: Drizzle tx typing loses schema; allow intentional any-casts in services
+      '@typescript-eslint/no-unsafe-argument': 'off',
+      '@typescript-eslint/no-explicit-any': 'off',
+      '@typescript-eslint/no-unsafe-call': 'off',
+      '@typescript-eslint/no-unsafe-member-access': 'off',
+      '@typescript-eslint/no-unsafe-assignment': 'off',
+      '@typescript-eslint/no-unsafe-return': 'off',
     },
   },
 ];

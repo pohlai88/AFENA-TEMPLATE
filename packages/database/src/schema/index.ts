@@ -3,6 +3,7 @@
  * Do not edit manually. Run: pnpm db:barrel
  */
 
+export * from './_registry';
 export * from './addresses';
 export * from './advisories';
 export * from './advisory-evidence';
@@ -95,6 +96,8 @@ export * from './sales-invoice-lines';
 export * from './sales-invoices';
 export * from './sales-order-lines';
 export * from './sales-orders';
+export * from './search-documents';
+export * from './search-outbox';
 export * from './sites';
 export * from './spine-relations';
 export * from './stock-balances';
@@ -119,3 +122,4 @@ export * from './workflow-rules';
 export * from './workflow-side-effects-outbox';
 export * from './workflow-step-executions';
 export * from './workflow-step-receipts';
+// @entity-gen:schema-barrel

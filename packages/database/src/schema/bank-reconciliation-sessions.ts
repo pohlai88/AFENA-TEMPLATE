@@ -1,18 +1,23 @@
 import { sql } from 'drizzle-orm';
-import { bigint, check, date, index, pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core';
+import { bigint, check, date, foreignKey, index, pgTable, primaryKey, text, timestamp, uuid } from 'drizzle-orm/pg-core';
 
 import { baseEntityColumns } from '../helpers/base-entity';
 import { tenantPolicy } from '../helpers/tenant-policy';
 
+import { companies } from './companies';
+
 /**
  * Bank reconciliation sessions — tracks reconciliation runs.
  *
+ * RULE C-01: Bank reconciliation is LEGAL-scoped (company-specific).
  * Audit P1-7:
  * - Groups matched bank_statement_lines into a session
  * - Tracks reconciliation status (in_progress, completed, approved)
  * - Records preparer and approver for audit trail
  * - Statement date range for the reconciliation window
  * - Closing balance for period-end verification
+ * 
+ * GAP-DB-001: Composite PK (org_id, id) for data integrity and tenant isolation.
  */
 export const bankReconciliationSessions = pgTable(
   'bank_reconciliation_sessions',
@@ -36,6 +41,12 @@ export const bankReconciliationSessions = pgTable(
     memo: text('memo'),
   },
   (table) => [
+    primaryKey({ columns: [table.orgId, table.id] }),
+    foreignKey({
+      columns: [table.orgId, table.companyId],
+      foreignColumns: [companies.orgId, companies.id],
+      name: 'bank_reconciliation_sessions_company_fk',
+    }),
     index('bank_recon_org_id_idx').on(table.orgId, table.id),
     index('bank_recon_org_company_idx').on(table.orgId, table.companyId),
     index('bank_recon_org_bank_acct_idx').on(table.orgId, table.bankAccountId),

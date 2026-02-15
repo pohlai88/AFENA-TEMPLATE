@@ -1,18 +1,23 @@
 import { sql } from 'drizzle-orm';
-import { bigint, boolean, check, index, pgTable, text, uniqueIndex, uuid } from 'drizzle-orm/pg-core';
+import { bigint, boolean, check, foreignKey, index, pgTable, primaryKey, text, uniqueIndex, uuid } from 'drizzle-orm/pg-core';
 
 import { baseEntityColumns } from '../helpers/base-entity';
 import { tenantPolicy } from '../helpers/tenant-policy';
 
+import { companies } from './companies';
+
 /**
  * Bank accounts — company bank account master data.
  *
+ * RULE C-01: Bank accounts are LEGAL-scoped (company owns bank accounts).
  * Audit P0-3:
  * - Referenced by payments.bank_account_id and bank_statement_lines.bank_account_id
  * - Scoped to company for legal entity isolation
  * - Supports multi-currency accounts
  * - GL account link for automatic journalization
  * - UNIQUE(org_id, company_id, account_number) prevents duplicates
+ * 
+ * GAP-DB-001: Composite PK (org_id, id) for data integrity and tenant isolation.
  */
 export const bankAccounts = pgTable(
   'bank_accounts',
@@ -36,7 +41,13 @@ export const bankAccounts = pgTable(
     description: text('description'),
   },
   (table) => [
-    index('bank_acct_org_id_idx').on(table.orgId, table.id),
+    primaryKey({ columns: [table.orgId, table.id] }),
+    foreignKey({
+      columns: [table.orgId, table.companyId],
+      foreignColumns: [companies.orgId, companies.id],
+      name: 'bank_accounts_company_fk',
+    }),
+    index('bank_accounts_org_id_idx').on(table.orgId, table.id),
     index('bank_acct_org_company_idx').on(table.orgId, table.companyId),
     uniqueIndex('bank_acct_org_company_number_uniq').on(
       table.orgId,

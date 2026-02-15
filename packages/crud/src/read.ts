@@ -1,4 +1,4 @@
-import { and, companies, contacts, getDb, eq } from 'afena-database';
+import { and, batch, companies, contacts, eq, getDb, sql } from 'afena-database';
 // @entity-gen:read-import
 
 import { err, ok } from './envelope';
@@ -52,8 +52,10 @@ export async function listEntities(
   requestId: string,
   options?: {
     includeDeleted?: boolean;
+    includeCount?: boolean;
     limit?: number;
     offset?: number;
+    orgId?: string;
     forcePrimary?: boolean;
   },
 ): Promise<ApiResponse> {
@@ -62,15 +64,65 @@ export async function listEntities(
     return err('VALIDATION_FAILED', `Unknown entity type: ${entityType}`, requestId);
   }
 
-  const whereClause = options?.includeDeleted ? undefined : eq(table.isDeleted, false);
+  const conditions: Parameters<typeof and>[0][] = [];
+  if (!options?.includeDeleted) {
+    conditions.push(eq(table.isDeleted, false));
+  }
+  if (options?.orgId) {
+    conditions.push(eq(table.orgId, options.orgId));
+  }
+  const whereClause = conditions.length > 0 ? and(...conditions) : undefined;
 
   const conn = getDb(options?.forcePrimary ? { forcePrimary: true } : undefined);
+  const limit = options?.limit ?? 100;
+  const offset = options?.offset ?? 0;
+
+  if (options?.includeCount) {
+    // batch() uses dbRo; when forcePrimary we need read-after-write, so run list+count on primary (2 RTT)
+    const useBatch = !options?.forcePrimary;
+    let rows: unknown[];
+    let totalCount: number;
+
+    if (useBatch) {
+      const [listResult, countRows] = await batch([
+        conn
+          .select()
+          .from(table)
+          .where(whereClause)
+          .limit(limit)
+          .offset(offset),
+        conn
+          .select({ count: sql<bigint>`count(*)::bigint` })
+          .from(table)
+          .where(whereClause),
+      ]);
+      rows = listResult;
+      totalCount = Number((countRows[0] as { count: bigint })?.count ?? 0);
+    } else {
+      const [listResult, countResult] = await Promise.all([
+        conn
+          .select()
+          .from(table)
+          .where(whereClause)
+          .limit(limit)
+          .offset(offset),
+        conn
+          .select({ count: sql<bigint>`count(*)::bigint` })
+          .from(table)
+          .where(whereClause),
+      ]);
+      rows = listResult;
+      totalCount = Number((countResult[0] as { count: bigint })?.count ?? 0);
+    }
+    return ok(rows, requestId, undefined, { totalCount });
+  }
+
   const rows = await conn
     .select()
     .from(table)
     .where(whereClause)
-    .limit(options?.limit ?? 100)
-    .offset(options?.offset ?? 0);
+    .limit(limit)
+    .offset(offset);
 
   return ok(rows, requestId);
 }

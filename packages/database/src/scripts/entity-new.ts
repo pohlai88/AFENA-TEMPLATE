@@ -7,11 +7,13 @@
  * with zero manual wiring.
  *
  * Usage:
- *   npx tsx src/scripts/entity-new.ts <name> [--doc] [--skip-schema]
+ *   npx tsx src/scripts/entity-new.ts <name> [--doc] [--skip-schema] [--kind <kind>]
  *
  * Flags:
  *   --doc          Include lifecycle verbs (submit/cancel/approve/reject)
  *   --skip-schema  Skip schema generation (for existing tables like companies)
+ *   --kind <kind>  Table kind for TABLE_KIND_OVERRIDES: truth|control|system|evidence|projection|link
+ *                  Auto-inserts into table-registry.config.ts (reduces manual config edits)
  *
  * Run from packages/database directory.
  */
@@ -24,17 +26,33 @@ import { fileURLToPath } from 'node:url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+const VALID_KINDS = ['truth', 'control', 'system', 'evidence', 'projection', 'link'] as const;
+type TableKind = (typeof VALID_KINDS)[number];
+
 // ── Parse CLI args ───────────────────────────────────────
 
 const args = process.argv.slice(2);
 const entityName = args[0];
 if (!entityName || entityName.startsWith('-')) {
-  console.error('Usage: npx tsx src/scripts/entity-new.ts <entity_name> [--doc] [--skip-schema]');
+  console.error('Usage: npx tsx src/scripts/entity-new.ts <entity_name> [--doc] [--skip-schema] [--kind <kind>]');
   process.exit(1);
 }
 const flags = new Set(args.slice(1));
 const hasDoc = flags.has('--doc');
 const skipSchema = flags.has('--skip-schema');
+
+// Parse --kind <value>
+let kindOverride: TableKind | null = null;
+const kindIdx = args.indexOf('--kind');
+if (kindIdx >= 0 && args[kindIdx + 1]) {
+  const k = args[kindIdx + 1];
+  if (VALID_KINDS.includes(k as TableKind)) {
+    kindOverride = k as TableKind;
+  } else {
+    console.error(`Invalid --kind: ${k}. Must be one of: ${VALID_KINDS.join(', ')}`);
+    process.exit(1);
+  }
+}
 
 // ── Derive names ─────────────────────────────────────────
 
@@ -107,6 +125,10 @@ function insertAtMarker(filePath: string, marker: string, insertion: string, lab
   ledger.filesModified.push(relPath);
 }
 
+function escapeRe(s: string): string {
+  return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
 function insertImportAtMarker(filePath: string, marker: string, importLine: string, _label: string): void {
   const relPath = path.relative(ROOT, filePath);
   if (!fs.existsSync(filePath)) {
@@ -123,6 +145,27 @@ function insertImportAtMarker(filePath: string, marker: string, importLine: stri
   }
   const updated = content.replace(marker, `${importLine}\n${marker}`);
   fs.writeFileSync(filePath, updated, 'utf-8');
+}
+
+/** Insert entity into TABLE_KIND_OVERRIDES in table-registry.config.ts. Idempotent. */
+function insertTableKindOverride(tableName: string, kind: TableKind): void {
+  const configPath = path.join(ROOT, 'packages', 'database', 'table-registry.config.ts');
+  const content = fs.readFileSync(configPath, 'utf-8');
+  const entry = `  ${tableName}: '${kind}'`;
+  if (content.includes(`${tableName}: '`) || content.includes(`${tableName}: "`)) {
+    console.warn(`  SKIP TABLE_KIND_OVERRIDES: ${tableName} already has an entry`);
+    return;
+  }
+  // Insert before "} as const satisfies Record<string, TableKind>;"
+  const insertPattern = /(\s+)(\} as const satisfies Record<string, TableKind>;)/;
+  const match = content.match(insertPattern);
+  if (!match) {
+    console.error('FATAL: Could not find TABLE_KIND_OVERRIDES closing in table-registry.config.ts');
+    process.exit(1);
+  }
+  const updated = content.replace(insertPattern, `${match[1]}${entry},\n${match[1]}${match[2]}`);
+  fs.writeFileSync(configPath, updated, 'utf-8');
+  ledger.filesModified.push(path.relative(ROOT, configPath));
 }
 
 // ── Action verbs ─────────────────────────────────────────
@@ -162,35 +205,44 @@ export type ${pascalSingular} = InferSelectModel<typeof ${camelPlural}>;
 export type New${pascalSingular} = InferInsertModel<typeof ${camelPlural}>;
 `;
   writeIfNotExists(path.join(DB_SCHEMA, `${entityName}.ts`), schemaContent, 'Drizzle schema');
-  // Regenerate schema barrel so new table is exported (Drizzle utilization)
-  execSync('npx tsx src/scripts/generate-schema-barrel.ts', {
+  if (kindOverride) {
+    insertTableKindOverride(entityName, kindOverride);
+    ledger.registries.push('TABLE_KIND_OVERRIDES');
+  }
+  // Regenerate schema barrel + table registry (Gate 7)
+  execSync('pnpm db:barrel', {
     cwd: path.join(ROOT, 'packages', 'database'),
     stdio: 'inherit',
   });
 }
 
+// When --skip-schema but --kind provided: add override and run db:barrel for existing table
+if (skipSchema && kindOverride) {
+  insertTableKindOverride(entityName, kindOverride);
+  ledger.registries.push('TABLE_KIND_OVERRIDES');
+  execSync('pnpm db:barrel', {
+    cwd: path.join(ROOT, 'packages', 'database'),
+    stdio: 'inherit',
+  });
+}
+
+// Gate 7: TABLE_REGISTRY is generated from schema. New truth tables get default kind.
+// Use --kind <kind> to auto-insert into TABLE_KIND_OVERRIDES; otherwise add manually then run pnpm db:barrel.
+
 // ══════════════════════════════════════════════════════════
 // STEP 2: CRUD handler
 // ══════════════════════════════════════════════════════════
 
-const handlerContent = `import { ${camelPlural} } from 'afena-database';
+const handlerContent = `import { ${camelPlural}, pickWritable } from 'afena-database';
 import { eq, and, sql } from 'drizzle-orm';
 
 import type { MutationContext } from '../context';
 import type { EntityHandler, HandlerResult } from './types';
 import type { NeonHttpDatabase } from 'drizzle-orm/neon-http';
 
-/**
- * K-11: ${pascalPlural} allowlist — only these fields are accepted from input.
- */
+/** GAP-DB-007 / SAN-01: Schema-derived allowlist — writable cols from Drizzle schema. */
 function pickAllowed(input: Record<string, unknown>): Record<string, unknown> {
-  // TODO: Update this list with entity-specific fields
-  const ALLOWED = ['description', 'metadata'] as const;
-  const result: Record<string, unknown> = {};
-  for (const key of ALLOWED) {
-    if (key in input) result[key] = input[key];
-  }
-  return result;
+  return pickWritable(${camelPlural}, input) as Record<string, unknown>;
 }
 
 function toRecord(row: Record<string, unknown>): Record<string, unknown> {

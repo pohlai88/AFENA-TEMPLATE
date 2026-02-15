@@ -1,5 +1,9 @@
 # Neon MCP Usage Guide
 
+> **Superseded** by [.architecture/database.architecture.md](./database.architecture.md) §10 Neon MCP Reference.
+> This document is historical; do not edit.
+> If conflicts exist, the consolidated doc wins.
+
 > **Purpose:** Use Neon MCP Server for database introspection, migrations, and branch management from Cursor/AI tools.
 
 ---

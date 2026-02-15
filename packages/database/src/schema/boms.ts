@@ -1,16 +1,21 @@
 import { sql } from 'drizzle-orm';
-import { boolean, check, index, integer, numeric, pgTable, text, uniqueIndex, uuid } from 'drizzle-orm/pg-core';
+import { boolean, check, foreignKey, index, integer, numeric, pgTable, primaryKey, text, uniqueIndex, uuid } from 'drizzle-orm/pg-core';
 
 import { baseEntityColumns } from '../helpers/base-entity';
 import { tenantPolicy } from '../helpers/tenant-policy';
 
+import { companies } from './companies';
+
 /**
  * Bills of Materials (BOMs) — manufacturing recipe definitions.
  *
+ * RULE C-01: BOMs are OPERATIONS-scoped (company defines manufacturing recipes).
  * PRD Phase E #19 + G0.21:
  * - Links finished product to component materials
  * - Versioned: changes create new BOM versions, not edits
  * - UNIQUE(org_id, company_id, product_id, version)
+ * 
+ * GAP-DB-001: Composite PK (org_id, id) for data integrity and tenant isolation.
  */
 export const boms = pgTable(
   'boms',
@@ -26,6 +31,12 @@ export const boms = pgTable(
     description: text('description'),
   },
   (table) => [
+    primaryKey({ columns: [table.orgId, table.id] }),
+    foreignKey({
+      columns: [table.orgId, table.companyId],
+      foreignColumns: [companies.orgId, companies.id],
+      name: 'boms_company_fk',
+    }),
     index('boms_org_id_idx').on(table.orgId, table.id),
     index('boms_product_idx').on(table.orgId, table.companyId, table.productId),
     uniqueIndex('boms_org_company_product_ver_uniq').on(

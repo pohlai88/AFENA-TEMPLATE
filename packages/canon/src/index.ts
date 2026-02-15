@@ -125,6 +125,9 @@ export {
 } from './schemas/data-types';
 export type { TypeConfigSchemas } from './schemas/data-types';
 
+// ── Serialization (GAP-DB-006 / SER-01) ─────────────────
+export { coerceMutationInput, coerceValue } from './serialization';
+
 // ── Validators ───────────────────────────────────────────
 export {
   validateFieldValue,

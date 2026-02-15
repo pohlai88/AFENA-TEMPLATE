@@ -1,8 +1,15 @@
 /**
  * Schema lint configuration — single source for exempt/override tables.
  * Reduces hardcoded lists in schema-lint.ts; add new tables here when needed.
+ *
+ * FK whitelist authority (GAP-DB-002): *_id columns without FK must be listed here
+ * with stable IDs. No ad-hoc whitelisting by comment.
  */
 export const schemaLintConfig = {
+  /** Columns exempt from FK requirement (*_id without FK constraint). Stable IDs: EX-FK-001, etc. */
+  FK_EXEMPT_COLUMNS: [] as Array<{ table: string; column: string; id: string }>,
+  /** Tables exempt from FK coverage check entirely */
+  FK_EXEMPT_TABLES: [] as Array<{ table: string; id: string }>,
   /** Tables exempt from ERP entity rules (system/config tables) */
   exemptTables: [
     'users',

@@ -11,6 +11,8 @@ import { check, pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core';
  *
  * Append-only: REVOKE UPDATE, DELETE from authenticated role.
  * Pruned by receipts-pruner job for completed instances > N days.
+ * 
+ * GAP-DB-001: Composite PK (org_id, instance_id, idempotency_key) for dedup.
  */
 export const workflowStepReceipts = pgTable(
   'workflow_step_receipts',

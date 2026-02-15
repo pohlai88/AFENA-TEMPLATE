@@ -6,6 +6,7 @@ import {
   integer,
   numeric,
   pgTable,
+  primaryKey,
   text,
   uniqueIndex,
   uuid,
@@ -24,6 +25,8 @@ import { tenantPolicy } from '../helpers/tenant-policy';
  * - Flags: is_stock_item, is_purchase_item, is_sales_item, is_fixed_asset
  * - Reorder/safety stock planning fields
  * - Default account/warehouse/cost centre for auto-fill
+ * 
+ * GAP-DB-001: Composite PK (org_id, id) for data integrity and tenant isolation.
  */
 export const items = pgTable(
   'items',
@@ -69,6 +72,7 @@ export const items = pgTable(
     defaultCostCenterId: uuid('default_cost_center_id'),
   },
   (table) => [
+    primaryKey({ columns: [table.orgId, table.id] }),
     uniqueIndex('items_org_code_uniq').on(table.orgId, table.code),
     index('items_org_group_idx').on(table.orgId, table.itemGroupId),
     index('items_org_type_idx').on(table.orgId, table.itemType),

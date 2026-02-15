@@ -1,4 +1,5 @@
 import {
+  coerceMutationInput,
   extractEntityNamespace,
   extractVerb,
   getActionFamily,
@@ -6,7 +7,7 @@ import {
   mutationSpecSchema,
   RateLimitError,
 } from 'afena-canon';
-import { and, auditLogs, companies, contacts, db, entityVersions, eq, sql } from 'afena-database';
+import { and, auditLogs, companies, contacts, db, entityVersions, eq, withDbRetry } from 'afena-database';
 import { evaluateRules, loadAndRegisterOrgRules, WorkflowEngineError } from 'afena-workflow';
 
 import { generateDiff } from './diff';
@@ -20,6 +21,7 @@ import { meterApiRequest, meterDbTimeout } from './metering';
 import { enforcePolicyV2 } from './policy-engine';
 import { checkRateLimit } from './rate-limiter';
 import { stripSystemColumns } from './sanitize';
+import { enqueueSearchOutboxEvent } from './services/search-outbox';
 import { enforceEditWindow } from './services/workflow-edit-window';
 import { enqueueWorkflowOutboxEvent } from './services/workflow-outbox';
 
@@ -87,9 +89,9 @@ export async function mutate(
 
   const verb = extractVerb(validSpec.actionType);
 
-  // 2. Strip system columns (K-11 backstop)
+  // 2. Strip system columns (K-11 backstop) + coerce for DB (GAP-DB-006 / SER-01)
   const sanitizedInput = typeof validSpec.input === 'object' && validSpec.input !== null && !Array.isArray(validSpec.input)
-    ? stripSystemColumns(validSpec.input as Record<string, unknown>)
+    ? coerceMutationInput(stripSystemColumns(validSpec.input as Record<string, unknown>))
     : validSpec.input;
 
   // 3. Enforce expectedVersion rules (K-04)
@@ -238,7 +240,8 @@ export async function mutate(
       ctx.channel,
     );
 
-    const result = await db.transaction(async (tx) => {
+    const result = await withDbRetry(() =>
+      db.transaction(async (tx) => {
       // INVARIANT-GOVERNORS-01: SET LOCAL timeouts + application_name
       await applyGovernor(tx as any, governorConfig);
       let handlerResult;
@@ -379,7 +382,7 @@ export async function mutate(
           entityId: handlerResult.entityId,
           entityVersion: handlerResult.versionAfter,
           actionType: validSpec.actionType,
-          fromStatus: (handlerResult.before as Record<string, unknown> | null)?.docStatus as string | undefined ?? null,
+          fromStatus: (handlerResult.before)?.docStatus as string | undefined ?? null,
           toStatus: (handlerResult.after as Record<string, unknown> | null)?.docStatus as string | undefined ?? null,
           traceId: ctx.requestId,
         });
@@ -388,8 +391,21 @@ export async function mutate(
         // The workflow will be triggered on the next mutation or manual retry.
       }
 
+      // Enqueue search outbox event in same TX (GAP-DB-004)
+      try {
+        await enqueueSearchOutboxEvent(tx, {
+          orgId: ctx.actor.orgId,
+          entityType: validSpec.entityRef.type,
+          entityId: handlerResult.entityId,
+          action: verb === 'delete' ? 'delete' : 'upsert',
+        });
+      } catch {
+        // Search outbox write failure must not abort the mutation TX.
+      }
+
       return { handlerResult, auditRow };
-    });
+    }),
+    );
 
     // Build success receipt
     const receipt: Receipt = {
@@ -414,11 +430,7 @@ export async function mutate(
       // After-rule errors are swallowed — they must not affect the mutation response
     });
 
-    // Refresh search_index MV (fire-and-forget, PRD Phase A #3)
-    // Uses CONCURRENTLY to avoid blocking reads. Errors are swallowed.
-    db.execute(sql`REFRESH MATERIALIZED VIEW CONCURRENTLY search_index`).catch(() => {
-      // MV refresh errors must not affect the mutation response
-    });
+    // GAP-DB-004: Search updates via search_outbox + worker (no MV refresh)
 
     // Meter successful mutation (fire-and-forget)
     meterApiRequest(ctx.actor.orgId);

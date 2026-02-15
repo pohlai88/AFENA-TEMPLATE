@@ -1,6 +1,6 @@
 import { sql } from 'drizzle-orm';
 import { crudPolicy, authenticatedRole } from 'drizzle-orm/neon';
-import { boolean, check, index, jsonb, pgTable, text, timestamp, integer, uniqueIndex, uuid } from 'drizzle-orm/pg-core';
+import { boolean, check, index, jsonb, pgTable, primaryKey, text, timestamp, integer, uniqueIndex, uuid } from 'drizzle-orm/pg-core';
 
 /**
  * Workflow V2 Definitions — envelope, org_patch, or compiled effective.
@@ -14,11 +14,13 @@ import { boolean, check, index, jsonb, pgTable, text, timestamp, integer, unique
  * - reject_published_definition_mutation: WF-04 immutability
  * - reject_default_definition_mutation: system envelopes immutable
  * - set_updated_at
+ * 
+ * GAP-DB-001: Composite PK (org_id, id) for data integrity and tenant isolation.
  */
 export const workflowDefinitions = pgTable(
   'workflow_definitions',
   {
-    id: uuid('id').defaultRandom().primaryKey(),
+    id: uuid('id').defaultRandom().notNull(),
     orgId: text('org_id').notNull().default(sql`(auth.require_org_id())`),
     entityType: text('entity_type').notNull(),
     name: text('name').notNull(),
@@ -45,6 +47,7 @@ export const workflowDefinitions = pgTable(
     updatedAt: timestamp('updated_at', { withTimezone: true }).defaultNow().notNull(),
   },
   (table) => [
+    primaryKey({ columns: [table.orgId, table.id] }),
     // Constraints
     check('wf_def_org_not_empty', sql`org_id <> ''`),
     check('wf_def_status_valid', sql`status IN ('draft', 'published', 'archived')`),

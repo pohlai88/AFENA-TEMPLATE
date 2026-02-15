@@ -1,20 +1,25 @@
 # Drizzle ORM Utilization Plan — Schema as Single Source of Truth
 
+> **Superseded** by [database.architecture.md](./database.architecture.md) §5 Drizzle ORM Usage.
+> This document is historical; do not edit.
+> If conflicts exist, the consolidated doc wins.
+> **Ratified:** 2026-02-14
+
 > **Purpose:** Replace hardcoded registries and manual schema exports with Drizzle-driven automation. Align with Neon MCP, db.schema.governance, and database.architecture.
 
 ---
 
 ## 1. Current State (Underutilization)
 
-| Area | Current | Problem |
-|------|---------|---------|
-| **Schema barrel** | 370+ manual exports in `schema/index.ts` | Every new table requires 2–4 lines; drift risk |
-| **ENTITY_TYPES** | Hardcoded in `canon/src/types/entity.ts` | Must sync with HANDLER_REGISTRY, TABLE_REGISTRY |
-| **HANDLER_REGISTRY** | Manual in `mutate.ts` | Duplicated with read.ts TABLE_REGISTRY |
-| **TABLE_REGISTRY** | Manual in `mutate.ts` + `read.ts` | Same table list in two places |
-| **Schema lint** | EXEMPT_TABLES, ERP_ENTITY_TABLES, POSTABLE_TABLES, LINE_TABLES hardcoded | New tables require manual list updates |
-| **Relations** | Partial (users, r2Files, spine-relations) | Not all entities have Drizzle relations; relational queries underused |
-| **Migrations** | drizzle-kit generate/migrate | ✅ Good — schema → SQL |
+| Area                 | Current                                                                  | Problem                                                               |
+| -------------------- | ------------------------------------------------------------------------ | --------------------------------------------------------------------- |
+| **Schema barrel**    | 370+ manual exports in `schema/index.ts`                                 | Every new table requires 2–4 lines; drift risk                        |
+| **ENTITY_TYPES**     | Hardcoded in `canon/src/types/entity.ts`                                 | Must sync with HANDLER_REGISTRY, TABLE_REGISTRY                       |
+| **HANDLER_REGISTRY** | Manual in `mutate.ts`                                                    | Duplicated with read.ts TABLE_REGISTRY                                |
+| **TABLE_REGISTRY**   | Manual in `mutate.ts` + `read.ts`                                        | Same table list in two places                                         |
+| **Schema lint**      | EXEMPT_TABLES, ERP_ENTITY_TABLES, POSTABLE_TABLES, LINE_TABLES hardcoded | New tables require manual list updates                                |
+| **Relations**        | Partial (users, r2Files, spine-relations)                                | Not all entities have Drizzle relations; relational queries underused |
+| **Migrations**       | drizzle-kit generate/migrate                                             | ✅ Good — schema → SQL                                                |
 
 ---
 
@@ -52,12 +57,12 @@
 
 **Approach:**
 
-| Metadata | Derivation |
-|----------|------------|
-| **ERP_ENTITY_TABLES** | Tables that include `customData` column (from erpEntityColumns) |
-| **EXEMPT_TABLES** | Config file or convention: `schema/*.ts` with `// @lint:exempt` or table name in `schema-lint.config.ts` |
-| **POSTABLE_TABLES** | Tables with `posting_status` column |
-| **LINE_TABLES** | Tables with `net_minor` or `*_lines` suffix + line-like columns |
+| Metadata              | Derivation                                                                                               |
+| --------------------- | -------------------------------------------------------------------------------------------------------- |
+| **ERP_ENTITY_TABLES** | Tables that include `customData` column (from erpEntityColumns)                                          |
+| **EXEMPT_TABLES**     | Config file or convention: `schema/*.ts` with `// @lint:exempt` or table name in `schema-lint.config.ts` |
+| **POSTABLE_TABLES**   | Tables with `posting_status` column                                                                      |
+| **LINE_TABLES**       | Tables with `net_minor` or `*_lines` suffix + line-like columns                                          |
 
 **Config file:** `packages/database/schema-lint.config.ts`
 
@@ -123,12 +128,12 @@ export const schemaLintConfig = {
 
 **Use cases:**
 
-| Use Case | Neon MCP Tool | When |
-|----------|---------------|------|
-| Schema introspection | `mcp_Neon_describe_table_schema`, `mcp_Neon_get_database_tables` | Debugging, docs |
-| Run migrations | `mcp_Neon_run_sql`, `mcp_Neon_run_sql_transaction` | Apply migrations to Neon branch |
-| Query tuning | `mcp_Neon_prepare_query_tuning`, `mcp_Neon_explain_sql_statement` | Performance work |
-| Branch management | `mcp_Neon_create_branch`, `mcp_Neon_list_projects` | Preview envs |
+| Use Case             | Neon MCP Tool                                                     | When                            |
+| -------------------- | ----------------------------------------------------------------- | ------------------------------- |
+| Schema introspection | `mcp_Neon_describe_table_schema`, `mcp_Neon_get_database_tables`  | Debugging, docs                 |
+| Run migrations       | `mcp_Neon_run_sql`, `mcp_Neon_run_sql_transaction`                | Apply migrations to Neon branch |
+| Query tuning         | `mcp_Neon_prepare_query_tuning`, `mcp_Neon_explain_sql_statement` | Performance work                |
+| Branch management    | `mcp_Neon_create_branch`, `mcp_Neon_list_projects`                | Preview envs                    |
 
 **Documentation:** Add `.architecture/neon-mcp.usage.md` with examples for common workflows.
 
@@ -136,17 +141,17 @@ export const schemaLintConfig = {
 
 ## 4. File Changes Summary
 
-| File | Change | Status |
-|------|--------|--------|
-| `packages/database/src/scripts/generate-schema-barrel.ts` | **New** — auto-generate schema index | ✅ Done |
-| `packages/database/schema-lint.config.ts` | **New** — config for exempt/override tables | ✅ Done |
-| `packages/database/src/scripts/schema-lint.ts` | **Update** — use schema-derived metadata + config | ✅ Done |
-| `packages/database/package.json` | Add `db:barrel` script | ✅ Done |
-| `packages/database/src/scripts/entity-new.ts` | Run db:barrel after schema generation | ✅ Done |
-| `packages/database/src/registry.ts` | **New** — TABLE_REGISTRY from schema (optional Phase 3) | Deferred |
-| `packages/crud/src/read.ts` | Import TABLE_REGISTRY from afena-database (if Phase 3) | Deferred |
-| `packages/crud/src/mutate.ts` | Import TABLE_REGISTRY from afena-database (if Phase 3) | Deferred |
-| `.architecture/neon-mcp.usage.md` | **New** — Neon MCP usage guide | ✅ Done |
+| File                                                      | Change                                                  | Status   |
+| --------------------------------------------------------- | ------------------------------------------------------- | -------- |
+| `packages/database/src/scripts/generate-schema-barrel.ts` | **New** — auto-generate schema index                    | ✅ Done  |
+| `packages/database/schema-lint.config.ts`                 | **New** — config for exempt/override tables             | ✅ Done  |
+| `packages/database/src/scripts/schema-lint.ts`            | **Update** — use schema-derived metadata + config       | ✅ Done  |
+| `packages/database/package.json`                          | Add `db:barrel` script                                  | ✅ Done  |
+| `packages/database/src/scripts/entity-new.ts`             | Run db:barrel after schema generation                   | ✅ Done  |
+| `packages/database/src/registry.ts`                       | **New** — TABLE_REGISTRY from schema (optional Phase 3) | Deferred |
+| `packages/crud/src/read.ts`                               | Import TABLE_REGISTRY from afena-database (if Phase 3)  | Deferred |
+| `packages/crud/src/mutate.ts`                             | Import TABLE_REGISTRY from afena-database (if Phase 3)  | Deferred |
+| `.architecture/neon-mcp.usage.md`                         | **New** — Neon MCP usage guide                          | ✅ Done  |
 
 ---
 

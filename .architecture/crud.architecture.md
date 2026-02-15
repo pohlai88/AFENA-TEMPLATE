@@ -1,6 +1,6 @@
 # Afena Interaction Kernel (CRUD-SAP) — Architecture Reference
 
-> **Auto-generated** by `afena readme gen` at 2026-02-14T08:34:54Z. Do not edit — regenerate instead.
+> **Auto-generated** by `afena readme gen` at 2026-02-14T09:51:23Z. Do not edit — regenerate instead.
 > **Package:** `afena-crud` (`packages/crud`)
 > **Purpose:** Single mutation entry point for all domain data — the Afena Interaction Kernel (AIK).
 

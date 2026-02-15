@@ -1,5 +1,5 @@
 import { sql } from 'drizzle-orm';
-import { check, index, pgTable, text, timestamp, uniqueIndex, uuid } from 'drizzle-orm/pg-core';
+import { check, integer, index, pgTable, primaryKey, text, timestamp, uniqueIndex, uuid } from 'drizzle-orm/pg-core';
 
 import { baseEntityColumns } from '../helpers/base-entity';
 import { tenantPolicy } from '../helpers/tenant-policy';
@@ -15,6 +15,9 @@ import { tenantPolicy } from '../helpers/tenant-policy';
  * - Active posting unique includes 'reversing' to prevent concurrent reversal + repost
  * - posting_batch_id = business grouping, posting_run_id = execution attempt (P-05)
  * - Error details live here, not on doc headers (P-07)
+ * - GAP-DB-008: doc_version enables multiple postings per document (amendments)
+ *
+ * GAP-DB-001: Composite PK (org_id, id) for data integrity and tenant isolation.
  */
 export const docPostings = pgTable(
   'doc_postings',
@@ -22,6 +25,7 @@ export const docPostings = pgTable(
     ...baseEntityColumns,
     docType: text('doc_type').notNull(),
     docId: uuid('doc_id').notNull(),
+    docVersion: integer('doc_version').notNull().default(1),
     status: text('status').notNull().default('posting'),
     idempotencyKey: text('idempotency_key').notNull(),
     postingBatchId: uuid('posting_batch_id'),
@@ -36,6 +40,7 @@ export const docPostings = pgTable(
     errorMessage: text('error_message'),
   },
   (table) => [
+    primaryKey({ columns: [table.orgId, table.id] }),
     // v6.3 critical: no-WHERE idempotency unique — one row per key, ever
     uniqueIndex('doc_postings_org_idemp_uniq').on(
       table.orgId,
@@ -45,6 +50,13 @@ export const docPostings = pgTable(
     uniqueIndex('doc_postings_org_doc_active_uniq')
       .on(table.orgId, table.docType, table.docId)
       .where(sql`status IN ('posting', 'posted', 'reversing')`),
+    // GAP-DB-008: unique per (org, doc_type, doc_id, doc_version) — allows posting v1, v2, etc.
+    uniqueIndex('doc_postings_org_doc_version_uniq').on(
+      table.orgId,
+      table.docType,
+      table.docId,
+      table.docVersion,
+    ),
     index('doc_postings_org_batch_idx').on(table.orgId, table.postingBatchId),
     index('doc_postings_org_run_idx').on(table.orgId, table.postingRunId),
     index('doc_postings_org_type_posted_idx').on(

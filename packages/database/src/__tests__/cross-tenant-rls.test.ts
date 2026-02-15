@@ -20,6 +20,8 @@
 
 import { describe, it as baseIt, expect } from 'vitest';
 
+import { REVOKE_UPDATE_DELETE_TABLES, RLS_TABLES } from '../schema/_registry';
+
 const run = process.env.RUN_RLS_TESTS === '1';
 const it = Object.assign(baseIt, {
   runIf: (cond: boolean) => (cond ? baseIt : baseIt.skip),
@@ -54,62 +56,7 @@ async function queryAs(token: string, sql: string): Promise<DataApiResult> {
   return (await res.json()) as DataApiResult;
 }
 
-// ---------------------------------------------------------------------------
-// Tables with RLS policies — each has a simple SELECT test
-// ---------------------------------------------------------------------------
-const RLS_TABLES = [
-  'contacts',
-  'companies',
-  'fiscal_periods',
-  'chart_of_accounts',
-  'tax_rates',
-  'payment_allocations',
-  'credit_notes',
-  'intercompany_transactions',
-  'bank_statement_lines',
-  'cost_centers',
-  'projects',
-  'stock_movements',
-  'approval_chains',
-  'approval_steps',
-  'approval_requests',
-  'approval_decisions',
-  'reporting_snapshots',
-  'price_lists',
-  'price_list_items',
-  'match_results',
-  'boms',
-  'bom_lines',
-  'work_orders',
-  'wip_movements',
-  'assets',
-  'depreciation_schedules',
-  'asset_events',
-  'revenue_schedules',
-  'revenue_schedule_lines',
-  'budgets',
-  'budget_commitments',
-  'lot_tracking',
-  'landed_cost_docs',
-  'landed_cost_allocations',
-  'webhook_endpoints',
-  'webhook_deliveries',
-  'inventory_trace_links',
-  'discount_rules',
-];
-
-// Append-only tables where UPDATE/DELETE is revoked
-const APPEND_ONLY_TABLES = [
-  'audit_logs',
-  'stock_movements',
-  'wip_movements',
-  'depreciation_schedules',
-  'asset_events',
-  'reporting_snapshots',
-  'approval_decisions',
-  'webhook_deliveries',
-  'bank_statement_lines',
-];
+// RLS_TABLES and REVOKE_UPDATE_DELETE_TABLES from _registry (GAP-DB-005)
 
 describe('Cross-tenant RLS isolation (Phase C #12)', () => {
   // ── RLS SELECT isolation: each table returns zero rows for wrong org ──
@@ -160,8 +107,22 @@ describe('Cross-tenant RLS isolation (Phase C #12)', () => {
     }
   });
 
-  // ── Append-only enforcement: UPDATE/DELETE rejected ─────
-  for (const table of APPEND_ONLY_TABLES) {
+  // ── Gate 6: Projection worker-only — search_documents rejects INSERT ──
+  it.runIf(run)('search_documents: INSERT rejected (projection worker-only)', async () => {
+    const tokenA = process.env.RLS_TEST_TOKEN_ORG_A;
+    if (!tokenA) throw new Error('RLS_TEST_TOKEN_ORG_A required');
+
+    const result = await queryAs(
+      tokenA,
+      `INSERT INTO search_documents (org_id, entity_type, entity_id, title, search_vector, updated_at, is_deleted)
+       VALUES ('00000000-0000-0000-0000-000000000001'::text, 'contact', 'test-id', 'test', ''::tsvector, now(), false)`,
+    );
+    expect(result.error).toBeDefined();
+    expect(result.error).toMatch(/permission denied|insufficient privilege/i);
+  });
+
+  // ── Append-only / projection enforcement: UPDATE/DELETE rejected ─────
+  for (const table of REVOKE_UPDATE_DELETE_TABLES) {
     it.runIf(run)(`${table}: UPDATE rejected (append-only)`, async () => {
       const tokenA = process.env.RLS_TEST_TOKEN_ORG_A;
       if (!tokenA) throw new Error('RLS_TEST_TOKEN_ORG_A required');
@@ -194,12 +155,19 @@ describe('Cross-tenant RLS isolation (Phase C #12)', () => {
 // ---------------------------------------------------------------------------
 describe('RLS coverage inventory', () => {
   it('all RLS tables are listed for cross-tenant testing', () => {
-    // This test ensures we don't forget to add new tables to the test list.
-    // Update RLS_TABLES when adding new schema files.
+    // GAP-DB-005: RLS_TABLES derived from TABLE_REGISTRY (non-system)
     expect(RLS_TABLES.length).toBeGreaterThanOrEqual(38);
   });
 
   it('all append-only tables are listed', () => {
-    expect(APPEND_ONLY_TABLES.length).toBeGreaterThanOrEqual(9);
+    expect(REVOKE_UPDATE_DELETE_TABLES.length).toBeGreaterThanOrEqual(10);
+  });
+
+  // Gate 6: Projection tables (stock_balances, search_documents, reporting_snapshots) reject app writes
+  it('projection tables stock_balances, search_documents, reporting_snapshots are in REVOKE_UPDATE_DELETE_TABLES', () => {
+    const projectionTables = ['stock_balances', 'search_documents', 'reporting_snapshots'];
+    for (const t of projectionTables) {
+      expect(REVOKE_UPDATE_DELETE_TABLES).toContain(t);
+    }
   });
 });

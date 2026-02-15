@@ -19,8 +19,9 @@
     "db:migrate": "drizzle-kit migrate",
     "db:push": "drizzle-kit push",
     "db:studio": "drizzle-kit studio",
-    "db:barrel": "npx tsx src/scripts/generate-schema-barrel.ts",
+    "db:barrel": "npx tsx src/scripts/generate-schema-barrel.ts && npx tsx src/scripts/generate-table-registry.ts",
     "db:lint": "npx tsx src/scripts/schema-lint.ts",
+    "db:drift-check": "npx tsx src/scripts/drift-check.ts",
     "test": "vitest run"
   },
   "dependencies": {

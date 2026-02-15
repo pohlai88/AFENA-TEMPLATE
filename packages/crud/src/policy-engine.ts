@@ -1,8 +1,10 @@
 import { SYSTEM_ACTOR_USER_ID, isSystemChannel } from 'afena-canon';
 import {
   and,
+  batch,
   eq,
   getDb,
+  inArray,
   rolePermissions,
   userRoles,
   userScopes,
@@ -23,27 +25,42 @@ import type {
 
 /**
  * Resolve actor's full permission set from DB.
- * Queries: user_roles → roles → role_permissions + user_scopes.
+ * RTT 1: batch([user_roles, user_scopes]). RTT 2 (if roleIds non-empty): role_permissions WHERE roleId IN (...).
  * Called once per request, before policy evaluation.
  */
 export async function resolveActor(
   orgId: string,
   userId: string,
 ): Promise<ResolvedActor> {
-  // 1. Load user's role assignments
-  const userRoleRows = await getDb()
-    .select({ roleId: userRoles.roleId })
-    .from(userRoles)
-    .where(and(eq(userRoles.orgId, orgId), eq(userRoles.userId, userId)));
+  const conn = getDb();
 
-  const roleIds = userRoleRows.map((r) => r.roleId);
+  // RTT 1: batch user_roles + user_scopes
+  const [userRoleRows, scopeRows] = await batch([
+    conn
+      .select({ roleId: userRoles.roleId })
+      .from(userRoles)
+      .where(and(eq(userRoles.orgId, orgId), eq(userRoles.userId, userId))),
+    conn
+      .select({
+        scopeType: userScopes.scopeType,
+        scopeId: userScopes.scopeId,
+      })
+      .from(userScopes)
+      .where(and(eq(userScopes.orgId, orgId), eq(userScopes.userId, userId))),
+  ]);
+
+  const roleIds = userRoleRows.map((r: { roleId: string }) => r.roleId);
+  const scopes: UserScopeAssignment[] = scopeRows.map((r: { scopeType: string; scopeId: string }) => ({
+    scopeType: r.scopeType as AuthScopeType,
+    scopeId: r.scopeId,
+  }));
 
   if (roleIds.length === 0) {
-    return { orgId, userId, roleIds: [], permissions: [], scopes: [] };
+    return { orgId, userId, roleIds: [], permissions: [], scopes };
   }
 
-  // 2. Load permissions for all of the actor's roles
-  const allPermRows = await getDb()
+  // RTT 2: role_permissions filtered by roleIds at SQL level
+  const allPermRows = await conn
     .select({
       roleId: rolePermissions.roleId,
       entityType: rolePermissions.entityType,
@@ -52,30 +69,18 @@ export async function resolveActor(
       fieldRulesJson: rolePermissions.fieldRulesJson,
     })
     .from(rolePermissions)
-    .where(eq(rolePermissions.orgId, orgId));
+    .where(
+      and(
+        eq(rolePermissions.orgId, orgId),
+        inArray(rolePermissions.roleId, roleIds),
+      ),
+    );
 
-  const roleIdSet = new Set(roleIds);
-  const permissions: ResolvedPermission[] = allPermRows
-    .filter((r) => roleIdSet.has(r.roleId))
-    .map((r) => ({
-      entityType: r.entityType,
-      verb: r.verb as ResolvedPermission['verb'],
-      scope: r.scope as AuthScope,
-      fieldRules: parseFieldRules(r.fieldRulesJson),
-    }));
-
-  // 3. Load user scopes
-  const scopeRows = await getDb()
-    .select({
-      scopeType: userScopes.scopeType,
-      scopeId: userScopes.scopeId,
-    })
-    .from(userScopes)
-    .where(and(eq(userScopes.orgId, orgId), eq(userScopes.userId, userId)));
-
-  const scopes: UserScopeAssignment[] = scopeRows.map((r) => ({
-    scopeType: r.scopeType as AuthScopeType,
-    scopeId: r.scopeId,
+  const permissions: ResolvedPermission[] = allPermRows.map((r) => ({
+    entityType: r.entityType,
+    verb: r.verb as ResolvedPermission['verb'],
+    scope: r.scope as AuthScope,
+    fieldRules: parseFieldRules(r.fieldRulesJson),
   }));
 
   return { orgId, userId, roleIds, permissions, scopes };
@@ -212,12 +217,13 @@ function mergeFieldRules(rules: FieldRules[]): FieldRules {
 
   let allow_write: string[] | undefined;
   if (allowSets && allowSets.length > 0) {
-    // Intersection of all allow sets
-    const first = allowSets[0] as Set<string>;
-    const intersection = new Set(
-      [...first].filter((f) => allowSets.every((s) => s.has(f))),
-    );
-    allow_write = Array.from(intersection);
+    const first = allowSets[0];
+    if (first) {
+      const intersection = new Set(
+        [...first].filter((f) => allowSets.every((s) => s.has(f))),
+      );
+      allow_write = Array.from(intersection);
+    }
   }
 
   const merged: FieldRules = {};

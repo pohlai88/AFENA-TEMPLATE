@@ -3,9 +3,11 @@ import {
   bigint,
   check,
   date,
+  foreignKey,
   index,
   numeric,
   pgTable,
+  primaryKey,
   text,
   uniqueIndex,
   uuid,
@@ -15,13 +17,18 @@ import { docEntityColumns } from '../helpers/doc-entity';
 import { postingColumns } from '../helpers/posting-columns';
 import { tenantPolicy } from '../helpers/tenant-policy';
 
+import { companies } from './companies';
+
 /**
  * Sales orders — customer order document.
  *
+ * RULE C-01: Sales orders are ISSUER-scoped (company issues orders).
  * Transactional Spine Migration 0035.
  * - 6-state posting_status (P-08)
  * - company_id NOT NULL (§3.12)
  * - Totals computed from SUM(lines) on every save (P-09, P-09a)
+ * 
+ * GAP-DB-001: Composite PK (org_id, id) for data integrity and tenant isolation.
  */
 export const salesOrders = pgTable(
   'sales_orders',
@@ -43,6 +50,12 @@ export const salesOrders = pgTable(
     memo: text('memo'),
   },
   (table) => [
+    primaryKey({ columns: [table.orgId, table.id] }),
+    foreignKey({
+      columns: [table.orgId, table.companyId],
+      foreignColumns: [companies.orgId, companies.id],
+      name: 'sales_orders_company_fk',
+    }),
     uniqueIndex('so_org_doc_no_uniq').on(table.orgId, table.docNo),
     index('so_org_customer_created_idx').on(table.orgId, table.customerId, table.createdAt),
     index('so_org_doc_status_idx').on(table.orgId, table.docStatus, table.updatedAt),

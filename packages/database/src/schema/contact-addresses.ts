@@ -1,5 +1,5 @@
 import { sql } from 'drizzle-orm';
-import { boolean, check, pgTable, text, timestamp, uniqueIndex, uuid } from 'drizzle-orm/pg-core';
+import { boolean, check, pgTable, primaryKey, text, timestamp, uniqueIndex, uuid } from 'drizzle-orm/pg-core';
 
 import { tenantPolicy } from '../helpers/tenant-policy';
 
@@ -9,11 +9,13 @@ import { tenantPolicy } from '../helpers/tenant-policy';
  * Transactional Spine Migration 0031: Master Data.
  * - One primary per (contact, address_type) via partial unique index
  * - Minimal columns: no baseEntityColumns overhead, just the link + audit fields
+ * 
+ * GAP-DB-001: Composite PK (org_id, id) for data integrity and tenant isolation.
  */
 export const contactAddresses = pgTable(
   'contact_addresses',
   {
-    id: uuid('id').defaultRandom().primaryKey(),
+    id: uuid('id').defaultRandom().notNull(),
     orgId: text('org_id')
       .notNull()
       .default(sql`(auth.require_org_id())`),
@@ -27,6 +29,7 @@ export const contactAddresses = pgTable(
       .default(sql`(auth.user_id())`),
   },
   (table) => [
+    primaryKey({ columns: [table.orgId, table.id] }),
     uniqueIndex('contact_addr_org_contact_addr_uniq').on(
       table.orgId,
       table.contactId,

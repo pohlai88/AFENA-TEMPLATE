@@ -1,21 +1,23 @@
 import { text, timestamp, uuid } from 'drizzle-orm/pg-core';
 
-import { erpEntityColumns } from './erp-entity';
+import { withCompanyScope } from './erp-entity';
 
 /**
- * Document entity columns — superset of erpEntityColumns.
+ * Document entity columns — for company-issued documents.
  *
- * Adds lifecycle state machine columns:
- * - docStatus: draft → submitted → cancelled (enforced by kernel, not DB)
- * - submittedAt / submittedBy: submission checkpoint
- * - cancelledAt / cancelledBy: cancellation record
- * - amendedFromId: links amended doc to its predecessor
+ * RULE C-01: Documents are ISSUER-scoped (invoices, orders, etc.).
+ * - company_id NOT NULL enforced (legal entity issues documents)
+ * - Adds lifecycle state machine columns:
+ *   - docStatus: draft → submitted → cancelled (enforced by kernel, not DB)
+ *   - submittedAt / submittedBy: submission checkpoint
+ *   - cancelledAt / cancelledBy: cancellation record
+ *   - amendedFromId: links amended doc to its predecessor
  *
  * Usage: spread into pgTable column definition:
  *   pgTable('invoices', { ...docEntityColumns, invoiceNo: text('invoice_no') })
  */
 export const docEntityColumns = {
-  ...erpEntityColumns,
+  ...withCompanyScope({ scope: 'ISSUER' }),
   docStatus: text('doc_status').notNull().default('draft'),
   submittedAt: timestamp('submitted_at', { withTimezone: true }),
   submittedBy: text('submitted_by'),

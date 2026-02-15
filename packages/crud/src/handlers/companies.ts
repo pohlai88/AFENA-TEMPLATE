@@ -1,4 +1,4 @@
-import { companies } from 'afena-database';
+import { companies, pickWritable } from 'afena-database';
 import { eq, and, sql } from 'drizzle-orm';
 
 import type { MutationContext } from '../context';
@@ -12,16 +12,9 @@ export const CAPABILITIES = [
   'companies.restore',
 ] as const;
 
-/**
- * K-11: Companies allowlist — only these fields are accepted from input.
- */
+/** GAP-DB-007 / SAN-01: Schema-derived allowlist. */
 function pickAllowed(input: Record<string, unknown>): Record<string, unknown> {
-  const ALLOWED = ['name', 'legalName', 'registrationNo', 'taxId', 'baseCurrency', 'fiscalYearStart', 'address'] as const;
-  const result: Record<string, unknown> = {};
-  for (const key of ALLOWED) {
-    if (key in input) result[key] = input[key];
-  }
-  return result;
+  return pickWritable(companies, input) as Record<string, unknown>;
 }
 
 function toRecord(row: Record<string, unknown>): Record<string, unknown> {

@@ -102,6 +102,19 @@ export function validateDslExpression(expr: string): { valid: boolean; error?: s
   return { valid: true };
 }
 
+// ── Helpers ────────────────────────────────────────────────
+
+/** Validate property path (e.g. entity.a.b) without ReDoS-prone regex. */
+function isValidPropertyPath(expr: string): boolean {
+  const parts = expr.split('.');
+  if (parts.length === 0) return false;
+  const identRe = /^[a-zA-Z_][a-zA-Z0-9_]*$/;
+  for (const p of parts) {
+    if (!identRe.test(p)) return false;
+  }
+  return true;
+}
+
 // ── Evaluation Context ──────────────────────────────────────
 
 export interface DslContext {
@@ -144,8 +157,8 @@ export function evaluateDsl(
   if (stringMatch) return stringMatch[1];
 
   // Check if it's a simple property path (most common case)
-  const pathMatch = /^([a-zA-Z_]\w*)(?:\.([a-zA-Z_]\w*))*$/.exec(expr);
-  if (pathMatch) {
+  // Use split+validate to avoid ReDoS from nested regex quantifiers
+  if (isValidPropertyPath(expr)) {
     return resolvePropertyPath(expr, dslContext);
   }
 
@@ -263,10 +276,12 @@ function resolveValue(token: string, ctx: DslContext): unknown {
   const numVal = Number(token);
   if (!Number.isNaN(numVal) && token.length > 0) return numVal;
 
-  // Boolean literals
+  // Boolean literals (eslint-disable: not comparing secrets, literal parsing only)
+  /* eslint-disable security/detect-possible-timing-attacks */
   if (token === 'true') return true;
   if (token === 'false') return false;
   if (token === 'null') return null;
+  /* eslint-enable security/detect-possible-timing-attacks */
 
   // Property path
   return resolvePropertyPath(token, ctx);

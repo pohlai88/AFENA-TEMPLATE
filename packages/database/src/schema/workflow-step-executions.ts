@@ -15,6 +15,8 @@ import { boolean, check, index, integer, jsonb, pgTable, text, timestamp, uuid }
  * Triggers (from migrations 0040 + 0042):
  * - restrict_step_execution_updates: identity column immutability
  * - restrict_status_regression: terminal states are final
+ * 
+ * GAP-DB-001: Composite PK (created_at, id) for partitioning (not org_id, id pattern).
  */
 export const workflowStepExecutions = pgTable(
   'workflow_step_executions',

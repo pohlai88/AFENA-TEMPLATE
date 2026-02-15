@@ -23,6 +23,8 @@ interface ArchEntry {
   title: string;
   /** Output filename (without .md) */
   filename: string;
+  /** If true, do NOT auto-generate; file is manually maintained (e.g. database.architecture.md) */
+  manualMaintenance?: boolean;
   /** One-line purpose */
   purpose: string;
   /** Architecture overview (markdown) */
@@ -107,6 +109,8 @@ mutate(spec, ctx)
   'afena-database': {
     title: 'Database Layer',
     filename: 'database.architecture',
+    /** Manually maintained contract; do NOT overwrite via readme gen */
+    manualMaintenance: true,
     purpose: 'Drizzle ORM schema definitions, dual RW/RO compute, migration management, and schema governance.',
     overview: `
 Neon Postgres with Drizzle ORM. Two connection singletons: \`db\` (RW) and \`dbRo\` (RO read replica).
@@ -567,6 +571,7 @@ export function generateArchitectureDocs(
   }
 
   for (const [key, entry] of Object.entries(ARCH_REGISTRY)) {
+    if (entry.manualMaintenance) continue;
     // Match by name first, then by path
     const info = byName.get(key) ?? byPath.get(key);
     if (!info) continue;

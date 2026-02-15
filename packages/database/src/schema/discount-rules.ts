@@ -1,17 +1,22 @@
 import { sql } from 'drizzle-orm';
-import { boolean, check, date, index, integer, numeric, pgTable, text, uuid } from 'drizzle-orm/pg-core';
+import { boolean, check, date, foreignKey, index, integer, numeric, pgTable, primaryKey, text, uuid } from 'drizzle-orm/pg-core';
 
 import { baseEntityColumns } from '../helpers/base-entity';
 import { tenantPolicy } from '../helpers/tenant-policy';
 
+import { companies } from './companies';
+
 /**
  * Discount rules — deterministic discount evaluation for pricing engine.
  *
+ * RULE C-01: Discount rules are LEGAL-scoped (company-specific discount policies).
  * PRD G0.16:
  * - Stacking rules: whether discounts compound or are exclusive
  * - Precedence order for evaluation
  * - Time-bounded: effective_from / effective_to
  * - Scope: customer-specific, product-specific, or global
+ * 
+ * GAP-DB-001: Composite PK (org_id, id) for data integrity and tenant isolation.
  */
 export const discountRules = pgTable(
   'discount_rules',
@@ -35,6 +40,12 @@ export const discountRules = pgTable(
     description: text('description'),
   },
   (table) => [
+    primaryKey({ columns: [table.orgId, table.id] }),
+    foreignKey({
+      columns: [table.orgId, table.companyId],
+      foreignColumns: [companies.orgId, companies.id],
+      name: 'discount_rules_company_fk',
+    }).onDelete('cascade'),
     index('disc_rules_org_id_idx').on(table.orgId, table.id),
     index('disc_rules_scope_idx').on(table.orgId, table.scope),
     index('disc_rules_customer_idx').on(table.orgId, table.customerId),

@@ -1,16 +1,21 @@
 import { sql } from 'drizzle-orm';
-import { bigint, check, date, index, integer, pgTable, text, uuid } from 'drizzle-orm/pg-core';
+import { bigint, check, date, foreignKey, index, integer, pgTable, primaryKey, text, uuid } from 'drizzle-orm/pg-core';
 
 import { baseEntityColumns } from '../helpers/base-entity';
 import { tenantPolicy } from '../helpers/tenant-policy';
 
+import { companies } from './companies';
+
 /**
  * Fixed assets — capitalized assets with depreciation tracking.
  *
+ * RULE C-01: Fixed assets are LEGAL-scoped (company owns assets).
  * PRD Phase E #20 + G0.20:
  * - Lifecycle: acquired → in_service → disposed
  * - Depreciation methods: straight_line, declining_balance, units_of_production
  * - Links to GL accounts for cost, depreciation, accumulated depreciation
+ * 
+ * GAP-DB-001: Composite PK (org_id, id) for data integrity and tenant isolation.
  */
 export const assets = pgTable(
   'assets',
@@ -37,6 +42,12 @@ export const assets = pgTable(
     description: text('description'),
   },
   (table) => [
+    primaryKey({ columns: [table.orgId, table.id] }),
+    foreignKey({
+      columns: [table.orgId, table.companyId],
+      foreignColumns: [companies.orgId, companies.id],
+      name: 'assets_company_fk',
+    }),
     index('assets_org_id_idx').on(table.orgId, table.id),
     index('assets_org_company_idx').on(table.orgId, table.companyId),
     index('assets_status_idx').on(table.orgId, table.status),

@@ -1,17 +1,22 @@
 import { sql } from 'drizzle-orm';
-import { check, date, index, numeric, pgTable, text, uniqueIndex, uuid } from 'drizzle-orm/pg-core';
+import { check, date, foreignKey, index, numeric, pgTable, primaryKey, text, uniqueIndex, uuid } from 'drizzle-orm/pg-core';
 
 import { baseEntityColumns } from '../helpers/base-entity';
 import { tenantPolicy } from '../helpers/tenant-policy';
 
+import { companies } from './companies';
+
 /**
  * Lot/batch/serial tracking — traceability for regulated industries.
  *
+ * RULE C-01: Lot tracking is OPERATIONS-scoped (company tracks lots/batches).
  * PRD Phase E #23 + G0.14:
  * - tracking_type: 'lot', 'batch', 'serial'
  * - Links to product + optional stock_movement
  * - Expiry/production dates for food/pharma
  * - Trace graph queryable via standard indexes (no JSON-only)
+ * 
+ * GAP-DB-001: Composite PK (org_id, id) for data integrity and tenant isolation.
  */
 export const lotTracking = pgTable(
   'lot_tracking',
@@ -33,6 +38,12 @@ export const lotTracking = pgTable(
     memo: text('memo'),
   },
   (table) => [
+    primaryKey({ columns: [table.orgId, table.id] }),
+    foreignKey({
+      columns: [table.orgId, table.companyId],
+      foreignColumns: [companies.orgId, companies.id],
+      name: 'lot_tracking_company_fk',
+    }),
     index('lot_track_org_id_idx').on(table.orgId, table.id),
     index('lot_track_item_idx').on(table.orgId, table.itemId),
     index('lot_track_company_idx').on(table.orgId, table.companyId),

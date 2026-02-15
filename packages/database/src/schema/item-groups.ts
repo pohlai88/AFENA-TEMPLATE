@@ -1,5 +1,5 @@
 import { sql } from 'drizzle-orm';
-import { check, index, integer, pgTable, text, uniqueIndex, uuid } from 'drizzle-orm/pg-core';
+import { check, index, integer, pgTable, primaryKey, text, uniqueIndex, uuid } from 'drizzle-orm/pg-core';
 
 import { baseEntityColumns } from '../helpers/base-entity';
 import { tenantPolicy } from '../helpers/tenant-policy';
@@ -10,6 +10,8 @@ import { tenantPolicy } from '../helpers/tenant-policy';
  * Transactional Spine Migration 0031: Master Data.
  * - Tree structure via parent_group_id (nullable = root)
  * - Unique name per org for UI lookup
+ * 
+ * GAP-DB-001: Composite PK (org_id, id) for data integrity and tenant isolation.
  */
 export const itemGroups = pgTable(
   'item_groups',
@@ -21,6 +23,7 @@ export const itemGroups = pgTable(
     sortOrder: integer('sort_order').default(0),
   },
   (table) => [
+    primaryKey({ columns: [table.orgId, table.id] }),
     uniqueIndex('item_groups_org_name_uniq').on(table.orgId, table.name),
     index('item_groups_org_parent_idx').on(table.orgId, table.parentGroupId),
     check('item_groups_org_not_empty', sql`org_id <> ''`),

@@ -36,6 +36,7 @@
     "ui:update": "pnpm dlx shadcn@latest add -o -c apps/web",
     "check:no-console": "node -e \"const{execSync}=require('child_process');try{const r=execSync('npx rg console\\\\\\\\. --type ts --type tsx -l --glob !node_modules --glob !dist --glob !.next --glob !**/client-logger.ts --glob !**/*.config.* --glob !tools/**',{encoding:'utf8'});if(r.trim()){console.error('INVARIANT-08 violation: console.* found in:\\n'+r);process.exit(1)}}catch(e){if(e.status===1)process.exit(0);throw e}\"",
     "ci:invariants": "node tools/ci-invariants.mjs",
+    "ci:company-scope": "node tools/validate-company-scope.mjs",
     "audit": "pnpm audit --audit-level=moderate",
     "audit:prod": "pnpm audit --prod --audit-level=moderate",
     "audit:fix": "pnpm audit --fix",
@@ -46,7 +47,8 @@
     "test:e2e:debug": "playwright test --debug",
     "test:e2e:codegen": "playwright codegen http://localhost:3000",
     "test:e2e:report": "playwright show-report",
-    "test:e2e:install": "playwright install --with-deps"
+    "test:e2e:install": "playwright install --with-deps",
+    "search:bootstrap": "pnpm --filter web search:bootstrap"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.11.1",
@@ -58,6 +60,7 @@
     "@vitest/coverage-v8": "catalog:",
     "@vitest/ui": "catalog:",
     "afena-vitest-config": "workspace:*",
+    "dotenv": "^16.6.1",
     "eslint": "catalog:",
     "eslint-config-prettier": "catalog:",
     "eslint-plugin-import": "catalog:",

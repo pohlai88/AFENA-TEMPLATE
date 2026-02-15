@@ -7,6 +7,7 @@ import {
   integer,
   numeric,
   pgTable,
+  primaryKey,
   text,
   uniqueIndex,
 } from 'drizzle-orm/pg-core';
@@ -24,6 +25,8 @@ import { tenantPolicy } from '../helpers/tenant-policy';
  * - rounding_precision: number of decimal places for rounding
  * - rate stored as NUMERIC(10,6) — e.g., 6.000000 for 6% GST
  * - UNIQUE(org_id, tax_code, effective_from) — one rate per code per effective date
+ * 
+ * GAP-DB-001: Composite PK (org_id, id) for data integrity and tenant isolation.
  */
 export const taxRates = pgTable(
   'tax_rates',
@@ -42,6 +45,7 @@ export const taxRates = pgTable(
     description: text('description'),
   },
   (table) => [
+    primaryKey({ columns: [table.orgId, table.id] }),
     index('tax_rates_org_id_idx').on(table.orgId, table.id),
     index('tax_rates_org_code_idx').on(table.orgId, table.taxCode),
     index('tax_rates_effective_idx').on(table.orgId, table.taxCode, table.effectiveFrom),

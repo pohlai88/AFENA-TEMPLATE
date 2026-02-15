@@ -1,5 +1,5 @@
 import { sql } from 'drizzle-orm';
-import { bigint, boolean, check, index, integer, pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core';
+import { bigint, boolean, check, index, integer, pgTable, primaryKey, text, timestamp, uuid } from 'drizzle-orm/pg-core';
 
 import { tenantPolicy } from '../helpers/tenant-policy';
 
@@ -14,11 +14,13 @@ import { tenantPolicy } from '../helpers/tenant-policy';
  * - sort_order for display ordering
  * - is_primary for designating featured attachment
  * - Spec §5 Gap 4: entity_attachments
+ * 
+ * GAP-DB-001: Composite PK (org_id, id) for data integrity and tenant isolation.
  */
 export const entityAttachments = pgTable(
   'entity_attachments',
   {
-    id: uuid('id').defaultRandom().primaryKey(),
+    id: uuid('id').defaultRandom().notNull(),
     orgId: text('org_id')
       .notNull()
       .default(sql`(auth.require_org_id())`),
@@ -38,6 +40,7 @@ export const entityAttachments = pgTable(
     createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
   },
   (table) => [
+    primaryKey({ columns: [table.orgId, table.id] }),
     index('entity_attach_org_entity_idx').on(table.orgId, table.entityType, table.entityId),
     index('entity_attach_org_file_idx').on(table.orgId, table.fileId),
     index('entity_attach_org_category_idx').on(table.orgId, table.entityType, table.category),

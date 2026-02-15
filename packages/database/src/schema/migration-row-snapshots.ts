@@ -1,5 +1,5 @@
 import { sql } from 'drizzle-orm';
-import { check, index, jsonb, integer, pgTable, text, timestamp, unique, uuid } from 'drizzle-orm/pg-core';
+import { check, index, jsonb, integer, pgTable, primaryKey, text, timestamp, unique, uuid } from 'drizzle-orm/pg-core';
 
 import { tenantPolicy } from '../helpers/tenant-policy';
 
@@ -10,11 +10,13 @@ import { migrationJobs } from './migration-jobs';
  *
  * Stores pre-migration write-shape (core + custom separated)
  * so rollback can reconstruct persistable data for mutate().
+ * 
+ * GAP-DB-001: Composite PK (org_id, id) for data integrity and tenant isolation.
  */
 export const migrationRowSnapshots = pgTable(
   'migration_row_snapshots',
   {
-    id: uuid('id').defaultRandom().primaryKey(),
+    id: uuid('id').defaultRandom().notNull(),
     orgId: text('org_id').notNull(),
     migrationJobId: uuid('migration_job_id').notNull().references(() => migrationJobs.id),
     entityType: text('entity_type').notNull(),
@@ -25,6 +27,7 @@ export const migrationRowSnapshots = pgTable(
     capturedAt: timestamp('captured_at', { withTimezone: true }).defaultNow().notNull(),
   },
   (table) => [
+    primaryKey({ columns: [table.orgId, table.id] }),
     index('migration_row_snapshots_job_idx').on(table.migrationJobId, table.entityType),
     unique('migration_row_snapshots_job_entity_uniq').on(
       table.migrationJobId, table.entityType, table.entityId

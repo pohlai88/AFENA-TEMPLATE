@@ -1,8 +1,10 @@
 import { sql } from 'drizzle-orm';
-import { boolean, check, index, integer, pgTable, text, timestamp, uniqueIndex, uuid } from 'drizzle-orm/pg-core';
+import { boolean, check, foreignKey, index, integer, pgTable, text, timestamp, uniqueIndex, uuid } from 'drizzle-orm/pg-core';
 
 import { baseEntityColumns } from '../helpers/base-entity';
 import { tenantPolicy } from '../helpers/tenant-policy';
+
+import { companies } from './companies';
 
 /**
  * Approval chains — multi-step approval workflow definitions.
@@ -11,6 +13,7 @@ import { tenantPolicy } from '../helpers/tenant-policy';
  * - Defines approval requirements per entity type + company
  * - Sequential or parallel steps
  * - "requires N of M approvers" per step
+ * - company_id nullable for org-wide chains
  */
 export const approvalChains = pgTable(
   'approval_chains',
@@ -23,6 +26,11 @@ export const approvalChains = pgTable(
     description: text('description'),
   },
   (table) => [
+    foreignKey({
+      columns: [table.orgId, table.companyId],
+      foreignColumns: [companies.orgId, companies.id],
+      name: 'approval_chains_company_fk',
+    }).onDelete('set null'),
     index('approval_chains_org_id_idx').on(table.orgId, table.id),
     index('approval_chains_org_entity_idx').on(table.orgId, table.entityType),
     uniqueIndex('approval_chains_org_company_entity_uniq').on(

@@ -1,16 +1,21 @@
 import { sql } from 'drizzle-orm';
-import { bigint, boolean, check, index, pgTable, text, uniqueIndex, uuid } from 'drizzle-orm/pg-core';
+import { bigint, boolean, check, foreignKey, index, pgTable, primaryKey, text, uniqueIndex, uuid } from 'drizzle-orm/pg-core';
 
 import { baseEntityColumns } from '../helpers/base-entity';
 import { tenantPolicy } from '../helpers/tenant-policy';
 
+import { companies } from './companies';
+
 /**
  * Budgets — spending control and encumbrance accounting.
  *
+ * RULE C-01: Budgets are LEGAL-scoped (company-specific financial planning).
  * PRD Phase E #22 + G0.18:
  * - enforcement_mode: 'advisory' (warn) or 'hard_stop' (reject)
  * - Links to fiscal period + account for period-based budget control
  * - Commitment sources: PO, PR, contract
+ * 
+ * GAP-DB-001: Composite PK (org_id, id) for data integrity and tenant isolation.
  */
 export const budgets = pgTable(
   'budgets',
@@ -30,6 +35,12 @@ export const budgets = pgTable(
     memo: text('memo'),
   },
   (table) => [
+    primaryKey({ columns: [table.orgId, table.id] }),
+    foreignKey({
+      columns: [table.orgId, table.companyId],
+      foreignColumns: [companies.orgId, companies.id],
+      name: 'budgets_company_fk',
+    }),
     index('budgets_org_id_idx').on(table.orgId, table.id),
     index('budgets_company_idx').on(table.orgId, table.companyId),
     index('budgets_period_idx').on(table.orgId, table.fiscalPeriodId),

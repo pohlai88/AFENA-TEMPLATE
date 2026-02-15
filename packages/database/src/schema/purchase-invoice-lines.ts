@@ -6,6 +6,7 @@ import {
   integer,
   numeric,
   pgTable,
+  primaryKey,
   text,
   timestamp,
   uniqueIndex,
@@ -20,6 +21,8 @@ import { tenantPolicy } from '../helpers/tenant-policy';
  *
  * Transactional Spine Migration 0036: Buying Cycle.
  * - Mirror of sales_invoice_lines with coa_expense_id
+ * 
+ * GAP-DB-001: Composite PK (org_id, id) for data integrity and tenant isolation.
  */
 export const purchaseInvoiceLines = pgTable(
   'purchase_invoice_lines',
@@ -50,6 +53,7 @@ export const purchaseInvoiceLines = pgTable(
     memo: text('memo'),
   },
   (table) => [
+    primaryKey({ columns: [table.orgId, table.id] }),
     uniqueIndex('pil_org_invoice_line_uniq').on(
       table.orgId,
       table.purchaseInvoiceId,

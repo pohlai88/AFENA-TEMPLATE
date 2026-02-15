@@ -1,16 +1,21 @@
 import { sql } from 'drizzle-orm';
-import { bigint, boolean, check, date, index, pgTable, text, uniqueIndex, uuid } from 'drizzle-orm/pg-core';
+import { bigint, boolean, check, date, foreignKey, index, pgTable, primaryKey, text, uniqueIndex, uuid } from 'drizzle-orm/pg-core';
 
 import { baseEntityColumns } from '../helpers/base-entity';
 import { tenantPolicy } from '../helpers/tenant-policy';
 
+import { companies } from './companies';
+
 /**
  * Price lists — pricing engine for deterministic price resolution.
  *
+ * RULE C-01: Price lists are LEGAL-scoped (company-specific pricing).
  * PRD Phase D #18.5 + G0.16:
  * - Resolution order: customer-specific → price list → campaign → default
  * - Time-bounded: effective_from / effective_to
  * - UNIQUE(org_id, code) per price list
+ * 
+ * GAP-DB-001: Composite PK (org_id, id) for data integrity and tenant isolation.
  */
 export const priceLists = pgTable(
   'price_lists',
@@ -27,6 +32,12 @@ export const priceLists = pgTable(
     description: text('description'),
   },
   (table) => [
+    primaryKey({ columns: [table.orgId, table.id] }),
+    foreignKey({
+      columns: [table.orgId, table.companyId],
+      foreignColumns: [companies.orgId, companies.id],
+      name: 'price_lists_company_fk',
+    }).onDelete('cascade'),
     index('price_lists_org_id_idx').on(table.orgId, table.id),
     uniqueIndex('price_lists_org_code_uniq').on(table.orgId, table.code),
     check('price_lists_org_not_empty', sql`org_id <> ''`),
@@ -43,6 +54,8 @@ export type NewPriceList = typeof priceLists.$inferInsert;
  *
  * - price_minor: integer minor units (no floats)
  * - min_qty: minimum quantity for this price tier
+ * 
+ * GAP-DB-001: Composite PK (org_id, id) for data integrity and tenant isolation.
  */
 export const priceListItems = pgTable(
   'price_list_items',
@@ -58,6 +71,7 @@ export const priceListItems = pgTable(
     memo: text('memo'),
   },
   (table) => [
+    primaryKey({ columns: [table.orgId, table.id] }),
     index('pli_org_id_idx').on(table.orgId, table.id),
     index('pli_price_list_idx').on(table.orgId, table.priceListId),
     index('pli_product_idx').on(table.orgId, table.productId),

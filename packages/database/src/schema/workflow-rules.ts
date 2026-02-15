@@ -1,5 +1,5 @@
 import { sql } from 'drizzle-orm';
-import { boolean, check, index, integer, jsonb, pgTable, text } from 'drizzle-orm/pg-core';
+import { boolean, check, index, integer, jsonb, pgTable, primaryKey, text } from 'drizzle-orm/pg-core';
 
 import { baseEntityColumns } from '../helpers/base-entity';
 import { tenantPolicy } from '../helpers/tenant-policy';
@@ -8,6 +8,8 @@ import { tenantPolicy } from '../helpers/tenant-policy';
  * Workflow Rules — per-org customizable rules stored in DB.
  * Loaded by the workflow engine at mutation time (TTL-cached).
  * JSON condition/action fields are interpreted into ConditionFn/ActionFn at load.
+ * 
+ * GAP-DB-001: Composite PK (org_id, id) for data integrity and tenant isolation.
  */
 export const workflowRules = pgTable(
   'workflow_rules',
@@ -24,6 +26,7 @@ export const workflowRules = pgTable(
     actionJson: jsonb('action_json').notNull(),
   },
   (table) => [
+    primaryKey({ columns: [table.orgId, table.id] }),
     index('workflow_rules_org_id_idx').on(table.orgId, table.id),
     index('workflow_rules_org_enabled_idx').on(table.orgId, table.enabled),
     check('workflow_rules_org_not_empty', sql`org_id <> ''`),

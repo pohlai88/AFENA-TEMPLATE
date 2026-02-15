@@ -1,5 +1,10 @@
 # Phase A — ERP Database Schema Governance (Typed Custom Fields)
 
+> **Superseded** by [database.architecture.md](./database.architecture.md) §4 Schema Design.
+> This document is historical; do not edit.
+> If conflicts exist, the consolidated doc wins.
+> **Ratified:** 2026-02-14
+
 Lock every ERP table into a governed template so nothing drifts — combining ERPNext's user-extensible custom fields (typed + governed), Retool's dynamic introspection via a typed index table, Neon's RW/RO dual compute for read scaling, and a LiteMetadata registry for business truth — all built on the existing CRUD-SAP kernel.
 
 > **Implementation Status (2026-02-13):** All 12 core steps complete. RW/RO dual compute, canon enums, column helpers (`baseEntityColumns`, `erpEntityColumns`, `docEntityColumns`), spine tables (companies, sites, currencies, UOM), custom fields (15 types, typed index, JSONB dual storage), entity views, LiteMetadata + aliasing + semantic terms, 8-rule schema lint, entity generator script (~20+ files + 8 registry auto-wires), migrations 0010–0012 applied. 43/43 tests passing.

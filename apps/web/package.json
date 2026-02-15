@@ -11,7 +11,8 @@
     "lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx --cache --fix",
     "type-check": "tsc --noEmit",
     "db:gen-types": "npx @neondatabase/neon-js gen-types --db-url \"$DATABASE_URL\" --output src/types/database.ts",
-    "ci:routes": "tsx tools/route-governance/index.ts"
+    "ci:routes": "tsx tools/route-governance/index.ts",
+    "search:bootstrap": "tsx scripts/search-bootstrap.mjs"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.987.0",
