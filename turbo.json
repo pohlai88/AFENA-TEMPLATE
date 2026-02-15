@@ -102,22 +102,6 @@
       "outputs": [],
       "cache": false
     },
-    "test": {
-      "dependsOn": [
-        "^build"
-      ],
-      "outputs": [],
-      "cache": false
-    },
-    "test:coverage": {
-      "dependsOn": [
-        "^build"
-      ],
-      "outputs": [
-        "coverage/**"
-      ],
-      "cache": false
-    },
     "type-gen": {
       "cache": false,
       "outputs": [

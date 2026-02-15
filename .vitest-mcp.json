@@ -1,0 +1,9 @@
+{
+  "safety": {
+    "allowedPaths": ["c:\\AI-BOS\\AFENDA-NEXUS"]
+  },
+  "testDefaults": {
+    "format": "detailed",
+    "timeout": 60000
+  }
+}

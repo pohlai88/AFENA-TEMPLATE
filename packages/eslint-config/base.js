@@ -151,18 +151,4 @@ module.exports = [
       '@typescript-eslint/no-unsafe-return': 'warn',
     },
   },
-
-  // ── Test file overrides ─────────────────────────────────────
-  {
-    files: ['**/*.test.*', '**/*.spec.*'],
-    languageOptions: {
-      globals: {
-        jest: true,
-      },
-    },
-    rules: {
-      '@typescript-eslint/no-explicit-any': 'off',
-      'security/detect-object-injection': 'off',
-    },
-  },
 ];

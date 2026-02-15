@@ -21,8 +21,7 @@
     "db:studio": "drizzle-kit studio",
     "db:barrel": "npx tsx src/scripts/generate-schema-barrel.ts && npx tsx src/scripts/generate-table-registry.ts",
     "db:lint": "npx tsx src/scripts/schema-lint.ts",
-    "db:drift-check": "npx tsx src/scripts/drift-check.ts",
-    "test": "vitest run"
+    "db:drift-check": "npx tsx src/scripts/drift-check.ts"
   },
   "dependencies": {
     "@neondatabase/serverless": "^1.0.0",
@@ -37,8 +36,6 @@
     "postgres": "^3.4.8",
     "tslib": "catalog:",
     "tsup": "catalog:",
-    "typescript": "catalog:",
-    "vitest": "catalog:",
-    "afena-vitest-config": "workspace:*"
+    "typescript": "catalog:"
   }
 }

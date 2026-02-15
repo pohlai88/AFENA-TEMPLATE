@@ -107,6 +107,7 @@
 - tenantPolicy, ownerPolicy, crudPolicy patterns
 - RLS_TABLES generated from TABLE_REGISTRY (Gate 7 schema-driven)
 - Cross-tenant isolation tests
+- **Integration tests:** `auth.org_id()` reads `activeOrganizationId` or `active_organization_id` from `request.jwt.claims`; `org_id` alone is not sufficient. Use `SET LOCAL request.jwt.claims = '...'` with escaped JSON (escape single quotes) when simulating tenant context; `SET LOCAL` does not support parameterized queries.
 
 **Invariants:** RLS-01 (every domain table has org_id + RLS + tenantPolicy), RLS-02 (auth.org_id() NULL → zero rows)
 
@@ -413,6 +414,19 @@ Zod is the single gate that turns `unknown` request JSON into typed `MutationSpe
 - Inline condensed version of neon-mcp.usage.md
 - Table: Use case → MCP tool
 - Link to full Neon MCP docs
+
+### Schema Synchronization Workflow
+
+Keep **Drizzle schema (TS)**, **migration files (SQL)**, and **Neon DB** in sync:
+
+| Step | Command / Tool | Purpose |
+|------|-----------------|---------|
+| 1. Drift check | `pnpm --filter afena-database db:drift-check` | Ensures `drizzle-kit generate` would produce no new migration (schema ↔ migrations in sync) |
+| 2. Apply migrations | `pnpm --filter afena-database db:migrate` | Applies pending migrations to Neon (uses `DATABASE_URL_MIGRATIONS` or `DATABASE_URL`) |
+| 3. Introspect (optional) | `mcp_Neon_get_database_tables`, `mcp_Neon_describe_table_schema` | Verify Neon schema matches expectations |
+| 4. Compare branches | `mcp_Neon_compare_database_schema` | Compare schema between Neon branches before merge |
+
+**If `db:migrate` fails with duplicate key on `__drizzle_migrations`:** Migration table may have custom hashes or sequence drift. Fix by: (1) updating hashes to match file content (SHA256 of migration SQL), (2) resetting the id sequence: `SELECT setval(pg_get_serial_sequence('drizzle.__drizzle_migrations', 'id'), (SELECT MAX(id) FROM drizzle.__drizzle_migrations));`
 
 **Optional:** Add [neon-drizzle.mdc](https://github.com/neondatabase-labs/ai-rules/blob/main/neon-drizzle.mdc) to `.cursor/rules/` for AI-assisted Drizzle+Neon code generation.
 

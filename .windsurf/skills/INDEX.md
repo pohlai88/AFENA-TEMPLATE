@@ -7,6 +7,7 @@ Quick reference guide to all available skills in this workspace.
 | Skill | Invoke With | Description |
 |-------|-------------|-------------|
 | **Lint & Type Debugging** | `@lint-types-debug` | Diagnose and fix ESLint and TypeScript errors in the AFENDA-NEXUS monorepo |
+| **Vitest Testing** | `@vitest-testing` | Comprehensive Vitest testing guide with unit/integration tests, coverage, and MCP tooling |
 | **Neon Postgres** | `@neon-postgres` | Guides and best practices for working with Neon Serverless Postgres |
 | **Example Deployment** | `@example-deployment` | Example skill showing deployment workflows with safety checks |
 
@@ -18,6 +19,13 @@ Quick reference guide to all available skills in this workspace.
   - Common error patterns and fixes
   - Package-specific notes and overrides
   - [View Skill](./lint-types-debug/SKILL.md) | [Reference](./lint-types-debug/reference.md) | [Compliance Report](./lint-types-debug/COMPLIANCE-REPORT.md)
+- **`@vitest-testing`** - Vitest testing and coverage
+  - Unit and integration test patterns
+  - MCP integration for AI-powered testing
+  - Coverage analysis and optimization
+  - Real codebase examples
+  - [View Skill](./vitest-testing/SKILL.md) | [Reference](./vitest-testing/reference.md) | [Examples](./vitest-testing/examples.md)
+
 
 ### 🗄️ Database & Infrastructure
 - **`@neon-postgres`** - Neon Serverless Postgres reference
@@ -39,7 +47,11 @@ Quick reference guide to all available skills in this workspace.
 ### Automatic Invocation
 Cascade automatically invokes skills when it detects tasks matching the skill's description.
 
-### Manual Invocation
+#vitest-testing How do I write integration tests with database transactions?
+```
+
+```
+@## Manual Invocation
 Use `@<skill-name>` in your chat to explicitly invoke a skill:
 
 ```

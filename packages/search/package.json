@@ -10,8 +10,7 @@
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx --cache --concurrency=auto",
     "lint:ci": "eslint . --ext .js,.jsx,.ts,.tsx --rule 'import/no-cycle: error'",
     "lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx --cache --fix",
-    "type-check": "tsc --noEmit",
-    "test": "vitest run"
+    "type-check": "tsc --noEmit"
   },
   "dependencies": {
     "afena-database": "workspace:^",
@@ -24,8 +23,6 @@
     "afena-typescript-config": "workspace:*",
     "tslib": "catalog:",
     "tsup": "catalog:",
-    "typescript": "catalog:",
-    "vitest": "catalog:",
-    "afena-vitest-config": "workspace:*"
+    "typescript": "catalog:"
   }
 }

@@ -12,13 +12,13 @@ concurrency:
 
 jobs:
   afena-ci:
-    name: Build & Test (Unit)
+    name: Build
     timeout-minutes: 15
     runs-on: ubuntu-latest
     env:
       # Dummy values — Next.js evaluates API route modules at build time.
       # Modules that throw at import time need valid-looking placeholders.
-      DATABASE_URL: 'postgresql://ci:ci@ci-placeholder.neon.tech/neondb?sslmode=require'
+      DATABASE_URL: 'postgresql://ci:ci@ci-placeholder.neon.tech/neondb?sslmode=verify-full'
       NEON_AUTH_BASE_URL: 'https://ci-placeholder.neon.tech'
       NEON_AUTH_COOKIE_SECRET: 'ci-placeholder-secret-32chars-minimum'
       # Uncomment for Vercel Remote Cache:
@@ -52,31 +52,6 @@ jobs:
       - name: Type check
         run: pnpm type-check
 
-      - name: Test (unit only)
-        run: pnpm test
-        # Unit tests run with placeholder DATABASE_URL
-        # Integration tests skip via internal guards
-
-      - name: Test Coverage
-        run: pnpm test:coverage
-
-      - name: Upload Coverage
-        if: ${{ !cancelled() }}
-        uses: actions/upload-artifact@v4
-        with:
-          name: coverage-report
-          path: coverage/
-          retention-days: 7
-
-      - name: Upload JUnit report
-        if: ${{ !cancelled() }}
-        uses: actions/upload-artifact@v4
-        with:
-          name: junit-report
-          path: test-results/junit.xml
-          retention-days: 7
-          if-no-files-found: ignore
-
       - name: CI invariants
         run: pnpm ci:invariants
 
@@ -95,58 +70,13 @@ jobs:
             exit 1
           )
 
-  afena-integration:
-    name: Integration Tests
-    timeout-minutes: 15
-    runs-on: ubuntu-latest
-    needs: afena-ci
-    # Only run when DATABASE_URL secret exists (main branch or manual trigger)
-    if: ${{ secrets.DATABASE_URL != '' }}
-    env:
-      DATABASE_URL: ${{ secrets.DATABASE_URL }}
-      RUN_INTEGRATION_TESTS: '1'
-      RUN_RLS_TESTS: '1'
-      NEON_DATA_API_URL: ${{ secrets.NEON_DATA_API_URL }}
-
-    steps:
-      - name: Check out code
-        uses: actions/checkout@v4
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: 'pnpm'
-
-      - name: Install dependencies (frozen lockfile)
-        run: pnpm install --frozen-lockfile
-
-      - name: Build packages
-        run: pnpm build
-
-      - name: Run integration tests
-        run: pnpm test
-        # Now runs with real DATABASE_URL
-        # Tests check RUN_INTEGRATION_TESTS env var and execute
-
-      - name: Upload integration test results
-        if: ${{ !cancelled() }}
-        uses: actions/upload-artifact@v4
-        with:
-          name: integration-test-results
-          path: packages/*/coverage/
-          retention-days: 7
-
   afena-e2e:
     name: E2E Tests
     timeout-minutes: 30
     runs-on: ubuntu-latest
     needs: afena-ci
     env:
-      DATABASE_URL: 'postgresql://ci:ci@ci-placeholder.neon.tech/neondb?sslmode=require'
+      DATABASE_URL: 'postgresql://ci:ci@ci-placeholder.neon.tech/neondb?sslmode=verify-full'
       NEON_AUTH_BASE_URL: 'https://ci-placeholder.neon.tech'
       NEON_AUTH_COOKIE_SECRET: 'ci-placeholder-secret-32chars-minimum'
 

@@ -1,20 +1,20 @@
 import { sql } from 'drizzle-orm';
 import { check, index, pgTable, primaryKey, text } from 'drizzle-orm/pg-core';
 
-import { docEntityColumns } from '../helpers/doc-entity';
+import { erpEntityColumns } from '../helpers/erp-entity';
 import { tenantPolicy } from '../helpers/tenant-policy';
 
 /**
  * Contacts — first domain entity, built alongside the kernel.
  * Exercises text search, soft-delete, audit timeline, version history.
- * Uses docEntityColumns for lifecycle support (draft → submitted → active → cancelled).
+ * Master data entity (NOT a document) - uses erpEntityColumns for base fields.
  * 
  * GAP-DB-001: Composite PK (org_id, id) for data integrity and tenant isolation.
  */
 export const contacts = pgTable(
   'contacts',
   {
-    ...docEntityColumns,
+    ...erpEntityColumns,
     name: text('name').notNull(),
     email: text('email'),
     phone: text('phone'),
