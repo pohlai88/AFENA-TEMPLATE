@@ -1,4 +1,4 @@
-import { sql } from 'drizzle-orm';
+import { desc, sql } from 'drizzle-orm';
 import { crudPolicy, authenticatedRole } from 'drizzle-orm/neon';
 import { boolean, check, index, integer, jsonb, pgTable, primaryKey, text, timestamp, uuid } from 'drizzle-orm/pg-core';
 
@@ -34,7 +34,7 @@ export const workflowExecutions = pgTable(
     check('workflow_executions_timing_check', sql`timing in ('before', 'after')`),
 
     // Indexes
-    index('workflow_executions_org_created_idx').on(table.orgId, table.createdAt),
+    index('workflow_executions_org_created_id_idx').on(table.orgId, desc(table.createdAt), desc(table.id)),
     index('workflow_executions_org_rule_created_idx').on(table.orgId, table.ruleId, table.createdAt),
     index('workflow_executions_org_request_idx').on(table.orgId, table.requestId),
 

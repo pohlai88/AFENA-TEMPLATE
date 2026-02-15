@@ -1,4 +1,4 @@
-import { sql } from 'drizzle-orm';
+import { desc, sql } from 'drizzle-orm';
 import { check, foreignKey, index, jsonb, pgTable, primaryKey, text, uniqueIndex } from 'drizzle-orm/pg-core';
 
 import { withCompanyScope } from '../helpers/erp-entity';
@@ -29,7 +29,7 @@ export const sites = pgTable(
       name: 'sites_company_fk',
     }),
     index('sites_org_id_idx').on(table.orgId, table.id),
-    index('sites_org_created_idx').on(table.orgId, table.createdAt),
+    index('sites_org_created_id_idx').on(table.orgId, desc(table.createdAt), desc(table.id)),
     check('sites_org_not_empty', sql`org_id <> ''`),
     check('sites_type_chk', sql`type IN ('warehouse','branch','plant','office')`),
     uniqueIndex('sites_org_code_uniq').on(table.orgId, table.code),

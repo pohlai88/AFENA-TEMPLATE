@@ -163,18 +163,15 @@ export async function allocateLandedCost(
       break;
   }
 
-  // Persist allocation rows
+  // Persist allocation rows (batch — DEV-3 bulk insert optimization)
+  const entries = [...allocationMap.entries()].filter(([, amt]) => amt > 0);
   const resultLines: LandedCostLineAllocation[] = [];
-  let totalAllocated = 0;
 
-  for (const [receiptLineId, allocatedCostMinor] of allocationMap) {
-    if (allocatedCostMinor <= 0) continue;
-
-    const baseAllocatedCostMinor = Math.round(allocatedCostMinor * fxRate);
-
-    await (tx as any)
-      .insert(landedCostAllocations)
-      .values({
+  if (entries.length > 0) {
+    const batch = entries.map(([receiptLineId, allocatedCostMinor]) => {
+      const baseAllocatedCostMinor = Math.round(allocatedCostMinor * fxRate);
+      resultLines.push({ receiptLineId, allocatedCostMinor, baseAllocatedCostMinor });
+      return {
         orgId,
         landedCostDocId,
         receiptLineId,
@@ -182,11 +179,12 @@ export async function allocateLandedCost(
         allocatedCostMinor,
         currencyCode,
         baseAllocatedCostMinor,
-      });
-
-    resultLines.push({ receiptLineId, allocatedCostMinor, baseAllocatedCostMinor });
-    totalAllocated += allocatedCostMinor;
+      };
+    });
+    await (tx as any).insert(landedCostAllocations).values(batch);
   }
+
+  const totalAllocated = resultLines.reduce((sum, l) => sum + l.allocatedCostMinor, 0);
 
   return {
     landedCostDocId,

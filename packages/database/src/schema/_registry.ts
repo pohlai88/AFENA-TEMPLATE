@@ -124,7 +124,6 @@ export const TABLE_REGISTRY = {
   warehouses: 'truth',
   webhook_deliveries: 'truth',
   webhook_endpoints: 'truth',
-  widgets: 'truth',
   wip_movements: 'truth',
   work_orders: 'truth',
   workflow_definitions: 'control',

@@ -2,7 +2,7 @@
 
 **Created:** 2026-02-15  
 **Priority:** P2 (Performance optimization, not correctness issue)  
-**Status:** Tracked, not scheduled
+**Status:** Complete — all tables done (migrations 0054_spotty_zombie, 0056_cursor_index_optimization)
 
 ---
 
@@ -117,16 +117,17 @@ DROP INDEX CONCURRENTLY contacts_org_created_idx;
 
 Tables with `(org_id, created_at)` indexes that support cursor pagination:
 
-- [x] `contacts` - **HIGH priority** (user-facing, high volume)
-- [ ] `audit_logs` - MEDIUM priority (compliance views)
-- [ ] `communications` - MEDIUM priority (activity feeds)
-- [ ] `sales_orders` - MEDIUM priority (order lists)
-- [ ] `purchase_orders` - MEDIUM priority (PO lists)
-- [ ] `quotations` - LOW priority (lower volume)
-- [ ] `sales_invoices` - MEDIUM priority (AR aging)
-- [ ] `purchase_invoices` - MEDIUM priority (AP aging)
-- [ ] `delivery_notes` - LOW priority (fulfillment views)
-- [ ] `goods_receipts` - LOW priority (receiving views)
+- [x] `contacts` - **HIGH priority** ✅ Done 2026-02-16 (contacts_org_created_id_idx)
+- [x] `audit_logs` - MEDIUM priority ✅ Done 0056 (audit_logs_org_created_id_idx)
+- [x] `communications` - MEDIUM priority ✅ Done 0056 (comms_org_created_id_idx)
+- [x] `companies` - MEDIUM priority ✅ Done 0056 (companies_org_created_id_idx)
+- [x] `advisories` - LOW priority ✅ Done 0056 (advisories_org_created_id_idx)
+- [x] `advisory_evidence` - LOW priority ✅ Done 0056 (advisory_evidence_org_created_id_idx)
+- [x] `sites` - LOW priority ✅ Done 0056 (sites_org_created_id_idx)
+- [x] `workflow_executions` - LOW priority ✅ Done 0056 (workflow_executions_org_created_id_idx)
+- [ ] `sales_orders` - Deferred (has so_org_customer_created_idx; different filter pattern)
+- [ ] `purchase_orders` - Deferred (has po_org_supplier_created_idx; different filter pattern)
+- [ ] `quotations` - Deferred (has qtn_org_party_created_idx; different filter pattern)
 
 **Recommendation:** Start with `contacts` only, measure impact, then expand.
 

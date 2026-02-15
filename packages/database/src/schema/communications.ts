@@ -1,4 +1,4 @@
-import { sql } from 'drizzle-orm';
+import { desc, sql } from 'drizzle-orm';
 import { check, index, pgTable, primaryKey, text, timestamp, uuid } from 'drizzle-orm/pg-core';
 
 import { tenantPolicy } from '../helpers/tenant-policy';
@@ -32,7 +32,7 @@ export const communications = pgTable(
   (table) => [
     primaryKey({ columns: [table.orgId, table.id] }),
     index('comms_org_entity_idx').on(table.orgId, table.entityType, table.entityId),
-    index('comms_org_created_idx').on(table.orgId, table.createdAt),
+    index('comms_org_created_id_idx').on(table.orgId, desc(table.createdAt), desc(table.id)),
     check('comms_org_not_empty', sql`org_id <> ''`),
     check('comms_entity_type_not_empty', sql`entity_type <> ''`),
     check('comms_type_valid', sql`type IN ('email', 'comment', 'note', 'call')`),

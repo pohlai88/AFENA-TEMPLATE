@@ -379,6 +379,20 @@
       "when": 1771171200000,
       "tag": "0055_contacts_rls_policies_ensure",
       "breakpoints": true
+    },
+    {
+      "idx": 54,
+      "version": "7",
+      "when": 1771181486262,
+      "tag": "0054_spotty_zombie",
+      "breakpoints": true
+    },
+    {
+      "idx": 55,
+      "version": "7",
+      "when": 1771182000000,
+      "tag": "0056_cursor_index_optimization",
+      "breakpoints": true
     }
   ]
 }

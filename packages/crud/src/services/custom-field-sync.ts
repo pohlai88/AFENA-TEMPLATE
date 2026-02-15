@@ -5,9 +5,21 @@ import {
   customFieldValues,
   customFieldSyncQueue,
 } from 'afena-database';
-import { eq, and, sql } from 'drizzle-orm';
+import { eq, and, sql, inArray } from 'drizzle-orm';
 
 import type { DataType } from 'afena-canon';
+
+/** Map snake_case value column to Drizzle camelCase. */
+const VALUE_COL_CAMEL: Record<string, 'valueText' | 'valueInt' | 'valueNumeric' | 'valueBool' | 'valueDate' | 'valueTs' | 'valueJson' | 'valueUuid'> = {
+  value_text: 'valueText',
+  value_int: 'valueInt',
+  value_numeric: 'valueNumeric',
+  value_bool: 'valueBool',
+  value_date: 'valueDate',
+  value_ts: 'valueTs',
+  value_json: 'valueJson',
+  value_uuid: 'valueUuid',
+};
 
 /**
  * Sync a single entity's custom_data JSONB blob into the
@@ -15,6 +27,8 @@ import type { DataType } from 'afena-canon';
  *
  * Called after a mutation that touches custom_data.
  * On failure, enqueues into custom_field_sync_queue for retry.
+ *
+ * DEV-3: Batch delete + batch upsert (replaces per-field loop).
  */
 export async function syncCustomFieldValues(
   orgId: string,
@@ -23,7 +37,6 @@ export async function syncCustomFieldValues(
   customData: Record<string, unknown>,
 ): Promise<{ synced: number; errors: string[] }> {
   const errors: string[] = [];
-  let synced = 0;
 
   // Load field definitions for this entity type
   const fieldDefs = await db
@@ -38,19 +51,17 @@ export async function syncCustomFieldValues(
       ),
     );
 
+  const toDelete: string[] = [];
+  const upsertRows: Array<{
+    def: (typeof fieldDefs)[number];
+    valueColumn: string;
+    value: unknown;
+  }> = [];
+
   for (const def of fieldDefs) {
     const value = customData[def.fieldName];
     if (value === undefined || value === null) {
-      // Delete existing value row if field was cleared
-      await db
-        .delete(customFieldValues)
-        .where(
-          and(
-            eq(customFieldValues.orgId, orgId),
-            eq(customFieldValues.entityId, entityId),
-            eq(customFieldValues.fieldId, def.id),
-          ),
-        );
+      toDelete.push(def.id);
       continue;
     }
 
@@ -59,19 +70,42 @@ export async function syncCustomFieldValues(
       errors.push(`Unknown field type "${def.fieldType}" for field "${def.fieldName}"`);
       continue;
     }
+    upsertRows.push({ def, valueColumn, value });
+  }
 
-    try {
-      // Upsert: insert or update the typed value
+  try {
+    // Batch delete cleared fields
+    if (toDelete.length > 0) {
       await db
-        .insert(customFieldValues)
-        .values({
+        .delete(customFieldValues)
+        .where(
+          and(
+            eq(customFieldValues.orgId, orgId),
+            eq(customFieldValues.entityId, entityId),
+            inArray(customFieldValues.fieldId, toDelete),
+          ),
+        );
+    }
+
+    // Batch upsert (single round-trip)
+    if (upsertRows.length > 0) {
+      type InsertRow = typeof customFieldValues.$inferInsert;
+      const batch: InsertRow[] = upsertRows.map(({ def, valueColumn, value }) => {
+        const camel = VALUE_COL_CAMEL[valueColumn];
+        const row: InsertRow = {
           orgId,
           entityType,
           entityId,
           fieldId: def.id,
-          [valueColumn]: value,
           source: 'system',
-        })
+        } as InsertRow;
+        if (camel) (row as Record<string, unknown>)[camel] = value;
+        return row;
+      });
+
+      await db
+        .insert(customFieldValues)
+        .values(batch)
         .onConflictDoUpdate({
           target: [
             customFieldValues.orgId,
@@ -79,17 +113,25 @@ export async function syncCustomFieldValues(
             customFieldValues.fieldId,
           ],
           set: {
-            [valueColumn]: value,
+            valueText: sql`COALESCE(excluded.value_text, custom_field_values.value_text)`,
+            valueInt: sql`COALESCE(excluded.value_int, custom_field_values.value_int)`,
+            valueNumeric: sql`COALESCE(excluded.value_numeric, custom_field_values.value_numeric)`,
+            valueBool: sql`COALESCE(excluded.value_bool, custom_field_values.value_bool)`,
+            valueDate: sql`COALESCE(excluded.value_date, custom_field_values.value_date)`,
+            valueTs: sql`COALESCE(excluded.value_ts, custom_field_values.value_ts)`,
+            valueJson: sql`COALESCE(excluded.value_json, custom_field_values.value_json)`,
+            valueUuid: sql`COALESCE(excluded.value_uuid, custom_field_values.value_uuid)`,
             updatedAt: sql`now()`,
-            source: 'system',
+            source: sql`'system'`,
           },
         });
-      synced++;
-    } catch (err) {
-      const msg = err instanceof Error ? err.message : String(err);
-      errors.push(`Failed to sync field "${def.fieldName}": ${msg}`);
     }
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : String(err);
+    errors.push(`Failed to sync custom fields: ${msg}`);
   }
+
+  const synced = upsertRows.length;
 
   // If any errors, enqueue for retry
   if (errors.length > 0) {

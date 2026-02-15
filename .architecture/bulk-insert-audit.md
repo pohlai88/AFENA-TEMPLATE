@@ -6,42 +6,39 @@ Phase 2C: Audit of handlers that insert records in loops. Candidates for batch i
 
 ## Candidate Files
 
-### 1. `packages/crud/src/services/revenue-recognition.ts`
+### 1. `packages/crud/src/services/revenue-recognition.ts` ✅ Done 2026-02-16
 
 | Field | Value |
 |-------|-------|
-| **Pattern** | Loop insert: `for (const line of schedule.lines) { await tx.insert(revenueScheduleLines).values(...) }` |
-| **Location** | `createRevenueSchedule()` lines 153–163 |
+| **Pattern** | ~~Loop insert~~ → Batch: `tx.insert(revenueScheduleLines).values(schedule.lines.map(...))` |
+| **Location** | `createRevenueSchedule()` |
 | **Table** | `revenue_schedule_lines` |
 | **Typical volume** | 1–60 lines per schedule (monthly recognition over contract term) |
-| **Proposed batch shape** | `tx.insert(revenueScheduleLines).values(schedule.lines.map(l => ({ orgId, scheduleId: header.id, periodDate: l.periodDate, amountMinor: l.amountMinor, status: 'pending' })))` |
-| **Estimated impact** | Medium — reduces N round-trips to 1 for multi-period schedules |
+| **Impact** | Medium — N round-trips → 1 for multi-period schedules |
 
 ---
 
-### 2. `packages/crud/src/services/landed-cost-engine.ts`
+### 2. `packages/crud/src/services/landed-cost-engine.ts` ✅ Done 2026-02-16
 
 | Field | Value |
 |-------|-------|
-| **Pattern** | Loop insert: `for (const [receiptLineId, allocatedCostMinor] of allocationMap) { await tx.insert(landedCostAllocations).values(...) }` |
-| **Location** | `allocateLandedCost()` lines 169–184 |
+| **Pattern** | ~~Loop insert~~ → Batch: `tx.insert(landedCostAllocations).values(batch)` |
+| **Location** | `allocateLandedCost()` |
 | **Table** | `landed_cost_allocations` |
 | **Typical volume** | 5–50 lines per receipt (depends on PO line count) |
-| **Proposed batch shape** | `tx.insert(landedCostAllocations).values([...allocationMap.entries()].filter(([, amt]) => amt > 0).map(([receiptLineId, allocatedCostMinor]) => ({ orgId, landedCostDocId, receiptLineId, allocationMethod: method, allocatedCostMinor, currencyCode, baseAllocatedCostMinor: Math.round(allocatedCostMinor * fxRate) })))` |
-| **Estimated impact** | Medium — single insert for typical receipts |
+| **Impact** | Medium — single insert for typical receipts |
 
 ---
 
-### 3. `packages/crud/src/services/custom-field-sync.ts`
+### 3. `packages/crud/src/services/custom-field-sync.ts` ✅ Done 2026-02-16
 
 | Field | Value |
 |-------|-------|
-| **Pattern** | Loop upsert: `for (const def of fieldDefs) { await db.insert(customFieldValues).values(...).onConflictDoUpdate(...) }` |
-| **Location** | `syncCustomFieldValues()` lines 40–91 |
+| **Pattern** | ~~Loop upsert~~ → Batch delete + batch upsert |
+| **Location** | `syncCustomFieldValues()` |
 | **Table** | `custom_field_values` |
 | **Typical volume** | 5–30 fields per entity |
-| **Proposed batch shape** | Use `db.insert(customFieldValues).values(batch).onConflictDoUpdate(...)` — Drizzle supports multi-row upsert. Build batch from fieldDefs, then single upsert. |
-| **Estimated impact** | Low–Medium — entities with many custom fields benefit |
+| **Impact** | Low–Medium — single delete + single upsert per entity |
 
 ---
 
@@ -83,13 +80,13 @@ Phase 2C: Audit of handlers that insert records in loops. Candidates for batch i
 
 ## Summary
 
-| Priority | File | Effort | Impact |
-|----------|------|--------|--------|
-| 1 | revenue-recognition.ts | Low | Medium |
-| 2 | landed-cost-engine.ts | Low | Medium |
-| 3 | custom-field-sync.ts | Medium | Low–Medium |
-| 4 | metering.ts | Medium | Medium (high traffic) |
-| 5 | depreciation-engine.ts | Low (caller change) | Low |
+| Priority | File | Effort | Impact | Status |
+|----------|------|--------|--------|--------|
+| 1 | revenue-recognition.ts | Low | Medium | ✅ Done |
+| 2 | landed-cost-engine.ts | Low | Medium | ✅ Done |
+| 3 | custom-field-sync.ts | Medium | Low–Medium | ✅ Done |
+| 4 | metering.ts | Medium | Medium (high traffic) | Deferred |
+| 5 | depreciation-engine.ts | Low (caller change) | Low | Deferred |
 
 ---
 

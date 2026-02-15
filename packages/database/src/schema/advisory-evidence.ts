@@ -1,4 +1,4 @@
-import { sql } from 'drizzle-orm';
+import { desc, sql } from 'drizzle-orm';
 import { crudPolicy, authenticatedRole } from 'drizzle-orm/neon';
 import { check, index, jsonb, pgTable, primaryKey, text, timestamp, uuid } from 'drizzle-orm/pg-core';
 
@@ -37,7 +37,7 @@ export const advisoryEvidence = pgTable(
 
     // Indexes
     index('advisory_evidence_advisory_idx').on(table.advisoryId),
-    index('advisory_evidence_org_created_idx').on(table.orgId, table.createdAt),
+    index('advisory_evidence_org_created_id_idx').on(table.orgId, desc(table.createdAt), desc(table.id)),
 
     // RLS: SELECT + INSERT only (INVARIANT-P02: append-only)
     crudPolicy({

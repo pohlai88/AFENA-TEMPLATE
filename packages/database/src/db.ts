@@ -10,10 +10,20 @@ function ensureConnectionParams(url: string): string {
   return `${url}${sep}sslnegotiation=direct`;
 }
 
-const rawDatabaseUrl = process.env.DATABASE_URL;
-if (!rawDatabaseUrl) {
-  throw new Error('DATABASE_URL is not set');
+/**
+ * Returns the appropriate DB URL for the current env (Neon branching).
+ * Use DEV_DATABASE_URL in development, TEST_DATABASE_URL in test, else DATABASE_URL.
+ */
+export function getBranchUrl(): string {
+  const env = process.env.NODE_ENV;
+  if (env === 'development' && process.env.DEV_DATABASE_URL) return process.env.DEV_DATABASE_URL;
+  if (env === 'test' && process.env.TEST_DATABASE_URL) return process.env.TEST_DATABASE_URL;
+  const url = process.env.DATABASE_URL;
+  if (!url) throw new Error('DATABASE_URL is not set');
+  return url;
 }
+
+const rawDatabaseUrl = getBranchUrl();
 const databaseUrl = ensureConnectionParams(rawDatabaseUrl);
 
 const isDev = process.env.NODE_ENV === 'development';

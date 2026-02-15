@@ -1,7 +1,13 @@
-export { db, dbRo, dbSearchWorker, getDb } from './db';
+export { db, dbRo, dbSearchWorker, getDb, getBranchUrl } from './db';
 export { batch } from './batch';
 export type { DbInstance } from './db';
-export { withDbRetry, type RetryOptions } from './retry';
+export {
+  withDbRetry,
+  type RetryOptions,
+  isDbTimeoutError,
+  getDbTimeoutCode,
+  type DbTimeoutCode,
+} from './retry';
 export * from './schema/index';
 export { tenantPolicy, ownerPolicy } from './helpers/tenant-policy';
 export { baseEntityColumns } from './helpers/base-entity';

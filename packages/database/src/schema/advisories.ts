@@ -1,4 +1,4 @@
-import { sql } from 'drizzle-orm';
+import { desc, sql } from 'drizzle-orm';
 import { crudPolicy, authenticatedRole } from 'drizzle-orm/neon';
 import { check, doublePrecision, index, jsonb, pgTable, primaryKey, text, timestamp, uniqueIndex, uuid } from 'drizzle-orm/pg-core';
 
@@ -54,7 +54,7 @@ export const advisories = pgTable(
     index('advisories_org_status_created_idx').on(table.orgId, table.status, table.createdAt),
     index('advisories_org_type_created_idx').on(table.orgId, table.type, table.createdAt),
     index('advisories_entity_idx').on(table.orgId, table.entityType, table.entityId, table.createdAt),
-    index('advisories_org_created_idx').on(table.orgId, table.createdAt),
+    index('advisories_org_created_id_idx').on(table.orgId, desc(table.createdAt), desc(table.id)),
     // Dedupe: only one open/ack advisory per fingerprint per org
     uniqueIndex('advisories_fingerprint_dedupe_idx')
       .on(table.orgId, table.fingerprint)

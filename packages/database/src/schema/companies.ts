@@ -1,4 +1,4 @@
-import { sql } from 'drizzle-orm';
+import { desc, sql } from 'drizzle-orm';
 import { check, index, jsonb, integer, pgTable, primaryKey, text } from 'drizzle-orm/pg-core';
 
 import { erpEntityColumns } from '../helpers/erp-entity';
@@ -25,7 +25,7 @@ export const companies = pgTable(
   },
   (table) => [
     primaryKey({ columns: [table.orgId, table.id] }),
-    index('companies_org_created_idx').on(table.orgId, table.createdAt),
+    index('companies_org_created_id_idx').on(table.orgId, desc(table.createdAt), desc(table.id)),
     check('companies_org_not_empty', sql`org_id <> ''`),
     tenantPolicy(table),
   ],

@@ -7,7 +7,18 @@ import {
   mutationSpecSchema,
   RateLimitError,
 } from 'afena-canon';
-import { and, auditLogs, companies, contacts, db, entityVersions, eq, withDbRetry } from 'afena-database';
+import {
+  and,
+  auditLogs,
+  companies,
+  contacts,
+  db,
+  entityVersions,
+  eq,
+  getDbTimeoutCode,
+  isDbTimeoutError,
+  withDbRetry,
+} from 'afena-database';
 import { evaluateRules, loadAndRegisterOrgRules, WorkflowEngineError } from 'afena-workflow';
 
 import { generateDiff } from './diff';
@@ -452,9 +463,13 @@ export async function mutate(
     if (message === 'NOT_FOUND') errorCode = 'NOT_FOUND';
     if (message === 'CONFLICT_VERSION') errorCode = 'CONFLICT_VERSION';
 
-    // Meter DB timeouts (fire-and-forget)
-    if (message.includes('statement timeout') || message.includes('idle-in-transaction timeout')) {
+    // Meter DB timeouts (Neon/PgBouncer: pool, query_wait, statement, idle-in-tx)
+    if (isDbTimeoutError(error)) {
       meterDbTimeout(ctx.actor.orgId);
+      const code = getDbTimeoutCode(error);
+      if (code && process.env.NODE_ENV !== 'production') {
+        console.warn(`[DB_TIMEOUT] ${code} org=${ctx.actor.orgId} requestId=${ctx.requestId}`);
+      }
     }
 
     const status = errorCode === 'INTERNAL_ERROR' ? 'error' : 'rejected';

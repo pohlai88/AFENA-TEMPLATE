@@ -80,32 +80,14 @@
     "tools"
   ],
   "references": [
-    {
-      "path": "./packages/ui"
-    },
-    {
-      "path": "./packages/logger"
-    },
-    {
-      "path": "./packages/database"
-    },
-    {
-      "path": "./packages/canon"
-    },
-    {
-      "path": "./packages/crud"
-    },
-    {
-      "path": "./packages/search"
-    },
-    {
-      "path": "./packages/workflow"
-    },
-    {
-      "path": "./packages/advisory"
-    },
-    {
-      "path": "./packages/migration"
-    }
+    { "path": "./packages/ui" },
+    { "path": "./packages/logger" },
+    { "path": "./packages/database" },
+    { "path": "./packages/canon" },
+    { "path": "./packages/crud" },
+    { "path": "./packages/search" },
+    { "path": "./packages/workflow" },
+    { "path": "./packages/advisory" },
+    { "path": "./packages/migration" }
   ]
 }

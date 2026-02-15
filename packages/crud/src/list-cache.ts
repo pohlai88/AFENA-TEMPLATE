@@ -1,14 +1,13 @@
 /**
- * Optional Upstash Redis cache for listEntities (Phase 2C).
+ * Optional Redis cache for listEntities (Phase 2C).
  *
- * When UPSTASH_REDIS_REST_URL and UPSTASH_REDIS_REST_TOKEN are set,
- * list results are cached. orgId is required for cache keys (tenant-safe).
- * Never cache across orgs.
+ * When REDIS_URL is set, list results are cached. Uses RedisLabs + ioredis.
+ * orgId is required for cache keys (tenant-safe). Never cache across orgs.
  *
  * TTL: 60s default (30–120s range per plan).
  */
 
-import { Redis } from '@upstash/redis';
+import Redis from 'ioredis';
 
 const CACHE_TTL_SEC = Number(process.env.LIST_CACHE_TTL_SEC) || 60;
 const CACHE_PREFIX = 'afena:list:';
@@ -17,11 +16,14 @@ let redis: Redis | null = null;
 
 function getRedis(): Redis | null {
   if (redis) return redis;
-  const url = process.env.UPSTASH_REDIS_REST_URL;
-  const token = process.env.UPSTASH_REDIS_REST_TOKEN;
-  if (!url || !token) return null;
-  redis = new Redis({ url, token });
-  return redis;
+  const url = process.env.REDIS_URL;
+  if (!url) return null;
+  try {
+    redis = new Redis(url, { maxRetriesPerRequest: 2 });
+    return redis;
+  } catch {
+    return null;
+  }
 }
 
 export type ListCacheOptions = {
@@ -61,7 +63,7 @@ export async function getCachedList(
   const r = getRedis();
   if (!r) return null;
   try {
-    const raw = await r.get<string>(key);
+    const raw = await r.get(key);
     if (!raw) return null;
     const parsed = JSON.parse(raw) as CachedListResult;
     // Rehydrate Date objects if needed (ISO strings in JSON)
@@ -122,14 +124,15 @@ export async function getListCacheVersion(entityType: string, orgId: string): Pr
   const r = getRedis();
   if (!r) return 0;
   try {
-    const v = await r.get<number>(`${VERSION_PREFIX}${entityType}:${orgId}`);
-    return typeof v === 'number' ? v : 0;
+    const v = await r.get(`${VERSION_PREFIX}${entityType}:${orgId}`);
+    const num = v ? parseInt(v, 10) : 0;
+    return Number.isFinite(num) ? num : 0;
   } catch {
     return 0;
   }
 }
 
-/** Whether cache is enabled (env vars set). */
+/** Whether cache is enabled (REDIS_URL set). */
 export function isListCacheEnabled(): boolean {
-  return !!(process.env.UPSTASH_REDIS_REST_URL && process.env.UPSTASH_REDIS_REST_TOKEN);
+  return !!process.env.REDIS_URL;
 }

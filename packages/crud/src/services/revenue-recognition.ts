@@ -150,17 +150,19 @@ export async function createRevenueSchedule(
     })
     .returning({ id: revenueSchedules.id });
 
-  // Insert schedule lines
-  for (const line of schedule.lines) {
+  // Insert schedule lines (batch — DEV-3 bulk insert optimization)
+  if (schedule.lines.length > 0) {
     await (tx as any)
       .insert(revenueScheduleLines)
-      .values({
-        orgId,
-        scheduleId: header.id,
-        periodDate: line.periodDate,
-        amountMinor: line.amountMinor,
-        status: 'pending',
-      });
+      .values(
+        schedule.lines.map((line) => ({
+          orgId,
+          scheduleId: header.id,
+          periodDate: line.periodDate,
+          amountMinor: line.amountMinor,
+          status: 'pending',
+        })),
+      );
   }
 
   return { scheduleId: header.id, lineCount: schedule.lines.length };

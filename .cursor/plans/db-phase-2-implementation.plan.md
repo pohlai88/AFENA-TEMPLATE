@@ -109,8 +109,8 @@ flowchart LR
 ### Cache (Upstash)
 
 - **Effort:** Medium | **Impact:** Low–Medium
-- Add `@upstash/redis` and Drizzle `.$withCache()` for read-heavy `listEntities` / search.
-- Requires `UPSTASH_REDIS_REST_URL` and `UPSTASH_REDIS_REST_TOKEN`.
+- Add Redis (RedisLabs + ioredis) for read-heavy `listEntities` / search.
+- Requires `REDIS_URL` (e.g. `redis://default:password@host:port`).
 - Defer until list/search latency is a bottleneck.
 - **Cache keys (deterministic, tenant-safe):** table name, orgId (always), whereClause inputs (normalized), orderBy, limit, cursor/offset, includeCount. **orgId required for cache keys; if orgId absent, caching disabled.** Never cache across orgs.
 - TTL defaults: 30–120s. Only cache read-heavy endpoints.
