@@ -52,10 +52,51 @@ export async function readEntity(
 }
 
 /**
- * List entities with basic filtering.
+ * List entities with optional cursor-based pagination.
  * Respects RLS (tenant isolation). Excludes soft-deleted by default.
  * K-05: one of only 3 public exports from packages/crud.
- * Supports cursor pagination (Phase 2B): when cursor provided, use limit+1, orderBy, nextCursor.
+ *
+ * **Pagination modes:**
+ * - **Offset-based** (default): `{ limit: 50, offset: 100 }` — simple but slow at high offsets
+ * - **Cursor-based**: `{ limit: 50, cursor: 'xyz...' }` — O(1) performance, recommended for infinite scroll
+ *
+ * **Cursor usage:**
+ * ```typescript
+ * // First page
+ * const page1 = await listEntities('contacts', requestId, { limit: 50, orgId: 'org-123' });
+ * // Returns: { ok: true, data: [...], meta: { nextCursor: 'abc...' } }
+ *
+ * // Next page
+ * const page2 = await listEntities('contacts', requestId, {
+ *   limit: 50,
+ *   cursor: page1.meta.nextCursor,
+ *   orgId: 'org-123'
+ * });
+ * ```
+ *
+ * **Cursor contract (IMPORTANT):**
+ * - **Cursor is opaque. Do not parse it client-side.** It's versioned and may change.
+ * - **Cursors are only valid for the same filter set** (same orgId + same WHERE conditions).
+ * - Changing filters mid-pagination will produce undefined results.
+ * - Cursor binds to sort order `(createdAt DESC, id DESC)` — don't reuse across different orderings.
+ *
+ * **Rules:**
+ * - `limit` must be 1..200 (enforced)
+ * - `limit=0` is rejected (use `limit=1` for minimal page)
+ * - Cursor requires table to have `createdAt` column
+ * - **Cursor requires `orgId`** (enforced for filter binding validation)
+ * - If both `cursor` and `offset` provided, cursor wins
+ * - `includeCount: true` with cursor → `totalCount` is full count (ignores cursor position)
+ * - Invalid/malformed cursor → returns `VALIDATION_FAILED` error
+ *
+ * **Performance:**
+ * - Cursor pagination: O(1) regardless of page depth
+ * - Offset pagination: O(offset) — degrades on page 100+
+ * - Requires composite index `(org_id, created_at DESC, id DESC)` for optimal performance
+ *
+ * @param entityType - Entity type to query
+ * @param requestId - Request correlation ID
+ * @param options - Filtering and pagination options
  */
 export async function listEntities(
   entityType: EntityType,
@@ -112,11 +153,23 @@ export async function listEntities(
   const baseWhereClause = conditions.length > 0 ? and(...conditions) : undefined;
 
   const conn = getDb(options?.forcePrimary ? { forcePrimary: true } : undefined);
-  const limit = options?.limit ?? 100;
+
+  // Validate limit
+  const MAX_LIMIT = 200;
+  const DEFAULT_LIMIT = 50;
+  const limit = options?.limit ?? DEFAULT_LIMIT;
+
+  if (!Number.isInteger(limit) || limit < 1 || limit > MAX_LIMIT) {
+    return err('VALIDATION_FAILED', `limit must be integer 1..${MAX_LIMIT}`, requestId);
+  }
+
   const offset = options?.offset ?? 0;
 
   // Cursor pagination path
   if (options?.cursor) {
+    if (!options.orgId) {
+      return err('VALIDATION_FAILED', 'cursor requires orgId to validate filter binding', requestId);
+    }
     if (process.env.NODE_ENV === 'development' && offset > 0) {
       getLogger().warn('[listEntities] cursor provided; ignoring offset (cursor takes precedence)');
     }
@@ -125,7 +178,7 @@ export async function listEntities(
     }
     let decoded;
     try {
-      decoded = decodeCursor(options.cursor);
+      decoded = decodeCursor(options.cursor, options.orgId);
     } catch (e) {
       const msg = e instanceof Error ? e.message : 'Invalid cursor';
       return err('VALIDATION_FAILED', msg, requestId);
@@ -167,6 +220,9 @@ export async function listEntities(
       const nextCursor =
         hasMore && page.length > 0 && lastRow
           ? encodeCursor({
+            v: 1,
+            order: 'createdAt_desc_id_desc',
+            orgId: options.orgId ?? '',
             createdAt: lastRow.createdAt instanceof Date ? lastRow.createdAt.toISOString() : String(lastRow.createdAt ?? ''),
             id: typeof lastRow.id === 'string' ? lastRow.id : '',
           })
@@ -185,6 +241,9 @@ export async function listEntities(
     const nextCursor =
       hasMore && page.length > 0 && lastRow
         ? encodeCursor({
+          v: 1,
+          order: 'createdAt_desc_id_desc',
+          orgId: options.orgId ?? '',
           createdAt: lastRow.createdAt instanceof Date ? lastRow.createdAt.toISOString() : String(lastRow.createdAt ?? ''),
           id: typeof lastRow.id === 'string' ? lastRow.id : '',
         })

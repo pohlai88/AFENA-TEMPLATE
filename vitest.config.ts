@@ -1,42 +1,49 @@
 import { defineConfig } from 'vitest/config';
 
+/**
+ * Root Vitest config for AFENDA-NEXUS monorepo.
+ * 
+ * IMPORTANT: In workspace/projects mode, root config only affects:
+ * - reporters (global)
+ * - coverage (global)
+ * - outputFile (global)
+ * 
+ * Runner knobs (pool, isolate, setupFiles, exclude, etc.) must be in presets
+ * or per-project configs. They do NOT affect workspace projects when placed here.
+ * 
+ * See: https://vitest.dev/guide/projects
+ */
 export default defineConfig({
   test: {
-    // Performance optimizations
-    pool: 'threads', // Better performance for larger projects
-    fileParallelism: true, // Enable parallel file processing
-    isolate: true, // Keep isolation for reliability (can be disabled for performance if needed)
-
-    // Test configuration
-    globals: true, // Use global test functions (test, expect, etc.)
-    environment: 'node', // Node environment for backend tests
-    passWithNoTests: true, // Don't fail if no tests found
-
-    // Timeout configuration
-    testTimeout: 10000, // 10 seconds default timeout
-    hookTimeout: 10000, // 10 seconds for hooks
-
     // Projects configuration
-    projects: [
-      'packages/*',
-      'tools/afena-cli',
-    ],
+    projects: ['packages/*', 'tools/afena-cli'],
 
-    // Coverage configuration
+    // Reporters (root-only config)
+    // GitHub Actions reporter auto-enables only with default reporter
+    // Must add explicitly when using custom reporters
+    reporters: process.env.GITHUB_ACTIONS === 'true'
+      ? ['default', 'github-actions', 'junit']
+      : ['default', 'junit'],
+    outputFile: {
+      junit: './test-results/junit.xml',
+    },
+
+    // Coverage configuration (root-only config)
     coverage: {
       provider: 'v8',
       include: [
-        'packages/*/src/**/*.ts',
-        'tools/*/src/**/*.ts',
+        'packages/*/src/**/*.{js,jsx,ts,tsx}',
+        'tools/*/src/**/*.{js,jsx,ts,tsx}',
       ],
       exclude: [
         '**/__tests__/**',
         '**/dist/**',
         '**/*.config.*',
         '**/setup/**',
-        '**/index.ts',
         '**/*.d.ts',
         '**/node_modules/**',
+        '**/coverage/**',
+        '**/coverage-mcp/**',
       ],
       reporter: ['text-summary', 'lcov', 'html'],
       reportsDirectory: './coverage',
@@ -49,26 +56,5 @@ export default defineConfig({
         },
       },
     },
-
-    // Reporters
-    reporters: ['default', 'junit'],
-    outputFile: {
-      junit: './test-results/junit.xml',
-    },
-
-    // Load apps/web/.env so integration tests get DATABASE_URL (single source)
-    setupFiles: ['./vitest.setup.ts'],
-  },
-
-  // Vite configuration
-  resolve: {
-    alias: {
-      // Add any path aliases if needed
-    },
-  },
-
-  // Define global constants
-  define: {
-    // Add any global constants needed for tests
   },
 });

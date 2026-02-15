@@ -92,6 +92,20 @@ export function generateEntityActions(entityType: EntityType) {
     return readEntity(entityType, id, requestId, forcePrimary ? { forcePrimary } : undefined);
   }
 
+  /**
+   * List entities with optional pagination.
+   * Supports both offset-based and cursor-based pagination.
+   *
+   * **Cursor pagination:**
+   * - Cursor is opaque - do not parse client-side
+   * - Only valid for same filter set (don't change orgId between pages)
+   * - limit: 1..200 (enforced)
+   *
+   * @example
+   * // Cursor-based (recommended for large lists)
+   * const page1 = await list({ limit: 50, orgId });
+   * const page2 = await list({ limit: 50, cursor: page1.meta.nextCursor, orgId });
+   */
   async function list(options?: {
     includeDeleted?: boolean;
     includeCount?: boolean;

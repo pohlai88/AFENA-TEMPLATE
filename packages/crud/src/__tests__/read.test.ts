@@ -85,6 +85,6 @@ describe('listEntities includeCount', () => {
     const content = readFileSync(readPath, 'utf-8');
 
     expect(content).toContain('VALIDATION_FAILED');
-    expect(content).toContain('decodeCursor(options.cursor)');
+    expect(content).toContain('decodeCursor(options.cursor, options.orgId)');
   });
 });

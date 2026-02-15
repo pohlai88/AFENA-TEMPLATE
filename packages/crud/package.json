@@ -27,6 +27,7 @@
     "afena-eslint-config": "workspace:^",
     "afena-typescript-config": "workspace:*",
     "afena-vitest-config": "workspace:*",
+    "pg": "^8.18.0",
     "tslib": "catalog:",
     "tsup": "catalog:",
     "typescript": "catalog:",

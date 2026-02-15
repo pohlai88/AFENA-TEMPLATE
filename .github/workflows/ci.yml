@@ -6,6 +6,10 @@ on:
   pull_request:
     types: [opened, synchronize]
 
+concurrency:
+  group: ci-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
 jobs:
   afena-ci:
     name: Build & Test (Unit)
@@ -63,6 +67,15 @@ jobs:
           name: coverage-report
           path: coverage/
           retention-days: 7
+
+      - name: Upload JUnit report
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: junit-report
+          path: test-results/junit.xml
+          retention-days: 7
+          if-no-files-found: ignore
 
       - name: CI invariants
         run: pnpm ci:invariants
