@@ -19,6 +19,8 @@
     "lint:fix": "turbo run lint:fix",
     "type-check": "turbo run type-check",
     "type-check:strict": "turbo run type-check -- --strict",
+    "type-check:refs": "tsc -b",
+    "type-check:refs:clean": "tsc -b --clean && tsc -b",
     "clean": "turbo run clean",
     "test": "vitest run",
     "test:watch": "vitest",

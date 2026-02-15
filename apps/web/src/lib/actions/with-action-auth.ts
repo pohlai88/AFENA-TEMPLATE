@@ -101,7 +101,7 @@ export async function withActionAuth<T>(
 
   const loggerCtx = toLoggerContext(bffCtx);
 
-  return runWithContext(loggerCtx, async () => {
+  return runWithContext(loggerCtx, async (): Promise<ApiResponse<T>> => {
     try {
       const actionCtx: ActionContext = {
         userId: session.user.id,
@@ -126,10 +126,10 @@ export async function withActionAuth<T>(
     } catch (e) {
       if (e instanceof Error && 'code' in e) {
         const code = (e as { code: string }).code as ErrorCode;
-        return errorEnvelope(code, e.message, requestId) as AnyApiResponse;
+        return errorEnvelope(code, e.message, requestId) as ApiResponse<T>;
       }
       const message = e instanceof Error ? e.message : 'Unexpected error';
-      return errorEnvelope('INTERNAL_ERROR' as ErrorCode, message, requestId) as AnyApiResponse;
+      return errorEnvelope('INTERNAL_ERROR' as ErrorCode, message, requestId) as ApiResponse<T>;
     }
   });
 }

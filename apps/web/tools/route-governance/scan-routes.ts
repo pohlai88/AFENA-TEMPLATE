@@ -14,6 +14,17 @@ export type ScannedRouteFile = {
   meta: RouteMetaStrict;
 };
 
+interface RouteModule {
+  GET?: unknown;
+  POST?: unknown;
+  PATCH?: unknown;
+  DELETE?: unknown;
+  PUT?: unknown;
+  HEAD?: unknown;
+  OPTIONS?: unknown;
+  ROUTE_META?: RouteMetaStrict;
+}
+
 export async function scanRouteFiles(): Promise<ScannedRouteFile[]> {
   const appDir = path.resolve(process.cwd(), 'app/api');
   const matches = await fg(['**/route.ts'], { cwd: appDir, absolute: true, dot: false });
@@ -21,10 +32,10 @@ export async function scanRouteFiles(): Promise<ScannedRouteFile[]> {
   const out: ScannedRouteFile[] = [];
 
   for (const abs of matches) {
-    const mod = await import(pathToFileURL(abs).toString());
+    const mod = await import(pathToFileURL(abs).toString()) as RouteModule;
 
     const exportedHandlers = HANDLER_METHODS.filter((m) => typeof mod[m] === 'function');
-    const meta = mod.ROUTE_META as RouteMetaStrict | undefined;
+    const meta = mod.ROUTE_META;
 
     if (!meta) throw new Error(`Missing export const ROUTE_META in ${abs}`);
 

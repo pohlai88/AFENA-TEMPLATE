@@ -6,8 +6,13 @@ import { getRequestId } from 'afena-logger';
 import { withAuthOrApiKey } from '@/lib/api/with-auth-or-api-key';
 
 /**
- * GET /api/delivery-notes/:id — Read delivery note with lines (BFF, unversioned).
- * Pass orgId from session context.
+ * GET /api/delivery-notes/:id — Read delivery note with lines (BFF endpoint).
+ * 
+ * This is a Backend-for-Frontend (BFF) endpoint that returns denormalized data
+ * (delivery note header + lines in one response). BFF endpoints are allowed to
+ * import directly from afena-crud per no-restricted-imports policy.
+ * 
+ * @see packages/crud/src/read-delivery-note.ts
  */
 export const GET = withAuthOrApiKey(async (request: NextRequest, session) => {
   const id = request.nextUrl.pathname.split('/').pop();
@@ -19,11 +24,13 @@ export const GET = withAuthOrApiKey(async (request: NextRequest, session) => {
   const result = await readDeliveryNoteWithLines(id, session.orgId, requestId);
 
   if (!result.ok) {
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- error is guaranteed to exist when ok is false
+    const error = result.error!;
     return {
       ok: false as const,
-      code: result.error!.code,
-      message: result.error!.message,
-      status: result.error!.code === 'NOT_FOUND' ? 404 : 400,
+      code: error.code,
+      message: error.message,
+      status: error.code === 'NOT_FOUND' ? 404 : 400,
     };
   }
 

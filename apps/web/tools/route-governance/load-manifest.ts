@@ -8,7 +8,7 @@ import type { RouteFileEntry } from '../../src/lib/api/route-types';
 const MANIFEST_PATH = path.resolve(process.cwd(), 'src/lib/api/route-manifest.ts');
 
 export async function loadManifest(): Promise<RouteFileEntry[]> {
-  const mod = await import(pathToFileURL(MANIFEST_PATH).toString());
+  const mod = await import(pathToFileURL(MANIFEST_PATH).toString()) as { ROUTE_MANIFEST?: RouteFileEntry[]; default?: RouteFileEntry[] };
   const manifest: RouteFileEntry[] | undefined = mod.ROUTE_MANIFEST ?? mod.default;
 
   if (!manifest || !Array.isArray(manifest)) {

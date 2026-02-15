@@ -44,7 +44,7 @@ export async function registerDiscovered(
     changes.push({
       script: ungrouped,
       group,
-      subcommand: ungrouped.currentScript,
+      ...(ungrouped.currentScript ? { subcommand: ungrouped.currentScript } : {}),
     });
   }
 

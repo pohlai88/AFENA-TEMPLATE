@@ -66,9 +66,9 @@ export async function getCachedList(
     const parsed = JSON.parse(raw) as CachedListResult;
     // Rehydrate Date objects if needed (ISO strings in JSON)
     if (Array.isArray(parsed.data)) {
-      parsed.data = parsed.data.map((row: any) => {
+      parsed.data = (parsed.data as Record<string, unknown>[]).map((row) => {
         const out: Record<string, unknown> = {};
-        for (const [k, v] of Object.entries(row as Record<string, unknown>)) {
+        for (const [k, v] of Object.entries(row)) {
           if (typeof v === 'string' && /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/.test(v)) {
             out[k] = new Date(v);
           } else {

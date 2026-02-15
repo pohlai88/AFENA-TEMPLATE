@@ -280,7 +280,7 @@ function runGate5(): string[] {
         /REVOKE\s+(?:UPDATE\s*,\s*DELETE|INSERT\s*,\s*UPDATE\s*,\s*DELETE|DELETE|UPDATE|INSERT)\s+ON\s+"?(\w+)"?\s+FROM/gi,
       );
       for (const m of revokeMatches) {
-        revokedTables.add(m[1]!.toLowerCase());
+        revokedTables.add(m[1].toLowerCase());
       }
     }
   } catch {

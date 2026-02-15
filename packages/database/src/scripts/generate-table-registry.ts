@@ -16,8 +16,8 @@ import * as fs from 'node:fs';
 import * as path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { REGISTRY_EXEMPT, TABLE_KIND_OVERRIDES } from '../../table-registry.config.js';
 import { REVOKE_UPDATE_DELETE_TABLES } from '../../revoke.config.js';
+import { REGISTRY_EXEMPT, TABLE_KIND_OVERRIDES } from '../../table-registry.config.js';
 import { __TABLE_NAMES__ } from '../schema/__schema-manifest.js';
 
 const __filename = fileURLToPath(import.meta.url);

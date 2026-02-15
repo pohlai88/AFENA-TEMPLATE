@@ -39,7 +39,7 @@ function resolveObjectCommand(
     cmd: entry.cmd,
     args: entry.args ?? [],
     cwd,
-    env,
+    ...(env ? { env } : {}),
     output: entry.output ?? 'inherit',
     shell: entry.shell ?? false,
   };
@@ -58,7 +58,6 @@ function resolveStringCommand(
     cmd: command,
     args: [],
     cwd: repoRoot,
-    env: undefined,
     output: 'inherit',
     shell: true,
   };

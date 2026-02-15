@@ -209,7 +209,7 @@ readmeCmd
       mode: 'gen',
       repoRoot,
       config,
-      packages,
+      ...(packages ? { packages } : {}),
       dryRun: opts.dryRun,
     });
     if (result.failures.length > 0) process.exitCode = 1;

@@ -150,7 +150,8 @@ export async function main(): Promise<void> {
   );
 }
 
-main().catch((err) => {
-  console.error(String(err?.stack ?? err));
+main().catch((err: unknown) => {
+  const error = err as Error | undefined;
+  console.error(String(error?.stack ?? err));
   process.exit(1);
 });

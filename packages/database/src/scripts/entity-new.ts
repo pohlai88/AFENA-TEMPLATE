@@ -125,10 +125,6 @@ function insertAtMarker(filePath: string, marker: string, insertion: string, lab
   ledger.filesModified.push(relPath);
 }
 
-function escapeRe(s: string): string {
-  return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-}
-
 function insertImportAtMarker(filePath: string, marker: string, importLine: string, _label: string): void {
   const relPath = path.relative(ROOT, filePath);
   if (!fs.existsSync(filePath)) {

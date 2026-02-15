@@ -13,11 +13,16 @@ function normalizeOpenApiMethod(m: string): string {
   return m.toLowerCase();
 }
 
+interface OpenApiModule {
+  generateOpenApiFromManifest?: (manifest: RouteFileEntry[]) => OpenApiSpec;
+  getOpenApiSpec?: () => OpenApiSpec;
+}
+
 export async function loadOpenApiFromGenerator(
   manifest: RouteFileEntry[],
 ): Promise<OpenApiSpec> {
   const p = path.resolve(process.cwd(), 'src/lib/api/openapi-spec.ts');
-  const mod = await import(pathToFileURL(p).toString());
+  const mod = await import(pathToFileURL(p).toString()) as OpenApiModule;
 
   if (typeof mod.generateOpenApiFromManifest === 'function') {
     return mod.generateOpenApiFromManifest(manifest);

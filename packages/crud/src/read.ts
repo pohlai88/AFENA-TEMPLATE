@@ -104,7 +104,7 @@ export async function listEntities(
   const conditions: Parameters<typeof and>[0][] = [];
   // Only apply soft-delete filter if the column exists
   if (!options?.includeDeleted && 'isDeleted' in table) {
-    conditions.push(eq((table as any).isDeleted, false));
+    conditions.push(eq(table.isDeleted, false));
   }
   if (options?.orgId) {
     conditions.push(eq(table.orgId, options.orgId));

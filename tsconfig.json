@@ -64,16 +64,21 @@
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true
   },
-  "include": [
-    "next-env.d.ts",
-    "**/*.ts",
-    "**/*.tsx",
-    "**/*.js",
-    "**/*.jsx",
-    ".next/types/**/*.ts",
-    ".next/dev/types/**/*.ts"
+  "include": ["packages/**/*.ts", "packages/**/*.tsx"],
+  "exclude": [
+    "node_modules",
+    ".next",
+    "**/dist/**",
+    "**/build/**",
+    "**/__tests__/**",
+    "**/*.test.ts",
+    "**/*.test.tsx",
+    "**/*.spec.ts",
+    "**/*.spec.tsx",
+    "v3",
+    "apps",
+    "tools"
   ],
-  "exclude": ["node_modules", ".next", "**/dist", "**/build", "v3"],
   "references": [
     {
       "path": "./packages/ui"

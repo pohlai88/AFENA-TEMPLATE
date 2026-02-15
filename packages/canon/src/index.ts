@@ -134,3 +134,6 @@ export {
   DATA_TYPE_VALUE_COLUMN_MAP,
 } from './validators/custom-field-value';
 export type { FieldValidationResult } from './validators/custom-field-value';
+
+// ── Utilities ────────────────────────────────────────────
+export { invariant } from './invariant';

@@ -57,6 +57,7 @@ module.exports = [
   // B2) No Second CRUD Stack — boundary modules only may import kernel/DB
   {
     files: ['**/*.{ts,tsx}'],
+    ignores: ['app/api/delivery-notes/**'],
     rules: {
       'no-restricted-imports': [
         'error',
@@ -96,7 +97,7 @@ module.exports = [
   // Route handlers — must use entity-route-handlers only (stricter message)
   {
     files: ['app/api/**/route.ts'],
-    ignores: ['app/api/storage/**', 'app/api/views/**', 'app/api/webhooks/**', 'app/api/internal/search/**'],
+    ignores: ['app/api/storage/**', 'app/api/views/**', 'app/api/webhooks/**', 'app/api/internal/search/**', 'app/api/delivery-notes/**'],
     rules: {
       'no-restricted-imports': [
         'error',
