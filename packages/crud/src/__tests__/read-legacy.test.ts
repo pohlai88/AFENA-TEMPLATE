@@ -7,8 +7,8 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 // Mock getLegacyRefs to assert it is never called when includeLegacyRef is false
 const getLegacyRefsMock = vi.fn().mockImplementation(
-  (_conn: unknown, _orgId: unknown, _entityType: unknown, afenaIds: string[]) => {
-    if (afenaIds.length === 0) return Promise.resolve(new Map());
+  (_conn: unknown, _orgId: unknown, _entityType: unknown, afendaIds: string[]) => {
+    if (afendaIds.length === 0) return Promise.resolve(new Map());
     return Promise.resolve(new Map());
   },
 );
@@ -35,7 +35,7 @@ const mockConn = {
   select: vi.fn().mockReturnValue(createChain([row])),
 };
 
-vi.mock('afena-database', () => {
+vi.mock('afenda-database', () => {
   const drizzle = require('drizzle-orm');
   return {
     ...drizzle,
@@ -54,7 +54,7 @@ import { getLegacyRefs } from '../read-legacy';
 import { readEntity, listEntities } from '../read';
 
 describe('getLegacyRefs', () => {
-  it('returns empty map when afenaIds is empty', async () => {
+  it('returns empty map when afendaIds is empty', async () => {
     const conn = {} as Parameters<typeof getLegacyRefs>[0];
     const result = await getLegacyRefs(conn, 'org-1', 'contacts', []);
     expect(result.size).toBe(0);

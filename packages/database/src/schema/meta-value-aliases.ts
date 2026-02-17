@@ -1,17 +1,14 @@
 import { sql } from 'drizzle-orm';
-import { boolean, check, index, pgTable, primaryKey, text, timestamp, uuid } from 'drizzle-orm/pg-core';
+import { boolean, check, index, pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core';
 
 import { tenantPolicy } from '../helpers/tenant-policy';
 
 import { metaAliasSets } from './meta-alias-sets';
 
-/**
- * GAP-DB-001: Composite PK (org_id, id) for data integrity and tenant isolation.
- */
 export const metaValueAliases = pgTable(
   'meta_value_aliases',
   {
-    id: uuid('id').defaultRandom().notNull(),
+    id: uuid('id').defaultRandom().primaryKey(),
     orgId: text('org_id')
       .notNull()
       .default(sql`(auth.require_org_id())`),
@@ -35,7 +32,6 @@ export const metaValueAliases = pgTable(
       .default(sql`(auth.user_id())`),
   },
   (table) => [
-    primaryKey({ columns: [table.orgId, table.id] }),
     index('meta_value_aliases_org_id_idx').on(table.orgId, table.id),
     check('meta_value_aliases_org_not_empty', sql`org_id <> ''`),
     check(

@@ -1,20 +1,18 @@
-import { desc, sql } from 'drizzle-orm';
-import { check, index, pgTable, primaryKey, text } from 'drizzle-orm/pg-core';
+import { sql } from 'drizzle-orm';
+import { check, index, pgTable, text } from 'drizzle-orm/pg-core';
 
-import { erpEntityColumns } from '../helpers/erp-entity';
+import { docEntityColumns } from '../helpers/doc-entity';
 import { tenantPolicy } from '../helpers/tenant-policy';
 
 /**
  * Contacts — first domain entity, built alongside the kernel.
  * Exercises text search, soft-delete, audit timeline, version history.
- * Master data entity (NOT a document) - uses erpEntityColumns for base fields.
- * 
- * GAP-DB-001: Composite PK (org_id, id) for data integrity and tenant isolation.
+ * Uses docEntityColumns for lifecycle support (draft → submitted → active → cancelled).
  */
 export const contacts = pgTable(
   'contacts',
   {
-    ...erpEntityColumns,
+    ...docEntityColumns,
     name: text('name').notNull(),
     email: text('email'),
     phone: text('phone'),
@@ -22,8 +20,8 @@ export const contacts = pgTable(
     notes: text('notes'),
   },
   (table) => [
-    primaryKey({ columns: [table.orgId, table.id] }),
-    index('contacts_org_created_id_idx').on(table.orgId, desc(table.createdAt), desc(table.id)),
+    index('contacts_org_id_idx').on(table.orgId, table.id),
+    index('contacts_org_created_idx').on(table.orgId, table.createdAt),
     check('contacts_org_not_empty', sql`org_id <> ''`),
     tenantPolicy(table),
   ]

@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation';
 
-import { Card, CardContent, CardHeader, CardTitle } from 'afena-ui/components/card';
+import { Card, CardContent, CardHeader, CardTitle } from 'afenda-ui/components/card';
 import {
   Table,
   TableBody,
@@ -8,7 +8,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from 'afena-ui/components/table';
+} from 'afenda-ui/components/table';
 import { Trash2 } from 'lucide-react';
 
 import { PageHeader } from '../../_components/crud/client/page-header';
@@ -17,7 +17,7 @@ import { TrashRestoreButton } from '../_components/trash-restore-button_client';
 import { resolveContactActions } from '../_server/contacts.policy_server';
 import { listTrashedContacts } from '../_server/contacts.query_server';
 
-import type { ResolvedActions } from 'afena-canon';
+import type { ResolvedActions } from 'afenda-canon';
 
 export default async function ContactsTrashPage({
   params,

@@ -2,6 +2,40 @@ import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
   test: {
-    exclude: ['ARCHIVE', 'node_modules', '.next', '.git'],
+    exclude: [
+      'ARCHIVE',
+      'node_modules',
+      '.next',
+      '.git',
+      '.**',  // Exclude all dot-prefixed directories
+    ],
+    coverage: {
+      provider: 'v8',
+      reporter: ['text', 'html', 'json-summary', 'lcov'],
+      reportsDirectory: './coverage',
+      thresholds: {
+        lines: 80,
+        functions: 80,
+        branches: 75,
+        statements: 80,
+        perFile: true,
+      },
+      exclude: [
+        '**/node_modules/**',
+        '**/.turbo/**',
+        '**/dist/**',
+        '**/__tests__/**',
+        '**/*.spec.ts',
+        '**/*.test.ts',
+        '**/ARCHIVE/**',
+        '**/.next/**',
+        '**/e2e/**',
+        '**/*.config.{ts,js,mjs,cjs}',
+        '**/*.d.ts',
+        '**/.**/**',  // Exclude all dot-prefixed directories
+      ],
+      all: true,
+      skipFull: false,
+    },
   },
 });

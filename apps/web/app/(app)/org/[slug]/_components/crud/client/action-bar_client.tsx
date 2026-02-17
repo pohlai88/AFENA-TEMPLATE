@@ -1,6 +1,6 @@
 'use client';
 
-import { Separator } from 'afena-ui/components/separator';
+import { Separator } from 'afenda-ui/components/separator';
 import { useState } from 'react';
 
 
@@ -8,7 +8,7 @@ import { ActionButton } from './action-button_client';
 import { ConfirmActionDialog } from './confirm-action-dialog_client';
 import { UpdateModeDialog } from './update-mode-dialog_client';
 
-import type { ActionKind, ResolvedAction, ResolvedActions } from 'afena-canon';
+import type { ActionKind, ResolvedAction, ResolvedActions } from 'afenda-canon';
 
 interface ActionBarProps {
   actions: ResolvedActions;

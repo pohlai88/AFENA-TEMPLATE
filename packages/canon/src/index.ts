@@ -125,23 +125,9 @@ export {
 } from './schemas/data-types';
 export type { TypeConfigSchemas } from './schemas/data-types';
 
-// ── Serialization (GAP-DB-006 / SER-01) ─────────────────
-export { coerceMutationInput, coerceValue } from './serialization';
-
 // ── Validators ───────────────────────────────────────────
 export {
   validateFieldValue,
   DATA_TYPE_VALUE_COLUMN_MAP,
 } from './validators/custom-field-value';
 export type { FieldValidationResult } from './validators/custom-field-value';
-
-// ── Contracts (LocalEntitySpec) ───────────────────────────
-export {
-  localEntitySpecSchema,
-  validateLocalEntitySpec,
-  safeParseLocalEntitySpec,
-} from './contracts';
-export type { LocalEntitySpec, EntityKind, FieldType, FieldDef } from './contracts';
-
-// ── Utilities ────────────────────────────────────────────
-export { invariant } from './invariant';

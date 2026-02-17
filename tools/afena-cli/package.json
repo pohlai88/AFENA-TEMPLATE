@@ -1,10 +1,10 @@
 {
-  "name": "@afena/cli",
+  "name": "@afenda/cli",
   "version": "0.1.0",
   "private": true,
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-  "bin": { "afena": "bin/afena" },
+  "bin": { "afenda": "bin/afenda" },
   "engines": { "node": ">=18" },
   "scripts": {
     "build": "tsup",
@@ -25,13 +25,13 @@
     "semver": "catalog:",
     "strip-ansi": "catalog:",
     "zod": "catalog:",
-    "afena-canon": "workspace:*"
+    "afenda-canon": "workspace:*"
   },
   "devDependencies": {
     "@types/node": "catalog:",
     "@types/semver": "catalog:",
-    "afena-eslint-config": "workspace:^",
-    "afena-typescript-config": "workspace:*",
+    "afenda-eslint-config": "workspace:^",
+    "afenda-typescript-config": "workspace:*",
     "eslint": "catalog:",
     "ts-morph": "catalog:",
     "tsup": "catalog:",

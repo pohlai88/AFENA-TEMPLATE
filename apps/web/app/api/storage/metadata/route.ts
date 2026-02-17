@@ -1,5 +1,5 @@
-import { meterStorageBytes } from 'afena-crud';
-import { db, eq, r2Files, sql } from 'afena-database';
+import { meterStorageBytes } from 'afenda-crud';
+import { db, eq, r2Files, sql } from 'afenda-database';
 
 import { withAuth } from '@/lib/api/with-auth';
 

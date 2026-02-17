@@ -1,7 +1,13 @@
 import { notFound } from 'next/navigation';
 
-import { Badge } from 'afena-ui/components/badge';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from 'afena-ui/components/card';
+import { Badge } from 'afenda-ui/components/badge';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from 'afenda-ui/components/card';
 import {
   Activity,
   AlertTriangle,
@@ -12,9 +18,9 @@ import {
   XCircle,
 } from 'lucide-react';
 
-import { PageHeader } from '../../../_components/crud/client/page-header';
-import { getOrgContext } from '../../../_server/org-context_server';
-import { fetchHealthStats } from '../_server/workflows.query_server';
+import { PageHeader } from '@/app/(app)/org/[slug]/_components/crud/client/page-header';
+import { getOrgContext } from '@/app/(app)/org/[slug]/_server/org-context_server';
+import { fetchHealthStats } from '@/app/(app)/org/[slug]/settings/workflows/_server/workflows.query_server';
 
 export default async function WorkflowHealthPage({
   params,
@@ -22,10 +28,7 @@ export default async function WorkflowHealthPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const [health, ctx] = await Promise.all([
-    fetchHealthStats(),
-    getOrgContext(slug),
-  ]);
+  const [health, ctx] = await Promise.all([fetchHealthStats(), getOrgContext(slug)]);
 
   if (!ctx) notFound();
 
@@ -36,14 +39,15 @@ export default async function WorkflowHealthPage({
           title="Workflow Health"
           description="Monitor workflow engine health and outbox status"
         />
-        <div className="py-12 text-center text-muted-foreground">
+        <div className="text-muted-foreground py-12 text-center">
           Unable to load health stats. The workflow tables may not be initialized.
         </div>
       </div>
     );
   }
 
-  const hasIssues = health.failedOutbox > 0 || health.deadLetterOutbox > 0 || health.stuckInstances > 0;
+  const hasIssues =
+    health.failedOutbox > 0 || health.deadLetterOutbox > 0 || health.stuckInstances > 0;
 
   return (
     <div className="space-y-6">
@@ -58,7 +62,7 @@ export default async function WorkflowHealthPage({
 
       {/* Engine Outbox */}
       <div>
-        <h3 className="mb-3 text-sm font-medium text-muted-foreground">Engine Event Outbox</h3>
+        <h3 className="text-muted-foreground mb-3 text-sm font-medium">Engine Event Outbox</h3>
         <div className="grid gap-4 md:grid-cols-4">
           <Card>
             <CardHeader className="pb-2">
@@ -69,9 +73,7 @@ export default async function WorkflowHealthPage({
               <CardTitle className="text-3xl">{health.pendingOutbox}</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-xs text-muted-foreground">
-                Events waiting to be processed
-              </p>
+              <p className="text-muted-foreground text-xs">Events waiting to be processed</p>
             </CardContent>
           </Card>
 
@@ -84,9 +86,7 @@ export default async function WorkflowHealthPage({
               <CardTitle className="text-3xl">{health.processingOutbox}</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-xs text-muted-foreground">
-                Currently being processed by workers
-              </p>
+              <p className="text-muted-foreground text-xs">Currently being processed by workers</p>
             </CardContent>
           </Card>
 
@@ -96,12 +96,14 @@ export default async function WorkflowHealthPage({
                 <XCircle className="h-3.5 w-3.5" />
                 Failed
               </CardDescription>
-              <CardTitle className={`text-3xl ${health.failedOutbox > 0 ? 'text-destructive' : ''}`}>
+              <CardTitle
+                className={`text-3xl ${health.failedOutbox > 0 ? 'text-destructive' : ''}`}
+              >
                 {health.failedOutbox}
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-xs text-muted-foreground">
+              <p className="text-muted-foreground text-xs">
                 Will be retried with exponential backoff
               </p>
             </CardContent>
@@ -113,12 +115,14 @@ export default async function WorkflowHealthPage({
                 <AlertTriangle className="h-3.5 w-3.5" />
                 Dead Letter
               </CardDescription>
-              <CardTitle className={`text-3xl ${health.deadLetterOutbox > 0 ? 'text-destructive' : ''}`}>
+              <CardTitle
+                className={`text-3xl ${health.deadLetterOutbox > 0 ? 'text-destructive' : ''}`}
+              >
                 {health.deadLetterOutbox}
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-xs text-muted-foreground">
+              <p className="text-muted-foreground text-xs">
                 Exhausted retries — requires admin intervention
               </p>
             </CardContent>
@@ -128,7 +132,7 @@ export default async function WorkflowHealthPage({
 
       {/* Side Effects */}
       <div>
-        <h3 className="mb-3 text-sm font-medium text-muted-foreground">Side Effects Outbox</h3>
+        <h3 className="text-muted-foreground mb-3 text-sm font-medium">Side Effects Outbox</h3>
         <div className="grid gap-4 md:grid-cols-2">
           <Card>
             <CardHeader className="pb-2">
@@ -139,7 +143,7 @@ export default async function WorkflowHealthPage({
               <CardTitle className="text-3xl">{health.pendingSideEffects}</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-xs text-muted-foreground">
+              <p className="text-muted-foreground text-xs">
                 Webhooks, emails, notifications waiting for IO worker
               </p>
             </CardContent>
@@ -151,12 +155,10 @@ export default async function WorkflowHealthPage({
                 <Clock className="h-3.5 w-3.5" />
                 Oldest Pending Age
               </CardDescription>
-              <CardTitle className="text-xl">
-                {health.oldestPendingAge ?? 'N/A'}
-              </CardTitle>
+              <CardTitle className="text-xl">{health.oldestPendingAge ?? 'N/A'}</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-xs text-muted-foreground">
+              <p className="text-muted-foreground text-xs">
                 Time since oldest pending event was created
               </p>
             </CardContent>
@@ -166,7 +168,7 @@ export default async function WorkflowHealthPage({
 
       {/* Stuck Instances */}
       <div>
-        <h3 className="mb-3 text-sm font-medium text-muted-foreground">Instance Health</h3>
+        <h3 className="text-muted-foreground mb-3 text-sm font-medium">Instance Health</h3>
         <Card className={health.stuckInstances > 0 ? 'border-orange-500/50' : ''}>
           <CardHeader className="pb-2">
             <CardDescription className="flex items-center gap-1.5">
@@ -178,9 +180,9 @@ export default async function WorkflowHealthPage({
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-xs text-muted-foreground">
-              Running instances with no pending outbox events and no activity for 30+ minutes.
-              May need projection rebuild or manual re-enqueue.
+            <p className="text-muted-foreground text-xs">
+              Running instances with no pending outbox events and no activity for 30+ minutes. May
+              need projection rebuild or manual re-enqueue.
             </p>
             {health.stuckInstances === 0 && (
               <p className="mt-2 flex items-center gap-1.5 text-xs text-green-600">

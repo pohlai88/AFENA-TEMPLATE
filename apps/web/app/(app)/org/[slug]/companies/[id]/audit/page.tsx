@@ -1,8 +1,8 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
-import { Card, CardContent } from 'afena-ui/components/card';
-import { Separator } from 'afena-ui/components/separator';
+import { Card, CardContent } from 'afenda-ui/components/card';
+import { Separator } from 'afenda-ui/components/separator';
 import { ArrowLeft, FileText } from 'lucide-react';
 
 import { getCompany, getCompanyAuditLogs } from '@/app/actions/companies';

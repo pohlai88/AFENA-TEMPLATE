@@ -10,11 +10,11 @@
  * This module will be wired when capability-driven RBAC is integrated into the UI layer.
  */
 
-import { CAPABILITY_CATALOG } from 'afena-canon';
+import { CAPABILITY_CATALOG } from 'afenda-canon';
 
 import { tierHasAccess } from './navigation';
 
-import type { RbacScope, RbacTier } from 'afena-canon';
+import type { RbacScope, RbacTier } from 'afenda-canon';
 
 
 export interface PermissionCheckResult {

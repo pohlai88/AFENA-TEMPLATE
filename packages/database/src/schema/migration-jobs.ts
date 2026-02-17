@@ -1,18 +1,16 @@
 import { sql } from 'drizzle-orm';
-import { check, index, integer, jsonb, pgTable, primaryKey, text, timestamp, uuid } from 'drizzle-orm/pg-core';
+import { check, index, integer, jsonb, pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core';
 
 import { tenantPolicy } from '../helpers/tenant-policy';
 
 /**
  * Migration jobs — top-level job registry.
  * Each job migrates one entity type from one source system.
- * 
- * GAP-DB-001: Composite PK (org_id, id) for data integrity and tenant isolation.
  */
 export const migrationJobs = pgTable(
   'migration_jobs',
   {
-    id: uuid('id').defaultRandom().notNull(),
+    id: uuid('id').defaultRandom().primaryKey(),
     orgId: text('org_id').notNull(),
     entityType: text('entity_type').notNull(),
     sourceConfig: jsonb('source_config').notNull(),
@@ -33,7 +31,6 @@ export const migrationJobs = pgTable(
     createdBy: text('created_by').notNull().default(sql`auth.user_id()`),
   },
   (table) => [
-    primaryKey({ columns: [table.orgId, table.id] }),
     index('migration_jobs_org_status_idx').on(table.orgId, table.status),
     index('migration_jobs_entity_type_idx').on(table.entityType),
     check('migration_jobs_status_chk', sql`status IN ('pending', 'preflight', 'ready', 'blocked', 'running', 'paused', 'cancelling', 'cancelled', 'completed', 'failed', 'rolled_back')`),

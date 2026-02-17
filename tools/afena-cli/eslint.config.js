@@ -1,4 +1,4 @@
-const baseConfig = require('afena-eslint-config/base');
+const baseConfig = require('afenda-eslint-config/base');
 
 module.exports = [
   ...baseConfig,
@@ -29,7 +29,7 @@ module.exports = [
   },
 
   // EX-LINT-CLI-00 (expires: 2026-03-15): CLI tools use console for stdout.
-  // Application code uses afena-logger; CLI is exempt.
+  // Application code uses afenda-logger; CLI is exempt.
   {
     files: ['src/**/*.ts'],
     rules: {
@@ -38,15 +38,15 @@ module.exports = [
         'error',
         {
           selector: "CallExpression[callee.object.name='db'][callee.property.name='insert']",
-          message: 'Direct db.insert() is forbidden — use mutate() from afena-crud (INVARIANT-01/K-01)',
+          message: 'Direct db.insert() is forbidden — use mutate() from afenda-crud (INVARIANT-01/K-01)',
         },
         {
           selector: "CallExpression[callee.object.name='db'][callee.property.name='update']",
-          message: 'Direct db.update() is forbidden — use mutate() from afena-crud (INVARIANT-01/K-01)',
+          message: 'Direct db.update() is forbidden — use mutate() from afenda-crud (INVARIANT-01/K-01)',
         },
         {
           selector: "CallExpression[callee.object.name='db'][callee.property.name='delete']",
-          message: 'Direct db.delete() is forbidden — use mutate() from afena-crud (INVARIANT-01/K-01)',
+          message: 'Direct db.delete() is forbidden — use mutate() from afenda-crud (INVARIANT-01/K-01)',
         },
         {
           selector: "CallExpression[callee.object.name='dbRo'][callee.property.name='insert']",

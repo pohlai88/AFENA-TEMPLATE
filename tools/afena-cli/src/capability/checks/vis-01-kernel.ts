@@ -16,9 +16,9 @@ import {
   ENTITY_TYPES,
   inferKindFromVerb,
   parseCapabilityKey,
-} from 'afena-canon';
+} from 'afenda-canon';
 
-import type { CapabilityException } from 'afena-canon';
+import type { CapabilityException } from 'afenda-canon';
 
 export interface Vis01Violation {
   key: string;

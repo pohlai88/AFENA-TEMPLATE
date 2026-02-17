@@ -9,7 +9,7 @@ import {
 } from './conditions';
 
 import type { ActionFn, ActionResult, ConditionFn, RuleContext } from './types';
-import type { MutationSpec } from 'afena-canon';
+import type { MutationSpec } from 'afenda-canon';
 
 function mustObject(x: unknown, msg: string): Record<string, unknown> {
   if (!x || typeof x !== 'object' || Array.isArray(x)) throw new Error(msg);

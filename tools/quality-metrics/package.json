@@ -1,0 +1,28 @@
+{
+  "name": "quality-metrics",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "collect": "tsx src/collect.ts",
+    "analyze": "tsx src/analyze.ts",
+    "report": "tsx src/report.ts",
+    "flakiness": "tsx src/flakiness.ts",
+    "performance": "tsx src/performance.ts",
+    "insights": "tsx src/insights.ts",
+    "gates": "tsx src/gates-cli.ts",
+    "security": "tsx src/security.ts"
+  },
+  "dependencies": {
+    "@paralleldrive/cuid2": "^3.3.0",
+    "afenda-database": "workspace:*",
+    "drizzle-orm": "^0.44.0",
+    "glob": "^10.3.10",
+    "simple-git": "^3.22.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.16",
+    "tsx": "^4.7.1",
+    "typescript": "^5.3.3"
+  }
+}

@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation';
 
-import { Card, CardContent } from 'afena-ui/components/card';
+import { Card, CardContent } from 'afenda-ui/components/card';
 import { Trash2 } from 'lucide-react';
 
 import { PageHeader } from '../../_components/crud/client/page-header';

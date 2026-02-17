@@ -1,7 +1,7 @@
 import { NextRequest } from 'next/server';
 
-import { readDeliveryNoteWithLines } from 'afena-crud';
-import { getRequestId } from 'afena-logger';
+import { readDeliveryNoteWithLines } from 'afenda-crud';
+import { getRequestId } from 'afenda-logger';
 
 import { withAuthOrApiKey } from '@/lib/api/with-auth-or-api-key';
 
@@ -10,7 +10,7 @@ import { withAuthOrApiKey } from '@/lib/api/with-auth-or-api-key';
  * 
  * This is a Backend-for-Frontend (BFF) endpoint that returns denormalized data
  * (delivery note header + lines in one response). BFF endpoints are allowed to
- * import directly from afena-crud per no-restricted-imports policy.
+ * import directly from afenda-crud per no-restricted-imports policy.
  * 
  * @see packages/crud/src/read-delivery-note.ts
  */

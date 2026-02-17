@@ -1,15 +1,15 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
-import { Badge } from 'afena-ui/components/badge';
-import { Card, CardContent, CardHeader, CardTitle } from 'afena-ui/components/card';
-import { Separator } from 'afena-ui/components/separator';
+import { Badge } from 'afenda-ui/components/badge';
+import { Card, CardContent, CardHeader, CardTitle } from 'afenda-ui/components/card';
+import { Separator } from 'afenda-ui/components/separator';
 import { ArrowLeft, Clock, GitBranch } from 'lucide-react';
 
 import { getContact, getContactVersions } from '@/app/actions/contacts';
 
-import { getOrgContext } from '../../../_server/org-context_server';
-import { RevertButton } from '../../_components/revert-button_client';
+import { getOrgContext } from '@/app/(app)/org/[slug]/_server/org-context_server';
+import { RevertButton } from '@/app/(app)/org/[slug]/contacts/_components/revert-button_client';
 
 interface EntityVersion {
   id: string;
@@ -46,17 +46,17 @@ export default async function ContactVersionsPage({
       {/* Back link */}
       <Link
         href={`/org/${slug}/contacts/${id}`}
-        className="mb-6 inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground"
+        className="text-muted-foreground hover:text-foreground mb-6 inline-flex items-center gap-1.5 text-sm"
       >
         <ArrowLeft className="h-4 w-4" />
         Back to {contact.name}
       </Link>
 
       <div className="flex items-center gap-3">
-        <GitBranch className="h-6 w-6 text-muted-foreground" />
+        <GitBranch className="text-muted-foreground h-6 w-6" />
         <div>
           <h1 className="text-2xl font-semibold tracking-tight">Version History</h1>
-          <p className="mt-1 text-sm text-muted-foreground">
+          <p className="text-muted-foreground mt-1 text-sm">
             {contact.name} — currently at v{contact.version}
           </p>
         </div>
@@ -68,7 +68,7 @@ export default async function ContactVersionsPage({
       {!versionsRes.ok && (
         <Card className="border-destructive">
           <CardContent className="pt-6">
-            <p className="text-sm text-destructive">
+            <p className="text-destructive text-sm">
               Failed to load versions: {versionsRes.error?.message ?? 'Unknown error'}
             </p>
           </CardContent>
@@ -79,7 +79,7 @@ export default async function ContactVersionsPage({
       {versionsRes.ok && versions.length === 0 && (
         <Card>
           <CardContent className="flex flex-col items-center justify-center py-16">
-            <Clock className="h-12 w-12 text-muted-foreground/40" />
+            <Clock className="text-muted-foreground/40 h-12 w-12" />
             <h3 className="mt-4 text-lg font-medium">No versions recorded</h3>
           </CardContent>
         </Card>
@@ -97,20 +97,20 @@ export default async function ContactVersionsPage({
                 <CardHeader className="pb-3">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                      <CardTitle className="text-sm font-medium">
-                        Version {ver.version}
-                      </CardTitle>
+                      <CardTitle className="text-sm font-medium">Version {ver.version}</CardTitle>
                       {isCurrent && (
-                        <Badge variant="default" className="text-xs">Current</Badge>
+                        <Badge variant="default" className="text-xs">
+                          Current
+                        </Badge>
                       )}
                       {ver.parentVersion != null && (
-                        <span className="text-xs text-muted-foreground">
+                        <span className="text-muted-foreground text-xs">
                           from v{ver.parentVersion}
                         </span>
                       )}
                     </div>
                     <div className="flex items-center gap-2">
-                      <span className="text-xs text-muted-foreground">
+                      <span className="text-muted-foreground text-xs">
                         {new Date(ver.createdAt).toLocaleDateString('en-US', {
                           month: 'short',
                           day: 'numeric',
@@ -133,15 +133,31 @@ export default async function ContactVersionsPage({
                   </div>
                 </CardHeader>
                 <CardContent className="pt-0">
-                  <div className="rounded-md bg-muted/50 p-3">
-                    <p className="mb-1 text-xs font-medium text-muted-foreground">Snapshot</p>
+                  <div className="bg-muted/50 rounded-md p-3">
+                    <p className="text-muted-foreground mb-1 text-xs font-medium">Snapshot</p>
                     <div className="grid gap-1 text-sm">
                       {Object.entries(snapshot)
-                        .filter(([key]) => !['id', 'org_id', 'created_by', 'updated_by', 'created_at', 'updated_at', 'version', 'is_deleted', 'deleted_at', 'deleted_by'].includes(key))
+                        .filter(
+                          ([key]) =>
+                            ![
+                              'id',
+                              'org_id',
+                              'created_by',
+                              'updated_by',
+                              'created_at',
+                              'updated_at',
+                              'version',
+                              'is_deleted',
+                              'deleted_at',
+                              'deleted_by',
+                            ].includes(key),
+                        )
                         .map(([key, value]) => (
                           <div key={key} className="flex gap-2">
-                            <span className="font-mono text-xs text-muted-foreground">{key}:</span>
-                            <span className="text-xs">{value != null ? `${value as string | number | boolean}` : '—'}</span>
+                            <span className="text-muted-foreground font-mono text-xs">{key}:</span>
+                            <span className="text-xs">
+                              {value != null ? `${value as string | number | boolean}` : '—'}
+                            </span>
                           </div>
                         ))}
                     </div>
@@ -149,8 +165,10 @@ export default async function ContactVersionsPage({
 
                   {/* Show diff if available */}
                   {ver.diff != null && (
-                    <div className="mt-3 rounded-md bg-muted/50 p-3">
-                      <p className="mb-1 text-xs font-medium text-muted-foreground">Changes (JSON Patch)</p>
+                    <div className="bg-muted/50 mt-3 rounded-md p-3">
+                      <p className="text-muted-foreground mb-1 text-xs font-medium">
+                        Changes (JSON Patch)
+                      </p>
                       <pre className="text-xs leading-relaxed">
                         {JSON.stringify(ver.diff, null, 2)}
                       </pre>

@@ -1,5 +1,5 @@
 /**
- * Ledger emitter — generates .afena/capability.ledger.json
+ * Ledger emitter — generates .afenda/capability.ledger.json
  * with deterministic statuses derived from booleans.
  */
 
@@ -13,12 +13,12 @@ import {
   VIS_POLICY,
   inferKindFromVerb,
   parseCapabilityKey,
-} from 'afena-canon';
+} from 'afenda-canon';
 
 import { getOrInit } from '../../core/get-or-init';
 
 import type { ScanResult } from '../collectors/surface-scanner';
-import type { CapabilityKind, ExceptionScope , CapabilityException } from 'afena-canon';
+import type { CapabilityKind, ExceptionScope , CapabilityException } from 'afenda-canon';
 
 
 export type LedgerStatus = 'covered' | 'orphaned' | 'phantom' | 'excepted' | 'planned';
@@ -200,10 +200,10 @@ export function generateLedger(
 }
 
 /**
- * Write the ledger to .afena/capability.ledger.json.
+ * Write the ledger to .afenda/capability.ledger.json.
  */
 export function writeLedger(repoRoot: string, ledger: CapabilityLedger): void {
-  const outPath = join(repoRoot, '.afena', 'capability.ledger.json');
+  const outPath = join(repoRoot, '.afenda', 'capability.ledger.json');
   mkdirSync(dirname(outPath), { recursive: true });
   writeFileSync(outPath, `${JSON.stringify(ledger, null, 2)  }\n`, 'utf-8');
 }

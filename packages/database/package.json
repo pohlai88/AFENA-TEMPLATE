@@ -1,5 +1,5 @@
 {
-  "name": "afena-database",
+  "name": "afenda-database",
   "version": "0.1.0",
   "private": true,
   "type": "module",
@@ -11,17 +11,14 @@
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch",
-    "lint": "eslint . --ext .js,.jsx,.ts,.tsx --cache --concurrency=auto",
-    "lint:ci": "eslint . --ext .js,.jsx,.ts,.tsx --rule 'import/no-cycle: error'",
-    "lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx --cache --fix",
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
+    "lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx --fix",
     "type-check": "tsc --noEmit",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
     "db:push": "drizzle-kit push",
     "db:studio": "drizzle-kit studio",
-    "db:barrel": "npx tsx src/scripts/generate-schema-barrel.ts && npx tsx src/scripts/generate-table-registry.ts",
-    "db:lint": "npx tsx src/scripts/schema-lint.ts",
-    "db:drift-check": "npx tsx src/scripts/drift-check.ts"
+    "db:lint": "npx tsx src/scripts/schema-lint.ts"
   },
   "dependencies": {
     "@neondatabase/serverless": "^1.0.0",
@@ -29,8 +26,8 @@
   },
   "devDependencies": {
     "@types/node": "catalog:",
-    "afena-eslint-config": "workspace:^",
-    "afena-typescript-config": "workspace:*",
+    "afenda-eslint-config": "workspace:^",
+    "afenda-typescript-config": "workspace:*",
     "dotenv": "^16.5.0",
     "drizzle-kit": "^0.31.0",
     "postgres": "^3.4.8",

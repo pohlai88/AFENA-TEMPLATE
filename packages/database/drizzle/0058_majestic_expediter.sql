@@ -1,3 +1,0 @@
--- Migration 0058: Placeholder for journal consistency
--- This migration was referenced in the journal but the file was missing
--- No changes needed - this is a placeholder to maintain journal integrity

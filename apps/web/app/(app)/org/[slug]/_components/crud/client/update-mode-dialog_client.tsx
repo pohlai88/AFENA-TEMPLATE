@@ -1,8 +1,8 @@
 'use client';
 
 
-import { Badge } from 'afena-ui/components/badge';
-import { Button } from 'afena-ui/components/button';
+import { Badge } from 'afenda-ui/components/badge';
+import { Button } from 'afenda-ui/components/button';
 import {
   Dialog,
   DialogContent,
@@ -10,13 +10,13 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from 'afena-ui/components/dialog';
-import { Label } from 'afena-ui/components/label';
-import { RadioGroup, RadioGroupItem } from 'afena-ui/components/radio-group';
-import { Textarea } from 'afena-ui/components/textarea';
+} from 'afenda-ui/components/dialog';
+import { Label } from 'afenda-ui/components/label';
+import { RadioGroup, RadioGroupItem } from 'afenda-ui/components/radio-group';
+import { Textarea } from 'afenda-ui/components/textarea';
 import { useState } from 'react';
 
-import type { ResolvedUpdateMode } from 'afena-canon';
+import type { ResolvedUpdateMode } from 'afenda-canon';
 
 interface UpdateModeDialogProps {
   open: boolean;

@@ -1,9 +1,9 @@
 'use server';
 
-import { db, sql } from 'afena-database';
-import { compileEffective, COMPILER_VERSION } from 'afena-workflow';
+import { db, sql } from 'afenda-database';
+import { compileEffective, COMPILER_VERSION } from 'afenda-workflow';
 
-import type { BodySlot, SlotGraphPatch, WorkflowEdge, WorkflowNode } from 'afena-workflow';
+import type { BodySlot, SlotGraphPatch, WorkflowEdge, WorkflowNode } from 'afenda-workflow';
 
 interface ActionResult<T = unknown> {
   ok: boolean;

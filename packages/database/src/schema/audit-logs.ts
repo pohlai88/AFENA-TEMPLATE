@@ -1,18 +1,16 @@
-import { desc, sql } from 'drizzle-orm';
+import { sql } from 'drizzle-orm';
 import { crudPolicy, authenticatedRole } from 'drizzle-orm/neon';
-import { check, index, integer, jsonb, pgTable, primaryKey, text, timestamp, uniqueIndex, uuid } from 'drizzle-orm/pg-core';
+import { check, index, integer, jsonb, pgTable, text, timestamp, uniqueIndex, uuid } from 'drizzle-orm/pg-core';
 
 /**
  * Audit log — base + 3 JSONB payload columns.
  * Append-only: SELECT for same org, INSERT if org matches + actor matches (K-14).
  * No UPDATE/DELETE ever.
- * 
- * GAP-DB-001: Composite PK (org_id, id) for data integrity and tenant isolation.
  */
 export const auditLogs = pgTable(
   'audit_logs',
   {
-    id: uuid('id').defaultRandom().notNull(),
+    id: uuid('id').defaultRandom().primaryKey(),
     orgId: text('org_id').notNull(),
     actorUserId: text('actor_user_id').notNull(),
     actorName: text('actor_name'),
@@ -43,8 +41,7 @@ export const auditLogs = pgTable(
     diff: jsonb('diff'),
   },
   (table) => [
-    primaryKey({ columns: [table.orgId, table.id] }),
-    index('audit_logs_org_created_id_idx').on(table.orgId, desc(table.createdAt), desc(table.id)),
+    index('audit_logs_org_created_idx').on(table.orgId, table.createdAt),
     index('audit_logs_entity_timeline_idx').on(table.entityType, table.entityId, table.createdAt),
     index('audit_logs_batch_idx').on(table.batchId, table.createdAt),
     index('audit_logs_request_idx').on(table.requestId),

@@ -1,5 +1,5 @@
 import { sql } from 'drizzle-orm';
-import { check, index, jsonb, pgTable, primaryKey, text, timestamp, uuid } from 'drizzle-orm/pg-core';
+import { check, index, jsonb, pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core';
 
 import { tenantPolicy } from '../helpers/tenant-policy';
 
@@ -9,13 +9,11 @@ import { migrationJobs } from './migration-jobs';
 /**
  * Migration conflict resolutions — how conflicts were resolved.
  * Nit B: migration_job_id denormalized for job-scoped evidence queries.
- * 
- * GAP-DB-001: Composite PK (org_id, id) for data integrity and tenant isolation.
  */
 export const migrationConflictResolutions = pgTable(
   'migration_conflict_resolutions',
   {
-    id: uuid('id').defaultRandom().notNull(),
+    id: uuid('id').defaultRandom().primaryKey(),
     orgId: text('org_id').notNull(),
     conflictId: uuid('conflict_id').notNull().references(() => migrationConflicts.id),
     migrationJobId: uuid('migration_job_id').references(() => migrationJobs.id),
@@ -27,7 +25,6 @@ export const migrationConflictResolutions = pgTable(
     resolvedBy: text('resolved_by').notNull().default(sql`auth.user_id()`),
   },
   (table) => [
-    primaryKey({ columns: [table.orgId, table.id] }),
     index('migration_conflict_resolutions_conflict_idx').on(table.conflictId),
     index('migration_conflict_resolutions_job_idx').on(table.migrationJobId, table.decision),
     check('migration_conflict_resolutions_decision_chk', sql`decision IN ('merged', 'created_new', 'skipped')`),

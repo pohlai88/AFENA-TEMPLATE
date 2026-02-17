@@ -1,15 +1,21 @@
 import { notFound, redirect } from 'next/navigation';
 
-import { Button } from 'afena-ui/components/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from 'afena-ui/components/card';
-import { Input } from 'afena-ui/components/input';
-import { Label } from 'afena-ui/components/label';
+import { Button } from 'afenda-ui/components/button';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from 'afenda-ui/components/card';
+import { Input } from 'afenda-ui/components/input';
+import { Label } from 'afenda-ui/components/label';
 import { Plus } from 'lucide-react';
 
 import { createWorkflowDefinition } from '@/app/actions/workflows';
 
-import { PageHeader } from '../../../_components/crud/client/page-header';
-import { getOrgContext } from '../../../_server/org-context_server';
+import { PageHeader } from '@/app/(app)/org/[slug]/_components/crud/client/page-header';
+import { getOrgContext } from '@/app/(app)/org/[slug]/_server/org-context_server';
 
 const ENTITY_TYPES = [
   'contacts',
@@ -65,8 +71,8 @@ export default async function NewWorkflowDefinitionPage({
         <CardHeader>
           <CardTitle className="text-base">Definition Details</CardTitle>
           <CardDescription>
-            Choose an entity type and name for your workflow definition.
-            Org patches customize the default lifecycle envelope for your organization.
+            Choose an entity type and name for your workflow definition. Org patches customize the
+            default lifecycle envelope for your organization.
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -77,7 +83,7 @@ export default async function NewWorkflowDefinitionPage({
                 id="entityType"
                 name="entityType"
                 required
-                className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+                className="border-input focus-visible:ring-ring flex h-9 w-full rounded-md border bg-transparent px-3 py-1 text-sm shadow-sm transition-colors focus-visible:ring-1 focus-visible:outline-none"
               >
                 <option value="">Select entity type...</option>
                 {ENTITY_TYPES.map((et) => (
@@ -90,12 +96,7 @@ export default async function NewWorkflowDefinitionPage({
 
             <div className="space-y-2">
               <Label htmlFor="name">Definition Name</Label>
-              <Input
-                id="name"
-                name="name"
-                required
-                placeholder="e.g. Invoice Approval Workflow"
-              />
+              <Input id="name" name="name" required placeholder="e.g. Invoice Approval Workflow" />
             </div>
 
             <div className="space-y-2">
@@ -103,14 +104,15 @@ export default async function NewWorkflowDefinitionPage({
               <select
                 id="definitionKind"
                 name="definitionKind"
-                className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+                className="border-input focus-visible:ring-ring flex h-9 w-full rounded-md border bg-transparent px-3 py-1 text-sm shadow-sm transition-colors focus-visible:ring-1 focus-visible:outline-none"
               >
                 <option value="org_patch">Org Patch (customize slots)</option>
                 <option value="envelope">Envelope (system lifecycle)</option>
                 <option value="effective">Effective (compiled)</option>
               </select>
-              <p className="text-xs text-muted-foreground">
-                Most workflows should use &quot;Org Patch&quot; to customize body slots within the system envelope.
+              <p className="text-muted-foreground text-xs">
+                Most workflows should use &quot;Org Patch&quot; to customize body slots within the
+                system envelope.
               </p>
             </div>
 

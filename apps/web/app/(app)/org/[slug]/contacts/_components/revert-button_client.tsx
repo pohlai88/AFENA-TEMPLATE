@@ -2,7 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 
-import { Button } from 'afena-ui/components/button';
+import { Button } from 'afenda-ui/components/button';
 import {
   Dialog,
   DialogClose,
@@ -12,13 +12,13 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from 'afena-ui/components/dialog';
+} from 'afenda-ui/components/dialog';
 import { Undo2 } from 'lucide-react';
 import { useState } from 'react';
 
 import { executeContactAction } from '../_server/contacts.server-actions';
 
-import type { ActionEnvelope } from 'afena-canon';
+import type { ActionEnvelope } from 'afenda-canon';
 
 interface RevertButtonProps {
   contactId: string;

@@ -1,12 +1,18 @@
 import { notFound } from 'next/navigation';
 
-import { Badge } from 'afena-ui/components/badge';
-import { Button } from 'afena-ui/components/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from 'afena-ui/components/card';
+import { Badge } from 'afenda-ui/components/badge';
+import { Button } from 'afenda-ui/components/button';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from 'afenda-ui/components/card';
 import { CheckCircle2, Clock, FileText, XCircle } from 'lucide-react';
 
-import { PageHeader } from '../../../_components/crud/client/page-header';
-import { getOrgContext } from '../../../_server/org-context_server';
+import { PageHeader } from '@/app/(app)/org/[slug]/_components/crud/client/page-header';
+import { getOrgContext } from '@/app/(app)/org/[slug]/_server/org-context_server';
 
 export default async function ApprovalsInboxPage({
   params,
@@ -24,23 +30,18 @@ export default async function ApprovalsInboxPage({
 
   return (
     <div className="space-y-6">
-      <PageHeader
-        title="Approval Inbox"
-        description="Pending approval tasks assigned to you"
-      />
+      <PageHeader title="Approval Inbox" description="Pending approval tasks assigned to you" />
 
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-base">
-            <Clock className="h-4 w-4 text-muted-foreground" />
+            <Clock className="text-muted-foreground h-4 w-4" />
             Pending Approvals
           </CardTitle>
-          <CardDescription>
-            Documents waiting for your review and decision
-          </CardDescription>
+          <CardDescription>Documents waiting for your review and decision</CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="py-8 text-center text-muted-foreground">
+          <div className="text-muted-foreground py-8 text-center">
             <FileText className="mx-auto mb-3 h-8 w-8" />
             <p className="text-sm">No pending approvals at this time.</p>
             <p className="mt-1 text-xs">
@@ -61,7 +62,7 @@ export default async function ApprovalsInboxPage({
               <CheckCircle2 className="mr-1.5 h-3.5 w-3.5" />
               Approve
             </Button>
-            <span className="text-xs text-muted-foreground">
+            <span className="text-muted-foreground text-xs">
               Accept the document at its current version
             </span>
           </div>
@@ -70,7 +71,7 @@ export default async function ApprovalsInboxPage({
               <XCircle className="mr-1.5 h-3.5 w-3.5" />
               Reject
             </Button>
-            <span className="text-xs text-muted-foreground">
+            <span className="text-muted-foreground text-xs">
               Reject and return to the requester with a reason
             </span>
           </div>
@@ -78,7 +79,7 @@ export default async function ApprovalsInboxPage({
             <Badge variant="outline" className="text-xs">
               Version-Pinned (WF-03)
             </Badge>
-            <span className="text-xs text-muted-foreground">
+            <span className="text-muted-foreground text-xs">
               Decisions are bound to the exact document version shown
             </span>
           </div>

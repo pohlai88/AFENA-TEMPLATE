@@ -32,7 +32,7 @@ export function createLogger(context?: LogContext): Logger {
   };
 
   const pinoOpts: pino.LoggerOptions = {
-    name: config.name ?? config.base?.service ?? 'afena',
+    name: config.name ?? config.base?.service ?? 'afenda',
     level: config.level ?? 'info',
     timestamp: config.timestamp !== false ? pino.stdTimeFunctions.isoTime : false,
     depthLimit: 5,
@@ -76,18 +76,12 @@ export function getLogger(): Logger {
 // ---------------------------------------------------------------------------
 
 /** Create a child logger scoped to a CRUD-SAP component. */
-export function createComponentLogger(
-  parent: Logger,
-  component: ComponentName
-): Logger {
+export function createComponentLogger(parent: Logger, component: ComponentName): Logger {
   return parent.child({ component });
 }
 
 /** Create a child logger for audit channel with stable schema. */
-export function createAuditLogger(
-  parent: Logger,
-  ctx: Omit<AuditLogContext, 'channel'>
-): Logger {
+export function createAuditLogger(parent: Logger, ctx: Omit<AuditLogContext, 'channel'>): Logger {
   return parent.child({ channel: 'audit' as const, ...ctx });
 }
 
@@ -95,17 +89,11 @@ export function createAuditLogger(
 // Backward-compatible helpers
 // ---------------------------------------------------------------------------
 
-export function createChildLogger(
-  parent: Logger,
-  options: ChildLoggerOptions
-): Logger {
+export function createChildLogger(parent: Logger, options: ChildLoggerOptions): Logger {
   return parent.child(options);
 }
 
-export function createRequestLogger(
-  parent: Logger,
-  options: RequestLoggerOptions
-): Logger {
+export function createRequestLogger(parent: Logger, options: RequestLoggerOptions): Logger {
   const { requestId, ...context } = options;
 
   return parent.child({
@@ -116,19 +104,10 @@ export function createRequestLogger(
 
 export function logRequest(
   logger: Logger,
-  options: RequestLoggerOptions & { error?: Error }
+  options: RequestLoggerOptions & { error?: Error },
 ): void {
-  const {
-    requestId,
-    method,
-    url,
-    statusCode,
-    responseTime,
-    userAgent,
-    ip,
-    error,
-    ...context
-  } = options;
+  const { requestId, method, url, statusCode, responseTime, userAgent, ip, error, ...context } =
+    options;
 
   const logData = {
     requestId,
@@ -142,10 +121,7 @@ export function logRequest(
   };
 
   if (error) {
-    logger.error(
-      { ...logData, err: error },
-      'Request failed'
-    );
+    logger.error({ ...logData, err: error }, 'Request failed');
   } else if (statusCode && statusCode >= 400) {
     logger.warn(logData, 'Request completed with warning');
   } else {
@@ -157,7 +133,7 @@ export function logPerformance(
   logger: Logger,
   operation: string,
   duration: number,
-  metadata?: Record<string, unknown>
+  metadata?: Record<string, unknown>,
 ): void {
   logger.info(
     {
@@ -165,27 +141,23 @@ export function logPerformance(
       duration,
       ...metadata,
     },
-    `Performance: ${operation}`
+    `Performance: ${operation}`,
   );
 }
 
-export function logError(
-  logger: Logger,
-  error: Error,
-  context?: Record<string, unknown>
-): void {
+export function logError(logger: Logger, error: Error, context?: Record<string, unknown>): void {
   logger.error(
     {
       err: error,
       ...context,
     },
-    error.message || 'An error occurred'
+    error.message || 'An error occurred',
   );
 }
 
 export function withLogger<T extends Record<string, unknown>>(
   obj: T,
-  logger?: Logger
+  logger?: Logger,
 ): T & { logger: Logger } {
   return {
     ...obj,

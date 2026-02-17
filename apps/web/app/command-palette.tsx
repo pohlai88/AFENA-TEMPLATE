@@ -11,7 +11,7 @@ import {
   CommandItem,
   CommandList,
   CommandSeparator,
-} from 'afena-ui/components/command';
+} from 'afenda-ui/components/command';
 import {
   Home,
   Plus,

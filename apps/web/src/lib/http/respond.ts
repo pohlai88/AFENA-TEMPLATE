@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 
 import { mapErrorCode } from './envelope';
 
-import type { ApiResponse } from 'afena-canon';
+import type { ApiResponse } from 'afenda-canon';
 
 /**
  * Convert an ApiResponse envelope into a NextResponse with correct status + headers.

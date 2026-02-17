@@ -1,44 +1,68 @@
 {
-  "extends": "../../tsconfig.json",
+  "extends": "afenda-typescript-config/nextjs.json",
   "compilerOptions": {
-    "target": "ES2017",
-    "lib": ["DOM", "DOM.Iterable", "ES2022"],
-    "allowJs": true,
-    "skipLibCheck": true,
-    "strict": true,
-    "noEmit": false,
-    "declaration": false,
-    "declarationMap": false,
-    "emitDeclarationOnly": false,
-    "esModuleInterop": true,
-    "importHelpers": false,
-    "module": "ESNext",
-    "moduleResolution": "bundler",
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "jsx": "preserve",
-    "incremental": true,
-    "composite": false,
-    "plugins": [
-      {
-        "name": "next"
-      }
-    ],
-
-    // Next.js Specific
-    "forceConsistentCasingInFileNames": true,
+    // Build Configuration
     "tsBuildInfoFile": ".next/cache/tsconfig.tsbuildinfo",
-
-    // Path Mapping
+    // Path Mapping - App-specific
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./*", "../../packages/ui/src/*"],
-      "@/ui/*": ["../../packages/ui/dist/*"],
-      "@/lib/*": ["./src/lib/*", "../../packages/ui/src/lib/*"],
-      "@/components/*": ["./components/*", "../../packages/ui/src/components/*"],
-      "@/hooks/*": ["./hooks/*", "../../packages/ui/src/hooks/*"],
-      "@/app/*": ["./app/*"],
-      "@/types/*": ["./src/types/*"]
+      // App-level @ alias - for Next.js app imports only
+      "@/*": [
+        "./*"
+      ],
+      // Shared packages - workspace dependencies
+      "@afenda/ui": [
+        "../../packages/ui/src"
+      ],
+      "@afenda/database": [
+        "../../packages/database/src"
+      ],
+      "@afenda/logger": [
+        "../../packages/logger/src"
+      ],
+      "@afenda/canon": [
+        "../../packages/canon/src"
+      ],
+      "@afenda/crud": [
+        "../../packages/crud/src"
+      ],
+      "@afenda/workflow": [
+        "../../packages/workflow/src"
+      ],
+      "@afenda/search": [
+        "../../packages/search/src"
+      ],
+      "@afenda/advisory": [
+        "../../packages/advisory/src"
+      ],
+      "@afenda/observability": [
+        "../../packages/observability/src"
+      ],
+      "@afenda/migration": [
+        "../../packages/migration/src"
+      ],
+      // Convenience aliases for UI subpaths
+      "@/ui/*": [
+        "../../packages/ui/src/*"
+      ],
+      "@/lib/*": [
+        "./src/lib/*",
+        "../../packages/ui/src/lib/*"
+      ],
+      "@/components/*": [
+        "./components/*",
+        "../../packages/ui/src/components/*"
+      ],
+      "@/hooks/*": [
+        "./hooks/*",
+        "../../packages/ui/src/hooks/*"
+      ],
+      "@/app/*": [
+        "./app/*"
+      ],
+      "@/types/*": [
+        "./src/types/*"
+      ]
     }
   },
   "include": [
@@ -51,5 +75,11 @@
     ".next/dev/types/**/*.ts",
     "./types/**/*.d.ts"
   ],
-  "exclude": ["node_modules", ".next", "dist", "build", "*.config.*"]
+  "exclude": [
+    "node_modules",
+    ".next",
+    "dist",
+    "build",
+    "*.config.*"
+  ]
 }

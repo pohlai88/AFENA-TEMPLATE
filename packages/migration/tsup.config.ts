@@ -13,8 +13,8 @@ export default defineConfig({
     'drizzle-orm/neon-http',
     'drizzle-orm/neon',
     '@neondatabase/serverless',
-    'afena-database',
-    'afena-canon',
-    'afena-logger',
+    'afenda-database',
+    'afenda-canon',
+    'afenda-logger',
   ],
 });

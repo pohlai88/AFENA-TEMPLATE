@@ -2,11 +2,11 @@ import {
   migrationJobs,
   migrationLineage,
   migrationRowSnapshots,
-} from 'afena-database';
+} from 'afenda-database';
 import { and, eq } from 'drizzle-orm';
 
 import type { CrudBridge } from './crud-bridge.js';
-import type { DbInstance } from 'afena-database';
+import type { DbInstance } from 'afenda-database';
 
 
 /**
@@ -83,11 +83,11 @@ export class RollbackEngine {
       );
 
     for (const row of lineageRows) {
-      if (!row.afenaId) continue;
+      if (!row.afendaId) continue;
 
       try {
         // Read current version for optimistic lock
-        const currentRow = await this.bridge.readRawRow(entityType, row.afenaId);
+        const currentRow = await this.bridge.readRawRow(entityType, row.afendaId);
         const currentVersion = currentRow
           ? (currentRow['version'] as number | undefined)
           : undefined;
@@ -95,7 +95,7 @@ export class RollbackEngine {
         await this.bridge.mutate({
           actionType: `${entityType}.delete`,
           entityType,
-          entityId: row.afenaId,
+          entityId: row.afendaId,
           input: {},
           expectedVersion: currentVersion,
         });
@@ -103,7 +103,7 @@ export class RollbackEngine {
       } catch (error) {
         result.failedCount++;
         result.errors.push({
-          entityId: row.afenaId,
+          entityId: row.afendaId,
           error: `Delete failed: ${String(error)}`,
         });
       }

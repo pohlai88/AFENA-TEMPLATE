@@ -45,7 +45,7 @@ export class ReportBuilder {
     this.startTime = getTimestamp();
     this.dryRun = options.dryRun ?? false;
     this.saveMarkdown = options.saveMarkdown ?? false;
-    this.outputDir = options.outputDir ?? '.afena/reports';
+    this.outputDir = options.outputDir ?? '.afenda/reports';
   }
 
   /**
@@ -129,7 +129,7 @@ export class ReportBuilder {
     // Auto-generate recommendations
     if (!this.isSuccess()) {
       recommendations.push('Review failed tasks and address errors before committing');
-      recommendations.push(`Run individual commands for detailed error messages: pnpm afena ${this.command} --help`);
+      recommendations.push(`Run individual commands for detailed error messages: pnpm afenda ${this.command} --help`);
     } else if (this.dryRun) {
       recommendations.push('Run without --dry-run to apply changes');
     } else if (totalTasks > 0) {

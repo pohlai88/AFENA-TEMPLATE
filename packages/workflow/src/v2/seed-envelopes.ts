@@ -2,7 +2,7 @@ import { generateEnvelope } from './envelope-generator';
 import { compileEffective } from './merge-compiler';
 import { COMPILER_VERSION } from './types';
 
-import type { EntityContract } from 'afena-canon';
+import type { EntityContract } from 'afenda-canon';
 
 /**
  * Seed data for a single entity type's default workflow definitions.

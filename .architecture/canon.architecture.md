@@ -1,7 +1,7 @@
-# Afena Canon (Type Authority) — Architecture Reference
+# afenda Canon (Type Authority) — Architecture Reference
 
-> **Auto-generated** by `afena readme gen` at 2026-02-16T12:44:12Z. Do not edit — regenerate instead.
-> **Package:** `afena-canon` (`packages/canon`)
+> **Auto-generated** by `afenda readme gen` at 2026-02-16T12:44:12Z. Do not edit — regenerate instead.
+> **Package:** `afenda-canon` (`packages/canon`)
 > **Purpose:** Single source of truth for all types, schemas, enums, and capability definitions across the monorepo.
 
 ---
@@ -190,8 +190,8 @@ packages/canon/src/
 
 ### Internal (workspace)
 
-- `afena-eslint-config`
-- `afena-typescript-config`
+- `afenda-eslint-config`
+- `afenda-typescript-config`
 
 ### External
 

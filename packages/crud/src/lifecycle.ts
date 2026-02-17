@@ -1,6 +1,6 @@
-import { LifecycleError } from 'afena-canon';
+import { LifecycleError } from 'afenda-canon';
 
-import type { MutationSpec } from 'afena-canon';
+import type { MutationSpec } from 'afenda-canon';
 
 /**
  * Lifecycle guard — enforced BEFORE policy, absolute.

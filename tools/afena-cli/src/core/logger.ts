@@ -12,7 +12,7 @@ function stripAnsi(input: string): string {
 }
 
 const isCI = !!process.env.CI;
-const isVerbose = !!process.env.AFENA_VERBOSE;
+const isVerbose = !!process.env.afenda_VERBOSE;
 const isJsonOutput = process.argv.includes('--json');
 
 function formatForOutput(msg: string): string {

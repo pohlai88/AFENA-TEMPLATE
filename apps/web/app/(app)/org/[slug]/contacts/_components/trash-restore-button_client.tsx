@@ -2,13 +2,13 @@
 
 import { useRouter } from 'next/navigation';
 
-import { Button } from 'afena-ui/components/button';
+import { Button } from 'afenda-ui/components/button';
 import { RotateCcw } from 'lucide-react';
 import { useState } from 'react';
 
 import { executeContactAction } from '../_server/contacts.server-actions';
 
-import type { ActionEnvelope, ResolvedActions } from 'afena-canon';
+import type { ActionEnvelope, ResolvedActions } from 'afenda-canon';
 
 interface TrashRestoreButtonProps {
   orgId: string;

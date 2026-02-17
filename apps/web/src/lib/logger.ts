@@ -1,4 +1,4 @@
-import { createComponentLogger, createLogger, getLogger } from 'afena-logger';
+import { createComponentLogger, createLogger, getLogger } from 'afenda-logger';
 
 // Base singleton — initialized once with service context
 const base = createLogger({

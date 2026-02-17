@@ -9,6 +9,6 @@ import { fileURLToPath } from 'url';
 const __dirname = dirname(fileURLToPath(import.meta.url));
 config({ path: resolve(__dirname, '../.env') });
 
-const { backfillSearchDocuments } = await import('afena-search');
+const { backfillSearchDocuments } = await import('afenda-search');
 const result = await backfillSearchDocuments();
 console.log('Bootstrap:', result);

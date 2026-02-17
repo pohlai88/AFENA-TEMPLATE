@@ -1,6 +1,6 @@
-import { sql } from 'afena-database';
+import { sql } from 'afenda-database';
 
-import type { Channel, GovernorPreset } from 'afena-canon';
+import type { Channel, GovernorPreset } from 'afenda-canon';
 import type { NeonHttpDatabase } from 'drizzle-orm/neon-http';
 
 /**
@@ -55,7 +55,7 @@ export function buildGovernorConfig(
   }
   return {
     ...base,
-    applicationName: `afena:${channel ?? 'web'}:org=${orgId}`,
+    applicationName: `afenda:${channel ?? 'web'}:org=${orgId}`,
   };
 }
 

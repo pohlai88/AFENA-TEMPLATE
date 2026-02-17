@@ -17,10 +17,10 @@ import {
   VIS_POLICY,
   inferKindFromVerb,
   parseCapabilityKey,
-} from 'afena-canon';
+} from 'afenda-canon';
 
 import type { ScanResult } from '../collectors/surface-scanner';
-import type { CapabilityException, CapabilityKind } from 'afena-canon';
+import type { CapabilityException, CapabilityKind } from 'afenda-canon';
 
 export type Vis02Severity = 'error' | 'warn';
 

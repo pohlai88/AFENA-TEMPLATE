@@ -16,7 +16,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarRail,
-} from 'afena-ui/components/sidebar';
+} from 'afenda-ui/components/sidebar';
 
 import { OrgSwitcher } from '@/app/components/org-switcher';
 

@@ -1,4 +1,4 @@
-import { sql } from 'afena-database';
+import { sql } from 'afenda-database';
 
 /**
  * Enqueue a search index update in the mutate() transaction (GAP-DB-004).

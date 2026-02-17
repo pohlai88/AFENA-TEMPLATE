@@ -1,4 +1,4 @@
-# Afena Workflow V2 — Contracted Workflow Envelope (Ratification Draft)
+# afenda Workflow V2 — Contracted Workflow Envelope (Ratification Draft)
 
 > **Document:** `.PRD/workflow.md`
 > **Monorepo root:** `C:\AI-BOS\AFENDA-NEXUS`
@@ -72,14 +72,14 @@ Workflow equivalent of K-01 through K-15. Every one must be provable.
 
 ## Why NOT n8n / Camunda / Temporal
 
-| Engine                     | Strength                             | Why wrong for AFENA                                                                                                       |
+| Engine                     | Strength                             | Why wrong for afenda                                                                                                       |
 | -------------------------- | ------------------------------------ | ------------------------------------------------------------------------------------------------------------------------- |
 | **n8n**                    | Integration automation (Zapier-like) | Doesn't understand doc lifecycle, multi-tenancy, or ERP audit trails. Impedance mismatch on every node.                   |
 | **Camunda**                | Enterprise BPMN process modeling     | Requires separate Zeebe engine + BPMN XML. Massive infra overhead for a SaaS. Doesn't share your DB/RLS/audit.            |
 | **Temporal**               | Durable long-running code workflows  | Requires separate Temporal server + worker fleet. Overkill when your workflows are document-centric, not compute-centric. |
 | **ERP-native (this plan)** | Workflow lives with the data         | Same DB, same RLS, same `mutate()` kernel, same audit trail. Zero impedance mismatch.                                     |
 
-**The decisive factor:** AFENA's `mutate()` kernel is the single write path (K-01). Any external workflow engine would either bypass it (breaking invariants) or awkwardly call back into it (adding latency + failure modes). Building natively means every workflow step is a first-class mutation with full audit + versioning + policy + lifecycle enforcement.
+**The decisive factor:** afenda's `mutate()` kernel is the single write path (K-01). Any external workflow engine would either bypass it (breaking invariants) or awkwardly call back into it (adding latency + failure modes). Building natively means every workflow step is a first-class mutation with full audit + versioning + policy + lifecycle enforcement.
 
 **n8n's real value** (integration connectors) can be captured later via `webhook_out` nodes — fire outbound HTTP to n8n/Make/Zapier for external integrations, while keeping core ERP flow in-house.
 
@@ -1234,25 +1234,25 @@ wait_timer (monthly cron) → action: "Generate royalty statement"
 
 - **Pattern:** Document states + transitions + conditions + multi-level approvals. Workflow states = lifecycle statuses for multi-stage approvals.
 - **Learn:** State → transition rules, role permissions, multi-stage approval UX.
-- **Afena takeaway:** Validates our lifecycle-first approach. Study their state transition UI. Our edit windows generalize their "allow edit" per-state flag.
+- **afenda takeaway:** Validates our lifecycle-first approach. Study their state transition UI. Our edit windows generalize their "allow edit" per-state flag.
 
 ### Odoo Automated Actions
 
 - **Pattern:** Trigger taxonomy: "On Creation", "On Update", "Based on Time Condition", "Based on Form Modification". Condition + action pairs.
 - **Learn:** Trigger taxonomy and "apply on + action to do" UX pattern. Clean separation of when/what.
-- **Afena takeaway:** Our trigger types (§ Workflow Triggers) map cleanly to Odoo's model. Stay lifecycle-first, not event-first.
+- **afenda takeaway:** Our trigger types (§ Workflow Triggers) map cleanly to Odoo's model. Stay lifecycle-first, not event-first.
 
 ### SAP B1 Approval Procedures
 
 - **Pattern:** Approval templates with originators (who triggers), approvers (who decides), criteria (document types, thresholds), and multi-stage routing.
 - **Learn:** Template-based approval configuration. Threshold + hierarchy routing. Originator/approver separation.
-- **Afena takeaway:** Our composable approval chains (chain-backed + inline) cover this. Study their template UX for our settings UI.
+- **afenda takeaway:** Our composable approval chains (chain-backed + inline) cover this. Study their template UX for our settings UI.
 
 ### ServiceNow Flow Designer
 
 - **Pattern:** "Ask for Approval" action patterns + approval inbox with routing, delegation, escalation.
 - **Learn:** Approval inbox UX — how approvals are presented to users, delegation workflows, escalation timers.
-- **Afena takeaway:** Directly informs our approval inbox design (Phase 3) and escalation branch patterns (Use Case D).
+- **afenda takeaway:** Directly informs our approval inbox design (Phase 3) and escalation branch patterns (Use Case D).
 
 ---
 

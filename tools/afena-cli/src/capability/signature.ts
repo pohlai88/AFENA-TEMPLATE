@@ -30,11 +30,11 @@ export function computeSignature(repoRoot: string): string {
     addFileSig(parts, repoRoot, toPosix(p.replace(repoRoot.replace(/\\/g, '/'), '').replace(/^\//, '')));
   }
 
-  // afena.registry.json
-  addFileSig(parts, repoRoot, 'afena.registry.json');
+  // afenda.registry.json
+  addFileSig(parts, repoRoot, 'afenda.registry.json');
 
-  // .afenarc config files
-  for (const name of ['.afenarc.json', '.afenarc.yaml', 'afena.config.js']) {
+  // .afendarc config files
+  for (const name of ['.afendarc.json', '.afendarc.yaml', 'afenda.config.js']) {
     addFileSig(parts, repoRoot, name);
   }
 

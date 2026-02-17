@@ -1,0 +1,22 @@
+{
+    "name": "afenda-mdm",
+    "version": "0.1.0",
+    "private": true,
+    "type": "module",
+    "exports": {
+        ".": "./src/index.ts"
+    },
+    "scripts": {
+        "type-check": "tsc --noEmit"
+    },
+    "dependencies": {
+        "afenda-canon": "workspace:*",
+        "afenda-database": "workspace:*",
+        "zod": "catalog:"
+    },
+    "devDependencies": {
+        "afenda-eslint-config": "workspace:*",
+        "afenda-typescript-config": "workspace:*",
+        "typescript": "catalog:"
+    }
+}

@@ -1,8 +1,8 @@
-# Afena Interaction Kernel (CRUD-SAP) — Architecture Reference
+# afenda Interaction Kernel (CRUD-SAP) — Architecture Reference
 
-> **Auto-generated** by `afena readme gen` at 2026-02-16T12:44:12Z. Do not edit — regenerate instead.
-> **Package:** `afena-crud` (`packages/crud`)
-> **Purpose:** Single mutation entry point for all domain data — the Afena Interaction Kernel (AIK).
+> **Auto-generated** by `afenda readme gen` at 2026-02-16T12:44:12Z. Do not edit — regenerate instead.
+> **Package:** `afenda-crud` (`packages/crud`)
+> **Purpose:** Single mutation entry point for all domain data — the afenda Interaction Kernel (AIK).
 
 ---
 
@@ -201,12 +201,12 @@ packages/crud/src/
 
 ### Internal (workspace)
 
-- `afena-canon`
-- `afena-database`
-- `afena-eslint-config`
-- `afena-logger`
-- `afena-typescript-config`
-- `afena-workflow`
+- `afenda-canon`
+- `afenda-database`
+- `afenda-eslint-config`
+- `afenda-logger`
+- `afenda-typescript-config`
+- `afenda-workflow`
 
 ### External
 

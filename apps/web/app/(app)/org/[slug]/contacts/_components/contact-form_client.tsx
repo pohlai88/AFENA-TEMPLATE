@@ -10,9 +10,9 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from 'afena-ui/components/form';
-import { Input } from 'afena-ui/components/input';
-import { Textarea } from 'afena-ui/components/textarea';
+} from 'afenda-ui/components/form';
+import { Input } from 'afenda-ui/components/input';
+import { Textarea } from 'afenda-ui/components/textarea';
 import { Building2, FileText, Mail, Phone, User } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 
@@ -25,7 +25,7 @@ import { contactFormSchema } from './contact-fields';
 
 import type { ContactFormValues } from './contact-fields';
 import type { FormState } from '../../_components/crud/client/entity-form-shell_client';
-import type { ActionEnvelope } from 'afena-canon';
+import type { ActionEnvelope } from 'afenda-canon';
 
 interface ContactFormProps {
   orgSlug: string;

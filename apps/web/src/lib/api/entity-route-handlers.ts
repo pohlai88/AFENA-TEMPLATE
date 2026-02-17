@@ -1,14 +1,14 @@
 import { NextRequest } from 'next/server';
 
-import { ENTITY_TYPES } from 'afena-canon';
-import { loadFieldDefs } from 'afena-crud';
+import { ENTITY_TYPES } from 'afenda-canon';
+import { loadFieldDefs } from 'afenda-crud';
 
 import { generateEntityActions } from '@/lib/actions/entity-actions';
 
 import { withAuthOrApiKey } from './with-auth-or-api-key';
 
 import type { AuthSession } from './with-auth';
-import type { EntityType, JsonValue } from 'afena-canon';
+import type { EntityType, JsonValue } from 'afenda-canon';
 
 /**
  * Validate that a string is a registered entity type.

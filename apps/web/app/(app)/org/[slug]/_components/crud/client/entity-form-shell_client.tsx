@@ -1,8 +1,8 @@
 'use client';
 
 
-import { Button } from 'afena-ui/components/button';
-import { Card, CardContent, CardFooter } from 'afena-ui/components/card';
+import { Button } from 'afenda-ui/components/button';
+import { Card, CardContent, CardFooter } from 'afenda-ui/components/card';
 import { useActionState } from 'react';
 
 /**

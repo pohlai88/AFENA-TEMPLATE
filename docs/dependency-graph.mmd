@@ -1,0 +1,157 @@
+```mermaid
+graph TD
+    %% Layer 0: Configuration
+    eslint[eslint-config]
+    typescript[typescript-config]
+    
+    %% Layer 1: Foundation
+    canon[canon<br/>Types & Schemas]
+    database[database<br/>Schema & ORM]
+    logger[logger<br/>Logging]
+    ui[ui<br/>Components]
+    
+    %% Layer 2: Domain Services
+    accounting[accounting<br/>Financial Domain]
+    inventory[inventory<br/>Inventory & MFG]
+    crm[crm<br/>CRM & Pricing]
+    intercompany[intercompany<br/>IC Transactions]
+    workflow[workflow<br/>Rules Engine]
+    advisory[advisory<br/>Analytics]
+    search[search<br/>Full-text Search]
+    migration[migration<br/>Data Migration]
+    
+    %% Layer 3: Application
+    crud[crud<br/>Entity Operations]
+    
+    %% Layer 0 → Layer 1 (Foundation uses Config)
+    canon -.-> typescript
+    database -.-> typescript
+    logger -.-> typescript
+    ui -.-> typescript
+    
+    %% Layer 2 → Layer 1 (Domain Services use Foundation)
+    accounting --> canon
+    accounting --> database
+    accounting --> logger
+    
+    inventory --> canon
+    inventory --> database
+    inventory --> logger
+    
+    crm --> canon
+    crm --> database
+    crm --> logger
+    
+    intercompany --> canon
+    intercompany --> database
+    intercompany --> logger
+    
+    workflow --> canon
+    workflow --> database
+    
+    advisory --> canon
+    advisory --> database
+    
+    search --> database
+    search --> logger
+    
+    migration --> canon
+    migration --> database
+    migration --> logger
+    
+    %% Layer 3 → Layer 2 (Application uses Domain Services)
+    crud --> canon
+    crud --> database
+    crud --> logger
+    crud --> workflow
+    crud --> accounting
+    crud --> inventory
+    crud --> crm
+    crud --> intercompany
+    
+    %% Styling
+    classDef layer0 fill:#e1f5ff,stroke:#01579b,stroke-width:2px
+    classDef layer1 fill:#f3e5f5,stroke:#4a148c,stroke-width:2px
+    classDef layer2 fill:#e8f5e9,stroke:#1b5e20,stroke-width:2px
+    classDef layer3 fill:#fff3e0,stroke:#e65100,stroke-width:2px
+    
+    class eslint,typescript layer0
+    class canon,database,logger,ui layer1
+    class accounting,inventory,crm,intercompany,workflow,advisory,search,migration layer2
+    class crud layer3
+```
+
+## Dependency Matrix
+
+### Currently Extracted Domain Services
+
+| Package | Layer | Depends On | Services/Features |
+|---------|-------|-----------|-------------------|
+| **accounting** | 2 | canon, database, logger | Tax calc, FX lookup, depreciation, revenue recognition, payment allocation, fiscal period, bank reconciliation |
+| **inventory** | 2 | canon, database, logger | UOM conversion, 3-way matching, manufacturing BOM, lot recall, landed cost |
+| **crm** | 2 | canon, database, logger | Pricing engine, discount evaluation, budget enforcement |
+| **intercompany** | 2 | canon, database, logger | IC transactions, matching, elimination entries, reconciliation |
+
+### Domain Package Statistics
+
+- **Total Domain Packages**: 8 (4 new + 4 existing)
+- **Services Extracted from CRUD**: 18 services moved to domain packages
+- **Remaining in CRUD**: 5 infrastructure services (custom-field-sync, custom-field-validation, doc-number, webhook-dispatch, workflow-edit-window, workflow-outbox, search-outbox)
+
+### Dependency Validation
+
+```bash
+# Check for circular dependencies
+pnpm run validate:deps
+
+# Expected: ✓ Zero circular dependencies
+# Expected: ✓ All layers follow dependency rules
+# Expected: ✓ No boundary violations (except documented advisory exception)
+```
+
+## Evolution Notes
+
+### Phase 1: Foundation Established ✅
+- `canon`: 211+ entity types
+- `database`: 150+ tables
+- `logger`: Centralized logging
+- `ui`: 60+ components
+
+### Phase 2: Domain Extraction (Current)
+- ✅ `accounting`: Financial domain services
+- ✅ `inventory`: Inventory & manufacturing
+- ✅ `crm`: Customer relationship & pricing
+- ✅ `intercompany`: Multi-entity transactions
+
+### Phase 3: Future Domains
+- `procurement`: Purchase requisitions, POs, receiving
+- `sales`: Sales orders, quotations, fulfillment
+- `hr`: Payroll, benefits, performance
+- `project`: Project accounting, time tracking, billing
+
+## Migration Notes
+
+**Before Domain Extraction**:
+```
+crud
+├── src/services/ (23 services - doing too much)
+│   ├── tax-calc.ts
+│   ├── pricing-engine.ts
+│   ├── manufacturing-engine.ts
+│   └── ... (20 more)
+```
+
+**After Domain Extraction**:
+```
+accounting/        → 7 services (tax, fx, depreciation, etc.)
+inventory/         → 5 services (uom, 3-way-match, mfg, etc.)
+crm/               → 3 services (pricing, discounts, budgets)
+intercompany/      → 4 functions (create, match, eliminate, reconcile)
+crud/              → 7 infrastructure services (doc-number, webhooks, etc.)
+```
+
+**Benefits**:
+- **Focused packages**: Each domain owns its logic
+- **Testability**: Domain services tested independently
+- **Scalability**: Add new domains without bloating CRUD
+- **Clarity**: Clear boundaries and responsibilities

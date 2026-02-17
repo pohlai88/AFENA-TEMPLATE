@@ -1,5 +1,5 @@
 {
-  "name": "afena-crud",
+  "name": "afenda-crud",
   "version": "0.1.0",
   "private": true,
   "main": "./src/index.ts",
@@ -14,10 +14,14 @@
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
-    "afena-canon": "workspace:*",
-    "afena-database": "workspace:*",
-    "afena-logger": "workspace:*",
-    "afena-workflow": "workspace:*",
+    "afenda-accounting": "workspace:*",
+    "afenda-canon": "workspace:*",
+    "afenda-crm": "workspace:*",
+    "afenda-database": "workspace:*",
+    "afenda-intercompany": "workspace:*",
+    "afenda-inventory": "workspace:*",
+    "afenda-logger": "workspace:*",
+    "afenda-workflow": "workspace:*",
     "drizzle-orm": "^0.44.0",
     "fast-json-patch": "catalog:",
     "ioredis": "^5.4.1"
@@ -25,8 +29,8 @@
   "devDependencies": {
     "@types/node": "catalog:",
     "@types/pg": "^8.16.0",
-    "afena-eslint-config": "workspace:^",
-    "afena-typescript-config": "workspace:*",
+    "afenda-eslint-config": "workspace:^",
+    "afenda-typescript-config": "workspace:*",
     "pg": "^8.18.0",
     "tslib": "catalog:",
     "tsup": "catalog:",

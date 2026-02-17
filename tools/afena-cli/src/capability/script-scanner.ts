@@ -7,7 +7,7 @@ import {
 } from '../core/parse-json';
 import { toPosix, toRelativePosix } from '../core/paths';
 
-import type { AfenaConfig, Registry, UngroupedScript, PackageInfo } from '../types';
+import type { afendaConfig, Registry, UngroupedScript, PackageInfo } from '../types';
 
 /**
  * Scan all workspace package.json files and find scripts not registered in the registry.
@@ -15,7 +15,7 @@ import type { AfenaConfig, Registry, UngroupedScript, PackageInfo } from '../typ
 export function scanScripts(
   repoRoot: string,
   registry: Registry,
-  config: AfenaConfig
+  config: afendaConfig
 ): { ungrouped: UngroupedScript[]; packages: PackageInfo[] } {
   const { commonScripts, customPrefixes, scanPaths } = config.discovery;
   const ignoreScripts = new Set(registry.ignore.scripts);
@@ -119,15 +119,15 @@ function collectRegisteredScripts(registry: Registry): Set<string> {
 }
 
 /**
- * Suggest an afena command name based on script name patterns.
+ * Suggest an afenda command name based on script name patterns.
  */
 function suggestCommand(scriptName: string): string {
-  if (scriptName.startsWith('type-') || scriptName.startsWith('type:')) return 'afena types';
-  if (scriptName.startsWith('docs:') || scriptName.startsWith('doc:')) return 'afena docs';
-  if (scriptName.startsWith('gen:') || scriptName.startsWith('generate')) return 'afena types';
-  if (scriptName.startsWith('sync:')) return 'afena types';
-  if (scriptName.startsWith('guard:')) return 'afena guard';
-  if (scriptName.includes('clean')) return 'afena clean';
-  if (scriptName.includes('watch')) return 'afena dev';
-  return `afena (unclassified: ${scriptName})`;
+  if (scriptName.startsWith('type-') || scriptName.startsWith('type:')) return 'afenda types';
+  if (scriptName.startsWith('docs:') || scriptName.startsWith('doc:')) return 'afenda docs';
+  if (scriptName.startsWith('gen:') || scriptName.startsWith('generate')) return 'afenda types';
+  if (scriptName.startsWith('sync:')) return 'afenda types';
+  if (scriptName.startsWith('guard:')) return 'afenda guard';
+  if (scriptName.includes('clean')) return 'afenda clean';
+  if (scriptName.includes('watch')) return 'afenda dev';
+  return `afenda (unclassified: ${scriptName})`;
 }

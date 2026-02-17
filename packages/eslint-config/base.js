@@ -68,9 +68,7 @@ module.exports = [
         },
       ],
       'import/no-duplicates': 'error',
-      // import/no-cycle is expensive (does its own parsing + file tracking).
-      // Disabled locally for speed; enforced in CI via lint:ci script.
-      'import/no-cycle': 'off',
+      'import/no-cycle': 'error',
 
       // Security rules
       'security/detect-object-injection': 'off', // Too noisy for general use
@@ -84,23 +82,26 @@ module.exports = [
         'error',
         {
           selector: "CallExpression[callee.object.name='console']",
-          message: 'Use afena-logger instead of console.* (INVARIANT-08)',
+          message: 'Use afenda-logger instead of console.* (INVARIANT-08)',
         },
         {
           selector: "CallExpression[callee.object.property.name='console']",
-          message: 'Use afena-logger instead of console.* (INVARIANT-08)',
+          message: 'Use afenda-logger instead of console.* (INVARIANT-08)',
         },
         {
           selector: "CallExpression[callee.object.name='db'][callee.property.name='insert']",
-          message: 'Direct db.insert() is forbidden — use mutate() from afena-crud (INVARIANT-01/K-01)',
+          message:
+            'Direct db.insert() is forbidden — use mutate() from afenda-crud (INVARIANT-01/K-01)',
         },
         {
           selector: "CallExpression[callee.object.name='db'][callee.property.name='update']",
-          message: 'Direct db.update() is forbidden — use mutate() from afena-crud (INVARIANT-01/K-01)',
+          message:
+            'Direct db.update() is forbidden — use mutate() from afenda-crud (INVARIANT-01/K-01)',
         },
         {
           selector: "CallExpression[callee.object.name='db'][callee.property.name='delete']",
-          message: 'Direct db.delete() is forbidden — use mutate() from afena-crud (INVARIANT-01/K-01)',
+          message:
+            'Direct db.delete() is forbidden — use mutate() from afenda-crud (INVARIANT-01/K-01)',
         },
         {
           selector: "CallExpression[callee.object.name='dbRo'][callee.property.name='insert']",
@@ -132,8 +133,7 @@ module.exports = [
     files: ['**/*.ts', '**/*.tsx'],
     languageOptions: {
       parserOptions: {
-        projectService: true,
-        project: null, // explicit null — prevents IDE ESLint LS from injecting project alongside projectService
+        project: true,
       },
     },
     rules: {
@@ -149,6 +149,20 @@ module.exports = [
       '@typescript-eslint/no-unsafe-call': 'warn',
       '@typescript-eslint/no-unsafe-member-access': 'warn',
       '@typescript-eslint/no-unsafe-return': 'warn',
+    },
+  },
+
+  // ── Test file overrides ─────────────────────────────────────
+  {
+    files: ['**/*.test.*', '**/*.spec.*'],
+    languageOptions: {
+      globals: {
+        jest: true,
+      },
+    },
+    rules: {
+      '@typescript-eslint/no-explicit-any': 'off',
+      'security/detect-object-injection': 'off',
     },
   },
 ];

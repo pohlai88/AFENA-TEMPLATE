@@ -1,0 +1,5 @@
+{
+  "error": "Cannot read properties of undefined (reading 'filter')",
+  "stack": "TypeError: Cannot read properties of undefined (reading 'filter')\n    at scanScripts (C:\\AI-BOS\\AFENDA-NEXUS\\tools\\afenda-cli\\dist\\discover.js:234:30)\n    at main (C:\\AI-BOS\\AFENDA-NEXUS\\tools\\afenda-cli\\dist\\discover.js:581:44)",
+  "timestamp": "2026-02-11T08:53:08.748Z"
+}

@@ -1,6 +1,6 @@
 import { Geist, Geist_Mono } from 'next/font/google';
 
-import { Providers } from 'afena-ui/providers';
+import { Providers } from 'afenda-ui/providers';
 
 import './globals.css';
 
@@ -17,8 +17,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'Afena Nexus',
-  description: 'Afena ERP Platform',
+  title: 'afenda Nexus',
+  description: 'afenda ERP Platform',
 };
 
 export default function RootLayout({

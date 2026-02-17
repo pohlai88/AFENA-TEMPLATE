@@ -5,13 +5,13 @@ import {
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from 'afena-ui/components/accordion';
-import { AnimateOnScroll } from 'afena-ui/components/animate-on-scroll';
-import { Avatar, AvatarFallback } from 'afena-ui/components/avatar';
-import { Badge } from 'afena-ui/components/badge';
-import { Button } from 'afena-ui/components/button';
-import { Card, CardContent, CardHeader, CardTitle } from 'afena-ui/components/card';
-import { Progress } from 'afena-ui/components/progress';
+} from 'afenda-ui/components/accordion';
+import { AnimateOnScroll } from 'afenda-ui/components/animate-on-scroll';
+import { Avatar, AvatarFallback } from 'afenda-ui/components/avatar';
+import { Badge } from 'afenda-ui/components/badge';
+import { Button } from 'afenda-ui/components/button';
+import { Card, CardContent, CardHeader, CardTitle } from 'afenda-ui/components/card';
+import { Progress } from 'afenda-ui/components/progress';
 import {
   Activity,
   ArrowRight,
@@ -38,7 +38,7 @@ export default function LandingPage() {
       <header className="glass sticky top-0 z-50 border-b">
         <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-6">
           <span className="text-lg font-bold tracking-tight text-primary">
-            Afena
+            afenda
           </span>
           <div className="flex items-center gap-3">
             <ThemeToggle />
@@ -71,7 +71,7 @@ export default function LandingPage() {
         </AnimateOnScroll>
         <AnimateOnScroll animation="animate-fade-in" delay="delay-150">
           <p className="max-w-2xl text-lg text-muted-foreground">
-            Afena unifies finance, inventory, HR, and operations into one
+            afenda unifies finance, inventory, HR, and operations into one
             collaborative platform — built for teams that move fast.
           </p>
         </AnimateOnScroll>
@@ -314,7 +314,7 @@ export default function LandingPage() {
               Loved by teams who ship
             </h2>
             <p className="mt-3 text-muted-foreground">
-              Hear from teams already running their operations on Afena.
+              Hear from teams already running their operations on afenda.
             </p>
           </div>
         </AnimateOnScroll>
@@ -378,7 +378,7 @@ export default function LandingPage() {
             Ready to streamline your operations?
           </h2>
           <p className="mt-3 text-muted-foreground">
-            Join teams already running on Afena. Free during Early Access.
+            Join teams already running on afenda. Free during Early Access.
           </p>
           <div className="mt-6">
             <Button size="lg" asChild>
@@ -414,7 +414,7 @@ export default function LandingPage() {
         </div>
         <div className="border-t">
           <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-6 text-sm text-muted-foreground">
-            <span>&copy; {new Date().getFullYear()} Afena</span>
+            <span>&copy; {new Date().getFullYear()} afenda</span>
             <div className="flex items-center gap-3">
               <ThemeToggle />
             </div>
@@ -482,7 +482,7 @@ const stats = [
 
 const testimonials = [
   {
-    quote: 'Afena replaced three separate tools for us. The unified dashboard alone saved our ops team 10 hours a week.',
+    quote: 'afenda replaced three separate tools for us. The unified dashboard alone saved our ops team 10 hours a week.',
     name: 'Sarah Chen',
     role: 'COO, TechFlow',
     initials: 'SC',
@@ -503,7 +503,7 @@ const testimonials = [
 
 const faqs = [
   {
-    q: 'Is Afena really free during Early Access?',
+    q: 'Is afenda really free during Early Access?',
     a: 'Yes. All core modules are free during Early Access. We\'ll introduce paid plans for advanced features (AI insights, premium support) after GA, but early adopters get a permanent discount.',
   },
   {
@@ -515,7 +515,7 @@ const faqs = [
     a: 'We provide CSV/API import tools and a dedicated migration guide. For enterprise migrations, our team offers hands-on support to map your existing data model.',
   },
   {
-    q: 'What tech stack does Afena use?',
+    q: 'What tech stack does afenda use?',
     a: 'Next.js 16, Neon Postgres (serverless), Drizzle ORM, and a custom design system built on shadcn/ui. Everything is TypeScript end-to-end.',
   },
 ];

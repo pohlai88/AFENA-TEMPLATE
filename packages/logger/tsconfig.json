@@ -1,13 +1,18 @@
 {
-  "extends": "afena-typescript-config/react-library.json",
+  "extends": "afenda-typescript-config/base.json",
   "compilerOptions": {
     "composite": true,
-    "noEmit": false,
-    "declaration": true,
-    "declarationMap": true,
     "outDir": "./dist",
     "tsBuildInfoFile": "./dist/.tsbuildinfo"
   },
-  "include": ["src/**/*", "src/**/*.ts", "src/**/*.tsx"],
-  "exclude": ["node_modules", "dist", "build", "**/*.test.*", "**/*.spec.*", "**/*.stories.*"]
+  "include": [
+    "src/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "build",
+    "**/*.test.*",
+    "**/*.spec.*"
+  ]
 }

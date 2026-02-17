@@ -7,7 +7,7 @@ import {
   migrationCheckpoints,
   migrationQuarantine,
   migrationMergeExplanations,
-} from 'afena-database';
+} from 'afenda-database';
 import { and, eq, inArray, sql } from 'drizzle-orm';
 import pLimit from 'p-limit';
 
@@ -45,7 +45,7 @@ import type {
   StepCheckpoint,
   ConflictThresholds,
 } from '../types/index.js';
-import type { DbInstance } from 'afena-database';
+import type { DbInstance } from 'afenda-database';
 
 /**
  * Concrete SQL migration pipeline.
@@ -74,7 +74,7 @@ export interface SqlPipelineConfig {
 }
 
 export class SqlMigrationPipeline extends MigrationPipelineBase {
-  private readonly afenaDb: DbInstance;
+  private readonly afendaDb: DbInstance;
   private readonly queryBuilder: QueryBuilder;
   private readonly conflictDetector: ConflictDetector;
   private readonly writeAdapter: EntityWriteAdapter;
@@ -98,7 +98,7 @@ export class SqlMigrationPipeline extends MigrationPipelineBase {
     config: SqlPipelineConfig
   ) {
     super(job, context, config.pipelineDb);
-    this.afenaDb = config.db;
+    this.afendaDb = config.db;
     this.queryBuilder = config.queryBuilder;
     this.conflictDetector = config.conflictDetector;
     this.writeAdapter = config.writeAdapter;
@@ -193,7 +193,7 @@ export class SqlMigrationPipeline extends MigrationPipelineBase {
     const systemName = this.resolveSystemName();
 
     // 1. Bulk lineage prefetch (single query)
-    const existingLineage = await this.afenaDb
+    const existingLineage = await this.afendaDb
       .select()
       .from(migrationLineage)
       .where(
@@ -205,9 +205,9 @@ export class SqlMigrationPipeline extends MigrationPipelineBase {
         )
       );
 
-    const lineageMap = new Map<string, { afenaId: string | null; state: string }>();
+    const lineageMap = new Map<string, { afendaId: string | null; state: string }>();
     for (const line of existingLineage) {
-      lineageMap.set(line.legacyId, { afenaId: line.afenaId, state: line.state });
+      lineageMap.set(line.legacyId, { afendaId: line.afendaId, state: line.state });
     }
 
     // 2. Separate: already-migrated vs new
@@ -216,7 +216,7 @@ export class SqlMigrationPipeline extends MigrationPipelineBase {
 
     for (const record of records) {
       const lineage = lineageMap.get(record.legacyId);
-      if (lineage?.state === 'committed' && lineage.afenaId) {
+      if (lineage?.state === 'committed' && lineage.afendaId) {
         alreadyMigrated.push(record);
       } else {
         newRecords.push(record);
@@ -227,12 +227,12 @@ export class SqlMigrationPipeline extends MigrationPipelineBase {
     for (const record of alreadyMigrated) {
       const legacyKey: LegacyKey = { legacySystem: systemName, legacyId: record.legacyId };
       const lineageEntry = lineageMap.get(record.legacyId);
-      const afenaId = lineageEntry?.afenaId ?? '';
+      const afendaId = lineageEntry?.afendaId ?? '';
 
       if (this.job.conflictStrategy === 'skip') {
         actions.push({ kind: 'skip', legacyKey, reason: 'Already migrated' });
       } else {
-        actions.push({ kind: 'update', targetId: afenaId, legacyKey, data: record.data });
+        actions.push({ kind: 'update', targetId: afendaId, legacyKey, data: record.data });
       }
     }
 
@@ -408,7 +408,7 @@ export class SqlMigrationPipeline extends MigrationPipelineBase {
         }
 
         case 'manual': {
-          await this.afenaDb.insert(migrationConflicts).values({
+          await this.afendaDb.insert(migrationConflicts).values({
             orgId: this.context.orgId,
             migrationJobId: plan.jobId,
             entityType,
@@ -452,10 +452,10 @@ export class SqlMigrationPipeline extends MigrationPipelineBase {
                 }
               }
 
-              result.updated.push({ legacyId, afenaId: action.targetId });
+              result.updated.push({ legacyId, afendaId: action.targetId });
 
               if (actionKind === 'merge' && 'evidence' in action && action.evidence) {
-                await this.afenaDb.insert(migrationConflictResolutions).values({
+                await this.afendaDb.insert(migrationConflictResolutions).values({
                   orgId: this.context.orgId,
                   migrationJobId: plan.jobId,
                   conflictId: action.evidence.conflictId,
@@ -541,7 +541,7 @@ export class SqlMigrationPipeline extends MigrationPipelineBase {
         }
 
         try {
-          let afenaId: string;
+          let afendaId: string;
 
           if (this.crudBridge) {
             const mutateResult = await this.crudBridge.mutate({
@@ -557,14 +557,14 @@ export class SqlMigrationPipeline extends MigrationPipelineBase {
                 { stage: 'load' }
               );
             }
-            afenaId = mutateResult.entityId;
+            afendaId = mutateResult.entityId;
           } else {
-            afenaId = crypto.randomUUID();
+            afendaId = crypto.randomUUID();
           }
 
-          await this.commitLineage(reservation.lineageId ?? '', afenaId);
-          result.created.push({ legacyId, afenaId });
-          return { entityType, legacyId, status: 'loaded' as const, action: 'create' as const, targetId: afenaId };
+          await this.commitLineage(reservation.lineageId ?? '', afendaId);
+          result.created.push({ legacyId, afendaId });
+          return { entityType, legacyId, status: 'loaded' as const, action: 'create' as const, targetId: afendaId };
         } catch (createError) {
           await this.db.deleteReservation(reservation.lineageId ?? '');
           throw createError;
@@ -582,7 +582,7 @@ export class SqlMigrationPipeline extends MigrationPipelineBase {
   // ── P2-1: Quarantine replay ─────────────────────────────────
 
   async replayQuarantinedRecord(quarantineId: string): Promise<RecordOutcome> {
-    const rows = await this.afenaDb
+    const rows = await this.afendaDb
       .select()
       .from(migrationQuarantine)
       .where(
@@ -623,7 +623,7 @@ export class SqlMigrationPipeline extends MigrationPipelineBase {
         }
 
         try {
-          let afenaId: string;
+          let afendaId: string;
           if (this.crudBridge) {
             const mutateResult = await this.crudBridge.mutate({
               actionType: `${row.entityType}.create`,
@@ -637,18 +637,18 @@ export class SqlMigrationPipeline extends MigrationPipelineBase {
                 { stage: 'load' }
               );
             }
-            afenaId = mutateResult.entityId;
+            afendaId = mutateResult.entityId;
           } else {
-            afenaId = crypto.randomUUID();
+            afendaId = crypto.randomUUID();
           }
 
-          await this.commitLineage(reservation.lineageId ?? '', afenaId);
+          await this.commitLineage(reservation.lineageId ?? '', afendaId);
           return {
             entityType: row.entityType,
             legacyId: row.legacyId,
             status: 'loaded' as const,
             action: 'create' as const,
-            targetId: afenaId,
+            targetId: afendaId,
           };
         } catch (err) {
           await this.db.deleteReservation(reservation.lineageId ?? '');
@@ -659,7 +659,7 @@ export class SqlMigrationPipeline extends MigrationPipelineBase {
 
     // Mark quarantine row resolved on success
     if (outcome.status === 'loaded') {
-      await this.afenaDb
+      await this.afendaDb
         .update(migrationQuarantine)
         .set({ status: 'resolved', resolvedAt: new Date() })
         .where(eq(migrationQuarantine.id, quarantineId));
@@ -685,7 +685,7 @@ export class SqlMigrationPipeline extends MigrationPipelineBase {
 
     const { core, custom } = this.writeAdapter.toWriteShape(rawRow);
 
-    await this.afenaDb
+    await this.afendaDb
       .insert(migrationRowSnapshots)
       .values({
         orgId: this.context.orgId,
@@ -722,7 +722,7 @@ export class SqlMigrationPipeline extends MigrationPipelineBase {
       stage: outcome.failureStage,
     });
 
-    await this.afenaDb
+    await this.afendaDb
       .insert(migrationQuarantine)
       .values({
         orgId: this.context.orgId,
@@ -751,7 +751,7 @@ export class SqlMigrationPipeline extends MigrationPipelineBase {
     entityType: string,
     checkpoint: StepCheckpoint,
   ): Promise<void> {
-    await this.afenaDb
+    await this.afendaDb
       .insert(migrationCheckpoints)
       .values({
         orgId: this.context.orgId,
@@ -780,7 +780,7 @@ export class SqlMigrationPipeline extends MigrationPipelineBase {
     jobId: string,
     entityType: string,
   ): Promise<StepCheckpoint | null> {
-    const rows = await this.afenaDb
+    const rows = await this.afendaDb
       .select()
       .from(migrationCheckpoints)
       .where(
@@ -814,7 +814,7 @@ export class SqlMigrationPipeline extends MigrationPipelineBase {
     scoreTotal: number,
     reasons: Array<{ field: string; matchType: string; scoreContribution: number; legacyValue?: string; candidateValue?: string }>,
   ): Promise<void> {
-    await this.afenaDb
+    await this.afendaDb
       .insert(migrationMergeExplanations)
       .values({
         orgId: this.context.orgId,

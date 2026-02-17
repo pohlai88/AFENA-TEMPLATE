@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-import { db, apiKeys, sql, eq, and, isNull } from 'afena-database';
-import { runWithContext } from 'afena-logger';
+import { db, apiKeys, sql, eq, and, isNull } from 'afenda-database';
+import { runWithContext } from 'afenda-logger';
 
 import type { AuthSession } from './with-auth';
-import type { RequestContext } from 'afena-logger';
+import type { RequestContext } from 'afenda-logger';
 
 /**
  * Validate an API key from the Authorization header.

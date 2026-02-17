@@ -1,5 +1,5 @@
 /**
- * Codebase manifest emitter — generates .afena/codebase.manifest.json
+ * Codebase manifest emitter — generates .afenda/codebase.manifest.json
  * with structural metadata: package graph, schema catalog, and stats.
  */
 
@@ -80,10 +80,10 @@ export function generateManifest(
 }
 
 /**
- * Write the manifest to .afena/codebase.manifest.json.
+ * Write the manifest to .afenda/codebase.manifest.json.
  */
 export function writeManifest(repoRoot: string, manifest: CodebaseManifest): void {
-  const outPath = join(repoRoot, '.afena', 'codebase.manifest.json');
+  const outPath = join(repoRoot, '.afenda', 'codebase.manifest.json');
   mkdirSync(dirname(outPath), { recursive: true });
   writeFileSync(outPath, `${JSON.stringify(manifest, null, 2)  }\n`, 'utf-8');
 }

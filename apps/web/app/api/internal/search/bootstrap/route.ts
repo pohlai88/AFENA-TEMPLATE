@@ -1,6 +1,6 @@
 import { NextRequest } from 'next/server';
 
-import { backfillSearchDocuments } from 'afena-search';
+import { backfillSearchDocuments } from 'afenda-search';
 
 import { requireCronSecret } from '@/lib/api/with-cron-secret';
 

@@ -1,4 +1,4 @@
-const reactConfig = require('afena-eslint-config/react');
+const reactConfig = require('afenda-eslint-config/react');
 
 module.exports = [
   { ignores: ['dist/**', '*.config.*', 'engine/**'] },

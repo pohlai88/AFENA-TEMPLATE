@@ -14,7 +14,7 @@ export interface MergeEvidence {
 
 export interface FieldDecision {
   field: string;
-  source: 'legacy' | 'afena' | 'merged';
+  source: 'legacy' | 'afenda' | 'merged';
   value: unknown;
 }
 
@@ -51,8 +51,8 @@ export interface UpsertPlan {
  * Load result
  */
 export interface LoadResult {
-  created: Array<{ legacyId: string; afenaId: string }>;
-  updated: Array<{ legacyId: string; afenaId: string }>;
+  created: Array<{ legacyId: string; afendaId: string }>;
+  updated: Array<{ legacyId: string; afendaId: string }>;
   skipped: Array<{ legacyId: string; reason: string }>;
   failed: Array<{ legacyId: string; error: string }>;
 }

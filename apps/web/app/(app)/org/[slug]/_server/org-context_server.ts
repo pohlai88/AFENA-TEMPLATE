@@ -1,4 +1,4 @@
-import { db, sql } from 'afena-database';
+import { db, sql } from 'afenda-database';
 import { cache } from 'react';
 
 

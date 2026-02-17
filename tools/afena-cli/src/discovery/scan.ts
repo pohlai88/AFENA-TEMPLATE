@@ -12,9 +12,9 @@ import { log, isVerbose } from '../core/logger';
 import { safeReadJson } from '../core/parse-json';
 import { findRepoRoot } from '../core/paths';
 import { scanReadmes } from '../readme/scanner';
-import { AfenaConfigSchema, RegistrySchema } from '../types';
+import { afendaConfigSchema, RegistrySchema } from '../types';
 
-import type { AfenaConfig, Registry, DiscoveryOutput } from '../types';
+import type { afendaConfig, Registry, DiscoveryOutput } from '../types';
 
 /**
  * Discovery scanner entry point.
@@ -23,11 +23,11 @@ import type { AfenaConfig, Registry, DiscoveryOutput } from '../types';
 async function main(): Promise<void> {
   try {
     const repoRoot = findRepoRoot();
-    const afenaDir = join(repoRoot, '.afena');
+    const afendaDir = join(repoRoot, '.afenda');
 
-    // Ensure .afena directory exists
-    if (!existsSync(afenaDir)) {
-      mkdirSync(afenaDir, { recursive: true });
+    // Ensure .afenda directory exists
+    if (!existsSync(afendaDir)) {
+      mkdirSync(afendaDir, { recursive: true });
     }
 
     // Load config
@@ -78,13 +78,13 @@ async function main(): Promise<void> {
     // Write discovery.json only if content changed
     if (contentChanged) {
       writeFileSync(
-        join(afenaDir, 'discovery.json'),
+        join(afendaDir, 'discovery.json'),
         `${JSON.stringify(canonical, null, 2)  }\n`
       );
     }
 
     // Always update signature
-    writeFileSync(join(afenaDir, 'last-signature'), currentSignature);
+    writeFileSync(join(afendaDir, 'last-signature'), currentSignature);
 
     // Print report only if new warnings or verbose
     if (newWarnings || isVerbose) {
@@ -96,12 +96,12 @@ async function main(): Promise<void> {
     const stack = err instanceof Error ? err.stack : undefined;
     try {
       const repoRoot = findRepoRoot();
-      const afenaDir = join(repoRoot, '.afena');
-      if (!existsSync(afenaDir)) {
-        mkdirSync(afenaDir, { recursive: true });
+      const afendaDir = join(repoRoot, '.afenda');
+      if (!existsSync(afendaDir)) {
+        mkdirSync(afendaDir, { recursive: true });
       }
       writeFileSync(
-        join(afenaDir, 'discovery.error.json'),
+        join(afendaDir, 'discovery.error.json'),
         `${JSON.stringify({ error: msg, stack, timestamp: new Date().toISOString() }, null, 2)}\n`
       );
     } catch {
@@ -111,25 +111,25 @@ async function main(): Promise<void> {
   }
 }
 
-async function loadConfig(repoRoot: string): Promise<AfenaConfig> {
+async function loadConfig(repoRoot: string): Promise<afendaConfig> {
   try {
-    const explorer = cosmiconfig('afena');
+    const explorer = cosmiconfig('afenda');
     const result = await explorer.search(repoRoot);
     if (result?.config) {
-      return AfenaConfigSchema.parse(result.config);
+      return afendaConfigSchema.parse(result.config);
     }
   } catch (err: unknown) {
     log.debug(`Config load error: ${err instanceof Error ? err.message : String(err)}`);
   }
-  return AfenaConfigSchema.parse({});
+  return afendaConfigSchema.parse({});
 }
 
 function loadRegistry(repoRoot: string): Registry {
-  if (!existsSync(join(repoRoot, 'afena.registry.json'))) {
+  if (!existsSync(join(repoRoot, 'afenda.registry.json'))) {
     return RegistrySchema.parse({ commands: {} });
   }
   try {
-    return safeReadJson(repoRoot, ['afena.registry.json'], RegistrySchema);
+    return safeReadJson(repoRoot, ['afenda.registry.json'], RegistrySchema);
   } catch (err: unknown) {
     log.debug(`Registry load error: ${err instanceof Error ? err.message : String(err)}`);
     return RegistrySchema.parse({ commands: {} });
@@ -142,7 +142,7 @@ function printReport(discovery: DiscoveryOutput, registry: Registry): void {
   const missingCount = discovery.missingReadmes.length;
 
   const lines: string[] = [
-    `🔍 Afena CLI Discovery Report`,
+    `🔍 afenda CLI Discovery Report`,
     ``,
     `✅ Registered: ${registeredCount}    ⚠️  Ungrouped: ${ungroupedCount}   📄 No README: ${missingCount}`,
   ];
@@ -174,8 +174,8 @@ function printReport(discovery: DiscoveryOutput, registry: Registry): void {
 
   if (ungroupedCount > 0 || missingCount > 0) {
     lines.push(``);
-    if (missingCount > 0) lines.push(`pnpm afena discover --fix-readmes`);
-    if (ungroupedCount > 0) lines.push(`pnpm afena --register --dry-run`);
+    if (missingCount > 0) lines.push(`pnpm afenda discover --fix-readmes`);
+    if (ungroupedCount > 0) lines.push(`pnpm afenda --register --dry-run`);
   }
 
   log.box(lines);

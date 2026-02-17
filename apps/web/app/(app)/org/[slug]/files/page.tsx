@@ -1,5 +1,5 @@
-import { Card, CardContent, CardHeader, CardTitle } from 'afena-ui/components/card';
-import { FileUpload } from 'afena-ui/components/file-upload';
+import { Card, CardContent, CardHeader, CardTitle } from 'afenda-ui/components/card';
+import { FileUpload } from 'afenda-ui/components/file-upload';
 
 /**
  * /org/[slug]/files — standalone file management page.

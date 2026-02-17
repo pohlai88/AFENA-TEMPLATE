@@ -1,7 +1,7 @@
-# Afena Logging & Observability — Architecture Reference
+# afenda Logging & Observability — Architecture Reference
 
-> **Auto-generated** by `afena readme gen` at 2026-02-16T12:44:12Z. Do not edit — regenerate instead.
-> **Package:** `afena-logger` (`packages/logger`)
+> **Auto-generated** by `afenda readme gen` at 2026-02-16T12:44:12Z. Do not edit — regenerate instead.
+> **Package:** `afenda-logger` (`packages/logger`)
 > **Purpose:** Pino-based structured logging with AsyncLocalStorage context propagation.
 
 ---
@@ -57,8 +57,8 @@ Edge Runtime safe: ALS uses lazy `require('node:async_hooks')` with try/catch fa
 
 ### Internal (workspace)
 
-- `afena-eslint-config`
-- `afena-typescript-config`
+- `afenda-eslint-config`
+- `afenda-typescript-config`
 
 ### External
 

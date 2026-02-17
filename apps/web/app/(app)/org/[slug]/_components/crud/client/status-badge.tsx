@@ -1,4 +1,4 @@
-import { Badge } from 'afena-ui/components/badge';
+import { Badge } from 'afenda-ui/components/badge';
 
 const STATUS_CONFIG: Record<
   string,

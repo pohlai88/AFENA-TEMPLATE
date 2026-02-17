@@ -1,6 +1,7 @@
 import { sql } from 'drizzle-orm';
 import {
-  bigint,
+  date,
+  integer,
   jsonb,
   numeric,
   text,
@@ -9,9 +10,9 @@ import {
 
 // ── Money ────────────────────────────────────────────────
 
-/** Bigint minor units (cents/sen). Safe to trillions, no float rounding. */
+/** Integer minor units (cents/sen). Safe, fast, no float rounding. */
 export const moneyMinor = (name: string) =>
-  bigint(name, { mode: 'number' }).notNull().default(0);
+  integer(name).notNull().default(0);
 
 /** ISO 4217 currency code. */
 export const currencyCode = (name: string) =>
@@ -23,7 +24,24 @@ export const fxRate = (name: string) =>
 
 /** Converted amount in base currency minor units. */
 export const baseAmountMinor = (name: string) =>
-  bigint(name, { mode: 'number' }).notNull().default(0);
+  integer(name).notNull().default(0);
+
+/**
+ * Full money document columns for financial entities.
+ * Expands to: {prefix}_minor, currency_code, fx_rate, fx_source, fx_as_of, base_{prefix}_minor
+ */
+export function moneyDocumentColumns(prefix: string) {
+  return {
+    [`${prefix}Minor`]: moneyMinor(`${prefix}_minor`),
+    currencyCode: currencyCode('currency_code'),
+    fxRate: fxRate('fx_rate'),
+    fxSource: text('fx_source').notNull().default('manual'),
+    fxAsOf: date('fx_as_of'),
+    [`base${prefix.charAt(0).toUpperCase()}${prefix.slice(1)}Minor`]: baseAmountMinor(
+      `base_${prefix}_minor`,
+    ),
+  } as const;
+}
 
 // ── Quantity ──────────────────────────────────────────────
 

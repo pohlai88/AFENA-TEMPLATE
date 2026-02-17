@@ -1,1 +1,0 @@
-ALTER TABLE "approval_chains" ADD CONSTRAINT "approval_chains_company_fk" FOREIGN KEY ("org_id","company_id") REFERENCES "public"."companies"("org_id","id") ON DELETE set null ON UPDATE no action;

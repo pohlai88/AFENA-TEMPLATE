@@ -1,4 +1,4 @@
-import type { ApiResponse, ErrorCode } from 'afena-canon';
+import type { ApiResponse, ErrorCode } from 'afenda-canon';
 
 /**
  * HTTP status mapping for canon error codes.

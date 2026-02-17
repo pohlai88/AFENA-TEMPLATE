@@ -1,4 +1,4 @@
-import { ENTITY_TYPES } from 'afena-canon';
+import { ENTITY_TYPES } from 'afenda-canon';
 
 import { toOpenApiPath } from './route-types';
 
@@ -250,7 +250,7 @@ export function generateOpenApiSpec() {
   return {
     openapi: '3.1.0',
     info: {
-      title: 'Afena ERP API',
+      title: 'afenda ERP API',
       version: '1.0.0',
       description: 'Auto-generated REST API for all registered entity types. Authentication required via session cookie.',
     },

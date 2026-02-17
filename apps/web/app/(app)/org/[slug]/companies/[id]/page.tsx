@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation';
 
-import { Badge } from 'afena-ui/components/badge';
+import { Badge } from 'afenda-ui/components/badge';
 
 import { EntityDetailLayout, MetadataCard } from '../../_components/crud/client/entity-detail-layout';
 import { PageHeader } from '../../_components/crud/client/page-header';

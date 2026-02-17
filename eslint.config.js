@@ -1,4 +1,4 @@
-const baseConfig = require('afena-eslint-config/base');
+const baseConfig = require('afenda-eslint-config/base');
 
 module.exports = [
   {

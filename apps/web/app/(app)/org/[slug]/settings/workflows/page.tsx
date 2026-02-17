@@ -1,9 +1,9 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
-import { Badge } from 'afena-ui/components/badge';
-import { Button } from 'afena-ui/components/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from 'afena-ui/components/card';
+import { Badge } from 'afenda-ui/components/badge';
+import { Button } from 'afenda-ui/components/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from 'afenda-ui/components/card';
 import {
   Activity,
   AlertTriangle,

@@ -1,14 +1,14 @@
 import { after } from 'next/server';
 
-import { mutate, readEntity, listEntities } from 'afena-crud';
-import { db, auditLogs, entityVersions, eq, and, desc } from 'afena-database';
-import { getRequestId } from 'afena-logger';
+import { mutate, readEntity, listEntities } from 'afenda-crud';
+import { db, auditLogs, entityVersions, eq, and, desc } from 'afenda-database';
+import { getRequestId } from 'afenda-logger';
 
 import { pokeSearchDrain, shouldPokeSearchDrain } from '@/lib/api/poke-search-drain';
 
 import { buildContext } from './context';
 
-import type { ApiResponse, EntityType, JsonValue, MutationSpec } from 'afena-canon';
+import type { ApiResponse, EntityType, JsonValue, MutationSpec } from 'afenda-canon';
 
 function maybePokeSearchDrain(entityType: EntityType): void {
   if (shouldPokeSearchDrain(entityType)) {

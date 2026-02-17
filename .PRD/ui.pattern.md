@@ -99,7 +99,7 @@ Client components exist only for:
    Never: `oklch()`, `hsl()`, hex/rgb in component files.
 
 2. **Pure shadcn/ui** only
-   Only import from `afena-ui/components/*`.
+   Only import from `afenda-ui/components/*`.
 
 3. **Enterprise action model** enforced in Canon types + UI composables.
 

@@ -1,7 +1,7 @@
-# Afena Database Layer — Architecture Reference (Contract)
+# afenda Database Layer — Architecture Reference (Contract)
 
-> **Manually maintained.** Supersedes auto-generated content. Do NOT overwrite via `afena readme gen`.
-> **Package:** `afena-database` (`packages/database`)
+> **Manually maintained.** Supersedes auto-generated content. Do NOT overwrite via `afenda readme gen`.
+> **Package:** `afenda-database` (`packages/database`)
 > **Purpose:** Drizzle ORM schema definitions, dual RW/RO compute, migration management, and schema governance.
 
 ---
@@ -226,7 +226,7 @@
 | Optimization            | Current          | Target                                                           |
 | ----------------------- | ---------------- | ---------------------------------------------------------------- |
 | **Prepared statements** | Not used         | `.prepare('name')` for hot queries; declare outside handler      |
-| **Batch API**           | Implemented      | `batch([...])` from afena-database; use for list+count patterns |
+| **Batch API**           | Implemented      | `batch([...])` from afenda-database; use for list+count patterns |
 | **Bulk insert**         | Per-row possible | `insert(table).values([...])` — single statement                 |
 | **Relational Queries**  | Partial          | `db.query.X.findMany({ with: { Y: true } })` — single SQL output |
 | **Read replicas**       | Manual db/dbRo   | Keep; neon-http has no withReplicas; manual split correct        |
@@ -248,7 +248,7 @@
 | Long-running Node               | neon-serverless Pool | Driver/runtime dependent; verify with benchmark | Yes   | Yes            |
 | Edge (Workers)                  | neon-serverless Pool | Driver/runtime dependent; verify with benchmark | Yes   | Yes            |
 
-**Batch API:** `batch([stmt1, stmt2, ...])` from afena-database (wraps dbRo.batch) — multiple read statements in one round trip. Use for list+count patterns. Source: [packages/database/src/batch.ts](packages/database/src/batch.ts). For mutations: keep `db.transaction()`.
+**Batch API:** `batch([stmt1, stmt2, ...])` from afenda-database (wraps dbRo.batch) — multiple read statements in one round trip. Use for list+count patterns. Source: [packages/database/src/batch.ts](packages/database/src/batch.ts). For mutations: keep `db.transaction()`.
 
 **Migration NOT VALID — FK rollout on large tables:**
 
@@ -403,7 +403,7 @@ Zod is the single gate that turns `unknown` request JSON into typed `MutationSpe
 
 **Source of truth:** [packages/database/src/scripts/schema-lint.ts](packages/database/src/scripts/schema-lint.ts), [packages/database/schema-lint.config.ts](packages/database/schema-lint.config.ts)
 
-**Validated by:** `pnpm --filter afena-database db:barrel` → `pnpm --filter afena-database db:lint` → `git diff --exit-code` (CI). Gate 5 runGate5, Gate 6 RLS migrations, Gate 7 db:barrel diff.
+**Validated by:** `pnpm --filter afenda-database db:barrel` → `pnpm --filter afenda-database db:lint` → `git diff --exit-code` (CI). Gate 5 runGate5, Gate 6 RLS migrations, Gate 7 db:barrel diff.
 
 **Exceptions:** EX-GOV-\* per gate (whitelisted tables, etc.)
 
@@ -421,8 +421,8 @@ Keep **Drizzle schema (TS)**, **migration files (SQL)**, and **Neon DB** in sync
 
 | Step | Command / Tool | Purpose |
 |------|-----------------|---------|
-| 1. Drift check | `pnpm --filter afena-database db:drift-check` | Ensures `drizzle-kit generate` would produce no new migration (schema ↔ migrations in sync) |
-| 2. Apply migrations | `pnpm --filter afena-database db:migrate` | Applies pending migrations to Neon (uses `DATABASE_URL_MIGRATIONS` or `DATABASE_URL`) |
+| 1. Drift check | `pnpm --filter afenda-database db:drift-check` | Ensures `drizzle-kit generate` would produce no new migration (schema ↔ migrations in sync) |
+| 2. Apply migrations | `pnpm --filter afenda-database db:migrate` | Applies pending migrations to Neon (uses `DATABASE_URL_MIGRATIONS` or `DATABASE_URL`) |
 | 3. Introspect (optional) | `mcp_Neon_get_database_tables`, `mcp_Neon_describe_table_schema` | Verify Neon schema matches expectations |
 | 4. Compare branches | `mcp_Neon_compare_database_schema` | Compare schema between Neon branches before merge |
 

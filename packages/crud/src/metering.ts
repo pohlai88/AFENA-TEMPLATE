@@ -8,7 +8,7 @@
  * so metering never blocks or fails the primary operation.
  */
 
-import { db, orgUsageDaily, sql } from 'afena-database';
+import { db, orgUsageDaily, sql } from 'afenda-database';
 
 /**
  * Get today's date as YYYY-MM-DD string (UTC).

@@ -1,9 +1,9 @@
-import { migrationLineage } from 'afena-database';
+import { migrationLineage } from 'afenda-database';
 import { and, eq, isNull, sql } from 'drizzle-orm';
 
 import type { PipelineDb } from './pipeline-base.js';
 import type { EntityType } from '../types/migration-job.js';
-import type { DbInstance } from 'afena-database';
+import type { DbInstance } from 'afenda-database';
 
 
 /**
@@ -44,7 +44,7 @@ export class DrizzlePipelineDb implements PipelineDb {
         entityType: params.entityType,
         legacyId: params.legacyId,
         legacySystem: params.legacySystem,
-        afenaId: null,
+        afendaId: null,
         state: 'reserved',
         reservedAt: new Date(),
         reservedBy: params.reservedBy,
@@ -84,7 +84,7 @@ export class DrizzlePipelineDb implements PipelineDb {
           eq(migrationLineage.legacyId, params.legacyId),
           eq(migrationLineage.state, 'reserved'),
           sql`${migrationLineage.reservedAt} < ${params.expiryThreshold}`,
-          isNull(migrationLineage.afenaId)
+          isNull(migrationLineage.afendaId)
         )
       )
       .returning({ id: migrationLineage.id });
@@ -95,11 +95,11 @@ export class DrizzlePipelineDb implements PipelineDb {
     return null;
   }
 
-  async commitLineage(lineageId: string, afenaId: string): Promise<boolean> {
+  async commitLineage(lineageId: string, afendaId: string): Promise<boolean> {
     const updated = await this.db
       .update(migrationLineage)
       .set({
-        afenaId,
+        afendaId,
         state: 'committed',
         committedAt: new Date(),
       } as Record<string, unknown>)
@@ -150,7 +150,7 @@ export class DrizzlePipelineDb implements PipelineDb {
           entityType: p.entityType,
           legacyId: p.legacyId,
           legacySystem: p.legacySystem,
-          afenaId: null,
+          afendaId: null,
           state: 'reserved',
           reservedAt: now,
           reservedBy: p.reservedBy,

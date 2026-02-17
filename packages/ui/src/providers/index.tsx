@@ -7,7 +7,7 @@ import { ToasterProvider } from './toaster-provider';
 import { GlobalTooltipProvider } from './tooltip-provider';
 
 /**
- * Unified providers wrapper for Afena UI.
+ * Unified providers wrapper for afenda UI.
  *
  * Composes all required root-level providers in the correct nesting order:
  * 1. **ThemeProvider** — `next-themes` (must be outermost so Toaster reads theme)
@@ -17,7 +17,7 @@ import { GlobalTooltipProvider } from './tooltip-provider';
  * @example
  * ```tsx
  * // apps/web/app/layout.tsx
- * import { Providers } from 'afena-ui/providers';
+ * import { Providers } from 'afenda-ui/providers';
  *
  * export default function RootLayout({ children }) {
  *   return (

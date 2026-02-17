@@ -4,13 +4,13 @@ import { join } from 'path';
 import type { DiscoveryOutput } from '../types';
 
 /**
- * Load the previous discovery output from .afena/discovery.json.
+ * Load the previous discovery output from .afenda/discovery.json.
  * Returns null if not found or invalid.
  */
 export function loadPreviousDiscovery(
   repoRoot: string
 ): DiscoveryOutput | null {
-  const filePath = join(repoRoot, '.afena', 'discovery.json');
+  const filePath = join(repoRoot, '.afenda', 'discovery.json');
   if (!existsSync(filePath)) return null;
 
   try {
@@ -22,10 +22,10 @@ export function loadPreviousDiscovery(
 }
 
 /**
- * Load the previous signature from .afena/last-signature.
+ * Load the previous signature from .afenda/last-signature.
  */
 export function loadPreviousSignature(repoRoot: string): string | null {
-  const filePath = join(repoRoot, '.afena', 'last-signature');
+  const filePath = join(repoRoot, '.afenda', 'last-signature');
   if (!existsSync(filePath)) return null;
 
   try {

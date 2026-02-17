@@ -1,7 +1,7 @@
 'use client';
 
-import { Separator } from 'afena-ui/components/separator';
-import { SidebarTrigger } from 'afena-ui/components/sidebar';
+import { Separator } from 'afenda-ui/components/separator';
+import { SidebarTrigger } from 'afenda-ui/components/sidebar';
 
 import { AppBreadcrumbs } from './app-breadcrumbs_client';
 

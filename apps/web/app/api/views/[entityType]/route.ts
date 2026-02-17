@@ -1,6 +1,6 @@
 import { NextRequest } from 'next/server';
 
-import { dbRo, entityViews, entityViewFields, eq, and } from 'afena-database';
+import { dbRo, entityViews, entityViewFields, eq, and } from 'afenda-database';
 
 import { type AuthSession, withAuth } from '@/lib/api/with-auth';
 

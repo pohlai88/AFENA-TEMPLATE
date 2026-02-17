@@ -6,7 +6,7 @@ import {
   LifecycleError,
   mutationSpecSchema,
   RateLimitError,
-} from 'afena-canon';
+} from 'afenda-canon';
 import {
   and,
   auditLogs,
@@ -20,8 +20,8 @@ import {
   isDbTimeoutError,
   videoSettings,
   withDbRetry,
-} from 'afena-database';
-import { evaluateRules, loadAndRegisterOrgRules, WorkflowEngineError } from 'afena-workflow';
+} from 'afenda-database';
+import { evaluateRules, loadAndRegisterOrgRules, WorkflowEngineError } from 'afenda-workflow';
 
 import { generateDiff } from './diff';
 import { err, ok } from './envelope';
@@ -38,7 +38,7 @@ import { enforceEditWindow } from './services/workflow-edit-window';
 import { enqueueWorkflowOutboxEvent } from './services/workflow-outbox';
 
 import type { MutationContext } from './context';
-import type { ApiResponse, ErrorCode, MutationSpec, Receipt } from 'afena-canon';
+import type { ApiResponse, ErrorCode, MutationSpec, Receipt } from 'afenda-canon';
 
 /**
  * Table registry for pre-transaction reads (resolve target).

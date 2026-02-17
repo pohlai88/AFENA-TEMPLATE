@@ -1,12 +1,21 @@
 import { notFound } from 'next/navigation';
 
-import { Badge } from 'afena-ui/components/badge';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from 'afena-ui/components/card';
+import { Badge } from 'afenda-ui/components/badge';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from 'afenda-ui/components/card';
 import { ShieldCheck } from 'lucide-react';
 
-import { PageHeader } from '../../../_components/crud/client/page-header';
-import { getOrgContext } from '../../../_server/org-context_server';
-import { fetchRole, fetchRolePermissions } from '../_server/roles.query_server';
+import { PageHeader } from '@/app/(app)/org/[slug]/_components/crud/client/page-header';
+import { getOrgContext } from '@/app/(app)/org/[slug]/_server/org-context_server';
+import {
+  fetchRole,
+  fetchRolePermissions,
+} from '@/app/(app)/org/[slug]/settings/roles/_server/roles.query_server';
 
 import { PermissionsTable } from './_components/permissions-table_client';
 
@@ -26,10 +35,7 @@ export default async function RoleDetailPage({
 
   return (
     <div className="space-y-6">
-      <PageHeader
-        title={role.name}
-        description={`Role key: ${role.key}`}
-      >
+      <PageHeader title={role.name} description={`Role key: ${role.key}`}>
         {role.isSystem && (
           <Badge variant="secondary" className="flex items-center gap-1">
             <ShieldCheck className="h-3 w-3" />
@@ -42,16 +48,12 @@ export default async function RoleDetailPage({
         <CardHeader>
           <CardTitle className="text-base">Permissions</CardTitle>
           <CardDescription>
-            Entity-level verb grants for this role. Each permission specifies what actions
-            users with this role can perform on a given entity type.
+            Entity-level verb grants for this role. Each permission specifies what actions users
+            with this role can perform on a given entity type.
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <PermissionsTable
-            permissions={permissions}
-            roleId={roleId}
-            isSystem={role.isSystem}
-          />
+          <PermissionsTable permissions={permissions} roleId={roleId} isSystem={role.isSystem} />
         </CardContent>
       </Card>
     </div>

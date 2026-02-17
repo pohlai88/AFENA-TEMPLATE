@@ -1,12 +1,12 @@
 /**
- * Autofix — `afena meta fix` with safe insertion rules (§11).
+ * Autofix — `afenda meta fix` with safe insertion rules (§11).
  *
  * - Inserts `export const CAPABILITIES = [...] as const;` into eligible
  *   server action / API route files that have write boundaries but no annotation.
  * - Inserts `export const SURFACE = { ... } as const;` skeleton into
  *   surface.ts files for pages that lack one.
  * - Never overwrites existing annotations — only fills gaps.
- * - Writes .afena/meta.fix.report.json listing every touched file.
+ * - Writes .afenda/meta.fix.report.json listing every touched file.
  */
 
 import { readFileSync, writeFileSync } from 'fs';

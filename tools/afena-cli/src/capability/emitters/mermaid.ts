@@ -95,7 +95,7 @@ export function generateDependencyMermaid(graph: PackageGraph): string {
 }
 
 /**
- * Write Mermaid diagrams to .afena/capability.mermaid.md
+ * Write Mermaid diagrams to .afenda/capability.mermaid.md
  */
 export function writeMermaid(
   repoRoot: string,
@@ -117,7 +117,7 @@ export function writeMermaid(
     '',
   ].join('\n');
 
-  const outPath = join(repoRoot, '.afena', 'capability.mermaid.md');
+  const outPath = join(repoRoot, '.afenda', 'capability.mermaid.md');
   mkdirSync(dirname(outPath), { recursive: true });
   writeFileSync(outPath, content, 'utf-8');
 }

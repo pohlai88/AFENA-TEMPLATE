@@ -8,30 +8,30 @@ import { DiscoveryOutputSchema, RegistrySchema } from '../types';
 import type { Registry, DiscoveryOutput, UngroupedScript } from '../types';
 
 /**
- * Register discovered ungrouped scripts into afena.registry.json.
+ * Register discovered ungrouped scripts into afenda.registry.json.
  * By default, only writes to registry file — never edits package.json.
  */
 export function registerDiscovered(
   repoRoot: string,
   options: { dryRun?: boolean; apply?: boolean; interactive?: boolean }
 ): void {
-  const discoveryPath = join(repoRoot, '.afena', 'discovery.json');
+  const discoveryPath = join(repoRoot, '.afenda', 'discovery.json');
   if (!existsSync(discoveryPath)) {
-    log.warn('No discovery.json found. Run `pnpm afena discover` first.');
+    log.warn('No discovery.json found. Run `pnpm afenda discover` first.');
     return;
   }
 
-  const discovery: DiscoveryOutput = safeReadJson(repoRoot, ['.afena', 'discovery.json'], DiscoveryOutputSchema);
+  const discovery: DiscoveryOutput = safeReadJson(repoRoot, ['.afenda', 'discovery.json'], DiscoveryOutputSchema);
   if (discovery.ungrouped.length === 0) {
     log.success('No ungrouped scripts found. Registry is up to date.');
     return;
   }
 
   // Load current registry
-  const registryPath = join(repoRoot, 'afena.registry.json');
+  const registryPath = join(repoRoot, 'afenda.registry.json');
   let registry: Registry;
   if (existsSync(registryPath)) {
-    registry = safeReadJson(repoRoot, ['afena.registry.json'], RegistrySchema);
+    registry = safeReadJson(repoRoot, ['afenda.registry.json'], RegistrySchema);
   } else {
     registry = RegistrySchema.parse({});
   }
@@ -40,7 +40,7 @@ export function registerDiscovered(
   const changes: Array<{ script: UngroupedScript; group: string; subcommand?: string }> = [];
 
   for (const ungrouped of discovery.ungrouped) {
-    const suggestion = ungrouped.suggestedCommand.replace('afena ', '');
+    const suggestion = ungrouped.suggestedCommand.replace('afenda ', '');
     const parts = suggestion.split(' ');
     const group = parts[0] || 'misc';
 

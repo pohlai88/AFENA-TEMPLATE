@@ -1,5 +1,5 @@
 {
-  "name": "afena-logger",
+  "name": "afenda-logger",
   "version": "0.1.0",
   "private": true,
   "main": "./src/index.ts",
@@ -7,9 +7,8 @@
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch",
-    "lint": "eslint . --ext .js,.jsx,.ts,.tsx --cache --concurrency=auto",
-    "lint:ci": "eslint . --ext .js,.jsx,.ts,.tsx --rule 'import/no-cycle: error'",
-    "lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx --cache --fix",
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
+    "lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx --fix",
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
@@ -18,8 +17,8 @@
   },
   "devDependencies": {
     "@types/node": "catalog:",
-    "afena-eslint-config": "workspace:^",
-    "afena-typescript-config": "workspace:*",
+    "afenda-eslint-config": "workspace:^",
+    "afenda-typescript-config": "workspace:*",
     "tslib": "catalog:",
     "tsup": "catalog:",
     "typescript": "catalog:"

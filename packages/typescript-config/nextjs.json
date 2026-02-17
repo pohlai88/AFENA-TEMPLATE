@@ -1,38 +1,63 @@
 {
   "$schema": "https://json.schemastore.org/tsconfig",
-  "display": "Next.js",
+  "display": "Next.js Application",
   "extends": "./base.json",
   "compilerOptions": {
-    "target": "ES2017",
-    "lib": ["dom", "dom.iterable", "esnext"],
+    // Next.js Specific
+    "target": "ES2022",
+    "lib": [
+      "DOM",
+      "DOM.Iterable",
+      "ES2022"
+    ],
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "jsx": "preserve",
+    // Next.js Features
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
     "noEmit": true,
     "esModuleInterop": true,
-    "module": "esnext",
-    "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "jsx": "react-jsx",
     "incremental": true,
+    // Plugin
     "plugins": [
       {
         "name": "next"
       }
     ],
+    // Next.js 16 Optimizations
+    "verbatimModuleSyntax": true,
+    "moduleDetection": "force",
+    // Build Output
+    "declaration": false,
+    "declarationMap": false,
+    "composite": false,
+    // Path Mapping (base - override in app tsconfig)
+    "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*", "./*"],
-      "@/ui/*": ["../../packages/ui/src/*"]
+      "@/*": [
+        "./src/*",
+        "./*"
+      ]
     }
   },
   "include": [
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
+    "**/*.js",
+    "**/*.jsx",
     ".next/types/**/*.ts",
-    ".next/dev/types/**/*.ts",
-    "**/*.mts"
+    ".next/dev/types/**/*.ts"
   ],
-  "exclude": ["node_modules"]
+  "exclude": [
+    "node_modules",
+    ".next",
+    "dist",
+    "build",
+    "*.config.*"
+  ]
 }

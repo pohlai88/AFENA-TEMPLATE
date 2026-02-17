@@ -1,29 +1,24 @@
 {
-  "extends": "afena-typescript-config/react-library.json",
+  "extends": "afenda-typescript-config/react-library.json",
   "compilerOptions": {
-    "target": "ES2020",
-    "lib": ["DOM", "DOM.Iterable", "ES2020"],
-    "module": "ESNext",
-    "moduleResolution": "bundler",
-    "allowSyntheticDefaultImports": true,
-    "esModuleInterop": true,
-    "allowJs": true,
-    "strict": true,
-    "noEmit": false,
-    "declaration": true,
-    "declarationMap": true,
-    "composite": true,
-    "jsx": "react-jsx",
-    "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true,
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "outDir": "./dist",
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"]
-    }
+      "@/*": [
+        "./src/*"
+      ]
+    },
+    "tsBuildInfoFile": "./dist/.tsbuildinfo"
   },
-  "include": ["src/**/*", "engine/**/*"],
-  "exclude": ["node_modules", "dist", "build", "**/*.test.*", "**/*.spec.*", "**/*.stories.*"]
+  "include": [
+    "src/**/*",
+    "engine/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "build",
+    "**/*.test.*",
+    "**/*.spec.*",
+    "**/*.stories.*"
+  ]
 }

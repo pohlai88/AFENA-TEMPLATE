@@ -35,7 +35,7 @@ CREATE TABLE migration_lineage (
   entity_type text NOT NULL,
   legacy_id text NOT NULL,
   legacy_system text NOT NULL,
-  afena_id uuid,
+  afenda_id uuid,
   state text NOT NULL DEFAULT 'committed' CHECK (state IN ('reserved', 'committed')),
   reserved_at timestamptz,
   reserved_by text,
@@ -45,12 +45,12 @@ CREATE TABLE migration_lineage (
   -- State-dependent nullability constraints (ratification-grade)
   CONSTRAINT migration_lineage_reserved_requires_reserved_at
     CHECK (state <> 'reserved' OR reserved_at IS NOT NULL),
-  CONSTRAINT migration_lineage_committed_requires_afena_id
-    CHECK (state <> 'committed' OR afena_id IS NOT NULL),
+  CONSTRAINT migration_lineage_committed_requires_afenda_id
+    CHECK (state <> 'committed' OR afenda_id IS NOT NULL),
   
   -- Unique constraints for idempotency
   UNIQUE (org_id, entity_type, legacy_system, legacy_id),
-  UNIQUE (org_id, entity_type, afena_id)
+  UNIQUE (org_id, entity_type, afenda_id)
 );
 
 CREATE INDEX migration_lineage_job_idx ON migration_lineage (migration_job_id);

@@ -16,9 +16,9 @@ import {
   CAPABILITY_KEYS,
   inferKindFromVerb,
   parseCapabilityKey,
-} from 'afena-canon';
+} from 'afenda-canon';
 
-import type { CapabilityKind, RbacTier } from 'afena-canon';
+import type { CapabilityKind, RbacTier } from 'afenda-canon';
 
 export interface NavCapability {
   key: string;

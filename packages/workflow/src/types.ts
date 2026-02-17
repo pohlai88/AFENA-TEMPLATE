@@ -1,4 +1,4 @@
-import type { ActorRef, MutationSpec } from 'afena-canon';
+import type { ActorRef, MutationSpec } from 'afenda-canon';
 
 // ── Rule Definition ─────────────────────────────────────────
 
@@ -75,7 +75,7 @@ export interface WorkflowRule {
 
 /**
  * Context passed to rule conditions and actions.
- * Uses ActorRef from afena-canon to match MutationContext.actor.
+ * Uses ActorRef from afenda-canon to match MutationContext.actor.
  */
 export interface RuleContext {
   requestId: string;

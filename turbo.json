@@ -1,9 +1,19 @@
 {
   "$schema": "https://turbo.build/schema.json",
+  "ui": "tui",
   "globalDependencies": [
     "**/.env",
     "**/.env.*",
-    "**/types/**/*"
+    "**/types/**/*",
+    "tsconfig.json",
+    "turbo.json",
+    "pnpm-lock.yaml"
+  ],
+  "globalEnv": [
+    "NODE_ENV",
+    "CI",
+    "VERCEL",
+    "VERCEL_ENV"
   ],
   "globalPassThroughEnv": [
     "CRON_SECRET",
@@ -52,64 +62,101 @@
       "outputs": [
         ".next/**",
         "!.next/cache/**",
-        "dist/**"
-      ]
+        "dist/**",
+        ".turbo/**"
+      ],
+      "env": [
+        "DATABASE_URL",
+        "NEXT_PUBLIC_*"
+      ],
+      "persistent": false
     },
     "lint": {
       "dependsOn": [
         "^build"
       ],
-      "outputs": []
+      "outputs": [
+        ".eslintcache"
+      ],
+      "cache": true
     },
     "lint:ci": {
       "dependsOn": [
         "^build"
       ],
       "outputs": [],
-      "cache": false
+      "cache": false,
+      "persistent": false
     },
     "lint:fix": {
       "outputs": [],
-      "cache": false
+      "cache": false,
+      "persistent": false
     },
     "dev": {
       "cache": false,
-      "persistent": true
+      "persistent": true,
+      "env": [
+        "DATABASE_URL",
+        "DATABASE_URL_RO",
+        "NEXT_PUBLIC_*"
+      ]
     },
     "clean": {
-      "cache": false
+      "cache": false,
+      "persistent": false
     },
     "type-check": {
       "dependsOn": [
         "^build"
       ],
       "outputs": [
-        "tsconfig.tsbuildinfo"
-      ]
+        "tsconfig.tsbuildinfo",
+        "**/*.tsbuildinfo"
+      ],
+      "cache": true
     },
     "type-check:strict": {
       "dependsOn": [
         "^build"
       ],
       "outputs": [
-        "tsconfig.tsbuildinfo"
-      ]
+        "tsconfig.tsbuildinfo",
+        "**/*.tsbuildinfo"
+      ],
+      "cache": true
     },
     "meta:check": {
       "dependsOn": [
         "^build"
       ],
       "outputs": [],
-      "cache": false
+      "cache": false,
+      "persistent": false
     },
     "type-gen": {
       "cache": false,
       "outputs": [
         "types/**/*",
-        ".next/types/**/*"
-      ]
+        ".next/types/**/*",
+        "src/types/**/*"
+      ],
+      "persistent": false
     },
     "type-gen:watch": {
+      "cache": false,
+      "persistent": true
+    },
+    "test": {
+      "dependsOn": [
+        "^build"
+      ],
+      "outputs": [
+        "coverage/**"
+      ],
+      "cache": true
+    },
+    "test:watch": {
       "cache": false,
       "persistent": true
     },
@@ -121,7 +168,8 @@
         "test-results/**",
         "playwright-report/**"
       ],
-      "cache": false
+      "cache": false,
+      "persistent": false
     },
     "test:e2e:ui": {
       "dependsOn": [

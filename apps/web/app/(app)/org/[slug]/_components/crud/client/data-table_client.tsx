@@ -8,7 +8,7 @@ import {
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table';
-import { Button } from 'afena-ui/components/button';
+import { Button } from 'afenda-ui/components/button';
 import {
   Table,
   TableBody,
@@ -16,7 +16,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from 'afena-ui/components/table';
+} from 'afenda-ui/components/table';
 import { useState } from 'react';
 
 import { EntityToolbar } from './entity-toolbar_client';

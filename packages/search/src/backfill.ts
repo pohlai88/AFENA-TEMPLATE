@@ -1,4 +1,4 @@
-import { dbSearchWorker, sql } from 'afena-database';
+import { dbSearchWorker, sql } from 'afenda-database';
 
 /** Chunk size for backfill (avoids timeouts). */
 const BACKFILL_CHUNK_LIMIT = 10_000;

@@ -1,11 +1,11 @@
 'use server';
 
-import { db, sql } from 'afena-database';
-import { getRequestId } from 'afena-logger';
+import { db, sql } from 'afenda-database';
+import { getRequestId } from 'afenda-logger';
 
 import { auth } from '@/lib/auth/server';
 
-import type { MutationContext } from 'afena-crud';
+import type { MutationContext } from 'afenda-crud';
 
 /**
  * Build MutationContext from the current server-side session.

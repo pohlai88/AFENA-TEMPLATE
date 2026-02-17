@@ -1,5 +1,5 @@
 {
-  "name": "afena-migration",
+  "name": "afenda-migration",
   "version": "0.1.0",
   "private": true,
   "main": "./dist/index.js",
@@ -22,9 +22,9 @@
   },
   "dependencies": {
     "@neondatabase/serverless": "^1.0.0",
-    "afena-canon": "workspace:*",
-    "afena-database": "workspace:*",
-    "afena-logger": "workspace:*",
+    "afenda-canon": "workspace:*",
+    "afenda-database": "workspace:*",
+    "afenda-logger": "workspace:*",
     "drizzle-orm": "^0.44.0",
     "fuse.js": "^7.1.0",
     "libphonenumber-js": "^1.12.36",
@@ -34,8 +34,8 @@
   "devDependencies": {
     "@types/node": "catalog:",
     "@types/papaparse": "^5.5.2",
-    "afena-eslint-config": "workspace:^",
-    "afena-typescript-config": "workspace:*",
+    "afenda-eslint-config": "workspace:^",
+    "afenda-typescript-config": "workspace:*",
     "tslib": "catalog:",
     "tsup": "catalog:",
     "typescript": "catalog:"

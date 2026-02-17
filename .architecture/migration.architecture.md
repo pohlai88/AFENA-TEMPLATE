@@ -1,7 +1,7 @@
-# Afena Migration Engine — Architecture Reference
+# afenda Migration Engine — Architecture Reference
 
-> **Auto-generated** by `afena readme gen` at 2026-02-16T12:44:12Z. Do not edit — regenerate instead.
-> **Package:** `afena-migration` (`packages/migration`)
+> **Auto-generated** by `afenda readme gen` at 2026-02-16T12:44:12Z. Do not edit — regenerate instead.
+> **Package:** `afenda-migration` (`packages/migration`)
 > **Purpose:** Legacy data migration pipeline with atomicity guarantees, conflict detection, and signed audit reports.
 
 ---
@@ -10,7 +10,7 @@
 
 Template Method pipeline: Extract → Transform → Plan → Load. Each batch is processed through
 a configurable chain of transforms, conflict detectors, and gates. Lineage tracking ensures
-every legacy record maps to exactly one Afena entity (reservation-first pattern).
+every legacy record maps to exactly one afenda entity (reservation-first pattern).
 
 Operational hardening: retry/quarantine wrapper (`withTerminalOutcome`), periodic checkpoints,
 performance tracking (p50/p95), and configurable conflict thresholds for score-based merge routing.
@@ -82,11 +82,11 @@ packages/migration/src/
 
 ### Internal (workspace)
 
-- `afena-canon`
-- `afena-database`
-- `afena-eslint-config`
-- `afena-logger`
-- `afena-typescript-config`
+- `afenda-canon`
+- `afenda-database`
+- `afenda-eslint-config`
+- `afenda-logger`
+- `afenda-typescript-config`
 
 ### External
 

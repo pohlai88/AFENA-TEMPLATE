@@ -1,5 +1,5 @@
 /**
- * Fix report emitter — writes .afena/meta.fix.report.json
+ * Fix report emitter — writes .afenda/meta.fix.report.json
  * documenting every file touched by autofix and what changed.
  */
 
@@ -20,13 +20,13 @@ export interface FixReport {
 }
 
 /**
- * Write the fix report to .afena/meta.fix.report.json.
+ * Write the fix report to .afenda/meta.fix.report.json.
  */
 export function writeFixReport(
   repoRoot: string,
   report: FixReport,
 ): void {
-  const outPath = join(repoRoot, '.afena', 'meta.fix.report.json');
+  const outPath = join(repoRoot, '.afenda', 'meta.fix.report.json');
   mkdirSync(dirname(outPath), { recursive: true });
   writeFileSync(outPath, `${JSON.stringify(report, null, 2)  }\n`, 'utf-8');
 }

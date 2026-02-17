@@ -1,4 +1,4 @@
-import { companies, pickWritable } from 'afena-database';
+import { companies, pickWritable } from 'afenda-database';
 import { eq, and, sql } from 'drizzle-orm';
 
 import type { MutationContext } from '../context';

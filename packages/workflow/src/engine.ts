@@ -1,5 +1,5 @@
-import { extractVerb } from 'afena-canon';
-import { db, workflowExecutions } from 'afena-database';
+import { extractVerb } from 'afenda-canon';
+import { db, workflowExecutions } from 'afenda-database';
 
 import { getRegisteredRules } from './registry';
 
@@ -9,7 +9,7 @@ import type {
   RuleExecutionLog,
   RuleTiming,
 } from './types';
-import type { MutationSpec } from 'afena-canon';
+import type { MutationSpec } from 'afenda-canon';
 
 /**
  * Evaluate all workflow rules for a given timing phase.

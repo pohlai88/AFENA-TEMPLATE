@@ -6,7 +6,7 @@ import {
   workflowSideEffectsOutbox,
   workflowStepReceipts,
   workflowOutboxReceipts,
-} from 'afena-database';
+} from 'afenda-database';
 import { and, eq, sql } from 'drizzle-orm';
 
 import type { InstanceSnapshot, StepExecutionRecord, WorkflowDbAdapter } from './engine';

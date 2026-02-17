@@ -1,7 +1,7 @@
 'use client';
 
-import { Button } from 'afena-ui/components/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from 'afena-ui/components/card';
+import { Button } from 'afenda-ui/components/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from 'afenda-ui/components/card';
 import {
   Archive,
   CheckCircle2,

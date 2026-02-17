@@ -1,4 +1,4 @@
-import { SYSTEM_ACTOR_USER_ID, isSystemChannel } from 'afena-canon';
+import { SYSTEM_ACTOR_USER_ID, isSystemChannel } from 'afenda-canon';
 import {
   and,
   batch,
@@ -8,7 +8,7 @@ import {
   rolePermissions,
   userRoles,
   userScopes,
-} from 'afena-database';
+} from 'afenda-database';
 
 import type { MutationContext } from './context';
 import type {
@@ -21,7 +21,7 @@ import type {
   ResolvedActor,
   ResolvedPermission,
   UserScopeAssignment,
-} from 'afena-canon';
+} from 'afenda-canon';
 
 /**
  * Resolve actor's full permission set from DB.

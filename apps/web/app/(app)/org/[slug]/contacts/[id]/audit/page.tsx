@@ -1,9 +1,9 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
-import { Badge } from 'afena-ui/components/badge';
-import { Card, CardContent, CardHeader, CardTitle } from 'afena-ui/components/card';
-import { Separator } from 'afena-ui/components/separator';
+import { Badge } from 'afenda-ui/components/badge';
+import { Card, CardContent, CardHeader, CardTitle } from 'afenda-ui/components/card';
+import { Separator } from 'afenda-ui/components/separator';
 import { ArrowLeft, Clock, FileText, Pencil, Plus, RotateCcw, Trash2 } from 'lucide-react';
 
 import { getContact, getContactAuditLogs } from '@/app/actions/contacts';

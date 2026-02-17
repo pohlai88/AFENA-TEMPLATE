@@ -15,13 +15,13 @@ import { computeReadmeSignature, loadReadmeSignature, saveReadmeSignature } from
 import { AUTOGEN_START, AUTOGEN_END, TEMPLATE_VERSION, renderRootReadme } from './templates';
 import { writeReadme, validateReadme } from './writer';
 
-import type { AfenaConfig } from '../types';
+import type { afendaConfig } from '../types';
 
 export interface ReadmeCommandOptions {
   mode: 'gen' | 'sync' | 'check';
   packages?: string[];
   repoRoot: string;
-  config: AfenaConfig;
+  config: afendaConfig;
   dryRun?: boolean;
 }
 
@@ -41,7 +41,7 @@ export interface ReadmeCommandResult {
  */
 function resolvePackages(
   repoRoot: string,
-  config: AfenaConfig,
+  config: afendaConfig,
   packages?: string[]
 ): string[] {
   // Find all workspace package directories
@@ -95,7 +95,7 @@ function resolvePackages(
 
 /**
  * Shared engine for all readme entrypoints.
- * Called by `afena readme gen|sync|check` and `discover --fix-readmes`.
+ * Called by `afenda readme gen|sync|check` and `discover --fix-readmes`.
  */
 export function runReadmeCommand(
   options: ReadmeCommandOptions

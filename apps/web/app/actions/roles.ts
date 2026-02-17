@@ -4,10 +4,10 @@
 
 import { revalidatePath } from 'next/cache';
 
-import { db, dbRo, eq, desc, roles, rolePermissions, userRoles, userScopes } from 'afena-database';
-import { getRequestId } from 'afena-logger';
+import { db, dbRo, eq, desc, roles, rolePermissions, userRoles, userScopes } from 'afenda-database';
+import { getRequestId } from 'afenda-logger';
 
-import type { ApiResponse } from 'afena-canon';
+import type { ApiResponse } from 'afenda-canon';
 
 // ── List Roles ─────────────────────────────────────────
 

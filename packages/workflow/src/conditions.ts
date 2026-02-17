@@ -1,5 +1,5 @@
 import type { ConditionFn, RuleContext } from './types';
-import type { MutationSpec } from 'afena-canon';
+import type { MutationSpec } from 'afenda-canon';
 
 /**
  * Built-in condition helpers for common rule patterns.

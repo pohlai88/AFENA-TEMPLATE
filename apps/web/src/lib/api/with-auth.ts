@@ -1,12 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-import { checkRateLimit } from 'afena-crud';
-import { db, sql } from 'afena-database';
-import { runWithContext } from 'afena-logger';
+import { checkRateLimit } from 'afenda-crud';
+import { db, sql } from 'afenda-database';
+import { runWithContext } from 'afenda-logger';
 
 import { auth } from '@/lib/auth/server';
 
-import type { RequestContext } from 'afena-logger';
+import type { RequestContext } from 'afenda-logger';
 
 /**
  * Authenticated session info passed to route handlers.

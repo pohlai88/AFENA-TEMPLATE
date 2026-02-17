@@ -2,8 +2,8 @@
 
 import { headers } from 'next/headers';
 
-import { db, sql } from 'afena-database';
-import { runWithContext } from 'afena-logger';
+import { db, sql } from 'afenda-database';
+import { runWithContext } from 'afenda-logger';
 
 import { auth } from '@/lib/auth/server';
 import { invalidateEntity } from '@/lib/cache/tags';
@@ -12,8 +12,8 @@ import { toLoggerContext } from '@/lib/http/request-context';
 
 import type { InvalidationTarget } from '@/lib/cache/tags';
 import type { BffRequestContext } from '@/lib/http/request-context';
-import type { ApiResponse, ErrorCode } from 'afena-canon';
-import type { MutationContext } from 'afena-crud';
+import type { ApiResponse, ErrorCode } from 'afenda-canon';
+import type { MutationContext } from 'afenda-crud';
 
 /**
  * Context passed to action handlers inside `withActionAuth`.

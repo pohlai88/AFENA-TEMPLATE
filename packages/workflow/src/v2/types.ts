@@ -1,4 +1,4 @@
-import type { DocStatus } from 'afena-canon';
+import type { DocStatus } from 'afenda-canon';
 
 // ── Node Types ──────────────────────────────────────────────
 

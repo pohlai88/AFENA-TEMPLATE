@@ -1,6 +1,6 @@
 import { NextRequest } from 'next/server';
 
-import { verifyWebhookSignature } from 'afena-crud';
+import { verifyWebhookSignature } from 'afenda-crud';
 
 import { withApiKey } from '@/lib/api/with-api-key';
 

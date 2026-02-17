@@ -1,5 +1,5 @@
 import { sql } from 'drizzle-orm';
-import { boolean, check, index, pgTable, primaryKey, text, timestamp, uniqueIndex, uuid } from 'drizzle-orm/pg-core';
+import { boolean, check, index, pgTable, text, timestamp, uniqueIndex, uuid } from 'drizzle-orm/pg-core';
 
 import { tenantPolicy } from '../helpers/tenant-policy';
 
@@ -7,13 +7,11 @@ import { tenantPolicy } from '../helpers/tenant-policy';
  * Roles — org-scoped role definitions.
  * Each org defines its own roles (admin, manager, clerk, etc.).
  * System roles (is_system=true) are seeded and cannot be deleted.
- * 
- * GAP-DB-001: Composite PK (org_id, id) for data integrity and tenant isolation.
  */
 export const roles = pgTable(
   'roles',
   {
-    id: uuid('id').defaultRandom().notNull(),
+    id: uuid('id').defaultRandom().primaryKey(),
     orgId: text('org_id')
       .notNull()
       .default(sql`(auth.require_org_id())`),
@@ -23,7 +21,6 @@ export const roles = pgTable(
     createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
   },
   (table) => [
-    primaryKey({ columns: [table.orgId, table.id] }),
     uniqueIndex('roles_org_key_idx').on(table.orgId, table.key),
     index('roles_org_id_idx').on(table.orgId),
     check('roles_org_not_empty', sql`org_id <> ''`),

@@ -13,9 +13,9 @@ import { findRepoRoot } from './core/paths';
 import { runRegistryCommand } from './core/runner';
 import { registerDiscovered } from './discovery/register';
 import { runReadmeCommand } from './readme/readme-engine';
-import { RegistrySchema, AfenaConfigSchema } from './types';
+import { RegistrySchema, afendaConfigSchema } from './types';
 
-import type { CommandEntry, Registry, AfenaConfig } from './types';
+import type { CommandEntry, Registry, afendaConfig } from './types';
 
 function formatCommandEntry(entry: CommandEntry): string {
   return typeof entry === 'string' ? entry : `${entry.cmd} ${(entry.args ?? []).join(' ')}`;
@@ -56,37 +56,37 @@ interface HousekeepingOpts {
   debug?: boolean;
 }
 
-const pkg = { name: '@afena/cli', version: '0.1.0' };
+const pkg = { name: '@afenda/cli', version: '0.1.0' };
 
 function loadRegistry(repoRoot: string): Registry {
-  if (!existsSync(join(repoRoot, 'afena.registry.json'))) {
+  if (!existsSync(join(repoRoot, 'afenda.registry.json'))) {
     return RegistrySchema.parse({ commands: {} });
   }
   try {
-    return safeReadJson(repoRoot, ['afena.registry.json'], RegistrySchema);
+    return safeReadJson(repoRoot, ['afenda.registry.json'], RegistrySchema);
   } catch (err: unknown) {
     log.warn(`Failed to load registry: ${err instanceof Error ? err.message : String(err)}`);
     return RegistrySchema.parse({ commands: {} });
   }
 }
 
-function loadConfig(repoRoot: string): AfenaConfig {
-  if (!existsSync(join(repoRoot, '.afenarc.json'))) {
-    return AfenaConfigSchema.parse({});
+function loadConfig(repoRoot: string): afendaConfig {
+  if (!existsSync(join(repoRoot, '.afendarc.json'))) {
+    return afendaConfigSchema.parse({});
   }
   try {
-    return safeReadJson(repoRoot, ['.afenarc.json'], AfenaConfigSchema);
+    return safeReadJson(repoRoot, ['.afendarc.json'], afendaConfigSchema);
   } catch (err: unknown) {
     log.warn(`Failed to load config: ${err instanceof Error ? err.message : String(err)}`);
-    return AfenaConfigSchema.parse({});
+    return afendaConfigSchema.parse({});
   }
 }
 
 const program = new Command();
 
 program
-  .name('afena')
-  .description('Afena monorepo CLI — unified command interface')
+  .name('afenda')
+  .description('afenda monorepo CLI — unified command interface')
   .version(pkg.version);
 
 // --- Dynamic commands from registry ---
@@ -174,7 +174,7 @@ program
     const commands = registry.commands;
 
     if (Object.keys(commands).length === 0) {
-      log.warn('No commands registered. Create afena.registry.json or run --register.');
+      log.warn('No commands registered. Create afenda.registry.json or run --register.');
       return;
     }
 
@@ -198,7 +198,7 @@ program
   .command('doctor')
   .description('Check environment (node, pnpm, turbo, git)')
   .action(async () => {
-    log.bold('Afena Doctor\n');
+    log.bold('afenda Doctor\n');
 
     // Node version
     const nodeVersion = process.version;
@@ -219,12 +219,12 @@ program
 
     // Registry
     const repoRoot = findRepoRoot();
-    const registryExists = existsSync(join(repoRoot, 'afena.registry.json'));
-    log.info(`  Registry: ${registryExists ? '✅' : '⚠️  afena.registry.json not found'}`);
+    const registryExists = existsSync(join(repoRoot, 'afenda.registry.json'));
+    log.info(`  Registry: ${registryExists ? '✅' : '⚠️  afenda.registry.json not found'}`);
 
     // Config
-    const configExists = existsSync(join(repoRoot, '.afenarc.json'));
-    log.info(`  Config: ${configExists ? '✅' : '⚠️  .afenarc.json not found (using defaults)'}`);
+    const configExists = existsSync(join(repoRoot, '.afendarc.json'));
+    log.info(`  Config: ${configExists ? '✅' : '⚠️  .afendarc.json not found (using defaults)'}`);
 
     log.info('');
   });
@@ -290,14 +290,14 @@ program
   .command('discover')
   .description('Run discovery scanner manually')
   .option('--json', 'Output as JSON')
-  .option('--fix-readmes', 'Generate missing READMEs (DEPRECATED: use afena readme gen)')
+  .option('--fix-readmes', 'Generate missing READMEs (DEPRECATED: use afenda readme gen)')
   .option('--since <ref>', 'Only check changes since git ref')
   .action((opts: DiscoverOpts) => {
     const repoRoot = findRepoRoot();
 
     // Run discovery
     if (opts.json) {
-      const discoveryPath = join(repoRoot, '.afena', 'discovery.json');
+      const discoveryPath = join(repoRoot, '.afenda', 'discovery.json');
       if (existsSync(discoveryPath)) {
         console.log(readFileSync(discoveryPath, 'utf-8'));
       } else {
@@ -305,7 +305,7 @@ program
         execSync(`node ${  join(__dirname, 'discover.js')}`, {
           cwd: repoRoot,
           stdio: 'inherit',
-          env: { ...process.env, AFENA_VERBOSE: '1' },
+          env: { ...process.env, afenda_VERBOSE: '1' },
         });
         if (existsSync(discoveryPath)) {
           console.log(readFileSync(discoveryPath, 'utf-8'));
@@ -315,13 +315,13 @@ program
       execSync(`node ${  join(__dirname, 'discover.js')}`, {
         cwd: repoRoot,
         stdio: 'inherit',
-        env: { ...process.env, AFENA_VERBOSE: '1' },
+        env: { ...process.env, afenda_VERBOSE: '1' },
       });
     }
 
     // --fix-readmes: deprecated compatibility shim
     if (opts.fixReadmes) {
-      log.dim('DEPRECATED: --fix-readmes will be removed in a future release. Use: afena readme gen');
+      log.dim('DEPRECATED: --fix-readmes will be removed in a future release. Use: afenda readme gen');
       try {
         const config = loadConfig(repoRoot);
         runReadmeCommand({ mode: 'gen', repoRoot, config });

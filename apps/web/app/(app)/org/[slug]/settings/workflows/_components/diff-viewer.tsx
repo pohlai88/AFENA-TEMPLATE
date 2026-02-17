@@ -1,7 +1,7 @@
 'use client';
 
-import { Badge } from 'afena-ui/components/badge';
-import { Card, CardContent, CardHeader, CardTitle } from 'afena-ui/components/card';
+import { Badge } from 'afenda-ui/components/badge';
+import { Card, CardContent, CardHeader, CardTitle } from 'afenda-ui/components/card';
 import { GitCompare, Minus, Plus } from 'lucide-react';
 
 // ── Types ───────────────────────────────────────────────────

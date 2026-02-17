@@ -1,6 +1,6 @@
-import { SYSTEM_ACTOR_USER_ID } from 'afena-canon';
+import { SYSTEM_ACTOR_USER_ID } from 'afenda-canon';
 
-import type { ActorRef, Channel, SystemChannel } from 'afena-canon';
+import type { ActorRef, Channel, SystemChannel } from 'afenda-canon';
 
 /**
  * Mutation context — populated from the request environment.

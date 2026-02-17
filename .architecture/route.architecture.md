@@ -1,6 +1,6 @@
-# Afena Web Application (Next.js) — Architecture Reference
+# afenda Web Application (Next.js) — Architecture Reference
 
-> **Auto-generated** by `afena readme gen` at 2026-02-16T12:44:12Z. Do not edit — regenerate instead.
+> **Auto-generated** by `afenda readme gen` at 2026-02-16T12:44:12Z. Do not edit — regenerate instead.
 > **Package:** `web` (`apps/web`)
 > **Purpose:** BFF pattern — Server Actions for domain CRUD, API routes for cross-cutting concerns.
 
@@ -47,15 +47,15 @@ apps/web/src/
 
 ### Internal (workspace)
 
-- `afena-canon`
-- `afena-crud`
-- `afena-database`
-- `afena-eslint-config`
-- `afena-logger`
-- `afena-search`
-- `afena-typescript-config`
-- `afena-ui`
-- `afena-workflow`
+- `afenda-canon`
+- `afenda-crud`
+- `afenda-database`
+- `afenda-eslint-config`
+- `afenda-logger`
+- `afenda-search`
+- `afenda-typescript-config`
+- `afenda-ui`
+- `afenda-workflow`
 
 ### External
 

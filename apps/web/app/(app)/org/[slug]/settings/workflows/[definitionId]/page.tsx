@@ -1,22 +1,23 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
-import { Badge } from 'afena-ui/components/badge';
-import { Button } from 'afena-ui/components/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from 'afena-ui/components/card';
+import { Badge } from 'afenda-ui/components/badge';
+import { Button } from 'afenda-ui/components/button';
 import {
-  AlertTriangle,
-  CheckCircle2,
-  Edit,
-  FileText,
-  GitBranch,
-  Hash,
-  Layers,
-} from 'lucide-react';
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from 'afenda-ui/components/card';
+import { AlertTriangle, CheckCircle2, Edit, FileText, GitBranch, Hash, Layers } from 'lucide-react';
 
-import { PageHeader } from '../../../_components/crud/client/page-header';
-import { getOrgContext } from '../../../_server/org-context_server';
-import { fetchWorkflowDefinition, fetchDefinitionVersions } from '../_server/workflows.query_server';
+import { PageHeader } from '@/app/(app)/org/[slug]/_components/crud/client/page-header';
+import { getOrgContext } from '@/app/(app)/org/[slug]/_server/org-context_server';
+import {
+  fetchDefinitionVersions,
+  fetchWorkflowDefinition,
+} from '@/app/(app)/org/[slug]/settings/workflows/_server/workflows.query_server';
 
 const STATUS_VARIANT: Record<string, 'default' | 'secondary' | 'destructive' | 'outline'> = {
   draft: 'outline',
@@ -40,27 +41,31 @@ export default async function WorkflowDefinitionDetailPage({
   const name = typeof defRow['name'] === 'string' ? defRow['name'] : 'Untitled';
   const version = Number(defRow['version'] ?? 1);
   const status = typeof defRow['status'] === 'string' ? defRow['status'] : 'draft';
-  const entityType = typeof defRow['entity_type'] === 'string'
-    ? defRow['entity_type']
-    : typeof defRow['entityType'] === 'string'
-      ? defRow['entityType']
-      : '';
-  const definitionKind = typeof defRow['definition_kind'] === 'string'
-    ? defRow['definition_kind']
-    : typeof defRow['definitionKind'] === 'string'
-      ? defRow['definitionKind']
-      : '';
+  const entityType =
+    typeof defRow['entity_type'] === 'string'
+      ? defRow['entity_type']
+      : typeof defRow['entityType'] === 'string'
+        ? defRow['entityType']
+        : '';
+  const definitionKind =
+    typeof defRow['definition_kind'] === 'string'
+      ? defRow['definition_kind']
+      : typeof defRow['definitionKind'] === 'string'
+        ? defRow['definitionKind']
+        : '';
   const isDefault = Boolean(defRow['is_default'] ?? defRow['isDefault']);
-  const compiledHash = typeof defRow['compiled_hash'] === 'string'
-    ? defRow['compiled_hash']
-    : typeof defRow['compiledHash'] === 'string'
-      ? defRow['compiledHash']
-      : null;
-  const compilerVersion = typeof defRow['compiler_version'] === 'string'
-    ? defRow['compiler_version']
-    : typeof defRow['compilerVersion'] === 'string'
-      ? defRow['compilerVersion']
-      : null;
+  const compiledHash =
+    typeof defRow['compiled_hash'] === 'string'
+      ? defRow['compiled_hash']
+      : typeof defRow['compiledHash'] === 'string'
+        ? defRow['compiledHash']
+        : null;
+  const compilerVersion =
+    typeof defRow['compiler_version'] === 'string'
+      ? defRow['compiler_version']
+      : typeof defRow['compilerVersion'] === 'string'
+        ? defRow['compilerVersion']
+        : null;
   const nodesJson = (defRow['nodes_json'] ?? defRow['nodesJson'] ?? []) as unknown[];
   const edgesJson = (defRow['edges_json'] ?? defRow['edgesJson'] ?? []) as unknown[];
   const slotsJson = (defRow['slots_json'] ?? defRow['slotsJson'] ?? []) as unknown[];
@@ -69,10 +74,7 @@ export default async function WorkflowDefinitionDetailPage({
 
   return (
     <div className="space-y-6">
-      <PageHeader
-        title={name}
-        description={`${entityType} · ${definitionKind} · v${version}`}
-      >
+      <PageHeader title={name} description={`${entityType} · ${definitionKind} · v${version}`}>
         <div className="flex gap-2">
           <Button size="sm" asChild>
             <Link href={`/org/${slug}/settings/workflows/editor/${definitionId}`}>
@@ -93,9 +95,7 @@ export default async function WorkflowDefinitionDetailPage({
             <Badge variant={STATUS_VARIANT[status] ?? 'outline'} className="text-sm">
               {status}
             </Badge>
-            {isDefault && (
-              <Badge variant="secondary">Default</Badge>
-            )}
+            {isDefault && <Badge variant="secondary">Default</Badge>}
           </CardContent>
         </Card>
 
@@ -112,13 +112,11 @@ export default async function WorkflowDefinitionDetailPage({
             ) : (
               <div className="flex items-center gap-2">
                 <AlertTriangle className="h-4 w-4 text-orange-500" />
-                <span className="text-sm text-muted-foreground">Not compiled</span>
+                <span className="text-muted-foreground text-sm">Not compiled</span>
               </div>
             )}
             {compilerVersion && (
-              <p className="mt-1 text-xs text-muted-foreground">
-                Compiler: {compilerVersion}
-              </p>
+              <p className="text-muted-foreground mt-1 text-xs">Compiler: {compilerVersion}</p>
             )}
           </CardContent>
         </Card>
@@ -129,15 +127,15 @@ export default async function WorkflowDefinitionDetailPage({
           </CardHeader>
           <CardContent className="flex items-center gap-4 text-sm">
             <span className="flex items-center gap-1">
-              <Layers className="h-3.5 w-3.5 text-muted-foreground" />
+              <Layers className="text-muted-foreground h-3.5 w-3.5" />
               {nodesJson.length} nodes
             </span>
             <span className="flex items-center gap-1">
-              <GitBranch className="h-3.5 w-3.5 text-muted-foreground" />
+              <GitBranch className="text-muted-foreground h-3.5 w-3.5" />
               {edgesJson.length} edges
             </span>
             <span className="flex items-center gap-1">
-              <Hash className="h-3.5 w-3.5 text-muted-foreground" />
+              <Hash className="text-muted-foreground h-3.5 w-3.5" />
               {slotsJson.length} slots
             </span>
           </CardContent>
@@ -167,12 +165,12 @@ export default async function WorkflowDefinitionDetailPage({
                     {nodeType}
                   </Badge>
                   <span className="font-medium">{label}</span>
-                  <span className="font-mono text-xs text-muted-foreground">{nodeId}</span>
+                  <span className="text-muted-foreground font-mono text-xs">{nodeId}</span>
                 </div>
               );
             })}
             {nodesJson.length === 0 && (
-              <p className="py-4 text-center text-sm text-muted-foreground">
+              <p className="text-muted-foreground py-4 text-center text-sm">
                 No nodes defined yet.
               </p>
             )}
@@ -192,19 +190,19 @@ export default async function WorkflowDefinitionDetailPage({
               <Link
                 key={`${v.id}-${String(v.version)}`}
                 href={`/org/${slug}/settings/workflows/${v.id}`}
-                className="flex items-center gap-3 rounded-md border px-3 py-2 text-sm transition-colors hover:bg-accent"
+                className="hover:bg-accent flex items-center gap-3 rounded-md border px-3 py-2 text-sm transition-colors"
               >
-                <FileText className="h-4 w-4 text-muted-foreground" />
+                <FileText className="text-muted-foreground h-4 w-4" />
                 <span className="font-medium">v{v.version}</span>
                 <Badge variant={STATUS_VARIANT[v.status] ?? 'outline'} className="text-[10px]">
                   {v.status}
                 </Badge>
                 {v.compiledHash && (
-                  <span className="font-mono text-[10px] text-muted-foreground">
+                  <span className="text-muted-foreground font-mono text-[10px]">
                     {v.compiledHash.slice(0, 12)}
                   </span>
                 )}
-                <span className="ml-auto text-xs text-muted-foreground">
+                <span className="text-muted-foreground ml-auto text-xs">
                   {new Date(v.updatedAt).toLocaleDateString()}
                 </span>
               </Link>

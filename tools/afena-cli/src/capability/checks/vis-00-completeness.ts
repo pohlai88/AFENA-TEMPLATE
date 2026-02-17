@@ -17,7 +17,7 @@ import {
   hasCapabilityAnnotation,
 } from '../shared/patterns';
 
-import type { CapabilityException } from 'afena-canon';
+import type { CapabilityException } from 'afenda-canon';
 
 export interface Vis00Violation {
   file: string;

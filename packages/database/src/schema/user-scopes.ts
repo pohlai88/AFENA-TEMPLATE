@@ -1,5 +1,5 @@
 import { sql } from 'drizzle-orm';
-import { check, index, pgTable, primaryKey, text, timestamp, uniqueIndex, uuid } from 'drizzle-orm/pg-core';
+import { check, index, pgTable, text, timestamp, uniqueIndex, uuid } from 'drizzle-orm/pg-core';
 
 import { tenantPolicy } from '../helpers/tenant-policy';
 
@@ -7,13 +7,11 @@ import { tenantPolicy } from '../helpers/tenant-policy';
  * User scopes — org-scoped scope assignments.
  * Maps users to company/site/team scope IDs for fine-grained access.
  * Option A: explicit columns — scope only applies if entity has matching column.
- * 
- * GAP-DB-001: Composite PK (org_id, id) for data integrity and tenant isolation.
  */
 export const userScopes = pgTable(
   'user_scopes',
   {
-    id: uuid('id').defaultRandom().notNull(),
+    id: uuid('id').defaultRandom().primaryKey(),
     orgId: text('org_id')
       .notNull()
       .default(sql`(auth.require_org_id())`),
@@ -23,7 +21,6 @@ export const userScopes = pgTable(
     createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
   },
   (table) => [
-    primaryKey({ columns: [table.orgId, table.id] }),
     uniqueIndex('user_scopes_org_user_type_id_idx').on(
       table.orgId,
       table.userId,

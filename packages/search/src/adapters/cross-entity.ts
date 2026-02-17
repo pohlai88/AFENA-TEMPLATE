@@ -1,4 +1,4 @@
-import { dbRo, sql } from 'afena-database';
+import { dbRo, sql } from 'afenda-database';
 
 import { toTsQuery } from '../fts';
 

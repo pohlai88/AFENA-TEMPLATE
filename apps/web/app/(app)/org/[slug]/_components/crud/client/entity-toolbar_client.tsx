@@ -1,6 +1,6 @@
 'use client';
 
-import { Input } from 'afena-ui/components/input';
+import { Input } from 'afenda-ui/components/input';
 import { Search } from 'lucide-react';
 
 interface EntityToolbarProps {

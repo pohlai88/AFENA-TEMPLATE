@@ -6,7 +6,7 @@
  * 1. Static architectural description (from ARCH_REGISTRY)
  * 2. Live introspected data (exports, dirs, types, invariants, deps, tests)
  *
- * Run via: `afena readme gen` (alongside README generation)
+ * Run via: `afenda readme gen` (alongside README generation)
  */
 
 import { writeFileSync, mkdirSync } from 'fs';
@@ -40,7 +40,7 @@ interface ArchEntry {
 }
 
 const ARCH_REGISTRY: Record<string, ArchEntry> = {
-  'afena-canon': {
+  'afenda-canon': {
     title: 'Canon (Type Authority)',
     filename: 'canon.architecture',
     purpose: 'Single source of truth for all types, schemas, enums, and capability definitions across the monorepo.',
@@ -62,10 +62,10 @@ It never imports from any other workspace package.
     crossRefs: ['crud.architecture.md', 'business.logic.architecture.md'],
   },
 
-  'afena-crud': {
+  'afenda-crud': {
     title: 'Interaction Kernel (CRUD-SAP)',
     filename: 'crud.architecture',
-    purpose: 'Single mutation entry point for all domain data — the Afena Interaction Kernel (AIK).',
+    purpose: 'Single mutation entry point for all domain data — the afenda Interaction Kernel (AIK).',
     overview: `
 Every domain mutation flows through \`mutate()\` — no exceptions. ESLint INVARIANT-01 enforces
 that no package outside \`packages/crud\` may call \`db.insert()\`, \`db.update()\`, or \`db.delete()\`
@@ -106,7 +106,7 @@ mutate(spec, ctx)
     crossRefs: ['business.logic.architecture.md', 'database.architecture.md'],
   },
 
-  'afena-database': {
+  'afenda-database': {
     title: 'Database Layer',
     filename: 'database.architecture',
     /** Manually maintained contract; do NOT overwrite via readme gen */
@@ -130,7 +130,7 @@ Schema governance: 8-rule lint, entity generator script, LiteMetadata registry.
     crossRefs: ['db.schema.governance.md', 'multitenancy.architecture.md'],
   },
 
-  'afena-search': {
+  'afenda-search': {
     title: 'Search Engine',
     filename: 'search.architecture',
     purpose: 'Full-text search helpers, per-entity adapters, and cross-entity search registry.',
@@ -156,7 +156,7 @@ The \`search_index\` materialized view provides a unified cross-entity search su
     crossRefs: ['database.architecture.md', 'route.architecture.md'],
   },
 
-  'afena-workflow': {
+  'afenda-workflow': {
     title: 'Workflow Engine',
     filename: 'workflow.architecture',
     purpose: 'Rule engine for before/after mutation hooks — conditional logic, input enrichment, and side effects.',
@@ -196,7 +196,7 @@ mutate() pipeline
     crossRefs: ['crud.architecture.md', 'business.logic.architecture.md'],
   },
 
-  'afena-advisory': {
+  'afenda-advisory': {
     title: 'Advisory Engine (Deterministic Intelligence)',
     filename: 'advisory.architecture',
     purpose: 'Math-first anomaly detection, forecasting, and business rule evaluation — NO LLMs.',
@@ -221,14 +221,14 @@ persists with evidence and human-readable explanations.
     crossRefs: ['database.architecture.md', 'business.logic.architecture.md'],
   },
 
-  'afena-migration': {
+  'afenda-migration': {
     title: 'Migration Engine',
     filename: 'migration.architecture',
     purpose: 'Legacy data migration pipeline with atomicity guarantees, conflict detection, and signed audit reports.',
     overview: `
 Template Method pipeline: Extract → Transform → Plan → Load. Each batch is processed through
 a configurable chain of transforms, conflict detectors, and gates. Lineage tracking ensures
-every legacy record maps to exactly one Afena entity (reservation-first pattern).
+every legacy record maps to exactly one afenda entity (reservation-first pattern).
 
 Operational hardening: retry/quarantine wrapper (\`withTerminalOutcome\`), periodic checkpoints,
 performance tracking (p50/p95), and configurable conflict thresholds for score-based merge routing.
@@ -268,7 +268,7 @@ buildSignedReport() → SignedReport
     crossRefs: ['database.architecture.md', 'crud.architecture.md'],
   },
 
-  'afena-logger': {
+  'afenda-logger': {
     title: 'Logging & Observability',
     filename: 'logger.architecture',
     purpose: 'Pino-based structured logging with AsyncLocalStorage context propagation.',
@@ -290,7 +290,7 @@ Edge Runtime safe: ALS uses lazy \`require('node:async_hooks')\` with try/catch 
     crossRefs: ['route.architecture.md', 'crud.architecture.md'],
   },
 
-  'afena-ui': {
+  'afenda-ui': {
     title: 'UI Design System',
     filename: 'ui.architecture',
     purpose: 'Four-layer design system: Engine tokens → CSS bridge → shadcn/ui primitives → App shell.',
@@ -309,7 +309,7 @@ no \`'use client'\` in pages/layouts.
 - **Token bridge**: Engine tokens → bare CSS vars (shadcn) + \`@theme inline\` (Tailwind v4)
 - **Glass utility**: Dark-mode-aware in \`@layer utilities\` (not \`@utility\`)
 - **Button polish**: Transition, shadow, lift on hover, press scale (both modes)
-- **Import aliases**: \`afena-ui/components\` and \`afena-ui/lib/utils\` in app workspace
+- **Import aliases**: \`afenda-ui/components\` and \`afenda-ui/lib/utils\` in app workspace
 `,
     crossRefs: ['route.architecture.md'],
   },
@@ -337,7 +337,7 @@ Auth: Neon Auth with middleware-level session validation. Org context resolved f
     crossRefs: ['ui.architecture.md', 'multitenancy.architecture.md'],
   },
 
-  'tools/afena-cli': {
+  'tools/afenda-cli': {
     title: 'CLI & Meta Engine',
     filename: 'meta.architecture',
     purpose: 'Capability Truth Ledger — scan, check, generate, fix. README generation. Entity scaffolding.',
@@ -372,9 +372,9 @@ function renderArchDoc(entry: ArchEntry, info: ArchPackageInfo): string {
   const lines: string[] = [];
   const now = `${new Date().toISOString().slice(0, 19)}Z`;
 
-  lines.push(`# Afena ${entry.title} — Architecture Reference`);
+  lines.push(`# afenda ${entry.title} — Architecture Reference`);
   lines.push('');
-  lines.push(`> **Auto-generated** by \`afena readme gen\` at ${now}. Do not edit — regenerate instead.`);
+  lines.push(`> **Auto-generated** by \`afenda readme gen\` at ${now}. Do not edit — regenerate instead.`);
   lines.push(`> **Package:** \`${info.name}\` (\`${info.path}\`)`);
   lines.push(`> **Purpose:** ${entry.purpose}`);
   lines.push('');

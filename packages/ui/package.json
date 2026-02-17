@@ -1,5 +1,5 @@
 {
-  "name": "afena-ui",
+  "name": "afenda-ui",
   "version": "0.1.0",
   "private": true,
   "main": "./dist/index.js",
@@ -55,8 +55,8 @@
   "devDependencies": {
     "@types/react": "catalog:",
     "@types/react-dom": "catalog:",
-    "afena-eslint-config": "workspace:^",
-    "afena-typescript-config": "workspace:*",
+    "afenda-eslint-config": "workspace:^",
+    "afenda-typescript-config": "workspace:*",
     "tailwindcss": "catalog:",
     "tsup": "catalog:",
     "typescript": "catalog:",

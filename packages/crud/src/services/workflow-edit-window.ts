@@ -1,7 +1,7 @@
-import { db, sql } from 'afena-database';
-import { checkEditWindow } from 'afena-workflow';
+import { db, sql } from 'afenda-database';
+import { checkEditWindow } from 'afenda-workflow';
 
-import type { CompiledWorkflow } from 'afena-workflow';
+import type { CompiledWorkflow } from 'afenda-workflow';
 
 /**
  * Enforce workflow edit-window policy as a mutate() precondition.

@@ -1,6 +1,6 @@
 import { NextRequest } from 'next/server';
 
-import { dbSearchWorker, sql } from 'afena-database';
+import { dbSearchWorker, sql } from 'afenda-database';
 
 import { requireCronSecret } from '@/lib/api/with-cron-secret';
 

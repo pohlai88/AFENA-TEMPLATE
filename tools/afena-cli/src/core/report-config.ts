@@ -1,6 +1,6 @@
 /**
  * Report Configuration Constants
- * Defines standard report structure and formatting for all afena-cli commands
+ * Defines standard report structure and formatting for all afenda-cli commands
  */
 
 export interface ReportTaskConfig {
@@ -18,7 +18,7 @@ export interface ReportCommandConfig {
 }
 
 /**
- * Standard report configurations for all afena-cli commands
+ * Standard report configurations for all afenda-cli commands
  */
 export const REPORT_CONFIGS: Record<string, ReportCommandConfig> = {
   bundle: {

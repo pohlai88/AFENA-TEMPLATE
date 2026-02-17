@@ -3,7 +3,7 @@ import { resolveActions } from '../../_components/crud/server/action-resolver_se
 import { CONTACT_CONTRACT } from '../_components/contact-contract';
 
 import type { OrgContext } from '../../_server/org-context_server';
-import type { ResolvedActions } from 'afena-canon';
+import type { ResolvedActions } from 'afenda-canon';
 
 /**
  * Resolve contact actions for the current actor + entity state.

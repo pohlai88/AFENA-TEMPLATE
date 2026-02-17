@@ -1,5 +1,5 @@
-import { Card, CardContent, CardHeader, CardTitle } from 'afena-ui/components/card';
-import { Separator } from 'afena-ui/components/separator';
+import { Card, CardContent, CardHeader, CardTitle } from 'afenda-ui/components/card';
+import { Separator } from 'afenda-ui/components/separator';
 
 /**
  * EntityDetailLayout — 2-column detail page layout.

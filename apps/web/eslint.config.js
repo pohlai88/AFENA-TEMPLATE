@@ -1,4 +1,4 @@
-const nextConfig = require('afena-eslint-config/next');
+const nextConfig = require('afenda-eslint-config/next');
 
 module.exports = [
   { ignores: ['.next/**', 'dist/**', '*.config.*', 'src/types/**', 'scripts/**', '.env', '.env.*', '.env*.example'] },
@@ -64,11 +64,11 @@ module.exports = [
         {
           paths: [
             {
-              name: '@afena/database',
+              name: '@afenda/database',
               message: 'Kernel only in boundary modules (entity-route-handlers, entity-actions).',
             },
             {
-              name: 'afena-database',
+              name: 'afenda-database',
               message: 'Kernel only in boundary modules (entity-route-handlers, entity-actions).',
             },
             {
@@ -76,7 +76,7 @@ module.exports = [
               message: 'Do not import from adapters; use kernel via boundary modules.',
             },
             {
-              name: 'afena-crud',
+              name: 'afenda-crud',
               message: 'Kernel only in boundary modules (entity-route-handlers, entity-actions).',
             },
           ],
@@ -86,7 +86,7 @@ module.exports = [
               message: 'Do not import schema/repositories; use kernel via boundary modules.',
             },
             {
-              group: ['**/packages/crud/**', '**/afena-crud/**'],
+              group: ['**/packages/crud/**', '**/afenda-crud/**'],
               message: 'Kernel only in boundary modules (entity-route-handlers, entity-actions).',
             },
           ],
@@ -104,11 +104,11 @@ module.exports = [
         {
           paths: [
             {
-              name: '@afena/database',
+              name: '@afenda/database',
               message: 'Routes must use entity-route-handlers only; do not import DB directly.',
             },
             {
-              name: 'afena-database',
+              name: 'afenda-database',
               message: 'Routes must use entity-route-handlers only; do not import DB directly.',
             },
             {
@@ -116,7 +116,7 @@ module.exports = [
               message: 'Routes must use entity-route-handlers only.',
             },
             {
-              name: 'afena-crud',
+              name: 'afenda-crud',
               message: 'Routes must use entity-route-handlers only; do not import crud directly.',
             },
           ],
@@ -126,7 +126,7 @@ module.exports = [
               message: 'Routes must use entity-route-handlers only.',
             },
             {
-              group: ['**/packages/crud/**', '**/afena-crud/**'],
+              group: ['**/packages/crud/**', '**/afenda-crud/**'],
               message: 'Routes must use entity-route-handlers only.',
             },
           ],
@@ -144,11 +144,11 @@ module.exports = [
         {
           paths: [
             {
-              name: '@afena/database',
+              name: '@afenda/database',
               message: 'Server actions must use entity-actions / generateEntityActions only.',
             },
             {
-              name: 'afena-database',
+              name: 'afenda-database',
               message: 'Server actions must use entity-actions / generateEntityActions only.',
             },
             {
@@ -156,7 +156,7 @@ module.exports = [
               message: 'Server actions must use entity-actions only.',
             },
             {
-              name: 'afena-crud',
+              name: 'afenda-crud',
               message: 'Server actions must use entity-actions / generateEntityActions only.',
             },
           ],
@@ -166,7 +166,7 @@ module.exports = [
               message: 'Server actions must use entity-actions only.',
             },
             {
-              group: ['**/packages/crud/**', '**/afena-crud/**'],
+              group: ['**/packages/crud/**', '**/afenda-crud/**'],
               message: 'Server actions must use entity-actions only.',
             },
           ],

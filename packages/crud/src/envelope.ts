@@ -1,4 +1,4 @@
-import type { ApiResponse, ErrorCode, KernelError, Receipt } from 'afena-canon';
+import type { ApiResponse, ErrorCode, KernelError, Receipt } from 'afenda-canon';
 
 /** Optional meta fields to merge into the response envelope. */
 export type ApiMetaExtras = { totalCount?: number; nextCursor?: string };

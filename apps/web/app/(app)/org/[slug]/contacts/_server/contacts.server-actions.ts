@@ -18,7 +18,7 @@ import {
   logActionSuccess,
 } from '../../_components/crud/server/action-logger_server';
 
-import type { ActionEnvelope, ApiResponse } from 'afena-canon';
+import type { ActionEnvelope, ApiResponse } from 'afenda-canon';
 
 /**
  * Enterprise contact server actions — accept ActionEnvelope.

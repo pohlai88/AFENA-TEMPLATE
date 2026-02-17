@@ -1,0 +1,2927 @@
+{
+  "version": "1.0",
+  "generatedAt": "2026-02-17T10:24:07.150Z",
+  "packageGraph": {
+    "nodes": [
+      {
+        "name": "afenda-monorepo",
+        "path": "package.json",
+        "version": "0.1.0",
+        "private": true,
+        "dependencies": [],
+        "devDependencies": []
+      },
+      {
+        "name": "web",
+        "path": "apps/web",
+        "version": "0.1.0",
+        "private": true,
+        "dependencies": [
+          "afenda-canon",
+          "afenda-crud",
+          "afenda-database",
+          "afenda-logger",
+          "afenda-observability",
+          "afenda-search",
+          "afenda-ui",
+          "afenda-workflow"
+        ],
+        "devDependencies": [
+          "afenda-eslint-config",
+          "afenda-typescript-config"
+        ]
+      },
+      {
+        "name": "afenda-accounting",
+        "path": "packages/accounting",
+        "version": "0.1.0",
+        "private": true,
+        "dependencies": [
+          "afenda-canon",
+          "afenda-database"
+        ],
+        "devDependencies": [
+          "afenda-eslint-config",
+          "afenda-typescript-config"
+        ]
+      },
+      {
+        "name": "afenda-crm",
+        "path": "packages/crm",
+        "version": "0.1.0",
+        "private": true,
+        "dependencies": [
+          "afenda-canon",
+          "afenda-database"
+        ],
+        "devDependencies": [
+          "afenda-eslint-config",
+          "afenda-typescript-config"
+        ]
+      },
+      {
+        "name": "afenda-canon",
+        "path": "packages/canon",
+        "version": "0.1.0",
+        "private": true,
+        "dependencies": [],
+        "devDependencies": [
+          "afenda-eslint-config",
+          "afenda-typescript-config"
+        ]
+      },
+      {
+        "name": "afenda-advisory",
+        "path": "packages/advisory",
+        "version": "0.1.0",
+        "private": true,
+        "dependencies": [
+          "afenda-canon",
+          "afenda-database"
+        ],
+        "devDependencies": [
+          "afenda-eslint-config",
+          "afenda-typescript-config"
+        ]
+      },
+      {
+        "name": "afenda-budgeting",
+        "path": "packages/budgeting",
+        "version": "0.1.0",
+        "private": true,
+        "dependencies": [
+          "afenda-canon",
+          "afenda-database",
+          "afenda-accounting",
+          "afenda-workflow"
+        ],
+        "devDependencies": [
+          "afenda-eslint-config",
+          "afenda-typescript-config"
+        ]
+      },
+      {
+        "name": "afenda-crud",
+        "path": "packages/crud",
+        "version": "0.1.0",
+        "private": true,
+        "dependencies": [
+          "afenda-accounting",
+          "afenda-canon",
+          "afenda-crm",
+          "afenda-database",
+          "afenda-intercompany",
+          "afenda-inventory",
+          "afenda-logger",
+          "afenda-workflow"
+        ],
+        "devDependencies": [
+          "afenda-eslint-config",
+          "afenda-typescript-config"
+        ]
+      },
+      {
+        "name": "afenda-database",
+        "path": "packages/database",
+        "version": "0.1.0",
+        "private": true,
+        "dependencies": [],
+        "devDependencies": [
+          "afenda-eslint-config",
+          "afenda-typescript-config"
+        ]
+      },
+      {
+        "name": "afenda-eslint-config",
+        "path": "packages/eslint-config",
+        "version": "0.1.0",
+        "private": true,
+        "dependencies": [],
+        "devDependencies": []
+      },
+      {
+        "name": "afenda-fixed-assets",
+        "path": "packages/fixed-assets",
+        "version": "0.1.0",
+        "private": true,
+        "dependencies": [
+          "afenda-canon",
+          "afenda-database",
+          "afenda-accounting"
+        ],
+        "devDependencies": [
+          "afenda-eslint-config",
+          "afenda-typescript-config"
+        ]
+      },
+      {
+        "name": "afenda-forecasting",
+        "path": "packages/forecasting",
+        "version": "0.1.0",
+        "private": true,
+        "dependencies": [
+          "afenda-canon",
+          "afenda-database",
+          "afenda-sales"
+        ],
+        "devDependencies": [
+          "afenda-eslint-config",
+          "afenda-typescript-config"
+        ]
+      },
+      {
+        "name": "afenda-intercompany",
+        "path": "packages/intercompany",
+        "version": "0.1.0",
+        "private": true,
+        "dependencies": [
+          "afenda-canon",
+          "afenda-database",
+          "afenda-logger"
+        ],
+        "devDependencies": [
+          "afenda-eslint-config",
+          "afenda-typescript-config"
+        ]
+      },
+      {
+        "name": "afenda-inventory",
+        "path": "packages/inventory",
+        "version": "0.1.0",
+        "private": true,
+        "dependencies": [
+          "afenda-canon",
+          "afenda-database"
+        ],
+        "devDependencies": [
+          "afenda-eslint-config",
+          "afenda-typescript-config"
+        ]
+      },
+      {
+        "name": "afenda-migration",
+        "path": "packages/migration",
+        "version": "0.1.0",
+        "private": true,
+        "dependencies": [
+          "afenda-canon",
+          "afenda-database",
+          "afenda-logger"
+        ],
+        "devDependencies": [
+          "afenda-eslint-config",
+          "afenda-typescript-config"
+        ]
+      },
+      {
+        "name": "afenda-logger",
+        "path": "packages/logger",
+        "version": "0.1.0",
+        "private": true,
+        "dependencies": [],
+        "devDependencies": [
+          "afenda-eslint-config",
+          "afenda-typescript-config"
+        ]
+      },
+      {
+        "name": "afenda-payables",
+        "path": "packages/payables",
+        "version": "0.1.0",
+        "private": true,
+        "dependencies": [
+          "afenda-canon",
+          "afenda-database",
+          "afenda-workflow",
+          "afenda-receiving"
+        ],
+        "devDependencies": [
+          "afenda-eslint-config",
+          "afenda-typescript-config"
+        ]
+      },
+      {
+        "name": "afenda-planning",
+        "path": "packages/planning",
+        "version": "0.1.0",
+        "private": true,
+        "dependencies": [
+          "afenda-canon",
+          "afenda-database",
+          "afenda-inventory",
+          "afenda-sales",
+          "afenda-purchasing"
+        ],
+        "devDependencies": [
+          "afenda-eslint-config",
+          "afenda-typescript-config"
+        ]
+      },
+      {
+        "name": "afenda-observability",
+        "path": "packages/observability",
+        "version": "0.1.0",
+        "private": false,
+        "dependencies": [
+          "afenda-logger"
+        ],
+        "devDependencies": [
+          "afenda-eslint-config",
+          "afenda-typescript-config"
+        ]
+      },
+      {
+        "name": "afenda-procurement",
+        "path": "packages/procurement",
+        "version": "0.1.0",
+        "private": true,
+        "dependencies": [
+          "afenda-canon",
+          "afenda-database",
+          "afenda-workflow",
+          "afenda-crm"
+        ],
+        "devDependencies": [
+          "afenda-eslint-config",
+          "afenda-typescript-config"
+        ]
+      },
+      {
+        "name": "afenda-production",
+        "path": "packages/production",
+        "version": "0.1.0",
+        "private": true,
+        "dependencies": [
+          "afenda-canon",
+          "afenda-database",
+          "afenda-inventory"
+        ],
+        "devDependencies": [
+          "afenda-eslint-config",
+          "afenda-typescript-config"
+        ]
+      },
+      {
+        "name": "afenda-purchasing",
+        "path": "packages/purchasing",
+        "version": "0.1.0",
+        "private": true,
+        "dependencies": [
+          "afenda-canon",
+          "afenda-database",
+          "afenda-workflow",
+          "afenda-procurement"
+        ],
+        "devDependencies": [
+          "afenda-eslint-config",
+          "afenda-typescript-config"
+        ]
+      },
+      {
+        "name": "afenda-quality-mgmt",
+        "path": "packages/quality-mgmt",
+        "version": "0.1.0",
+        "private": true,
+        "dependencies": [
+          "afenda-canon",
+          "afenda-database",
+          "afenda-production",
+          "afenda-receiving"
+        ],
+        "devDependencies": [
+          "afenda-eslint-config",
+          "afenda-typescript-config"
+        ]
+      },
+      {
+        "name": "afenda-receivables",
+        "path": "packages/receivables",
+        "version": "0.1.0",
+        "private": true,
+        "dependencies": [
+          "afenda-canon",
+          "afenda-database",
+          "afenda-workflow",
+          "afenda-sales",
+          "afenda-crm"
+        ],
+        "devDependencies": [
+          "afenda-eslint-config",
+          "afenda-typescript-config"
+        ]
+      },
+      {
+        "name": "afenda-receiving",
+        "path": "packages/receiving",
+        "version": "0.1.0",
+        "private": true,
+        "dependencies": [
+          "afenda-canon",
+          "afenda-database",
+          "afenda-inventory",
+          "afenda-purchasing"
+        ],
+        "devDependencies": [
+          "afenda-eslint-config",
+          "afenda-typescript-config"
+        ]
+      },
+      {
+        "name": "afenda-shipping",
+        "path": "packages/shipping",
+        "version": "0.1.0",
+        "private": true,
+        "dependencies": [
+          "afenda-canon",
+          "afenda-database",
+          "afenda-sales"
+        ],
+        "devDependencies": [
+          "afenda-eslint-config",
+          "afenda-typescript-config"
+        ]
+      },
+      {
+        "name": "afenda-sales",
+        "path": "packages/sales",
+        "version": "0.1.0",
+        "private": true,
+        "dependencies": [
+          "afenda-canon",
+          "afenda-database",
+          "afenda-workflow",
+          "afenda-inventory",
+          "afenda-crm"
+        ],
+        "devDependencies": [
+          "afenda-eslint-config",
+          "afenda-typescript-config"
+        ]
+      },
+      {
+        "name": "afenda-search",
+        "path": "packages/search",
+        "version": "0.1.0",
+        "private": true,
+        "dependencies": [
+          "afenda-database",
+          "afenda-logger"
+        ],
+        "devDependencies": [
+          "afenda-eslint-config",
+          "afenda-typescript-config"
+        ]
+      },
+      {
+        "name": "afenda-supplier-portal",
+        "path": "packages/supplier-portal",
+        "version": "0.1.0",
+        "private": true,
+        "dependencies": [
+          "afenda-canon",
+          "afenda-database",
+          "afenda-purchasing"
+        ],
+        "devDependencies": [
+          "afenda-eslint-config",
+          "afenda-typescript-config"
+        ]
+      },
+      {
+        "name": "afenda-tax-compliance",
+        "path": "packages/tax-compliance",
+        "version": "0.1.0",
+        "private": true,
+        "dependencies": [
+          "afenda-canon",
+          "afenda-database",
+          "afenda-accounting",
+          "afenda-sales",
+          "afenda-payables"
+        ],
+        "devDependencies": [
+          "afenda-eslint-config",
+          "afenda-typescript-config"
+        ]
+      },
+      {
+        "name": "afenda-transportation",
+        "path": "packages/transportation",
+        "version": "0.1.0",
+        "private": true,
+        "dependencies": [
+          "afenda-canon",
+          "afenda-database",
+          "afenda-shipping"
+        ],
+        "devDependencies": [
+          "afenda-eslint-config",
+          "afenda-typescript-config"
+        ]
+      },
+      {
+        "name": "afenda-treasury",
+        "path": "packages/treasury",
+        "version": "0.1.0",
+        "private": true,
+        "dependencies": [
+          "afenda-canon",
+          "afenda-database",
+          "afenda-payables",
+          "afenda-receivables"
+        ],
+        "devDependencies": [
+          "afenda-eslint-config",
+          "afenda-typescript-config"
+        ]
+      },
+      {
+        "name": "afenda-typescript-config",
+        "path": "packages/typescript-config",
+        "version": "0.1.0",
+        "private": true,
+        "dependencies": [],
+        "devDependencies": []
+      },
+      {
+        "name": "afenda-ui",
+        "path": "packages/ui",
+        "version": "0.1.0",
+        "private": true,
+        "dependencies": [],
+        "devDependencies": [
+          "afenda-eslint-config",
+          "afenda-typescript-config"
+        ]
+      },
+      {
+        "name": "afenda-warehouse",
+        "path": "packages/warehouse",
+        "version": "0.1.0",
+        "private": true,
+        "dependencies": [
+          "afenda-canon",
+          "afenda-database",
+          "afenda-inventory",
+          "afenda-sales"
+        ],
+        "devDependencies": [
+          "afenda-eslint-config",
+          "afenda-typescript-config"
+        ]
+      },
+      {
+        "name": "afenda-workflow",
+        "path": "packages/workflow",
+        "version": "0.1.0",
+        "private": true,
+        "dependencies": [
+          "afenda-canon",
+          "afenda-database"
+        ],
+        "devDependencies": [
+          "afenda-eslint-config",
+          "afenda-typescript-config"
+        ]
+      },
+      {
+        "name": "@afenda/cli",
+        "path": "tools/afenda-cli",
+        "version": "0.1.0",
+        "private": true,
+        "dependencies": [
+          "afenda-canon"
+        ],
+        "devDependencies": [
+          "afenda-eslint-config",
+          "afenda-typescript-config"
+        ]
+      },
+      {
+        "name": "quality-metrics",
+        "path": "tools/quality-metrics",
+        "version": "0.1.0",
+        "private": true,
+        "dependencies": [],
+        "devDependencies": []
+      }
+    ],
+    "edges": [
+      {
+        "from": "web",
+        "to": "afenda-canon",
+        "dev": false
+      },
+      {
+        "from": "web",
+        "to": "afenda-crud",
+        "dev": false
+      },
+      {
+        "from": "web",
+        "to": "afenda-database",
+        "dev": false
+      },
+      {
+        "from": "web",
+        "to": "afenda-logger",
+        "dev": false
+      },
+      {
+        "from": "web",
+        "to": "afenda-observability",
+        "dev": false
+      },
+      {
+        "from": "web",
+        "to": "afenda-search",
+        "dev": false
+      },
+      {
+        "from": "web",
+        "to": "afenda-ui",
+        "dev": false
+      },
+      {
+        "from": "web",
+        "to": "afenda-workflow",
+        "dev": false
+      },
+      {
+        "from": "web",
+        "to": "afenda-eslint-config",
+        "dev": true
+      },
+      {
+        "from": "web",
+        "to": "afenda-typescript-config",
+        "dev": true
+      },
+      {
+        "from": "afenda-accounting",
+        "to": "afenda-canon",
+        "dev": false
+      },
+      {
+        "from": "afenda-accounting",
+        "to": "afenda-database",
+        "dev": false
+      },
+      {
+        "from": "afenda-accounting",
+        "to": "afenda-eslint-config",
+        "dev": true
+      },
+      {
+        "from": "afenda-accounting",
+        "to": "afenda-typescript-config",
+        "dev": true
+      },
+      {
+        "from": "afenda-crm",
+        "to": "afenda-canon",
+        "dev": false
+      },
+      {
+        "from": "afenda-crm",
+        "to": "afenda-database",
+        "dev": false
+      },
+      {
+        "from": "afenda-crm",
+        "to": "afenda-eslint-config",
+        "dev": true
+      },
+      {
+        "from": "afenda-crm",
+        "to": "afenda-typescript-config",
+        "dev": true
+      },
+      {
+        "from": "afenda-canon",
+        "to": "afenda-eslint-config",
+        "dev": true
+      },
+      {
+        "from": "afenda-canon",
+        "to": "afenda-typescript-config",
+        "dev": true
+      },
+      {
+        "from": "afenda-advisory",
+        "to": "afenda-canon",
+        "dev": false
+      },
+      {
+        "from": "afenda-advisory",
+        "to": "afenda-database",
+        "dev": false
+      },
+      {
+        "from": "afenda-advisory",
+        "to": "afenda-eslint-config",
+        "dev": true
+      },
+      {
+        "from": "afenda-advisory",
+        "to": "afenda-typescript-config",
+        "dev": true
+      },
+      {
+        "from": "afenda-budgeting",
+        "to": "afenda-canon",
+        "dev": false
+      },
+      {
+        "from": "afenda-budgeting",
+        "to": "afenda-database",
+        "dev": false
+      },
+      {
+        "from": "afenda-budgeting",
+        "to": "afenda-accounting",
+        "dev": false
+      },
+      {
+        "from": "afenda-budgeting",
+        "to": "afenda-workflow",
+        "dev": false
+      },
+      {
+        "from": "afenda-budgeting",
+        "to": "afenda-eslint-config",
+        "dev": true
+      },
+      {
+        "from": "afenda-budgeting",
+        "to": "afenda-typescript-config",
+        "dev": true
+      },
+      {
+        "from": "afenda-crud",
+        "to": "afenda-accounting",
+        "dev": false
+      },
+      {
+        "from": "afenda-crud",
+        "to": "afenda-canon",
+        "dev": false
+      },
+      {
+        "from": "afenda-crud",
+        "to": "afenda-crm",
+        "dev": false
+      },
+      {
+        "from": "afenda-crud",
+        "to": "afenda-database",
+        "dev": false
+      },
+      {
+        "from": "afenda-crud",
+        "to": "afenda-intercompany",
+        "dev": false
+      },
+      {
+        "from": "afenda-crud",
+        "to": "afenda-inventory",
+        "dev": false
+      },
+      {
+        "from": "afenda-crud",
+        "to": "afenda-logger",
+        "dev": false
+      },
+      {
+        "from": "afenda-crud",
+        "to": "afenda-workflow",
+        "dev": false
+      },
+      {
+        "from": "afenda-crud",
+        "to": "afenda-eslint-config",
+        "dev": true
+      },
+      {
+        "from": "afenda-crud",
+        "to": "afenda-typescript-config",
+        "dev": true
+      },
+      {
+        "from": "afenda-database",
+        "to": "afenda-eslint-config",
+        "dev": true
+      },
+      {
+        "from": "afenda-database",
+        "to": "afenda-typescript-config",
+        "dev": true
+      },
+      {
+        "from": "afenda-fixed-assets",
+        "to": "afenda-canon",
+        "dev": false
+      },
+      {
+        "from": "afenda-fixed-assets",
+        "to": "afenda-database",
+        "dev": false
+      },
+      {
+        "from": "afenda-fixed-assets",
+        "to": "afenda-accounting",
+        "dev": false
+      },
+      {
+        "from": "afenda-fixed-assets",
+        "to": "afenda-eslint-config",
+        "dev": true
+      },
+      {
+        "from": "afenda-fixed-assets",
+        "to": "afenda-typescript-config",
+        "dev": true
+      },
+      {
+        "from": "afenda-forecasting",
+        "to": "afenda-canon",
+        "dev": false
+      },
+      {
+        "from": "afenda-forecasting",
+        "to": "afenda-database",
+        "dev": false
+      },
+      {
+        "from": "afenda-forecasting",
+        "to": "afenda-sales",
+        "dev": false
+      },
+      {
+        "from": "afenda-forecasting",
+        "to": "afenda-eslint-config",
+        "dev": true
+      },
+      {
+        "from": "afenda-forecasting",
+        "to": "afenda-typescript-config",
+        "dev": true
+      },
+      {
+        "from": "afenda-intercompany",
+        "to": "afenda-canon",
+        "dev": false
+      },
+      {
+        "from": "afenda-intercompany",
+        "to": "afenda-database",
+        "dev": false
+      },
+      {
+        "from": "afenda-intercompany",
+        "to": "afenda-logger",
+        "dev": false
+      },
+      {
+        "from": "afenda-intercompany",
+        "to": "afenda-eslint-config",
+        "dev": true
+      },
+      {
+        "from": "afenda-intercompany",
+        "to": "afenda-typescript-config",
+        "dev": true
+      },
+      {
+        "from": "afenda-inventory",
+        "to": "afenda-canon",
+        "dev": false
+      },
+      {
+        "from": "afenda-inventory",
+        "to": "afenda-database",
+        "dev": false
+      },
+      {
+        "from": "afenda-inventory",
+        "to": "afenda-eslint-config",
+        "dev": true
+      },
+      {
+        "from": "afenda-inventory",
+        "to": "afenda-typescript-config",
+        "dev": true
+      },
+      {
+        "from": "afenda-migration",
+        "to": "afenda-canon",
+        "dev": false
+      },
+      {
+        "from": "afenda-migration",
+        "to": "afenda-database",
+        "dev": false
+      },
+      {
+        "from": "afenda-migration",
+        "to": "afenda-logger",
+        "dev": false
+      },
+      {
+        "from": "afenda-migration",
+        "to": "afenda-eslint-config",
+        "dev": true
+      },
+      {
+        "from": "afenda-migration",
+        "to": "afenda-typescript-config",
+        "dev": true
+      },
+      {
+        "from": "afenda-logger",
+        "to": "afenda-eslint-config",
+        "dev": true
+      },
+      {
+        "from": "afenda-logger",
+        "to": "afenda-typescript-config",
+        "dev": true
+      },
+      {
+        "from": "afenda-payables",
+        "to": "afenda-canon",
+        "dev": false
+      },
+      {
+        "from": "afenda-payables",
+        "to": "afenda-database",
+        "dev": false
+      },
+      {
+        "from": "afenda-payables",
+        "to": "afenda-workflow",
+        "dev": false
+      },
+      {
+        "from": "afenda-payables",
+        "to": "afenda-receiving",
+        "dev": false
+      },
+      {
+        "from": "afenda-payables",
+        "to": "afenda-eslint-config",
+        "dev": true
+      },
+      {
+        "from": "afenda-payables",
+        "to": "afenda-typescript-config",
+        "dev": true
+      },
+      {
+        "from": "afenda-planning",
+        "to": "afenda-canon",
+        "dev": false
+      },
+      {
+        "from": "afenda-planning",
+        "to": "afenda-database",
+        "dev": false
+      },
+      {
+        "from": "afenda-planning",
+        "to": "afenda-inventory",
+        "dev": false
+      },
+      {
+        "from": "afenda-planning",
+        "to": "afenda-sales",
+        "dev": false
+      },
+      {
+        "from": "afenda-planning",
+        "to": "afenda-purchasing",
+        "dev": false
+      },
+      {
+        "from": "afenda-planning",
+        "to": "afenda-eslint-config",
+        "dev": true
+      },
+      {
+        "from": "afenda-planning",
+        "to": "afenda-typescript-config",
+        "dev": true
+      },
+      {
+        "from": "afenda-observability",
+        "to": "afenda-logger",
+        "dev": false
+      },
+      {
+        "from": "afenda-observability",
+        "to": "afenda-eslint-config",
+        "dev": true
+      },
+      {
+        "from": "afenda-observability",
+        "to": "afenda-typescript-config",
+        "dev": true
+      },
+      {
+        "from": "afenda-procurement",
+        "to": "afenda-canon",
+        "dev": false
+      },
+      {
+        "from": "afenda-procurement",
+        "to": "afenda-database",
+        "dev": false
+      },
+      {
+        "from": "afenda-procurement",
+        "to": "afenda-workflow",
+        "dev": false
+      },
+      {
+        "from": "afenda-procurement",
+        "to": "afenda-crm",
+        "dev": false
+      },
+      {
+        "from": "afenda-procurement",
+        "to": "afenda-eslint-config",
+        "dev": true
+      },
+      {
+        "from": "afenda-procurement",
+        "to": "afenda-typescript-config",
+        "dev": true
+      },
+      {
+        "from": "afenda-production",
+        "to": "afenda-canon",
+        "dev": false
+      },
+      {
+        "from": "afenda-production",
+        "to": "afenda-database",
+        "dev": false
+      },
+      {
+        "from": "afenda-production",
+        "to": "afenda-inventory",
+        "dev": false
+      },
+      {
+        "from": "afenda-production",
+        "to": "afenda-eslint-config",
+        "dev": true
+      },
+      {
+        "from": "afenda-production",
+        "to": "afenda-typescript-config",
+        "dev": true
+      },
+      {
+        "from": "afenda-purchasing",
+        "to": "afenda-canon",
+        "dev": false
+      },
+      {
+        "from": "afenda-purchasing",
+        "to": "afenda-database",
+        "dev": false
+      },
+      {
+        "from": "afenda-purchasing",
+        "to": "afenda-workflow",
+        "dev": false
+      },
+      {
+        "from": "afenda-purchasing",
+        "to": "afenda-procurement",
+        "dev": false
+      },
+      {
+        "from": "afenda-purchasing",
+        "to": "afenda-eslint-config",
+        "dev": true
+      },
+      {
+        "from": "afenda-purchasing",
+        "to": "afenda-typescript-config",
+        "dev": true
+      },
+      {
+        "from": "afenda-quality-mgmt",
+        "to": "afenda-canon",
+        "dev": false
+      },
+      {
+        "from": "afenda-quality-mgmt",
+        "to": "afenda-database",
+        "dev": false
+      },
+      {
+        "from": "afenda-quality-mgmt",
+        "to": "afenda-production",
+        "dev": false
+      },
+      {
+        "from": "afenda-quality-mgmt",
+        "to": "afenda-receiving",
+        "dev": false
+      },
+      {
+        "from": "afenda-quality-mgmt",
+        "to": "afenda-eslint-config",
+        "dev": true
+      },
+      {
+        "from": "afenda-quality-mgmt",
+        "to": "afenda-typescript-config",
+        "dev": true
+      },
+      {
+        "from": "afenda-receivables",
+        "to": "afenda-canon",
+        "dev": false
+      },
+      {
+        "from": "afenda-receivables",
+        "to": "afenda-database",
+        "dev": false
+      },
+      {
+        "from": "afenda-receivables",
+        "to": "afenda-workflow",
+        "dev": false
+      },
+      {
+        "from": "afenda-receivables",
+        "to": "afenda-sales",
+        "dev": false
+      },
+      {
+        "from": "afenda-receivables",
+        "to": "afenda-crm",
+        "dev": false
+      },
+      {
+        "from": "afenda-receivables",
+        "to": "afenda-eslint-config",
+        "dev": true
+      },
+      {
+        "from": "afenda-receivables",
+        "to": "afenda-typescript-config",
+        "dev": true
+      },
+      {
+        "from": "afenda-receiving",
+        "to": "afenda-canon",
+        "dev": false
+      },
+      {
+        "from": "afenda-receiving",
+        "to": "afenda-database",
+        "dev": false
+      },
+      {
+        "from": "afenda-receiving",
+        "to": "afenda-inventory",
+        "dev": false
+      },
+      {
+        "from": "afenda-receiving",
+        "to": "afenda-purchasing",
+        "dev": false
+      },
+      {
+        "from": "afenda-receiving",
+        "to": "afenda-eslint-config",
+        "dev": true
+      },
+      {
+        "from": "afenda-receiving",
+        "to": "afenda-typescript-config",
+        "dev": true
+      },
+      {
+        "from": "afenda-shipping",
+        "to": "afenda-canon",
+        "dev": false
+      },
+      {
+        "from": "afenda-shipping",
+        "to": "afenda-database",
+        "dev": false
+      },
+      {
+        "from": "afenda-shipping",
+        "to": "afenda-sales",
+        "dev": false
+      },
+      {
+        "from": "afenda-shipping",
+        "to": "afenda-eslint-config",
+        "dev": true
+      },
+      {
+        "from": "afenda-shipping",
+        "to": "afenda-typescript-config",
+        "dev": true
+      },
+      {
+        "from": "afenda-sales",
+        "to": "afenda-canon",
+        "dev": false
+      },
+      {
+        "from": "afenda-sales",
+        "to": "afenda-database",
+        "dev": false
+      },
+      {
+        "from": "afenda-sales",
+        "to": "afenda-workflow",
+        "dev": false
+      },
+      {
+        "from": "afenda-sales",
+        "to": "afenda-inventory",
+        "dev": false
+      },
+      {
+        "from": "afenda-sales",
+        "to": "afenda-crm",
+        "dev": false
+      },
+      {
+        "from": "afenda-sales",
+        "to": "afenda-eslint-config",
+        "dev": true
+      },
+      {
+        "from": "afenda-sales",
+        "to": "afenda-typescript-config",
+        "dev": true
+      },
+      {
+        "from": "afenda-search",
+        "to": "afenda-database",
+        "dev": false
+      },
+      {
+        "from": "afenda-search",
+        "to": "afenda-logger",
+        "dev": false
+      },
+      {
+        "from": "afenda-search",
+        "to": "afenda-eslint-config",
+        "dev": true
+      },
+      {
+        "from": "afenda-search",
+        "to": "afenda-typescript-config",
+        "dev": true
+      },
+      {
+        "from": "afenda-supplier-portal",
+        "to": "afenda-canon",
+        "dev": false
+      },
+      {
+        "from": "afenda-supplier-portal",
+        "to": "afenda-database",
+        "dev": false
+      },
+      {
+        "from": "afenda-supplier-portal",
+        "to": "afenda-purchasing",
+        "dev": false
+      },
+      {
+        "from": "afenda-supplier-portal",
+        "to": "afenda-eslint-config",
+        "dev": true
+      },
+      {
+        "from": "afenda-supplier-portal",
+        "to": "afenda-typescript-config",
+        "dev": true
+      },
+      {
+        "from": "afenda-tax-compliance",
+        "to": "afenda-canon",
+        "dev": false
+      },
+      {
+        "from": "afenda-tax-compliance",
+        "to": "afenda-database",
+        "dev": false
+      },
+      {
+        "from": "afenda-tax-compliance",
+        "to": "afenda-accounting",
+        "dev": false
+      },
+      {
+        "from": "afenda-tax-compliance",
+        "to": "afenda-sales",
+        "dev": false
+      },
+      {
+        "from": "afenda-tax-compliance",
+        "to": "afenda-payables",
+        "dev": false
+      },
+      {
+        "from": "afenda-tax-compliance",
+        "to": "afenda-eslint-config",
+        "dev": true
+      },
+      {
+        "from": "afenda-tax-compliance",
+        "to": "afenda-typescript-config",
+        "dev": true
+      },
+      {
+        "from": "afenda-transportation",
+        "to": "afenda-canon",
+        "dev": false
+      },
+      {
+        "from": "afenda-transportation",
+        "to": "afenda-database",
+        "dev": false
+      },
+      {
+        "from": "afenda-transportation",
+        "to": "afenda-shipping",
+        "dev": false
+      },
+      {
+        "from": "afenda-transportation",
+        "to": "afenda-eslint-config",
+        "dev": true
+      },
+      {
+        "from": "afenda-transportation",
+        "to": "afenda-typescript-config",
+        "dev": true
+      },
+      {
+        "from": "afenda-treasury",
+        "to": "afenda-canon",
+        "dev": false
+      },
+      {
+        "from": "afenda-treasury",
+        "to": "afenda-database",
+        "dev": false
+      },
+      {
+        "from": "afenda-treasury",
+        "to": "afenda-payables",
+        "dev": false
+      },
+      {
+        "from": "afenda-treasury",
+        "to": "afenda-receivables",
+        "dev": false
+      },
+      {
+        "from": "afenda-treasury",
+        "to": "afenda-eslint-config",
+        "dev": true
+      },
+      {
+        "from": "afenda-treasury",
+        "to": "afenda-typescript-config",
+        "dev": true
+      },
+      {
+        "from": "afenda-ui",
+        "to": "afenda-eslint-config",
+        "dev": true
+      },
+      {
+        "from": "afenda-ui",
+        "to": "afenda-typescript-config",
+        "dev": true
+      },
+      {
+        "from": "afenda-warehouse",
+        "to": "afenda-canon",
+        "dev": false
+      },
+      {
+        "from": "afenda-warehouse",
+        "to": "afenda-database",
+        "dev": false
+      },
+      {
+        "from": "afenda-warehouse",
+        "to": "afenda-inventory",
+        "dev": false
+      },
+      {
+        "from": "afenda-warehouse",
+        "to": "afenda-sales",
+        "dev": false
+      },
+      {
+        "from": "afenda-warehouse",
+        "to": "afenda-eslint-config",
+        "dev": true
+      },
+      {
+        "from": "afenda-warehouse",
+        "to": "afenda-typescript-config",
+        "dev": true
+      },
+      {
+        "from": "afenda-workflow",
+        "to": "afenda-canon",
+        "dev": false
+      },
+      {
+        "from": "afenda-workflow",
+        "to": "afenda-database",
+        "dev": false
+      },
+      {
+        "from": "afenda-workflow",
+        "to": "afenda-eslint-config",
+        "dev": true
+      },
+      {
+        "from": "afenda-workflow",
+        "to": "afenda-typescript-config",
+        "dev": true
+      },
+      {
+        "from": "@afenda/cli",
+        "to": "afenda-canon",
+        "dev": false
+      },
+      {
+        "from": "@afenda/cli",
+        "to": "afenda-eslint-config",
+        "dev": true
+      },
+      {
+        "from": "@afenda/cli",
+        "to": "afenda-typescript-config",
+        "dev": true
+      }
+    ]
+  },
+  "schemaCatalog": {
+    "tableCount": 175,
+    "totalColumns": 2071,
+    "tables": [
+      {
+        "name": "account_categories",
+        "file": "packages/database/src/schema/account-categories.ts",
+        "columnCount": 2,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "accounts_settings",
+        "file": "packages/database/src/schema/accounts-settings.ts",
+        "columnCount": 37,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "activity_costs",
+        "file": "packages/database/src/schema/activity-costs.ts",
+        "columnCount": 3,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "activity_types",
+        "file": "packages/database/src/schema/activity-types.ts",
+        "columnCount": 2,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "addresses",
+        "file": "packages/database/src/schema/addresses.ts",
+        "columnCount": 9,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "advisories",
+        "file": "packages/database/src/schema/advisories.ts",
+        "columnCount": 21,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "advisory_evidence",
+        "file": "packages/database/src/schema/advisory-evidence.ts",
+        "columnCount": 8,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "api_keys",
+        "file": "packages/database/src/schema/api-keys.ts",
+        "columnCount": 11,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "appointment_booking_settings",
+        "file": "packages/database/src/schema/appointment-booking-settings.ts",
+        "columnCount": 0,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "approval_chains",
+        "file": "packages/database/src/schema/approval-chains.ts",
+        "columnCount": 30,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "approval_steps",
+        "file": "packages/database/src/schema/approval-chains.ts",
+        "columnCount": 30,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "approval_requests",
+        "file": "packages/database/src/schema/approval-chains.ts",
+        "columnCount": 30,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "approval_decisions",
+        "file": "packages/database/src/schema/approval-chains.ts",
+        "columnCount": 30,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "audit_logs",
+        "file": "packages/database/src/schema/audit-logs.ts",
+        "columnCount": 27,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "authorization_controls",
+        "file": "packages/database/src/schema/authorization-controls.ts",
+        "columnCount": 0,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "authorization_rules",
+        "file": "packages/database/src/schema/authorization-rules.ts",
+        "columnCount": 12,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "bank_accounts",
+        "file": "packages/database/src/schema/bank-accounts.ts",
+        "columnCount": 16,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "bank_reconciliation_sessions",
+        "file": "packages/database/src/schema/bank-reconciliation-sessions.ts",
+        "columnCount": 14,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "bank_statement_lines",
+        "file": "packages/database/src/schema/bank-statements.ts",
+        "columnCount": 19,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "boms",
+        "file": "packages/database/src/schema/boms.ts",
+        "columnCount": 16,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "bom_lines",
+        "file": "packages/database/src/schema/boms.ts",
+        "columnCount": 16,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "branches",
+        "file": "packages/database/src/schema/branches.ts",
+        "columnCount": 1,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "budgets",
+        "file": "packages/database/src/schema/budgets.ts",
+        "columnCount": 18,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "budget_commitments",
+        "file": "packages/database/src/schema/budgets.ts",
+        "columnCount": 18,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "buying_settings",
+        "file": "packages/database/src/schema/buying-settings.ts",
+        "columnCount": 13,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "chart_of_accounts",
+        "file": "packages/database/src/schema/chart-of-accounts.ts",
+        "columnCount": 9,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "communications",
+        "file": "packages/database/src/schema/communications.ts",
+        "columnCount": 9,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "companies",
+        "file": "packages/database/src/schema/companies.ts",
+        "columnCount": 8,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "company_addresses",
+        "file": "packages/database/src/schema/company-addresses.ts",
+        "columnCount": 8,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "contact_addresses",
+        "file": "packages/database/src/schema/contact-addresses.ts",
+        "columnCount": 8,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "contacts",
+        "file": "packages/database/src/schema/contacts.ts",
+        "columnCount": 5,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "contracts",
+        "file": "packages/database/src/schema/contracts.ts",
+        "columnCount": 16,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "cost_centers",
+        "file": "packages/database/src/schema/cost-centers.ts",
+        "columnCount": 7,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "credit_notes",
+        "file": "packages/database/src/schema/credit-notes.ts",
+        "columnCount": 18,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "crm_settings",
+        "file": "packages/database/src/schema/crm-settings.ts",
+        "columnCount": 5,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "currencies",
+        "file": "packages/database/src/schema/currencies.ts",
+        "columnCount": 9,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "currency_exchange_settings_details",
+        "file": "packages/database/src/schema/currency-exchange-settings-details.ts",
+        "columnCount": 3,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "currency_exchange_settings",
+        "file": "packages/database/src/schema/currency-exchange-settings.ts",
+        "columnCount": 7,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "currency_exchanges",
+        "file": "packages/database/src/schema/currency-exchanges.ts",
+        "columnCount": 5,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "custom_field_sync_queue",
+        "file": "packages/database/src/schema/custom-field-sync-queue.ts",
+        "columnCount": 9,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "custom_field_values",
+        "file": "packages/database/src/schema/custom-field-values.ts",
+        "columnCount": 16,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "custom_fields",
+        "file": "packages/database/src/schema/custom-fields.ts",
+        "columnCount": 24,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "customer_profiles",
+        "file": "packages/database/src/schema/customer-profiles.ts",
+        "columnCount": 13,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "debit_notes",
+        "file": "packages/database/src/schema/debit-notes.ts",
+        "columnCount": 18,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "delivery_note_lines",
+        "file": "packages/database/src/schema/delivery-note-lines.ts",
+        "columnCount": 22,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "delivery_notes",
+        "file": "packages/database/src/schema/delivery-notes.ts",
+        "columnCount": 4,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "delivery_settings",
+        "file": "packages/database/src/schema/delivery-settings.ts",
+        "columnCount": 2,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "departments",
+        "file": "packages/database/src/schema/departments.ts",
+        "columnCount": 5,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "dependent_tasks",
+        "file": "packages/database/src/schema/dependent-tasks.ts",
+        "columnCount": 2,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "designations",
+        "file": "packages/database/src/schema/designations.ts",
+        "columnCount": 2,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "discount_rules",
+        "file": "packages/database/src/schema/discount-rules.ts",
+        "columnCount": 16,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "doc_links",
+        "file": "packages/database/src/schema/doc-links.ts",
+        "columnCount": 7,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "doc_postings",
+        "file": "packages/database/src/schema/doc-postings.ts",
+        "columnCount": 15,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "employee_groups",
+        "file": "packages/database/src/schema/employee-groups.ts",
+        "columnCount": 1,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "entity_attachments",
+        "file": "packages/database/src/schema/entity-attachments.ts",
+        "columnCount": 14,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "entity_versions",
+        "file": "packages/database/src/schema/entity-versions.ts",
+        "columnCount": 12,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "entity_view_fields",
+        "file": "packages/database/src/schema/entity-view-fields.ts",
+        "columnCount": 11,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "entity_views",
+        "file": "packages/database/src/schema/entity-views.ts",
+        "columnCount": 10,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "fiscal_periods",
+        "file": "packages/database/src/schema/fiscal-periods.ts",
+        "columnCount": 5,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "assets",
+        "file": "packages/database/src/schema/fixed-assets.ts",
+        "columnCount": 34,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "depreciation_schedules",
+        "file": "packages/database/src/schema/fixed-assets.ts",
+        "columnCount": 34,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "asset_events",
+        "file": "packages/database/src/schema/fixed-assets.ts",
+        "columnCount": 34,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "fx_rates",
+        "file": "packages/database/src/schema/fx-rates.ts",
+        "columnCount": 10,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "global_defaults",
+        "file": "packages/database/src/schema/global-defaults.ts",
+        "columnCount": 40,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "goods_receipt_lines",
+        "file": "packages/database/src/schema/goods-receipt-lines.ts",
+        "columnCount": 22,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "goods_receipts",
+        "file": "packages/database/src/schema/goods-receipts.ts",
+        "columnCount": 4,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "holiday_lists",
+        "file": "packages/database/src/schema/holiday-lists.ts",
+        "columnCount": 6,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "holidays",
+        "file": "packages/database/src/schema/holidays.ts",
+        "columnCount": 4,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "incoming_call_settings",
+        "file": "packages/database/src/schema/incoming-call-settings.ts",
+        "columnCount": 0,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "intercompany_transactions",
+        "file": "packages/database/src/schema/intercompany-transactions.ts",
+        "columnCount": 12,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "inventory_trace_links",
+        "file": "packages/database/src/schema/inventory-trace-links.ts",
+        "columnCount": 7,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "issue_types",
+        "file": "packages/database/src/schema/issue-types.ts",
+        "columnCount": 2,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "item_groups",
+        "file": "packages/database/src/schema/item-groups.ts",
+        "columnCount": 4,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "item_variant_settings",
+        "file": "packages/database/src/schema/item-variant-settings.ts",
+        "columnCount": 3,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "items",
+        "file": "packages/database/src/schema/items.ts",
+        "columnCount": 30,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "journal_entries",
+        "file": "packages/database/src/schema/journal-entries.ts",
+        "columnCount": 11,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "journal_lines",
+        "file": "packages/database/src/schema/journal-lines.ts",
+        "columnCount": 14,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "landed_cost_docs",
+        "file": "packages/database/src/schema/landed-costs.ts",
+        "columnCount": 15,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "landed_cost_allocations",
+        "file": "packages/database/src/schema/landed-costs.ts",
+        "columnCount": 15,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "lot_tracking",
+        "file": "packages/database/src/schema/lot-tracking.ts",
+        "columnCount": 14,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "manufacturing_settings",
+        "file": "packages/database/src/schema/manufacturing-settings.ts",
+        "columnCount": 14,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "match_results",
+        "file": "packages/database/src/schema/match-results.ts",
+        "columnCount": 13,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "meta_alias_resolution_rules",
+        "file": "packages/database/src/schema/meta-alias-resolution-rules.ts",
+        "columnCount": 9,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "meta_alias_sets",
+        "file": "packages/database/src/schema/meta-alias-sets.ts",
+        "columnCount": 14,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "meta_aliases",
+        "file": "packages/database/src/schema/meta-aliases.ts",
+        "columnCount": 19,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "meta_assets",
+        "file": "packages/database/src/schema/meta-assets.ts",
+        "columnCount": 14,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "meta_lineage_edges",
+        "file": "packages/database/src/schema/meta-lineage-edges.ts",
+        "columnCount": 7,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "meta_quality_checks",
+        "file": "packages/database/src/schema/meta-quality-checks.ts",
+        "columnCount": 9,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "meta_semantic_terms",
+        "file": "packages/database/src/schema/meta-semantic-terms.ts",
+        "columnCount": 12,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "meta_term_links",
+        "file": "packages/database/src/schema/meta-term-links.ts",
+        "columnCount": 5,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "meta_value_aliases",
+        "file": "packages/database/src/schema/meta-value-aliases.ts",
+        "columnCount": 13,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "migration_checkpoints",
+        "file": "packages/database/src/schema/migration-checkpoints.ts",
+        "columnCount": 10,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "migration_conflict_resolutions",
+        "file": "packages/database/src/schema/migration-conflict-resolutions.ts",
+        "columnCount": 10,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "migration_conflicts",
+        "file": "packages/database/src/schema/migration-conflicts.ts",
+        "columnCount": 9,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "migration_jobs",
+        "file": "packages/database/src/schema/migration-jobs.ts",
+        "columnCount": 19,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "migration_lineage",
+        "file": "packages/database/src/schema/migration-lineage.ts",
+        "columnCount": 13,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "migration_merge_explanations",
+        "file": "packages/database/src/schema/migration-merge-explanations.ts",
+        "columnCount": 10,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "migration_quarantine",
+        "file": "packages/database/src/schema/migration-quarantine.ts",
+        "columnCount": 19,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "migration_reports",
+        "file": "packages/database/src/schema/migration-reports.ts",
+        "columnCount": 5,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "migration_row_snapshots",
+        "file": "packages/database/src/schema/migration-row-snapshots.ts",
+        "columnCount": 9,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "mutation_batches",
+        "file": "packages/database/src/schema/mutation-batches.ts",
+        "columnCount": 12,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "number_sequences",
+        "file": "packages/database/src/schema/number-sequences.ts",
+        "columnCount": 9,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "org_usage_daily",
+        "file": "packages/database/src/schema/org-usage-daily.ts",
+        "columnCount": 7,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "payment_allocations",
+        "file": "packages/database/src/schema/payment-allocations.ts",
+        "columnCount": 12,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "payment_terms",
+        "file": "packages/database/src/schema/payment-terms.ts",
+        "columnCount": 8,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "payments",
+        "file": "packages/database/src/schema/payments.ts",
+        "columnCount": 10,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "plaid_settings",
+        "file": "packages/database/src/schema/plaid-settings.ts",
+        "columnCount": 0,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "pos_settings",
+        "file": "packages/database/src/schema/pos-settings.ts",
+        "columnCount": 5,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "price_lists",
+        "file": "packages/database/src/schema/price-lists.ts",
+        "columnCount": 17,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "price_list_items",
+        "file": "packages/database/src/schema/price-lists.ts",
+        "columnCount": 17,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "project_template_tasks",
+        "file": "packages/database/src/schema/project-template-tasks.ts",
+        "columnCount": 3,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "project_templates",
+        "file": "packages/database/src/schema/project-templates.ts",
+        "columnCount": 2,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "project_types",
+        "file": "packages/database/src/schema/project-types.ts",
+        "columnCount": 2,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "project_updates",
+        "file": "packages/database/src/schema/project-updates.ts",
+        "columnCount": 7,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "project_users",
+        "file": "packages/database/src/schema/project-users.ts",
+        "columnCount": 6,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "projects_settings",
+        "file": "packages/database/src/schema/projects-settings.ts",
+        "columnCount": 2,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "projects",
+        "file": "packages/database/src/schema/projects.ts",
+        "columnCount": 9,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "psoa_projects",
+        "file": "packages/database/src/schema/psoa-projects.ts",
+        "columnCount": 2,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "purchase_invoice_lines",
+        "file": "packages/database/src/schema/purchase-invoice-lines.ts",
+        "columnCount": 23,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "purchase_invoices",
+        "file": "packages/database/src/schema/purchase-invoices.ts",
+        "columnCount": 16,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "purchase_order_lines",
+        "file": "packages/database/src/schema/purchase-order-lines.ts",
+        "columnCount": 24,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "purchase_orders",
+        "file": "packages/database/src/schema/purchase-orders.ts",
+        "columnCount": 13,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "purchase_requests",
+        "file": "packages/database/src/schema/purchase-requests.ts",
+        "columnCount": 12,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "quotation_lines",
+        "file": "packages/database/src/schema/quotation-lines.ts",
+        "columnCount": 15,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "quotations",
+        "file": "packages/database/src/schema/quotations.ts",
+        "columnCount": 14,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "r2_files",
+        "file": "packages/database/src/schema/r2-files.ts",
+        "columnCount": 14,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "reporting_snapshots",
+        "file": "packages/database/src/schema/reporting-snapshots.ts",
+        "columnCount": 11,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "repost_accounting_ledger_settings",
+        "file": "packages/database/src/schema/repost-accounting-ledger-settings.ts",
+        "columnCount": 0,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "revenue_schedules",
+        "file": "packages/database/src/schema/revenue-schedules.ts",
+        "columnCount": 21,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "revenue_schedule_lines",
+        "file": "packages/database/src/schema/revenue-schedules.ts",
+        "columnCount": 21,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "role_permissions",
+        "file": "packages/database/src/schema/role-permissions.ts",
+        "columnCount": 8,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "roles",
+        "file": "packages/database/src/schema/roles.ts",
+        "columnCount": 6,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "sales_invoice_lines",
+        "file": "packages/database/src/schema/sales-invoice-lines.ts",
+        "columnCount": 23,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "sales_invoices",
+        "file": "packages/database/src/schema/sales-invoices.ts",
+        "columnCount": 17,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "sales_order_lines",
+        "file": "packages/database/src/schema/sales-order-lines.ts",
+        "columnCount": 24,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "sales_orders",
+        "file": "packages/database/src/schema/sales-orders.ts",
+        "columnCount": 13,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "search_documents",
+        "file": "packages/database/src/schema/search-documents.ts",
+        "columnCount": 7,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "search_outbox",
+        "file": "packages/database/src/schema/search-outbox.ts",
+        "columnCount": 12,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "selling_settings",
+        "file": "packages/database/src/schema/selling-settings.ts",
+        "columnCount": 24,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "service_level_agreements",
+        "file": "packages/database/src/schema/service-level-agreements.ts",
+        "columnCount": 7,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "sites",
+        "file": "packages/database/src/schema/sites.ts",
+        "columnCount": 4,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "south_africa_vat_settings",
+        "file": "packages/database/src/schema/south-africa-vat-settings.ts",
+        "columnCount": 0,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "stock_balances",
+        "file": "packages/database/src/schema/stock-balances.ts",
+        "columnCount": 12,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "stock_movements",
+        "file": "packages/database/src/schema/stock-movements.ts",
+        "columnCount": 20,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "stock_reposting_settings",
+        "file": "packages/database/src/schema/stock-reposting-settings.ts",
+        "columnCount": 0,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "stock_settings",
+        "file": "packages/database/src/schema/stock-settings.ts",
+        "columnCount": 33,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "subscription_settings",
+        "file": "packages/database/src/schema/subscription-settings.ts",
+        "columnCount": 0,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "supplier_profiles",
+        "file": "packages/database/src/schema/supplier-profiles.ts",
+        "columnCount": 12,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "support_settings",
+        "file": "packages/database/src/schema/support-settings.ts",
+        "columnCount": 5,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "tasks",
+        "file": "packages/database/src/schema/tasks.ts",
+        "columnCount": 14,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "tax_rates",
+        "file": "packages/database/src/schema/tax-rates.ts",
+        "columnCount": 11,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "timesheet_details",
+        "file": "packages/database/src/schema/timesheet-details.ts",
+        "columnCount": 7,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "timesheets",
+        "file": "packages/database/src/schema/timesheets.ts",
+        "columnCount": 12,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "uae_vat_settings",
+        "file": "packages/database/src/schema/uae-vat-settings.ts",
+        "columnCount": 0,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "uom_conversions",
+        "file": "packages/database/src/schema/uom-conversions.ts",
+        "columnCount": 9,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "uom",
+        "file": "packages/database/src/schema/uom.ts",
+        "columnCount": 5,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "user_roles",
+        "file": "packages/database/src/schema/user-roles.ts",
+        "columnCount": 5,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "user_scopes",
+        "file": "packages/database/src/schema/user-scopes.ts",
+        "columnCount": 6,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "users",
+        "file": "packages/database/src/schema/users.ts",
+        "columnCount": 7,
+        "hasRls": false,
+        "hasOrgId": false
+      },
+      {
+        "name": "video_settings",
+        "file": "packages/database/src/schema/video-settings.ts",
+        "columnCount": 3,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "voice_call_settings",
+        "file": "packages/database/src/schema/voice-call-settings.ts",
+        "columnCount": 0,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "warehouses",
+        "file": "packages/database/src/schema/warehouses.ts",
+        "columnCount": 7,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "webhook_endpoints",
+        "file": "packages/database/src/schema/webhook-endpoints.ts",
+        "columnCount": 20,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "webhook_deliveries",
+        "file": "packages/database/src/schema/webhook-endpoints.ts",
+        "columnCount": 20,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "wip_movements",
+        "file": "packages/database/src/schema/wip-movements.ts",
+        "columnCount": 12,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "work_orders",
+        "file": "packages/database/src/schema/work-orders.ts",
+        "columnCount": 15,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "workflow_definitions",
+        "file": "packages/database/src/schema/workflow-definitions.ts",
+        "columnCount": 18,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "workflow_events_outbox",
+        "file": "packages/database/src/schema/workflow-events-outbox.ts",
+        "columnCount": 16,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "workflow_executions",
+        "file": "packages/database/src/schema/workflow-executions.ts",
+        "columnCount": 14,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "workflow_instances",
+        "file": "packages/database/src/schema/workflow-instances.ts",
+        "columnCount": 15,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "workflow_outbox_receipts",
+        "file": "packages/database/src/schema/workflow-outbox-receipts.ts",
+        "columnCount": 5,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "workflow_rules",
+        "file": "packages/database/src/schema/workflow-rules.ts",
+        "columnCount": 9,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "workflow_side_effects_outbox",
+        "file": "packages/database/src/schema/workflow-side-effects-outbox.ts",
+        "columnCount": 16,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "workflow_step_executions",
+        "file": "packages/database/src/schema/workflow-step-executions.ts",
+        "columnCount": 23,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "workflow_step_receipts",
+        "file": "packages/database/src/schema/workflow-step-receipts.ts",
+        "columnCount": 5,
+        "hasRls": false,
+        "hasOrgId": true
+      }
+    ]
+  },
+  "stats": {
+    "totalFiles": 880,
+    "totalLoc": 83229,
+    "totalTestFiles": 19,
+    "totalTestLoc": 714,
+    "packages": [
+      {
+        "name": "apps/web",
+        "fileCount": 186,
+        "loc": 14293,
+        "testFileCount": 6,
+        "testLoc": 212
+      },
+      {
+        "name": "packages/accounting",
+        "fileCount": 9,
+        "loc": 1233,
+        "testFileCount": 0,
+        "testLoc": 0
+      },
+      {
+        "name": "packages/advisory",
+        "fileCount": 17,
+        "loc": 1201,
+        "testFileCount": 1,
+        "testLoc": 32
+      },
+      {
+        "name": "packages/budgeting",
+        "fileCount": 6,
+        "loc": 350,
+        "testFileCount": 0,
+        "testLoc": 0
+      },
+      {
+        "name": "packages/canon",
+        "fileCount": 53,
+        "loc": 2551,
+        "testFileCount": 2,
+        "testLoc": 57
+      },
+      {
+        "name": "packages/crm",
+        "fileCount": 3,
+        "loc": 534,
+        "testFileCount": 0,
+        "testLoc": 0
+      },
+      {
+        "name": "packages/crud",
+        "fileCount": 32,
+        "loc": 3939,
+        "testFileCount": 1,
+        "testLoc": 107
+      },
+      {
+        "name": "packages/database",
+        "fileCount": 190,
+        "loc": 12064,
+        "testFileCount": 3,
+        "testLoc": 84
+      },
+      {
+        "name": "packages/eslint-config",
+        "fileCount": 4,
+        "loc": 327,
+        "testFileCount": 0,
+        "testLoc": 0
+      },
+      {
+        "name": "packages/fixed-assets",
+        "fileCount": 6,
+        "loc": 363,
+        "testFileCount": 0,
+        "testLoc": 0
+      },
+      {
+        "name": "packages/forecasting",
+        "fileCount": 6,
+        "loc": 704,
+        "testFileCount": 0,
+        "testLoc": 0
+      },
+      {
+        "name": "packages/intercompany",
+        "fileCount": 2,
+        "loc": 324,
+        "testFileCount": 0,
+        "testLoc": 0
+      },
+      {
+        "name": "packages/inventory",
+        "fileCount": 6,
+        "loc": 1332,
+        "testFileCount": 0,
+        "testLoc": 0
+      },
+      {
+        "name": "packages/logger",
+        "fileCount": 6,
+        "loc": 632,
+        "testFileCount": 2,
+        "testLoc": 74
+      },
+      {
+        "name": "packages/migration",
+        "fileCount": 43,
+        "loc": 4370,
+        "testFileCount": 1,
+        "testLoc": 37
+      },
+      {
+        "name": "packages/observability",
+        "fileCount": 7,
+        "loc": 1366,
+        "testFileCount": 0,
+        "testLoc": 0
+      },
+      {
+        "name": "packages/payables",
+        "fileCount": 6,
+        "loc": 558,
+        "testFileCount": 0,
+        "testLoc": 0
+      },
+      {
+        "name": "packages/planning",
+        "fileCount": 6,
+        "loc": 907,
+        "testFileCount": 0,
+        "testLoc": 0
+      },
+      {
+        "name": "packages/procurement",
+        "fileCount": 6,
+        "loc": 943,
+        "testFileCount": 0,
+        "testLoc": 0
+      },
+      {
+        "name": "packages/production",
+        "fileCount": 6,
+        "loc": 958,
+        "testFileCount": 0,
+        "testLoc": 0
+      },
+      {
+        "name": "packages/purchasing",
+        "fileCount": 6,
+        "loc": 390,
+        "testFileCount": 0,
+        "testLoc": 0
+      },
+      {
+        "name": "packages/quality-mgmt",
+        "fileCount": 6,
+        "loc": 998,
+        "testFileCount": 0,
+        "testLoc": 0
+      },
+      {
+        "name": "packages/receivables",
+        "fileCount": 6,
+        "loc": 308,
+        "testFileCount": 0,
+        "testLoc": 0
+      },
+      {
+        "name": "packages/receiving",
+        "fileCount": 6,
+        "loc": 527,
+        "testFileCount": 0,
+        "testLoc": 0
+      },
+      {
+        "name": "packages/sales",
+        "fileCount": 7,
+        "loc": 608,
+        "testFileCount": 0,
+        "testLoc": 0
+      },
+      {
+        "name": "packages/search",
+        "fileCount": 10,
+        "loc": 956,
+        "testFileCount": 1,
+        "testLoc": 42
+      },
+      {
+        "name": "packages/shipping",
+        "fileCount": 6,
+        "loc": 310,
+        "testFileCount": 0,
+        "testLoc": 0
+      },
+      {
+        "name": "packages/supplier-portal",
+        "fileCount": 6,
+        "loc": 572,
+        "testFileCount": 0,
+        "testLoc": 0
+      },
+      {
+        "name": "packages/tax-compliance",
+        "fileCount": 6,
+        "loc": 325,
+        "testFileCount": 0,
+        "testLoc": 0
+      },
+      {
+        "name": "packages/transportation",
+        "fileCount": 1,
+        "loc": 40,
+        "testFileCount": 0,
+        "testLoc": 0
+      },
+      {
+        "name": "packages/treasury",
+        "fileCount": 6,
+        "loc": 318,
+        "testFileCount": 0,
+        "testLoc": 0
+      },
+      {
+        "name": "packages/typescript-config",
+        "fileCount": 0,
+        "loc": 0,
+        "testFileCount": 0,
+        "testLoc": 0
+      },
+      {
+        "name": "packages/ui",
+        "fileCount": 98,
+        "loc": 10898,
+        "testFileCount": 0,
+        "testLoc": 0
+      },
+      {
+        "name": "packages/warehouse",
+        "fileCount": 6,
+        "loc": 332,
+        "testFileCount": 0,
+        "testLoc": 0
+      },
+      {
+        "name": "packages/workflow",
+        "fileCount": 47,
+        "loc": 7399,
+        "testFileCount": 2,
+        "testLoc": 69
+      },
+      {
+        "name": "tools/afenda-cli",
+        "fileCount": 56,
+        "loc": 8109,
+        "testFileCount": 0,
+        "testLoc": 0
+      },
+      {
+        "name": "tools/quality-metrics",
+        "fileCount": 6,
+        "loc": 1864,
+        "testFileCount": 0,
+        "testLoc": 0
+      },
+      {
+        "name": "tools/scripts",
+        "fileCount": 1,
+        "loc": 326,
+        "testFileCount": 0,
+        "testLoc": 0
+      }
+    ]
+  }
+}

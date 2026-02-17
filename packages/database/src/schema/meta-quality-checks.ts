@@ -1,17 +1,14 @@
 import { sql } from 'drizzle-orm';
-import { check, index, jsonb, pgTable, primaryKey, text, timestamp, uuid } from 'drizzle-orm/pg-core';
+import { check, index, jsonb, pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core';
 
 import { tenantPolicy } from '../helpers/tenant-policy';
 
 import { metaAssets } from './meta-assets';
 
-/**
- * GAP-DB-001: Composite PK (org_id, id) for data integrity and tenant isolation.
- */
 export const metaQualityChecks = pgTable(
   'meta_quality_checks',
   {
-    id: uuid('id').defaultRandom().notNull(),
+    id: uuid('id').defaultRandom().primaryKey(),
     orgId: text('org_id')
       .notNull()
       .default(sql`(auth.require_org_id())`),
@@ -28,7 +25,6 @@ export const metaQualityChecks = pgTable(
     createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
   },
   (table) => [
-    primaryKey({ columns: [table.orgId, table.id] }),
     index('meta_quality_checks_org_id_idx').on(table.orgId, table.id),
     check('meta_quality_checks_org_not_empty', sql`org_id <> ''`),
     tenantPolicy(table),

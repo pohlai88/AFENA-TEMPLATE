@@ -1,7 +1,7 @@
-# Afena UI Design System — Architecture Reference
+# afenda UI Design System — Architecture Reference
 
-> **Auto-generated** by `afena readme gen` at 2026-02-16T12:44:12Z. Do not edit — regenerate instead.
-> **Package:** `afena-ui` (`packages/ui`)
+> **Auto-generated** by `afenda readme gen` at 2026-02-16T12:44:12Z. Do not edit — regenerate instead.
+> **Package:** `afenda-ui` (`packages/ui`)
 > **Purpose:** Four-layer design system: Engine tokens → CSS bridge → shadcn/ui primitives → App shell.
 
 ---
@@ -25,7 +25,7 @@ no `'use client'` in pages/layouts.
 - **Token bridge**: Engine tokens → bare CSS vars (shadcn) + `@theme inline` (Tailwind v4)
 - **Glass utility**: Dark-mode-aware in `@layer utilities` (not `@utility`)
 - **Button polish**: Transition, shadow, lift on hover, press scale (both modes)
-- **Import aliases**: `afena-ui/components` and `afena-ui/lib/utils` in app workspace
+- **Import aliases**: `afenda-ui/components` and `afenda-ui/lib/utils` in app workspace
 
 ---
 
@@ -120,8 +120,8 @@ packages/ui/src/
 
 ### Internal (workspace)
 
-- `afena-eslint-config`
-- `afena-typescript-config`
+- `afenda-eslint-config`
+- `afenda-typescript-config`
 
 ### External
 

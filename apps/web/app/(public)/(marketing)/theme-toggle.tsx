@@ -1,7 +1,7 @@
 'use client';
 
 
-import { Button } from 'afena-ui/components/button';
+import { Button } from 'afenda-ui/components/button';
 import { Moon, Sun } from 'lucide-react';
 import { useTheme } from 'next-themes';
 

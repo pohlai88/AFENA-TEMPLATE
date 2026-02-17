@@ -2,10 +2,10 @@
 
 import { useRouter } from 'next/navigation';
 
-import { Button } from 'afena-ui/components/button';
-import { Card, CardContent, CardFooter } from 'afena-ui/components/card';
-import { Input } from 'afena-ui/components/input';
-import { Label } from 'afena-ui/components/label';
+import { Button } from 'afenda-ui/components/button';
+import { Card, CardContent, CardFooter } from 'afenda-ui/components/card';
+import { Input } from 'afenda-ui/components/input';
+import { Label } from 'afenda-ui/components/label';
 import { useState, useTransition } from 'react';
 
 import { createRole } from '@/app/actions/roles';

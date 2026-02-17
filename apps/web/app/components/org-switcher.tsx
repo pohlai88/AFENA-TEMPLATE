@@ -2,8 +2,8 @@
 
 import { useRouter } from 'next/navigation';
 
-import { Badge } from 'afena-ui/components/badge';
-import { Button } from 'afena-ui/components/button';
+import { Badge } from 'afenda-ui/components/badge';
+import { Button } from 'afenda-ui/components/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -11,8 +11,8 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from 'afena-ui/components/dropdown-menu';
-import { Spinner } from 'afena-ui/components/spinner';
+} from 'afenda-ui/components/dropdown-menu';
+import { Spinner } from 'afenda-ui/components/spinner';
 import { Building2, Check, ChevronDown } from 'lucide-react';
 import { useState } from 'react';
 

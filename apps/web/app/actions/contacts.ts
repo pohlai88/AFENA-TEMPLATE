@@ -2,7 +2,7 @@
 
 import { generateEntityActions } from '@/lib/actions/entity-actions';
 
-import type { ApiResponse } from 'afena-canon';
+import type { ApiResponse } from 'afenda-canon';
 
 // CAPABILITIES moved to contacts.capabilities.ts (Next.js 16: 'use server' files can only export async functions)
 

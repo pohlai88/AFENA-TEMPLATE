@@ -6,12 +6,12 @@ import {
   VIS_POLICY,
   inferKindFromVerb,
   parseCapabilityKey,
-} from 'afena-canon';
+} from 'afenda-canon';
 
 import { withAuth } from '@/lib/api/with-auth';
 
 import type { RouteMetaStrict } from '@/lib/api/route-types';
-import type { CapabilityDescriptor, CapabilityKind } from 'afena-canon';
+import type { CapabilityDescriptor, CapabilityKind } from 'afenda-canon';
 
 export const ROUTE_META = {
   path: '/api/meta/capabilities',

@@ -2,7 +2,7 @@ import { cache } from 'react';
 
 import { listRoles, getRole, listRolePermissions, listUserRoles } from '@/app/actions/roles';
 
-import type { Role, RolePermission, UserRole } from 'afena-database';
+import type { Role, RolePermission, UserRole } from 'afenda-database';
 
 export const fetchRoles = cache(async (): Promise<Role[]> => {
   const response = await listRoles();

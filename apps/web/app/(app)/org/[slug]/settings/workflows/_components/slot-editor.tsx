@@ -13,8 +13,8 @@ import {
   useReactFlow,
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
-import { Badge } from 'afena-ui/components/badge';
-import { Button } from 'afena-ui/components/button';
+import { Badge } from 'afenda-ui/components/badge';
+import { Button } from 'afenda-ui/components/button';
 import { Save } from 'lucide-react';
 import { useCallback, useMemo, useRef, useState } from 'react';
 

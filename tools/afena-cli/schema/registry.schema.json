@@ -1,7 +1,7 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "Afena Registry",
-  "description": "Human-owned command registry for the Afena CLI",
+  "title": "afenda Registry",
+  "description": "Human-owned command registry for the afenda CLI",
   "type": "object",
   "properties": {
     "$schema": {

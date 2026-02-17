@@ -1,6 +1,6 @@
-import { db, sql } from 'afena-database';
-import { Badge } from 'afena-ui/components/badge';
-import { Card, CardContent, CardHeader, CardTitle } from 'afena-ui/components/card';
+import { db, sql } from 'afenda-database';
+import { Badge } from 'afenda-ui/components/badge';
+import { Card, CardContent, CardHeader, CardTitle } from 'afenda-ui/components/card';
 import { FileText, Shield, Users } from 'lucide-react';
 
 import { getOrgContext } from './_server/org-context_server';

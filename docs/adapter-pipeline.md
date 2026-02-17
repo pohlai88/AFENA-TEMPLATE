@@ -6,7 +6,7 @@ Adopt ERP doctypes from `.PRD/erp-refactor/v3/canon/` into LocalEntitySpec and w
 
 1. **Adopt spec** — Run the pipeline for the target entity:
    ```bash
-   pnpm afena:dev meta run --entity video-settings
+   pnpm afenda:dev meta run --entity video-settings
    ```
    This writes `packages/canon/src/specs/entities/video-settings.spec.json`.
 
@@ -42,15 +42,15 @@ Words like `settings`, `defaults`, `config` are not pluralized.
 
 | Stage | Command | Output |
 |-------|---------|--------|
-| 1 | `afena meta scan` | `.afena/meta/raw/refactor.entities.json`, `local.contract.snapshot.json` |
-| 2 | `afena meta transform` | `.afena/meta/staged/transformed.entities.json` |
-| 3 | `afena meta analyze` | `.afena/meta/reports/analyze.json` |
-| 5 | `afena meta map` | `.afena/meta/staged/spec-candidates.json` |
-| 6 | `afena meta adopt` | `packages/canon/src/specs/entities/*.spec.json` |
+| 1 | `afenda meta scan` | `.afenda/meta/raw/refactor.entities.json`, `local.contract.snapshot.json` |
+| 2 | `afenda meta transform` | `.afenda/meta/staged/transformed.entities.json` |
+| 3 | `afenda meta analyze` | `.afenda/meta/reports/analyze.json` |
+| 5 | `afenda meta map` | `.afenda/meta/staged/spec-candidates.json` |
+| 6 | `afenda meta adopt` | `packages/canon/src/specs/entities/*.spec.json` |
 
-Full pipeline: `afena meta run [--entity <entityType>] [--dry-run]`
+Full pipeline: `afenda meta run [--entity <entityType>] [--dry-run]`
 
-Use `--dry-run` to run through map only (no spec writes). Outputs: `.afena/meta/reports/analyze.json`, `.afena/meta/staged/spec-candidates.json`. See `.afena/meta/DRY-RUN-REPORT.md` for analysis.
+Use `--dry-run` to run through map only (no spec writes). Outputs: `.afenda/meta/reports/analyze.json`, `.afenda/meta/staged/spec-candidates.json`. See `.afenda/meta/DRY-RUN-REPORT.md` for analysis.
 
 ## Overrides
 
@@ -62,5 +62,5 @@ Place `packages/canon/src/adapters/erpnext/overrides/<entityType>.override.json`
 ## CI Gates
 
 - **N1** — Spec determinism (run pipeline twice, compare `inputsHash`)
-- **N2** — Contract compliance (`afena meta validate`)
+- **N2** — Contract compliance (`afenda meta validate`)
 - **N3** — Spine lock (no adopted specs for locked entityTypes)

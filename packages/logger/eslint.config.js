@@ -1,4 +1,4 @@
-const baseConfig = require('afena-eslint-config/base');
+const baseConfig = require('afenda-eslint-config/base');
 
 module.exports = [
   { ignores: ['dist/**', '*.config.*'] },
@@ -6,7 +6,7 @@ module.exports = [
   {
     languageOptions: {
       parserOptions: {
-        projectService: true,
+        project: './tsconfig.json',
         tsconfigRootDir: __dirname,
       },
     },

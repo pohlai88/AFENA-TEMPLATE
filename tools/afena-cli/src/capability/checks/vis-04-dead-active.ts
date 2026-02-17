@@ -10,10 +10,10 @@ import {
   CAPABILITY_CATALOG,
   inferKindFromVerb,
   parseCapabilityKey,
-} from 'afena-canon';
+} from 'afenda-canon';
 
 import type { ScanResult } from '../collectors/surface-scanner';
-import type { CapabilityException } from 'afena-canon';
+import type { CapabilityException } from 'afenda-canon';
 
 export interface Vis04Violation {
   key: string;

@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation';
 
-import { SidebarInset, SidebarProvider } from 'afena-ui/components/sidebar';
+import { SidebarInset, SidebarProvider } from 'afenda-ui/components/sidebar';
 
 import { OrgProvider } from '@/app/providers/org-context';
 import { listUserOrgs } from '@/lib/org';

@@ -2,7 +2,7 @@
 
 import { generateEntityActions } from '@/lib/actions/entity-actions';
 
-import type { ApiResponse } from 'afena-canon';
+import type { ApiResponse } from 'afenda-canon';
 
 const actions = generateEntityActions('video-settings');
 

@@ -1,17 +1,15 @@
 import { sql } from 'drizzle-orm';
 import { crudPolicy, authenticatedRole } from 'drizzle-orm/neon';
-import { boolean, check, integer, jsonb, pgTable, primaryKey, text, timestamp, uniqueIndex, uuid } from 'drizzle-orm/pg-core';
+import { boolean, check, integer, jsonb, pgTable, text, timestamp, uniqueIndex, uuid } from 'drizzle-orm/pg-core';
 
 /**
  * Entity version history — fork-aware, snapshot-first.
  * Append-only: SELECT for same org, INSERT if org matches. No UPDATE/DELETE.
- * 
- * GAP-DB-001: Composite PK (org_id, id) for data integrity and tenant isolation.
  */
 export const entityVersions = pgTable(
   'entity_versions',
   {
-    id: uuid('id').defaultRandom().notNull(),
+    id: uuid('id').defaultRandom().primaryKey(),
     orgId: text('org_id').notNull(),
     entityType: text('entity_type').notNull(),
     entityId: text('entity_id').notNull(),
@@ -25,7 +23,6 @@ export const entityVersions = pgTable(
     createdBy: text('created_by').notNull(),
   },
   (table) => [
-    primaryKey({ columns: [table.orgId, table.id] }),
     uniqueIndex('entity_versions_unique_idx').on(
       table.orgId,
       table.entityType,

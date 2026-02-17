@@ -11,7 +11,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  afena-ci:
+  afenda-ci:
     name: Build
     timeout-minutes: 15
     runs-on: ubuntu-latest
@@ -46,13 +46,32 @@ jobs:
       - name: Build
         run: pnpm build
 
-      - name: Unit tests (Setup domain, axis-erp)
+      - name: Unit tests with coverage
         env:
           NODE_ENV: test
           TEST_DATABASE_URL: 'postgresql://ci:ci@ci-placeholder.neon.tech/neondb?sslmode=verify-full'
         run: |
-          pnpm --filter afena-crud test
+          pnpm --filter afenda-crud test:coverage
           pnpm --filter axis-erp test:ci
+          pnpm test:coverage
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: ./coverage/coverage-final.json
+          flags: unittests
+          name: afenda-coverage
+          fail_ci_if_error: false
+          verbose: true
+
+      - name: Coverage summary comment
+        if: github.event_name == 'pull_request'
+        uses: romeovs/lcov-reporter-action@v0.3.1
+        with:
+          lcov-file: ./coverage/lcov.info
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          delete-old-comments: true
 
       - name: Lint (with import/no-cycle)
         run: pnpm lint:ci
@@ -64,28 +83,28 @@ jobs:
         run: pnpm ci:invariants
 
       - name: DB barrel + registry (Gate 7)
-        run: pnpm --filter afena-database db:barrel
+        run: pnpm --filter afenda-database db:barrel
 
       - name: DB schema lint (Gate 0 + schema rules)
-        run: pnpm --filter afena-database db:lint
+        run: pnpm --filter afenda-database db:lint
 
       - name: Generated files up to date (Gate 7 diff)
         run: |
           git diff --exit-code packages/database/src/schema/index.ts \
             packages/database/src/schema/__schema-manifest.ts \
             packages/database/src/schema/_registry.ts || (
-            echo "::error::Generated schema files are stale. Run 'pnpm --filter afena-database db:barrel' and commit."
+            echo "::error::Generated schema files are stale. Run 'pnpm --filter afenda-database db:barrel' and commit."
             exit 1
           )
 
       - name: Adapter gates (N2 contract, spine denylist)
         run: pnpm ci:adapter-gates
 
-  afena-e2e:
+  afenda-e2e:
     name: E2E Tests
     timeout-minutes: 30
     runs-on: ubuntu-latest
-    needs: afena-ci
+    needs: afenda-ci
     env:
       DATABASE_URL: 'postgresql://ci:ci@ci-placeholder.neon.tech/neondb?sslmode=verify-full'
       NEON_AUTH_BASE_URL: 'https://ci-placeholder.neon.tech'
@@ -133,7 +152,7 @@ jobs:
           path: test-results/
           retention-days: 7
 
-  afena-audit:
+  afenda-audit:
     name: Dependency Audit
     timeout-minutes: 5
     runs-on: ubuntu-latest

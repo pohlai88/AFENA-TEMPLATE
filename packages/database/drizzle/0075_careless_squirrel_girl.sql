@@ -1,1 +1,0 @@
-CREATE INDEX "migration_lineage_legacy_lookup_idx" ON "migration_lineage" USING btree ("org_id","entity_type","afena_id") WHERE state = 'committed';

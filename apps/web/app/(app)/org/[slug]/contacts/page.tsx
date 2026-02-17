@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
-import { Button } from 'afena-ui/components/button';
+import { Button } from 'afenda-ui/components/button';
 import { Plus, Trash2 } from 'lucide-react';
 
 import { PageHeader } from '../_components/crud/client/page-header';

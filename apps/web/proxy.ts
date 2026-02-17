@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-import { createLoggingMiddleware } from 'afena-logger';
+import { createLoggingMiddleware } from 'afenda-logger';
 
 import { auth } from './src/lib/auth/server';
 import logger from './src/lib/logger';

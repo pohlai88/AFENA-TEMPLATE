@@ -56,9 +56,9 @@ export function loadReadmeSignature(
   repoRoot: string
 ): string | null {
   const sigFile = sigFilename(pkgDir);
-  if (!safeExists(repoRoot, '.afena', 'readme', sigFile)) return null;
+  if (!safeExists(repoRoot, '.afenda', 'readme', sigFile)) return null;
   try {
-    return safeReadFile(repoRoot, '.afena', 'readme', sigFile).trim();
+    return safeReadFile(repoRoot, '.afenda', 'readme', sigFile).trim();
   } catch {
     return null;
   }
@@ -72,6 +72,6 @@ export function saveReadmeSignature(
   repoRoot: string,
   sig: string
 ): void {
-  safeMkdir(repoRoot, '.afena', 'readme');
-  safeWriteFile(repoRoot, `${sig}\n`, '.afena', 'readme', sigFilename(pkgDir));
+  safeMkdir(repoRoot, '.afenda', 'readme');
+  safeWriteFile(repoRoot, `${sig}\n`, '.afenda', 'readme', sigFilename(pkgDir));
 }

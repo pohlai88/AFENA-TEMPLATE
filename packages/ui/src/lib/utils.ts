@@ -10,7 +10,7 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-// Re-export cva + VariantProps so consumers only need `import { cn, cva } from "afena-ui"`
+// Re-export cva + VariantProps so consumers only need `import { cn, cva } from "afenda-ui"`
 export { cva, type VariantProps };
 
 /**

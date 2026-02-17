@@ -1,7 +1,7 @@
-# Afena CLI & Meta Engine — Architecture Reference
+# afenda CLI & Meta Engine — Architecture Reference
 
-> **Auto-generated** by `afena readme gen` at 2026-02-16T12:44:12Z. Do not edit — regenerate instead.
-> **Package:** `@afena/cli` (`tools/afena-cli`)
+> **Auto-generated** by `afenda readme gen` at 2026-02-16T12:44:12Z. Do not edit — regenerate instead.
+> **Package:** `@afenda/cli` (`tools/afenda-cli`)
 > **Purpose:** Capability Truth Ledger — scan, check, generate, fix. README generation. Entity scaffolding.
 
 ---
@@ -39,7 +39,7 @@ Architecture documents are auto-generated from live codebase introspection durin
 | **Source directories** | bundle, capability, checks, core, discovery, docs, readme |
 
 ```
-tools/afena-cli/src/
+tools/afenda-cli/src/
 ├── bundle/
 ├── capability/
 ├── checks/
@@ -55,9 +55,9 @@ tools/afena-cli/src/
 
 ### Internal (workspace)
 
-- `afena-canon`
-- `afena-eslint-config`
-- `afena-typescript-config`
+- `afenda-canon`
+- `afenda-eslint-config`
+- `afenda-typescript-config`
 
 ### External
 

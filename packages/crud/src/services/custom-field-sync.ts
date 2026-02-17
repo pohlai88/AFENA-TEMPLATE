@@ -1,13 +1,13 @@
-import { DATA_TYPE_VALUE_COLUMN_MAP } from 'afena-canon';
+import { DATA_TYPE_VALUE_COLUMN_MAP } from 'afenda-canon';
 import {
   db,
   customFields,
   customFieldValues,
   customFieldSyncQueue,
-} from 'afena-database';
+} from 'afenda-database';
 import { eq, and, sql, inArray } from 'drizzle-orm';
 
-import type { DataType } from 'afena-canon';
+import type { DataType } from 'afenda-canon';
 
 /** Map snake_case value column to Drizzle camelCase. */
 const VALUE_COL_CAMEL: Record<string, 'valueText' | 'valueInt' | 'valueNumeric' | 'valueBool' | 'valueDate' | 'valueTs' | 'valueJson' | 'valueUuid'> = {

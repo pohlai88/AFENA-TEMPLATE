@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'API Documentation — Afena ERP',
+  title: 'API Documentation — afenda ERP',
   description: 'Interactive REST API documentation',
 };
 

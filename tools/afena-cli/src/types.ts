@@ -51,9 +51,9 @@ export const RegistrySchema = z
 export type RegistryCommand = z.infer<typeof RegistryCommandSchema>;
 export type Registry = z.infer<typeof RegistrySchema>;
 
-// --- Config Schema (.afenarc.json) ---
+// --- Config Schema (.afendarc.json) ---
 
-export const AfenaConfigSchema = z
+export const afendaConfigSchema = z
   .object({
     watchPatterns: z.record(z.string(), z.array(z.string())).default({}),
     guardrails: z
@@ -130,7 +130,7 @@ export const AfenaConfigSchema = z
   })
   .strict();
 
-export type AfenaConfig = z.infer<typeof AfenaConfigSchema>;
+export type afendaConfig = z.infer<typeof afendaConfigSchema>;
 
 // --- Discovery Output Schema ---
 

@@ -1,5 +1,5 @@
 /**
- * Matrix emitter — generates .afena/capability.matrix.md
+ * Matrix emitter — generates .afenda/capability.matrix.md
  * Human-readable coverage table.
  */
 
@@ -104,10 +104,10 @@ export function generateMatrix(ledger: CapabilityLedger): string {
 }
 
 /**
- * Write the matrix to .afena/capability.matrix.md.
+ * Write the matrix to .afenda/capability.matrix.md.
  */
 export function writeMatrix(repoRoot: string, markdown: string): void {
-  const outPath = join(repoRoot, '.afena', 'capability.matrix.md');
+  const outPath = join(repoRoot, '.afenda', 'capability.matrix.md');
   mkdirSync(dirname(outPath), { recursive: true });
   writeFileSync(outPath, `${markdown  }\n`, 'utf-8');
 }

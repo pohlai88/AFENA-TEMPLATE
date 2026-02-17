@@ -1,4 +1,4 @@
-import { and, eq, webhookEndpoints, webhookDeliveries, sql } from 'afena-database';
+import { and, eq, webhookEndpoints, webhookDeliveries, sql } from 'afenda-database';
 
 import type { NeonHttpDatabase } from 'drizzle-orm/neon-http';
 
@@ -107,8 +107,8 @@ export async function dispatchWebhookEvent(
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'X-Afena-Signature': `sha256=${signature}`,
-          'X-Afena-Event': eventType,
+          'X-afenda-Signature': `sha256=${signature}`,
+          'X-afenda-Event': eventType,
         },
         body: payloadStr,
         signal: AbortSignal.timeout(10_000), // 10s timeout

@@ -1,7 +1,7 @@
-# Afena Workflow Engine — Architecture Reference
+# afenda Workflow Engine — Architecture Reference
 
-> **Auto-generated** by `afena readme gen` at 2026-02-16T12:44:12Z. Do not edit — regenerate instead.
-> **Package:** `afena-workflow` (`packages/workflow`)
+> **Auto-generated** by `afenda readme gen` at 2026-02-16T12:44:12Z. Do not edit — regenerate instead.
+> **Package:** `afenda-workflow` (`packages/workflow`)
 > **Purpose:** Rule engine for before/after mutation hooks — conditional logic, input enrichment, and side effects.
 
 ---
@@ -106,10 +106,10 @@ packages/workflow/src/
 
 ### Internal (workspace)
 
-- `afena-canon`
-- `afena-database`
-- `afena-eslint-config`
-- `afena-typescript-config`
+- `afenda-canon`
+- `afenda-database`
+- `afenda-eslint-config`
+- `afenda-typescript-config`
 
 ### External
 

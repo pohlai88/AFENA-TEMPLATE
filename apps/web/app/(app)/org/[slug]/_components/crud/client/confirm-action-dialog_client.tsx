@@ -1,6 +1,6 @@
 'use client';
 
-import { Button } from 'afena-ui/components/button';
+import { Button } from 'afenda-ui/components/button';
 import {
   Dialog,
   DialogContent,
@@ -8,13 +8,13 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from 'afena-ui/components/dialog';
-import { Input } from 'afena-ui/components/input';
-import { Label } from 'afena-ui/components/label';
-import { Textarea } from 'afena-ui/components/textarea';
+} from 'afenda-ui/components/dialog';
+import { Input } from 'afenda-ui/components/input';
+import { Label } from 'afenda-ui/components/label';
+import { Textarea } from 'afenda-ui/components/textarea';
 import { useState } from 'react';
 
-import type { ResolvedAction } from 'afena-canon';
+import type { ResolvedAction } from 'afenda-canon';
 
 interface ConfirmActionDialogProps {
   action: ResolvedAction | null;

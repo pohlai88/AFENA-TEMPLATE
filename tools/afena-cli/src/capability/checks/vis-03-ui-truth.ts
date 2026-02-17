@@ -7,7 +7,7 @@
  * 2. Verify every key exists in CAPABILITY_KEYS
  */
 
-import { CAPABILITY_KEYS } from 'afena-canon';
+import { CAPABILITY_KEYS } from 'afenda-canon';
 
 import type { UiSurface } from '../collectors/surface-scanner';
 

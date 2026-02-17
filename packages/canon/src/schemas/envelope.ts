@@ -10,6 +10,5 @@ export const apiResponseSchema = z.object({
   meta: z.object({
     requestId: z.string(),
     receipt: receiptSchema.optional(),
-    totalCount: z.number().optional(),
   }),
 });

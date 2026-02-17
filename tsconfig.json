@@ -2,7 +2,11 @@
   "compilerOptions": {
     // Base Options
     "target": "ES2022",
-    "lib": ["DOM", "DOM.Iterable", "ES2022"],
+    "lib": [
+      "DOM",
+      "DOM.Iterable",
+      "ES2022"
+    ],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -14,21 +18,66 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
+    // Next.js plugin
     "plugins": [
       {
         "name": "next"
       }
     ],
-
+    // Module System (Next.js 16 optimizations)
+    "verbatimModuleSyntax": true,
+    "allowImportingTsExtensions": false,
+    "moduleDetection": "force",
     // Path Mapping
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./apps/*"],
-      "@/ui/*": ["./packages/ui/src/*"],
-      "@packages/*": ["./packages/*"]
+      // Package aliases - for apps to import shared packages
+      "@afenda/*": [
+        "./packages/*/src"
+      ],
+      "@afenda/ui": [
+        "./packages/ui/src"
+      ],
+      "@afenda/database": [
+        "./packages/database/src"
+      ],
+      "@afenda/logger": [
+        "./packages/logger/src"
+      ],
+      "@afenda/canon": [
+        "./packages/canon/src"
+      ],
+      "@afenda/crud": [
+        "./packages/crud/src"
+      ],
+      "@afenda/workflow": [
+        "./packages/workflow/src"
+      ],
+      "@afenda/search": [
+        "./packages/search/src"
+      ],
+      "@afenda/migration": [
+        "./packages/migration/src"
+      ],
+      "@afenda/advisory": [
+        "./packages/advisory/src"
+      ],
+      "@afenda/observability": [
+        "./packages/observability/src"
+      ],
+      // DEPRECATED: Old @ patterns - use package names instead for cross-package
+      // These are kept ONLY for backward compatibility and will be removed
+      "@/*": [
+        "./apps/*"
+      ],
+      "@/ui/*": [
+        "./packages/ui/src/*"
+      ],
+      "@packages/*": [
+        "./packages/*"
+      ]
     },
-
-    // Strict Type Checking
+    // Strict Type Checking (Enhanced)
     "noImplicitAny": true,
     "strictNullChecks": true,
     "strictFunctionTypes": true,
@@ -44,27 +93,31 @@
     "noUncheckedIndexedAccess": true,
     "noImplicitOverride": true,
     "noPropertyAccessFromIndexSignature": false,
-
+    // Additional Strict Checks
+    "allowUnusedLabels": false,
+    "allowUnreachableCode": false,
     // Module Resolution
     "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true,
-
     // Emit Options
     "declaration": true,
     "declarationMap": true,
     "sourceMap": true,
     "removeComments": false,
     "importHelpers": false,
-
     // Advanced Options
     "skipDefaultLibCheck": true,
     "useDefineForClassFields": true,
-
+    // Performance
+    "assumeChangesOnlyAffectDirectDependencies": true,
     // Experimental
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true
   },
-  "include": ["packages/*/src/**/*.ts", "packages/*/src/**/*.tsx"],
+  "include": [
+    "packages/*/src/**/*.ts",
+    "packages/*/src/**/*.tsx"
+  ],
   "exclude": [
     "node_modules",
     ".next",
@@ -78,17 +131,36 @@
     "v3",
     "apps",
     "tools",
-    "ARCHIVE"
+    "ARCHIVE",
+    ".**"
   ],
   "references": [
-    { "path": "./packages/ui" },
-    { "path": "./packages/logger" },
-    { "path": "./packages/database" },
-    { "path": "./packages/canon" },
-    { "path": "./packages/crud" },
-    { "path": "./packages/search" },
-    { "path": "./packages/workflow" },
-    { "path": "./packages/advisory" },
-    { "path": "./packages/migration" }
+    {
+      "path": "./packages/ui"
+    },
+    {
+      "path": "./packages/logger"
+    },
+    {
+      "path": "./packages/database"
+    },
+    {
+      "path": "./packages/canon"
+    },
+    {
+      "path": "./packages/crud"
+    },
+    {
+      "path": "./packages/search"
+    },
+    {
+      "path": "./packages/workflow"
+    },
+    {
+      "path": "./packages/advisory"
+    },
+    {
+      "path": "./packages/migration"
+    }
   ]
 }

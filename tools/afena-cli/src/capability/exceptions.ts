@@ -1,14 +1,14 @@
 /**
  * Exceptions loader — loads, validates, and checks expiry/review cycle
- * for .afena/capability-exceptions.json.
+ * for .afenda/capability-exceptions.json.
  */
 
 import { existsSync, readFileSync } from 'fs';
 import { join } from 'path';
 
-import { capabilityExceptionsFileSchema } from 'afena-canon';
+import { capabilityExceptionsFileSchema } from 'afenda-canon';
 
-import type { CapabilityException, ExceptionScope } from 'afena-canon';
+import type { CapabilityException, ExceptionScope } from 'afenda-canon';
 
 export interface LoadedExceptions {
   exceptions: CapabilityException[];
@@ -37,10 +37,10 @@ export function matchesScope(scope: ExceptionScope, filePath: string): boolean {
 }
 
 /**
- * Load and validate exceptions from .afena/capability-exceptions.json.
+ * Load and validate exceptions from .afenda/capability-exceptions.json.
  */
 export function loadExceptions(repoRoot: string): LoadedExceptions {
-  const filePath = join(repoRoot, '.afena', 'capability-exceptions.json');
+  const filePath = join(repoRoot, '.afenda', 'capability-exceptions.json');
 
   if (!existsSync(filePath)) {
     return { exceptions: [], expired: [], reviewOverdue: [] };

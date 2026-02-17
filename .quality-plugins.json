@@ -1,0 +1,53 @@
+{
+    "$schema": "./tools/quality-metrics/schemas/plugins-config.schema.json",
+    "enabled": true,
+    "pluginsDir": "tools/quality-metrics/plugins",
+    "timeout": 30000,
+    "plugins": {
+        "code-smells": {
+            "enabled": true,
+            "config": {
+                "maxFunctionLength": 50,
+                "maxNestingLevel": 4,
+                "maxParameters": 5,
+                "excludePatterns": [
+                    "*.test.ts",
+                    "*.spec.ts"
+                ]
+            }
+        },
+        "todo-tracker": {
+            "enabled": true,
+            "config": {
+                "trackTypes": [
+                    "TODO",
+                    "FIXME",
+                    "HACK",
+                    "XXX",
+                    "NOTE"
+                ],
+                "excludePatterns": [
+                    "node_modules",
+                    "dist",
+                    "build",
+                    ".git"
+                ],
+                "reportThreshold": 10
+            }
+        },
+        "dependency-health": {
+            "enabled": true,
+            "config": {
+                "checkOutdated": true,
+                "checkDeprecated": true,
+                "warnThreshold": 10,
+                "excludePackages": []
+            }
+        }
+    },
+    "database": {
+        "enabled": true,
+        "savePluginMetrics": true,
+        "tableName": "quality_plugin_metrics"
+    }
+}

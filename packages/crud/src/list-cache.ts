@@ -10,7 +10,7 @@
 import Redis from 'ioredis';
 
 const CACHE_TTL_SEC = Number(process.env.LIST_CACHE_TTL_SEC) || 60;
-const CACHE_PREFIX = 'afena:list:';
+const CACHE_PREFIX = 'afenda:list:';
 
 let redis: Redis | null = null;
 
@@ -107,7 +107,7 @@ export async function setCachedList(
  * Uses a version key: incrementing it makes all cached keys for that entity:org stale.
  * Call after insert/update/delete when entityType and orgId are known.
  */
-const VERSION_PREFIX = 'afena:list:v:';
+const VERSION_PREFIX = 'afenda:list:v:';
 
 export async function invalidateListCache(entityType: string, orgId: string): Promise<void> {
   const r = getRedis();

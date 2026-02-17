@@ -1,5 +1,5 @@
 import type { BodySlot, WorkflowEdge, WorkflowNode } from './types';
-import type { DocStatus, EntityContract } from 'afena-canon';
+import type { DocStatus, EntityContract } from 'afenda-canon';
 
 /**
  * Generated envelope — the immutable system skeleton for a workflow.

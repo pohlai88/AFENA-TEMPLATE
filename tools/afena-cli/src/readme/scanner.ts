@@ -3,14 +3,14 @@ import fg from 'fast-glob';
 import { safeExists, safeStat, safeStatAbsolute } from '../core/fs-safe';
 import { toPosix } from '../core/paths';
 
-import type { AfenaConfig } from '../types';
+import type { afendaConfig } from '../types';
 
 /**
  * Scan for packages missing README.md or with stale READMEs.
  */
 export function scanReadmes(
   repoRoot: string,
-  config: AfenaConfig
+  config: afendaConfig
 ): { missing: string[]; stale: string[] } {
   const { ignore, required } = config.docs.readme;
   const ignoreSet = new Set(ignore.map((p: string) => toPosix(p)));

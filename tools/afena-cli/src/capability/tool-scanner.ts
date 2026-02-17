@@ -35,7 +35,7 @@ export function scanTools(
     seen.add(toolDir);
 
     // Skip the CLI tool itself
-    if (toolDir === 'tools/afena-cli') continue;
+    if (toolDir === 'tools/afenda-cli') continue;
 
     // Check if this tool is referenced in any registry command
     const isRegistered = registeredPaths.some((p: string) => p.includes(toolDir));
@@ -49,8 +49,8 @@ export function scanTools(
 
     ungrouped.push({
       source: toolDir,
-      suggestedCommand: `afena (tool: ${toolName})`,
-      reason: `Tool directory not wired into afena CLI`,
+      suggestedCommand: `afenda (tool: ${toolName})`,
+      reason: `Tool directory not wired into afenda CLI`,
     });
   }
 
@@ -85,7 +85,7 @@ export function scanStandaloneScripts(
     ungrouped.push({
       source: posixPath,
       suggestedCommand: suggestFromFilename(posixPath),
-      reason: `Standalone script not referenced by any afena command`,
+      reason: `Standalone script not referenced by any afenda command`,
     });
   }
 
@@ -111,9 +111,9 @@ function collectRegisteredPaths(registry: Registry): string[] {
 
 function suggestFromFilename(filePath: string): string {
   const name = filePath.replace(/^scripts\//, '').replace(/\.(ts|js)$/, '');
-  if (name.includes('type') || name.includes('generate')) return 'afena types';
-  if (name.includes('doc') || name.includes('readme')) return 'afena docs';
-  if (name.includes('guard') || name.includes('check')) return 'afena guard';
-  if (name.includes('clean')) return 'afena clean';
-  return `afena (script: ${name})`;
+  if (name.includes('type') || name.includes('generate')) return 'afenda types';
+  if (name.includes('doc') || name.includes('readme')) return 'afenda docs';
+  if (name.includes('guard') || name.includes('check')) return 'afenda guard';
+  if (name.includes('clean')) return 'afenda clean';
+  return `afenda (script: ${name})`;
 }

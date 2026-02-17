@@ -1,4 +1,4 @@
-import { dbRo, contacts, and, sql, ilike, isNull, or, desc } from 'afena-database';
+import { dbRo, contacts, and, sql, ilike, isNull, or, desc } from 'afenda-database';
 
 import { ftsRank, ftsWhere } from '../fts';
 

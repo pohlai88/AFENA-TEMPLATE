@@ -1,6 +1,6 @@
-import { createLogger, createComponentLogger } from 'afena-logger';
+import { createLogger, createComponentLogger } from 'afenda-logger';
 
-import type { ActionEnvelope } from 'afena-canon';
+import type { ActionEnvelope } from 'afenda-canon';
 import type { Logger } from 'pino';
 
 /**

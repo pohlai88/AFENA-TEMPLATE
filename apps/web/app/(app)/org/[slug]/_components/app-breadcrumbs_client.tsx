@@ -10,7 +10,7 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-} from 'afena-ui/components/breadcrumb';
+} from 'afenda-ui/components/breadcrumb';
 import { Fragment } from 'react';
 
 import { getBreadcrumbLabel } from './nav-config';

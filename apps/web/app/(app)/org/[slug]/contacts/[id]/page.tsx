@@ -1,8 +1,8 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
-import { Badge } from 'afena-ui/components/badge';
-import { Card, CardContent, CardHeader, CardTitle } from 'afena-ui/components/card';
+import { Badge } from 'afenda-ui/components/badge';
+import { Card, CardContent, CardHeader, CardTitle } from 'afenda-ui/components/card';
 import { Building2, Clock, FileText, Mail, Phone } from 'lucide-react';
 
 import {

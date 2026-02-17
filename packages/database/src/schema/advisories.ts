@@ -1,6 +1,6 @@
-import { desc, sql } from 'drizzle-orm';
+import { sql } from 'drizzle-orm';
 import { crudPolicy, authenticatedRole } from 'drizzle-orm/neon';
-import { check, doublePrecision, index, jsonb, pgTable, primaryKey, text, timestamp, uniqueIndex, uuid } from 'drizzle-orm/pg-core';
+import { check, doublePrecision, index, jsonb, pgTable, text, timestamp, uniqueIndex, uuid } from 'drizzle-orm/pg-core';
 
 /**
  * Advisories — deterministic advisory engine output.
@@ -8,13 +8,11 @@ import { check, doublePrecision, index, jsonb, pgTable, primaryKey, text, timest
  * INVARIANT-P03: open/ack advisories deduplicated by (org_id, fingerprint).
  *
  * RLS: tenantPolicy-style. UPDATE allowed ONLY on status (ack/dismiss). No DELETE.
- * 
- * GAP-DB-001: Composite PK (org_id, id) for data integrity and tenant isolation.
  */
 export const advisories = pgTable(
   'advisories',
   {
-    id: uuid('id').defaultRandom().notNull(),
+    id: uuid('id').defaultRandom().primaryKey(),
     orgId: text('org_id')
       .notNull()
       .default(sql`(auth.require_org_id())`),
@@ -41,7 +39,6 @@ export const advisories = pgTable(
       .default(sql`COALESCE(auth.user_id(), 'system')`),
   },
   (table) => [
-    primaryKey({ columns: [table.orgId, table.id] }),
     // CHECK constraints — enforce enum-like values at DB level
     check('advisories_type_taxonomy', sql`type ~ '^(anomaly|forecast|rule)\.[a-z0-9_]+\.[a-z0-9_]+$'`),
     check('advisories_severity_enum', sql`severity IN ('info','warn','critical')`),
@@ -54,7 +51,7 @@ export const advisories = pgTable(
     index('advisories_org_status_created_idx').on(table.orgId, table.status, table.createdAt),
     index('advisories_org_type_created_idx').on(table.orgId, table.type, table.createdAt),
     index('advisories_entity_idx').on(table.orgId, table.entityType, table.entityId, table.createdAt),
-    index('advisories_org_created_id_idx').on(table.orgId, desc(table.createdAt), desc(table.id)),
+    index('advisories_org_created_idx').on(table.orgId, table.createdAt),
     // Dedupe: only one open/ack advisory per fingerprint per org
     uniqueIndex('advisories_fingerprint_dedupe_idx')
       .on(table.orgId, table.fingerprint)

@@ -1,6 +1,6 @@
 'use client';
 
-import { Button } from 'afena-ui/components/button';
+import { Button } from 'afenda-ui/components/button';
 import {
   CheckCircle,
   Pencil,
@@ -11,7 +11,7 @@ import {
   XCircle,
 } from 'lucide-react';
 
-import type { ResolvedAction } from 'afena-canon';
+import type { ResolvedAction } from 'afenda-canon';
 import type { LucideIcon } from 'lucide-react';
 
 const ICON_MAP: Record<string, LucideIcon> = {

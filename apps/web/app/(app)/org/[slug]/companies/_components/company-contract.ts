@@ -1,4 +1,4 @@
-import type { EntityContract } from 'afena-canon';
+import type { EntityContract } from 'afenda-canon';
 
 export const COMPANIES_CONTRACT: EntityContract = {
   entityType: 'companies',

@@ -1,6 +1,6 @@
 # API Architecture
 
-Brief reference for the Afena web API structure.
+Brief reference for the afenda web API structure.
 
 ## Tiers
 

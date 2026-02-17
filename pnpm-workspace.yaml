@@ -1,9 +1,14 @@
+# pnpm workspace configuration
+# See: https://pnpm.io/pnpm-workspace_yaml
+
 packages:
   - 'apps/*'
+  - 'business-domain/*'
   - 'packages/*'
   - 'tools/*'
 
-
+# Catalog - centralized dependency version management
+# Use 'catalog:' in package.json to reference these versions
 catalog:
   # ── Core ──────────────────────────────────────────────
   typescript: ~5.9.3
@@ -65,7 +70,7 @@ catalog:
   postcss: ~8.5.6
   prettier-plugin-tailwindcss: ~0.7.2
 
-  # ── Afena CLI deps ───────────────────────────────────
+  # ── afenda CLI deps ───────────────────────────────────
   commander: ~14.0.3
   cosmiconfig: ~9.0.0
   execa: ~5.1.1

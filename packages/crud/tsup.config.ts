@@ -7,6 +7,6 @@ export default defineConfig({
   splitting: false,
   sourcemap: true,
   clean: true,
-  external: ['afena-canon', 'afena-database', 'afena-logger', 'drizzle-orm'],
+  external: ['afenda-canon', 'afenda-database', 'afenda-logger', 'drizzle-orm'],
   tsconfig: './tsconfig.build.json',
 });

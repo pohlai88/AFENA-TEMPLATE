@@ -2,12 +2,12 @@ import {
   validateFieldValue,
   validateTypeConfig,
   DATA_TYPE_VALUE_COLUMN_MAP,
-} from 'afena-canon';
-import { db, dbRo, customFields } from 'afena-database';
+} from 'afenda-canon';
+import { db, dbRo, customFields } from 'afenda-database';
 import { eq, and } from 'drizzle-orm';
 
-import type { DataType } from 'afena-canon';
-import type { DbInstance } from 'afena-database';
+import type { DataType } from 'afenda-canon';
+import type { DbInstance } from 'afenda-database';
 
 export interface CustomFieldDef {
   id: string;

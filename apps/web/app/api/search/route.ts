@@ -1,6 +1,6 @@
 import { NextRequest } from 'next/server';
 
-import { searchAll } from 'afena-search';
+import { searchAll } from 'afenda-search';
 
 import { withAuth } from '@/lib/api/with-auth';
 

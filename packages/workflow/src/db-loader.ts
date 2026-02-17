@@ -1,4 +1,4 @@
-import { and, db, eq, workflowRules } from 'afena-database';
+import { and, db, eq, workflowRules } from 'afenda-database';
 
 import { interpretAction, interpretCondition } from './interpreter';
 import { registerRule, unregisterByPrefix } from './registry';

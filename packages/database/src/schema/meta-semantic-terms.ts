@@ -1,15 +1,12 @@
 import { sql } from 'drizzle-orm';
-import { boolean, check, index, pgTable, primaryKey, text, timestamp, uuid } from 'drizzle-orm/pg-core';
+import { boolean, check, index, pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core';
 
 import { tenantPolicy } from '../helpers/tenant-policy';
 
-/**
- * GAP-DB-001: Composite PK (org_id, id) for data integrity and tenant isolation.
- */
 export const metaSemanticTerms = pgTable(
   'meta_semantic_terms',
   {
-    id: uuid('id').defaultRandom().notNull(),
+    id: uuid('id').defaultRandom().primaryKey(),
     orgId: text('org_id')
       .notNull()
       .default(sql`(auth.require_org_id())`),
@@ -25,7 +22,6 @@ export const metaSemanticTerms = pgTable(
     updatedAt: timestamp('updated_at', { withTimezone: true }).defaultNow().notNull(),
   },
   (table) => [
-    primaryKey({ columns: [table.orgId, table.id] }),
     index('meta_semantic_terms_org_id_idx').on(table.orgId, table.id),
     check('meta_semantic_terms_org_not_empty', sql`org_id <> ''`),
     check(

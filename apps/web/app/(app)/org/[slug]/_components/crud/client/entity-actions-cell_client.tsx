@@ -1,16 +1,16 @@
 'use client';
 
-import { Button } from 'afena-ui/components/button';
+import { Button } from 'afenda-ui/components/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from 'afena-ui/components/dropdown-menu';
+} from 'afenda-ui/components/dropdown-menu';
 import { MoreHorizontal } from 'lucide-react';
 
-import type { ActionKind, ResolvedActions } from 'afena-canon';
+import type { ActionKind, ResolvedActions } from 'afenda-canon';
 
 interface EntityActionsCellProps {
   actions: ResolvedActions;

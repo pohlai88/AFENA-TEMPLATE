@@ -6,7 +6,7 @@ import type {
   ResolvedActions,
   ResolvedUpdateMode,
   UpdateMode,
-} from 'afena-canon';
+} from 'afenda-canon';
 
 /**
  * ActionResolver — server-side truth for what the current actor

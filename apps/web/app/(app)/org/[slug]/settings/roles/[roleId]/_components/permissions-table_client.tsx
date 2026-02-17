@@ -2,17 +2,17 @@
 
 import { useRouter } from 'next/navigation';
 
-import { Badge } from 'afena-ui/components/badge';
-import { Button } from 'afena-ui/components/button';
-import { Input } from 'afena-ui/components/input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from 'afena-ui/components/select';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from 'afena-ui/components/table';
+import { Badge } from 'afenda-ui/components/badge';
+import { Button } from 'afenda-ui/components/button';
+import { Input } from 'afenda-ui/components/input';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from 'afenda-ui/components/select';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from 'afenda-ui/components/table';
 import { Plus, Trash2 } from 'lucide-react';
 import { useState, useTransition } from 'react';
 
 import { addRolePermission, removeRolePermission } from '@/app/actions/roles';
 
-import type { RolePermission } from 'afena-database';
+import type { RolePermission } from 'afenda-database';
 
 const VERBS = ['create', 'update', 'delete', 'submit', 'cancel', 'amend', 'approve', 'reject', 'restore', '*'] as const;
 const SCOPES = ['org', 'self', 'company', 'site', 'team'] as const;

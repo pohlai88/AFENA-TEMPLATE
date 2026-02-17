@@ -1,7 +1,7 @@
-# Afena Search Engine — Architecture Reference
+# afenda Search Engine — Architecture Reference
 
-> **Auto-generated** by `afena readme gen` at 2026-02-16T12:44:12Z. Do not edit — regenerate instead.
-> **Package:** `afena-search` (`packages/search`)
+> **Auto-generated** by `afenda readme gen` at 2026-02-16T12:44:12Z. Do not edit — regenerate instead.
+> **Package:** `afenda-search` (`packages/search`)
 > **Purpose:** Full-text search helpers, per-entity adapters, and cross-entity search registry.
 
 ---
@@ -83,10 +83,10 @@ packages/search/src/
 
 ### Internal (workspace)
 
-- `afena-database`
-- `afena-eslint-config`
-- `afena-logger`
-- `afena-typescript-config`
+- `afenda-database`
+- `afenda-eslint-config`
+- `afenda-logger`
+- `afenda-typescript-config`
 
 ### External
 

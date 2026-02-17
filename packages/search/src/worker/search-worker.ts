@@ -1,5 +1,5 @@
-import { dbSearchWorker, sql, withDbRetry } from 'afena-database';
-import { getLogger } from 'afena-logger';
+import { dbSearchWorker, sql, withDbRetry } from 'afenda-database';
+import { getLogger } from 'afenda-logger';
 
 /**
  * Search outbox worker (GAP-DB-004).

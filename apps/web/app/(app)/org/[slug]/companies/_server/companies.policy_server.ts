@@ -2,7 +2,7 @@ import { resolveActions } from '../../_components/crud/server/action-resolver_se
 import { COMPANIES_CONTRACT } from '../_components/company-contract';
 
 import type { OrgContext } from '../../_server/org-context_server';
-import type { DocStatus, ResolvedActions } from 'afena-canon';
+import type { DocStatus, ResolvedActions } from 'afenda-canon';
 
 export function resolveCompanyActions(
   ctx: OrgContext,

@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
-import { Button } from 'afena-ui/components/button';
+import { Button } from 'afenda-ui/components/button';
 import { Building2, Plus } from 'lucide-react';
 
 import { DataTable } from '../../_components/crud/client/data-table_client';
@@ -15,7 +15,7 @@ import { contactColumns } from './contact-columns';
 
 import type { ContactRow } from './contact-columns';
 import type { ColumnDef } from '@tanstack/react-table';
-import type { ActionEnvelope, ActionKind, ResolvedActions } from 'afena-canon';
+import type { ActionEnvelope, ActionKind, ResolvedActions } from 'afenda-canon';
 
 interface ContactsTableProps {
   data: ContactRow[];

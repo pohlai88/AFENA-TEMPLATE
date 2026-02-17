@@ -4,7 +4,7 @@ import {
   migrationConflicts,
   migrationConflictResolutions,
   migrationReports,
-} from 'afena-database';
+} from 'afenda-database';
 import { and, eq } from 'drizzle-orm';
 
 import { buildSignedReport } from '../audit/signed-report.js';
@@ -22,7 +22,7 @@ import type {
   MigrationResult,
 } from '../types/migration-job.js';
 import type { LoadResult } from '../types/upsert-plan.js';
-import type { DbInstance } from 'afena-database';
+import type { DbInstance } from 'afenda-database';
 
 /**
  * Job execution result — extends MigrationResult with timing info.

@@ -1,0 +1,705 @@
+{
+  "version": "1.0",
+  "generatedAt": "2026-02-17T10:24:06.911Z",
+  "policyPhase": 3,
+  "summary": {
+    "total": 34,
+    "covered": 24,
+    "orphaned": 8,
+    "phantom": 0,
+    "excepted": 2,
+    "planned": 0
+  },
+  "entries": [
+    {
+      "key": "contacts.create",
+      "declared": true,
+      "observed": true,
+      "kind": "mutation",
+      "status": "covered",
+      "kernel": {
+        "actionType": true,
+        "handler": true
+      },
+      "surfaces": [
+        {
+          "file": "apps/web/app/actions/contacts.capabilities.ts",
+          "kind": "server_action"
+        },
+        {
+          "file": "packages/crud/src/handlers/contacts.ts",
+          "kind": "engine"
+        }
+      ],
+      "uiSurfaces": [
+        {
+          "file": "apps/web/app/(app)/org/[slug]/contacts/surface.ts",
+          "surfaceId": "web.contacts.list.page",
+          "page": ""
+        }
+      ]
+    },
+    {
+      "key": "contacts.update",
+      "declared": true,
+      "observed": true,
+      "kind": "mutation",
+      "status": "covered",
+      "kernel": {
+        "actionType": true,
+        "handler": true
+      },
+      "surfaces": [
+        {
+          "file": "apps/web/app/actions/contacts.capabilities.ts",
+          "kind": "server_action"
+        },
+        {
+          "file": "packages/crud/src/handlers/contacts.ts",
+          "kind": "engine"
+        }
+      ],
+      "uiSurfaces": [
+        {
+          "file": "apps/web/app/(app)/org/[slug]/contacts/[id]/edit/surface.ts",
+          "surfaceId": "web.contacts.edit.page",
+          "page": ""
+        }
+      ]
+    },
+    {
+      "key": "contacts.delete",
+      "declared": true,
+      "observed": true,
+      "kind": "mutation",
+      "status": "covered",
+      "kernel": {
+        "actionType": true,
+        "handler": true
+      },
+      "surfaces": [
+        {
+          "file": "apps/web/app/actions/contacts.capabilities.ts",
+          "kind": "server_action"
+        },
+        {
+          "file": "packages/crud/src/handlers/contacts.ts",
+          "kind": "engine"
+        }
+      ],
+      "uiSurfaces": [
+        {
+          "file": "apps/web/app/(app)/org/[slug]/contacts/surface.ts",
+          "surfaceId": "web.contacts.list.page",
+          "page": ""
+        },
+        {
+          "file": "apps/web/app/(app)/org/[slug]/contacts/[id]/surface.ts",
+          "surfaceId": "web.contacts.detail.page",
+          "page": ""
+        }
+      ]
+    },
+    {
+      "key": "contacts.restore",
+      "declared": true,
+      "observed": true,
+      "kind": "mutation",
+      "status": "covered",
+      "kernel": {
+        "actionType": true,
+        "handler": true
+      },
+      "surfaces": [
+        {
+          "file": "apps/web/app/actions/contacts.capabilities.ts",
+          "kind": "server_action"
+        },
+        {
+          "file": "packages/crud/src/handlers/contacts.ts",
+          "kind": "engine"
+        }
+      ],
+      "uiSurfaces": [
+        {
+          "file": "apps/web/app/(app)/org/[slug]/contacts/trash/surface.ts",
+          "surfaceId": "web.contacts.trash.page",
+          "page": ""
+        }
+      ]
+    },
+    {
+      "key": "contacts.read",
+      "declared": true,
+      "observed": true,
+      "kind": "read",
+      "status": "covered",
+      "kernel": null,
+      "surfaces": [
+        {
+          "file": "apps/web/app/actions/contacts.capabilities.ts",
+          "kind": "server_action"
+        }
+      ],
+      "uiSurfaces": [
+        {
+          "file": "apps/web/app/(app)/org/[slug]/contacts/[id]/surface.ts",
+          "surfaceId": "web.contacts.detail.page",
+          "page": ""
+        }
+      ]
+    },
+    {
+      "key": "contacts.list",
+      "declared": true,
+      "observed": true,
+      "kind": "read",
+      "status": "covered",
+      "kernel": null,
+      "surfaces": [
+        {
+          "file": "apps/web/app/actions/contacts.capabilities.ts",
+          "kind": "server_action"
+        }
+      ],
+      "uiSurfaces": [
+        {
+          "file": "apps/web/app/(app)/org/[slug]/contacts/surface.ts",
+          "surfaceId": "web.contacts.list.page",
+          "page": ""
+        },
+        {
+          "file": "apps/web/app/(app)/org/[slug]/contacts/trash/surface.ts",
+          "surfaceId": "web.contacts.trash.page",
+          "page": ""
+        }
+      ]
+    },
+    {
+      "key": "contacts.versions",
+      "declared": true,
+      "observed": true,
+      "kind": "read",
+      "status": "covered",
+      "kernel": null,
+      "surfaces": [
+        {
+          "file": "apps/web/app/actions/contacts.capabilities.ts",
+          "kind": "server_action"
+        }
+      ],
+      "uiSurfaces": [
+        {
+          "file": "apps/web/app/(app)/org/[slug]/contacts/[id]/versions/surface.ts",
+          "surfaceId": "web.contacts.versions.page",
+          "page": ""
+        }
+      ]
+    },
+    {
+      "key": "contacts.audit",
+      "declared": true,
+      "observed": true,
+      "kind": "read",
+      "status": "covered",
+      "kernel": null,
+      "surfaces": [
+        {
+          "file": "apps/web/app/actions/contacts.capabilities.ts",
+          "kind": "server_action"
+        }
+      ],
+      "uiSurfaces": [
+        {
+          "file": "apps/web/app/(app)/org/[slug]/contacts/[id]/audit/surface.ts",
+          "surfaceId": "web.contacts.audit.page",
+          "page": ""
+        }
+      ]
+    },
+    {
+      "key": "contacts.search",
+      "declared": true,
+      "observed": true,
+      "kind": "search",
+      "status": "covered",
+      "kernel": null,
+      "surfaces": [
+        {
+          "file": "apps/web/app/api/search/route.ts",
+          "kind": "api_route"
+        }
+      ],
+      "uiSurfaces": []
+    },
+    {
+      "key": "search.global",
+      "declared": true,
+      "observed": true,
+      "kind": "search",
+      "status": "covered",
+      "kernel": null,
+      "surfaces": [
+        {
+          "file": "apps/web/app/api/search/route.ts",
+          "kind": "api_route"
+        }
+      ],
+      "uiSurfaces": []
+    },
+    {
+      "key": "custom_fields.read",
+      "declared": true,
+      "observed": true,
+      "kind": "read",
+      "status": "covered",
+      "kernel": null,
+      "surfaces": [
+        {
+          "file": "apps/web/app/api/custom-fields/[entityType]/route.ts",
+          "kind": "api_route"
+        }
+      ],
+      "uiSurfaces": []
+    },
+    {
+      "key": "admin.custom_fields.define",
+      "declared": true,
+      "observed": false,
+      "kind": "admin",
+      "status": "orphaned",
+      "kernel": null,
+      "surfaces": [],
+      "uiSurfaces": []
+    },
+    {
+      "key": "admin.custom_fields.sync",
+      "declared": true,
+      "observed": false,
+      "kind": "admin",
+      "status": "orphaned",
+      "kernel": null,
+      "surfaces": [],
+      "uiSurfaces": []
+    },
+    {
+      "key": "admin.aliases.resolve",
+      "declared": true,
+      "observed": false,
+      "kind": "admin",
+      "status": "orphaned",
+      "kernel": null,
+      "surfaces": [],
+      "uiSurfaces": []
+    },
+    {
+      "key": "views.read",
+      "declared": true,
+      "observed": true,
+      "kind": "read",
+      "status": "covered",
+      "kernel": null,
+      "surfaces": [
+        {
+          "file": "apps/web/app/api/views/[entityType]/route.ts",
+          "kind": "api_route"
+        }
+      ],
+      "uiSurfaces": []
+    },
+    {
+      "key": "admin.views.manage",
+      "declared": true,
+      "observed": true,
+      "kind": "admin",
+      "status": "covered",
+      "kernel": null,
+      "surfaces": [
+        {
+          "file": "apps/web/app/api/meta/capabilities/route.ts",
+          "kind": "api_route"
+        },
+        {
+          "file": "apps/web/app/api/meta/capabilities/flags/route.ts",
+          "kind": "api_route"
+        }
+      ],
+      "uiSurfaces": []
+    },
+    {
+      "key": "system.workflows.evaluate",
+      "declared": true,
+      "observed": false,
+      "kind": "system",
+      "status": "orphaned",
+      "kernel": null,
+      "surfaces": [],
+      "uiSurfaces": []
+    },
+    {
+      "key": "system.workflows.manage",
+      "declared": true,
+      "observed": false,
+      "kind": "admin",
+      "status": "orphaned",
+      "kernel": null,
+      "surfaces": [],
+      "uiSurfaces": []
+    },
+    {
+      "key": "system.advisory.detect",
+      "declared": true,
+      "observed": false,
+      "kind": "system",
+      "status": "orphaned",
+      "kernel": null,
+      "surfaces": [],
+      "uiSurfaces": []
+    },
+    {
+      "key": "system.advisory.forecast",
+      "declared": true,
+      "observed": false,
+      "kind": "system",
+      "status": "orphaned",
+      "kernel": null,
+      "surfaces": [],
+      "uiSurfaces": []
+    },
+    {
+      "key": "system.advisory.explain",
+      "declared": true,
+      "observed": false,
+      "kind": "system",
+      "status": "orphaned",
+      "kernel": null,
+      "surfaces": [],
+      "uiSurfaces": []
+    },
+    {
+      "key": "auth.sign_in",
+      "declared": true,
+      "observed": true,
+      "kind": "auth",
+      "status": "covered",
+      "kernel": null,
+      "surfaces": [
+        {
+          "file": "apps/web/app/api/auth/[...path]/route.ts",
+          "kind": "api_route"
+        }
+      ],
+      "uiSurfaces": [
+        {
+          "file": "apps/web/app/(public)/(auth)/auth/[path]/surface.ts",
+          "surfaceId": "web.auth.page",
+          "page": "/auth/[path]"
+        }
+      ]
+    },
+    {
+      "key": "auth.sign_out",
+      "declared": true,
+      "observed": true,
+      "kind": "auth",
+      "status": "covered",
+      "kernel": null,
+      "surfaces": [
+        {
+          "file": "apps/web/app/api/auth/[...path]/route.ts",
+          "kind": "api_route"
+        }
+      ],
+      "uiSurfaces": [
+        {
+          "file": "apps/web/app/(public)/(auth)/auth/[path]/surface.ts",
+          "surfaceId": "web.auth.page",
+          "page": "/auth/[path]"
+        }
+      ]
+    },
+    {
+      "key": "storage.files.upload",
+      "declared": true,
+      "observed": true,
+      "kind": "storage",
+      "status": "excepted",
+      "kernel": null,
+      "surfaces": [
+        {
+          "file": "apps/web/app/api/storage/presign/route.ts",
+          "kind": "api_route"
+        }
+      ],
+      "uiSurfaces": [],
+      "exception": {
+        "id": "EXC-0001",
+        "rule": "VIS-00",
+        "scope": {
+          "kind": "file",
+          "file": "apps/web/app/api/storage/presign/route.ts"
+        },
+        "reason": "Presign route generates a signed URL but does not call mutate() — the actual upload goes directly to R2. No kernel write boundary to tag.",
+        "expiresOn": "2026-04-15",
+        "reviewOverdue": false
+      }
+    },
+    {
+      "key": "storage.files.metadata",
+      "declared": true,
+      "observed": true,
+      "kind": "storage",
+      "status": "covered",
+      "kernel": null,
+      "surfaces": [
+        {
+          "file": "apps/web/app/api/storage/metadata/route.ts",
+          "kind": "api_route"
+        }
+      ],
+      "uiSurfaces": []
+    },
+    {
+      "key": "storage.files.save",
+      "declared": true,
+      "observed": true,
+      "kind": "storage",
+      "status": "excepted",
+      "kernel": null,
+      "surfaces": [
+        {
+          "file": "apps/web/app/api/storage/metadata/route.ts",
+          "kind": "api_route"
+        }
+      ],
+      "uiSurfaces": [],
+      "exception": {
+        "id": "EXC-0002",
+        "rule": "VIS-00",
+        "scope": {
+          "kind": "file",
+          "file": "apps/web/app/api/storage/metadata/route.ts"
+        },
+        "reason": "Metadata POST uses raw db.insert (not kernel mutate) for r2_files table which is not a domain entity. Will migrate to kernel in Phase 2.",
+        "expiresOn": "2026-04-15",
+        "reviewOverdue": false
+      }
+    },
+    {
+      "key": "companies.create",
+      "declared": true,
+      "observed": true,
+      "kind": "mutation",
+      "status": "covered",
+      "kernel": {
+        "actionType": true,
+        "handler": true
+      },
+      "surfaces": [
+        {
+          "file": "apps/web/app/actions/companies.capabilities.ts",
+          "kind": "server_action"
+        },
+        {
+          "file": "packages/crud/src/handlers/companies.ts",
+          "kind": "engine"
+        }
+      ],
+      "uiSurfaces": [
+        {
+          "file": "apps/web/app/(app)/org/[slug]/companies/surface.ts",
+          "surfaceId": "web.companies.list.page",
+          "page": ""
+        },
+        {
+          "file": "apps/web/app/(app)/org/[slug]/companies/new/surface.ts",
+          "surfaceId": "web.companies.new.page",
+          "page": ""
+        }
+      ]
+    },
+    {
+      "key": "companies.update",
+      "declared": true,
+      "observed": true,
+      "kind": "mutation",
+      "status": "covered",
+      "kernel": {
+        "actionType": true,
+        "handler": true
+      },
+      "surfaces": [
+        {
+          "file": "apps/web/app/actions/companies.capabilities.ts",
+          "kind": "server_action"
+        },
+        {
+          "file": "packages/crud/src/handlers/companies.ts",
+          "kind": "engine"
+        }
+      ],
+      "uiSurfaces": [
+        {
+          "file": "apps/web/app/(app)/org/[slug]/companies/[id]/surface.ts",
+          "surfaceId": "web.companies.detail.page",
+          "page": ""
+        },
+        {
+          "file": "apps/web/app/(app)/org/[slug]/companies/[id]/edit/surface.ts",
+          "surfaceId": "web.companies.edit.page",
+          "page": ""
+        }
+      ]
+    },
+    {
+      "key": "companies.delete",
+      "declared": true,
+      "observed": true,
+      "kind": "mutation",
+      "status": "covered",
+      "kernel": {
+        "actionType": true,
+        "handler": true
+      },
+      "surfaces": [
+        {
+          "file": "apps/web/app/actions/companies.capabilities.ts",
+          "kind": "server_action"
+        },
+        {
+          "file": "packages/crud/src/handlers/companies.ts",
+          "kind": "engine"
+        }
+      ],
+      "uiSurfaces": [
+        {
+          "file": "apps/web/app/(app)/org/[slug]/companies/surface.ts",
+          "surfaceId": "web.companies.list.page",
+          "page": ""
+        },
+        {
+          "file": "apps/web/app/(app)/org/[slug]/companies/[id]/surface.ts",
+          "surfaceId": "web.companies.detail.page",
+          "page": ""
+        }
+      ]
+    },
+    {
+      "key": "companies.restore",
+      "declared": true,
+      "observed": true,
+      "kind": "mutation",
+      "status": "covered",
+      "kernel": {
+        "actionType": true,
+        "handler": true
+      },
+      "surfaces": [
+        {
+          "file": "apps/web/app/actions/companies.capabilities.ts",
+          "kind": "server_action"
+        },
+        {
+          "file": "packages/crud/src/handlers/companies.ts",
+          "kind": "engine"
+        }
+      ],
+      "uiSurfaces": [
+        {
+          "file": "apps/web/app/(app)/org/[slug]/companies/trash/surface.ts",
+          "surfaceId": "web.companies.trash.page",
+          "page": ""
+        }
+      ]
+    },
+    {
+      "key": "companies.read",
+      "declared": true,
+      "observed": true,
+      "kind": "read",
+      "status": "covered",
+      "kernel": null,
+      "surfaces": [
+        {
+          "file": "apps/web/app/actions/companies.capabilities.ts",
+          "kind": "server_action"
+        }
+      ],
+      "uiSurfaces": [
+        {
+          "file": "apps/web/app/(app)/org/[slug]/companies/[id]/surface.ts",
+          "surfaceId": "web.companies.detail.page",
+          "page": ""
+        }
+      ]
+    },
+    {
+      "key": "companies.list",
+      "declared": true,
+      "observed": true,
+      "kind": "read",
+      "status": "covered",
+      "kernel": null,
+      "surfaces": [
+        {
+          "file": "apps/web/app/actions/companies.capabilities.ts",
+          "kind": "server_action"
+        }
+      ],
+      "uiSurfaces": [
+        {
+          "file": "apps/web/app/(app)/org/[slug]/companies/surface.ts",
+          "surfaceId": "web.companies.list.page",
+          "page": ""
+        },
+        {
+          "file": "apps/web/app/(app)/org/[slug]/companies/trash/surface.ts",
+          "surfaceId": "web.companies.trash.page",
+          "page": ""
+        }
+      ]
+    },
+    {
+      "key": "companies.versions",
+      "declared": true,
+      "observed": true,
+      "kind": "read",
+      "status": "covered",
+      "kernel": null,
+      "surfaces": [
+        {
+          "file": "apps/web/app/actions/companies.capabilities.ts",
+          "kind": "server_action"
+        }
+      ],
+      "uiSurfaces": [
+        {
+          "file": "apps/web/app/(app)/org/[slug]/companies/[id]/versions/surface.ts",
+          "surfaceId": "web.companies.versions.page",
+          "page": ""
+        }
+      ]
+    },
+    {
+      "key": "companies.audit",
+      "declared": true,
+      "observed": true,
+      "kind": "read",
+      "status": "covered",
+      "kernel": null,
+      "surfaces": [
+        {
+          "file": "apps/web/app/actions/companies.capabilities.ts",
+          "kind": "server_action"
+        }
+      ],
+      "uiSurfaces": [
+        {
+          "file": "apps/web/app/(app)/org/[slug]/companies/[id]/audit/surface.ts",
+          "surfaceId": "web.companies.audit.page",
+          "page": ""
+        }
+      ]
+    }
+  ]
+}

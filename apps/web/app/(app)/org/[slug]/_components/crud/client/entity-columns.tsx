@@ -1,7 +1,7 @@
 'use client';
 
-import { Badge } from 'afena-ui/components/badge';
-import { Button } from 'afena-ui/components/button';
+import { Badge } from 'afenda-ui/components/badge';
+import { Button } from 'afenda-ui/components/button';
 import { ArrowUpDown } from 'lucide-react';
 
 import type { Column, ColumnDef } from '@tanstack/react-table';

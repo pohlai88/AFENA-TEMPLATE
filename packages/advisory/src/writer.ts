@@ -1,4 +1,4 @@
-import { advisories, advisoryEvidence, db, eq, and, sql } from 'afena-database';
+import { advisories, advisoryEvidence, db, eq, and, sql } from 'afenda-database';
 
 import { buildEvidence } from './evidence';
 import { renderExplanation } from './explain/render';

@@ -1,17 +1,14 @@
 import { sql } from 'drizzle-orm';
-import { check, index, pgTable, primaryKey, text, timestamp, uniqueIndex, uuid } from 'drizzle-orm/pg-core';
+import { check, index, pgTable, text, timestamp, uniqueIndex, uuid } from 'drizzle-orm/pg-core';
 
 import { tenantPolicy } from '../helpers/tenant-policy';
 
 import { metaAssets } from './meta-assets';
 
-/**
- * GAP-DB-001: Composite PK (org_id, id) for data integrity and tenant isolation.
- */
 export const metaLineageEdges = pgTable(
   'meta_lineage_edges',
   {
-    id: uuid('id').defaultRandom().notNull(),
+    id: uuid('id').defaultRandom().primaryKey(),
     orgId: text('org_id')
       .notNull()
       .default(sql`(auth.require_org_id())`),
@@ -26,7 +23,6 @@ export const metaLineageEdges = pgTable(
     createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
   },
   (table) => [
-    primaryKey({ columns: [table.orgId, table.id] }),
     index('meta_lineage_edges_org_id_idx').on(table.orgId, table.id),
     uniqueIndex('meta_lineage_edges_uniq').on(
       table.orgId,

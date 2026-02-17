@@ -6,7 +6,7 @@ import {
   drainSearchOutbox,
   isBackfillComplete,
   isSearchDocumentsEmpty,
-} from 'afena-search';
+} from 'afenda-search';
 
 import { requireCronSecret } from '@/lib/api/with-cron-secret';
 

@@ -12,8 +12,8 @@ import {
   sql,
   tasks,
   videoSettings,
-} from 'afena-database';
-import { getLogger } from 'afena-logger';
+} from 'afenda-database';
+import { getLogger } from 'afenda-logger';
 // @entity-gen:read-import
 
 import { buildCursorWhere, decodeCursor, encodeCursor } from './cursor';
@@ -27,7 +27,7 @@ import {
   setCachedList,
 } from './list-cache';
 
-import type { ApiResponse, EntityType } from 'afena-canon';
+import type { ApiResponse, EntityType } from 'afenda-canon';
 
 /** Table registry for reads — maps entity type to Drizzle table. */
 const TABLE_REGISTRY: Record<string, any> = {

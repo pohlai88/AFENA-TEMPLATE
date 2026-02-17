@@ -2,11 +2,11 @@
  * Relational read for delivery note with lines.
  * Phase 2A: Uses db.query.X.findFirst({ with: { Y: true } }) — single bounded query.
  */
-import { and, deliveryNotes, eq, getDb } from 'afena-database';
+import { and, deliveryNotes, eq, getDb } from 'afenda-database';
 
 import { err, ok } from './envelope';
 
-import type { ApiResponse } from 'afena-canon';
+import type { ApiResponse } from 'afenda-canon';
 
 /**
  * Read a delivery note with its lines in one query.

@@ -1,5 +1,5 @@
 {
-  "$schema": "./tools/afena-cli/schema/registry.schema.json",
+  "$schema": "./tools/afenda-cli/schema/registry.schema.json",
   "commands": {
     "clean": {
       "default": "turbo run clean",

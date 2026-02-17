@@ -38,7 +38,7 @@ export interface PipelineDb {
     expiryThreshold: Date;
   }): Promise<{ id: string } | null>;
 
-  commitLineage(lineageId: string, afenaId: string): Promise<boolean>;
+  commitLineage(lineageId: string, afendaId: string): Promise<boolean>;
 
   deleteReservation(lineageId: string): Promise<void>;
 
@@ -167,8 +167,8 @@ export abstract class MigrationPipelineBase {
   }
 
   // Fix 1: Commit with state transition enforcement
-  protected async commitLineage(lineageId: string, afenaId: string): Promise<void> {
-    const ok = await this.db.commitLineage(lineageId, afenaId);
+  protected async commitLineage(lineageId: string, afendaId: string): Promise<void> {
+    const ok = await this.db.commitLineage(lineageId, afendaId);
     if (!ok) {
       throw new Error(`Lineage commit failed (not reserved): ${lineageId}`);
     }

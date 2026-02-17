@@ -1,20 +1,17 @@
 {
-  "extends": "afena-typescript-config/base.json",
+  "extends": "afenda-typescript-config/base.json",
   "compilerOptions": {
-    "outDir": "dist",
-    "rootDir": "src",
-    "declaration": true,
-    "declarationMap": true,
-    "sourceMap": true,
+    // CLI Tool Configuration - Node.js CommonJS
+    "tsBuildInfoFile": "./dist/.tsbuildinfo",
     "module": "commonjs",
-    "moduleResolution": "node",
-    "esModuleInterop": true,
-    "resolveJsonModule": true,
-    "strict": true,
-    "skipLibCheck": true,
-    "incremental": false,
-    "composite": false
+    "moduleResolution": "node"
   },
-  "include": ["src/**/*.ts"],
-  "exclude": ["node_modules", "dist"]
+  "include": [
+    "src/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "bin"
+  ]
 }

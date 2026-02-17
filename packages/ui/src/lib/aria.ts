@@ -18,7 +18,7 @@ let idCounter = 0;
  * const inputId = generateId("input");  // "input-2"
  * ```
  */
-export function generateId(prefix = 'afena'): string {
+export function generateId(prefix = 'afenda'): string {
   return `${prefix}-${++idCounter}`;
 }
 

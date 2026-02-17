@@ -7,18 +7,15 @@
  * with zero manual wiring.
  *
  * Usage:
- *   npx tsx src/scripts/entity-new.ts <name> [--doc] [--skip-schema] [--kind <kind>]
+ *   npx tsx src/scripts/entity-new.ts <name> [--doc] [--skip-schema]
  *
  * Flags:
  *   --doc          Include lifecycle verbs (submit/cancel/approve/reject)
  *   --skip-schema  Skip schema generation (for existing tables like companies)
- *   --kind <kind>  Table kind for TABLE_KIND_OVERRIDES: truth|control|system|evidence|projection|link
- *                  Auto-inserts into table-registry.config.ts (reduces manual config edits)
  *
  * Run from packages/database directory.
  */
 
-import { execSync } from 'node:child_process';
 import * as fs from 'node:fs';
 import * as path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -26,40 +23,25 @@ import { fileURLToPath } from 'node:url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const VALID_KINDS = ['truth', 'control', 'system', 'evidence', 'projection', 'link'] as const;
-type TableKind = (typeof VALID_KINDS)[number];
-
 // ── Parse CLI args ───────────────────────────────────────
 
 const args = process.argv.slice(2);
 const entityName = args[0];
 if (!entityName || entityName.startsWith('-')) {
-  console.error('Usage: npx tsx src/scripts/entity-new.ts <entity_name> [--doc] [--skip-schema] [--kind <kind>]');
+  console.error('Usage: npx tsx src/scripts/entity-new.ts <entity_name> [--doc] [--skip-schema]');
   process.exit(1);
 }
 const flags = new Set(args.slice(1));
 const hasDoc = flags.has('--doc');
 const skipSchema = flags.has('--skip-schema');
 
-// Parse --kind <value>
-let kindOverride: TableKind | null = null;
-const kindIdx = args.indexOf('--kind');
-if (kindIdx >= 0 && args[kindIdx + 1]) {
-  const k = args[kindIdx + 1];
-  if (VALID_KINDS.includes(k as TableKind)) {
-    kindOverride = k as TableKind;
-  } else {
-    console.error(`Invalid --kind: ${k}. Must be one of: ${VALID_KINDS.join(', ')}`);
-    process.exit(1);
-  }
-}
-
 // ── Derive names ─────────────────────────────────────────
 
 // Smarter singularization: companies→company, contacts→contact, sites→site
 function singularize(name: string): string {
   if (name.endsWith('ies')) return `${name.slice(0, -3)}y`; // companies→company
-  if (name.endsWith('ses') || name.endsWith('xes') || name.endsWith('zes')) return name.slice(0, -2); // addresses→address
+  if (name.endsWith('ses') || name.endsWith('xes') || name.endsWith('zes'))
+    return name.slice(0, -2); // addresses→address
   if (name.endsWith('s') && !name.endsWith('ss')) return name.slice(0, -1); // contacts→contact
   return name;
 }
@@ -78,7 +60,17 @@ const CRUD_HANDLERS = path.join(CRUD_SRC, 'handlers');
 const CRUD_TESTS = path.join(CRUD_SRC, '__tests__');
 const SEARCH_ADAPTERS = path.join(ROOT, 'packages', 'search', 'src', 'adapters');
 const WEB_ENTITY = path.join(ROOT, 'apps', 'web', 'app', '(app)', 'org', '[slug]', entityName);
-const NAV_CONFIG = path.join(ROOT, 'apps', 'web', 'app', '(app)', 'org', '[slug]', '_components', 'nav-config.ts');
+const NAV_CONFIG = path.join(
+  ROOT,
+  'apps',
+  'web',
+  'app',
+  '(app)',
+  'org',
+  '[slug]',
+  '_components',
+  'nav-config.ts',
+);
 
 // ── Ledger tracking ──────────────────────────────────────
 
@@ -114,7 +106,10 @@ function insertAtMarker(filePath: string, marker: string, insertion: string, lab
   }
   // Dedup: check if the entity name appears in the insertion context near the marker
   // Use a line that uniquely identifies this entity (not just '{' or generic syntax)
-  const dedupLines = insertion.trim().split('\n').filter((l) => l.includes(entityName));
+  const dedupLines = insertion
+    .trim()
+    .split('\n')
+    .filter((l) => l.includes(entityName));
   const dedupKey = dedupLines[0]?.trim() ?? insertion.trim().split('\n')[0]?.trim() ?? '';
   if (dedupKey && content.includes(dedupKey)) {
     console.warn(`  SKIP ${label}: already wired`);
@@ -125,7 +120,12 @@ function insertAtMarker(filePath: string, marker: string, insertion: string, lab
   ledger.filesModified.push(relPath);
 }
 
-function insertImportAtMarker(filePath: string, marker: string, importLine: string, _label: string): void {
+function insertImportAtMarker(
+  filePath: string,
+  marker: string,
+  importLine: string,
+  _label: string,
+): void {
   const relPath = path.relative(ROOT, filePath);
   if (!fs.existsSync(filePath)) {
     console.error(`FATAL: File not found for import insertion: ${relPath}`);
@@ -141,27 +141,6 @@ function insertImportAtMarker(filePath: string, marker: string, importLine: stri
   }
   const updated = content.replace(marker, `${importLine}\n${marker}`);
   fs.writeFileSync(filePath, updated, 'utf-8');
-}
-
-/** Insert entity into TABLE_KIND_OVERRIDES in table-registry.config.ts. Idempotent. */
-function insertTableKindOverride(tableName: string, kind: TableKind): void {
-  const configPath = path.join(ROOT, 'packages', 'database', 'table-registry.config.ts');
-  const content = fs.readFileSync(configPath, 'utf-8');
-  const entry = `  ${tableName}: '${kind}'`;
-  if (content.includes(`${tableName}: '`) || content.includes(`${tableName}: "`)) {
-    console.warn(`  SKIP TABLE_KIND_OVERRIDES: ${tableName} already has an entry`);
-    return;
-  }
-  // Insert before "} as const satisfies Record<string, TableKind>;"
-  const insertPattern = /(\s+)(\} as const satisfies Record<string, TableKind>;)/;
-  const match = content.match(insertPattern);
-  if (!match) {
-    console.error('FATAL: Could not find TABLE_KIND_OVERRIDES closing in table-registry.config.ts');
-    process.exit(1);
-  }
-  const updated = content.replace(insertPattern, `${match[1]}${entry},\n${match[1]}${match[2]}`);
-  fs.writeFileSync(configPath, updated, 'utf-8');
-  ledger.filesModified.push(path.relative(ROOT, configPath));
 }
 
 // ── Action verbs ─────────────────────────────────────────
@@ -201,44 +180,30 @@ export type ${pascalSingular} = InferSelectModel<typeof ${camelPlural}>;
 export type New${pascalSingular} = InferInsertModel<typeof ${camelPlural}>;
 `;
   writeIfNotExists(path.join(DB_SCHEMA, `${entityName}.ts`), schemaContent, 'Drizzle schema');
-  if (kindOverride) {
-    insertTableKindOverride(entityName, kindOverride);
-    ledger.registries.push('TABLE_KIND_OVERRIDES');
-  }
-  // Regenerate schema barrel + table registry (Gate 7)
-  execSync('pnpm db:barrel', {
-    cwd: path.join(ROOT, 'packages', 'database'),
-    stdio: 'inherit',
-  });
 }
-
-// When --skip-schema but --kind provided: add override and run db:barrel for existing table
-if (skipSchema && kindOverride) {
-  insertTableKindOverride(entityName, kindOverride);
-  ledger.registries.push('TABLE_KIND_OVERRIDES');
-  execSync('pnpm db:barrel', {
-    cwd: path.join(ROOT, 'packages', 'database'),
-    stdio: 'inherit',
-  });
-}
-
-// Gate 7: TABLE_REGISTRY is generated from schema. New truth tables get default kind.
-// Use --kind <kind> to auto-insert into TABLE_KIND_OVERRIDES; otherwise add manually then run pnpm db:barrel.
 
 // ══════════════════════════════════════════════════════════
 // STEP 2: CRUD handler
 // ══════════════════════════════════════════════════════════
 
-const handlerContent = `import { ${camelPlural}, pickWritable } from 'afena-database';
+const handlerContent = `import { ${camelPlural} } from 'afenda-database';
 import { eq, and, sql } from 'drizzle-orm';
 
 import type { MutationContext } from '../context';
 import type { EntityHandler, HandlerResult } from './types';
 import type { NeonHttpDatabase } from 'drizzle-orm/neon-http';
 
-/** GAP-DB-007 / SAN-01: Schema-derived allowlist — writable cols from Drizzle schema. */
+/**
+ * K-11: ${pascalPlural} allowlist — only these fields are accepted from input.
+ */
 function pickAllowed(input: Record<string, unknown>): Record<string, unknown> {
-  return pickWritable(${camelPlural}, input) as Record<string, unknown>;
+  // TODO: Update this list with entity-specific fields
+  const ALLOWED = ['description', 'metadata'] as const;
+  const result: Record<string, unknown> = {};
+  for (const key of ALLOWED) {
+    if (key in input) result[key] = input[key];
+  }
+  return result;
 }
 
 function toRecord(row: Record<string, unknown>): Record<string, unknown> {
@@ -307,16 +272,20 @@ writeIfNotExists(path.join(CRUD_HANDLERS, `${entityName}.ts`), handlerContent, '
 
 const testContent = `import { describe, it, expect } from 'vitest';
 
-import { ENTITY_TYPES, ACTION_TYPES } from 'afena-canon';
+import { ENTITY_TYPES, ACTION_TYPES } from 'afenda-canon';
 
 describe('${pascalPlural} entity registration', () => {
   it('${entityName} is in ENTITY_TYPES', () => {
     expect(ENTITY_TYPES).toContain('${entityName}');
   });
 
-${allVerbs.map((v) => `  it('${entityName}.${v} is in ACTION_TYPES', () => {
+${allVerbs
+  .map(
+    (v) => `  it('${entityName}.${v} is in ACTION_TYPES', () => {
     expect(ACTION_TYPES).toContain('${entityName}.${v}');
-  });`).join('\n\n')}
+  });`,
+  )
+  .join('\n\n')}
 });
 `;
 writeIfNotExists(path.join(CRUD_TESTS, `${entityName}.smoke.test.ts`), testContent, 'Smoke test');
@@ -325,7 +294,7 @@ writeIfNotExists(path.join(CRUD_TESTS, `${entityName}.smoke.test.ts`), testConte
 // STEP 4: Search adapter stub
 // ══════════════════════════════════════════════════════════
 
-const searchContent = `import { dbRo, ${camelPlural}, and, sql, ilike, isNull, or, desc } from 'afena-database';
+const searchContent = `import { dbRo, ${camelPlural}, and, sql, ilike, isNull, or, desc } from 'afenda-database';
 
 import { ftsRank, ftsWhere } from '../fts';
 
@@ -443,11 +412,21 @@ insertImportAtMarker(
   `import { ${camelPlural}Handler } from './handlers/${entityName}';`,
   'Handler import',
 );
-insertAtMarker(mutateFile, '// @entity-gen:handler-registry', `${entityName}: ${camelPlural}Handler,`, 'HANDLER_REGISTRY');
+insertAtMarker(
+  mutateFile,
+  '// @entity-gen:handler-registry',
+  `${entityName}: ${camelPlural}Handler,`,
+  'HANDLER_REGISTRY',
+);
 ledger.registries.push('HANDLER_REGISTRY');
 
 // 5f. TABLE_REGISTRY (mutate.ts)
-insertAtMarker(mutateFile, '// @entity-gen:table-registry-mutate', `${entityName}: ${camelPlural},`, 'TABLE_REGISTRY (mutate)');
+insertAtMarker(
+  mutateFile,
+  '// @entity-gen:table-registry-mutate',
+  `${entityName}: ${camelPlural},`,
+  'TABLE_REGISTRY (mutate)',
+);
 ledger.registries.push('TABLE_REGISTRY (mutate)');
 
 // 5g. TABLE_REGISTRY (read.ts) — import + registry entry
@@ -455,21 +434,31 @@ const readFile = path.join(CRUD_SRC, 'read.ts');
 insertImportAtMarker(
   readFile,
   '// @entity-gen:read-import',
-  `import { ${camelPlural} } from 'afena-database';`,
+  `import { ${camelPlural} } from 'afenda-database';`,
   'Read import',
 );
 
-// For read.ts, the table is already imported via afena-database barrel for contacts.
+// For read.ts, the table is already imported via afenda-database barrel for contacts.
 // For new entities, we need to add it to the destructured import or add a separate import.
 // The insertImportAtMarker handles this — but we also need to add to TABLE_REGISTRY.
-insertAtMarker(readFile, '// @entity-gen:table-registry-read', `${entityName}: ${camelPlural},`, 'TABLE_REGISTRY (read)');
+insertAtMarker(
+  readFile,
+  '// @entity-gen:table-registry-read',
+  `${entityName}: ${camelPlural},`,
+  'TABLE_REGISTRY (read)',
+);
 ledger.registries.push('TABLE_REGISTRY (read)');
 
 // 5h. Handler metadata (handler-meta.ts)
 const handlerMetaFile = path.join(CRUD_SRC, 'handler-meta.ts');
 if (fs.existsSync(handlerMetaFile)) {
   const verbList = allVerbs.map((v) => `'${v}'`).join(', ');
-  insertAtMarker(handlerMetaFile, '// @entity-gen:handler-meta', `${entityName}: [${verbList}],`, 'Handler meta');
+  insertAtMarker(
+    handlerMetaFile,
+    '// @entity-gen:handler-meta',
+    `${entityName}: [${verbList}],`,
+    'Handler meta',
+  );
   ledger.registries.push('HANDLER_META');
 }
 
@@ -493,7 +482,7 @@ ledger.registries.push('NAV_ITEMS');
 // ══════════════════════════════════════════════════════════
 
 // Contract
-const contractContent = `import type { EntityContract } from 'afena-canon';
+const contractContent = `import type { EntityContract } from 'afenda-canon';
 
 export const ${entityName.toUpperCase()}_CONTRACT: EntityContract = {
   entityType: '${entityName}',
@@ -501,12 +490,16 @@ export const ${entityName.toUpperCase()}_CONTRACT: EntityContract = {
   labelPlural: '${pascalPlural}',
   hasLifecycle: ${hasDoc},
   hasSoftDelete: true,
-  transitions: [${hasDoc ? `
+  transitions: [${
+    hasDoc
+      ? `
     { from: 'draft', allowed: ['update', 'delete', 'submit'] },
     { from: 'submitted', allowed: ['approve', 'reject', 'cancel'] },
     { from: 'active', allowed: ['update', 'cancel', 'delete'] },
-    { from: 'cancelled', allowed: ['restore'] },` : `
-    // No lifecycle transitions — spine entity`}
+    { from: 'cancelled', allowed: ['restore'] },`
+      : `
+    // No lifecycle transitions — spine entity`
+  }
   ],
   updateModes: ['edit', 'correct'],
   reasonRequired: [${hasDoc ? `'reject', 'cancel'` : ''}],
@@ -515,7 +508,11 @@ export const ${entityName.toUpperCase()}_CONTRACT: EntityContract = {
   secondaryVerbs: ['restore'],
 };
 `;
-writeIfNotExists(path.join(WEB_ENTITY, '_components', `${singular}-contract.ts`), contractContent, 'Entity contract');
+writeIfNotExists(
+  path.join(WEB_ENTITY, '_components', `${singular}-contract.ts`),
+  contractContent,
+  'Entity contract',
+);
 
 // Columns
 const columnsContent = `import { textColumn, dateColumn } from '../../_components/crud/client/entity-columns';
@@ -538,7 +535,11 @@ export const ${singular}Columns: ColumnDef<${pascalSingular}Row, unknown>[] = [
   dateColumn<${pascalSingular}Row>('created_at', 'Created'),
 ];
 `;
-writeIfNotExists(path.join(WEB_ENTITY, '_components', `${singular}-columns.ts`), columnsContent, 'Column defs');
+writeIfNotExists(
+  path.join(WEB_ENTITY, '_components', `${singular}-columns.ts`),
+  columnsContent,
+  'Column defs',
+);
 
 // Fields
 const fieldsContent = `import { z } from 'zod';
@@ -563,7 +564,11 @@ export const ${singular}FormSchema = z.object({
 
 export type ${pascalSingular}FormValues = z.infer<typeof ${singular}FormSchema>;
 `;
-writeIfNotExists(path.join(WEB_ENTITY, '_components', `${singular}-fields.ts`), fieldsContent, 'Field defs');
+writeIfNotExists(
+  path.join(WEB_ENTITY, '_components', `${singular}-fields.ts`),
+  fieldsContent,
+  'Field defs',
+);
 
 // Query server
 const queryContent = `import { cache } from 'react';
@@ -590,14 +595,18 @@ export const listTrashed${pascalPlural} = cache(async (): Promise<${pascalSingul
   return (response.data as ${pascalSingular}Row[]).filter((r) => r.is_deleted);
 });
 `;
-writeIfNotExists(path.join(WEB_ENTITY, '_server', `${entityName}.query_server.ts`), queryContent, 'Query server');
+writeIfNotExists(
+  path.join(WEB_ENTITY, '_server', `${entityName}.query_server.ts`),
+  queryContent,
+  'Query server',
+);
 
 // Policy server
 const policyContent = `import { resolveActions } from '../../_components/crud/server/action-resolver_server';
 import { ${entityName.toUpperCase()}_CONTRACT } from '../_components/${singular}-contract';
 
 import type { OrgContext } from '../../_server/org-context_server';
-import type { ResolvedActions } from 'afena-canon';
+import type { ResolvedActions } from 'afenda-canon';
 
 export function resolve${pascalSingular}Actions(
   ctx: OrgContext,
@@ -612,7 +621,11 @@ export function resolve${pascalSingular}Actions(
   });
 }
 `;
-writeIfNotExists(path.join(WEB_ENTITY, '_server', `${entityName}.policy_server.ts`), policyContent, 'Policy server');
+writeIfNotExists(
+  path.join(WEB_ENTITY, '_server', `${entityName}.policy_server.ts`),
+  policyContent,
+  'Policy server',
+);
 
 // Server actions (sealed dispatcher contract)
 const serverActionsContent = `'use server';
@@ -635,7 +648,7 @@ import {
   logActionSuccess,
 } from '../../_components/crud/server/action-logger_server';
 
-import type { ActionEnvelope, ApiResponse, ErrorCode, JsonValue } from 'afena-canon';
+import type { ActionEnvelope, ApiResponse, ErrorCode, JsonValue } from 'afenda-canon';
 
 function errorResponse(code: ErrorCode, message: string): ApiResponse {
   return { ok: false, error: { code, message }, meta: { requestId: randomUUID() } };
@@ -695,14 +708,18 @@ export async function executeEntityAction(
   }
 }
 `;
-writeIfNotExists(path.join(WEB_ENTITY, '_server', `${entityName}.server-actions.ts`), serverActionsContent, 'Server actions');
+writeIfNotExists(
+  path.join(WEB_ENTITY, '_server', `${entityName}.server-actions.ts`),
+  serverActionsContent,
+  'Server actions',
+);
 
 // Server action (legacy actions file for query loaders)
 const legacyActionsContent = `'use server';
 
 import { generateEntityActions } from '@/lib/actions/entity-actions';
 
-import type { ApiResponse, JsonValue } from 'afena-canon';
+import type { ApiResponse, JsonValue } from 'afenda-canon';
 
 const actions = generateEntityActions('${entityName}');
 
@@ -716,18 +733,57 @@ export async function getDeleted${pascalPlural}(options?: { limit?: number }): P
 export async function get${pascalSingular}Versions(id: string): Promise<ApiResponse> { return actions.getVersions(id); }
 export async function get${pascalSingular}AuditLogs(id: string): Promise<ApiResponse> { return actions.getAuditLogs(id); }
 `;
-writeIfNotExists(path.join(ROOT, 'apps', 'web', 'app', 'actions', `${entityName}.ts`), legacyActionsContent, 'Legacy actions');
+writeIfNotExists(
+  path.join(ROOT, 'apps', 'web', 'app', 'actions', `${entityName}.ts`),
+  legacyActionsContent,
+  'Legacy actions',
+);
 
 // ── Surface files ────────────────────────────────────────
 
 const surfaces: Array<{ dir: string; surfaceId: string; page: string; exposes: string[] }> = [
-  { dir: '', surfaceId: `web.${entityName}.list.page`, page: `/org/[slug]/${entityName}`, exposes: [`${entityName}.list`, `${entityName}.create`, `${entityName}.delete`] },
-  { dir: '[id]', surfaceId: `web.${entityName}.detail.page`, page: `/org/[slug]/${entityName}/[id]`, exposes: [`${entityName}.read`, `${entityName}.update`, `${entityName}.delete`] },
-  { dir: 'new', surfaceId: `web.${entityName}.new.page`, page: `/org/[slug]/${entityName}/new`, exposes: [`${entityName}.create`] },
-  { dir: '[id]/edit', surfaceId: `web.${entityName}.edit.page`, page: `/org/[slug]/${entityName}/[id]/edit`, exposes: [`${entityName}.update`] },
-  { dir: '[id]/versions', surfaceId: `web.${entityName}.versions.page`, page: `/org/[slug]/${entityName}/[id]/versions`, exposes: [`${entityName}.versions`] },
-  { dir: '[id]/audit', surfaceId: `web.${entityName}.audit.page`, page: `/org/[slug]/${entityName}/[id]/audit`, exposes: [`${entityName}.audit`] },
-  { dir: 'trash', surfaceId: `web.${entityName}.trash.page`, page: `/org/[slug]/${entityName}/trash`, exposes: [`${entityName}.list`, `${entityName}.restore`] },
+  {
+    dir: '',
+    surfaceId: `web.${entityName}.list.page`,
+    page: `/org/[slug]/${entityName}`,
+    exposes: [`${entityName}.list`, `${entityName}.create`, `${entityName}.delete`],
+  },
+  {
+    dir: '[id]',
+    surfaceId: `web.${entityName}.detail.page`,
+    page: `/org/[slug]/${entityName}/[id]`,
+    exposes: [`${entityName}.read`, `${entityName}.update`, `${entityName}.delete`],
+  },
+  {
+    dir: 'new',
+    surfaceId: `web.${entityName}.new.page`,
+    page: `/org/[slug]/${entityName}/new`,
+    exposes: [`${entityName}.create`],
+  },
+  {
+    dir: '[id]/edit',
+    surfaceId: `web.${entityName}.edit.page`,
+    page: `/org/[slug]/${entityName}/[id]/edit`,
+    exposes: [`${entityName}.update`],
+  },
+  {
+    dir: '[id]/versions',
+    surfaceId: `web.${entityName}.versions.page`,
+    page: `/org/[slug]/${entityName}/[id]/versions`,
+    exposes: [`${entityName}.versions`],
+  },
+  {
+    dir: '[id]/audit',
+    surfaceId: `web.${entityName}.audit.page`,
+    page: `/org/[slug]/${entityName}/[id]/audit`,
+    exposes: [`${entityName}.audit`],
+  },
+  {
+    dir: 'trash',
+    surfaceId: `web.${entityName}.trash.page`,
+    page: `/org/[slug]/${entityName}/trash`,
+    exposes: [`${entityName}.list`, `${entityName}.restore`],
+  },
 ];
 
 for (const s of surfaces) {
@@ -746,7 +802,7 @@ for (const s of surfaces) {
 const listPageContent = `import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
-import { Button } from 'afena-ui/components/button';
+import { Button } from 'afenda-ui/components/button';
 import { Plus, Trash2 } from 'lucide-react';
 
 import { PageHeader } from '../_components/crud/client/page-header';
@@ -782,7 +838,7 @@ writeIfNotExists(path.join(WEB_ENTITY, 'page.tsx'), listPageContent, 'List page'
 
 const detailPageContent = `import { notFound } from 'next/navigation';
 
-import { Badge } from 'afena-ui/components/badge';
+import { Badge } from 'afenda-ui/components/badge';
 
 import { EntityDetailLayout, MetadataCard } from '../../_components/crud/client/entity-detail-layout';
 import { PageHeader } from '../../_components/crud/client/page-header';
@@ -867,8 +923,8 @@ writeIfNotExists(path.join(WEB_ENTITY, '[id]', 'edit', 'page.tsx'), editPageCont
 const versionsPageContent = `import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
-import { Card, CardContent } from 'afena-ui/components/card';
-import { Separator } from 'afena-ui/components/separator';
+import { Card, CardContent } from 'afenda-ui/components/card';
+import { Separator } from 'afenda-ui/components/separator';
 import { ArrowLeft, GitBranch } from 'lucide-react';
 
 import { get${pascalSingular}, get${pascalSingular}Versions } from '@/app/actions/${entityName}';
@@ -906,13 +962,17 @@ export default async function ${pascalSingular}VersionsPage({
   );
 }
 `;
-writeIfNotExists(path.join(WEB_ENTITY, '[id]', 'versions', 'page.tsx'), versionsPageContent, 'Versions page');
+writeIfNotExists(
+  path.join(WEB_ENTITY, '[id]', 'versions', 'page.tsx'),
+  versionsPageContent,
+  'Versions page',
+);
 
 const auditPageContent = `import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
-import { Card, CardContent } from 'afena-ui/components/card';
-import { Separator } from 'afena-ui/components/separator';
+import { Card, CardContent } from 'afenda-ui/components/card';
+import { Separator } from 'afenda-ui/components/separator';
 import { ArrowLeft, FileText } from 'lucide-react';
 
 import { get${pascalSingular}, get${pascalSingular}AuditLogs } from '@/app/actions/${entityName}';
@@ -946,11 +1006,15 @@ export default async function ${pascalSingular}AuditPage({
   );
 }
 `;
-writeIfNotExists(path.join(WEB_ENTITY, '[id]', 'audit', 'page.tsx'), auditPageContent, 'Audit page');
+writeIfNotExists(
+  path.join(WEB_ENTITY, '[id]', 'audit', 'page.tsx'),
+  auditPageContent,
+  'Audit page',
+);
 
 const trashPageContent = `import { notFound } from 'next/navigation';
 
-import { Card, CardContent } from 'afena-ui/components/card';
+import { Card, CardContent } from 'afenda-ui/components/card';
 import { Trash2 } from 'lucide-react';
 
 import { PageHeader } from '../../_components/crud/client/page-header';
@@ -1012,8 +1076,7 @@ if (ledger.actionTypes.length > 0) {
 console.log(`╠══════════════════════════════════════════════════════════╣
 ║  Manual steps remaining:                                 ║
 ║    1. pnpm db:generate && pnpm db:push                   ║
-║    2. pnpm db:barrel (if schema added manually)          ║
-║    3. Seed meta_assets (if needed)                       ║
-║    4. Customize stubs (columns, fields, handler allowlist)║
+║    2. Seed meta_assets (if needed)                       ║
+║    3. Customize stubs (columns, fields, handler allowlist)║
 ╚══════════════════════════════════════════════════════════╝
 `);

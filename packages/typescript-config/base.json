@@ -1,27 +1,65 @@
 {
   "$schema": "https://json.schemastore.org/tsconfig",
-  "display": "Default",
+  "display": "Base - Shared TypeScript Configuration",
   "compilerOptions": {
+    // Module System
+    "target": "ES2022",
+    "module": "ESNext",
+    "lib": [
+      "ES2022"
+    ],
+    "moduleResolution": "bundler",
+    "moduleDetection": "force",
+    "verbatimModuleSyntax": true,
+    // Type Checking
+    "strict": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "strictFunctionTypes": true,
+    "strictBindCallApply": true,
+    "strictPropertyInitialization": true,
+    "noImplicitThis": true,
+    "alwaysStrict": true,
+    // Additional Checks
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUncheckedIndexedAccess": true,
+    "noImplicitOverride": true,
+    "allowUnusedLabels": false,
+    "allowUnreachableCode": false,
+    "exactOptionalPropertyTypes": true,
+    // Emit
     "composite": false,
     "declaration": true,
     "declarationMap": true,
+    "sourceMap": true,
+    "noEmit": false,
+    "removeComments": false,
+    // Interop
     "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true,
-    "inlineSources": false,
     "isolatedModules": true,
-    "moduleResolution": "node",
-    "noUnusedLocals": false,
-    "noUnusedParameters": false,
-    "preserveWatchOutput": true,
+    "resolveJsonModule": true,
+    // Advanced
     "skipLibCheck": true,
-    "strict": true,
-    "target": "es2022",
-    "module": "ESNext",
-    "lib": ["es2022"],
+    "skipDefaultLibCheck": true,
     "allowJs": true,
     "checkJs": false,
     "incremental": true,
-    "noEmit": false
+    "preserveWatchOutput": true,
+    "useDefineForClassFields": true,
+    // Performance
+    "assumeChangesOnlyAffectDirectDependencies": true
   },
-  "exclude": ["node_modules"]
+  "exclude": [
+    "node_modules",
+    "dist",
+    "build",
+    ".next",
+    "**/*.test.*",
+    "**/*.spec.*"
+  ]
 }

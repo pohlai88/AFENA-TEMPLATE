@@ -1,8 +1,8 @@
 /**
- * Bridge between the migration pipeline and the afena-crud kernel.
+ * Bridge between the migration pipeline and the afenda-crud kernel.
  *
  * This module defines the function signatures the pipeline needs,
- * without importing afena-crud directly. The caller injects the
+ * without importing afenda-crud directly. The caller injects the
  * real implementations at runtime via SqlPipelineConfig.
  *
  * This keeps the migration package loosely coupled to crud — it
@@ -12,7 +12,7 @@
 
 /**
  * Simplified mutate function for migration use.
- * Maps to afena-crud's mutate(MutationSpec, MutationContext).
+ * Maps to afenda-crud's mutate(MutationSpec, MutationContext).
  *
  * The migration pipeline calls this with a simplified shape;
  * the bridge adapter (provided by the caller) converts it to
@@ -39,7 +39,7 @@ export interface CrudMutateResult {
 
 /**
  * Read a raw DB row by entity type + ID.
- * Maps to afena-crud's readEntity() or a direct Drizzle select.
+ * Maps to afenda-crud's readEntity() or a direct Drizzle select.
  *
  * Returns the full row as Record<string, unknown> for snapshot capture.
  * Returns null if not found.
@@ -57,13 +57,13 @@ export interface CrudBridge {
 }
 
 /**
- * Build a CrudBridge from the real afena-crud exports.
+ * Build a CrudBridge from the real afenda-crud exports.
  *
  * Usage (at the app layer, NOT inside packages/migration):
  *
  * ```ts
- * import { mutate, readEntity, buildSystemContext } from 'afena-crud';
- * import { buildCrudBridge } from 'afena-migration';
+ * import { mutate, readEntity, buildSystemContext } from 'afenda-crud';
+ * import { buildCrudBridge } from 'afenda-migration';
  *
  * const bridge = buildCrudBridge({
  *   mutate: async (params) => {

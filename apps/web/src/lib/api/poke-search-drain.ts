@@ -1,4 +1,4 @@
-import { drainSearchOutbox } from 'afena-search';
+import { drainSearchOutbox } from 'afenda-search';
 
 /**
  * Poke the search drain after a mutation (GAP-DB-004).

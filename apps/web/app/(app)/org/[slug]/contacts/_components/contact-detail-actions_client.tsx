@@ -7,7 +7,7 @@ import { useState } from 'react';
 import { ActionBar } from '../../_components/crud/client/action-bar_client';
 import { executeContactAction } from '../_server/contacts.server-actions';
 
-import type { ActionEnvelope, ActionKind, ResolvedActions, UpdateMode } from 'afena-canon';
+import type { ActionEnvelope, ActionKind, ResolvedActions, UpdateMode } from 'afenda-canon';
 
 interface ContactDetailActionsProps {
   actions: ResolvedActions;

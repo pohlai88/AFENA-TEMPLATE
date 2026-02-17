@@ -1,4 +1,4 @@
-const baseConfig = require('afena-eslint-config/base');
+const baseConfig = require('afenda-eslint-config/base');
 
 module.exports = [
   ...baseConfig,
@@ -26,7 +26,7 @@ module.exports = [
         'error',
         {
           selector: "CallExpression[callee.object.name='console']",
-          message: 'Use afena-logger instead of console.* (INVARIANT-08)',
+          message: 'Use afenda-logger instead of console.* (INVARIANT-08)',
         },
         // INVARIANT-01 db.insert/update/delete rules intentionally omitted here
       ],

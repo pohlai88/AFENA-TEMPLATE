@@ -1,10 +1,10 @@
 'use client';
 
-import { Badge } from 'afena-ui/components/badge';
-import { Button } from 'afena-ui/components/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from 'afena-ui/components/card';
-import { Input } from 'afena-ui/components/input';
-import { Label } from 'afena-ui/components/label';
+import { Badge } from 'afenda-ui/components/badge';
+import { Button } from 'afenda-ui/components/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from 'afenda-ui/components/card';
+import { Input } from 'afenda-ui/components/input';
+import { Label } from 'afenda-ui/components/label';
 import { GitBranch, X } from 'lucide-react';
 import { useCallback, useState } from 'react';
 

@@ -14,11 +14,11 @@ import { log } from '../core/logger';
 import { ReportBuilder } from '../core/report-builder';
 import { runReadmeCommand } from '../readme/readme-engine';
 
-import type { AfenaConfig } from '../types';
+import type { afendaConfig } from '../types';
 
 export interface BundleOptions {
   repoRoot: string;
-  config: AfenaConfig;
+  config: afendaConfig;
   skipReadme?: boolean;
   skipMeta?: boolean;
   skipHousekeeping?: boolean;
@@ -51,7 +51,7 @@ export async function runBundle(options: BundleOptions): Promise<BundleResult> {
     tasks: {},
   };
 
-  log.bold('\n🔧 Running Afena Maintenance Bundle\n');
+  log.bold('\n🔧 Running afenda Maintenance Bundle\n');
 
   // Task 1: README Generation
   if (!skipReadme) {

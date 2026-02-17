@@ -1,5 +1,5 @@
-import { sql } from 'afena-database';
-import { computeEventIdempotencyKey } from 'afena-workflow';
+import { sql } from 'afenda-database';
+import { computeEventIdempotencyKey } from 'afenda-workflow';
 
 /**
  * Enqueue a workflow trigger event inside the mutate() transaction.

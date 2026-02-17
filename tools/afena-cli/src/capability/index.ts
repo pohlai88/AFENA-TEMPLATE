@@ -1,5 +1,5 @@
 /**
- * Meta CLI commands — afena meta [gen|check|fix|matrix|manifest]
+ * Meta CLI commands — afenda meta [gen|check|fix|matrix|manifest]
  *
  * gen      — scan surfaces, load exceptions, generate ledger + matrix + manifest + mermaid + AI context
  * check    — run VIS-00 through VIS-04, exit non-zero on failure
@@ -8,11 +8,7 @@
  * manifest — generate codebase manifest only
  */
 
-import {
-  CAPABILITY_CATALOG,
-  inferKindFromVerb,
-  parseCapabilityKey,
-} from 'afena-canon';
+import { CAPABILITY_CATALOG, inferKindFromVerb, parseCapabilityKey } from 'afenda-canon';
 import { Command } from 'commander';
 import pc from 'picocolors';
 
@@ -33,7 +29,11 @@ import { generateAiContext, writeAiContext } from './emitters/ai-context';
 import { generateLedger, writeLedger } from './emitters/ledger';
 import { generateManifest, writeManifest } from './emitters/manifest';
 import { generateMatrix, writeMatrix } from './emitters/matrix';
-import { generateCapabilityMermaid, generateDependencyMermaid, writeMermaid } from './emitters/mermaid';
+import {
+  generateCapabilityMermaid,
+  generateDependencyMermaid,
+  writeMermaid,
+} from './emitters/mermaid';
 import { loadExceptions } from './exceptions';
 
 /**
@@ -64,7 +64,7 @@ export function registerMetaCommand(program: Command): void {
     .command('meta')
     .description('Capability Truth Ledger — scan, check, generate, fix');
 
-  // ── afena meta gen ──────────────────────────────────────
+  // ── afenda meta gen ──────────────────────────────────────
   meta
     .command('gen')
     .description('Scan surfaces + generate ledger and matrix')
@@ -100,7 +100,7 @@ export function registerMetaCommand(program: Command): void {
 
       console.log(
         `  Found ${pc.bold(String(scanResult.capabilities.length))} capability surfaces, ` +
-        `${pc.bold(String(scanResult.uiSurfaces.length))} UI surfaces`,
+          `${pc.bold(String(scanResult.uiSurfaces.length))} UI surfaces`,
       );
 
       const { exceptions, expired, reviewOverdue } = loadExceptions(repoRoot);
@@ -125,11 +125,11 @@ export function registerMetaCommand(program: Command): void {
 
       const ledger = generateLedger(scanResult, exceptions);
       writeLedger(repoRoot, ledger);
-      console.log(pc.green(`  ✓ Wrote .afena/capability.ledger.json`));
+      console.log(pc.green(`  ✓ Wrote .afenda/capability.ledger.json`));
 
       const matrix = generateMatrix(ledger);
       writeMatrix(repoRoot, matrix);
-      console.log(pc.green(`  ✓ Wrote .afena/capability.matrix.md`));
+      console.log(pc.green(`  ✓ Wrote .afenda/capability.matrix.md`));
 
       // Collect structural metadata
       console.log(pc.cyan('\nCollecting structural metadata...'));
@@ -141,19 +141,21 @@ export function registerMetaCommand(program: Command): void {
 
       const manifest = generateManifest(packageGraph, schemaCatalog, repoStats);
       writeManifest(repoRoot, manifest);
-      console.log(pc.green(`  ✓ Wrote .afena/codebase.manifest.json`));
-      console.log(`    ${packageGraph.nodes.length} packages, ${schemaCatalog.tables.length} tables, ${repoStats.totalLoc} LOC`);
+      console.log(pc.green(`  ✓ Wrote .afenda/codebase.manifest.json`));
+      console.log(
+        `    ${packageGraph.nodes.length} packages, ${schemaCatalog.tables.length} tables, ${repoStats.totalLoc} LOC`,
+      );
 
       // Generate Mermaid diagrams
       const capMermaid = generateCapabilityMermaid(ledger);
       const depMermaid = generateDependencyMermaid(packageGraph);
       writeMermaid(repoRoot, capMermaid, depMermaid);
-      console.log(pc.green(`  ✓ Wrote .afena/capability.mermaid.md`));
+      console.log(pc.green(`  ✓ Wrote .afenda/capability.mermaid.md`));
 
       // Generate AI context
       const aiContext = generateAiContext();
       writeAiContext(repoRoot, aiContext);
-      console.log(pc.green(`  ✓ Wrote .agent/context/capability-map.md`));
+      console.log(pc.green(`  ✓ Wrote .agents/context/capability-map.md`));
 
       // Print summary
       console.log('');
@@ -166,7 +168,7 @@ export function registerMetaCommand(program: Command): void {
       console.log(`  Total:    ${ledger.summary.total}`);
     });
 
-  // ── afena meta check ────────────────────────────────────
+  // ── afenda meta check ────────────────────────────────────
   meta
     .command('check')
     .description('Run VIS-00 through VIS-04 checks (exits non-zero on failure)')
@@ -302,8 +304,15 @@ export function registerMetaCommand(program: Command): void {
           status: hasErrors ? 'fail' : hasWarnings ? 'warn' : 'pass',
           vis00: vis00Errors.map((v) => ({ file: v.file, reason: v.reason })),
           vis01: vis01.map((v) => ({ key: v.key, reason: v.reason })),
-          vis02: { errors: vis02Errors.map((v) => ({ key: v.key, kind: v.kind, reason: v.reason })), warnings: vis02Warns.map((v) => ({ key: v.key, kind: v.kind, reason: v.reason })) },
-          vis03: vis03.map((v) => ({ file: v.file, surfaceId: v.surfaceId, phantomKey: v.phantomKey })),
+          vis02: {
+            errors: vis02Errors.map((v) => ({ key: v.key, kind: v.kind, reason: v.reason })),
+            warnings: vis02Warns.map((v) => ({ key: v.key, kind: v.kind, reason: v.reason })),
+          },
+          vis03: vis03.map((v) => ({
+            file: v.file,
+            surfaceId: v.surfaceId,
+            phantomKey: v.phantomKey,
+          })),
           vis04: vis04.map((v) => ({ key: v.key, reason: v.reason })),
           kindWarnings,
         };
@@ -317,13 +326,15 @@ export function registerMetaCommand(program: Command): void {
         console.log(pc.red(pc.bold('FAIL — capability checks found errors')));
         process.exit(1);
       } else if (hasWarnings) {
-        console.log(pc.yellow(pc.bold('PASS with warnings — capability checks found non-blocking issues')));
+        console.log(
+          pc.yellow(pc.bold('PASS with warnings — capability checks found non-blocking issues')),
+        );
       } else {
         console.log(pc.green(pc.bold('PASS — all capability checks passed')));
       }
     });
 
-  // ── afena meta fix ──────────────────────────────────────
+  // ── afenda meta fix ──────────────────────────────────────
   meta
     .command('fix')
     .description('Autofix missing capability annotations')
@@ -343,16 +354,16 @@ export function registerMetaCommand(program: Command): void {
           const action = dryRun ? 'would' : 'did';
           console.log(
             pc.yellow(`  ${action} ${f.action} → ${f.path}`) +
-            (f.keysAdded.length > 0 ? ` (${f.keysAdded.join(', ')})` : ''),
+              (f.keysAdded.length > 0 ? ` (${f.keysAdded.join(', ')})` : ''),
           );
         }
-        console.log(pc.green(`\n  ✓ Wrote .afena/meta.fix.report.json`));
+        console.log(pc.green(`\n  ✓ Wrote .afenda/meta.fix.report.json`));
       }
 
       console.log(`\n  ${report.files.length} file(s) ${dryRun ? 'would be' : ''} touched`);
     });
 
-  // ── afena meta matrix ───────────────────────────────────
+  // ── afenda meta matrix ───────────────────────────────────
   meta
     .command('matrix')
     .description('Generate and print the capability matrix')
@@ -368,7 +379,7 @@ export function registerMetaCommand(program: Command): void {
       console.log(matrix);
     });
 
-  // ── afena meta manifest ────────────────────────────────
+  // ── afenda meta manifest ────────────────────────────────
   meta
     .command('manifest')
     .description('Generate codebase manifest (package graph, schema catalog, stats)')
@@ -384,7 +395,9 @@ export function registerMetaCommand(program: Command): void {
 
       const manifest = generateManifest(packageGraph, schemaCatalog, repoStats);
       writeManifest(repoRoot, manifest);
-      console.log(pc.green(`  ✓ Wrote .afena/codebase.manifest.json`));
-      console.log(`    ${packageGraph.nodes.length} packages, ${schemaCatalog.tables.length} tables, ${repoStats.totalLoc} LOC`);
+      console.log(pc.green(`  ✓ Wrote .afenda/codebase.manifest.json`));
+      console.log(
+        `    ${packageGraph.nodes.length} packages, ${schemaCatalog.tables.length} tables, ${repoStats.totalLoc} LOC`,
+      );
     });
 }

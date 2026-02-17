@@ -1,4 +1,4 @@
-import type { RequestContext as LoggerRequestContext } from 'afena-logger';
+import type { RequestContext as LoggerRequestContext } from 'afenda-logger';
 
 /**
  * BFF-level request context — shared by route handlers and server actions.

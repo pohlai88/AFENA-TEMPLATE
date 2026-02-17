@@ -1,7 +1,7 @@
 'use client';
 
-import { Input } from 'afena-ui/components/input';
-import { Label } from 'afena-ui/components/label';
+import { Input } from 'afenda-ui/components/input';
+import { Label } from 'afenda-ui/components/label';
 
 /**
  * FormConfigRenderer — Renders form fields from form.config.

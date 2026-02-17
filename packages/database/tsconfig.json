@@ -1,21 +1,18 @@
 {
-  "extends": "afena-typescript-config/base.json",
+  "extends": "afenda-typescript-config/base.json",
   "compilerOptions": {
     "composite": true,
-    "noEmit": false,
-    "declaration": true,
-    "declarationMap": true,
     "outDir": "./dist",
-    "module": "ESNext",
-    "moduleResolution": "bundler",
-    "target": "ES2022",
-    "strict": true,
-    "esModuleInterop": true,
-    "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true,
-    "resolveJsonModule": true,
-    "isolatedModules": true
+    "tsBuildInfoFile": "./dist/.tsbuildinfo"
   },
-  "include": ["src/**/*", "schema-lint.config.ts", "table-registry.config.ts", "revoke.config.ts"],
-  "exclude": ["node_modules", "dist", "build", "**/*.test.*", "**/*.spec.*"]
+  "include": [
+    "src/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "build",
+    "**/*.test.*",
+    "**/*.spec.*"
+  ]
 }

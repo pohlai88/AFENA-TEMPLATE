@@ -1,5 +1,5 @@
 {
-  "name": "afena-advisory",
+  "name": "afenda-advisory",
   "version": "0.1.0",
   "private": true,
   "main": "./src/index.ts",
@@ -13,14 +13,14 @@
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
-    "afena-canon": "workspace:*",
-    "afena-database": "workspace:*",
+    "afenda-canon": "workspace:*",
+    "afenda-database": "workspace:*",
     "drizzle-orm": "^0.44.0"
   },
   "devDependencies": {
     "@types/node": "catalog:",
-    "afena-eslint-config": "workspace:^",
-    "afena-typescript-config": "workspace:*",
+    "afenda-eslint-config": "workspace:^",
+    "afenda-typescript-config": "workspace:*",
     "tslib": "catalog:",
     "tsup": "catalog:",
     "typescript": "catalog:"

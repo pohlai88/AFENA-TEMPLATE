@@ -47,12 +47,12 @@ Thumbs.db
 # Turbo
 .turbo
 
+# TypeScript
+*.tsbuildinfo
+next-env.d.ts
+
 # ESLint cache
 .eslintcache
-
-# Afena CLI generated output (ledger, matrix, discovery, manifests)
-.afena/*
-!.afena/capability-exceptions.json
 
 # Tailwind engine generated output
 packages/ui/engine/generated/
@@ -74,3 +74,36 @@ temp/
 
 # Archive
 /ARCHIVE/
+
+# AI Assistant configurations
+# Keep only .agents/ for skills management (SSOT)
+.adal/
+.augment/
+.claude/
+.cline/
+.codebuddy/
+.commandcode/
+.continue/
+.cursor/
+.factory/
+.iflow/
+.junie/
+.kilocode/
+.kiro/
+.kode/
+.mcpjam/
+.mux/
+.neovate/
+.openhands/
+.pi/
+.pochi/
+.qoder/
+.qwen/
+.roo/
+.trae/
+.vibe/
+.windsurf/
+.zencoder/
+
+# Root-level skills directory (use .agents/skills instead)
+/skills/

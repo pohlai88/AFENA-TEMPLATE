@@ -1,0 +1,32 @@
+{
+  "version": "1.0",
+  "generatedAt": "2026-02-12T17:10:32.170Z",
+  "dryRun": true,
+  "files": [
+    {
+      "path": "apps/web/app/(app)/org/surface.ts",
+      "action": "insert_surface",
+      "keysAdded": []
+    },
+    {
+      "path": "apps/web/app/(app)/dashboard/surface.ts",
+      "action": "insert_surface",
+      "keysAdded": []
+    },
+    {
+      "path": "apps/web/app/(public)/(marketing)/surface.ts",
+      "action": "insert_surface",
+      "keysAdded": []
+    },
+    {
+      "path": "apps/web/app/(app)/org/[slug]/surface.ts",
+      "action": "insert_surface",
+      "keysAdded": []
+    },
+    {
+      "path": "apps/web/app/(app)/org/[slug]/files/surface.ts",
+      "action": "insert_surface",
+      "keysAdded": []
+    }
+  ]
+}

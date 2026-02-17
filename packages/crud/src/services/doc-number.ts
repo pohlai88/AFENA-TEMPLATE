@@ -1,9 +1,9 @@
-import { and, eq, numberSequences, sql } from 'afena-database';
+import { and, eq, numberSequences, sql } from 'afenda-database';
 
 import type { NeonHttpDatabase } from 'drizzle-orm/neon-http';
 
-// Re-export pure function from DB-free module
-export { resolveFiscalYear } from './fiscal-year';
+// Re-export fiscal year resolver from accounting domain package
+export { resolveFiscalYear } from 'afenda-accounting';
 
 /**
  * Result of a successful doc number allocation.
