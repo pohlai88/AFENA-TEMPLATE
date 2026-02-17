@@ -1,10 +1,12 @@
-import { FileText, GitBranch, Home, Settings, Shield, Trash2, Users } from 'lucide-react';
+import { ArrowRightLeft, CalendarClock, FileText, GitBranch, Home, Settings, Shield, Trash2, Users } from 'lucide-react';
 
 import {
   org,
   orgEntity,
   orgEntityTrash,
   orgSettings,
+  orgSettingsCurrencyConverter,
+  orgSettingsWorkingDay,
   orgSettingsWorkflows,
 } from '@/lib/routes/app-routes';
 
@@ -54,6 +56,76 @@ export const NAV_ITEMS: NavItem[] = [
     icon: FileText,
     group: 'main',
   },
+  {
+    label: 'Video settings',
+    href: (slug) => orgEntity(slug, 'video-settings'),
+    icon: Settings,
+    group: 'main',
+    commandPaletteAction: 'Open Video settings',
+  },
+  {
+    label: 'Tasks',
+    href: (slug) => orgEntity(slug, 'tasks'),
+    icon: Settings,
+    group: 'main',
+    commandPaletteAction: 'Open Tasks',
+  },
+  {
+    label: 'Timesheets',
+    href: (slug) => orgEntity(slug, 'timesheets'),
+    icon: Settings,
+    group: 'main',
+    commandPaletteAction: 'Open Timesheets',
+  },
+  {
+    label: 'Timesheet details',
+    href: (slug) => orgEntity(slug, 'timesheet-details'),
+    icon: Settings,
+    group: 'main',
+    commandPaletteAction: 'Open Timesheet details',
+  },
+  {
+    label: 'Dependent tasks',
+    href: (slug) => orgEntity(slug, 'dependent-tasks'),
+    icon: Settings,
+    group: 'main',
+    commandPaletteAction: 'Open Dependent tasks',
+  },
+  {
+    label: 'Activity types',
+    href: (slug) => orgEntity(slug, 'activity-types'),
+    icon: Settings,
+    group: 'main',
+    commandPaletteAction: 'Open Activity types',
+  },
+  {
+    label: 'Activity costs',
+    href: (slug) => orgEntity(slug, 'activity-costs'),
+    icon: Settings,
+    group: 'main',
+    commandPaletteAction: 'Open Activity costs',
+  },
+  {
+    label: 'Psoa projects',
+    href: (slug) => orgEntity(slug, 'psoa-projects'),
+    icon: Settings,
+    group: 'main',
+    commandPaletteAction: 'Open Psoa projects',
+  },
+  {
+    label: 'Buying settings',
+    href: (slug) => orgEntity(slug, 'buying-settings'),
+    icon: Settings,
+    group: 'main',
+    commandPaletteAction: 'Open Buying settings',
+  },
+  {
+    label: 'Designations',
+    href: (slug) => orgEntity(slug, 'designations'),
+    icon: Settings,
+    group: 'main',
+    commandPaletteAction: 'Open Designations',
+  },
   // @entity-gen:nav-items
   {
     label: 'Trash',
@@ -74,6 +146,20 @@ export const NAV_ITEMS: NavItem[] = [
     href: (slug) => orgSettings(slug),
     icon: Settings,
     group: 'system',
+  },
+  {
+    label: 'Currency converter',
+    href: (slug) => orgSettingsCurrencyConverter(slug),
+    icon: ArrowRightLeft,
+    group: 'system',
+    commandPaletteAction: 'Open Currency converter',
+  },
+  {
+    label: 'Working day',
+    href: (slug) => orgSettingsWorkingDay(slug),
+    icon: CalendarClock,
+    group: 'system',
+    commandPaletteAction: 'Open Working day',
   },
 ];
 

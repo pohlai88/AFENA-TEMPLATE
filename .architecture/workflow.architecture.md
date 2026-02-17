@@ -1,6 +1,6 @@
 # Afena Workflow Engine — Architecture Reference
 
-> **Auto-generated** by `afena readme gen` at 2026-02-14T09:51:23Z. Do not edit — regenerate instead.
+> **Auto-generated** by `afena readme gen` at 2026-02-16T12:44:12Z. Do not edit — regenerate instead.
 > **Package:** `afena-workflow` (`packages/workflow`)
 > **Purpose:** Rule engine for before/after mutation hooks — conditional logic, input enrichment, and side effects.
 
@@ -53,7 +53,7 @@ mutate() pipeline
 | Metric | Value |
 | ------ | ----- |
 | **Source files** | 47 |
-| **Test files** | 12 |
+| **Test files** | 0 |
 | **Source directories** | v2 |
 
 ```
@@ -110,7 +110,6 @@ packages/workflow/src/
 - `afena-database`
 - `afena-eslint-config`
 - `afena-typescript-config`
-- `afena-vitest-config`
 
 ### External
 

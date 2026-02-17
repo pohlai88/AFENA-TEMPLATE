@@ -1,0 +1,2 @@
+ALTER TABLE "project_users" ADD CONSTRAINT "project_users_user_col_users_id_fk" FOREIGN KEY ("user_col") REFERENCES "public"."users"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "project_updates" ADD CONSTRAINT "project_updates_project_projects_id_fk" FOREIGN KEY ("project") REFERENCES "public"."projects"("id") ON DELETE no action ON UPDATE no action;

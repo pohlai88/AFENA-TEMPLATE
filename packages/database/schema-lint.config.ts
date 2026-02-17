@@ -7,7 +7,10 @@
  */
 export const schemaLintConfig = {
   /** Columns exempt from FK requirement (*_id without FK constraint). Stable IDs: EX-FK-001, etc. */
-  FK_EXEMPT_COLUMNS: [] as Array<{ table: string; column: string; id: string }>,
+  FK_EXEMPT_COLUMNS: [
+    // EX-FK-001: Polymorphic reference; target table varies by entity_type (contacts, companies, etc.)
+    { table: 'migration_lineage', column: 'afena_id', id: 'EX-FK-001' },
+  ] as Array<{ table: string; column: string; id: string }>,
   /** Tables exempt from FK coverage check entirely */
   FK_EXEMPT_TABLES: [] as Array<{ table: string; id: string }>,
   /** Tables exempt from ERP entity rules (system/config tables) */

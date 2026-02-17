@@ -1,6 +1,6 @@
 # Afena Search Engine — Architecture Reference
 
-> **Auto-generated** by `afena readme gen` at 2026-02-14T09:51:23Z. Do not edit — regenerate instead.
+> **Auto-generated** by `afena readme gen` at 2026-02-16T12:44:12Z. Do not edit — regenerate instead.
 > **Package:** `afena-search` (`packages/search`)
 > **Purpose:** Full-text search helpers, per-entity adapters, and cross-entity search registry.
 
@@ -31,13 +31,14 @@ The `search_index` materialized view provides a unified cross-entity search surf
 
 | Metric | Value |
 | ------ | ----- |
-| **Source files** | 8 |
-| **Test files** | 1 |
-| **Source directories** | adapters |
+| **Source files** | 10 |
+| **Test files** | 0 |
+| **Source directories** | adapters, worker |
 
 ```
 packages/search/src/
 ├── adapters/
+├── worker/
 ```
 
 ---
@@ -58,6 +59,15 @@ packages/search/src/
 | `searchAll` | `./adapters/cross-entity` |
 | `searchContacts` | `./adapters/contacts` |
 | `refreshSearchIndex` | `./refresh` |
+| `backfillSearchDocuments` | `./backfill` |
+| `backfillSearchDocumentsChunk` | `./backfill` |
+| `isSearchDocumentsEmpty` | `./backfill` |
+| `isBackfillComplete` | `./backfill` |
+| `processSearchOutboxBatch` | `./worker/search-worker` |
+| `drainSearchOutbox` | `./worker/search-worker` |
+| `runSearchWorker` | `./worker/search-worker` |
+| `type SearchWorkerConfig` | `./worker/search-worker` |
+| `type SearchOutboxEvent` | `./worker/search-worker` |
 
 ### Type Exports
 
@@ -75,8 +85,8 @@ packages/search/src/
 
 - `afena-database`
 - `afena-eslint-config`
+- `afena-logger`
 - `afena-typescript-config`
-- `afena-vitest-config`
 
 ### External
 

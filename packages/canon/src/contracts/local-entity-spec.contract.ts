@@ -15,7 +15,7 @@ import { z } from 'zod';
 const slugSchema = z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, 'Must be lowercase slug (e.g. video-settings)');
 
 // ── Kind classification ──────────────────────────────────
-export const entityKindSchema = z.enum(['config', 'master', 'doc']);
+export const entityKindSchema = z.enum(['config', 'master', 'doc', 'line']);
 export type EntityKind = z.infer<typeof entityKindSchema>;
 
 // ── Field type system (closed set) ────────────────────────
@@ -78,10 +78,18 @@ const uiConfigSchema = z.object({
 });
 
 // ── Doc config (only when kind=doc) ──────────────────────
+const docPostingSchema = z.object({
+  enabled: z.boolean(),
+  model: z.enum(['bridge']).optional(),
+  disabledReason: z.string().optional(),
+});
+
 const docConfigSchema = z
   .object({
     postingStatus: z.string().optional(),
     numberingField: z.string().optional(),
+    linesEntityType: z.string().optional(), // Required when kind=doc has lines
+    posting: docPostingSchema.optional(), // Required when kind=doc touches money/stock
   })
   .optional();
 
@@ -99,15 +107,25 @@ const metaSchema = z.object({
   }),
 });
 
+// ── adoptionLevel (plan §adoptionLevel) ───────────────────
+export const adoptionLevelSchema = z.enum(['reference', 'ui-mine', 'adopt', 'adopt-lite']);
+export type AdoptionLevel = z.infer<typeof adoptionLevelSchema>;
+
+// ── Domain (virtual; plan §IR fields) ─────────────────────
+const domainSchema = z.string().optional(); // selling | buying | accounts | stock | setup | master-data | ...
+
 // ── LocalEntitySpec (full contract) ──────────────────────
 export const localEntitySpecSchema = z
   .object({
     entityType: slugSchema,
     kind: entityKindSchema,
+    adoptionLevel: adoptionLevelSchema.optional(), // Advisory; runtime uses adopted.entities.json
+    domain: domainSchema,
     table: tableConfigSchema,
     fields: z.array(fieldDefSchema),
     ui: uiConfigSchema.default({}),
     doc: docConfigSchema,
+    capabilities: z.array(z.string()).optional(), // Lifecycle verbs, posting rules
     sourceMap: sourceMapSchema,
     meta: metaSchema,
   })

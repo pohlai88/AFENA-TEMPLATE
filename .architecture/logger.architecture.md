@@ -1,6 +1,6 @@
 # Afena Logging & Observability — Architecture Reference
 
-> **Auto-generated** by `afena readme gen` at 2026-02-14T09:51:23Z. Do not edit — regenerate instead.
+> **Auto-generated** by `afena readme gen` at 2026-02-16T12:44:12Z. Do not edit — regenerate instead.
 > **Package:** `afena-logger` (`packages/logger`)
 > **Purpose:** Pino-based structured logging with AsyncLocalStorage context propagation.
 

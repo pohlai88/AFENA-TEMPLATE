@@ -77,7 +77,8 @@
     "**/*.spec.tsx",
     "v3",
     "apps",
-    "tools"
+    "tools",
+    "ARCHIVE"
   ],
   "references": [
     { "path": "./packages/ui" },

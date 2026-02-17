@@ -1,6 +1,6 @@
 # Afena CLI & Meta Engine — Architecture Reference
 
-> **Auto-generated** by `afena readme gen` at 2026-02-14T09:51:23Z. Do not edit — regenerate instead.
+> **Auto-generated** by `afena readme gen` at 2026-02-16T12:44:12Z. Do not edit — regenerate instead.
 > **Package:** `@afena/cli` (`tools/afena-cli`)
 > **Purpose:** Capability Truth Ledger — scan, check, generate, fix. README generation. Entity scaffolding.
 
@@ -34,18 +34,19 @@ Architecture documents are auto-generated from live codebase introspection durin
 
 | Metric | Value |
 | ------ | ----- |
-| **Source files** | 44 |
-| **Test files** | 1 |
-| **Source directories** | executor, generator, meta, scanner, types, utils |
+| **Source files** | 81 |
+| **Test files** | 0 |
+| **Source directories** | bundle, capability, checks, core, discovery, docs, readme |
 
 ```
 tools/afena-cli/src/
-├── executor/
-├── generator/
-├── meta/
-├── scanner/
-├── types/
-├── utils/
+├── bundle/
+├── capability/
+├── checks/
+├── core/
+├── discovery/
+├── docs/
+├── readme/
 ```
 
 ---
@@ -55,8 +56,8 @@ tools/afena-cli/src/
 ### Internal (workspace)
 
 - `afena-canon`
+- `afena-eslint-config`
 - `afena-typescript-config`
-- `afena-vitest-config`
 
 ### External
 
@@ -74,19 +75,19 @@ tools/afena-cli/src/
 
 ---
 
-## 5. Database Tables
-
-- `table_name`
-
----
-
-## 6. Invariants
+## 5. Invariants
 
 - `INVARIANT-01`
+- `INVARIANT-ADOPT`
+- `INVARIANT-BFF`
+- `INVARIANT-HANDLER`
+- `INVARIANT-LOCK`
 - `INVARIANT-P01`
 - `INVARIANT-P02`
 - `INVARIANT-P03`
+- `INVARIANT-REGISTRY`
 - `INVARIANT-RO`
+- `INVARIANT-SCHEMA`
 - `INVARIANT_REGEX`
 - `K-01`
 - `K-02`
@@ -107,7 +108,9 @@ tools/afena-cli/src/
 
 ## Design Patterns Detected
 
+- **Builder**
 - **Chain of Responsibility**
+- **Factory**
 - **Observer**
 - **Registry**
 

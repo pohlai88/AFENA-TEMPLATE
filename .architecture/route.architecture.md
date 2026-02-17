@@ -1,6 +1,6 @@
 # Afena Web Application (Next.js) — Architecture Reference
 
-> **Auto-generated** by `afena readme gen` at 2026-02-14T09:51:23Z. Do not edit — regenerate instead.
+> **Auto-generated** by `afena readme gen` at 2026-02-16T12:44:12Z. Do not edit — regenerate instead.
 > **Package:** `web` (`apps/web`)
 > **Purpose:** BFF pattern — Server Actions for domain CRUD, API routes for cross-cutting concerns.
 
@@ -32,7 +32,7 @@ Auth: Neon Auth with middleware-level session validation. Org context resolved f
 
 | Metric | Value |
 | ------ | ----- |
-| **Source files** | 24 |
+| **Source files** | 26 |
 | **Test files** | 0 |
 | **Source directories** | lib |
 

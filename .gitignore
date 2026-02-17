@@ -71,3 +71,6 @@ blob-report/
 # Temporary folders
 tmp/
 temp/
+
+# Archive
+/ARCHIVE/

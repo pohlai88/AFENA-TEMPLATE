@@ -25,12 +25,12 @@ function maybePokeSearchDrain(entityType: EntityType): void {
  * call these functions must have 'use server'.
  */
 export function generateEntityActions(entityType: EntityType) {
-  async function create(input: JsonValue): Promise<ApiResponse> {
+  async function create(input: Record<string, unknown> | JsonValue): Promise<ApiResponse> {
     const ctx = await buildContext();
     const spec: MutationSpec = {
       actionType: `${entityType}.create` as MutationSpec['actionType'],
       entityRef: { type: entityType },
-      input,
+      input: input as JsonValue,
       idempotencyKey: crypto.randomUUID(),
     };
     const result = await mutate(spec, ctx);
@@ -41,13 +41,13 @@ export function generateEntityActions(entityType: EntityType) {
   async function update(
     id: string,
     expectedVersion: number,
-    input: JsonValue,
+    input: Record<string, unknown> | JsonValue,
   ): Promise<ApiResponse> {
     const ctx = await buildContext();
     const spec: MutationSpec = {
       actionType: `${entityType}.update` as MutationSpec['actionType'],
       entityRef: { type: entityType, id },
-      input,
+      input: input as JsonValue,
       expectedVersion,
     };
     const result = await mutate(spec, ctx);
@@ -87,9 +87,12 @@ export function generateEntityActions(entityType: EntityType) {
     return result;
   }
 
-  async function read(id: string, forcePrimary?: boolean): Promise<ApiResponse> {
+  async function read(
+    id: string,
+    options?: { forcePrimary?: boolean; includeLegacyRef?: boolean },
+  ): Promise<ApiResponse> {
     const requestId = getRequestId() ?? crypto.randomUUID();
-    return readEntity(entityType, id, requestId, forcePrimary ? { forcePrimary } : undefined);
+    return readEntity(entityType, id, requestId, options);
   }
 
   /**
@@ -109,6 +112,7 @@ export function generateEntityActions(entityType: EntityType) {
   async function list(options?: {
     includeDeleted?: boolean;
     includeCount?: boolean;
+    includeLegacyRef?: boolean;
     limit?: number;
     offset?: number;
     orgId?: string;
@@ -233,11 +237,28 @@ export function generateEntityActions(entityType: EntityType) {
     return result;
   }
 
+  /**
+   * Upsert by org — for singleton config entities (global-defaults, *-settings).
+   * Finds existing row for org; updates if found, creates if not.
+   * Use when UI wants a single "save settings" flow without find-or-create.
+   */
+  async function ensure(input: Record<string, unknown> | JsonValue): Promise<ApiResponse> {
+    const listRes = await list({ limit: 1 });
+    if (!listRes.ok) return listRes;
+    const items = Array.isArray(listRes.data) ? listRes.data : [];
+    const first = items[0] as { id?: string; version?: number } | undefined;
+    if (first?.id != null && typeof first.version === 'number') {
+      return update(first.id, first.version, input as Record<string, unknown>);
+    }
+    return create(input);
+  }
+
   return {
     create,
     update,
     remove,
     restore,
+    ensure,
     submit,
     cancel,
     approve,

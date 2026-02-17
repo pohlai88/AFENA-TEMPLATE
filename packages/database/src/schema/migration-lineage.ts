@@ -40,6 +40,9 @@ export const migrationLineage = pgTable(
     index('migration_lineage_reservations_idx')
       .on(table.orgId, table.entityType, table.legacySystem, table.reservedAt)
       .where(sql`state = 'reserved'`),
+    index('migration_lineage_legacy_lookup_idx')
+      .on(table.orgId, table.entityType, table.afenaId)
+      .where(sql`state = 'committed'`),
     unique('migration_lineage_org_entity_legacy_uniq').on(
       table.orgId, table.entityType, table.legacySystem, table.legacyId
     ),

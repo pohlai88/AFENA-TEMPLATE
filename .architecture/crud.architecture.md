@@ -1,6 +1,6 @@
 # Afena Interaction Kernel (CRUD-SAP) — Architecture Reference
 
-> **Auto-generated** by `afena readme gen` at 2026-02-14T09:51:23Z. Do not edit — regenerate instead.
+> **Auto-generated** by `afena readme gen` at 2026-02-16T12:44:12Z. Do not edit — regenerate instead.
 > **Package:** `afena-crud` (`packages/crud`)
 > **Purpose:** Single mutation entry point for all domain data — the Afena Interaction Kernel (AIK).
 
@@ -56,13 +56,14 @@ mutate(spec, ctx)
 
 | Metric | Value |
 | ------ | ----- |
-| **Source files** | 40 |
-| **Test files** | 12 |
-| **Source directories** | handlers, services |
+| **Source files** | 94 |
+| **Test files** | 1 |
+| **Source directories** | handlers, registries, services |
 
 ```
 packages/crud/src/
 ├── handlers/
+├── registries/
 ├── services/
 ```
 
@@ -77,6 +78,7 @@ packages/crud/src/
 | `mutate` | `./mutate` |
 | `readEntity` | `./read` |
 | `listEntities` | `./read` |
+| `readDeliveryNoteWithLines` | `./read-delivery-note` |
 | `buildSystemContext` | `./context` |
 | `checkRateLimit` | `./rate-limiter` |
 | `getRateLimitConfig` | `./rate-limiter` |
@@ -204,7 +206,6 @@ packages/crud/src/
 - `afena-eslint-config`
 - `afena-logger`
 - `afena-typescript-config`
-- `afena-vitest-config`
 - `afena-workflow`
 
 ### External
@@ -213,6 +214,7 @@ packages/crud/src/
 | ------- | ------- |
 | `drizzle-orm` | `^0.44.0` |
 | `fast-json-patch` | `catalog:` |
+| `ioredis` | `^5.4.1` |
 
 ---
 
@@ -220,6 +222,7 @@ packages/crud/src/
 
 - `INVARIANT-07`
 - `INVARIANT-GOVERNORS`
+- `INVARIANT-HANDLER`
 - `INVARIANT-LIFECYCLE`
 - `INVARIANT-POLICY`
 - `INVARIANT-RL`

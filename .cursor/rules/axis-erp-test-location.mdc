@@ -1,0 +1,29 @@
+---
+description: axis-erp tests must live in the canonical __tests__ directory
+globs: "axis-erp/**/*.ts"
+alwaysApply: false
+---
+
+# axis-erp Test Location
+
+All axis-erp test files **must** live under the canonical test directory:
+
+```
+axis-erp/__tests__/
+```
+
+## Do
+
+- Place new tests in `axis-erp/__tests__/`, mirroring the source structure
+- Example: `selling/services/order-pricing.ts` → `__tests__/selling/services/order-pricing-service.test.ts`
+- Use `*.test.ts` or `*.spec.ts` naming
+
+## Don't
+
+- Co-locate tests next to source (e.g. `selling/services/__tests__/`)
+- Put tests in `axis-erp/` root or scattered subfolders
+
+## Reference
+
+- `axis-erp/vitest.config.ts` — includes `__tests__/**/*.{test,spec}.ts`
+- `axis-erp/AGENT.md` — architecture and test layout

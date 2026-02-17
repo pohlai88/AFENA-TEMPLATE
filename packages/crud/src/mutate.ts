@@ -12,11 +12,13 @@ import {
   auditLogs,
   companies,
   contacts,
+  currencyExchanges,
   db,
   entityVersions,
   eq,
   getDbTimeoutCode,
   isDbTimeoutError,
+  videoSettings,
   withDbRetry,
 } from 'afena-database';
 import { evaluateRules, loadAndRegisterOrgRules, WorkflowEngineError } from 'afena-workflow';
@@ -24,9 +26,7 @@ import { evaluateRules, loadAndRegisterOrgRules, WorkflowEngineError } from 'afe
 import { generateDiff } from './diff';
 import { err, ok } from './envelope';
 import { applyGovernor, buildGovernorConfig } from './governor';
-import { companiesHandler } from './handlers/companies';
-import { contactsHandler } from './handlers/contacts';
-// @entity-gen:handler-import
+import { HANDLER_REGISTRY } from './registries/handler-registry';
 import { enforceLifecycle } from './lifecycle';
 import { invalidateListCache } from './list-cache';
 import { meterApiRequest, meterDbTimeout } from './metering';
@@ -38,15 +38,7 @@ import { enforceEditWindow } from './services/workflow-edit-window';
 import { enqueueWorkflowOutboxEvent } from './services/workflow-outbox';
 
 import type { MutationContext } from './context';
-import type { EntityHandler } from './handlers/types';
 import type { ApiResponse, ErrorCode, MutationSpec, Receipt } from 'afena-canon';
-
-/** Entity handler registry — maps entity type to handler. */
-const HANDLER_REGISTRY: Record<string, EntityHandler> = {
-  contacts: contactsHandler,
-  companies: companiesHandler,
-  // @entity-gen:handler-registry
-};
 
 /**
  * Table registry for pre-transaction reads (resolve target).
@@ -55,6 +47,8 @@ const HANDLER_REGISTRY: Record<string, EntityHandler> = {
 const TABLE_REGISTRY: Record<string, any> = {
   contacts,
   companies,
+  'video-settings': videoSettings,
+  'currency-exchanges': currencyExchanges,
   // @entity-gen:table-registry-mutate
 };
 
@@ -254,173 +248,173 @@ export async function mutate(
 
     const result = await withDbRetry(() =>
       db.transaction(async (tx) => {
-      // INVARIANT-GOVERNORS-01: SET LOCAL timeouts + application_name
-      await applyGovernor(tx as any, governorConfig);
-      let handlerResult;
+        // INVARIANT-GOVERNORS-01: SET LOCAL timeouts + application_name
+        await applyGovernor(tx as any, governorConfig);
+        let handlerResult;
 
-      switch (verb) {
-        case 'create':
-          handlerResult = await handler.create(
-            tx as any,
-            sanitizedInput as Record<string, unknown>,
-            ctx,
-          );
-          break;
-        case 'update':
-          handlerResult = await handler.update(
-            tx as any,
-            entityId as string,
-            sanitizedInput as Record<string, unknown>,
-            expectedVer as number,
-            ctx,
-          );
-          break;
-        case 'delete':
-          handlerResult = await handler.delete(
-            tx as any,
-            entityId as string,
-            expectedVer as number,
-            ctx,
-          );
-          break;
-        case 'restore':
-          handlerResult = await handler.restore(
-            tx as any,
-            entityId as string,
-            expectedVer as number,
-            ctx,
-          );
-          break;
-        case 'submit':
-          if (!handler.submit) throw new Error(`Entity type '${validSpec.entityRef.type}' does not support submit`);
-          handlerResult = await handler.submit(
-            tx as any,
-            entityId as string,
-            expectedVer as number,
-            ctx,
-          );
-          break;
-        case 'cancel':
-          if (!handler.cancel) throw new Error(`Entity type '${validSpec.entityRef.type}' does not support cancel`);
-          handlerResult = await handler.cancel(
-            tx as any,
-            entityId as string,
-            expectedVer as number,
-            ctx,
-          );
-          break;
-        case 'amend':
-          if (!handler.amend) throw new Error(`Entity type '${validSpec.entityRef.type}' does not support amend`);
-          handlerResult = await handler.amend(
-            tx as any,
-            entityId as string,
-            expectedVer as number,
-            ctx,
-          );
-          break;
-        case 'approve':
-          if (!handler.approve) throw new Error(`Entity type '${validSpec.entityRef.type}' does not support approve`);
-          handlerResult = await handler.approve(
-            tx as any,
-            entityId as string,
-            expectedVer as number,
-            ctx,
-          );
-          break;
-        case 'reject':
-          if (!handler.reject) throw new Error(`Entity type '${validSpec.entityRef.type}' does not support reject`);
-          handlerResult = await handler.reject(
-            tx as any,
-            entityId as string,
-            expectedVer as number,
-            ctx,
-          );
-          break;
-        default:
-          throw new Error(`Unsupported verb: ${verb}`);
-      }
+        switch (verb) {
+          case 'create':
+            handlerResult = await handler.create(
+              tx as any,
+              sanitizedInput as Record<string, unknown>,
+              ctx,
+            );
+            break;
+          case 'update':
+            handlerResult = await handler.update(
+              tx as any,
+              entityId as string,
+              sanitizedInput as Record<string, unknown>,
+              expectedVer as number,
+              ctx,
+            );
+            break;
+          case 'delete':
+            handlerResult = await handler.delete(
+              tx as any,
+              entityId as string,
+              expectedVer as number,
+              ctx,
+            );
+            break;
+          case 'restore':
+            handlerResult = await handler.restore(
+              tx as any,
+              entityId as string,
+              expectedVer as number,
+              ctx,
+            );
+            break;
+          case 'submit':
+            if (!handler.submit) throw new Error(`Entity type '${validSpec.entityRef.type}' does not support submit`);
+            handlerResult = await handler.submit(
+              tx as any,
+              entityId as string,
+              expectedVer as number,
+              ctx,
+            );
+            break;
+          case 'cancel':
+            if (!handler.cancel) throw new Error(`Entity type '${validSpec.entityRef.type}' does not support cancel`);
+            handlerResult = await handler.cancel(
+              tx as any,
+              entityId as string,
+              expectedVer as number,
+              ctx,
+            );
+            break;
+          case 'amend':
+            if (!handler.amend) throw new Error(`Entity type '${validSpec.entityRef.type}' does not support amend`);
+            handlerResult = await handler.amend(
+              tx as any,
+              entityId as string,
+              expectedVer as number,
+              ctx,
+            );
+            break;
+          case 'approve':
+            if (!handler.approve) throw new Error(`Entity type '${validSpec.entityRef.type}' does not support approve`);
+            handlerResult = await handler.approve(
+              tx as any,
+              entityId as string,
+              expectedVer as number,
+              ctx,
+            );
+            break;
+          case 'reject':
+            if (!handler.reject) throw new Error(`Entity type '${validSpec.entityRef.type}' does not support reject`);
+            handlerResult = await handler.reject(
+              tx as any,
+              entityId as string,
+              expectedVer as number,
+              ctx,
+            );
+            break;
+          default:
+            throw new Error(`Unsupported verb: ${verb}`);
+        }
 
-      // Generate diff (K-13: normalized snapshots)
-      const diff = generateDiff(handlerResult.before, handlerResult.after);
+        // Generate diff (K-13: normalized snapshots)
+        const diff = generateDiff(handlerResult.before, handlerResult.after);
 
-      // Insert entity_versions row (K-03)
-      await (tx as any).insert(entityVersions).values({
-        orgId: ctx.actor.orgId,
-        entityType: validSpec.entityRef.type,
-        entityId: handlerResult.entityId,
-        version: handlerResult.versionAfter,
-        parentVersion: handlerResult.versionBefore,
-        snapshot: handlerResult.after,
-        diff,
-        createdBy: ctx.actor.userId,
-      });
-
-      // Insert audit_logs row (K-03)
-      const [auditRow] = await (tx as any)
-        .insert(auditLogs)
-        .values({
+        // Insert entity_versions row (K-03)
+        await (tx as any).insert(entityVersions).values({
           orgId: ctx.actor.orgId,
-          actorUserId: ctx.actor.userId,
-          actorName: ctx.actor.name ?? null,
-          ownerId: handlerResult.before?.createdBy ?? handlerResult.after?.createdBy ?? ctx.actor.userId ?? null,
-          geoCountry: null,
-          actionType: validSpec.actionType,
-          actionFamily: getActionFamily(validSpec.actionType),
           entityType: validSpec.entityRef.type,
           entityId: handlerResult.entityId,
-          requestId: ctx.requestId,
-          mutationId,
-          batchId: validSpec.batchId ?? null,
-          versionBefore: handlerResult.versionBefore,
-          versionAfter: handlerResult.versionAfter,
-          channel: ctx.channel ?? 'web_ui',
-          ip: ctx.ip ?? null,
-          userAgent: ctx.userAgent ?? null,
-          reason: validSpec.reason ?? null,
-          authoritySnapshot,
-          idempotencyKey: validSpec.idempotencyKey ?? null,
-          before: handlerResult.before,
-          after: handlerResult.after,
+          version: handlerResult.versionAfter,
+          parentVersion: handlerResult.versionBefore,
+          snapshot: handlerResult.after,
           diff,
-        })
-        .returning();
-
-      // Enqueue workflow outbox event in same TX (PRD § Event Outbox Pattern)
-      // Fire-and-forget within TX: errors here should NOT fail the mutation
-      try {
-        await enqueueWorkflowOutboxEvent(tx, {
-          orgId: ctx.actor.orgId,
-          entityType: validSpec.entityRef.type,
-          entityId: handlerResult.entityId,
-          entityVersion: handlerResult.versionAfter,
-          actionType: validSpec.actionType,
-          fromStatus: (handlerResult.before)?.docStatus as string | undefined ?? null,
-          toStatus: (handlerResult.after as Record<string, unknown> | null)?.docStatus as string | undefined ?? null,
-          traceId: ctx.requestId,
+          createdBy: ctx.actor.userId,
         });
-      } catch {
-        // Outbox write failure must not abort the mutation TX.
-        // The workflow will be triggered on the next mutation or manual retry.
-      }
 
-      // Enqueue search outbox event in same TX (GAP-DB-004)
-      try {
-        await enqueueSearchOutboxEvent(tx, {
-          orgId: ctx.actor.orgId,
-          entityType: validSpec.entityRef.type,
-          entityId: handlerResult.entityId,
-          action: verb === 'delete' ? 'delete' : 'upsert',
-        });
-      } catch {
-        // Search outbox write failure must not abort the mutation TX.
-      }
+        // Insert audit_logs row (K-03)
+        const [auditRow] = await (tx as any)
+          .insert(auditLogs)
+          .values({
+            orgId: ctx.actor.orgId,
+            actorUserId: ctx.actor.userId,
+            actorName: ctx.actor.name ?? null,
+            ownerId: handlerResult.before?.createdBy ?? handlerResult.after?.createdBy ?? ctx.actor.userId ?? null,
+            geoCountry: null,
+            actionType: validSpec.actionType,
+            actionFamily: getActionFamily(validSpec.actionType),
+            entityType: validSpec.entityRef.type,
+            entityId: handlerResult.entityId,
+            requestId: ctx.requestId,
+            mutationId,
+            batchId: validSpec.batchId ?? null,
+            versionBefore: handlerResult.versionBefore,
+            versionAfter: handlerResult.versionAfter,
+            channel: ctx.channel ?? 'web_ui',
+            ip: ctx.ip ?? null,
+            userAgent: ctx.userAgent ?? null,
+            reason: validSpec.reason ?? null,
+            authoritySnapshot,
+            idempotencyKey: validSpec.idempotencyKey ?? null,
+            before: handlerResult.before,
+            after: handlerResult.after,
+            diff,
+          })
+          .returning();
 
-      return { handlerResult, auditRow };
-    }),
+        // Enqueue workflow outbox event in same TX (PRD § Event Outbox Pattern)
+        // Fire-and-forget within TX: errors here should NOT fail the mutation
+        try {
+          await enqueueWorkflowOutboxEvent(tx, {
+            orgId: ctx.actor.orgId,
+            entityType: validSpec.entityRef.type,
+            entityId: handlerResult.entityId,
+            entityVersion: handlerResult.versionAfter,
+            actionType: validSpec.actionType,
+            fromStatus: (handlerResult.before)?.docStatus as string | undefined ?? null,
+            toStatus: (handlerResult.after as Record<string, unknown> | null)?.docStatus as string | undefined ?? null,
+            traceId: ctx.requestId,
+          });
+        } catch {
+          // Outbox write failure must not abort the mutation TX.
+          // The workflow will be triggered on the next mutation or manual retry.
+        }
+
+        // Enqueue search outbox event in same TX (GAP-DB-004)
+        try {
+          await enqueueSearchOutboxEvent(tx, {
+            orgId: ctx.actor.orgId,
+            entityType: validSpec.entityRef.type,
+            entityId: handlerResult.entityId,
+            action: verb === 'delete' ? 'delete' : 'upsert',
+          });
+        } catch {
+          // Search outbox write failure must not abort the mutation TX.
+        }
+
+        return { handlerResult, auditRow };
+      }),
     );
 
     // Phase 2C: Invalidate list cache for this entity type + org (fire-and-forget)
-    invalidateListCache(validSpec.entityRef.type, ctx.actor.orgId).catch(() => {});
+    invalidateListCache(validSpec.entityRef.type, ctx.actor.orgId).catch(() => { });
 
     // Build success receipt
     const receipt: Receipt = {

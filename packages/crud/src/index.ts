@@ -224,6 +224,7 @@ export type {
     AutoMatchResult,
 } from './services/bank-reconciliation';
 
+
 // ── Manufacturing engine ─────────────────────────────
 export {
     explodeBom,

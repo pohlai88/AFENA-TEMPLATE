@@ -31,6 +31,7 @@ export type ListCacheOptions = {
   orgId: string;
   includeDeleted?: boolean;
   includeCount?: boolean;
+  includeLegacyRef?: boolean;
   limit?: number;
   offset?: number;
   cursor?: string;
@@ -44,6 +45,7 @@ export function buildListCacheKey(opts: ListCacheOptions, version: number): stri
     String(version),
     opts.includeDeleted ? '1' : '0',
     opts.includeCount ? '1' : '0',
+    opts.includeLegacyRef ? '1' : '0',
     String(opts.limit ?? 100),
     String(opts.offset ?? 0),
     opts.cursor ?? '',

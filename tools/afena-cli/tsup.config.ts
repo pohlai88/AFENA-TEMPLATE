@@ -2,8 +2,8 @@ import { defineConfig } from 'tsup';
 
 export default defineConfig({
   entry: {
-    index: 'src/index.ts',
-    discover: 'src/discover.ts',
+    index: 'src/cli.ts',
+    discover: 'src/discovery/scan.ts',
   },
   format: ['cjs'],
   dts: true,

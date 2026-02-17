@@ -1,6 +1,6 @@
 # Afena Canon (Type Authority) — Architecture Reference
 
-> **Auto-generated** by `afena readme gen` at 2026-02-14T09:51:23Z. Do not edit — regenerate instead.
+> **Auto-generated** by `afena readme gen` at 2026-02-16T12:44:12Z. Do not edit — regenerate instead.
 > **Package:** `afena-canon` (`packages/canon`)
 > **Purpose:** Single source of truth for all types, schemas, enums, and capability definitions across the monorepo.
 
@@ -31,14 +31,17 @@ It never imports from any other workspace package.
 
 | Metric | Value |
 | ------ | ----- |
-| **Source files** | 48 |
+| **Source files** | 60 |
 | **Test files** | 0 |
-| **Source directories** | enums, schemas, types, validators |
+| **Source directories** | adapters, contracts, enums, schemas, serialization, types, validators |
 
 ```
 packages/canon/src/
+├── adapters/
+├── contracts/
 ├── enums/
 ├── schemas/
+├── serialization/
 ├── types/
 ├── validators/
 ```
@@ -104,8 +107,25 @@ packages/canon/src/
 | `TYPE_CONFIG_SCHEMAS` | `./schemas/data-types` |
 | `getTypeConfigSchema` | `./schemas/data-types` |
 | `validateTypeConfig` | `./schemas/data-types` |
+| `coerceMutationInput` | `./serialization` |
+| `coerceValue` | `./serialization` |
 | `validateFieldValue` | `./validators/custom-field-value` |
 | `DATA_TYPE_VALUE_COLUMN_MAP` | `./validators/custom-field-value` |
+| `localEntitySpecSchema` | `./contracts` |
+| `validateLocalEntitySpec` | `./contracts` |
+| `safeParseLocalEntitySpec` | `./contracts` |
+| `invariant` | `./invariant` |
+| `MONEY_POLICY` | `./adapters/erpnext` |
+| `RESERVED_WORD_POLICY` | `./adapters/erpnext` |
+| `resolveAdoptionDecision` | `./adapters/erpnext` |
+| `buildResolveInput` | `./adapters/erpnext` |
+| `type AdoptionLevel` | `./adapters/erpnext` |
+| `type LockLevel` | `./adapters/erpnext` |
+| `type ReasonCode` | `./adapters/erpnext` |
+| `type ResolveAdoptionDecisionInput` | `./adapters/erpnext` |
+| `type ResolveAdoptionDecisionOutput` | `./adapters/erpnext` |
+| `type AdoptedEntitiesFile` | `./adapters/erpnext` |
+| `type LoadedAdoptionConfig` | `./adapters/erpnext` |
 
 ### Type Exports
 
@@ -159,6 +179,10 @@ packages/canon/src/
 | `CapabilityException` | `./schemas/capability` |
 | `TypeConfigSchemas` | `./schemas/data-types` |
 | `FieldValidationResult` | `./validators/custom-field-value` |
+| `LocalEntitySpec` | `./contracts` |
+| `EntityKind` | `./contracts` |
+| `FieldType` | `./contracts` |
+| `FieldDef` | `./contracts` |
 
 ---
 
@@ -179,6 +203,8 @@ packages/canon/src/
 
 ## 6. Invariants
 
+- `INVARIANT-ADOPT`
+- `INVARIANT-LOCK`
 - `K-04`
 - `K-06`
 - `K-07`
@@ -190,6 +216,7 @@ packages/canon/src/
 
 ## Design Patterns Detected
 
+- **Factory**
 - **Registry**
 
 ---

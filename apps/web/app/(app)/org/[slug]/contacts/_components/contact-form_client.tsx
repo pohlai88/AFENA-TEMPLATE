@@ -30,6 +30,8 @@ import type { ActionEnvelope } from 'afena-canon';
 interface ContactFormProps {
   orgSlug: string;
   orgId: string;
+  /** Prefilled from global defaults (Setup DefaultValueResolver) */
+  defaultCompany?: string;
   contact?: {
     id: string;
     name: string;
@@ -41,7 +43,12 @@ interface ContactFormProps {
   };
 }
 
-export function ContactForm({ orgSlug, orgId, contact }: ContactFormProps) {
+export function ContactForm({
+  orgSlug,
+  orgId,
+  defaultCompany = '',
+  contact,
+}: ContactFormProps) {
   const router = useRouter();
   const isEdit = !!contact;
 
@@ -51,7 +58,7 @@ export function ContactForm({ orgSlug, orgId, contact }: ContactFormProps) {
       name: contact?.name ?? '',
       email: contact?.email ?? '',
       phone: contact?.phone ?? '',
-      company: contact?.company ?? '',
+      company: contact?.company ?? defaultCompany,
       notes: contact?.notes ?? '',
     },
   });

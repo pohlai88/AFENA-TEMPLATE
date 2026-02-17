@@ -1,9 +1,24 @@
-import { and, batch, companies, contacts, desc, eq, getDb, sql } from 'afena-database';
+import {
+  and,
+  batch,
+  branches,
+  companies,
+  contacts,
+  currencyExchanges,
+  departments,
+  desc,
+  eq,
+  getDb,
+  sql,
+  tasks,
+  videoSettings,
+} from 'afena-database';
 import { getLogger } from 'afena-logger';
 // @entity-gen:read-import
 
 import { buildCursorWhere, decodeCursor, encodeCursor } from './cursor';
 import { err, ok } from './envelope';
+import { getLegacyRefs } from './read-legacy';
 import {
   buildListCacheKey,
   getCachedList,
@@ -18,8 +33,30 @@ import type { ApiResponse, EntityType } from 'afena-canon';
 const TABLE_REGISTRY: Record<string, any> = {
   contacts,
   companies,
+  'video-settings': videoSettings,
+  'currency-exchanges': currencyExchanges,
+  departments,
+  branches,
+  tasks,
   // @entity-gen:table-registry-read
 };
+
+/** Enrich rows with legacyRef when includeLegacyRef; no-op when false or empty. */
+async function enrichWithLegacyRef(
+  conn: ReturnType<typeof getDb>,
+  orgId: string,
+  entityType: EntityType,
+  rows: Record<string, unknown>[],
+): Promise<Record<string, unknown>[]> {
+  if (rows.length === 0) return rows;
+  const ids = rows.map((r) => r.id as string).filter(Boolean);
+  if (ids.length === 0) return rows;
+  const refs = await getLegacyRefs(conn, orgId, entityType, ids);
+  return rows.map((r) => ({
+    ...r,
+    ...(refs.has(r.id as string) ? { legacyRef: refs.get(r.id as string) } : {}),
+  }));
+}
 
 /**
  * Read a single entity by ID.
@@ -30,7 +67,7 @@ export async function readEntity(
   entityType: EntityType,
   id: string,
   requestId: string,
-  options?: { forcePrimary?: boolean },
+  options?: { forcePrimary?: boolean; includeLegacyRef?: boolean },
 ): Promise<ApiResponse> {
   const table = TABLE_REGISTRY[entityType];
   if (!table) {
@@ -46,6 +83,16 @@ export async function readEntity(
 
   if (!row) {
     return err('NOT_FOUND', `${entityType} not found: ${id}`, requestId);
+  }
+
+  if (options?.includeLegacyRef) {
+    const orgId = (row as { orgId?: string }).orgId;
+    if (!orgId) {
+      return err('VALIDATION_FAILED', 'org context required', requestId);
+    }
+    const refs = await getLegacyRefs(conn, orgId, entityType, [id]);
+    const legacyRef = refs.get(id);
+    return ok(legacyRef ? { ...row, legacyRef } : row, requestId);
   }
 
   return ok(row, requestId);
@@ -104,6 +151,7 @@ export async function listEntities(
   options?: {
     includeDeleted?: boolean;
     includeCount?: boolean;
+    includeLegacyRef?: boolean;
     limit?: number;
     offset?: number;
     orgId?: string;
@@ -116,6 +164,11 @@ export async function listEntities(
     return err('VALIDATION_FAILED', `Unknown entity type: ${entityType}`, requestId);
   }
 
+  // Rule A: includeLegacyRef requires org context (derived by caller from tenant context)
+  if (options?.includeLegacyRef && !options?.orgId) {
+    return err('VALIDATION_FAILED', 'org context required', requestId);
+  }
+
   // Phase 2C: Optional cache — orgId required; skip when absent
   let cacheKey: string | null = null;
   if (isListCacheEnabled() && options?.orgId) {
@@ -126,6 +179,7 @@ export async function listEntities(
         orgId: options.orgId,
         ...(options.includeDeleted !== undefined ? { includeDeleted: options.includeDeleted } : {}),
         ...(options.includeCount !== undefined ? { includeCount: options.includeCount } : {}),
+        ...(options.includeLegacyRef !== undefined ? { includeLegacyRef: options.includeLegacyRef } : {}),
         ...(options.limit !== undefined ? { limit: options.limit } : {}),
         ...(options.offset !== undefined ? { offset: options.offset } : {}),
         ...(options.cursor !== undefined ? { cursor: options.cursor } : {}),
@@ -228,10 +282,13 @@ export async function listEntities(
           })
           : undefined;
 
+      const enriched = options?.includeLegacyRef && options?.orgId
+        ? await enrichWithLegacyRef(conn, options.orgId, entityType, page as Record<string, unknown>[])
+        : page;
       if (cacheKey) {
-        setCachedList(cacheKey, { data: page, meta: { totalCount, ...(nextCursor ? { nextCursor } : {}) } }).catch(() => { });
+        setCachedList(cacheKey, { data: enriched, meta: { totalCount, ...(nextCursor ? { nextCursor } : {}) } }).catch(() => { });
       }
-      return ok(page, requestId, undefined, { totalCount, ...(nextCursor ? { nextCursor } : {}) });
+      return ok(enriched, requestId, undefined, { totalCount, ...(nextCursor ? { nextCursor } : {}) });
     }
 
     const rowsPlus = await listQuery;
@@ -249,10 +306,13 @@ export async function listEntities(
         })
         : undefined;
 
+    const enrichedCursor = options?.includeLegacyRef && options?.orgId
+      ? await enrichWithLegacyRef(conn, options.orgId, entityType, page as Record<string, unknown>[])
+      : page;
     if (cacheKey) {
-      setCachedList(cacheKey, { data: page, ...(nextCursor ? { meta: { nextCursor } } : {}) }).catch(() => { });
+      setCachedList(cacheKey, { data: enrichedCursor, ...(nextCursor ? { meta: { nextCursor } } : {}) }).catch(() => { });
     }
-    return ok(page, requestId, undefined, nextCursor ? { nextCursor } : undefined);
+    return ok(enrichedCursor, requestId, undefined, nextCursor ? { nextCursor } : undefined);
   }
 
   // Offset pagination path (cursor not provided)
@@ -294,10 +354,13 @@ export async function listEntities(
       rows = listResult;
       totalCount = Number((countResult[0] as { count: bigint })?.count ?? 0);
     }
+    const enrichedOffset = options?.includeLegacyRef && options?.orgId
+      ? await enrichWithLegacyRef(conn, options.orgId, entityType, rows as Record<string, unknown>[])
+      : rows;
     if (cacheKey) {
-      setCachedList(cacheKey, { data: rows, meta: { totalCount } }).catch(() => { });
+      setCachedList(cacheKey, { data: enrichedOffset, meta: { totalCount } }).catch(() => { });
     }
-    return ok(rows, requestId, undefined, { totalCount });
+    return ok(enrichedOffset, requestId, undefined, { totalCount });
   }
 
   const rows = await conn
@@ -307,8 +370,11 @@ export async function listEntities(
     .limit(limit)
     .offset(offset);
 
+  const enrichedFinal = options?.includeLegacyRef && options?.orgId
+    ? await enrichWithLegacyRef(conn, options.orgId!, entityType, rows as Record<string, unknown>[])
+    : rows;
   if (cacheKey) {
-    setCachedList(cacheKey, { data: rows }).catch(() => { });
+    setCachedList(cacheKey, { data: enrichedFinal }).catch(() => { });
   }
-  return ok(rows, requestId);
+  return ok(enrichedFinal, requestId);
 }

@@ -1,6 +1,6 @@
 # Afena Migration Engine — Architecture Reference
 
-> **Auto-generated** by `afena readme gen` at 2026-02-14T09:51:23Z. Do not edit — regenerate instead.
+> **Auto-generated** by `afena readme gen` at 2026-02-16T12:44:12Z. Do not edit — regenerate instead.
 > **Package:** `afena-migration` (`packages/migration`)
 > **Purpose:** Legacy data migration pipeline with atomicity guarantees, conflict detection, and signed audit reports.
 
@@ -60,7 +60,7 @@ buildSignedReport() → SignedReport
 | Metric | Value |
 | ------ | ----- |
 | **Source files** | 43 |
-| **Test files** | 20 |
+| **Test files** | 0 |
 | **Source directories** | adapters, audit, gates, pipeline, queries, strategies, transforms, types, worker |
 
 ```
@@ -87,7 +87,6 @@ packages/migration/src/
 - `afena-eslint-config`
 - `afena-logger`
 - `afena-typescript-config`
-- `afena-vitest-config`
 
 ### External
 

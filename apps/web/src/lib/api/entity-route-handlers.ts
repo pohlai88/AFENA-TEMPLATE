@@ -45,6 +45,7 @@ export const listEntitiesHandler = withAuthOrApiKey(async (request: NextRequest,
   const actions = generateEntityActions(entityType);
   const includeDeleted = request.nextUrl.searchParams.get('includeDeleted') === 'true';
   const includeCount = request.nextUrl.searchParams.get('includeCount') === 'true';
+  const includeLegacyRef = request.nextUrl.searchParams.get('includeLegacyRef') === 'true';
   const limit = Math.min(Number(request.nextUrl.searchParams.get('limit') ?? '50'), 200);
   const offset = Number(request.nextUrl.searchParams.get('offset') ?? '0');
   const cursor = request.nextUrl.searchParams.get('cursor');
@@ -52,6 +53,7 @@ export const listEntitiesHandler = withAuthOrApiKey(async (request: NextRequest,
   const result = await actions.list({
     includeDeleted,
     includeCount,
+    includeLegacyRef,
     limit,
     offset,
     ...(cursor ? { cursor } : {}),
@@ -102,8 +104,9 @@ export const readEntityHandler = withAuthOrApiKey(async (request: NextRequest, _
     return { ok: false as const, code: 'VALIDATION_FAILED', message: 'Missing entity ID' };
   }
 
+  const includeLegacyRef = request.nextUrl.searchParams.get('includeLegacyRef') === 'true';
   const actions = generateEntityActions(entityType);
-  const result = await actions.read(id);
+  const result = await actions.read(id, { includeLegacyRef });
   if (!result.ok) {
     return { ok: false as const, code: result.error?.code ?? 'NOT_FOUND', message: result.error?.message ?? 'Entity not found', status: 404 };
   }

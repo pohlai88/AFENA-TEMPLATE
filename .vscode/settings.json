@@ -46,7 +46,9 @@
   },
 
   // ── ESLint ───────────────────────────────────────────────
+  // Include root so root-level files get linted; patterns for workspace packages
   "eslint.workingDirectories": [
+    ".",
     { "pattern": "apps/*" },
     { "pattern": "packages/*" },
     { "pattern": "tools/*" }

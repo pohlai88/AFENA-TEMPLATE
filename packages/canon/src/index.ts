@@ -145,6 +145,3 @@ export type { LocalEntitySpec, EntityKind, FieldType, FieldDef } from './contrac
 
 // ── Utilities ────────────────────────────────────────────
 export { invariant } from './invariant';
-
-// ── Adapter policies (ERP refactor) ──────────────────────
-export { MONEY_POLICY, RESERVED_WORD_POLICY } from './adapters/erpnext';

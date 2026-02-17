@@ -46,6 +46,14 @@ jobs:
       - name: Build
         run: pnpm build
 
+      - name: Unit tests (Setup domain, axis-erp)
+        env:
+          NODE_ENV: test
+          TEST_DATABASE_URL: 'postgresql://ci:ci@ci-placeholder.neon.tech/neondb?sslmode=verify-full'
+        run: |
+          pnpm --filter afena-crud test
+          pnpm --filter axis-erp test:ci
+
       - name: Lint (with import/no-cycle)
         run: pnpm lint:ci
 

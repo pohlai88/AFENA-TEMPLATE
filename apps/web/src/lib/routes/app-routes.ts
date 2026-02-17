@@ -98,6 +98,16 @@ export function orgSettingsWorkflowsInstanceId(slug: string, instanceId: string)
   return `/org/${slug}/settings/workflows/instances/${instanceId}`;
 }
 
+/** Settings currency converter: /org/[slug]/settings/currency-converter */
+export function orgSettingsCurrencyConverter(slug: string): string {
+  return `/org/${slug}/settings/currency-converter`;
+}
+
+/** Settings working day: /org/[slug]/settings/working-day */
+export function orgSettingsWorkingDay(slug: string): string {
+  return `/org/${slug}/settings/working-day`;
+}
+
 /**
  * Surface page template — Next.js route pattern with [slug].
  * Use for SURFACE.page when the route is /org/[slug]/...

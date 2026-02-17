@@ -5,6 +5,7 @@
   "main": "./src/index.ts",
   "types": "./src/index.ts",
   "scripts": {
+    "test": "vitest run",
     "build": "tsup",
     "dev": "tsup --watch",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx --cache --concurrency=auto",
@@ -13,13 +14,13 @@
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
-    "ioredis": "^5.4.1",
     "afena-canon": "workspace:*",
     "afena-database": "workspace:*",
     "afena-logger": "workspace:*",
     "afena-workflow": "workspace:*",
     "drizzle-orm": "^0.44.0",
-    "fast-json-patch": "catalog:"
+    "fast-json-patch": "catalog:",
+    "ioredis": "^5.4.1"
   },
   "devDependencies": {
     "@types/node": "catalog:",
