@@ -51,7 +51,7 @@ This directory contains AI agent resources, skills, rules, and contextual inform
     │
     └── ─── Custom Project Skills (11 skills) ───
         ├── afenda-architecture/     # ★★★ Monorepo architecture
-        ├── afenda-cli-usage/        # ★★★ CLI commands & workflows
+        ├── afena-cli-usage/        # ★★★ CLI commands & workflows
         ├── afenda-database-patterns/# ★★ DB schema & migrations
         ├── ci-cd-pipeline/          # ★★ CI/CD workflows
         ├── domain-driven-patterns/  # ★★ DDD patterns
@@ -85,7 +85,7 @@ Reusable knowledge modules that guide AI assistants through specific workflows.
 
 #### ?? **Development Tools (2 skills)**
 
-- **afenda-cli-usage** ??? - CLI tool usage for code generation and validation
+- **afena-cli-usage** ??? - CLI tool usage for code generation and validation
 - **lint-types-debug** ??? - ESLint & TypeScript debugging with official patterns
 
 #### ?? **Testing & Quality (2 skills)**
@@ -139,7 +139,7 @@ Project-specific conventions and rules:
 ### ? Phase 2: Priority 1 Skills Created (7 new skills, ~4,700 lines)
 
 1. **afenda-architecture** - Monorepo architecture & layered dependencies
-2. **afenda-cli-usage** - CLI commands & code generation workflows
+2. **afena-cli-usage** - CLI commands & code generation workflows
 3. **afenda-database-patterns** - Database schema patterns & migrations
 4. **package-development** - Package creation & maintenance guide
 5. **domain-driven-patterns** - DDD patterns for domain packages
@@ -169,7 +169,7 @@ Skills are designed to be referenced by AI assistants using the `@skill-name` sy
 
 ```
 @afenda-architecture - Understanding monorepo structure
-@afenda-cli-usage - Running CLI commands
+@afena-cli-usage - Running CLI commands
 @lint-types-debug - Fixing ESLint/TypeScript errors
 @vitest-testing - Writing and running tests
 @neon-postgres - Working with Neon database
@@ -188,7 +188,7 @@ Start with these core skills:
 
 1. **@afenda-architecture** - Understand the monorepo structure
 2. **@package-development** - Learn how to create packages
-3. **@afenda-cli-usage** - Master the CLI tools
+3. **@afena-cli-usage** - Master the CLI tools
 4. **@lint-types-debug** - Debug common errors
 5. **@vitest-testing** - Write effective tests
 

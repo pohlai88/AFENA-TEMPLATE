@@ -126,7 +126,7 @@ The `.agent` directory contains **legacy content** from the previous "axis-erp" 
 
 ---
 
-#### 2. **afenda-cli-usage** ⭐⭐⭐
+#### 2. **afena-cli-usage** ⭐⭐⭐
 
 **Description:** afenda CLI tool usage for code generation, validation, and monorepo management
 
@@ -145,7 +145,7 @@ The `.agent` directory contains **legacy content** from the previous "axis-erp" 
 
 **References:**
 
-- `tools/afenda-cli/` source
+- `tools/afena-cli/` source
 - `package.json` scripts
 - Existing adapter documentation
 
@@ -345,7 +345,7 @@ The `.agent` directory contains **legacy content** from the previous "axis-erp" 
 ├── skills/                             # Active skills
 │   ├── SKILL-TEMPLATE.md
 │   ├── afenda-architecture/            # NEW - Priority 1
-│   ├── afenda-cli-usage/               # NEW - Priority 1
+│   ├── afena-cli-usage/               # NEW - Priority 1
 │   ├── afenda-database-patterns/       # NEW - Priority 1
 │   ├── package-development/            # NEW - Priority 1
 │   ├── domain-driven-patterns/         # NEW - Priority 2
@@ -381,7 +381,7 @@ The `.agent` directory contains **legacy content** from the previous "axis-erp" 
 ### Phase 2: Create Priority 1 Skills (4-6 hours)
 
 1. **afenda-architecture** - Extract from ARCHITECTURE.md + GOVERNANCE.md
-2. **afenda-cli-usage** - Document CLI commands and workflows
+2. **afena-cli-usage** - Document CLI commands and workflows
 3. **afenda-database-patterns** - Extract from migrations and schema
 4. **package-development** - Create from PACKAGE_TEMPLATE + examples
 

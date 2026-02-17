@@ -10,7 +10,7 @@
 **Strengths to Preserve:**
 - ⭐ Exceptional TypeScript strictness (10/10) - `noUncheckedIndexedAccess`, all strict flags
 - ⭐ Advanced architectural governance - `.architecture/` docs, gap registers, invariant tracking
-- ⭐ Sophisticated custom tooling - `afenda-cli` with auto-gen docs and metadata validation
+- ⭐ Sophisticated custom tooling - `afena-cli` with auto-gen docs and metadata validation
 - ⭐ Comprehensive CI/CD - 3-job workflow with security audits, schema validation, E2E tests
 
 **Critical Gaps to Address:**
@@ -56,7 +56,7 @@ coverage: {
 
 **1.2 Create Coverage Badge Generation**
 
-Add to `tools/afenda-cli/src/bundle/command.ts`:
+Add to `tools/afena-cli/src/bundle/command.ts`:
 ```typescript
 // New task: Generate coverage badges
 {
@@ -239,7 +239,7 @@ export interface TemplateInput {
 
 **3.2 Generate API Documentation**
 
-Create `tools/afenda-cli/src/docs/openapi-generator.ts`:
+Create `tools/afena-cli/src/docs/openapi-generator.ts`:
 ```typescript
 import { Project } from 'ts-morph';
 import { OpenAPIV3 } from 'openapi-types';
@@ -404,7 +404,7 @@ indent_style = tab
 
 **5.1 Create Quality Metrics Collector**
 
-Create `tools/afenda-cli/src/quality/metrics-collector.ts`:
+Create `tools/afena-cli/src/quality/metrics-collector.ts`:
 ```typescript
 export interface QualityMetrics {
   codebase: {
@@ -440,7 +440,7 @@ export interface QualityMetrics {
 
 **5.2 Generate Dashboard Markdown**
 
-Create `tools/afenda-cli/src/quality/dashboard-generator.ts`:
+Create `tools/afena-cli/src/quality/dashboard-generator.ts`:
 ```typescript
 export function generateQualityDashboard(metrics: QualityMetrics): string {
   return `
@@ -497,7 +497,7 @@ program
 
 **6.1 Add Code Complexity Analysis**
 
-Create `tools/afenda-cli/src/quality/complexity-analyzer.ts`:
+Create `tools/afena-cli/src/quality/complexity-analyzer.ts`:
 ```typescript
 import { Project, SyntaxKind } from 'ts-morph';
 
@@ -524,7 +524,7 @@ export function analyzeComplexity(filePath: string) {
 
 **6.2 Generate Dependency Graph Insights**
 
-Create `tools/afenda-cli/src/quality/dependency-analyzer.ts`:
+Create `tools/afena-cli/src/quality/dependency-analyzer.ts`:
 ```typescript
 export function analyzeDependencies() {
   return {
@@ -631,7 +631,7 @@ Create `.lighthouserc.json`:
 
 **API Docs:** Custom OpenAPI generator using ts-morph (type-safe, auto-sync with code)
 
-**Quality Metrics:** Custom collector (full control, integrates with existing afenda-cli architecture)
+**Quality Metrics:** Custom collector (full control, integrates with existing afena-cli architecture)
 
 ---
 
@@ -642,7 +642,7 @@ Create `.lighthouserc.json`:
 **Strong Foundation (Preserve & Build Upon):**
 - TypeScript configuration is world-class (strictest possible settings including `noUncheckedIndexedAccess`)
 - Architecture documentation system (.architecture/ folder) with gap registers and invariant tracking
-- Sophisticated custom tooling (afenda-cli) for maintenance automation
+- Sophisticated custom tooling (afena-cli) for maintenance automation
 - Comprehensive CI/CD with security audits, schema validation, multiple test tiers
 - Structured logging with Pino and AsyncLocalStorage for request context
 - ESLint with security plugin and custom invariant rules
@@ -661,7 +661,7 @@ Create `.lighthouserc.json`:
 - Missing developer experience files (.env.example, CONTRIBUTING.md, .editorconfig, GitHub templates)
 - No performance monitoring (no Web Vitals tracking, no Lighthouse CI, no performance budgets)
 - No SAST tools (CodeQL, Semgrep) beyond basic eslint-plugin-security
-- Incomplete invariant checks (E1-E7, H00-H02 are stubbed out in tools/afenda-cli/src/checks/invariants.ts)
+- Incomplete invariant checks (E1-E7, H00-H02 are stubbed out in tools/afena-cli/src/checks/invariants.ts)
 - Many READMEs show placeholder text ("TODO: Add entity-specific...")
 
 **Package-Level Health:**

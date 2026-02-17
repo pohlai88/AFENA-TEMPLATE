@@ -1004,7 +1004,7 @@ afenda-NEXUS/
 │       ├── workflow
 │       └── advisory
 └── tools/
-    └── afenda-cli             ← CLI tooling
+    └── afena-cli             ← CLI tooling
 ```
 
 ### Runtime Deployment

@@ -9,25 +9,21 @@
 
 **Comprehensive development guide for AFENDA-NEXUS tools**
 
-[Architecture](#-architecture-principles) • [Report System](#-report-system) •
-[Adding Commands](#-adding-new-commands) • [Best Practices](#-best-practices) •
-[Troubleshooting](#-troubleshooting)
-
 </div>
 
 ---
 
 ## 📋 Table of Contents
 
-- [Architecture Principles](#-architecture-principles)
-- [Report System](#-report-system)
-- [Adding New Commands](#-adding-new-commands)
-- [Code Organization Patterns](#-code-organization-patterns)
-- [Testing Strategy](#-testing-strategy)
-- [Best Practices](#-best-practices)
-- [Troubleshooting](#-troubleshooting)
-- [Advanced Topics](#-advanced-topics)
-- [Reference](#-reference)
+- Architecture Principles
+- Report System
+- Adding New Commands
+- Code Organization Patterns
+- Testing Strategy
+- Best Practices
+- Troubleshooting
+- Advanced Topics
+- Reference
 
 ---
 
@@ -70,7 +66,7 @@ src/
 #### 2. **Constants-Based Configuration**
 
 **Single Source of Truth**: All report structures defined in
-[`core/report-config.ts`](./afenda-cli/src/core/report-config.ts)
+`core/report-config.ts`
 
 **Benefits**:
 
@@ -138,27 +134,27 @@ All reports are defined in `core/report-config.ts`:
 ```typescript
 export const REPORT_CONFIGS = {
   bundle: {
-    command: "bundle",
-    displayName: "Bundle",
-    description: "Run all maintenance tasks",
+    command: 'bundle',
+    displayName: 'Bundle',
+    description: 'Run all maintenance tasks',
     tasks: [
       {
-        key: "readme",
-        title: "README Generation",
-        icon: "📝",
-        description: "Generate package READMEs",
+        key: 'readme',
+        title: 'README Generation',
+        icon: '📝',
+        description: 'Generate package READMEs',
       },
       {
-        key: "meta",
-        title: "Metadata Checks",
-        icon: "🔍",
-        description: "Validate metadata quality",
+        key: 'meta',
+        title: 'Metadata Checks',
+        icon: '🔍',
+        description: 'Validate metadata quality',
       },
       {
-        key: "housekeeping",
-        title: "Housekeeping",
-        icon: "🧹",
-        description: "Run invariant checks",
+        key: 'housekeeping',
+        title: 'Housekeeping',
+        icon: '🧹',
+        description: 'Run invariant checks',
       },
     ],
   },
@@ -191,11 +187,11 @@ interface Task {
 #### Basic Usage
 
 ```typescript
-import { ReportBuilder } from "../core/report-builder";
+import { ReportBuilder } from '../core/report-builder';
 
 export async function runMyCommand(options: { dryRun?: boolean }) {
   // 1. Create builder (references config in report-config.ts)
-  const reportBuilder = new ReportBuilder("mycommand", {
+  const reportBuilder = new ReportBuilder('mycommand', {
     dryRun: options.dryRun,
   });
 
@@ -204,14 +200,14 @@ export async function runMyCommand(options: { dryRun?: boolean }) {
     const result = await doSomething();
 
     // 3. Report results
-    reportBuilder.addTask("task1", {
+    reportBuilder.addTask('task1', {
       success: true,
       message: `Processed ${result.count} items`,
       count: result.count,
     });
   } catch (error) {
     // 4. Report failures
-    reportBuilder.addTask("task1", {
+    reportBuilder.addTask('task1', {
       success: false,
       message: `Failed: ${error.message}`,
       error: error as Error,
@@ -227,31 +223,31 @@ export async function runMyCommand(options: { dryRun?: boolean }) {
 
 ```typescript
 // Success with count
-reportBuilder.addTask("readme", {
+reportBuilder.addTask('readme', {
   success: true,
-  message: "Generated 38 READMEs",
+  message: 'Generated 38 READMEs',
   count: 38,
 });
 
 // Success with details
-reportBuilder.addTask("meta", {
+reportBuilder.addTask('meta', {
   success: true,
-  message: "All metadata valid",
-  details: ["VIS-00: ✓", "VIS-01: ✓", "VIS-02: ✓"],
+  message: 'All metadata valid',
+  details: ['VIS-00: ✓', 'VIS-01: ✓', 'VIS-02: ✓'],
 });
 
 // Failure with error
-reportBuilder.addTask("housekeeping", {
+reportBuilder.addTask('housekeeping', {
   success: false,
-  message: "Some checks failed",
-  error: new Error("E1 failed"),
-  details: ["E1: ✗ Missing exports", "E2: ✓", "E3: ✓"],
+  message: 'Some checks failed',
+  error: new Error('E1 failed'),
+  details: ['E1: ✗ Missing exports', 'E2: ✓', 'E3: ✓'],
 });
 
 // Skipped task
-reportBuilder.addTask("optional", {
+reportBuilder.addTask('optional', {
   success: true,
-  message: "Skipped (dry-run)",
+  message: 'Skipped (dry-run)',
   skipped: true,
 });
 ```
@@ -314,28 +310,28 @@ Update `src/core/report-config.ts`:
 export const REPORT_CONFIGS = {
   // ... existing configs ...
 
-  "my-feature": {
-    command: "my-feature",
-    displayName: "My Feature",
-    description: "Does something useful for the monorepo",
+  'my-feature': {
+    command: 'my-feature',
+    displayName: 'My Feature',
+    description: 'Does something useful for the monorepo',
     tasks: [
       {
-        key: "scan",
-        title: "Scan Packages",
-        icon: "🔍",
-        description: "Scan all packages for issues",
+        key: 'scan',
+        title: 'Scan Packages',
+        icon: '🔍',
+        description: 'Scan all packages for issues',
       },
       {
-        key: "process",
-        title: "Process Results",
-        icon: "⚙️",
-        description: "Process scanning results",
+        key: 'process',
+        title: 'Process Results',
+        icon: '⚙️',
+        description: 'Process scanning results',
       },
       {
-        key: "report",
-        title: "Generate Report",
-        icon: "📝",
-        description: "Generate final report",
+        key: 'report',
+        title: 'Generate Report',
+        icon: '📝',
+        description: 'Generate final report',
       },
     ],
   },
@@ -358,9 +354,9 @@ src/features/my-feature/
 **File: `command.ts`**:
 
 ```typescript
-import { ReportBuilder } from "../../core/report-builder";
-import { scanPackages } from "./scanner";
-import { processResults } from "./processor";
+import { ReportBuilder } from '../../core/report-builder';
+import { scanPackages } from './scanner';
+import { processResults } from './processor';
 
 export interface MyFeatureOptions {
   dryRun?: boolean;
@@ -368,14 +364,14 @@ export interface MyFeatureOptions {
 }
 
 export async function runMyFeature(options: MyFeatureOptions = {}) {
-  const reportBuilder = new ReportBuilder("my-feature", {
+  const reportBuilder = new ReportBuilder('my-feature', {
     dryRun: options.dryRun,
   });
 
   try {
     // Task 1: Scan
     const scanResults = await scanPackages();
-    reportBuilder.addTask("scan", {
+    reportBuilder.addTask('scan', {
       success: true,
       message: `Scanned ${scanResults.length} packages`,
       count: scanResults.length,
@@ -383,7 +379,7 @@ export async function runMyFeature(options: MyFeatureOptions = {}) {
 
     // Task 2: Process
     const processed = await processResults(scanResults);
-    reportBuilder.addTask("process", {
+    reportBuilder.addTask('process', {
       success: processed.success,
       message: processed.message,
       details: processed.details,
@@ -392,20 +388,20 @@ export async function runMyFeature(options: MyFeatureOptions = {}) {
     // Task 3: Report
     if (!options.dryRun) {
       await generateReport(processed);
-      reportBuilder.addTask("report", {
+      reportBuilder.addTask('report', {
         success: true,
-        message: "Report generated at .afenda/my-feature-report.md",
+        message: 'Report generated at .afenda/my-feature-report.md',
       });
     } else {
-      reportBuilder.addTask("report", {
+      reportBuilder.addTask('report', {
         success: true,
-        message: "Skipped (dry-run)",
+        message: 'Skipped (dry-run)',
         skipped: true,
       });
     }
   } catch (error) {
-    console.error("Error:", error);
-    reportBuilder.addTask("scan", {
+    console.error('Error:', error);
+    reportBuilder.addTask('scan', {
       success: false,
       message: `Failed: ${(error as Error).message}`,
       error: error as Error,
@@ -419,8 +415,8 @@ export async function runMyFeature(options: MyFeatureOptions = {}) {
 **File: `index.ts`**:
 
 ```typescript
-export { runMyFeature } from "./command";
-export type { MyFeatureOptions } from "./command";
+export { runMyFeature } from './command';
+export type { MyFeatureOptions } from './command';
 ```
 
 #### Step 3: Register CLI Command
@@ -428,19 +424,19 @@ export type { MyFeatureOptions } from "./command";
 Update `src/cli.ts` (or `bin/afenda.ts`):
 
 ```typescript
-import { Command } from "commander";
+import { Command } from 'commander';
 
 const program = new Command();
 
 // ... existing commands ...
 
 program
-  .command("my-feature")
-  .description("Does something useful for the monorepo")
-  .option("--dry-run", "Preview changes without writing")
-  .option("--verbose", "Show detailed output")
+  .command('my-feature')
+  .description('Does something useful for the monorepo')
+  .option('--dry-run', 'Preview changes without writing')
+  .option('--verbose', 'Show detailed output')
   .action(async (opts) => {
-    const { runMyFeature } = await import("./features/my-feature");
+    const { runMyFeature } = await import('./features/my-feature');
     await runMyFeature({
       dryRun: opts.dryRun,
       verbose: opts.verbose,
@@ -468,21 +464,19 @@ pnpm afenda my-feature --verbose
 Create `src/features/my-feature/__tests__/command.test.ts`:
 
 ```typescript
-import { describe, expect, it, vi } from "vitest";
-import { runMyFeature } from "../command";
+import { describe, expect, it, vi } from 'vitest';
+import { runMyFeature } from '../command';
 
-describe("my-feature command", () => {
-  it("should scan packages successfully", async () => {
-    const consoleSpy = vi.spyOn(console, "log");
+describe('my-feature command', () => {
+  it('should scan packages successfully', async () => {
+    const consoleSpy = vi.spyOn(console, 'log');
 
     await runMyFeature({ dryRun: true });
 
-    expect(consoleSpy).toHaveBeenCalledWith(
-      expect.stringContaining("Scan Packages"),
-    );
+    expect(consoleSpy).toHaveBeenCalledWith(expect.stringContaining('Scan Packages'));
   });
 
-  it("should handle errors gracefully", async () => {
+  it('should handle errors gracefully', async () => {
     // Test error handling
   });
 });
@@ -571,23 +565,23 @@ src/
 
 ```typescript
 // 1. Node.js built-ins
-import fs from "node:fs/promises";
-import path from "node:path";
+import fs from 'node:fs/promises';
+import path from 'node:path';
 
 // 2. External dependencies
-import { Command } from "commander";
-import chalk from "chalk";
+import { Command } from 'commander';
+import chalk from 'chalk';
 
 // 3. Internal core utilities
-import { logger } from "../../core/logger";
-import { exec } from "../../core/exec";
+import { logger } from '../../core/logger';
+import { exec } from '../../core/exec';
 
 // 4. Internal feature imports
-import { scanPackages } from "./scanner";
-import { processResults } from "./processor";
+import { scanPackages } from './scanner';
+import { processResults } from './processor';
 
 // 5. Types
-import type { MyFeatureOptions } from "./types";
+import type { MyFeatureOptions } from './types';
 ```
 
 ---
@@ -603,20 +597,20 @@ import type { MyFeatureOptions } from "./types";
 **Example**:
 
 ```typescript
-import { describe, expect, it } from "vitest";
-import { processResults } from "../processor";
+import { describe, expect, it } from 'vitest';
+import { processResults } from '../processor';
 
-describe("processResults", () => {
-  it("should process valid results", () => {
-    const input = [{ name: "pkg1", valid: true }];
+describe('processResults', () => {
+  it('should process valid results', () => {
+    const input = [{ name: 'pkg1', valid: true }];
     const result = processResults(input);
 
     expect(result.success).toBe(true);
     expect(result.processed).toBe(1);
   });
 
-  it("should handle invalid results", () => {
-    const input = [{ name: "pkg1", valid: false }];
+  it('should handle invalid results', () => {
+    const input = [{ name: 'pkg1', valid: false }];
     const result = processResults(input);
 
     expect(result.success).toBe(false);
@@ -627,24 +621,24 @@ describe("processResults", () => {
 
 ### Integration Tests
 
-**Location**: `tools/afenda-cli/__tests__/integration/*.test.ts`
+**Location**: `tools/afena-cli/__tests__/integration/*.test.ts`
 
 **Purpose**: Test full command execution
 
 **Example**:
 
 ```typescript
-import { describe, expect, it } from "vitest";
-import { exec } from "../src/core/exec";
+import { describe, expect, it } from 'vitest';
+import { exec } from '../src/core/exec';
 
-describe("bundle command integration", () => {
-  it("should run all tasks in dry-run mode", async () => {
-    const result = await exec("pnpm afenda bundle --dry-run");
+describe('bundle command integration', () => {
+  it('should run all tasks in dry-run mode', async () => {
+    const result = await exec('pnpm afenda bundle --dry-run');
 
     expect(result.exitCode).toBe(0);
-    expect(result.stdout).toContain("README Generation");
-    expect(result.stdout).toContain("Metadata Checks");
-    expect(result.stdout).toContain("Housekeeping");
+    expect(result.stdout).toContain('README Generation');
+    expect(result.stdout).toContain('Metadata Checks');
+    expect(result.stdout).toContain('Housekeeping');
   });
 });
 ```
@@ -729,8 +723,8 @@ const reportBuilder = new ReportBuilder('mycommand', options);
 
 ```typescript
 // Don't do this
-console.log("┌────────────────┐");
-console.log("│ My Report      │");
+console.log('┌────────────────┐');
+console.log('│ My Report      │');
 // ... manual formatting
 ```
 
@@ -739,16 +733,16 @@ console.log("│ My Report      │");
 ✅ **Use ReportBuilder for consistency**
 
 ```typescript
-reportBuilder.addTask("task1", {
+reportBuilder.addTask('task1', {
   success: true,
-  message: "Completed successfully",
+  message: 'Completed successfully',
 });
 ```
 
 ❌ **Don't print ad-hoc messages**
 
 ```typescript
-console.log("✅ Task completed"); // Inconsistent formatting
+console.log('✅ Task completed'); // Inconsistent formatting
 ```
 
 ### 3. Error Handling
@@ -758,12 +752,12 @@ console.log("✅ Task completed"); // Inconsistent formatting
 ```typescript
 try {
   const result = await doSomething();
-  reportBuilder.addTask("task", {
+  reportBuilder.addTask('task', {
     success: true,
     message: result.message,
   });
 } catch (error) {
-  reportBuilder.addTask("task", {
+  reportBuilder.addTask('task', {
     success: false,
     message: `Failed: ${(error as Error).message}`,
     error: error as Error,
@@ -820,7 +814,8 @@ for (const pkg of packages) {
 ❌ **Don't repeat expensive operations**
 
 ```typescript
-for (const pkg of await discoverPackages()) { // Called N times
+for (const pkg of await discoverPackages()) {
+  // Called N times
   await processPackage(pkg);
 }
 ```
@@ -951,9 +946,9 @@ reportBuilder.addTask('task1', { ... });  // 'task1' must exist in REPORT_CONFIG
 #### Enable Verbose Logging
 
 ```typescript
-import { logger } from "../core/logger";
+import { logger } from '../core/logger';
 
-logger.setLevel("debug"); // Show all debug messages
+logger.setLevel('debug'); // Show all debug messages
 ```
 
 #### Inspect Generated Reports
@@ -990,14 +985,16 @@ export class HTMLReporter {
         <head><title>${report.title}</title></head>
         <body>
           <h1>${report.title}</h1>
-          ${
-      report.tasks.map((task) => `
-            <div class="task ${task.success ? "success" : "error"}">
+          ${report.tasks
+            .map(
+              (task) => `
+            <div class="task ${task.success ? 'success' : 'error'}">
               <h2>${task.icon} ${task.title}</h2>
               <p>${task.message}</p>
             </div>
-          `).join("")
-    }
+          `,
+            )
+            .join('')}
         </body>
       </html>
     `;
@@ -1030,17 +1027,13 @@ export async function runComplexWorkflow() {
 Profile and optimize slow commands:
 
 ```typescript
-import { performance } from "node:perf_hooks";
+import { performance } from 'node:perf_hooks';
 
 export async function runOptimizedCommand() {
   const start = performance.now();
 
   // Use parallel processing
-  const results = await Promise.all([
-    scanPackages(),
-    analyzeMetadata(),
-    collectMetrics(),
-  ]);
+  const results = await Promise.all([scanPackages(), analyzeMetadata(), collectMetrics()]);
 
   const duration = performance.now() - start;
   console.log(`Completed in ${duration.toFixed(2)}ms`);
@@ -1063,20 +1056,20 @@ export async function runOptimizedCommand() {
 
 ### Key Files
 
-| File                                                              | Purpose                      |
-| ----------------------------------------------------------------- | ---------------------------- |
-| [`core/report-config.ts`](./afenda-cli/src/core/report-config.ts) | Report structure definitions |
-| [`cli.ts`](./afenda-cli/src/cli.ts)                               | CLI command registration     |
-| [`bin/afenda.ts`](./afenda-cli/bin/afenda.ts)                     | CLI entry point              |
-| [`package.json`](./afenda-cli/package.json)                       | Package metadata             |
+| File                    | Purpose                      |
+| ----------------------- | ---------------------------- |
+| `core/report-config.ts` | Report structure definitions |
+| `cli.ts`                | CLI command registration     |
+| `bin/afena`             | CLI entry point              |
+| `package.json`          | Package metadata             |
 
 ### Related Documentation
 
-- [Tools README](./README.md) - Complete tools overview
-- [START_HERE.md](./START_HERE.md) - Quick start guide
-- [afenda-cli README](./afenda-cli/README.md) - CLI reference
-- [quality-metrics README](./quality-metrics/README.md) - Metrics guide
-- [CONTRIBUTING.md](../CONTRIBUTING.md) - Contribution guidelines
+- Tools README - Complete tools overview
+- START_HERE.md - Quick start guide
+- afena-cli README - CLI reference
+- quality-metrics README - Metrics guide
+- CONTRIBUTING.md - Contribution guidelines
 
 ---
 
@@ -1087,9 +1080,5 @@ export async function runOptimizedCommand() {
 This file is auto-generated via `pnpm afenda tools-docs`. Manual edits will be
 overwritten.\
 Last updated: Auto-generated on save
-
----
-
-[⬆ Back to Top](#-tools-development-guide)
 
 </div>

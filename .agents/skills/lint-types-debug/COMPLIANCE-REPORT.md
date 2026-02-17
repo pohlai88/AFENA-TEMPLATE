@@ -83,9 +83,9 @@
 **Fixed Files:**
 - `apps/web/src/lib/api/entity-route-handlers.ts` - cursor, meta properties
 - `packages/crud/src/read.ts` - cache options (includeDeleted, limit, offset, cursor)
-- `tools/afenda-cli/src/executor/resolver.ts` - env property
-- `tools/afenda-cli/src/register.ts` - subcommand property
-- `tools/afenda-cli/src/index.ts` - packages property
+- `tools/afena-cli/src/executor/resolver.ts` - env property
+- `tools/afena-cli/src/register.ts` - subcommand property
+- `tools/afena-cli/src/index.ts` - packages property
 
 **Pattern Used:** `...(val ? { key: val } : {})` ✅ Matches skills documentation
 
@@ -128,7 +128,7 @@ Array access properly handled with:
 
 **Library Packages:** ✅ All have `composite: true`, `declaration: true`  
 **Leaf Apps (web):** ✅ Has `composite: false`  
-**Tools (afenda-cli):** ✅ Has `composite: false`
+**Tools (afena-cli):** ✅ Has `composite: false`
 
 ---
 

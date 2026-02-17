@@ -17,6 +17,7 @@ AFENDA-NEXUS now has a comprehensive quality management system with:
 ### Viewing the Dashboard
 
 1. **Start the development server**:
+
    ```bash
    pnpm dev
    ```
@@ -99,15 +100,15 @@ Create `.quality-gates.json` in workspace root:
 
 ```json
 {
-    "minCoverageLines": 80,
-    "minCoverageFunctions": 80,
-    "minCoverageStatements": 80,
-    "minCoverageBranches": 75,
-    "maxCoverageDropPct": 2,
-    "maxTypeErrors": 0,
-    "maxLintErrors": 0,
-    "maxLintWarnings": 10,
-    "maxBuildTimeIncreasePct": 20
+  "minCoverageLines": 80,
+  "minCoverageFunctions": 80,
+  "minCoverageStatements": 80,
+  "minCoverageBranches": 75,
+  "maxCoverageDropPct": 2,
+  "maxTypeErrors": 0,
+  "maxLintErrors": 0,
+  "maxLintWarnings": 10,
+  "maxBuildTimeIncreasePct": 20
 }
 ```
 
@@ -154,30 +155,30 @@ GET /api/quality/metrics
 
 ```json
 {
-    "timestamp": "2026-02-17T10:30:00Z",
-    "coverage": {
-        "lines": 85.5,
-        "functions": 88.2,
-        "branches": 78.9,
-        "statements": 86.1
-    },
-    "build": {
-        "duration": 12300,
-        "bundleSize": 512000
-    },
-    "codeQuality": {
-        "typeErrors": 0,
-        "lintErrors": 0,
-        "lintWarnings": 5,
-        "todoCount": 12,
-        "filesCount": 450,
-        "linesOfCode": 45000
-    },
-    "git": {
-        "commitCount": 1000,
-        "contributors": 137,
-        "lastCommitDate": "2026-02-17T10:30:00Z"
-    }
+  "timestamp": "2026-02-17T10:30:00Z",
+  "coverage": {
+    "lines": 85.5,
+    "functions": 88.2,
+    "branches": 78.9,
+    "statements": 86.1
+  },
+  "build": {
+    "duration": 12300,
+    "bundleSize": 512000
+  },
+  "codeQuality": {
+    "typeErrors": 0,
+    "lintErrors": 0,
+    "lintWarnings": 5,
+    "todoCount": 12,
+    "filesCount": 450,
+    "linesOfCode": 45000
+  },
+  "git": {
+    "commitCount": 1000,
+    "contributors": 137,
+    "lastCommitDate": "2026-02-17T10:30:00Z"
+  }
 }
 ```
 
@@ -228,15 +229,15 @@ GET /api/quality/trends?days=7
 
 ```json
 [
-    {
-        "date": "2026-02-17",
-        "coverage": 85.5,
-        "buildTime": 12300,
-        "typeErrors": 0,
-        "lintErrors": 0,
-        "bundleSize": 2.4,
-        "cacheHitRate": 0
-    }
+  {
+    "date": "2026-02-17",
+    "coverage": 85.5,
+    "buildTime": 12300,
+    "typeErrors": 0,
+    "lintErrors": 0,
+    "bundleSize": 2.4,
+    "cacheHitRate": 0
+  }
 ]
 ```
 
@@ -311,8 +312,8 @@ Run quality checks on any SHA:
 ```yaml
 # In GitHub UI: Actions → Quality Gates → Run workflow
 Inputs:
-    sha: abc123def456
-    base-branch: main
+  sha: abc123def456
+  base-branch: main
 ```
 
 ### Local CI Simulation
@@ -437,11 +438,11 @@ pnpm update <package-name>
 
 ## 📚 Additional Resources
 
-- [TOOL-DEVELOPMENT-PLAN.md](TOOL-DEVELOPMENT-PLAN.md) - Full development plan
-- [SPRINT-0-COMPLETE.md](SPRINT-0-COMPLETE.md) - Database foundation
-- [SPRINT-1-COMPLETE.md](SPRINT-1-COMPLETE.md) - Quality gates + security
-- [Quality Dashboard](/quality) - Interactive UI
-- [API Documentation](/api/docs) - Full API reference
+- TOOL-DEVELOPMENT-PLAN.md - Full development plan
+- SPRINT-0-COMPLETE.md - Database foundation
+- SPRINT-1-COMPLETE.md - Quality gates + security
+- Quality Dashboard - Interactive UI
+- API Documentation - Full API reference
 
 ---
 

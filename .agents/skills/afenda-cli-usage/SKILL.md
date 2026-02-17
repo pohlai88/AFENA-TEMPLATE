@@ -1,4 +1,4 @@
-# afenda-cli-usage
+# afena-cli-usage
 
 ## Description
 Comprehensive guide to the `afenda` CLI tool: code generation, validation, monorepo management, and adapter pipeline workflows.
@@ -297,7 +297,7 @@ Show all registered commands from `afenda.registry.json`.
 ```
 Registered commands:
 
-  types → npx tsx tools/afenda-cli/src/types/generator.ts
+  types → npx tsx tools/afena-cli/src/types/generator.ts
   types:check → tsc --noEmit
   docs → npx markdownlint **/*.md
   build → turbo run build
@@ -533,7 +533,7 @@ The CLI generates several files in `.afenda/` directory:
 ### `afenda command not found`
 ```bash
 # Rebuild CLI
-cd tools/afenda-cli
+cd tools/afena-cli
 pnpm build
 cd ../..
 
@@ -554,7 +554,7 @@ pnpm afenda discover --json > afenda.registry.json
 ### `TypeScript errors in CLI`
 ```bash
 # Rebuild with latest types
-cd tools/afenda-cli
+cd tools/afena-cli
 pnpm type-check
 pnpm build
 ```
@@ -579,7 +579,7 @@ fi
 
 ## References
 
-- [tools/afenda-cli/](../../../tools/afenda-cli/) - CLI source code
+- [tools/afena-cli/](../../../tools/afena-cli/) - CLI source code
 - [afenda.registry.json](../../../afenda.registry.json) - Command registry
 - [.afendarc.json](../../../.afendarc.json) - CLI configuration
 - [tools/GUIDE.md](../../../tools/GUIDE.md) - Tools directory guide

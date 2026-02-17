@@ -53,7 +53,7 @@ afenda-monorepo/
 │   ├── ui/               # Shared React components
 │   └── ...               # Other shared packages
 ├── tools/
-│   └── afenda-cli/        # CLI tool for metadata generation
+│   └── afena-cli/        # CLI tool for metadata generation
 └── docs/
     ├── adr/              # Architecture Decision Records
     ├── api/              # API documentation

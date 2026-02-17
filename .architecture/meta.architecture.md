@@ -1,7 +1,7 @@
 # afenda CLI & Meta Engine — Architecture Reference
 
 > **Auto-generated** by `afenda readme gen` at 2026-02-16T12:44:12Z. Do not edit — regenerate instead.
-> **Package:** `@afenda/cli` (`tools/afenda-cli`)
+> **Package:** `@afenda/cli` (`tools/afena-cli`)
 > **Purpose:** Capability Truth Ledger — scan, check, generate, fix. README generation. Entity scaffolding.
 
 ---
@@ -39,7 +39,7 @@ Architecture documents are auto-generated from live codebase introspection durin
 | **Source directories** | bundle, capability, checks, core, discovery, docs, readme |
 
 ```
-tools/afenda-cli/src/
+tools/afena-cli/src/
 ├── bundle/
 ├── capability/
 ├── checks/

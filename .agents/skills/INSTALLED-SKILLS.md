@@ -278,7 +278,7 @@ Ask me things like:
 Your project also has custom skills in `.agent\skills`:
 
 - `afenda-architecture` - Your specific architecture patterns
-- `afenda-cli-usage` - CLI tool usage
+- `afena-cli-usage` - CLI tool usage
 - `afenda-database-patterns` - Database patterns and conventions
 - `ci-cd-pipeline` - CI/CD setup
 - `domain-driven-patterns` - DDD patterns

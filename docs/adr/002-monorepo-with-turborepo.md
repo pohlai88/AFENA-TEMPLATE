@@ -42,7 +42,7 @@ afenda-monorepo/
 │   ├── migration/    # Migration utilities
 │   └── search/       # Search functionality
 └── tools/
-    └── afenda-cli/    # CLI tool for metadata generation
+    └── afena-cli/    # CLI tool for metadata generation
 ```
 
 ### Build Pipeline

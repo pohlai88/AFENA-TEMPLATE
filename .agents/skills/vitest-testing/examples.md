@@ -578,7 +578,7 @@ import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
   test: {
-    projects: ['packages/*', 'tools/afenda-cli'],
+    projects: ['packages/*', 'tools/afena-cli'],
     reporters: process.env.GITHUB_ACTIONS === 'true'
       ? ['default', 'github-actions', 'junit']
       : ['default', 'junit'],

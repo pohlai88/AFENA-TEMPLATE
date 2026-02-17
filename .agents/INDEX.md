@@ -12,7 +12,7 @@ Quick reference guide to all agent resources in this workspace.
 | Category | Skills |
 |----------|--------|
 | **??? Architecture & Structure** | [afenda-architecture](#afenda-architecture) · [package-development](#package-development) · [afenda-database-patterns](#afenda-database-patterns) |
-| **?? Development Tools** | [afenda-cli-usage](#afenda-cli-usage) · [lint-types-debug](#lint-types-debug) |
+| **?? Development Tools** | [afena-cli-usage](#afena-cli-usage) · [lint-types-debug](#lint-types-debug) |
 | **?? Testing & Quality** | [vitest-testing](#vitest-testing) · [monorepo-testing-strategy](#monorepo-testing-strategy) |
 | **??? Database & Infrastructure** | [neon-postgres](#neon-postgres) |
 | **?? Domain Design** | [domain-driven-patterns](#domain-driven-patterns) |
@@ -103,7 +103,7 @@ Quick reference guide to all agent resources in this workspace.
 
 ### ?? Development Tools
 
-#### @afenda-cli-usage ???
+#### @afena-cli-usage ???
 **afenda CLI tool usage for code generation, validation, and monorepo management**
 
 **Use when:**
@@ -128,7 +128,7 @@ pnpm afenda housekeeping validate-deps       # Check circular dependencies
 pnpm afenda bundle check-exports             # Validate package exports
 ```
 
-**File:** [skills/afenda-cli-usage/SKILL.md](./skills/afenda-cli-usage/SKILL.md) (12KB)
+**File:** [skills/afena-cli-usage/SKILL.md](./skills/afena-cli-usage/SKILL.md) (12KB)
 
 ---
 

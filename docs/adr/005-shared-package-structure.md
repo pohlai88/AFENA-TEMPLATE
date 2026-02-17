@@ -43,7 +43,7 @@ We will follow a **domain-driven package structure** with clear rules for packag
    - `ui` - Shared React components (shadcn/ui)
 
 4. **Tooling** (`tools/`)
-   - `afenda-cli` - CLI for metadata generation and housekeeping
+   - `afena-cli` - CLI for metadata generation and housekeeping
 
 5. **Applications** (`apps/`)
    - `web` - Next.js web application
@@ -236,7 +236,7 @@ All packages use `tsup` for bundling:
 Some packages may deviate from structure:
 - **`eslint-config`**: Configuration-only, no `src/` directory
 - **`typescript-config`**: Configuration-only, no `src/` directory
-- **`afenda-cli`**: CLI tool, may have different structure
+- **`afena-cli`**: CLI tool, may have different structure
 
 ## References
 

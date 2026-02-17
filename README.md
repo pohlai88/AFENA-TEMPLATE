@@ -23,7 +23,7 @@ afenda-monorepo/
 │   ├── ui/
 │   └── workflow/
 ├── tools/
-│   └── afenda-cli/
+│   └── afena-cli/
 ├── turbo.json
 ├── pnpm-workspace.yaml
 └── package.json
@@ -45,16 +45,16 @@ afenda-monorepo/
 | `afenda-typescript-config` | `packages/typescript-config` | config  |             |
 | `afenda-ui`                | `packages/ui`                | ui      |             |
 | `afenda-workflow`          | `packages/workflow`          | library |             |
-| `@afenda/cli`              | `tools/afenda-cli`           | tool    |             |
+| `@afenda/cli`              | `tools/afena-cli`           | tool    |             |
 
 ## Scripts
 
 | Script                       | Command                                                                                  |
 | ---------------------------- | ---------------------------------------------------------------------------------------- |
 | `pnpm adapter:build`         | `pnpm afenda meta emit-all`                                                              |
-| `pnpm afenda`                | `node tools/afenda-cli/dist/index.js`                                                    |
-| `pnpm afenda:dev`            | `tsx tools/afenda-cli/src/index.ts`                                                      |
-| `pnpm afenda:discover`       | `node tools/afenda-cli/dist/discover.js`                                                 |
+| `pnpm afenda`                | `node tools/afena-cli/dist/index.js`                                                    |
+| `pnpm afenda:dev`            | `tsx tools/afena-cli/src/index.ts`                                                      |
+| `pnpm afenda:discover`       | `node tools/afena-cli/dist/discover.js`                                                 |
 | `pnpm audit`                 | `pnpm audit --audit-level=moderate`                                                      |
 | `pnpm audit:fix`             | `pnpm audit --fix`                                                                       |
 | `pnpm audit:prod`            | `pnpm audit --prod --audit-level=moderate`                                               |
@@ -76,7 +76,7 @@ afenda-monorepo/
 | `pnpm meta:check`            | `pnpm afenda meta check`                                                                 |
 | `pnpm meta:gen`              | `pnpm afenda meta gen`                                                                   |
 | `pnpm meta:matrix`           | `pnpm afenda meta matrix`                                                                |
-| `pnpm postinstall`           | `node -e "try{require('./tools/afenda-cli/dist/discover.js')}catch(e){process.exit(0)}"` |
+| `pnpm postinstall`           | `node -e "try{require('./tools/afena-cli/dist/discover.js')}catch(e){process.exit(0)}"` |
 | `pnpm readme:check`          | `pnpm afenda readme check`                                                               |
 | `pnpm readme:gen`            | `pnpm afenda readme gen`                                                                 |
 | `pnpm readme:sync`           | `pnpm afenda readme sync`                                                                |
