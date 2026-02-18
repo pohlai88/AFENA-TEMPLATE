@@ -1,4 +1,8 @@
-# afenda-recruitment
+﻿# afenda-recruitment
+
+<!-- afenda:badges -->
+![E - Human Capital Management](https://img.shields.io/badge/E-Human+Capital+Management-00B8D9?style=flat-square) ![Layer 2](https://img.shields.io/badge/layer-2%20Domain%20Service-5C4EE5?style=flat-square) ![pkg](https://img.shields.io/badge/pkg-afenda--recruitment-555555?style=flat-square) ![docs](https://img.shields.io/badge/class-E%20·%20of%2010-lightgrey?style=flat-square)
+
 
 Applicant tracking and recruitment management for the AFENDA-NEXUS ERP system.
 

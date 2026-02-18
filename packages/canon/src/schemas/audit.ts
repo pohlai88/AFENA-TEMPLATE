@@ -3,20 +3,10 @@ import { z } from 'zod';
 import { channelSchema } from '../enums/channel';
 
 import { actionFamilySchema } from './action';
-
-const jsonValueSchema: z.ZodType<unknown> = z.lazy(() =>
-  z.union([
-    z.string(),
-    z.number(),
-    z.boolean(),
-    z.null(),
-    z.array(jsonValueSchema),
-    z.record(z.string(), jsonValueSchema),
-  ]),
-);
+import { jsonValueSchema } from './json-value';
 
 export const auditLogEntrySchema = z.object({
-  id: z.string().uuid(),
+  id: z.uuid(),
   orgId: z.string(),
   actorUserId: z.string(),
   actionType: z.string(),
@@ -24,8 +14,8 @@ export const auditLogEntrySchema = z.object({
   entityType: z.string(),
   entityId: z.string(),
   requestId: z.string().nullable(),
-  mutationId: z.string().uuid(),
-  batchId: z.string().uuid().nullable(),
+  mutationId: z.uuid(),
+  batchId: z.uuid().nullable(),
   versionBefore: z.number().int().nullable(),
   versionAfter: z.number().int(),
   channel: channelSchema,

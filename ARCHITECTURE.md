@@ -98,42 +98,47 @@ Packages only access others through `src/index.ts` exports. Internal modules are
 **Dependencies:** Layer 0 only  
 **Location:** `packages/canon`, `packages/database`, `packages/logger`, `packages/ui`
 
-### `canon` - The Type System
+### `canon` - The Metadata Catalog
 
-**Definition:** Single source of truth for ALL types, enums, and schemas.
+**Definition:** The system's schema of schemas — a self-describing metadata registry that defines every entity, action, field type, capability, type mapping, and business asset.
+
+> Canon defines the model and rules; Database stores instances; Tools reconcile.
 
 **Exports:**
-- 211+ entity type definitions (Invoice, Payment, Customer, etc.)
-- Action types and verbs (CREATE, UPDATE, DELETE, etc.)
-- Policy types (permissions, scopes, field rules)
-- Zod validation schemas
-- ERP adapter contracts
+- Registries: entity metadata, action verbs/families, capability catalog, entity contracts
+- LiteMetadata: asset key grammar, alias resolution, quality rules, lineage helpers, PII classification, glossary types, asset fingerprinting
+- Mappings: Postgres → Canon type mapping, CSV type inference, type compatibility matrix
+- Validators: field value validation (17 DataTypes), type config validation
+- Enums: 23 cross-cutting vocabulary enums with Zod schemas
+- Types: ActionType, EntityRef, MutationSpec, Receipt, PolicyDecision, AuditLogEntry, etc.
 
 **Function:**
-- Prevents type duplication across packages
-- Enforces ubiquitous language
-- Enables type-safe development
+- Prevents type duplication across packages (ubiquitous language)
+- Provides deterministic metadata operations (alias resolution, quality scoring, key parsing)
+- Powers migration with type mapping and PII detection
+- Enables type-safe, audit-grade metadata governance
 
 **Features:**
-- Zero workspace dependencies
-- Only Zod for schema validation
-- Exports types, never implements business logic
+- Zero workspace dependencies — only `zod` for schema validation
+- Pure functions only — no database reads, no side effects
+- Business-first asset model (BusinessObject + Policy as first-class concepts)
+- Two-layer quality model: business dimensions compile into executable rules
 
 **Example:**
 ```typescript
-// packages/canon/src/types/accounting.ts
-export interface TaxRate {
-  taxCode: string;
-  rate: number;
-  effectiveFrom: Date;
-  effectiveTo?: Date;
-}
+// Metadata operations (pure functions)
+import { buildAssetKey, classifyColumn, mapPostgresType } from 'afenda-canon';
+import { matchAlias, resolveAlias, slugify } from 'afenda-canon';
+import { compileQualityRule, scoreQualityTier } from 'afenda-canon';
+import type { ActionType, EntityRef, CapabilityKey } from 'afenda-canon';
 
-// All packages import from canon
-import type { TaxRate } from 'afenda-canon';
+// Entity data types come from DATABASE, not Canon
+import type { Contact, Invoice } from 'afenda-database';
 ```
 
 **Critical Rule:** ❌ Canon NEVER imports from business domains (Layer 2) or applications (Layer 3).
+
+> Full architecture: see `packages/canon/canon.architecture.md`
 
 ---
 

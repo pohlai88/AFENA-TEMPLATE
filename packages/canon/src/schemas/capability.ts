@@ -1,11 +1,11 @@
 import { z } from 'zod';
 
 import {
-  CAPABILITY_DOMAINS,
-  CAPABILITY_KINDS,
-  CAPABILITY_NAMESPACES,
-  RBAC_SCOPES,
-  RBAC_TIERS,
+    CAPABILITY_DOMAINS,
+    CAPABILITY_KINDS,
+    CAPABILITY_NAMESPACES,
+    RBAC_SCOPES,
+    RBAC_TIERS,
 } from '../types/capability';
 
 // ── Capability Descriptor Schema ────────────────────────────
@@ -64,8 +64,6 @@ export type ExceptionScope = z.infer<typeof exceptionScopeSchema>;
 
 // ── Capability Exception Schema ─────────────────────────────
 
-const dateOnlyRegex = /^\d{4}-\d{2}-\d{2}$/;
-
 export const capabilityExceptionSchema = z.object({
   id: z.string().min(1),
   key: z.string().min(3),
@@ -73,13 +71,10 @@ export const capabilityExceptionSchema = z.object({
   scope: exceptionScopeSchema,
   reason: z.string().min(1),
   owner: z.string().min(1),
-  createdAt: z.string().regex(dateOnlyRegex, 'Must be YYYY-MM-DD'),
-  lastReviewedOn: z
-    .string()
-    .regex(dateOnlyRegex, 'Must be YYYY-MM-DD')
-    .optional(),
+  createdAt: z.iso.date({ error: 'Must be YYYY-MM-DD' }),
+  lastReviewedOn: z.iso.date({ error: 'Must be YYYY-MM-DD' }).optional(),
   reviewEveryDays: z.number().int().positive(),
-  expiresOn: z.string().regex(dateOnlyRegex, 'Must be YYYY-MM-DD'),
+  expiresOn: z.iso.date({ error: 'Must be YYYY-MM-DD' }),
 });
 
 export type CapabilityException = z.infer<typeof capabilityExceptionSchema>;

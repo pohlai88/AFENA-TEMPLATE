@@ -1,4 +1,8 @@
-# Transfer Pricing (afenda-transfer-pricing)
+﻿# Transfer Pricing (afenda-transfer-pricing)
+
+<!-- afenda:badges -->
+![A - Financial Management](https://img.shields.io/badge/A-Financial+Management-0052CC?style=flat-square) ![Layer 2](https://img.shields.io/badge/layer-2%20Domain%20Service-5C4EE5?style=flat-square) ![pkg](https://img.shields.io/badge/pkg-afenda--transfer--pricing-555555?style=flat-square) ![docs](https://img.shields.io/badge/class-A%20·%20of%2010-lightgrey?style=flat-square)
+
 
 **Transfer pricing for intercompany transactions with OECD BEPS compliance, arm's length pricing methods, country-by-country reporting, and advance pricing agreements.**
 

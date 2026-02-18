@@ -1,4 +1,8 @@
-# Trade Compliance Package
+﻿# Trade Compliance Package
+
+<!-- afenda:badges -->
+![B - Procurement & Supply Chain](https://img.shields.io/badge/B-Procurement+%26+Supply+Chain-36B37E?style=flat-square) ![Layer 2](https://img.shields.io/badge/layer-2%20Domain%20Service-5C4EE5?style=flat-square) ![pkg](https://img.shields.io/badge/pkg-afenda--trade--compliance-555555?style=flat-square) ![docs](https://img.shields.io/badge/class-B%20·%20of%2010-lightgrey?style=flat-square)
+
 
 Global trade and customs management for afenda NEXUS.
 

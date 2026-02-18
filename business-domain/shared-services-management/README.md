@@ -1,4 +1,8 @@
-# Shared Services Management
+﻿# Shared Services Management
+
+<!-- afenda:badges -->
+![J - Corporate & Strategy](https://img.shields.io/badge/J-Corporate+%26+Strategy-8777D9?style=flat-square) ![Layer 2](https://img.shields.io/badge/layer-2%20Domain%20Service-5C4EE5?style=flat-square) ![pkg](https://img.shields.io/badge/pkg-afenda--shared--services--management-555555?style=flat-square) ![docs](https://img.shields.io/badge/class-J%20·%20of%2010-lightgrey?style=flat-square)
+
 
 Shared service center (SSC) cost allocation and chargeback automation.
 

@@ -1,4 +1,8 @@
-# afenda-promoter
+﻿# afenda-promoter
+
+<!-- afenda:badges -->
+![C - Sales, Marketing & CX](https://img.shields.io/badge/C-Sales%2C+Marketing+%26+CX-FF5630?style=flat-square) ![Layer 2](https://img.shields.io/badge/layer-2%20Domain%20Service-5C4EE5?style=flat-square) ![pkg](https://img.shields.io/badge/pkg-afenda--promoter-555555?style=flat-square) ![docs](https://img.shields.io/badge/class-C%20·%20of%2010-lightgrey?style=flat-square)
+
 
 Brand promoter and field marketing management for the AFENDA-NEXUS ERP system.
 
