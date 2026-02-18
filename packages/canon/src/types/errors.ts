@@ -14,7 +14,53 @@ export const ERROR_CODES = [
   'NOT_FOUND',
   'INTERNAL_ERROR',
 ] as const;
+
 export type ErrorCode = (typeof ERROR_CODES)[number];
+
+/**
+ * Internal error class for Canon validation errors
+ * 
+ * NOTE: This is for internal use only. Public APIs should return CanonResult instead.
+ */
+export class CanonValidationError extends Error {
+  constructor(
+    message: string,
+    public readonly code: string,
+    public readonly field?: string,
+    public readonly details?: Record<string, unknown>
+  ) {
+    super(message);
+    this.name = 'CanonValidationError';
+  }
+
+  /**
+   * Convert to CanonIssue format
+   */
+  toIssue(): { code: string; message: string; path?: (string | number)[]; details?: Record<string, unknown> } {
+    return {
+      code: this.code,
+      message: this.message,
+      ...(this.field ? { path: [this.field] } : {}),
+      ...(this.details ? { details: this.details } : {}),
+    };
+  }
+}
+
+/**
+ * Internal error class for Canon parsing errors
+ * 
+ * NOTE: This is for internal use only. Public APIs should return CanonResult instead.
+ */
+export class CanonParseError extends Error {
+  constructor(
+    message: string,
+    public readonly input: unknown,
+    public readonly expected: string
+  ) {
+    super(message);
+    this.name = 'CanonParseError';
+  }
+}
 
 /** Structured error object for ApiResponse. */
 export interface KernelError {

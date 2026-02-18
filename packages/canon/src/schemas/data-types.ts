@@ -4,18 +4,18 @@ import type { DataType } from '../enums/data-types';
 
 export const TYPE_CONFIG_SCHEMAS = {
   short_text: z.object({
-    maxLength: z.number().int().min(1).max(4000).default(255),
+    maxLength: z.coerce.number().int().min(1).max(4000).default(255),
   }),
   long_text: z.object({
-    maxLength: z.number().int().min(1).max(100000).optional(),
+    maxLength: z.coerce.number().int().min(1).max(100000).optional(),
   }),
   integer: z.object({
-    min: z.number().int().optional(),
-    max: z.number().int().optional(),
+    min: z.coerce.number().int().optional(),
+    max: z.coerce.number().int().optional(),
   }),
   decimal: z.object({
-    precision: z.number().int().min(1).max(38).default(18),
-    scale: z.number().int().min(0).max(18).default(6),
+    precision: z.coerce.number().int().min(1).max(38).default(18),
+    scale: z.coerce.number().int().min(0).max(18).default(6),
   }),
   money: z.object({
     currencyField: z.string().optional(),
@@ -31,7 +31,7 @@ export const TYPE_CONFIG_SCHEMAS = {
   }),
   multi_enum: z.object({
     choices: z.array(z.string().min(1)).min(1).max(100),
-    maxSelections: z.number().int().min(1).optional(),
+    maxSelections: z.coerce.number().int().min(1).optional(),
   }),
   email: z.object({}),
   phone: z.object({}),
@@ -41,6 +41,35 @@ export const TYPE_CONFIG_SCHEMAS = {
   }),
   json: z.object({
     schema: z.record(z.string(), z.unknown()).optional(),
+  }),
+  binary: z.object({
+    maxBytes: z.coerce.number().int().min(1).optional(),
+  }),
+  file: z.object({
+    maxBytes: z.coerce.number().int().min(1).optional(),
+    allowedMimeTypes: z.array(z.string()).optional(),
+  }),
+  single_select: z.object({
+    choices: z.array(z.string().min(1)).min(1).max(100),
+  }),
+  multi_select: z.object({
+    choices: z.array(z.string().min(1)).min(1).max(100),
+    maxSelections: z.coerce.number().int().min(1).optional(),
+  }),
+  rich_text: z.object({
+    maxLength: z.coerce.number().int().min(1).max(100000).optional(),
+  }),
+  currency: z.object({
+    currencyCode: z.string().length(3).default('USD'),
+    precision: z.coerce.number().int().min(0).max(10).default(2),
+  }),
+  formula: z.object({
+    expression: z.string().min(1),
+    resultType: z.string().min(1),
+  }),
+  relation: z.object({
+    targetEntity: z.string().min(1),
+    relationshipType: z.enum(['one_to_one', 'one_to_many', 'many_to_many']).optional(),
   }),
 } as const satisfies Record<DataType, z.ZodType>;
 

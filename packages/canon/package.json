@@ -2,6 +2,8 @@
   "name": "afenda-canon",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
+  "sideEffects": false,
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
@@ -10,6 +12,43 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/index.mjs",
       "require": "./dist/index.js"
+    },
+    "./lite-meta": {
+      "types": "./dist/lite-meta/index.d.ts",
+      "import": "./dist/lite-meta/index.mjs",
+      "require": "./dist/lite-meta/index.js"
+    },
+    "./schemas": {
+      "types": "./dist/schemas/index.d.ts",
+      "import": "./dist/schemas/index.mjs",
+      "require": "./dist/schemas/index.js"
+    },
+    "./types": {
+      "types": "./dist/types/index.d.ts",
+      "import": "./dist/types/index.mjs",
+      "require": "./dist/types/index.js"
+    },
+    "./mappings": {
+      "types": "./dist/mappings/index.d.ts",
+      "import": "./dist/mappings/index.mjs",
+      "require": "./dist/mappings/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "typesVersions": {
+    "*": {
+      "lite-meta": [
+        "dist/lite-meta/index.d.ts"
+      ],
+      "schemas": [
+        "dist/schemas/index.d.ts"
+      ],
+      "types": [
+        "dist/types/index.d.ts"
+      ],
+      "mappings": [
+        "dist/mappings/index.d.ts"
+      ]
     }
   },
   "scripts": {
@@ -17,15 +56,20 @@
     "dev": "tsup --watch",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx --fix",
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage"
   },
   "dependencies": {
     "zod": "catalog:"
   },
   "devDependencies": {
+    "@fast-check/vitest": "~0.2.4",
     "@types/node": "catalog:",
     "afenda-eslint-config": "workspace:^",
     "afenda-typescript-config": "workspace:*",
+    "fast-check": "~4.5.3",
     "tslib": "catalog:",
     "tsup": "catalog:",
     "typescript": "catalog:"

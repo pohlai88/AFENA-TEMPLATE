@@ -1,8 +1,19 @@
 # afenda-canon
 
-**Layer 1: Foundation** • **Role:** Type System & Contracts
+**Version:** 1.0.0 • **Status:** Production-Ready ✅  
+**Layer 1: Foundation** • **Role:** Type System & Metadata Catalog
 
-Single source of truth for ALL types, enums, and Zod schemas across AFENDA-NEXUS.
+Single source of truth for ALL types, enums, Zod schemas, and metadata definitions across AFENDA-NEXUS.
+
+---
+
+## 🎉 v1.0 Production Status
+
+**Shipped:** February 18, 2026  
+**Tests:** 181/181 passing (100%)  
+**TypeScript:** 0 errors  
+**Coverage:** 44% overall (75-100% on core modules)  
+**Dependencies:** `zod` only (zero workspace deps)
 
 ---
 
@@ -19,10 +30,11 @@ Layer 0: Configuration (eslint-config, typescript-config)
 
 **Purpose:**
 - Exports types, enums, and Zod schemas
+- Provides metadata catalog (LiteMetadata)
 - Enforces ubiquitous language across all packages
 - Prevents type duplication
 
-**Zero Business Logic:** This package contains ONLY type definitions.
+**Zero Business Logic:** This package contains ONLY type definitions and pure functions.
 
 ---
 
@@ -51,6 +63,22 @@ export enum DocStatus { DRAFT = 'draft', FINAL = 'final' }
 export const invoiceSchema = z.object({ id: z.string(), totalMinor: z.number() });
 export const paymentSchema = z.object({ id: z.string(), invoiceId: z.string() });
 // 211+ validation schemas
+```
+
+### 4. LiteMetadata Catalog (NEW in v1.0)
+
+```typescript
+// Asset key system
+import { buildAssetKey, parseAssetKey, validateAssetKey } from 'afenda-canon';
+
+// Type mappings
+import { POSTGRES_TO_CANON, mapPostgresType, TYPE_COMPAT_MATRIX } from 'afenda-canon';
+
+// Classification
+import { classifyColumn, PII_PATTERNS } from 'afenda-canon';
+
+// Lineage & Quality
+import { inferEdgeType, topoSortLineage, compileQualityRule } from 'afenda-canon';
 ```
 
 ---
@@ -134,14 +162,15 @@ const validated: Invoice = invoiceSchema.parse(input);
 
 - `zod` (validation schemas)
 
-### Who Depends on This Package
+### Who Depends on This Package (v1.0 Verified)
 
 - ✅ `afenda-database` (Layer 1) — imports types for schema definitions
 - ✅ `afenda-logger` (Layer 1) — imports types for log context
-- ✅ `afenda-workflow` (Layer 2) — imports types for workflow rules
+- ✅ `afenda-workflow` (Layer 2) — imports types + LiteMetadata (verified)
 - ✅ `afenda-advisory` (Layer 2) — imports types for analytics
+- ✅ `afenda-crud` (Layer 3) — imports types + LiteMetadata for API handlers
+- ✅ `apps/web` (Layer 3) — imports types for Next.js application
 - ✅ All 116 business-domain packages (Layer 2) — import types for business logic
-- ✅ `afenda-crud` (Layer 3) — imports types for API handlers
 
 ---
 
@@ -376,13 +405,21 @@ cat package.json | grep -A 5 dependencies
 
 ---
 
-## 📚 Related Documentation
+## 📚 Documentation
 
+**In this package:**
+- `README.md` (this file) - Quick start and usage guide
+- `canon.architecture.md` - Complete architecture specification (2113 lines)
+- `CANON-V1-COMPLETE.md` - Production readiness certification
+- `IMPLEMENTATION-STATUS.md` - Test coverage and status summary
+
+**Related:**
 - [ARCHITECTURE.md](../../ARCHITECTURE.md) - Complete 4-layer architecture
 - [business-domain/README.md](../../business-domain/README.md) - Domain package guide
 - [packages/database/README.md](../database/README.md) - Database schemas
 
 ---
 
+**Version:** 1.0.0  
 **Last Updated:** February 18, 2026  
-**Architecture Version:** 2.0 (Clean State)
+**Status:** Production-Ready ✅

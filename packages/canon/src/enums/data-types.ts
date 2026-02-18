@@ -16,6 +16,14 @@ export const DATA_TYPES = [
   'url',
   'entity_ref',
   'json',
+  'binary',
+  'file',
+  'single_select',
+  'multi_select',
+  'rich_text',
+  'currency',
+  'formula',
+  'relation',
 ] as const;
 
 export type DataType = (typeof DATA_TYPES)[number];

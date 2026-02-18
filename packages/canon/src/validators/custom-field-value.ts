@@ -132,6 +132,68 @@ export function validateFieldValue(
       return { valid: true };
     }
 
+    case 'binary': {
+      if (typeof value !== 'string') return { valid: false, error: 'Expected base64 string' };
+      const maxBytes = typeConfig.maxBytes as number | undefined;
+      const buffer = Buffer.from(value, 'base64');
+      if (maxBytes !== undefined && buffer.length > maxBytes)
+        return { valid: false, error: `Exceeds max bytes ${maxBytes}` };
+      return { valid: true };
+    }
+
+    case 'file': {
+      if (typeof value !== 'string') return { valid: false, error: 'Expected file path or reference' };
+      return { valid: true };
+    }
+
+    case 'single_select': {
+      if (typeof value !== 'string') return { valid: false, error: 'Expected string' };
+      const choices = typeConfig.choices as string[] | undefined;
+      if (choices && !choices.includes(value))
+        return { valid: false, error: `Value not in choices: ${choices.join(', ')}` };
+      return { valid: true };
+    }
+
+    case 'multi_select': {
+      if (!Array.isArray(value)) return { valid: false, error: 'Expected array' };
+      const choices = typeConfig.choices as string[] | undefined;
+      const maxSel = typeConfig.maxSelections as number | undefined;
+      if (maxSel !== undefined && value.length > maxSel)
+        return { valid: false, error: `Exceeds max selections ${maxSel}` };
+      for (const item of value) {
+        if (typeof item !== 'string')
+          return { valid: false, error: 'Array items must be strings' };
+        if (choices && !choices.includes(item))
+          return { valid: false, error: `Value "${item}" not in choices` };
+      }
+      return { valid: true };
+    }
+
+    case 'rich_text': {
+      if (typeof value !== 'string') return { valid: false, error: 'Expected string' };
+      const maxLen = typeConfig.maxLength as number | undefined;
+      if (maxLen !== undefined && value.length > maxLen)
+        return { valid: false, error: `Exceeds max length ${maxLen}` };
+      return { valid: true };
+    }
+
+    case 'currency': {
+      if (typeof value !== 'number' || !Number.isFinite(value))
+        return { valid: false, error: 'Expected finite number' };
+      return { valid: true };
+    }
+
+    case 'formula': {
+      // Formula values are typically read-only, computed results
+      return { valid: true };
+    }
+
+    case 'relation': {
+      if (typeof value !== 'string' && typeof value !== 'object')
+        return { valid: false, error: 'Expected string UUID or object reference' };
+      return { valid: true };
+    }
+
     default:
       return { valid: false, error: `Unknown data type: ${dataType as string}` };
   }
@@ -153,4 +215,12 @@ export const DATA_TYPE_VALUE_COLUMN_MAP: Record<DataType, string> = {
   url: 'value_text',
   entity_ref: 'value_uuid',
   json: 'value_json',
+  binary: 'value_blob',
+  file: 'value_blob',
+  single_select: 'value_text',
+  multi_select: 'value_json',
+  rich_text: 'value_text',
+  currency: 'value_numeric',
+  formula: 'value_text',
+  relation: 'value_uuid',
 };
