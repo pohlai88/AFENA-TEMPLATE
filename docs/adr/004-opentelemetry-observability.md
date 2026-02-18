@@ -8,6 +8,7 @@
 ## Context
 
 We needed an observability solution that provides:
+
 - **Distributed tracing** across services and functions
 - **Custom metrics** for business and application monitoring
 - **Error tracking** with context and debugging information
@@ -15,6 +16,7 @@ We needed an observability solution that provides:
 - **Production readiness** with minimal performance overhead
 
 Requirements:
+
 - Works with serverless/edge deployments (Next.js, Vercel)
 - Low overhead (< 5% performance impact)
 - Open standards to avoid vendor lock-in
@@ -59,19 +61,19 @@ Lightstep/Honeycomb/etc.
 ✅ **Production-ready**: Used by Google, Microsoft, AWS, etc.  
 ✅ **Cost control**: Configurable sampling (10% in prod = 90% cost reduction)  
 ✅ **Unified interface**: Single API for all observability needs  
-✅ **Best-of-breed**: OpenTelemetry for traces, Sentry for errors  
+✅ **Best-of-breed**: OpenTelemetry for traces, Sentry for errors
 
 ### Negative
 
 ⚠️ **Learning curve**: Team needs to learn OpenTelemetry concepts  
 ⚠️ **Initial overhead**: Setup complexity vs. simple logger  
 ⚠️ **Node.js-specific**: Auto-instrumentation only works server-side  
-⚠️ **Bundle size**: Adds ~2MB to server bundle (not edge-compatible)  
+⚠️ **Bundle size**: Adds ~2MB to server bundle (not edge-compatible)
 
 ### Neutral
 
 ℹ️ **Platform choice**: Team can choose any OTLP-compatible backend  
-ℹ️ **Gradual adoption**: Can enable/disable via environment variables  
+ℹ️ **Gradual adoption**: Can enable/disable via environment variables
 
 ## Implementation Details
 
@@ -135,49 +137,58 @@ try {
 ## Sampling Strategy
 
 ### Development
+
 - **100% sampling**: See every trace for debugging
 - **Environment**: `OTEL_TRACES_SAMPLER=always_on`
 
 ### Production
+
 - **10% sampling**: Balance cost and visibility
 - **Environment**: `OTEL_TRACES_SAMPLER=parentbased_traceidratio`, `OTEL_TRACES_SAMPLER_ARG=0.1`
 
 ### High Traffic
+
 - **1% sampling**: For very high-volume endpoints
 - **Environment**: `OTEL_TRACES_SAMPLER_ARG=0.01`
 
 ## Platform Recommendations
 
 ### For Traces & Metrics
+
 1. **Lightstep** - Best UI, 100GB/month free
 2. **Honeycomb** - Purpose-built for OTEL, 20M events/month free
 3. **Grafana Cloud** - Full stack, Prometheus + Tempo + Loki
 4. **New Relic** - Established player, good free tier
 
 ### For Errors
+
 - **Sentry** - Industry standard, 5K errors/month free
 
 ## Alternatives Considered
 
 ### Datadog
+
 - ✅ All-in-one platform
 - ❌ Expensive at scale ($15+/host/month)
 - ❌ Proprietary agent and API
 - **Rejected**: Vendor lock-in, high cost
 
 ### AWS X-Ray
+
 - ✅ Native AWS integration
 - ❌ AWS-only (no local dev, other clouds)
 - ❌ Limited features vs. OpenTelemetry
 - **Rejected**: Too limiting, AWS lock-in
 
 ### Application Insights (Azure)
+
 - ✅ Good Azure integration
 - ❌ Azure-only
 - ❌ Less mature OTLP support
 - **Rejected**: Azure lock-in
 
 ### Jaeger (self-hosted)
+
 - ✅ Free, open source
 - ❌ Operational burden
 - ❌ No managed offering
@@ -185,6 +196,7 @@ try {
 - **Rejected**: Too much ops work for lean team
 
 ### Custom Logging Only
+
 - ✅ Simple, no dependencies
 - ❌ No distributed tracing
 - ❌ No performance profiling
@@ -194,17 +206,20 @@ try {
 ## Migration Path
 
 ### Phase 1: Infrastructure (Complete)
+
 - ✅ Create `afenda-observability` package
 - ✅ OpenTelemetry SDK integration
 - ✅ Sentry integration
 - ✅ Health check endpoints
 
 ### Phase 2: Instrumentation (In Progress)
+
 - ⏳ Add tracing to API routes
 - ⏳ Database query tracing
 - ⏳ Custom business metrics
 
 ### Phase 3: Alerting
+
 - 🔜 Error rate alerts
 - 🔜 Latency alerts
 - 🔜 Custom business metric alerts
@@ -212,12 +227,14 @@ try {
 ## Cost Optimization
 
 ### Techniques
+
 1. **Sampling**: 10% sampling = 90% cost reduction
 2. **Attribute filtering**: Remove high-cardinality attributes
 3. **Span selection**: Don't trace utility functions
 4. **Retention**: Keep traces 7-30 days max
 
 ### Estimated Costs (10K requests/day)
+
 - **Lightstep**: Free tier covers fully
 - **Honeycomb**: Free tier covers fully
 - **Sentry**: Free tier covers ~150 errors/day, paid $26/month for 10K

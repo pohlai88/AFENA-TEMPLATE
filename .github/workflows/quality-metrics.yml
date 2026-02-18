@@ -18,6 +18,10 @@ jobs:
       contents: write
       pull-requests: write
 
+    env:
+      # Disable TUI alternate buffer for output capture in CI
+      TURBO_UI: stream
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4

@@ -4,7 +4,7 @@ description: Build accessible forms with React Hook Form + Zod
 license: MIT
 metadata:
   author: danielmeppiel
-  version: "1.0.0"
+  version: '1.0.0'
 compatibility: React 18+, TypeScript 5+
 ---
 
@@ -15,6 +15,7 @@ Build accessible, type-safe forms in React.
 ## When to Use
 
 Activate when user asks to:
+
 - Create any form (contact, signup, login, checkout, etc.)
 - Add form validation
 - Handle form submission

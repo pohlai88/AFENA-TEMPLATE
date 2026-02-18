@@ -90,7 +90,7 @@ import {
   trackContractCompliance,
   trackMaverickSpend,
   type VendorQualification,
-} from "afenda-procurement";
+} from 'afenda-procurement';
 ```
 
 ## Usage Examples
@@ -98,24 +98,24 @@ import {
 ### Create and Route Requisition
 
 ```typescript
-import { createRequisition, routeForApproval } from "afenda-procurement";
-import { db } from "afenda-database";
+import { createRequisition, routeForApproval } from 'afenda-procurement';
+import { db } from 'afenda-database';
 
 // Create requisition from employee request
 const requisition = await createRequisition(db, orgId, {
-  requesterId: "EMP-001",
-  department: "DEPT-IT",
+  requesterId: 'EMP-001',
+  department: 'DEPT-IT',
   items: [
     {
-      productId: "PROD-LAPTOP-001",
+      productId: 'PROD-LAPTOP-001',
       quantity: 5,
-      unitPrice: 1200.00,
-      description: "Dell Latitude 5430",
-      budgetAccountId: "GL-5100-EQUIPMENT",
+      unitPrice: 1200.0,
+      description: 'Dell Latitude 5430',
+      budgetAccountId: 'GL-5100-EQUIPMENT',
     },
   ],
-  justification: "Replace end-of-life laptops for engineering team",
-  requiredByDate: "2026-03-15",
+  justification: 'Replace end-of-life laptops for engineering team',
+  requiredByDate: '2026-03-15',
   budgetCheck: true,
 });
 // Returns: { reqId: 'REQ-2026-00123', status: 'draft', totalAmount: 6000.00 }
@@ -123,7 +123,7 @@ const requisition = await createRequisition(db, orgId, {
 // Submit for approval workflow
 const workflow = await routeForApproval(db, orgId, {
   reqId: requisition.reqId,
-  approvalChain: ["MGR-IT", "DIR-OPS", "CFO"], // Auto-determined by amount
+  approvalChain: ['MGR-IT', 'DIR-OPS', 'CFO'], // Auto-determined by amount
 });
 // Returns: { workflowId: 'WF-REQ-00123', currentApprover: 'MGR-IT', status: 'pending' }
 ```
@@ -131,39 +131,39 @@ const workflow = await routeForApproval(db, orgId, {
 ### Run RFQ and Award to Best Bidder
 
 ```typescript
-import { awardRFQ, createRFQ, evaluateBids } from "afenda-procurement";
+import { awardRFQ, createRFQ, evaluateBids } from 'afenda-procurement';
 
 // Create RFQ package from consolidated requisitions
 const rfq = await createRFQ(db, orgId, {
-  reqIds: ["REQ-2026-00123", "REQ-2026-00124"],
-  vendors: ["VEND-DELL", "VEND-HP", "VEND-LENOVO"],
-  responseDeadline: "2026-02-28T17:00:00Z",
+  reqIds: ['REQ-2026-00123', 'REQ-2026-00124'],
+  vendors: ['VEND-DELL', 'VEND-HP', 'VEND-LENOVO'],
+  responseDeadline: '2026-02-28T17:00:00Z',
   evaluationCriteria: [
-    { criterion: "price", weight: 0.40 },
-    { criterion: "delivery", weight: 0.30 },
-    { criterion: "warranty", weight: 0.20 },
-    { criterion: "payment_terms", weight: 0.10 },
+    { criterion: 'price', weight: 0.4 },
+    { criterion: 'delivery', weight: 0.3 },
+    { criterion: 'warranty', weight: 0.2 },
+    { criterion: 'payment_terms', weight: 0.1 },
   ],
 });
 // Returns: { rfqId: 'RFQ-2026-0045', status: 'sent', bidCount: 0 }
 
 // After bid deadline, evaluate proposals
 const evaluation = await evaluateBids(db, orgId, {
-  rfqId: "RFQ-2026-0045",
+  rfqId: 'RFQ-2026-0045',
   criteria: rfq.evaluationCriteria,
-  weights: [0.40, 0.30, 0.20, 0.10],
+  weights: [0.4, 0.3, 0.2, 0.1],
   bids: [
-    { vendorId: "VEND-DELL", scores: [85, 90, 95, 80] },
-    { vendorId: "VEND-HP", scores: [90, 85, 90, 85] },
-    { vendorId: "VEND-LENOVO", scores: [80, 95, 85, 90] },
+    { vendorId: 'VEND-DELL', scores: [85, 90, 95, 80] },
+    { vendorId: 'VEND-HP', scores: [90, 85, 90, 85] },
+    { vendorId: 'VEND-LENOVO', scores: [80, 95, 85, 90] },
   ],
 });
 // Returns: { rankings: [{ vendorId: 'VEND-DELL', totalScore: 87.5, rank: 1 }, ...] }
 
 // Award to winning vendor
 const award = await awardRFQ(db, orgId, {
-  rfqId: "RFQ-2026-0045",
-  vendorId: "VEND-DELL",
+  rfqId: 'RFQ-2026-0045',
+  vendorId: 'VEND-DELL',
   items: rfq.items,
   createPO: true,
 });
@@ -173,35 +173,35 @@ const award = await awardRFQ(db, orgId, {
 ### Vendor Qualification and Performance
 
 ```typescript
-import { assessVendorPerformance, qualifyVendor } from "afenda-procurement";
+import { assessVendorPerformance, qualifyVendor } from 'afenda-procurement';
 
 // Qualify new vendor
 const qualification = await qualifyVendor(db, orgId, {
-  vendorId: "VEND-NEW-001",
+  vendorId: 'VEND-NEW-001',
   criteria: [
-    { name: "financial_stability", required: true, passed: true },
-    { name: "iso_9001_certified", required: true, passed: true },
+    { name: 'financial_stability', required: true, passed: true },
+    { name: 'iso_9001_certified', required: true, passed: true },
     {
-      name: "insurance_coverage",
+      name: 'insurance_coverage',
       required: true,
       passed: true,
-      value: "2M USD",
+      value: '2M USD',
     },
-    { name: "capacity_check", required: false, passed: true },
+    { name: 'capacity_check', required: false, passed: true },
   ],
 });
 // Returns: { status: 'approved', approvedCategories: ['electronics', 'IT equipment'], validUntil: '2027-02-17' }
 
 // Assess ongoing performance
 const performance = await assessVendorPerformance(db, orgId, {
-  vendorId: "VEND-DELL",
+  vendorId: 'VEND-DELL',
   metrics: {
     onTimeDelivery: 0.95, // 95% OTD
     qualityRejectRate: 0.02, // 2% defect rate
     priceCompetitiveness: 0.88, // 88% of market benchmark
-    responsiveness: 0.90, // Response time score
+    responsiveness: 0.9, // Response time score
   },
-  period: "2025-Q4",
+  period: '2025-Q4',
 });
 // Returns: { overallScore: 87.5, rating: 'preferred', recommendations: ['Continue partnership'] }
 ```
@@ -209,15 +209,12 @@ const performance = await assessVendorPerformance(db, orgId, {
 ### Spend Analysis
 
 ```typescript
-import {
-  analyzeSpendByCategory,
-  identifySavingsOpportunities,
-} from "afenda-procurement";
+import { analyzeSpendByCategory, identifySavingsOpportunities } from 'afenda-procurement';
 
 // Analyze spend across dimensions
 const analysis = await analyzeSpendByCategory(db, orgId, {
-  period: { from: "2025-01-01", to: "2025-12-31" },
-  dimensions: ["category", "vendor", "department"],
+  period: { from: '2025-01-01', to: '2025-12-31' },
+  dimensions: ['category', 'vendor', 'department'],
   minAmount: 10000, // Focus on material spend
 });
 // Returns: {
@@ -229,11 +226,7 @@ const analysis = await analyzeSpendByCategory(db, orgId, {
 // Identify consolidation opportunities
 const savings = await identifySavingsOpportunities(db, orgId, {
   analysisData: analysis,
-  strategies: [
-    "vendor_consolidation",
-    "volume_discounts",
-    "contract_renegotiation",
-  ],
+  strategies: ['vendor_consolidation', 'volume_discounts', 'contract_renegotiation'],
 });
 // Returns: {
 //   opportunities: [

@@ -12,13 +12,16 @@ Complete Drizzle ORM documentation embedded in markdown. Read from `references/`
 All documentation is in `references/` organized by topic:
 
 ### Getting Started (`references/get-started/`)
+
 - Installation and setup
 - Schema definition basics
 - Database connections
 - First queries
 
 ### Database Connections (`references/connect-*.mdx`)
+
 Connect to various databases and platforms:
+
 - **PostgreSQL:** `connect-neon.mdx`, `connect-supabase.mdx`, `connect-effect-postgres.mdx`, `connect-pglite.mdx`
 - **MySQL:** `connect-planetscale.mdx`, `connect-tidb.mdx`
 - **SQLite:** `connect-cloudflare-d1.mdx`, `connect-turso.mdx`, `connect-bun-sqlite.mdx`, `connect-expo-sqlite.mdx`, `connect-op-sqlite.mdx`
@@ -26,13 +29,17 @@ Connect to various databases and platforms:
 - **Edge:** `connect-nile.mdx`, `connect-sqlite-cloud.mdx`
 
 ### Column Types (`references/column-types/`)
+
 All database column types and modifiers:
+
 - PostgreSQL, MySQL, SQLite types
 - Custom types and validators
 - Type safety and inference
 
 ### Queries & Operations
+
 Core query builder features:
+
 - `select.mdx` - Select queries
 - `insert.mdx` - Insert operations
 - `update.mdx` - Update operations
@@ -44,54 +51,62 @@ Core query builder features:
 - `transactions.mdx` - Transaction handling
 
 ### Relations & Schema (`references/relations/`)
+
 - One-to-one, one-to-many, many-to-many
 - Foreign keys and constraints
 - Cascading operations
 
 ### Migrations (`references/migrate/`)
+
 Schema migration tools:
+
 - `drizzle-kit` usage
 - Migration generation
 - Push vs generate modes
 - Migration deployment
 
 ### Integrations & Extensions (`references/extensions/`)
+
 - Validation (Zod, Valibot, Arktype, Effect)
 - Type safety enhancements
 - Caching strategies
 
 ### Guides (`references/guides/`)
+
 Best practices and how-tos:
+
 - Performance optimization
 - Type-safe queries
 - Testing strategies
 - Production patterns
 
 ### Tutorials (`references/tutorials/`)
+
 Step-by-step walkthroughs for common use cases.
 
 ### Latest Releases (`references/latest-releases/`)
+
 Version-specific features and updates.
 
 ## Quick Reference
 
 ### Common Tasks
 
-| Task | File to Read |
-|------|--------------|
-| Setup Drizzle | `references/get-started/` |
-| Connect to Neon | `references/connect-neon.mdx` |
-| Connect to Supabase | `references/connect-supabase.mdx` |
-| Connect to PlanetScale | `references/connect-planetscale.mdx` |
-| Connect to Cloudflare D1 | `references/connect-cloudflare-d1.mdx` |
-| Connect to Turso | `references/connect-turso.mdx` |
-| Define schema | `references/get-started/` + `references/column-types/` |
-| Run queries | `references/select.mdx`, `references/insert.mdx`, etc. |
-| Setup relations | `references/relations/` |
-| Run migrations | `references/migrate/` |
-| Validate with Zod | `references/zod.mdx` |
-| Batch operations | `references/batch-api.mdx` |
-| Transactions | `references/transactions.mdx` |
+| Task                     | File to Read                                           |
+| ------------------------ | ------------------------------------------------------ |
+| Setup Drizzle            | `references/get-started/`                              |
+| Connect to Neon          | `references/connect-neon.mdx`                          |
+| Connect to Supabase      | `references/connect-supabase.mdx`                      |
+| Connect to PlanetScale   | `references/connect-planetscale.mdx`                   |
+| Connect to Cloudflare D1 | `references/connect-cloudflare-d1.mdx`                 |
+| Connect to Turso         | `references/connect-turso.mdx`                         |
+| Define schema            | `references/get-started/` + `references/column-types/` |
+| Run queries              | `references/select.mdx`, `references/insert.mdx`, etc. |
+| Setup relations          | `references/relations/`                                |
+| Run migrations           | `references/migrate/`                                  |
+| Validate with Zod        | `references/zod.mdx`                                   |
+| Batch operations         | `references/batch-api.mdx`                             |
+| Transactions             | `references/transactions.mdx`                          |
 
 ### When to Use This Skill
 

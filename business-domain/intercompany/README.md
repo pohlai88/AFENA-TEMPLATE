@@ -57,7 +57,7 @@ import {
   generateEliminationEntries,
   type IntercompanyPairResult,
   matchIntercompanyTransactions,
-} from "afenda-intercompany";
+} from 'afenda-intercompany';
 ```
 
 ## Usage Examples
@@ -66,13 +66,13 @@ import {
 
 ```typescript
 const result = await createIntercompanyTransaction(tx, orgId, {
-  sourceCompanyId: "company-a",
-  targetCompanyId: "company-b",
-  transactionType: "invoice",
+  sourceCompanyId: 'company-a',
+  targetCompanyId: 'company-b',
+  transactionType: 'invoice',
   amountMinor: 100000,
   baseAmountMinor: 100000,
-  currencyCode: "USD",
-  memo: "Intercompany sale of goods",
+  currencyCode: 'USD',
+  memo: 'Intercompany sale of goods',
 });
 ```
 
@@ -80,8 +80,8 @@ const result = await createIntercompanyTransaction(tx, orgId, {
 
 ```typescript
 const matched = await matchIntercompanyTransactions(db, orgId, {
-  companyIds: ["company-a", "company-b"],
-  fiscalPeriodId: "period-2024-q1",
+  companyIds: ['company-a', 'company-b'],
+  fiscalPeriodId: 'period-2024-q1',
 });
 ```
 
@@ -89,7 +89,7 @@ const matched = await matchIntercompanyTransactions(db, orgId, {
 
 ```typescript
 const eliminations = await generateEliminationEntries(db, orgId, {
-  fiscalPeriodId: "period-2024-q1",
-  consolidationLevel: "group",
+  fiscalPeriodId: 'period-2024-q1',
+  consolidationLevel: 'group',
 });
 ```

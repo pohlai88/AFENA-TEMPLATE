@@ -44,13 +44,13 @@ calculation, shift scheduling, and attendance analytics.
 ## Usage
 
 ```typescript
-import { submitTimesheet } from "afenda-time-attendance";
+import { submitTimesheet } from 'afenda-time-attendance';
 
 const result = await submitTimesheet(db, orgId, {
-  employeeId: "emp-123",
-  periodStart: new Date("2026-02-10"),
-  periodEnd: new Date("2026-02-16"),
-  entries: [{ date: new Date("2026-02-10"), hoursWorked: 8 }],
+  employeeId: 'emp-123',
+  periodStart: new Date('2026-02-10'),
+  periodEnd: new Date('2026-02-16'),
+  entries: [{ date: new Date('2026-02-10'), hoursWorked: 8 }],
 });
 ```
 

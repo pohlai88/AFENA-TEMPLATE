@@ -12,9 +12,9 @@ This directory contains detailed architecture documentation for the AFENDA-NEXUS
 
 - **[COMPLETE_ENTERPRISE_ARCHITECTURE.md](COMPLETE_ENTERPRISE_ARCHITECTURE.md)** - Complete enterprise architecture overview including technical stack, patterns, and implementation guidelines
 
-### Analysis
+### Analysis & Planning
 
-- **[ENTERPRISE_ERP_GAP_ANALYSIS.md](ENTERPRISE_ERP_GAP_ANALYSIS.md)** - Gap analysis for enterprise ERP requirements
+- **[CRITICAL_DOMAIN.md](CRITICAL_DOMAIN.md)** - Critical domain gap analysis and prioritization (43 missing packages across corporate finance, industry verticals, and foundation)
 
 ## Related Documentation
 

@@ -85,7 +85,7 @@ import {
   trackOrderStatus,
   trackPriceVariance,
   updateDeliverySchedule,
-} from "afenda-purchasing";
+} from 'afenda-purchasing';
 ```
 
 ## Usage Examples
@@ -93,27 +93,27 @@ import {
 ### Create PO from Requisition
 
 ```typescript
-import { createPurchaseOrder } from "afenda-purchasing";
-import { db } from "afenda-database";
+import { createPurchaseOrder } from 'afenda-purchasing';
+import { db } from 'afenda-database';
 
 const po = await createPurchaseOrder(db, orgId, {
-  requisitionId: "REQ-2026-00123",
-  vendorId: "VEND-DELL",
+  requisitionId: 'REQ-2026-00123',
+  vendorId: 'VEND-DELL',
   items: [
     {
-      requisitionLineId: "REQ-LINE-001",
-      productId: "PROD-LAPTOP-001",
-      description: "Dell Latitude 5430, 16GB RAM, 512GB SSD",
+      requisitionLineId: 'REQ-LINE-001',
+      productId: 'PROD-LAPTOP-001',
+      description: 'Dell Latitude 5430, 16GB RAM, 512GB SSD',
       quantity: 5,
-      unitPrice: 1150.00,
-      deliveryDate: "2026-03-15",
-      shipToLocationId: "LOC-HQ",
+      unitPrice: 1150.0,
+      deliveryDate: '2026-03-15',
+      shipToLocationId: 'LOC-HQ',
     },
   ],
   terms: {
-    paymentTerms: "NET_30",
-    shippingTerms: "FOB_DESTINATION",
-    currency: "USD",
+    paymentTerms: 'NET_30',
+    shippingTerms: 'FOB_DESTINATION',
+    currency: 'USD',
   },
 });
 // Returns: { poId: 'PO-2026-05678', status: 'draft', totalAmount: 5750.00 }
@@ -122,20 +122,18 @@ const po = await createPurchaseOrder(db, orgId, {
 ### Approval Workflow
 
 ```typescript
-import { approvePurchaseOrder, submitForApproval } from "afenda-purchasing";
+import { approvePurchaseOrder, submitForApproval } from 'afenda-purchasing';
 
 // Submit PO for approval
-const workflow = await submitForApproval(db, orgId, { poId: "PO-2026-05678" });
+const workflow = await submitForApproval(db, orgId, { poId: 'PO-2026-05678' });
 // Returns: { workflowId: 'WF-PO-05678', approvers: ['MGR-001', 'DIR-001'], status: 'pending' }
 
 // Manager approves
 const approval = await approvePurchaseOrder(db, orgId, {
-  poId: "PO-2026-05678",
-  approverId: "MGR-001",
-  comments: "Approved, urgent need for engineering team",
-  glCoding: [
-    { lineId: 1, glAccountId: "GL-5100-EQUIPMENT", amount: 5750.00 },
-  ],
+  poId: 'PO-2026-05678',
+  approverId: 'MGR-001',
+  comments: 'Approved, urgent need for engineering team',
+  glCoding: [{ lineId: 1, glAccountId: 'GL-5100-EQUIPMENT', amount: 5750.0 }],
 });
 // Returns: { status: 'approved', nextApprover: 'DIR-001', timestamp: '2026-02-17T14:30:00Z' }
 ```
@@ -143,32 +141,32 @@ const approval = await approvePurchaseOrder(db, orgId, {
 ### Track Vendor Acknowledgment
 
 ```typescript
-import { acknowledgeOrder, updateDeliverySchedule } from "afenda-purchasing";
+import { acknowledgeOrder, updateDeliverySchedule } from 'afenda-purchasing';
 
 // Vendor acknowledges PO (via EDI 855 or portal)
 const ack = await acknowledgeOrder(db, orgId, {
-  poId: "PO-2026-05678",
+  poId: 'PO-2026-05678',
   vendorConfirmation: {
-    acknowledgedDate: "2026-02-18T09:00:00Z",
+    acknowledgedDate: '2026-02-18T09:00:00Z',
     confirmedLines: [
       {
         lineId: 1,
         confirmedQty: 5,
-        confirmedPrice: 1150.00,
-        promisedDate: "2026-03-12",
+        confirmedPrice: 1150.0,
+        promisedDate: '2026-03-12',
       },
     ],
-    vendorPoNumber: "VEND-PO-98765",
+    vendorPoNumber: 'VEND-PO-98765',
   },
 });
 // Returns: { status: 'acknowledged', discrepancies: [] }
 
 // Vendor requests delivery reschedule
 const reschedule = await updateDeliverySchedule(db, orgId, {
-  poId: "PO-2026-05678",
+  poId: 'PO-2026-05678',
   lineId: 1,
-  newDeliveryDate: "2026-03-18",
-  reason: "Component shortage, 3-day delay",
+  newDeliveryDate: '2026-03-18',
+  reason: 'Component shortage, 3-day delay',
   requiresApproval: true,
 });
 // Returns: { approved: false, escalatedTo: 'BUYER-001', newStatus: 'pending_reschedule' }
@@ -177,7 +175,7 @@ const reschedule = await updateDeliverySchedule(db, orgId, {
 ### Expedite Overdue Orders
 
 ```typescript
-import { identifyOverdueOrders, sendVendorReminder } from "afenda-purchasing";
+import { identifyOverdueOrders, sendVendorReminder } from 'afenda-purchasing';
 
 // Find late orders
 const overdue = await identifyOverdueOrders(db, orgId, {
@@ -192,9 +190,9 @@ const overdue = await identifyOverdueOrders(db, orgId, {
 for (const order of overdue) {
   await sendVendorReminder(db, orgId, {
     poId: order.poId,
-    messageTemplate: "OVERDUE_DELIVERY",
-    method: "email", // or 'edi'
-    escalationLevel: order.daysLate > 7 ? "urgent" : "normal",
+    messageTemplate: 'OVERDUE_DELIVERY',
+    method: 'email', // or 'edi'
+    escalationLevel: order.daysLate > 7 ? 'urgent' : 'normal',
   });
 }
 ```
@@ -202,20 +200,20 @@ for (const order of overdue) {
 ### PO Analytics
 
 ```typescript
-import { analyzePurchaseLeadTime, trackPriceVariance } from "afenda-purchasing";
+import { analyzePurchaseLeadTime, trackPriceVariance } from 'afenda-purchasing';
 
 // Analyze lead time by category
 const leadTime = await analyzePurchaseLeadTime(db, orgId, {
-  category: "IT Equipment",
-  vendorId: "VEND-DELL",
-  period: { from: "2025-01-01", to: "2025-12-31" },
+  category: 'IT Equipment',
+  vendorId: 'VEND-DELL',
+  period: { from: '2025-01-01', to: '2025-12-31' },
 });
 // Returns: { avgLeadTime: 12.5, stdDev: 3.2, minLeadTime: 7, maxLeadTime: 21, unit: 'days' }
 
 // Track price changes/variance
 const variance = await trackPriceVariance(db, orgId, {
-  poId: "PO-2026-05678",
-  compareToQuote: "RFQ-2026-0045",
+  poId: 'PO-2026-05678',
+  compareToQuote: 'RFQ-2026-0045',
 });
 // Returns: {
 //   variances: [{ lineId: 1, quotedPrice: 1200.00, poPrice: 1150.00, variance: -4.17, favorable: true }],

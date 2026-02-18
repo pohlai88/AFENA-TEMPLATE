@@ -1,0 +1,17 @@
+{
+  "extends": "afenda-typescript-config/base.json",
+  "compilerOptions": {
+    // CLI Tool Configuration - Node.js ESM
+    "tsBuildInfoFile": "./dist/.tsbuildinfo",
+    "module": "esnext",
+    "moduleResolution": "bundler"
+  },
+  "include": [
+    "src/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "bin"
+  ]
+}

@@ -192,6 +192,7 @@ fi
 ## Output Summary
 
 Heartbeat output should include:
+
 - suite version status,
 - advisory feed status,
 - new advisory list (if any),

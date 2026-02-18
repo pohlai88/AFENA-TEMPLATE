@@ -242,7 +242,7 @@
 
 ## 📋 Implementation Reference (Historical — All Phases Complete)
 
-*Step-by-step adoption workflow preserved for reference. All phases complete.*
+_Step-by-step adoption workflow preserved for reference. All phases complete._
 
 ---
 
@@ -347,15 +347,15 @@ With 93% adoption (13/14 entities) and production-grade database quality, the pr
 
 ## 📊 Domain Adoption Comparison
 
-| Domain       | Total Specs | Adopted | % Complete | Remaining |
-| ------------ | ----------- | ------- | ---------- | --------- |
-| **projects** | **14**      | **13**  | **93%** ✅ | 1 (locked) |
-| **setup**    | **27**      | **27**  | **100%** ✅ | 0         |
-| quality      | 16          | 0       | 0%         | 16        |
-| selling      | 17          | 1       | 6%         | 16        |
-| buying       | 19          | 0       | 0%         | 19        |
-| support      | 12          | 3       | 25%        | 9         |
-| assets       | 24          | 0       | 0%         | 24        |
-| crm          | 26          | 1       | 4%         | 25        |
+| Domain       | Total Specs | Adopted | % Complete  | Remaining  |
+| ------------ | ----------- | ------- | ----------- | ---------- |
+| **projects** | **14**      | **13**  | **93%** ✅  | 1 (locked) |
+| **setup**    | **27**      | **27**  | **100%** ✅ | 0          |
+| quality      | 16          | 0       | 0%          | 16         |
+| selling      | 17          | 1       | 6%          | 16         |
+| buying       | 19          | 0       | 0%          | 19         |
+| support      | 12          | 3       | 25%         | 9          |
+| assets       | 24          | 0       | 0%          | 24         |
+| crm          | 26          | 1       | 4%          | 25         |
 
 **Completed domains:** Projects ✅ | Setup ✅

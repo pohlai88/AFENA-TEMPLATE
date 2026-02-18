@@ -107,7 +107,7 @@ pnpm run report
 
 ```
 tools/
-├── afena-cli/              # Unified CLI tool (20+ commands)
+├── afenda-cli/              # Unified CLI tool (20+ commands)
 │   ├── bin/afenda.ts       # Entry point
 │   ├── src/
 │   │   ├── commands/       # CLI command definitions
@@ -131,7 +131,7 @@ tools/
 
 | Component             | Purpose                        | Technology              |
 | --------------------- | ------------------------------ | ----------------------- |
-| **afena-cli**         | Unified command-line interface | Commander.js, Zod       |
+| **afenda-cli**        | Unified command-line interface | Commander.js, Zod       |
 | **quality-metrics**   | Metrics collection & analysis  | Vitest, Node.js         |
 | **ReportBuilder**     | Consistent report generation   | Markdown templates      |
 | **Capability System** | Codebase capability mapping    | AST parsing, validators |
@@ -211,13 +211,13 @@ pnpm run report
 
 1. **START_HERE.md** (you are here) - Quick orientation
 2. [README.md](README.md) - Complete tool overview
-3. [afena-cli/README.md](afena-cli/README.md) - CLI command reference
+3. [afenda-cli/README.md](afenda-cli/README.md) - CLI command reference
 4. [GUIDE.md](GUIDE.md) - Development best practices
 
 #### 🏗️ Tool Developer
 
 1. [GUIDE.md](GUIDE.md) - Architecture & patterns
-2. [afena-cli/README.md](afena-cli/README.md) - CLI integration
+2. [afenda-cli/README.md](afenda-cli/README.md) - CLI integration
 3. [quality-metrics/README.md](quality-metrics/README.md) - Metrics integration
 4. [../CONTRIBUTING.md](../CONTRIBUTING.md) - Contribution guidelines
 
@@ -230,7 +230,7 @@ pnpm run report
 #### ⚙️ DevOps Engineer
 
 1. [README.md](README.md) - CI/CD integration examples
-2. [afena-cli/README.md](afena-cli/README.md) - Automation commands
+2. [afenda-cli/README.md](afenda-cli/README.md) - Automation commands
 3. [QUALITY-GUIDE.md](QUALITY-GUIDE.md) - Quality gates configuration
 
 ### Documentation Index
@@ -241,7 +241,7 @@ pnpm run report
 | [README.md](README.md)                                 | Complete overview  | Intermediate | 15 min |
 | [GUIDE.md](GUIDE.md)                                   | Development guide  | Advanced     | 20 min |
 | [QUALITY-GUIDE.md](QUALITY-GUIDE.md)                   | Quality & security | Intermediate | 10 min |
-| [afena-cli/README.md](afena-cli/README.md)             | CLI reference      | Intermediate | 10 min |
+| [afenda-cli/README.md](afenda-cli/README.md)           | CLI reference      | Intermediate | 10 min |
 | [quality-metrics/README.md](quality-metrics/README.md) | Metrics guide      | Intermediate | 12 min |
 
 ---
@@ -321,7 +321,7 @@ A: `bundle` runs all maintenance tasks in a specific order. Use it for comprehen
 A: It scans the entire codebase (83K+ LOC, 175 tables, 38 packages). This is normal and runs in ~10-30 seconds.
 
 **Q: Can I customize generated READMEs?**  
-A: Yes. Customize templates in `afena-cli/src/features/readme/`. See [GUIDE.md](GUIDE.md) for details.
+A: Yes. Customize templates in `afenda-cli/src/features/readme/`. See [GUIDE.md](GUIDE.md) for details.
 
 ### Troubleshooting
 

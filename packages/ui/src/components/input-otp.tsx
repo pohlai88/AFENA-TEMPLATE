@@ -37,7 +37,9 @@ function InputOTPSlot({
   index: number;
 }) {
   const inputOTPContext = React.useContext(OTPInputContext);
-  const { char, hasFakeCaret, isActive } = inputOTPContext?.slots[index] ?? {};
+  // Type assertion: OTPInputContext provides slots array
+  const slot = (inputOTPContext as { slots: Array<{ char: string; hasFakeCaret: boolean; isActive: boolean } | undefined> }).slots[index];
+  const { char, hasFakeCaret, isActive } = slot ?? {};
 
   return (
     <div
@@ -67,4 +69,5 @@ function InputOTPSeparator({ ...props }: React.ComponentProps<'div'>) {
   );
 }
 
-export { InputOTP, InputOTPGroup, InputOTPSlot, InputOTPSeparator };
+export { InputOTP, InputOTPGroup, InputOTPSeparator, InputOTPSlot };
+

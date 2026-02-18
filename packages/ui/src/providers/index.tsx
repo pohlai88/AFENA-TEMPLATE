@@ -41,7 +41,8 @@ function Providers({ children }: { children: React.ReactNode }) {
   );
 }
 
-export { Providers };
-export { ThemeProvider } from './theme-provider';
+export { ThemeProvider, type ThemeProviderProps } from './theme-provider';
 export { ToasterProvider } from './toaster-provider';
 export { GlobalTooltipProvider } from './tooltip-provider';
+export { Providers };
+

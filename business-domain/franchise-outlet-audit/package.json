@@ -1,0 +1,20 @@
+{
+  "name": "afenda-franchise-outlet-audit",
+  "version": "0.0.1",
+  "type": "module",
+  "main": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "dependencies": {
+    "afenda-canon": "workspace:*",
+    "afenda-database": "workspace:*",
+    "drizzle-orm": "catalog:",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "afenda-eslint-config": "workspace:*",
+    "afenda-typescript-config": "workspace:*",
+    "typescript": "catalog:"
+  }
+}

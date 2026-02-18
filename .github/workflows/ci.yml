@@ -16,6 +16,8 @@ jobs:
     timeout-minutes: 15
     runs-on: ubuntu-latest
     env:
+      # Disable TUI alternate buffer for output capture in CI
+      TURBO_UI: stream
       # Dummy values — Next.js evaluates API route modules at build time.
       # Modules that throw at import time need valid-looking placeholders.
       DATABASE_URL: 'postgresql://ci:ci@ci-placeholder.neon.tech/neondb?sslmode=verify-full'

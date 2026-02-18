@@ -79,9 +79,9 @@ describeIf('integration test suite', () => {
 
 ```typescript
 // Equality
-expect(value).toBe(expected);           // Strict equality (===)
-expect(value).toEqual(expected);        // Deep equality
-expect(value).toStrictEqual(expected);  // Strict deep equality (no undefined)
+expect(value).toBe(expected); // Strict equality (===)
+expect(value).toEqual(expected); // Deep equality
+expect(value).toStrictEqual(expected); // Strict deep equality (no undefined)
 
 // Truthiness
 expect(value).toBeTruthy();
@@ -95,7 +95,7 @@ expect(value).toBeGreaterThan(5);
 expect(value).toBeGreaterThanOrEqual(5);
 expect(value).toBeLessThan(10);
 expect(value).toBeLessThanOrEqual(10);
-expect(value).toBeCloseTo(0.3, 5);  // Floating point
+expect(value).toBeCloseTo(0.3, 5); // Floating point
 
 // Strings
 expect(string).toMatch(/pattern/);
@@ -136,9 +136,7 @@ assertOk(result);
 console.log(result.data);
 
 // Array ordering assertion
-function assertOrderingDescCreatedAtDescId(
-  rows: Array<{ createdAt: Date; id: string }>
-) {
+function assertOrderingDescCreatedAtDescId(rows: Array<{ createdAt: Date; id: string }>) {
   for (let i = 1; i < rows.length; i++) {
     const prev = rows[i - 1];
     const curr = rows[i];
@@ -263,9 +261,9 @@ import { vi } from 'vitest';
 vi.useFakeTimers();
 
 // Advance time
-vi.advanceTimersByTime(1000);  // 1 second
-vi.runAllTimers();             // Run all pending timers
-vi.runOnlyPendingTimers();     // Run only currently pending
+vi.advanceTimersByTime(1000); // 1 second
+vi.runAllTimers(); // Run all pending timers
+vi.runOnlyPendingTimers(); // Run only currently pending
 
 // Restore real timers
 vi.useRealTimers();
@@ -313,9 +311,7 @@ it('rejects with error', async () => {
 
 // Testing promise chains
 it('chains promises', async () => {
-  const result = await promise
-    .then((x) => x * 2)
-    .then((x) => x + 1);
+  const result = await promise.then((x) => x * 2).then((x) => x + 1);
   expect(result).toBe(11);
 });
 ```
@@ -350,10 +346,14 @@ describe.concurrent('limited concurrency', { concurrent: 2 }, () => {
 import { it } from 'vitest';
 
 // Retry flaky test
-it('flaky test', async () => {
-  const result = await flakyOperation();
-  expect(result).toBe('success');
-}, { retry: 3 });  // Retry up to 3 times
+it(
+  'flaky test',
+  async () => {
+    const result = await flakyOperation();
+    expect(result).toBe('success');
+  },
+  { retry: 3 },
+); // Retry up to 3 times
 ```
 
 ---
@@ -488,7 +488,7 @@ it('test with transaction', async () => {
 ```typescript
 async function setTenantContext(orgId: string, userId: string) {
   await pgClient.query(
-    `SET LOCAL request.jwt.claims = '${JSON.stringify({ org_id: orgId, sub: userId })}'`
+    `SET LOCAL request.jwt.claims = '${JSON.stringify({ org_id: orgId, sub: userId })}'`,
   );
 }
 
@@ -498,7 +498,7 @@ it('test with tenant context', async () => {
 
   // RLS policies now apply
   const result = await pgClient.query('SELECT * FROM contacts');
-  expect(result.rows).toEqual([]);  // No data for this org yet
+  expect(result.rows).toEqual([]); // No data for this org yet
 
   await pgClient.query('ROLLBACK');
 });
@@ -514,7 +514,7 @@ async function seedTestData(orgId: string) {
       `INSERT INTO contacts (id, org_id, name, contact_type, doc_status)
        VALUES (gen_random_uuid(), $1, $2, 'customer', 'draft')
        RETURNING *`,
-      [orgId, `Contact ${i}`]
+      [orgId, `Contact ${i}`],
     );
     contacts.push(result.rows[0]);
   }
@@ -548,9 +548,13 @@ describe('performance', () => {
     fastFunction();
   });
 
-  bench('slow operation', () => {
-    slowFunction();
-  }, { time: 1000 });  // Run for 1 second
+  bench(
+    'slow operation',
+    () => {
+      slowFunction();
+    },
+    { time: 1000 },
+  ); // Run for 1 second
 
   bench('async operation', async () => {
     await asyncFunction();
@@ -568,7 +572,7 @@ import { it } from 'vitest';
 // Per-test timeout
 it('slow test', async () => {
   await verySlowOperation();
-}, 60_000);  // 60 second timeout
+}, 60_000); // 60 second timeout
 
 // Suite-level timeout
 describe('slow suite', { timeout: 30_000 }, () => {
@@ -613,7 +617,7 @@ it('classifies errors correctly', async () => {
     } else if (error instanceof DatabaseError) {
       expect(error.code).toBe('DATABASE_ERROR');
     } else {
-      throw error;  // Unexpected error type
+      throw error; // Unexpected error type
     }
   }
 });
@@ -766,10 +770,7 @@ class UserBuilder {
 }
 
 it('test with builder', () => {
-  const user = new UserBuilder()
-    .withName('John')
-    .withEmail('john@example.com')
-    .build();
+  const user = new UserBuilder().withName('John').withEmail('john@example.com').build();
 
   expect(user.name).toBe('John');
 });
@@ -803,7 +804,7 @@ import { it } from 'vitest';
 
 it('debug test', () => {
   const value = complexCalculation();
-  console.log('Debug value:', value);  // Shows in test output
+  console.log('Debug value:', value); // Shows in test output
   expect(value).toBe(expected);
 });
 ```

@@ -15,7 +15,7 @@
   "dependencies": {
     "afenda-canon": "workspace:*",
     "afenda-database": "workspace:*",
-    "drizzle-orm": "^0.44.0",
+    "drizzle-orm": "catalog:",
     "zod": "catalog:"
   },
   "devDependencies": {

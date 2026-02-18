@@ -143,28 +143,28 @@ interface Config {
     "strict": true,                      // Enable all strict checks
     "noUncheckedIndexedAccess": true,    // []? for array access
     "exactOptionalPropertyTypes": true,  // No {x?: T} = {x: undefined}
-    
+
     // Module System
     "module": "esnext",                  // or "nodenext" for Node.js
     "moduleResolution": "bundler",       // or "nodenext"
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
-    
+
     // Emit
     "declaration": true,
     "declarationMap": true,
     "sourceMap": true,
     "outDir": "./dist",
-    
+
     // Project References (monorepo)
     "composite": true,                   // Enable project references
     "tsBuildInfoFile": "./dist/.tsbuildinfo",
-    
+
     // Quality
     "skipLibCheck": true,               // Faster builds
     "forceConsistentCasingInFileNames": true,
     "isolatedModules": true,
-    
+
     // Libraries
     "lib": ["ES2021"],
     "target": "ES2021"
@@ -205,7 +205,7 @@ interface Config {
 }
 ```
 
-**Issue:** Root tsconfig including `apps/` or `tools/` causes TS6305 errors.  
+**Issue:** Root tsconfig including `apps/` or `tools/` causes TS6305 errors.
 **Fix:** Exclude non-library packages from root build graph.
 
 **Source:** [TypeScript Project References](https://www.typescriptlang.org/docs/handbook/project-references.html)
@@ -216,7 +216,7 @@ interface Config {
 
 ### 1. `Use afenda-logger instead of console.* (INVARIANT-08)`
 
-**Rule:** Project-specific custom rule  
+**Rule:** Project-specific custom rule
 **Fix:** Replace `console.log/info/warn/error` with `logger` from `afenda-logger`
 
 ```ts
@@ -232,7 +232,7 @@ logger.info({ userId }, 'User created');
 
 ### 2. `Direct db.insert/update/delete forbidden - use mutate() (INVARIANT-01)`
 
-**Rule:** Enforce mutation tracking through CRUD abstraction  
+**Rule:** Enforce mutation tracking through CRUD abstraction
 **Fix:** Use `mutate()` from `afenda-crud`
 
 ```ts
@@ -248,7 +248,7 @@ const result = await mutate(tx).insert(users, { org_id, name }, userId);
 
 ### 3. `@typescript-eslint/no-unsafe-*` in Drizzle Transaction Code
 
-**Context:** Known TypeScript-ESLint limitation with Drizzle transaction typing (EX-LINT-DRZ-TX-001)  
+**Context:** Known TypeScript-ESLint limitation with Drizzle transaction typing (EX-LINT-DRZ-TX-001)
 **Fix:** File-scoped override in package `eslint.config.js`
 
 ```js
@@ -428,7 +428,7 @@ export default tseslint.config(
   ...tseslint.configs.recommended,       // Basic rules
   ...tseslint.configs.strict,            // Stricter rules
   ...tseslint.configs.stylistic,         // Code style
-  
+
   // Custom overrides after
   {
     rules: {

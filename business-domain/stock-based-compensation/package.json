@@ -1,0 +1,39 @@
+{
+    "name": "afenda-stock-based-compensation",
+    "version": "0.1.0",
+    "description": "Stock-based compensation management with ASC 718 / IFRS 2 compliance",
+    "type": "module",
+    "main": "./src/index.ts",
+    "types": "./src/index.ts",
+    "exports": {
+        ".": "./src/index.ts"
+    },
+    "scripts": {
+        "test": "vitest",
+        "test:coverage": "vitest --coverage",
+        "type-check": "tsc --noEmit",
+        "lint": "eslint src"
+    },
+    "dependencies": {
+        "afenda-canon": "workspace:*",
+        "afenda-database": "workspace:*",
+        "afenda-logger": "workspace:*",
+        "decimal.js": "^10.4.3",
+        "zod": "^3.24.1"
+    },
+    "devDependencies": {
+        "afenda-eslint-config": "workspace:*",
+        "afenda-typescript-config": "workspace:*",
+        "typescript": "^5.7.2",
+        "vitest": "^2.1.8"
+    },
+    "keywords": [
+        "stock-based-compensation",
+        "equity-compensation",
+        "asc-718",
+        "ifrs-2",
+        "stock-options",
+        "rsu",
+        "psu"
+    ]
+}

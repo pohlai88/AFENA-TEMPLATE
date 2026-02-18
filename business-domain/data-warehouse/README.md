@@ -44,13 +44,13 @@ data quality monitoring, metadata management, and warehouse analytics.
 ## Usage
 
 ```typescript
-import { createETLJob } from "afenda-data-warehouse";
+import { createETLJob } from 'afenda-data-warehouse';
 
 const result = await createETLJob(db, orgId, {
-  jobName: "Daily Sales ETL",
-  source: "oltp-sales",
-  target: "dw-fact-sales",
-  schedule: "daily",
+  jobName: 'Daily Sales ETL',
+  source: 'oltp-sales',
+  target: 'dw-fact-sales',
+  schedule: 'daily',
 });
 ```
 

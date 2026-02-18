@@ -9,12 +9,14 @@ This document proposes the complete enterprise ERP domain structure for AFENDA-N
 ## Current State (Implemented)
 
 ### Layer 1: Foundation ✅
+
 - `canon` - Type system, schemas, contracts (211+ entity types)
 - `database` - Schema definitions, ORM (150+ tables)
 - `logger` - Centralized logging
 - `ui` - React component library
 
 ### Layer 2: Domain Services (Partially Implemented) ✅
+
 - `accounting` - Tax, FX, depreciation, revenue recognition, payment allocation, fiscal periods, bank reconciliation
 - `inventory` - UOM conversion, lot traceability, manufacturing BOM, landed costs, three-way matching
 - `crm` - Pricing, discounts, budget enforcement
@@ -25,6 +27,7 @@ This document proposes the complete enterprise ERP domain structure for AFENDA-N
 - `migration` - Data migration pipeline
 
 ### Layer 3: Application ✅
+
 - `crud` - Entity operations, authorization, lifecycle management
 
 ---
@@ -38,9 +41,11 @@ Following the **same architectural pattern**: Layer 2 (Domain Services) packages
 ## 🏦 Financial Management Domain
 
 ### 1. `accounting` ✅ (Implemented)
+
 **Responsibility**: Core financial accounting operations
 
 **Services**:
+
 - Tax calculation & compliance
 - Foreign exchange management
 - Depreciation schedules
@@ -52,9 +57,11 @@ Following the **same architectural pattern**: Layer 2 (Domain Services) packages
 ---
 
 ### 2. `treasury` (Proposed)
+
 **Responsibility**: Cash management, liquidity, and banking operations
 
 **Services**:
+
 ```typescript
 // Cash positioning & forecasting
 - getCashPosition(companyId, date) → cash balances by account/currency
@@ -80,6 +87,7 @@ Following the **same architectural pattern**: Layer 2 (Domain Services) packages
 **Dependencies**: `canon`, `database`, `logger`, `accounting` (for FX rates)
 
 **Key Features**:
+
 - Multi-currency cash positioning
 - Payment factory (batch payments)
 - Bank connectivity (MT940, camt.053)
@@ -89,9 +97,11 @@ Following the **same architectural pattern**: Layer 2 (Domain Services) packages
 ---
 
 ### 3. `fixed-assets` (Proposed)
+
 **Responsibility**: Asset lifecycle management and compliance
 
 **Services**:
+
 ```typescript
 // Asset registration & tracking
 - registerAsset(assetData) → asset master record
@@ -121,6 +131,7 @@ Following the **same architectural pattern**: Layer 2 (Domain Services) packages
 **Dependencies**: `canon`, `database`, `logger`, `accounting`
 
 **Key Features**:
+
 - Multi-book depreciation (tax, GAAP, IFRS, management)
 - Asset lifecycle (acquisition → retirement)
 - Revaluation & impairment (IAS 16, IAS 36)
@@ -130,9 +141,11 @@ Following the **same architectural pattern**: Layer 2 (Domain Services) packages
 ---
 
 ### 4. `tax-compliance` (Proposed)
+
 **Responsibility**: Tax calculation, filing, and regulatory compliance
 
 **Services**:
+
 ```typescript
 // Tax determination
 - determineTaxJurisdiction(address, taxType) → jurisdiction codes
@@ -163,6 +176,7 @@ Following the **same architectural pattern**: Layer 2 (Domain Services) packages
 **Dependencies**: `canon`, `database`, `logger`, `accounting`
 
 **Key Features**:
+
 - Multi-jurisdiction tax rules
 - VAT/GST/Sales tax automation
 - Withholding tax (domestic & treaty)
@@ -175,9 +189,11 @@ Following the **same architectural pattern**: Layer 2 (Domain Services) packages
 ## 🛒 Procurement-to-Pay (P2P) Domain
 
 ### 5. `procurement` (Proposed)
+
 **Responsibility**: Purchase requisitions, sourcing, and procurement workflows
 
 **Services**:
+
 ```typescript
 // Requisition management
 - createRequisition(items, requester, budgetCheck) → req-xxx
@@ -208,6 +224,7 @@ Following the **same architectural pattern**: Layer 2 (Domain Services) packages
 **Dependencies**: `canon`, `database`, `logger`, `workflow`, `crm` (budget)
 
 **Key Features**:
+
 - Multi-level approval workflows
 - RFQ/RFP management
 - Vendor qualification & evaluation
@@ -218,9 +235,11 @@ Following the **same architectural pattern**: Layer 2 (Domain Services) packages
 ---
 
 ### 6. `purchasing` (Proposed)
+
 **Responsibility**: Purchase order management and execution
 
 **Services**:
+
 ```typescript
 // PO creation & management
 - createPurchaseOrder(requisitionId, vendor, items) → PO-xxx
@@ -251,6 +270,7 @@ Following the **same architectural pattern**: Layer 2 (Domain Services) packages
 **Dependencies**: `canon`, `database`, `logger`, `workflow`, `procurement`
 
 **Key Features**:
+
 - PO versioning & change management
 - Multi-level approval
 - Vendor acknowledgment tracking
@@ -260,9 +280,11 @@ Following the **same architectural pattern**: Layer 2 (Domain Services) packages
 ---
 
 ### 7. `receiving` (Proposed)
+
 **Responsibility**: Goods receipt, inspection, and put-away
 
 **Services**:
+
 ```typescript
 // Goods receipt
 - createGoodsReceipt(poId, receivedItems) → GRN-xxx
@@ -292,6 +314,7 @@ Following the **same architectural pattern**: Layer 2 (Domain Services) packages
 **Dependencies**: `canon`, `database`, `logger`, `inventory`, `purchasing`
 
 **Key Features**:
+
 - Barcode/RFID scanning
 - Quality inspection workflows
 - Blind receiving support
@@ -301,9 +324,11 @@ Following the **same architectural pattern**: Layer 2 (Domain Services) packages
 ---
 
 ### 8. `payables` (Proposed)
+
 **Responsibility**: Accounts payable, invoice processing, vendor payments
 
 **Services**:
+
 ```typescript
 // Invoice processing
 - captureInvoice(invoiceData, source) → OCR/EDI/manual
@@ -339,6 +364,7 @@ Following the **same architectural pattern**: Layer 2 (Domain Services) packages
 **Dependencies**: `canon`, `database`, `logger`, `accounting`, `treasury`, `workflow`
 
 **Key Features**:
+
 - OCR invoice capture
 - 3-way matching automation
 - Early payment discount tracking
@@ -351,9 +377,11 @@ Following the **same architectural pattern**: Layer 2 (Domain Services) packages
 ## 💰 Order-to-Cash (O2C) Domain
 
 ### 9. `sales` (Proposed)
+
 **Responsibility**: Sales order management, quotations, and fulfillment
 
 **Services**:
+
 ```typescript
 // Quotation management
 - createQuotation(customer, items, validity) → QT-xxx
@@ -389,6 +417,7 @@ Following the **same architectural pattern**: Layer 2 (Domain Services) packages
 **Dependencies**: `canon`, `database`, `logger`, `workflow`, `crm`, `inventory`
 
 **Key Features**:
+
 - CPQ (Configure-Price-Quote)
 - ATP/CTP (capable-to-promise)
 - Stock reservation
@@ -399,9 +428,11 @@ Following the **same architectural pattern**: Layer 2 (Domain Services) packages
 ---
 
 ### 10. `shipping` (Proposed)
+
 **Responsibility**: Shipping execution, carrier management, logistics
 
 **Services**:
+
 ```typescript
 // Shipment planning
 - planShipment(soIds, consolidationRules) → shipments
@@ -437,6 +468,7 @@ Following the **same architectural pattern**: Layer 2 (Domain Services) packages
 **Dependencies**: `canon`, `database`, `logger`, `sales`, `inventory`
 
 **Key Features**:
+
 - Multi-carrier integration (UPS, FedEx, DHL)
 - Rate shopping & optimization
 - Advanced shipping notice (ASN)
@@ -447,9 +479,11 @@ Following the **same architectural pattern**: Layer 2 (Domain Services) packages
 ---
 
 ### 11. `receivables` (Proposed)
+
 **Responsibility**: Accounts receivable, invoicing, collections
 
 **Services**:
+
 ```typescript
 // Invoice generation
 - generateInvoice(shipmentId, billingRules) → INV-xxx
@@ -486,6 +520,7 @@ Following the **same architectural pattern**: Layer 2 (Domain Services) packages
 **Dependencies**: `canon`, `database`, `logger`, `accounting`, `sales`, `workflow`
 
 **Key Features**:
+
 - Auto-matching payments to invoices
 - Dunning management (automated reminders)
 - Credit limit enforcement
@@ -498,9 +533,11 @@ Following the **same architectural pattern**: Layer 2 (Domain Services) packages
 ## 📦 Supply Chain & Operations Domain
 
 ### 12. `inventory` ✅ (Implemented - Enhanced)
+
 **Current Services**: UOM conversion, lot traceability, manufacturing BOM, landed costs, three-way matching
 
 **Proposed Enhancements**:
+
 ```typescript
 // Inventory planning
 - calculateReorderPoint(productId, location) → safety stock + lead time demand
@@ -521,9 +558,11 @@ Following the **same architectural pattern**: Layer 2 (Domain Services) packages
 ---
 
 ### 13. `warehouse` (Proposed)
+
 **Responsibility**: Warehouse operations, picking, packing, storage
 
 **Services**:
+
 ```typescript
 // Warehouse layout & storage
 - defineWarehouseZones(warehouseId, zones) → zone structure
@@ -560,6 +599,7 @@ Following the **same architectural pattern**: Layer 2 (Domain Services) packages
 **Dependencies**: `canon`, `database`, `logger`, `inventory`, `receiving`, `shipping`
 
 **Key Features**:
+
 - Directed picking (wave, batch, zone, discrete)
 - Slotting optimization
 - Cross-docking
@@ -570,9 +610,11 @@ Following the **same architectural pattern**: Layer 2 (Domain Services) packages
 ---
 
 ### 14. `manufacturing` (Proposed - Split from inventory)
+
 **Responsibility**: Production planning, work orders, shop floor
 
 **Services**:
+
 ```typescript
 // Production planning
 - createProductionPlan(demand, capacity, horizon) → MPS (master production schedule)
@@ -609,6 +651,7 @@ Following the **same architectural pattern**: Layer 2 (Domain Services) packages
 **Dependencies**: `canon`, `database`, `logger`, `inventory`
 
 **Key Features**:
+
 - MRP (Material Requirements Planning)
 - Shop floor control
 - BOM explosion (already in inventory)
@@ -620,9 +663,11 @@ Following the **same architectural pattern**: Layer 2 (Domain Services) packages
 ---
 
 ### 15. `quality` (Proposed)
+
 **Responsibility**: Quality management, inspections, non-conformance
 
 **Services**:
+
 ```typescript
 // Inspection management
 - defineInspectionPlan(entity, checkpoints) → inspection template
@@ -654,6 +699,7 @@ Following the **same architectural pattern**: Layer 2 (Domain Services) packages
 **Dependencies**: `canon`, `database`, `logger`, `inventory`, `manufacturing`
 
 **Key Features**:
+
 - SPC (statistical process control)
 - CAPA (corrective/preventive action)
 - Certificate of analysis (COA)
@@ -664,9 +710,11 @@ Following the **same architectural pattern**: Layer 2 (Domain Services) packages
 ---
 
 ### 16. `planning` (Proposed)
+
 **Responsibility**: Demand planning, supply planning, S&OP
 
 **Services**:
+
 ```typescript
 // Demand forecasting
 - forecastDemand(productId, method, horizon) → statistical forecast
@@ -697,6 +745,7 @@ Following the **same architectural pattern**: Layer 2 (Domain Services) packages
 **Dependencies**: `canon`, `database`, `logger`, `inventory`, `sales`
 
 **Key Features**:
+
 - Time-series forecasting (ARIMA, exponential smoothing)
 - Demand sensing (POS data integration)
 - Collaborative planning (CPFR)
@@ -708,9 +757,11 @@ Following the **same architectural pattern**: Layer 2 (Domain Services) packages
 ## 👥 Human Capital Management (HCM) Domain
 
 ### 17. `hr-core` (Proposed)
+
 **Responsibility**: Employee master data, organizational structure
 
 **Services**:
+
 ```typescript
 // Employee management
 - hireEmployee(employeeData, position, startDate) → EMP-xxx
@@ -742,6 +793,7 @@ Following the **same architectural pattern**: Layer 2 (Domain Services) packages
 **Dependencies**: `canon`, `database`, `logger`, `workflow`
 
 **Key Features**:
+
 - Employee self-service
 - Organizational charting
 - Position management
@@ -752,9 +804,11 @@ Following the **same architectural pattern**: Layer 2 (Domain Services) packages
 ---
 
 ### 18. `payroll` (Proposed)
+
 **Responsibility**: Payroll processing, pay calculation, tax withholding
 
 **Services**:
+
 ```typescript
 // Payroll processing
 - calculateGrossPay(empId, period, earnings) → gross amount
@@ -791,6 +845,7 @@ Following the **same architectural pattern**: Layer 2 (Domain Services) packages
 **Dependencies**: `canon`, `database`, `logger`, `accounting`, `hr-core`
 
 **Key Features**:
+
 - Multi-state/country payroll
 - Tax computation (federal, state, local)
 - Garnishment processing
@@ -801,9 +856,11 @@ Following the **same architectural pattern**: Layer 2 (Domain Services) packages
 ---
 
 ### 19. `time-attendance` (Proposed)
+
 **Responsibility**: Time tracking, attendance, leave management
 
 **Services**:
+
 ```typescript
 // Time capture
 - clockIn(empId, timestamp, location) → time punch
@@ -839,6 +896,7 @@ Following the **same architectural pattern**: Layer 2 (Domain Services) packages
 **Dependencies**: `canon`, `database`, `logger`, `workflow`, `hr-core`, `payroll`
 
 **Key Features**:
+
 - Biometric/badge integration
 - Mobile time entry
 - Shift scheduling
@@ -849,9 +907,11 @@ Following the **same architectural pattern**: Layer 2 (Domain Services) packages
 ---
 
 ### 20. `benefits` (Proposed)
+
 **Responsibility**: Benefits administration, enrollment, claims
 
 **Services**:
+
 ```typescript
 // Benefits enrollment
 - definebenefitPlan(type, coverage, cost, carrier) → plan setup
@@ -882,6 +942,7 @@ Following the **same architectural pattern**: Layer 2 (Domain Services) packages
 **Dependencies**: `canon`, `database`, `logger`, `workflow`, `hr-core`, `payroll`
 
 **Key Features**:
+
 - Open enrollment automation
 - Life event processing
 - Carrier EDI integration (834, 837)
@@ -892,9 +953,11 @@ Following the **same architectural pattern**: Layer 2 (Domain Services) packages
 ---
 
 ### 21. `performance` (Proposed)
+
 **Responsibility**: Performance management, goals, reviews
 
 **Services**:
+
 ```typescript
 // Goal management
 - cascadeGoals(orgGoals, department) → aligned goals
@@ -931,6 +994,7 @@ Following the **same architectural pattern**: Layer 2 (Domain Services) packages
 **Dependencies**: `canon`, `database`, `logger`, `workflow`, `hr-core`
 
 **Key Features**:
+
 - Continuous feedback
 - OKR (Objectives & Key Results)
 - Competency-based reviews
@@ -943,9 +1007,11 @@ Following the **same architectural pattern**: Layer 2 (Domain Services) packages
 ## 📊 Project & Services Domain
 
 ### 22. `projects` (Proposed)
+
 **Responsibility**: Project management, time tracking, billing
 
 **Services**:
+
 ```typescript
 // Project management
 - createProject(customer, contract, budget, timeline) → PROJ-xxx
@@ -981,6 +1047,7 @@ Following the **same architectural pattern**: Layer 2 (Domain Services) packages
 **Dependencies**: `canon`, `database`, `logger`, `accounting`, `time-attendance`
 
 **Key Features**:
+
 - Gantt charts & dependencies
 - Resource capacity planning
 - Time & expense tracking
@@ -993,9 +1060,11 @@ Following the **same architectural pattern**: Layer 2 (Domain Services) packages
 ## 🔐 Compliance & Governance Domain
 
 ### 23. `audit` (Proposed)
+
 **Responsibility**: Audit trail, change tracking, compliance reporting
 
 **Services**:
+
 ```typescript
 // Audit logging (enhanced from CRUD)
 - logEntityChange(entity, action, before, after, userId) → audit entry
@@ -1026,6 +1095,7 @@ Following the **same architectural pattern**: Layer 2 (Domain Services) packages
 **Dependencies**: `canon`, `database`, `logger`
 
 **Key Features**:
+
 - Immutable audit logs
 - SOX compliance
 - GDPR right-to-audit
@@ -1035,9 +1105,11 @@ Following the **same architectural pattern**: Layer 2 (Domain Services) packages
 ---
 
 ### 24. `regulatory` (Proposed)
+
 **Responsibility**: Regulatory reporting, statutory compliance
 
 **Services**:
+
 ```typescript
 // Financial reporting
 - generateFinancialStatement(companyId, period, standard) → GAAP/IFRS reports
@@ -1068,6 +1140,7 @@ Following the **same architectural pattern**: Layer 2 (Domain Services) packages
 **Dependencies**: `canon`, `database`, `logger`, `accounting`, `tax-compliance`
 
 **Key Features**:
+
 - Multi-jurisdiction reporting
 - XBRL generation
 - E-filing integration
@@ -1079,9 +1152,11 @@ Following the **same architectural pattern**: Layer 2 (Domain Services) packages
 ## 📈 Analytics & Business Intelligence Domain
 
 ### 25. `advisory` ✅ (Implemented - To be enhanced)
+
 **Current Services**: Anomaly detection, forecasting, statistical scoring
 
 **Proposed Enhancements**:
+
 ```typescript
 // Predictive analytics
 - forecastSales(productId, method, horizon) → sales forecast
@@ -1102,9 +1177,11 @@ Following the **same architectural pattern**: Layer 2 (Domain Services) packages
 ---
 
 ### 26. `reporting` (Proposed)
+
 **Responsibility**: Business intelligence, dashboards, KPIs
 
 **Services**:
+
 ```typescript
 // Report generation
 - executeReport(reportId, parameters, format) → report output
@@ -1135,6 +1212,7 @@ Following the **same architectural pattern**: Layer 2 (Domain Services) packages
 **Dependencies**: `canon`, `database`, `logger`, `advisory`
 
 **Key Features**:
+
 - Self-service BI
 - Interactive dashboards
 - Drill-down/drill-through
@@ -1145,9 +1223,11 @@ Following the **same architectural pattern**: Layer 2 (Domain Services) packages
 ---
 
 ### 27. `budgeting` (Proposed - Split from CRM/advisory)
+
 **Responsibility**: Budgeting, forecasting, planning
 
 **Services**:
+
 ```typescript
 // Budget preparation
 - createBudget(fiscalYear, scenario, version) → BUD-xxx
@@ -1183,6 +1263,7 @@ Following the **same architectural pattern**: Layer 2 (Domain Services) packages
 **Dependencies**: `canon`, `database`, `logger`, `accounting`, `workflow`
 
 **Key Features**:
+
 - Top-down & bottom-up budgeting
 - Driver-based planning
 - Scenario modeling
@@ -1195,6 +1276,7 @@ Following the **same architectural pattern**: Layer 2 (Domain Services) packages
 ## 🔧 Platform & Integration Domain
 
 ### 28. `workflow` ✅ (Implemented)
+
 **Current Services**: Rules engine, workflow orchestration, envelope generation
 
 **Note**: Already well-implemented - continue to enhance
@@ -1202,9 +1284,11 @@ Following the **same architectural pattern**: Layer 2 (Domain Services) packages
 ---
 
 ### 29. `integration` (Proposed)
+
 **Responsibility**: API management, EDI, data exchange
 
 **Services**:
+
 ```typescript
 // API management
 - defineAPIEndpoint(entity, operations, auth) → REST/GraphQL API
@@ -1235,6 +1319,7 @@ Following the **same architectural pattern**: Layer 2 (Domain Services) packages
 **Dependencies**: `canon`, `database`, `logger`
 
 **Key Features**:
+
 - REST & GraphQL APIs
 - EDI (X12, EDIFACT, XML)
 - SFTP/FTP/AS2 transfers
@@ -1245,9 +1330,11 @@ Following the **same architectural pattern**: Layer 2 (Domain Services) packages
 ---
 
 ### 30. `notifications` (Proposed)
+
 **Responsibility**: Alerts, notifications, messaging
 
 **Services**:
+
 ```typescript
 // Notification delivery
 - sendEmail(recipient, template, data, attachments) → email sent
@@ -1278,6 +1365,7 @@ Following the **same architectural pattern**: Layer 2 (Domain Services) packages
 **Dependencies**: `canon`, `database`, `logger`
 
 **Key Features**:
+
 - Multi-channel (email, SMS, push, in-app)
 - Template management
 - User preferences
@@ -1289,11 +1377,13 @@ Following the **same architectural pattern**: Layer 2 (Domain Services) packages
 ## 📦 Package Summary
 
 ### Layer 1: Foundation (4 packages) ✅
+
 Already implemented and solid.
 
 ### Layer 2: Domain Services (30 packages total)
 
 **Financial Management (6 packages)**
+
 1. ✅ `accounting` - Core accounting
 2. 🆕 `treasury` - Cash & banking
 3. 🆕 `fixed-assets` - Asset lifecycle
@@ -1301,52 +1391,24 @@ Already implemented and solid.
 5. ✅ `intercompany` - IC transactions
 6. 🆕 `budgeting` - Planning & forecasting
 
-**Procurement-to-Pay (4 packages)**
-7. 🆕 `procurement` - Requisitions, RFQ, sourcing
-8. 🆕 `purchasing` - Purchase orders
-9. 🆕 `receiving` - Goods receipt
-10. 🆕 `payables` - AP & payments
+**Procurement-to-Pay (4 packages)** 7. 🆕 `procurement` - Requisitions, RFQ, sourcing 8. 🆕 `purchasing` - Purchase orders 9. 🆕 `receiving` - Goods receipt 10. 🆕 `payables` - AP & payments
 
-**Order-to-Cash (3 packages)**
-11. 🆕 `sales` - Sales orders & quotations
-12. 🆕 `shipping` - Logistics & carriers
-13. 🆕 `receivables` - AR & collections
+**Order-to-Cash (3 packages)** 11. 🆕 `sales` - Sales orders & quotations 12. 🆕 `shipping` - Logistics & carriers 13. 🆕 `receivables` - AR & collections
 
-**Supply Chain (6 packages)**
-14. ✅ `inventory` - Inventory management
-15. 🆕 `warehouse` - WMS operations
-16. 🆕 `manufacturing` - Production control
-17. 🆕 `quality` - Quality management
-18. 🆕 `planning` - Demand & supply planning
-19. ✅ `crm` - Customer & pricing
+**Supply Chain (6 packages)** 14. ✅ `inventory` - Inventory management 15. 🆕 `warehouse` - WMS operations 16. 🆕 `manufacturing` - Production control 17. 🆕 `quality` - Quality management 18. 🆕 `planning` - Demand & supply planning 19. ✅ `crm` - Customer & pricing
 
-**Human Capital (5 packages)**
-20. 🆕 `hr-core` - Employee master data
-21. 🆕 `payroll` - Payroll processing
-22. 🆕 `time-attendance` - Time tracking
-23. 🆕 `benefits` - Benefits administration
-24. 🆕 `performance` - Performance management
+**Human Capital (5 packages)** 20. 🆕 `hr-core` - Employee master data 21. 🆕 `payroll` - Payroll processing 22. 🆕 `time-attendance` - Time tracking 23. 🆕 `benefits` - Benefits administration 24. 🆕 `performance` - Performance management
 
-**Project & Services (1 package)**
-25. 🆕 `projects` - Project management
+**Project & Services (1 package)** 25. 🆕 `projects` - Project management
 
-**Compliance (2 packages)**
-26. 🆕 `audit` - Audit trail & controls
-27. 🆕 `regulatory` - Regulatory reporting
+**Compliance (2 packages)** 26. 🆕 `audit` - Audit trail & controls 27. 🆕 `regulatory` - Regulatory reporting
 
-**Analytics (3 packages)**
-28. ✅ `advisory` - Predictive analytics
-29. 🆕 `reporting` - BI & dashboards
-30. 🆕 `budgeting` - (already listed above)
+**Analytics (3 packages)** 28. ✅ `advisory` - Predictive analytics 29. 🆕 `reporting` - BI & dashboards 30. 🆕 `budgeting` - (already listed above)
 
-**Platform (4 packages)**
-31. ✅ `workflow` - Rules engine
-32. ✅ `search` - Full-text search
-33. ✅ `migration` - Data migration
-34. 🆕 `integration` - APIs & EDI
-35. 🆕 `notifications` - Alerts & messaging
+**Platform (4 packages)** 31. ✅ `workflow` - Rules engine 32. ✅ `search` - Full-text search 33. ✅ `migration` - Data migration 34. 🆕 `integration` - APIs & EDI 35. 🆕 `notifications` - Alerts & messaging
 
 ### Layer 3: Application (1 package) ✅
+
 - `crud` - Entity orchestration
 
 ---
@@ -1362,23 +1424,29 @@ Already implemented and solid.
 ## Implementation Priority
 
 ### Phase 1: Core Transactional (P2P + O2C)
+
 - `procurement`, `purchasing`, `receiving`, `payables`
 - `sales`, `shipping`, `receivables`
 - `warehouse`
 
 ### Phase 2: Financial Management
+
 - `treasury`, `fixed-assets`, `tax-compliance`, `budgeting`
 
 ### Phase 3: Manufacturing & Supply Chain
+
 - `manufacturing`, `quality`, `planning`
 
 ### Phase 4: Human Capital
+
 - `hr-core`, `payroll`, `time-attendance`, `benefits`, `performance`
 
 ### Phase 5: Services & Analytics
+
 - `projects`, `reporting`, `integration`, `notifications`
 
 ### Phase 6: Governance
+
 - `audit`, `regulatory`
 
 ---
@@ -1388,6 +1456,7 @@ Already implemented and solid.
 All new packages MUST follow these patterns:
 
 ### ✅ Package Structure
+
 ```
 packages/[domain-name]/
 ├── package.json          # exports: {"main": "./src/index.ts"}
@@ -1401,12 +1470,14 @@ packages/[domain-name]/
 ```
 
 ### ✅ Dependencies
+
 - Layer 2 packages depend ONLY on: Layer 1 (foundation) + `logger`
 - Exception: Can depend on other Layer 2 packages if justified (document in GOVERNANCE.md)
 - Always include: `afenda-canon`, `afenda-database`, `drizzle-orm`(if DB access)
 - DevDependencies: `afenda-eslint-config`, `afenda-typescript-config`, `typescript`
 
 ### ✅ Exports Pattern
+
 ```typescript
 // src/index.ts
 export {
@@ -1418,6 +1489,7 @@ export {
 ```
 
 ### ✅ Service Pattern
+
 ```typescript
 // src/services/service-name.ts
 import type { NeonHttpDatabase } from 'drizzle-orm/neon-http';
@@ -1432,7 +1504,9 @@ export async function serviceName(
 ```
 
 ### ✅ Documentation
+
 Every README must include:
+
 1. **Purpose** - What this package does
 2. **When to Use** - Use cases bullet list
 3. **Key Concepts** - Domain concepts explained
@@ -1442,7 +1516,9 @@ Every README must include:
 7. **See Also** - Links to ARCHITECTURE.md, GOVERNANCE.md
 
 ### ✅ Validation
+
 After creating each package:
+
 ```bash
 pnpm install
 pnpm run validate:deps  # Must pass

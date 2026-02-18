@@ -14,10 +14,12 @@ All documentation is in `references/` organized by topic:
 ### Core Documentation
 
 #### Getting Started
+
 - `index.mdx` - Introduction and quick start
 - `basics.mdx` - Basic usage and schema definition
 
 #### API Reference
+
 - `api.mdx` - Complete API documentation
   - Primitives (string, number, boolean, etc.)
   - Complex types (object, array, tuple, union, etc.)
@@ -27,6 +29,7 @@ All documentation is in `references/` organized by topic:
   - Error handling
 
 #### Advanced Features
+
 - `error-formatting.mdx` - Error formatting and customization
 - `error-customization.mdx` - Custom error messages
 - `codecs.mdx` - Serialization and deserialization
@@ -34,48 +37,52 @@ All documentation is in `references/` organized by topic:
 - `metadata.mdx` - Schema metadata
 
 #### Integration & Ecosystem
+
 - `ecosystem.mdx` - Community packages and integrations
 - `library-authors.mdx` - Guide for library authors
 - `packages/` - Related packages
 
 #### Version 4
+
 - `v4/` - Zod v4 features and migration guide
 
 ## Quick Reference
 
 ### Common Tasks
 
-| Task | File to Read |
-|------|--------------|
-| Get started | `index.mdx`, `basics.mdx` |
-| Define schemas | `api.mdx` (Primitives section) |
-| Object validation | `api.mdx` (Objects section) |
-| Array validation | `api.mdx` (Arrays section) |
-| Union types | `api.mdx` (Unions section) |
-| Refinements | `api.mdx` (Refinements section) |
-| Transforms | `api.mdx` (Transforms section) |
-| Error handling | `error-formatting.mdx`, `error-customization.mdx` |
-| Type inference | `api.mdx` (Type Inference section) |
-| Async validation | `api.mdx` (Async section) |
-| JSON Schema | `json-schema.mdx` |
-| Custom errors | `error-customization.mdx` |
-| Ecosystem | `ecosystem.mdx` |
+| Task              | File to Read                                      |
+| ----------------- | ------------------------------------------------- |
+| Get started       | `index.mdx`, `basics.mdx`                         |
+| Define schemas    | `api.mdx` (Primitives section)                    |
+| Object validation | `api.mdx` (Objects section)                       |
+| Array validation  | `api.mdx` (Arrays section)                        |
+| Union types       | `api.mdx` (Unions section)                        |
+| Refinements       | `api.mdx` (Refinements section)                   |
+| Transforms        | `api.mdx` (Transforms section)                    |
+| Error handling    | `error-formatting.mdx`, `error-customization.mdx` |
+| Type inference    | `api.mdx` (Type Inference section)                |
+| Async validation  | `api.mdx` (Async section)                         |
+| JSON Schema       | `json-schema.mdx`                                 |
+| Custom errors     | `error-customization.mdx`                         |
+| Ecosystem         | `ecosystem.mdx`                                   |
 
 ### Schema Examples
 
 **Primitives:**
+
 ```typescript
-z.string()
-z.number()
-z.boolean()
-z.date()
-z.undefined()
-z.null()
-z.any()
-z.unknown()
+z.string();
+z.number();
+z.boolean();
+z.date();
+z.undefined();
+z.null();
+z.any();
+z.unknown();
 ```
 
 **Complex Types:**
+
 ```typescript
 z.object({ ... })
 z.array(z.string())
@@ -87,18 +94,20 @@ z.set(z.string())
 ```
 
 **Refinements:**
+
 ```typescript
-z.string().email()
-z.string().url()
-z.string().uuid()
-z.number().min(5).max(10)
-z.string().regex(/pattern/)
+z.string().email();
+z.string().url();
+z.string().uuid();
+z.number().min(5).max(10);
+z.string().regex(/pattern/);
 ```
 
 **Transforms:**
+
 ```typescript
-z.string().transform(val => val.toUpperCase())
-z.coerce.number()
+z.string().transform((val) => val.toUpperCase());
+z.coerce.number();
 ```
 
 ### When to Use This Skill

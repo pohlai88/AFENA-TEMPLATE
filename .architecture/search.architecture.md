@@ -22,17 +22,17 @@ The `search_index` materialized view provides a unified cross-entity search surf
 - **FTS config**: `'simple'` (not `'english'`) — multi-language friendly
 - **Adapter pattern**: Each entity provides a `searchFn(query, limit) → SearchResult[]`
 - **Cross-entity**: `Promise.all` fan-out with per-adapter error isolation (`.catch(() => [])`)
-- **Score normalization**: FTS uses `ts_rank`, ILIKE uses position-based scoring (1 - idx * 0.01)
+- **Score normalization**: FTS uses `ts_rank`, ILIKE uses position-based scoring (1 - idx \* 0.01)
 - **Read replica**: All search queries use `dbRo` (never the RW connection)
 
 ---
 
 ## 3. Package Structure (live)
 
-| Metric | Value |
-| ------ | ----- |
-| **Source files** | 10 |
-| **Test files** | 0 |
+| Metric                 | Value            |
+| ---------------------- | ---------------- |
+| **Source files**       | 10               |
+| **Test files**         | 0                |
 | **Source directories** | adapters, worker |
 
 ```
@@ -47,34 +47,34 @@ packages/search/src/
 
 ### Value Exports
 
-| Export | Source |
-| ------ | ------ |
-| `toTsQuery` | `./fts` |
-| `ftsWhere` | `./fts` |
-| `ftsRank` | `./fts` |
-| `ilikeFallback` | `./fts` |
-| `registerSearchableEntity` | `./registry` |
-| `getRegisteredEntityTypes` | `./registry` |
-| `crossEntitySearch` | `./registry` |
-| `searchAll` | `./adapters/cross-entity` |
-| `searchContacts` | `./adapters/contacts` |
-| `refreshSearchIndex` | `./refresh` |
-| `backfillSearchDocuments` | `./backfill` |
-| `backfillSearchDocumentsChunk` | `./backfill` |
-| `isSearchDocumentsEmpty` | `./backfill` |
-| `isBackfillComplete` | `./backfill` |
-| `processSearchOutboxBatch` | `./worker/search-worker` |
-| `drainSearchOutbox` | `./worker/search-worker` |
-| `runSearchWorker` | `./worker/search-worker` |
-| `type SearchWorkerConfig` | `./worker/search-worker` |
-| `type SearchOutboxEvent` | `./worker/search-worker` |
+| Export                         | Source                    |
+| ------------------------------ | ------------------------- |
+| `toTsQuery`                    | `./fts`                   |
+| `ftsWhere`                     | `./fts`                   |
+| `ftsRank`                      | `./fts`                   |
+| `ilikeFallback`                | `./fts`                   |
+| `registerSearchableEntity`     | `./registry`              |
+| `getRegisteredEntityTypes`     | `./registry`              |
+| `crossEntitySearch`            | `./registry`              |
+| `searchAll`                    | `./adapters/cross-entity` |
+| `searchContacts`               | `./adapters/contacts`     |
+| `refreshSearchIndex`           | `./refresh`               |
+| `backfillSearchDocuments`      | `./backfill`              |
+| `backfillSearchDocumentsChunk` | `./backfill`              |
+| `isSearchDocumentsEmpty`       | `./backfill`              |
+| `isBackfillComplete`           | `./backfill`              |
+| `processSearchOutboxBatch`     | `./worker/search-worker`  |
+| `drainSearchOutbox`            | `./worker/search-worker`  |
+| `runSearchWorker`              | `./worker/search-worker`  |
+| `type SearchWorkerConfig`      | `./worker/search-worker`  |
+| `type SearchOutboxEvent`       | `./worker/search-worker`  |
 
 ### Type Exports
 
-| Type | Source |
-| ---- | ------ |
-| `SearchResult` | `./types` |
-| `SearchOptions` | `./types` |
+| Type                     | Source    |
+| ------------------------ | --------- |
+| `SearchResult`           | `./types` |
+| `SearchOptions`          | `./types` |
 | `SearchableEntityConfig` | `./types` |
 
 ---
@@ -90,8 +90,8 @@ packages/search/src/
 
 ### External
 
-| Package | Version |
-| ------- | ------- |
+| Package       | Version   |
+| ------------- | --------- |
 | `drizzle-orm` | `^0.44.0` |
 
 ---

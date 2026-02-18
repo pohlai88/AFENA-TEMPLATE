@@ -39,6 +39,7 @@ curl https://app.afenda.dev/api/users/me \
 - **Unauthenticated**: 100 requests/hour
 
 Rate limit headers:
+
 ```
 X-RateLimit-Limit: 1000
 X-RateLimit-Remaining: 950
@@ -50,9 +51,11 @@ X-RateLimit-Reset: 1640995200
 ### Health Checks
 
 #### `GET /api/health`
+
 Full health status including database and memory checks.
 
 **Response**:
+
 ```json
 {
   "healthy": true,
@@ -75,22 +78,27 @@ Full health status including database and memory checks.
 ```
 
 #### `GET /api/ready`
+
 Kubernetes readiness probe (returns `OK` or `NOT READY`).
 
 #### `GET /api/alive`
+
 Kubernetes liveness probe (returns `OK` or `DEAD`).
 
 ### Users
 
 #### `GET /api/users/me`
+
 Get current authenticated user.
 
 **Headers**:
+
 ```
 Authorization: Bearer <jwt-token>
 ```
 
 **Response**:
+
 ```json
 {
   "id": "123e4567-e89b-12d3-a456-426614174000",
@@ -119,14 +127,14 @@ All errors follow a consistent format:
 
 ### Error Codes
 
-| Code | Status | Description |
-|------|--------|-------------|
-| `UNAUTHORIZED` | 401 | Authentication required or invalid token |
-| `FORBIDDEN` | 403 | Insufficient permissions |
-| `NOT_FOUND` | 404 | Resource not found |
-| `BAD_REQUEST` | 400 | Invalid request parameters |
-| `CONFLICT` | 409 | Resource conflict (e.g., duplicate email) |
-| `INTERNAL_SERVER_ERROR` | 500 | Unexpected server error |
+| Code                    | Status | Description                               |
+| ----------------------- | ------ | ----------------------------------------- |
+| `UNAUTHORIZED`          | 401    | Authentication required or invalid token  |
+| `FORBIDDEN`             | 403    | Insufficient permissions                  |
+| `NOT_FOUND`             | 404    | Resource not found                        |
+| `BAD_REQUEST`           | 400    | Invalid request parameters                |
+| `CONFLICT`              | 409    | Resource conflict (e.g., duplicate email) |
+| `INTERNAL_SERVER_ERROR` | 500    | Unexpected server error                   |
 
 ## Correlation IDs
 
@@ -165,7 +173,7 @@ import { fetchWithCorrelation } from 'afenda-observability/correlation';
 
 const response = await fetchWithCorrelation('https://app.afenda.dev/api/users/me', {
   headers: {
-    'Authorization': `Bearer ${token}`,
+    Authorization: `Bearer ${token}`,
   },
 });
 
@@ -180,7 +188,7 @@ import type { User } from '@/types/api';
 async function getCurrentUser(token: string): Promise<User> {
   const response = await fetch('https://app.afenda.dev/api/users/me', {
     headers: {
-      'Authorization': `Bearer ${token}`,
+      Authorization: `Bearer ${token}`,
     },
   });
 

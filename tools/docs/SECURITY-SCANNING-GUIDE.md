@@ -163,30 +163,30 @@ pnpm --filter quality-metrics security --format=json
 
 ```json
 {
-    "timestamp": "2026-02-17T10:30:00Z",
-    "summary": {
-        "critical": 1,
-        "high": 2,
-        "moderate": 0,
-        "low": 0,
-        "info": 0,
-        "total": 3
-    },
-    "vulnerabilities": [
-        {
-            "severity": "critical",
-            "package": "lodash",
-            "version": "4.17.20",
-            "title": "Prototype Pollution",
-            "url": "https://github.com/advisories/GHSA-xxxx",
-            "fixedIn": "4.17.21",
-            "cwe": "CWE-1321",
-            "cvss": 9.8
-        }
-    ],
-    "passed": false,
-    "violations": ["1 critical vulnerabilities"],
-    "warnings": ["2 high vulnerabilities"]
+  "timestamp": "2026-02-17T10:30:00Z",
+  "summary": {
+    "critical": 1,
+    "high": 2,
+    "moderate": 0,
+    "low": 0,
+    "info": 0,
+    "total": 3
+  },
+  "vulnerabilities": [
+    {
+      "severity": "critical",
+      "package": "lodash",
+      "version": "4.17.20",
+      "title": "Prototype Pollution",
+      "url": "https://github.com/advisories/GHSA-xxxx",
+      "fixedIn": "4.17.21",
+      "cwe": "CWE-1321",
+      "cvss": 9.8
+    }
+  ],
+  "passed": false,
+  "violations": ["1 critical vulnerabilities"],
+  "warnings": ["2 high vulnerabilities"]
 }
 ```
 
@@ -362,19 +362,19 @@ Security scanning is integrated in `.github/workflows/quality-gates.yml`:
   if: github.event_name == 'pull_request'
   id: security_report
   run: |
-      if [ -f ".quality-metrics/security-report.md" ]; then
-        echo "report<<EOF" >> $GITHUB_OUTPUT
-        cat .quality-metrics/security-report.md >> $GITHUB_OUTPUT
-        echo "EOF" >> $GITHUB_OUTPUT
-      fi
+    if [ -f ".quality-metrics/security-report.md" ]; then
+      echo "report<<EOF" >> $GITHUB_OUTPUT
+      cat .quality-metrics/security-report.md >> $GITHUB_OUTPUT
+      echo "EOF" >> $GITHUB_OUTPUT
+    fi
 
 - name: Post PR Comment
   if: github.event_name == 'pull_request'
   uses: actions/github-script@v7
   with:
-      script: |
-          const report = `${{ steps.security_report.outputs.report }}`;
-          // Post comment with report...
+    script: |
+      const report = `${{ steps.security_report.outputs.report }}`;
+      // Post comment with report...
 
 - name: Fail if security scan failed
   if: steps.security.outcome == 'failure'
@@ -744,12 +744,14 @@ Or update devDependency to fix the vulnerability.
 **Solution**:
 
 1. **Ensure lockfile committed**:
+
    ```bash
    git add pnpm-lock.yaml
    git commit -m "chore: update lockfile"
    ```
 
 2. **Clear local cache**:
+
    ```bash
    rm -rf node_modules pnpm-lock.yaml
    pnpm install

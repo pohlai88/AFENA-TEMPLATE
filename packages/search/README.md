@@ -29,7 +29,7 @@ src/
 ## Usage
 
 ```ts
-import {/* ... */} from "afenda-search";
+import {} from /* ... */ 'afenda-search';
 ```
 
 ## API
@@ -129,10 +129,10 @@ platform.
 ## Usage
 
 ```typescript
-import { crossEntitySearch, registerSearchableEntity } from "afenda-search";
+import { crossEntitySearch, registerSearchableEntity } from 'afenda-search';
 
-registerSearchableEntity({ type: "contacts", adapter: searchContacts });
-const results = await crossEntitySearch("acme", { limit: 10 });
+registerSearchableEntity({ type: 'contacts', adapter: searchContacts });
+const results = await crossEntitySearch('acme', { limit: 10 });
 ```
 
 ## GAP-DB-004: Incremental Search (Vercel)

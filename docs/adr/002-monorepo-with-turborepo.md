@@ -8,6 +8,7 @@
 ## Context
 
 We needed a repository structure that:
+
 - Supports multiple packages with shared dependencies
 - Enables code sharing across applications
 - Provides fast, incremental builds
@@ -15,6 +16,7 @@ We needed a repository structure that:
 - Supports multiple deployment targets (web, API, workers)
 
 Options considered:
+
 1. **Polyrepo**: Separate repos for each package
 2. **Monorepo with npm workspaces**: Basic monorepo without build orchestration
 3. **Monorepo with Nx**: Advanced monorepo tooling
@@ -42,7 +44,7 @@ afenda-monorepo/
 │   ├── migration/    # Migration utilities
 │   └── search/       # Search functionality
 └── tools/
-    └── afena-cli/    # CLI tool for metadata generation
+    └── afenda-cli/    # CLI tool for metadata generation
 ```
 
 ### Build Pipeline
@@ -75,23 +77,24 @@ afenda-monorepo/
 ✅ **Build caching**: Turborepo caches build outputs (local + remote)  
 ✅ **Incremental builds**: Only rebuilds changed packages  
 ✅ **Type safety**: TypeScript project references across packages  
-✅ **Faster CI**: Parallel builds, intelligent caching  
+✅ **Faster CI**: Parallel builds, intelligent caching
 
 ### Negative
 
 ⚠️ **Repository size**: Grows larger over time  
 ⚠️ **Tooling complexity**: Need to learn Turborepo + pnpm  
 ⚠️ **CI configuration**: More complex than single-package repos  
-⚠️ **Merge conflicts**: Higher chance on shared files (package.json, lockfile)  
+⚠️ **Merge conflicts**: Higher chance on shared files (package.json, lockfile)
 
 ### Neutral
 
 ℹ️ **Build times**: Initial builds slower, incremental builds much faster  
-ℹ️ **Deployment**: Each app can be deployed independently  
+ℹ️ **Deployment**: Each app can be deployed independently
 
 ## Alternatives Considered
 
 ### Polyrepo (Multiple Repositories)
+
 - ✅ Simple, isolated changes
 - ❌ Difficult to share code
 - ❌ Dependency version drift
@@ -99,6 +102,7 @@ afenda-monorepo/
 - **Rejected**: Too much overhead for small team
 
 ### Nx
+
 - ✅ More features (code generation, dependency graph visualization)
 - ✅ Better task scheduling
 - ❌ More complex configuration
@@ -107,6 +111,7 @@ afenda-monorepo/
 - **Rejected**: Overkill for our needs, Turborepo is simpler
 
 ### Lerna
+
 - ✅ Mature, well-tested
 - ❌ Primarily for publishing npm packages
 - ❌ No build caching
@@ -114,6 +119,7 @@ afenda-monorepo/
 - **Rejected**: Not optimized for monorepo builds
 
 ### Rush
+
 - ✅ Excellent at scale (Microsoft monorepos)
 - ❌ Complex configuration
 - ❌ Designed for very large monorepos
@@ -124,6 +130,7 @@ afenda-monorepo/
 ### Package Naming Convention
 
 All packages use the `afenda-` prefix:
+
 - `afenda-database`
 - `afenda-logger`
 - `afenda-observability`

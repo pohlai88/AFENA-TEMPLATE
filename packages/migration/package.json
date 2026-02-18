@@ -21,19 +21,19 @@
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
-    "@neondatabase/serverless": "^1.0.0",
+    "@neondatabase/serverless": "catalog:",
     "afenda-canon": "workspace:*",
     "afenda-database": "workspace:*",
     "afenda-logger": "workspace:*",
-    "drizzle-orm": "^0.44.0",
-    "fuse.js": "^7.1.0",
-    "libphonenumber-js": "^1.12.36",
-    "p-limit": "^7.3.0",
-    "papaparse": "^5.5.3"
+    "drizzle-orm": "catalog:",
+    "fuse.js": "catalog:",
+    "libphonenumber-js": "catalog:",
+    "p-limit": "catalog:",
+    "papaparse": "catalog:"
   },
   "devDependencies": {
     "@types/node": "catalog:",
-    "@types/papaparse": "^5.5.2",
+    "@types/papaparse": "catalog:",
     "afenda-eslint-config": "workspace:^",
     "afenda-typescript-config": "workspace:*",
     "tslib": "catalog:",

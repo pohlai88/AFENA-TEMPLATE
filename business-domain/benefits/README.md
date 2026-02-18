@@ -44,12 +44,12 @@ processing, COBRA administration, FSA/HSA management, and benefits analytics.
 ## Usage
 
 ```typescript
-import { enrollEmployee } from "afenda-benefits";
+import { enrollEmployee } from 'afenda-benefits';
 
 const result = await enrollEmployee(db, orgId, {
-  employeeId: "emp-123",
-  planIds: ["plan-medical-1", "plan-dental-2"],
-  effectiveDate: new Date("2026-01-01"),
+  employeeId: 'emp-123',
+  planIds: ['plan-medical-1', 'plan-dental-2'],
+  effectiveDate: new Date('2026-01-01'),
 });
 ```
 

@@ -1,10 +1,13 @@
 # package-development
 
 ## Description
+
 Creating, structuring, and maintaining packages in the AFENDA-NEXUS monorepo with layer-specific requirements and best practices.
 
 ## Trigger Conditions
+
 Use this skill when:
+
 - Creating a new package
 - Restructuring an existing package
 - Questions about package structure
@@ -27,6 +30,7 @@ AFENDA-NEXUS uses a **monorepo** with **pnpm workspaces** and **Turborepo**. Pac
 ### 1. Determine the Correct Layer
 
 Ask these questions:
+
 - **Layer 0**: Is this purely tooling/configuration?
 - **Layer 1**: Is this a core primitive used everywhere?
 - **Layer 2**: Is this domain-specific business logic?
@@ -44,6 +48,7 @@ cd packages/<package-name>
 ```
 
 **Naming Convention**:
+
 - **Singular nouns**: `inventory`, `accounting`, `workflow`
 - **Domain-focused**: Reflects business capability
 - **Lowercase with hyphens**: `multi-word-package`
@@ -54,6 +59,7 @@ cd packages/<package-name>
 ### 3. Required Files
 
 Every package must have:
+
 1. `package.json` - Package metadata and dependencies
 2. `tsconfig.json` - TypeScript configuration
 3. `README.md` - Documentation
@@ -61,6 +67,7 @@ Every package must have:
 5. `eslint.config.cjs` (or `eslint.config.js`) - Linting configuration
 
 **Optional**:
+
 - `vitest.config.ts` - Unit test configuration (Layer 2 & 3)
 - `tsup.config.ts` - Build configuration (if package needs bundling)
 - `__tests__/` - Test files
@@ -72,6 +79,7 @@ Every package must have:
 ### `package.json`
 
 #### Layer 0 (Configuration)
+
 ```json
 {
   "name": "afenda-<package-name>",
@@ -96,6 +104,7 @@ Every package must have:
 ---
 
 #### Layer 1 (Foundation)
+
 ```json
 {
   "name": "afenda-<package-name>",
@@ -135,6 +144,7 @@ Every package must have:
 ---
 
 #### Layer 2 (Domain Services)
+
 ```json
 {
   "name": "afenda-<package-name>",
@@ -178,6 +188,7 @@ Every package must have:
 ---
 
 #### Layer 3 (Application)
+
 ```json
 {
   "name": "afenda-<package-name>",
@@ -231,14 +242,15 @@ Every package must have:
   "extends": "afenda-typescript-config/base.json",
   "compilerOptions": {
     "rootDir": "./src",
-    "noEmit": true
+    "noEmit": true,
   },
   "include": ["src/**/*"],
-  "exclude": ["node_modules", "dist", "**/*.test.ts"]
+  "exclude": ["node_modules", "dist", "**/*.test.ts"],
 }
 ```
 
 **For packages that bundle** (rare):
+
 ```jsonc
 {
   "extends": "afenda-typescript-config/base.json",
@@ -246,10 +258,10 @@ Every package must have:
     "rootDir": "./src",
     "outDir": "./dist",
     "declaration": true,
-    "declarationMap": true
+    "declarationMap": true,
   },
   "include": ["src/**/*"],
-  "exclude": ["node_modules", "dist", "**/*.test.ts"]
+  "exclude": ["node_modules", "dist", "**/*.test.ts"],
 }
 ```
 
@@ -260,9 +272,7 @@ Every package must have:
 ```javascript
 const base = require('afenda-eslint-config/base.cjs');
 
-module.exports = [
-  ...base,
-];
+module.exports = [...base];
 ```
 
 ---
@@ -270,58 +280,39 @@ module.exports = [
 ### `src/index.ts` (Public API)
 
 **Layer 1 (Foundation)**:
+
 ```typescript
 // Types
-export type {
-  EntityType,
-  ActionVerb,
-  CapabilityKey,
-} from './types/entity';
+export type { EntityType, ActionVerb, CapabilityKey } from './types/entity';
 
 // Schemas
-export {
-  entitySchema,
-  actionSchema,
-} from './schemas/entity-schema';
+export { entitySchema, actionSchema } from './schemas/entity-schema';
 
 // Utilities
-export {
-  parseEntityId,
-  formatDocNo,
-} from './utils/formatters';
+export { parseEntityId, formatDocNo } from './utils/formatters';
 ```
 
 ---
 
 **Layer 2 (Domain Service)**:
+
 ```typescript
 // Services
-export {
-  TaxCalculationService,
-  type TaxCalculationResult,
-} from './services/tax-calculation';
+export { TaxCalculationService, type TaxCalculationResult } from './services/tax-calculation';
 
-export {
-  FiscalPeriodService,
-  type FiscalPeriodStatus,
-} from './services/fiscal-period';
+export { FiscalPeriodService, type FiscalPeriodStatus } from './services/fiscal-period';
 
 // Utility functions (exported for convenience)
-export {
-  resolveTaxRate,
-  calculateLineTax,
-} from './services/tax-calc';
+export { resolveTaxRate, calculateLineTax } from './services/tax-calc';
 
 // Types
-export type {
-  TaxLineResult,
-  ResolvedTaxRate,
-} from './services/tax-calc';
+export type { TaxLineResult, ResolvedTaxRate } from './services/tax-calc';
 ```
 
 ---
 
 **Layer 3 (Application)**:
+
 ```typescript
 // CRUD operations
 export {
@@ -340,10 +331,7 @@ export {
 } from './policies/enforcement';
 
 // Types
-export type {
-  CRUDResult,
-  PolicyContext,
-} from './types';
+export type { CRUDResult, PolicyContext } from './types';
 ```
 
 ---
@@ -353,6 +341,7 @@ export type {
 See [packages/PACKAGE_TEMPLATE.md](../../../packages/PACKAGE_TEMPLATE.md) for full template.
 
 **Minimum sections**:
+
 1. **Title** - Package name
 2. **Purpose** - What this package does
 3. **When to Use** - Use cases
@@ -454,6 +443,7 @@ packages/crud/
 ### Barrel Exports (`src/index.ts`)
 
 **✅ Good: Explicit exports**
+
 ```typescript
 // Export specific items
 export { functionA, functionB } from './module';
@@ -465,6 +455,7 @@ export * as utils from './utils';
 ```
 
 **❌ Bad: Wildcard exports**
+
 ```typescript
 // Exposes internals
 export * from './module';
@@ -476,6 +467,7 @@ export * from './internal-helpers';
 ### Type-Only Exports
 
 Always use `type` keyword for type exports:
+
 ```typescript
 // ✅ Good
 export type { User, Company } from './types';
@@ -489,6 +481,7 @@ export { User, Company } from './types';
 ### Re-exports
 
 When re-exporting from dependencies:
+
 ```typescript
 // ✅ Good - explicit re-export
 export type { EntityType } from 'afenda-canon';
@@ -514,12 +507,7 @@ export default defineConfig({
     coverage: {
       provider: 'v8',
       reporter: ['text', 'json', 'html'],
-      exclude: [
-        'node_modules/',
-        'dist/',
-        '**/*.test.ts',
-        '**/*.config.ts',
-      ],
+      exclude: ['node_modules/', 'dist/', '**/*.test.ts', '**/*.config.ts'],
       thresholds: {
         statements: 70,
         branches: 70,
@@ -558,11 +546,13 @@ describe('functionUnderTest', () => {
 ### When to Build a Package
 
 **Build if**:
+
 - Package is published externally
 - Package needs browser bundle
 - Package needs ESM + CJS dual exports
 
 **Don't build if**:
+
 - Package is internal and consumed via TypeScript source
 - Faster development iteration is needed
 
@@ -604,7 +594,8 @@ export default defineConfig({
 ### JSDoc Comments
 
 **For Public API Functions**:
-```typescript
+
+````typescript
 /**
  * Calculate tax amount for a line item.
  *
@@ -621,7 +612,7 @@ export default defineConfig({
 export function calculateLineTax(lineAmount: number, taxRate: number): number {
   return Math.round(lineAmount * taxRate * 100) / 100;
 }
-```
+````
 
 ---
 
@@ -649,10 +640,7 @@ export async function calculateLineTax(
 ): Promise<TaxCalculationResult> {
   // 1. Fetch tax rate
   const taxRate = await db.query.taxRates.findFirst({
-    where: (rates, { eq, and }) => and(
-      eq(rates.orgId, orgId),
-      eq(rates.id, taxRateId),
-    ),
+    where: (rates, { eq, and }) => and(eq(rates.orgId, orgId), eq(rates.id, taxRateId)),
   });
 
   if (!taxRate) {
@@ -697,10 +685,7 @@ export class FiscalPeriodPolicy implements FiscalPeriodChecker {
     }
   }
 
-  private async findPeriod(
-    orgId: string,
-    date: Date,
-  ): Promise<FiscalPeriod | undefined> {
+  private async findPeriod(orgId: string, date: Date): Promise<FiscalPeriod | undefined> {
     // Implementation
     return undefined;
   }
@@ -712,11 +697,13 @@ export class FiscalPeriodPolicy implements FiscalPeriodChecker {
 ## Validation Workflow
 
 ### 1. Dependency Validation
+
 ```bash
 pnpm validate:deps
 ```
 
 Checks:
+
 - Layer isolation rules
 - Circular dependencies
 - Forbidden cross-layer references
@@ -724,6 +711,7 @@ Checks:
 ---
 
 ### 2. Type Checking
+
 ```bash
 pnpm type-check:refs
 ```
@@ -733,6 +721,7 @@ Validates TypeScript project references.
 ---
 
 ### 3. Linting
+
 ```bash
 cd packages/<package-name>
 pnpm lint
@@ -741,6 +730,7 @@ pnpm lint
 ---
 
 ### 4. Testing
+
 ```bash
 cd packages/<package-name>
 pnpm test
@@ -750,6 +740,7 @@ pnpm test:coverage
 ---
 
 ### 5. README Generation
+
 ```bash
 pnpm afenda readme gen --package <package-name>
 pnpm afenda readme check
@@ -767,6 +758,7 @@ import { Something } from '../../database/src/internal';
 ```
 
 **Solution**:
+
 ```typescript
 // ✅ GOOD - explicit dependency via package.json
 import { Something } from 'afenda-database';
@@ -783,6 +775,7 @@ export * from './private-utils';
 ```
 
 **Solution**:
+
 ```typescript
 // ✅ GOOD - explicit public API
 export { publicFunction } from './internal-helpers';
@@ -835,11 +828,13 @@ import { crudOperation } from 'afenda-crud';
 ## Quick Reference
 
 ### Package Naming
+
 - **Singular**: `inventory`, not `inventories`
 - **Domain-focused**: `accounting`, not `accounting-service`
 - **Lowercase**: `multi-word-package`
 
 ### Export Patterns
+
 ```typescript
 // Types
 export type { Type1, Type2 } from './types';
@@ -855,6 +850,7 @@ export * as utils from './utils';
 ```
 
 ### Required Scripts (package.json)
+
 ```json
 {
   "scripts": {

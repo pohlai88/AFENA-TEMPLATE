@@ -111,14 +111,14 @@ dependencies beyond `clsx`, `tailwind-merge`, and `class-variance-authority`
 All utilities are exported from the package barrel:
 
 ```tsx
-import { cn, composeRefs, cva, formatCurrency, Keys } from "afenda-ui";
+import { cn, composeRefs, cva, formatCurrency, Keys } from 'afenda-ui';
 ```
 
 Or import individual modules for tree-shaking:
 
 ```tsx
-import { cn } from "afenda-ui/lib/utils";
-import { composeRefs } from "afenda-ui/lib/compose-refs";
+import { cn } from 'afenda-ui/lib/utils';
+import { composeRefs } from 'afenda-ui/lib/compose-refs';
 ```
 
 ## Design Principles

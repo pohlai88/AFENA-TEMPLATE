@@ -23,12 +23,12 @@ duties (SoD), and access certification.
 
 ```typescript
 import {
-    createAccessReview,
-    createRole,
-    evaluateSoDRules,
-    getGovernanceMetrics,
-    requestAccess,
-} from "afenda-access-governance";
+  createAccessReview,
+  createRole,
+  evaluateSoDRules,
+  getGovernanceMetrics,
+  requestAccess,
+} from 'afenda-access-governance';
 ```
 
 ## Services

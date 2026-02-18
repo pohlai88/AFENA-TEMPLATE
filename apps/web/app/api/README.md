@@ -4,12 +4,12 @@ Brief reference for the afenda web API structure.
 
 ## Tiers
 
-| Tier | Purpose | Versioned | In OpenAPI |
-|------|---------|-----------|------------|
-| **Contract** | External HTTP API (SDK, mobile, partners) | Yes (`/api/v1/...`) | Yes |
-| **BFF** | UI-coupled endpoints (search, storage, views, custom-fields) | No | No |
-| **Admin** | Spec, meta, capabilities, health | No | No |
-| **Auth** | Delegated to Neon Auth | No | No |
+| Tier         | Purpose                                                      | Versioned           | In OpenAPI |
+| ------------ | ------------------------------------------------------------ | ------------------- | ---------- |
+| **Contract** | External HTTP API (SDK, mobile, partners)                    | Yes (`/api/v1/...`) | Yes        |
+| **BFF**      | UI-coupled endpoints (search, storage, views, custom-fields) | No                  | No         |
+| **Admin**    | Spec, meta, capabilities, health                             | No                  | No         |
+| **Auth**     | Delegated to Neon Auth                                       | No                  | No         |
 
 ## Endpoints by Tier
 

@@ -1,10 +1,13 @@
 # domain-driven-patterns
 
 ## Description
+
 Domain-Driven Design (DDD) patterns used in AFENDA-NEXUS domain packages: services, policies, ports, value objects, and domain modeling best practices.
 
 ## Trigger Conditions
+
 Use this skill when:
+
 - Implementing business logic in Layer 2 packages
 - Questions about DDD patterns (services, entities, value objects)
 - Designing domain models
@@ -19,6 +22,7 @@ Use this skill when:
 AFENDA-NEXUS domain packages (Layer 2) follow **Domain-Driven Design (DDD)** principles with pragmatic adaptations for TypeScript and functional programming.
 
 **Core Patterns**:
+
 1. **Service Pattern**: Stateless functions encapsulating business logic
 2. **Policy Pattern**: Class-based business rules with ports (interfaces)
 3. **Value Object Pattern**: Immutable data structures with validation
@@ -34,11 +38,13 @@ AFENDA-NEXUS domain packages (Layer 2) follow **Domain-Driven Design (DDD)** pri
 **What**: Stateless functions that encapsulate domain business logic.
 
 **When to Use**:
+
 - Pure calculations (tax, depreciation, allocations)
 - Database-dependent operations (lookups, validations)
 - Orchestration within a single domain
 
 **Structure**:
+
 ```typescript
 // packages/<domain>/src/services/<service-name>.ts
 
@@ -56,7 +62,7 @@ export interface TaxCalculationResult {
 
 /**
  * Service function: database handle first, then domain params.
- * 
+ *
  * @param db - Database handle (supports transactions)
  * @param orgId - Tenant org ID
  * @param lineAmount - Amount to calculate tax on
@@ -71,10 +77,7 @@ export async function calculateLineTax(
 ): Promise<TaxCalculationResult> {
   // 1. Fetch domain data
   const taxRate = await db.query.taxRates.findFirst({
-    where: (rates, { eq, and }) => and(
-      eq(rates.orgId, orgId),
-      eq(rates.id, taxRateId),
-    ),
+    where: (rates, { eq, and }) => and(eq(rates.orgId, orgId), eq(rates.id, taxRateId)),
   });
 
   if (!taxRate) {
@@ -94,6 +97,7 @@ export async function calculateLineTax(
 ```
 
 **Key Rules**:
+
 - **Stateless**: No instance state, pure functions
 - **Database-first param**: `db` parameter enables transaction support
 - **Explicit returns**: Always return typed result interfaces
@@ -106,16 +110,18 @@ export async function calculateLineTax(
 **What**: Domain logic with no database dependency.
 
 **When to Use**:
+
 - Pure calculations (rounding, allocations, conversions)
 - Data transformations
 - Validation logic
 - Deterministic algorithms
 
 **Example**: Landed Cost Allocation
+
 ```typescript
 /**
  * Allocate cost across lines by quantity (pure function).
- * 
+ *
  * PRD: Last line absorbs rounding remainder (no penny drift).
  */
 export function allocateByQty(
@@ -131,7 +137,7 @@ export function allocateByQty(
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i];
     const isLast = i === lines.length - 1;
-    
+
     // Last line gets remainder to prevent rounding drift
     const amount = isLast
       ? totalCostMinor - allocated
@@ -146,6 +152,7 @@ export function allocateByQty(
 ```
 
 **Benefits**:
+
 - Easy to test (no mocking)
 - Deterministic (same input → same output)
 - Composable (can be unit-tested independently)
@@ -157,12 +164,14 @@ export function allocateByQty(
 **What**: Class-based business rules with dependency injection via constructor.
 
 **When to Use**:
+
 - Complex validation logic
 - Multi-step authorization checks
 - Approval workflows
 - Business rules that need state or configuration
 
 **Structure**:
+
 ```typescript
 // packages/<domain>/src/policies/<policy-name>.ts
 
@@ -182,20 +191,12 @@ export interface FiscalPeriodChecker {
 export class FiscalPeriodPolicy implements FiscalPeriodChecker {
   constructor(private db: NeonHttpDatabase) {}
 
-  async isPeriodOpen(
-    orgId: string,
-    companyId: string,
-    date: Date,
-  ): Promise<boolean> {
+  async isPeriodOpen(orgId: string, companyId: string, date: Date): Promise<boolean> {
     const period = await this.findPeriod(orgId, companyId, date);
     return period?.status === 'open';
   }
 
-  async assertPeriodOpen(
-    orgId: string,
-    companyId: string,
-    date: Date,
-  ): Promise<void> {
+  async assertPeriodOpen(orgId: string, companyId: string, date: Date): Promise<void> {
     const isOpen = await this.isPeriodOpen(orgId, companyId, date);
     if (!isOpen) {
       throw new Error(`Fiscal period closed for date: ${date.toISOString()}`);
@@ -214,6 +215,7 @@ export class FiscalPeriodPolicy implements FiscalPeriodChecker {
 ```
 
 **Key Rules**:
+
 - **Constructor injection**: Pass dependencies (db, config) via constructor
 - **Interface first**: Define port interface, then implement
 - **No "I" prefix**: Use `FiscalPeriodChecker`, not `IFiscalPeriodChecker`
@@ -226,12 +228,14 @@ export class FiscalPeriodPolicy implements FiscalPeriodChecker {
 **What**: TypeScript interfaces defining contracts between layers/modules.
 
 **When to Use**:
+
 - Define service contracts
 - Enable dependency inversion
 - Support testing with fakes/mocks
 - Abstract external dependencies
 
 **Example**:
+
 ```typescript
 // packages/<domain>/src/ports/tax-calculator.ts
 
@@ -239,18 +243,9 @@ export class FiscalPeriodPolicy implements FiscalPeriodChecker {
  * Tax calculation port — abstracts tax calculation logic.
  */
 export interface TaxCalculator {
-  calculateTax(
-    orgId: string,
-    taxCode: string,
-    amount: number,
-    date: Date,
-  ): Promise<TaxResult>;
+  calculateTax(orgId: string, taxCode: string, amount: number, date: Date): Promise<TaxResult>;
 
-  resolveTaxRate(
-    orgId: string,
-    taxCode: string,
-    date: Date,
-  ): Promise<TaxRate | null>;
+  resolveTaxRate(orgId: string, taxCode: string, date: Date): Promise<TaxRate | null>;
 }
 
 export interface TaxResult {
@@ -267,6 +262,7 @@ export interface TaxRate {
 ```
 
 **Usage**:
+
 ```typescript
 // Implementation
 export class StandardTaxCalculator implements TaxCalculator {
@@ -298,12 +294,14 @@ export class InvoiceService {
 **What**: Immutable data structures with validation and factory method.
 
 **When to Use**:
+
 - Domain concepts with validation rules
 - Identifiers with format requirements
 - Money, date ranges, addresses
 - Anything that needs validation on construction
 
 **Structure**:
+
 ```typescript
 // packages/<domain>/src/values/<value-object>.ts
 
@@ -360,15 +358,17 @@ export class Money {
 ```
 
 **Usage**:
+
 ```typescript
 const price = Money.create(10000, 'USD'); // $100.00
-const tax = Money.create(600, 'USD');     // $6.00
-const total = price.add(tax);             // $106.00
+const tax = Money.create(600, 'USD'); // $6.00
+const total = price.add(tax); // $106.00
 
 console.log(total.toString()); // "USD 106.00"
 ```
 
 **Key Rules**:
+
 - **Immutable**: All fields `readonly`
 - **Private constructor**: Force use of factory method
 - **Static create()**: Validates inputs before construction
@@ -381,11 +381,13 @@ console.log(total.toString()); // "USD 106.00"
 **What**: Database access encapsulated in service functions.
 
 **AFENDA Approach**: We don't use separate Repository classes. Instead:
+
 - Service functions take `db` parameter
 - Drizzle ORM provides query builders
 - Transaction support via `db` parameter
 
 **Example**:
+
 ```typescript
 import { db, items } from 'afenda-database';
 import { eq, and } from 'drizzle-orm';
@@ -401,10 +403,7 @@ export async function findItemByCode(
   const [item] = await db
     .select()
     .from(items)
-    .where(and(
-      eq(items.orgId, orgId),
-      eq(items.itemCode, itemCode),
-    ))
+    .where(and(eq(items.orgId, orgId), eq(items.itemCode, itemCode)))
     .limit(1);
 
   return item ?? null;
@@ -422,6 +421,7 @@ export async function findItemByCode(
 **Current Status**: Not fully implemented (planned).
 
 **Future Pattern**:
+
 ```typescript
 // Domain event type
 export interface ItemCreatedEvent {
@@ -437,10 +437,13 @@ export async function createItem(
   orgId: string,
   input: ItemInput,
 ): Promise<{ item: Item; events: DomainEvent[] }> {
-  const item = await db.insert(items).values({
-    orgId,
-    ...input,
-  }).returning();
+  const item = await db
+    .insert(items)
+    .values({
+      orgId,
+      ...input,
+    })
+    .returning();
 
   const event: ItemCreatedEvent = {
     type: 'item.created',
@@ -482,7 +485,7 @@ await policy.evaluate(request);
 
 ```typescript
 export async function calculateTax(
-  db: NeonHttpDatabase,  // Injected
+  db: NeonHttpDatabase, // Injected
   orgId: string,
   amount: number,
 ): Promise<TaxResult> {
@@ -502,7 +505,10 @@ const result = await calculateTax(db, orgId, 1000);
 ```typescript
 // ❌ BAD
 class Money {
-  constructor(public amount: number, public currency: string) {}
+  constructor(
+    public amount: number,
+    public currency: string,
+  ) {}
 
   add(other: Money): void {
     this.amount += other.amount; // MUTATION!
@@ -511,12 +517,13 @@ class Money {
 ```
 
 **Solution**:
+
 ```typescript
 // ✅ GOOD
 class Money {
   private constructor(
     public readonly amount: number,
-    public readonly currency: string
+    public readonly currency: string,
   ) {}
 
   add(other: Money): Money {
@@ -543,6 +550,7 @@ class TaxService {
 ```
 
 **Solution**:
+
 ```typescript
 // ✅ GOOD - Stateless service
 export async function calculateTax(
@@ -572,6 +580,7 @@ export function validateOrder(order: Order): boolean {
 ```
 
 **Solution** (if rich domain models preferred):
+
 ```typescript
 // ✅ GOOD - Encapsulates behavior
 export class Order {
@@ -611,6 +620,7 @@ export interface ITaxCalculator {
 ```
 
 **Solution**:
+
 ```typescript
 // ✅ GOOD - No "I" prefix
 export interface TaxCalculator {
@@ -699,9 +709,7 @@ describe('FiscalPeriodPolicy', () => {
 
     const policy = new FiscalPeriodPolicy(mockDb as any);
 
-    await expect(
-      policy.assertPeriodOpen('org-1', 'co-1', new Date())
-    ).rejects.toThrow('closed');
+    await expect(policy.assertPeriodOpen('org-1', 'co-1', new Date())).rejects.toThrow('closed');
   });
 });
 ```
@@ -783,6 +791,7 @@ packages/<domain>/
 ## Quick Reference
 
 ### Service Function Template
+
 ```typescript
 export async function serviceName(
   db: NeonHttpDatabase,
@@ -796,6 +805,7 @@ export async function serviceName(
 ```
 
 ### Policy Class Template
+
 ```typescript
 export interface PolicyPort {
   check(...): Promise<boolean>;
@@ -816,6 +826,7 @@ export class PolicyImpl implements PolicyPort {
 ```
 
 ### Value Object Template
+
 ```typescript
 export class ValueObject {
   private constructor(public readonly field: Type) {}

@@ -57,3 +57,35 @@ export {
   getCSATScore,
   getServiceDashboard,
 } from './services/service-analytics.js';
+
+// Customer Portal
+export type {
+  CustomerPortalAccount,
+  NotificationPreferences,
+  PortalTicket,
+  FileAttachment,
+  TicketMessage,
+  KnowledgeArticle,
+  FAQ,
+  ProductUpdate,
+  ServiceRequest,
+  PortalActivity,
+  PortalAnalytics,
+} from './services/customer-portal.js';
+export {
+  createPortalAccount,
+  submitPortalTicket,
+  publishKnowledgeArticle,
+  createServiceRequest,
+  logPortalActivity,
+  generateTicketNumber,
+  generateRequestNumber,
+  calculateArticleHelpfulness,
+  searchKnowledgeBase,
+  findRelatedArticles,
+  identifyPopularArticles,
+  analyzeSearchQueries,
+  calculateSelfServiceRate,
+  analyzePortalEngagement,
+  analyzePortalMetrics,
+} from './services/customer-portal.js';

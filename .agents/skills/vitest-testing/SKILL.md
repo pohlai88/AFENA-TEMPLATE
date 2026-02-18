@@ -85,13 +85,13 @@ export default defineConfig({
         },
       },
     },
-    
+
     // Projects definition
     projects: [
       // 1. Glob patterns to config files
       'packages/*/vitest.config.ts',
       'tools/*/vitest.config.ts',
-      
+
       // 2. Inline project configs
       {
         test: {
@@ -100,7 +100,7 @@ export default defineConfig({
           pool: 'threads',
         },
       },
-      
+
       // 3. Or use defineProject helper
       defineProject({
         test: {
@@ -189,7 +189,7 @@ export default defineConfig({
 // vitest.config.ts
 coverage: {
   provider: 'v8',  // Fast, accurate (AST-based remapping since Vitest 3.2)
-  
+
   // Global thresholds (entire codebase)
   thresholds: {
     global: {
@@ -198,17 +198,17 @@ coverage: {
       lines: 70,
       statements: 70,
     },
-    
+
     // Per-file thresholds (each file must meet these)
     perFile: true,
     lines: 80,          // Each file must have 80%+ line coverage
     branches: 75,       // Each file must have 75%+ branch coverage
-    
+
     // Max uncovered lines (use negative numbers)
     // Fail if ANY file has >10 uncovered lines
     lines: -10,
     statements: -10,
-    
+
     // Pattern-specific thresholds
     'packages/crud/**/*.ts': {
       branches: 90,     // Critical package needs higher coverage
@@ -219,12 +219,12 @@ coverage: {
       lines: 50,
     },
   },
-  
+
   // Auto-update thresholds in CI
   thresholds: {
     autoUpdate: true,  // Update package.json with new thresholds after run
   },
-  
+
   // Perfect coverage shortcut
   thresholds: {
     100: true,  // Equivalent to all metrics at 100%
@@ -280,10 +280,10 @@ coverage: {
     'clover',           // Clover XML (Jenkins, Bamboo)
     'cobertura',        // Cobertura XML (Azure DevOps)
   ],
-  
+
   // Multiple output directories for different reporters
   reportsDirectory: './coverage',     // Default for all reporters
-  
+
   // Reporter-specific options
   html: {
     subdir: 'html',                   // Custom HTML output dir

@@ -28,12 +28,12 @@ journal entries.
 
 ```typescript
 import {
-    createLeaseContract,
-    generateAmortizationSchedule,
-    generateLeaseEntries,
-    getLeaseMetrics,
-    recordModification,
-} from "afenda-lease-accounting";
+  createLeaseContract,
+  generateAmortizationSchedule,
+  generateLeaseEntries,
+  getLeaseMetrics,
+  recordModification,
+} from 'afenda-lease-accounting';
 ```
 
 ## Services

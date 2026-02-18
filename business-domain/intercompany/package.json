@@ -19,12 +19,12 @@
     "afenda-canon": "workspace:*",
     "afenda-database": "workspace:*",
     "afenda-logger": "workspace:*",
-    "drizzle-orm": "^0.44.0"
+    "drizzle-orm": "catalog:"
   },
   "devDependencies": {
     "afenda-eslint-config": "workspace:^",
     "afenda-typescript-config": "workspace:*",
-    "eslint": "^9.21.0",
-    "typescript": "^5.8.2"
+    "eslint": "catalog:",
+    "typescript": "catalog:"
   }
 }

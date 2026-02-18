@@ -57,10 +57,10 @@ buildSignedReport() → SignedReport
 
 ## 4. Package Structure (live)
 
-| Metric | Value |
-| ------ | ----- |
-| **Source files** | 43 |
-| **Test files** | 0 |
+| Metric                 | Value                                                                            |
+| ---------------------- | -------------------------------------------------------------------------------- |
+| **Source files**       | 43                                                                               |
+| **Test files**         | 0                                                                                |
 | **Source directories** | adapters, audit, gates, pipeline, queries, strategies, transforms, types, worker |
 
 ```
@@ -90,14 +90,14 @@ packages/migration/src/
 
 ### External
 
-| Package | Version |
-| ------- | ------- |
-| `@neondatabase/serverless` | `^1.0.0` |
-| `drizzle-orm` | `^0.44.0` |
-| `fuse.js` | `^7.1.0` |
-| `libphonenumber-js` | `^1.12.36` |
-| `p-limit` | `^7.3.0` |
-| `papaparse` | `^5.5.3` |
+| Package                    | Version    |
+| -------------------------- | ---------- |
+| `@neondatabase/serverless` | `^1.0.0`   |
+| `drizzle-orm`              | `^0.44.0`  |
+| `fuse.js`                  | `^7.1.0`   |
+| `libphonenumber-js`        | `^1.12.36` |
+| `p-limit`                  | `^7.3.0`   |
+| `papaparse`                | `^5.5.3`   |
 
 ---
 

@@ -26,7 +26,8 @@ import { createLogger } from '../../logger/src/index';
 import { db } from '../../../packages/database/src';
 ```
 
-**Why?** 
+**Why?**
+
 - Type-safe with proper package.json exports configuration
 - Works correctly with TypeScript project references
 - Easier to refactor and move files
@@ -55,6 +56,7 @@ import type { WorkflowNodeType } from 'afenda-workflow/types';
 ```
 
 **Why?**
+
 - Prevents circular dependency issues
 - Faster module resolution
 - Works correctly with bundlers
@@ -86,6 +88,7 @@ import { db } from '@/database';
 ```
 
 **Why?**
+
 - Next.js convention and best practice
 - Cleaner imports for app-specific code
 - Easier to move components around
@@ -98,6 +101,7 @@ import { db } from '@/database';
 **When to use:** Importing UI components from the shared packages/ui
 
 **From Apps:**
+
 ```typescript
 // ✅ CORRECT - Import from published package
 import { Button } from '@afenda/ui';
@@ -106,6 +110,7 @@ import { cn } from '@afenda/ui/lib/utils';
 ```
 
 **Within packages/ui:**
+
 ```typescript
 // ✅ CORRECT - Use relative paths internally
 import { cn } from './lib/utils';
@@ -125,15 +130,15 @@ import type { ButtonProps } from '../types';
     "paths": {
       // Package aliases (for apps to import packages)
       "@afenda/*": ["./packages/*/src"],
-      
+
       // App-level aliases (Next.js specific)
       "@/*": ["./apps/web/*"],
       "@/ui/*": ["./packages/ui/src/*"],
       "@/lib/*": ["./apps/web/src/lib/*"],
       "@/components/*": ["./apps/web/components/*"],
-      "@/app/*": ["./apps/web/app/*"]
-    }
-  }
+      "@/app/*": ["./apps/web/app/*"],
+    },
+  },
 }
 ```
 
@@ -146,7 +151,7 @@ import type { ButtonProps } from '../types';
     "composite": true,
     // NO paths configuration - use relative imports internally
     // NO @ aliases - not needed for package code
-  }
+  },
 }
 ```
 
@@ -161,9 +166,9 @@ import type { ButtonProps } from '../types';
       "@/*": ["./*"],
       "@/ui/*": ["../../packages/ui/src/*"],
       "@/lib/*": ["./src/lib/*"],
-      "@/components/*": ["./components/*"]
-    }
-  }
+      "@/components/*": ["./components/*"],
+    },
+  },
 }
 ```
 
@@ -175,31 +180,31 @@ import type { ButtonProps } from '../types';
 
 ```typescript
 // ✅ CORRECT
-import { extractVerb } from 'afenda-canon';           // Cross-package
+import { extractVerb } from 'afenda-canon'; // Cross-package
 import { db, workflowExecutions } from 'afenda-database'; // Cross-package
-import type { MutationSpec } from 'afenda-canon';     // Cross-package
-import { executeNode } from './executor';              // Internal
-import type { WorkflowContext } from './types';        // Internal
+import type { MutationSpec } from 'afenda-canon'; // Cross-package
+import { executeNode } from './executor'; // Internal
+import type { WorkflowContext } from './types'; // Internal
 ```
 
 ### In `packages/crud/src/mutate.ts`
 
 ```typescript
 // ✅ CORRECT
-import { db, sql } from 'afenda-database';           // Cross-package
-import { createLogger } from 'afenda-logger';        // Cross-package
-import { buildSystemContext } from './context';       // Internal
-import { validateMutation } from './validators';      // Internal
-import type { MutationContext } from './context';     // Internal
+import { db, sql } from 'afenda-database'; // Cross-package
+import { createLogger } from 'afenda-logger'; // Cross-package
+import { buildSystemContext } from './context'; // Internal
+import { validateMutation } from './validators'; // Internal
+import type { MutationContext } from './context'; // Internal
 ```
 
 ### In `apps/web/app/dashboard/page.tsx`
 
 ```typescript
 // ✅ CORRECT
-import { Button } from '@afenda/ui';                 // Shared UI package
-import { getUser } from '@/app/actions/user';        // App action
-import { auth } from '@/lib/auth/server';            // App lib
+import { Button } from '@afenda/ui'; // Shared UI package
+import { getUser } from '@/app/actions/user'; // App action
+import { auth } from '@/lib/auth/server'; // App lib
 import DashboardLayout from '@/components/layouts/dashboard'; // App component
 ```
 
@@ -207,10 +212,10 @@ import DashboardLayout from '@/components/layouts/dashboard'; // App component
 
 ```typescript
 // ✅ CORRECT
-import { Table } from '@afenda/ui';                  // Shared UI
-import { cn } from '@afenda/ui/lib/utils';           // Shared util
-import { useTableState } from '@/hooks/use-table';   // App hook
-import type { TableConfig } from '@/lib/types';      // App type
+import { Table } from '@afenda/ui'; // Shared UI
+import { cn } from '@afenda/ui/lib/utils'; // Shared util
+import { useTableState } from '@/hooks/use-table'; // App hook
+import type { TableConfig } from '@/lib/types'; // App type
 ```
 
 ---
@@ -218,6 +223,7 @@ import type { TableConfig } from '@/lib/types';      // App type
 ## 🚫 Common Mistakes
 
 ### ❌ Using @ for cross-package imports
+
 ```typescript
 // WRONG
 import { db } from '@/database';
@@ -229,6 +235,7 @@ import { createLogger } from 'afenda-logger';
 ```
 
 ### ❌ Using package name for internal imports
+
 ```typescript
 // WRONG (in packages/crud/src/mutate.ts)
 import { buildContext } from 'afenda-crud/context';
@@ -238,6 +245,7 @@ import { buildContext } from './context';
 ```
 
 ### ❌ Using relative paths across packages
+
 ```typescript
 // WRONG
 import { db } from '../../../database/src/index';
@@ -247,6 +255,7 @@ import { db } from 'afenda-database';
 ```
 
 ### ❌ Mixing patterns inconsistently
+
 ```typescript
 // WRONG - Inconsistent
 import { Button } from '@afenda/ui';
@@ -260,13 +269,13 @@ import { Button, Card } from '@afenda/ui';
 
 ## 🎯 Quick Reference
 
-| Import Type | Pattern | Example |
-|------------|---------|---------|
-| **Cross-Package** | `afenda-<pkg>` | `import { db } from 'afenda-database'` |
-| **Internal (Package)** | `./` or `../` | `import { utils } from './lib/utils'` |
-| **App Files** | `@/` | `import { auth } from '@/lib/auth'` |
-| **Shared UI** | `@afenda/ui` | `import { Button } from '@afenda/ui'` |
-| **Node Modules** | package name | `import { z } from 'zod'` |
+| Import Type            | Pattern        | Example                                |
+| ---------------------- | -------------- | -------------------------------------- |
+| **Cross-Package**      | `afenda-<pkg>` | `import { db } from 'afenda-database'` |
+| **Internal (Package)** | `./` or `../`  | `import { utils } from './lib/utils'`  |
+| **App Files**          | `@/`           | `import { auth } from '@/lib/auth'`    |
+| **Shared UI**          | `@afenda/ui`   | `import { Button } from '@afenda/ui'`  |
+| **Node Modules**       | package name   | `import { z } from 'zod'`              |
 
 ---
 

@@ -21,12 +21,12 @@ work requests, spare parts tracking, calibration management, and EAM analytics.
 
 ```typescript
 import {
-    createPMSchedule,
-    createWorkRequest,
-    linkSparePart,
-    scheduleCalibration,
-    getMTBF,
-} from "afenda-asset-mgmt";
+  createPMSchedule,
+  createWorkRequest,
+  linkSparePart,
+  scheduleCalibration,
+  getMTBF,
+} from 'afenda-asset-mgmt';
 ```
 
 ## Services

@@ -58,12 +58,14 @@ packages/my-package/
 ### Public API (`src/index.ts`)
 
 **Rules**:
+
 1. **Export only public API** - Internal modules stay private
 2. **Minimal surface** - Don't export everything "just in case"
 3. **Stable** - The public API is a contract; breaking changes require major version bump
 4. **Documented** - JSDoc comments for all exports
 
 **Example**:
+
 ```typescript
 // src/index.ts - Good ✅
 export { mutate, readEntity, listEntities } from './crud-operations';
@@ -77,12 +79,14 @@ export { policyEngine } from './policies';
 ### Dependencies
 
 **Rules**:
+
 1. **Explicit**: All dependencies in `package.json` - no implicit file system access
 2. **Minimal**: Only depend on what you actually use
 3. **Layer-compliant**: Follow governance rules (see `GOVERNANCE.md`)
 4. **Version pinning**: Use catalog versions for consistency
 
 **Example**:
+
 ```json
 {
   "dependencies": {
@@ -119,6 +123,7 @@ All packages MUST use strict TypeScript:
 ### Type Safety
 
 **Rules**:
+
 1. **No `any`** - Use `unknown` and type guards instead
 2. **Explicit return types** - On all public functions
 3. **Discriminated unions** - For polymorphic types
@@ -126,6 +131,7 @@ All packages MUST use strict TypeScript:
 5. **Avoid type assertions** - Use type guards instead
 
 **Example**:
+
 ```typescript
 // ❌ Bad
 export function process(data: any) {
@@ -142,10 +148,7 @@ export function process(data: unknown): string {
 
 function isValidData(data: unknown): data is { value: string } {
   return (
-    typeof data === 'object' &&
-    data !== null &&
-    'value' in data &&
-    typeof data.value === 'string'
+    typeof data === 'object' && data !== null && 'value' in data && typeof data.value === 'string'
   );
 }
 ```
@@ -153,22 +156,26 @@ function isValidData(data: unknown): data is { value: string } {
 ### Zod Schemas
 
 **When to use Zod**:
+
 - ✅ API request/response validation
 - ✅ External data parsing (CSV, JSON imports)
 - ✅ Configuration validation
 - ✅ Database row parsing (when needed)
 
 **Pattern**:
+
 ```typescript
 import { z } from 'zod';
 
 // Define schema
 export const CreateOrderSchema = z.object({
   customerId: z.string().uuid(),
-  items: z.array(z.object({
-    productId: z.string(),
-    quantity: z.number().int().positive(),
-  })),
+  items: z.array(
+    z.object({
+      productId: z.string(),
+      quantity: z.number().int().positive(),
+    }),
+  ),
   totalAmount: z.number().positive(),
 });
 
@@ -188,11 +195,13 @@ export function createOrder(input: unknown): CreateOrderInput {
 ### Entities and Types
 
 **Rules**:
+
 - **Entity types**: `kebab-case` plural (e.g., `sales-orders`, `purchase-invoices`)
 - **TypeScript types**: `PascalCase` (e.g., `SalesOrder`, `PurchaseInvoice`)
 - **Zod schemas**: `PascalCase` + `Schema` suffix (e.g., `SalesOrderSchema`)
 
 **Example**:
+
 ```typescript
 // Entity type (canon)
 export const entityTypes = {
@@ -218,6 +227,7 @@ export const SalesOrderSchema = z.object({
 ### Database
 
 **Rules**:
+
 - **Table names**: `snake_case` plural (e.g., `sales_orders`, `purchase_invoices`)
 - **Column names**: `snake_case` (e.g., `customer_id`, `total_amount`)
 - **Foreign keys**: `{related_table}_id` (e.g., `company_id`, `customer_id`)
@@ -225,21 +235,29 @@ export const SalesOrderSchema = z.object({
 - **Constraints**: `{table}_{column}_check` (e.g., `sales_orders_total_amount_check`)
 
 **Example**:
+
 ```typescript
-export const salesOrders = pgTable('sales_orders', {
-  id: uuid('id').primaryKey().defaultRandom(),
-  customerId: uuid('customer_id').notNull().references(() => contacts.id),
-  totalAmount: numeric('total_amount', { precision: 15, scale: 2 }).notNull(),
-  createdAt: timestamp('created_at').defaultNow().notNull(),
-}, (table) => ({
-  customerIdx: index('idx_sales_orders_customer_id').on(table.customerId),
-  totalCheck: check('sales_orders_total_amount_check', sql`${table.totalAmount} >= 0`),
-}));
+export const salesOrders = pgTable(
+  'sales_orders',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    customerId: uuid('customer_id')
+      .notNull()
+      .references(() => contacts.id),
+    totalAmount: numeric('total_amount', { precision: 15, scale: 2 }).notNull(),
+    createdAt: timestamp('created_at').defaultNow().notNull(),
+  },
+  (table) => ({
+    customerIdx: index('idx_sales_orders_customer_id').on(table.customerId),
+    totalCheck: check('sales_orders_total_amount_check', sql`${table.totalAmount} >= 0`),
+  }),
+);
 ```
 
 ### Files and Packages
 
 **Rules**:
+
 - **Package names**: `afenda-{domain}` (e.g., `afenda-accounting`, `afenda-inventory`)
 - **File names**: `kebab-case.ts` (e.g., `tax-engine.ts`, `pricing-engine.ts`)
 - **Test files**: `{filename}.test.ts` or `{filename}.spec.ts`
@@ -248,12 +266,14 @@ export const salesOrders = pgTable('sales_orders', {
 ### Functions and Variables
 
 **Rules**:
+
 - **Functions**: `camelCase` verbs (e.g., `calculateTax`, `validateOrder`)
 - **Variables**: `camelCase` nouns (e.g., `taxAmount`, `orderTotal`)
 - **Constants**: `SCREAMING_SNAKE_CASE` (e.g., `MAX_RETRIES`, `DEFAULT_TIMEOUT`)
 - **Private/internal**: Prefix with `_` only when needed (prefer module scope)
 
 **Example**:
+
 ```typescript
 const MAX_BATCH_SIZE = 100;
 
@@ -285,13 +305,11 @@ import { eq } from 'drizzle-orm';
 
 /**
  * Calculate tax for a transaction
- * 
+ *
  * @param input - Transaction details and tax context
  * @returns Tax calculation result with line-item breakdown
  */
-export async function calculateTax(
-  input: TaxCalculationInput
-): Promise<TaxCalculationResult> {
+export async function calculateTax(input: TaxCalculationInput): Promise<TaxCalculationResult> {
   // 1. Validate input
   if (input.amount <= 0) {
     throw new Error('Amount must be positive');
@@ -315,9 +333,7 @@ export async function calculateTax(
     taxRate: rate.rate,
     taxAmount,
     totalAmount: input.amount + taxAmount,
-    breakdown: [
-      { type: rate.type, rate: rate.rate, amount: taxAmount },
-    ],
+    breakdown: [{ type: rate.type, rate: rate.rate, amount: taxAmount }],
   };
 }
 ```
@@ -333,6 +349,7 @@ export async function calculateTax(
 7. **Documentation**: JSDoc with examples
 
 **Dependency Injection Example**:
+
 ```typescript
 export type TaxEngineContext = {
   db: Database;
@@ -341,12 +358,12 @@ export type TaxEngineContext = {
 
 export async function calculateTax(
   input: TaxCalculationInput,
-  ctx: TaxEngineContext
+  ctx: TaxEngineContext,
 ): Promise<TaxCalculationResult> {
   ctx.logger.info({ input }, 'Calculating tax');
-  
+
   // ... implementation
-  
+
   return result;
 }
 ```
@@ -379,7 +396,6 @@ import { companies, db } from 'afenda-database';
 import { eq } from 'drizzle-orm';
 
 export const companiesHandler: Handler<Company> = {
-  
   // Before create hook
   async beforeCreate(input, ctx: MutateContext) {
     // Custom validation: Check for duplicate company name
@@ -449,8 +465,8 @@ import { contactsHandler } from './contacts';
 import { baseHandler } from './base';
 
 export const handlerRegistry = {
-  'companies': companiesHandler,
-  'contacts': contactsHandler,
+  companies: companiesHandler,
+  contacts: contactsHandler,
   // All other entities use base handler
   '*': baseHandler,
 };
@@ -515,13 +531,13 @@ describe('calculateTax', () => {
   describe('when given invalid input', () => {
     it('throws error for negative amount', async () => {
       await expect(
-        calculateTax({ amount: -10, jurisdiction: 'US-CA', date: new Date() })
+        calculateTax({ amount: -10, jurisdiction: 'US-CA', date: new Date() }),
       ).rejects.toThrow('Amount must be positive');
     });
 
     it('throws error for unknown jurisdiction', async () => {
       await expect(
-        calculateTax({ amount: 100, jurisdiction: 'UNKNOWN', date: new Date() })
+        calculateTax({ amount: 100, jurisdiction: 'UNKNOWN', date: new Date() }),
       ).rejects.toThrow('No tax rate found');
     });
   });
@@ -617,15 +633,15 @@ Template: See `packages/PACKAGE_TEMPLATE.md`
 
 All public exports must have JSDoc:
 
-```typescript
+````typescript
 /**
  * Calculate depreciation for an asset using the specified method
- * 
+ *
  * @param asset - The asset to depreciate
  * @param method - Depreciation method (straight-line, declining-balance, etc.)
  * @param options - Optional calculation parameters
  * @returns Depreciation amount for the period
- * 
+ *
  * @example
  * ```typescript
  * const depreciation = calculateDepreciation(
@@ -634,28 +650,30 @@ All public exports must have JSDoc:
  * );
  * // Returns 1800 per year
  * ```
- * 
+ *
  * @throws {Error} If asset cost is negative
  * @throws {Error} If useful life is zero or negative
  */
 export function calculateDepreciation(
   asset: Asset,
   method: DepreciationMethod,
-  options?: DepreciationOptions
+  options?: DepreciationOptions,
 ): number {
   // ...
 }
-```
+````
 
 ### Inline Comments
 
 **When to comment**:
+
 - ✅ Complex algorithms or business rules
 - ✅ Performance optimizations (why this approach)
 - ✅ Workarounds for bugs or limitations
 - ✅ TODOs with context and owner
 
 **When NOT to comment**:
+
 - ❌ Obvious code (`i++; // increment i`)
 - ❌ Repeating the function name
 - ❌ Outdated comments
@@ -685,6 +703,7 @@ Follow [Conventional Commits](https://www.conventionalcommits.org/):
 ```
 
 **Examples**:
+
 ```
 feat(accounting): add tax calculation engine
 
@@ -712,6 +731,7 @@ Move common query patterns to shared utilities to reduce duplication.
 ### Pull Requests
 
 PRs must:
+
 1. **Pass CI** - Tests, linting, type checking
 2. **Follow standards** - This document
 3. **Update docs** - README, ARCHITECTURE.md if needed

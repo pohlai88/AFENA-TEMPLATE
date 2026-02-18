@@ -45,7 +45,7 @@ src/
 ## Usage
 
 ```ts
-import {/* ... */} from "afenda-migration";
+import {} from /* ... */ 'afenda-migration';
 ```
 
 ## API
@@ -191,8 +191,8 @@ packages/migration/
 ## Usage
 
 ```typescript
-import { MigrationPipelineBase } from "afenda-migration/pipeline";
-import { getConflictDetector } from "afenda-migration/strategies";
+import { MigrationPipelineBase } from 'afenda-migration/pipeline';
+import { getConflictDetector } from 'afenda-migration/strategies';
 
 // Implement concrete pipeline
 class SqlMigrationPipeline extends MigrationPipelineBase {

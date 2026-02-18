@@ -16,6 +16,7 @@ packages/<package-name>/
 ## Running Tests
 
 ### All Tests
+
 ```bash
 pnpm test                 # Run all tests
 pnpm test:watch          # Run tests in watch mode
@@ -23,12 +24,14 @@ pnpm test:ui             # Run tests with Vitest UI
 ```
 
 ### With Coverage
+
 ```bash
 pnpm test:coverage       # Run tests with coverage
 pnpm test:coverage:ui    # Run tests with coverage UI
 ```
 
 ### Package-Specific Tests
+
 ```bash
 pnpm --filter <package-name> test
 pnpm --filter afenda-logger test
@@ -53,12 +56,14 @@ Coverage reports are generated in the `coverage/` directory.
 **Purpose**: Test individual functions/classes in isolation
 
 **Characteristics**:
+
 - Fast execution (< 100ms per test)
 - No external dependencies (database, API, filesystem)
 - Use mocks/stubs for dependencies
 - Test pure logic and business rules
 
 **Example**:
+
 ```typescript
 import { describe, it, expect } from 'vitest';
 import { validateEmail } from '../../validation';
@@ -79,12 +84,14 @@ describe('validateEmail', () => {
 **Purpose**: Test interactions between components/systems
 
 **Characteristics**:
+
 - Slower execution (100ms - 5s per test)
 - May use real external dependencies (test database, etc.)
 - Test end-to-end flows within a package
 - Use `TEST_DATABASE_URL` for database tests
 
 **Example**:
+
 ```typescript
 import { describe, it, expect, beforeAll, afterAll } from 'vitest';
 import { getDbClient } from '../../client';
@@ -112,11 +119,13 @@ describe('Database Queries (Integration)', () => {
 **Purpose**: Shared test data, mocks, and utilities
 
 **Characteristics**:
+
 - Reusable across multiple tests
 - Mock objects, test data, helper functions
 - Factory functions for creating test entities
 
 **Example**:
+
 ```typescript
 // fixtures/test-data.ts
 export const createMockUser = (overrides = {}) => ({
@@ -134,40 +143,46 @@ export const mockDatabase = {
 ## Best Practices
 
 ### 1. Test Naming
+
 - Use descriptive test names: `should [expected behavior] when [condition]`
 - Group related tests with `describe` blocks
 - Use `it` for individual test cases
 
 ### 2. Arrange-Act-Assert Pattern
+
 ```typescript
 it('should calculate total price', () => {
   // Arrange: Set up test data
   const cart = { items: [{ price: 10 }, { price: 20 }] };
-  
+
   // Act: Execute the function
   const total = calculateTotal(cart);
-  
+
   // Assert: Verify the result
   expect(total).toBe(30);
 });
 ```
 
 ### 3. Isolation
+
 - Each test should be independent
 - Use `beforeEach`/`afterEach` for setup/teardown
 - Don't rely on test execution order
 
 ### 4. Coverage vs. Quality
+
 - Aim for meaningful tests, not just coverage numbers
 - Test edge cases and error conditions
 - Test public APIs, not implementation details
 
 ### 5. Mock External Dependencies
+
 - Mock external APIs, databases, file I/O in unit tests
 - Use `vi.mock()` for module mocking
 - Use `vi.fn()` for function mocking
 
 ### 6. Environment Variables
+
 - Use `.env.example` as template for test environment
 - Set `NODE_ENV=test` for test runs
 - Use `TEST_DATABASE_URL` for database tests (separate from production)
@@ -175,11 +190,13 @@ it('should calculate total price', () => {
 ## CI/CD Integration
 
 Tests run automatically on:
+
 - Every push to `main` branch
 - Every pull request
 - Pre-commit hooks (optional)
 
 ### CI Test Workflow
+
 1. Install dependencies (`pnpm install --frozen-lockfile`)
 2. Run tests with coverage (`pnpm test:coverage`)
 3. Upload coverage to Codecov
@@ -189,11 +206,13 @@ Tests run automatically on:
 ## Debugging Tests
 
 ### VS Code
+
 1. Install Vitest extension
 2. Use `Debug Test` CodeLens in test files
 3. Set breakpoints in your tests
 
 ### CLI
+
 ```bash
 # Run specific test file
 pnpm test path/to/test.test.ts
@@ -211,11 +230,13 @@ pnpm test:ui
 ## Performance
 
 ### Test Speed Guidelines
+
 - **Unit tests**: < 100ms each
 - **Integration tests**: < 5s each
 - **Total test suite**: < 2 minutes
 
 If tests are slow:
+
 1. Check for unnecessary async operations
 2. Use mocks instead of real dependencies
 3. Parallelize independent tests (Vitest does this by default)
@@ -224,6 +245,7 @@ If tests are slow:
 ## Migration from Jest
 
 If migrating from Jest:
+
 - Replace `jest.mock()` with `vi.mock()`
 - Replace `jest.fn()` with `vi.fn()`
 - Replace `jest.spyOn()` with `vi.spyOn()`

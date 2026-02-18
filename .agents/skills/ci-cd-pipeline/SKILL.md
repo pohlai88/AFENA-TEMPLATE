@@ -1,10 +1,13 @@
 # ci-cd-pipeline
 
 ## Description
+
 CI/CD pipeline configuration, GitHub Actions workflows, quality gates, security scanning, and deployment strategies for AFENDA-NEXUS.
 
 ## Trigger Conditions
+
 Use this skill when:
+
 - Setting up or modifying CI/CD workflows
 - Adding quality gates or checks
 - Questions about build/test/deploy pipeline
@@ -17,6 +20,7 @@ Use this skill when:
 ## Overview
 
 AFENDA-NEXUS uses **GitHub Actions** for CI/CD with multiple workflows:
+
 1. **CI**: Build, test, lint, type-check, quality gates
 2. **E2E**: End-to-end browser tests
 3. **Quality Metrics**: Code quality analysis, flakiness detection
@@ -29,6 +33,7 @@ AFENDA-NEXUS uses **GitHub Actions** for CI/CD with multiple workflows:
 ### 1. CI Workflow (`ci.yml`)
 
 **Triggers**:
+
 - Push to `main` branch
 - Pull requests (opened, synchronize)
 
@@ -39,6 +44,7 @@ AFENDA-NEXUS uses **GitHub Actions** for CI/CD with multiple workflows:
 #### Job: `afenda-ci`
 
 **Steps**:
+
 1. **Checkout code** (`actions/checkout@v4`)
 2. **Setup pnpm** (`pnpm/action-setup@v4`)
 3. **Setup Node.js 20** (`actions/setup-node@v4`)
@@ -62,6 +68,7 @@ AFENDA-NEXUS uses **GitHub Actions** for CI/CD with multiple workflows:
 **Depends On**: `afenda-ci`
 
 **Steps**:
+
 1. **Checkout code**
 2. **Setup pnpm & Node.js**
 3. **Install dependencies**
@@ -76,12 +83,14 @@ AFENDA-NEXUS uses **GitHub Actions** for CI/CD with multiple workflows:
 ### 2. Quality Metrics Workflow (`quality-metrics.yml`)
 
 **Triggers**:
+
 - Push to `main` or `feat/*` branches
 - Pull requests to `main`
 - Daily at 2 AM UTC (cron)
 - Manual dispatch
 
 **Steps**:
+
 1. **Checkout code** (with full history)
 2. **Setup Node.js & pnpm**
 3. **Install dependencies**
@@ -102,11 +111,13 @@ AFENDA-NEXUS uses **GitHub Actions** for CI/CD with multiple workflows:
 ### 3. SBOM Workflow (`sbom.yml`)
 
 **Triggers**:
+
 - Release published
 - Weekly Monday 6 AM UTC
 - Manual dispatch
 
 **Steps**:
+
 1. **Checkout code**
 2. **Setup pnpm & Node.js**
 3. **Install dependencies**
@@ -119,11 +130,13 @@ AFENDA-NEXUS uses **GitHub Actions** for CI/CD with multiple workflows:
 ## Quality Gates
 
 ### Gate 0: Database Schema Lint
+
 ```bash
 pnpm --filter afenda-database db:lint
 ```
 
 **Checks**:
+
 - Schema naming conventions
 - Column naming conventions
 - Index naming conventions
@@ -132,11 +145,13 @@ pnpm --filter afenda-database db:lint
 ---
 
 ### Gate 1: Dependency Validation
+
 ```bash
 pnpm validate:deps
 ```
 
 **Checks**:
+
 - Layer isolation rules (no upward dependencies)
 - Circular dependencies
 - Forbidden cross-layer references
@@ -144,23 +159,27 @@ pnpm validate:deps
 ---
 
 ### Gate 2: Type Checking
+
 ```bash
 pnpm type-check
 pnpm type-check:refs
 ```
 
 **Checks**:
+
 - TypeScript compilation errors
 - Project reference consistency
 
 ---
 
 ### Gate 3: Linting
+
 ```bash
 pnpm lint:ci
 ```
 
 **Checks**:
+
 - ESLint rules (base + custom)
 - **import/no-cycle**: Circular imports (CI-only, slow)
 - Code style violations
@@ -168,11 +187,13 @@ pnpm lint:ci
 ---
 
 ### Gate 4: Unit Tests
+
 ```bash
 pnpm test:coverage
 ```
 
 **Requirements**:
+
 - All tests pass
 - Coverage thresholds met:
   - Lines: 80%
@@ -183,11 +204,13 @@ pnpm test:coverage
 ---
 
 ### Gate 5: E2E Tests
+
 ```bash
 pnpm test:e2e
 ```
 
 **Requirements**:
+
 - Critical user flows pass
 - No browser console errors
 - Accessibility checks pass
@@ -195,12 +218,14 @@ pnpm test:e2e
 ---
 
 ### Gate 6: CI Invariants
+
 ```bash
 pnpm ci:invariants
 pnpm housekeeping
 ```
 
 **Checks**:
+
 - Package.json consistency
 - Build configuration
 - No uncommitted generated files
@@ -208,11 +233,13 @@ pnpm housekeeping
 ---
 
 ### Gate 7: Generated Files Up-to-Date
+
 ```bash
 git diff --exit-code packages/database/src/schema/index.ts
 ```
 
 **Checks**:
+
 - Database barrel exports current
 - Schema registry up-to-date
 - No uncommitted generated code
@@ -220,11 +247,13 @@ git diff --exit-code packages/database/src/schema/index.ts
 ---
 
 ### Gate 8: Adapter Gates
+
 ```bash
 pnpm ci:adapter-gates
 ```
 
 **Checks**:
+
 - N2 contract integrity
 - Spine denylist compliance
 
@@ -240,11 +269,11 @@ env:
   DATABASE_URL: 'postgresql://ci:ci@ci-placeholder.neon.tech/neondb?sslmode=verify-full'
   NEON_AUTH_BASE_URL: 'https://ci-placeholder.neon.tech'
   NEON_AUTH_COOKIE_SECRET: 'ci-placeholder-secret-32chars-minimum'
-  
+
   # Test environment
   NODE_ENV: test
   TEST_DATABASE_URL: 'postgresql://ci:ci@ci-placeholder.neon.tech/neondb?sslmode=verify-full'
-  
+
   # Turbo Remote Cache (optional)
   # TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
   # TURBO_TEAM: ${{ vars.TURBO_TEAM }}
@@ -337,6 +366,7 @@ env:
 ## Artifacts
 
 ### Unit Test Coverage
+
 - **Path**: `./coverage/`
 - **Uploaded to**: Codecov
 - **Retention**: Codecov storage policy
@@ -344,6 +374,7 @@ env:
 ---
 
 ### E2E Test Reports
+
 - **Path**: `playwright-report/`
 - **Artifact Name**: `playwright-report`
 - **Retention**: 7 days
@@ -351,6 +382,7 @@ env:
 ---
 
 ### E2E Test Results
+
 - **Path**: `test-results/`
 - **Artifact Name**: `test-results`
 - **Retention**: 7 days
@@ -358,6 +390,7 @@ env:
 ---
 
 ### Quality Metrics
+
 - **Path**: `.quality-metrics/`, `*.txt`
 - **Artifact Name**: `quality-metrics`
 - **Retention**: 90 days
@@ -365,6 +398,7 @@ env:
 ---
 
 ### SBOM
+
 - **Path**: `sbom.json`, `sbom.sha256`
 - **Artifact Name**: `sbom-${{ github.sha }}`
 - **Retention**: 90 days
@@ -376,11 +410,13 @@ env:
 ### 1. Frozen Lockfile Violation
 
 **Error**:
+
 ```
 ERR_PNPM_OUTDATED_LOCKFILE  Cannot install with "frozen-lockfile" because pnpm-lock.yaml is not up to date with package.json
 ```
 
 **Solution**:
+
 ```bash
 pnpm install
 git add pnpm-lock.yaml
@@ -392,11 +428,13 @@ git commit -m "chore: update lockfile"
 ### 2. Generated Files Stale
 
 **Error**:
+
 ```
 Generated schema files are stale. Run 'pnpm --filter afenda-database db:barrel' and commit.
 ```
 
 **Solution**:
+
 ```bash
 pnpm --filter afenda-database db:barrel
 git add packages/database/src/schema/
@@ -408,11 +446,13 @@ git commit -m "chore: regenerate schema barrel"
 ### 3. Coverage Threshold Not Met
 
 **Error**:
+
 ```
 Coverage for lines (78%) does not meet threshold (80%)
 ```
 
 **Solution**:
+
 - Add more unit tests
 - Focus on uncovered lines (check coverage report)
 - If legitimate, adjust threshold in `vitest.config.ts`
@@ -422,11 +462,13 @@ Coverage for lines (78%) does not meet threshold (80%)
 ### 4. Lint Failures
 
 **Error**:
+
 ```
 Import cycle detected: packages/a -> packages/b -> packages/a
 ```
 
 **Solution**:
+
 - Refactor to break circular dependency
 - Extract shared code to lower layer
 - Review architecture (Layer 2 shouldn't depend on Layer 2)
@@ -436,11 +478,13 @@ Import cycle detected: packages/a -> packages/b -> packages/a
 ### 5. Type Check Failures
 
 **Error**:
+
 ```
 Property 'field' does not exist on type 'Type'
 ```
 
 **Solution**:
+
 ```bash
 pnpm type-check
 # Fix TypeScript errors
@@ -452,11 +496,13 @@ pnpm type-check:refs  # Verify project references
 ### 6. E2E Test Timeouts
 
 **Error**:
+
 ```
 Test timeout of 30000ms exceeded
 ```
 
 **Solution**:
+
 - Increase timeout in `playwright.config.ts`
 - Check if `webServer` is starting correctly
 - Review test for infinite waits
@@ -480,6 +526,7 @@ pnpm build
 ```
 
 **Shortcut**:
+
 ```bash
 pnpm bundle  # Runs most checks
 ```
@@ -491,11 +538,13 @@ pnpm bundle  # Runs most checks
 **Current Status**: Not yet implemented.
 
 **Planned Strategy**:
+
 1. **Preview Deployments**: Every PR → Vercel preview
 2. **Staging Deployment**: Merge to `main` → staging environment
 3. **Production Deployment**: Git tag → production environment
 
 **Providers**:
+
 - **Frontend**: Vercel (Next.js)
 - **Database**: Neon Postgres (branching for preview)
 - **Monitoring**: OpenTelemetry + observability platform
@@ -525,6 +574,7 @@ pnpm sbom  # Alias for: pnpm dlx @cyclonedx/cdxgen -r --no-install-deps -o sbom.
 ```
 
 **Use Cases**:
+
 - Vulnerability tracking
 - License compliance
 - Supply chain security
@@ -575,6 +625,7 @@ steps:
 **Default**: Email notifications on workflow failures.
 
 **Slack Integration** (optional):
+
 ```yaml
 - name: Notify Slack on Failure
   if: failure()
@@ -592,6 +643,7 @@ steps:
 ### Quality Metrics Trends
 
 Daily cron job tracks:
+
 - Code coverage trends
 - Test flakiness
 - Build performance
@@ -604,6 +656,7 @@ Output: `.quality-metrics/` directory with JSON reports.
 ## Best Practices
 
 ### 1. Fast Feedback
+
 - **Unit tests first**: Fastest, catch most issues
 - **Lint & type-check early**: Before expensive operations
 - **Parallel jobs**: Run E2E separately from CI
@@ -611,6 +664,7 @@ Output: `.quality-metrics/` directory with JSON reports.
 ---
 
 ### 2. Fail Fast
+
 - **Stop on first failure**: `--bail` (Vitest default)
 - **Cancel in-progress**: Concurrency group
 - **Early validation**: Lint before build
@@ -618,6 +672,7 @@ Output: `.quality-metrics/` directory with JSON reports.
 ---
 
 ### 3. Deterministic Builds
+
 - **Frozen lockfile**: `--frozen-lockfile`
 - **Pinned versions**: Catalog versions in `package.json`
 - **No network in tests**: Mock external API calls
@@ -625,6 +680,7 @@ Output: `.quality-metrics/` directory with JSON reports.
 ---
 
 ### 4. Cache Aggressively
+
 - **pnpm cache**: Automatic with `setup-node`
 - **Turbo cache**: Remote cache for builds
 - **Playwright browsers**: Cache installed browsers
@@ -632,6 +688,7 @@ Output: `.quality-metrics/` directory with JSON reports.
 ---
 
 ### 5. Meaningful Artifacts
+
 - **Test reports**: Always upload, even on failure
 - **Coverage reports**: Track trends over time
 - **Build logs**: Include in PR comments
@@ -643,6 +700,7 @@ Output: `.quality-metrics/` directory with JSON reports.
 ### CI Passes Locally, Fails in GitHub Actions
 
 **Possible Causes**:
+
 1. **Environment variables**: Check `.env` vs. workflow `env`
 2. **Dependency versions**: Use `--frozen-lockfile`
 3. **Generated files**: Commit all generated code
@@ -653,6 +711,7 @@ Output: `.quality-metrics/` directory with JSON reports.
 ### Slow CI Runs
 
 **Optimizations**:
+
 1. **Enable Turbo cache**: Remote cache for builds
 2. **Parallel jobs**: Split E2E from CI
 3. **Prune dependencies**: Remove unused packages
@@ -663,6 +722,7 @@ Output: `.quality-metrics/` directory with JSON reports.
 ### Flaky E2E Tests
 
 **Solutions**:
+
 1. **Increase timeouts**: `playwright.config.ts`
 2. **Wait for network idle**: `page.waitForLoadState('networkidle')`
 3. **Retry on failure**: `retries: 2` in config
@@ -685,6 +745,7 @@ Output: `.quality-metrics/` directory with JSON reports.
 ## Quick Reference
 
 ### Run All CI Checks Locally
+
 ```bash
 pnpm validate:deps
 pnpm type-check:refs
@@ -697,19 +758,21 @@ pnpm test:e2e
 ```
 
 ### Quality Gates Summary
-| Gate | Command | Purpose |
-|------|---------|---------|
-| 0 | `db:lint` | Schema naming conventions |
-| 1 | `validate:deps` | Layer isolation |
-| 2 | `type-check:refs` | TypeScript compilation |
-| 3 | `lint:ci` | Code style + circular imports |
-| 4 | `test:coverage` | Unit tests + coverage |
-| 5 | `test:e2e` | End-to-end tests |
-| 6 | `housekeeping` | Package.json consistency |
-| 7 | Git diff | Generated files current |
-| 8 | `ci:adapter-gates` | N2 contract integrity |
+
+| Gate | Command            | Purpose                       |
+| ---- | ------------------ | ----------------------------- |
+| 0    | `db:lint`          | Schema naming conventions     |
+| 1    | `validate:deps`    | Layer isolation               |
+| 2    | `type-check:refs`  | TypeScript compilation        |
+| 3    | `lint:ci`          | Code style + circular imports |
+| 4    | `test:coverage`    | Unit tests + coverage         |
+| 5    | `test:e2e`         | End-to-end tests              |
+| 6    | `housekeeping`     | Package.json consistency      |
+| 7    | Git diff           | Generated files current       |
+| 8    | `ci:adapter-gates` | N2 contract integrity         |
 
 ### Workflow Triggers
+
 ```yaml
 # Run on push to main
 on:

@@ -1,4 +1,9 @@
-import { dbSearchWorker, sql } from 'afenda-database';
+// TODO: Restore dbSearchWorker when search tables regenerated
+// import { dbSearchWorker, sql } from 'afenda-database';
+import { getDb, sql } from 'afenda-database';
+
+// FIXME: This file is non-functional without dbSearchWorker
+const dbSearchWorker = getDb(); // Temporary stub
 
 /** Chunk size for backfill (avoids timeouts). */
 const BACKFILL_CHUNK_LIMIT = 10_000;

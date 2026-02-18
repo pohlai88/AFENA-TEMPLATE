@@ -8,12 +8,14 @@
 ## Context
 
 We needed to decide on TypeScript configuration that balances:
+
 - Type safety and bug prevention
 - Developer productivity
 - Code maintainability
 - Learning curve for new team members
 
 TypeScript offers a spectrum from permissive to strict:
+
 - **Permissive**: `allowJs`, minimal type checking
 - **Standard**: `strict: true` preset
 - **Strictest**: `strict: true` + additional strict flags
@@ -57,19 +59,19 @@ We will use the **strictest possible TypeScript configuration** across all packa
 ✅ **Better refactoring**: Type errors immediately highlighted when changing code  
 ✅ **Self-documenting code**: Type signatures serve as inline documentation  
 ✅ **IDE support**: Excellent autocomplete and inline error detection  
-✅ **Reduced testing burden**: Type system catches entire classes of bugs  
+✅ **Reduced testing burden**: Type system catches entire classes of bugs
 
 ### Negative
 
 ⚠️ **More verbose code**: Requires explicit type annotations and null checks  
 ⚠️ **Learning curve**: Team needs to learn strict TypeScript patterns  
 ⚠️ **Initial migration pain**: Existing code required significant changes  
-⚠️ **Slower initial development**: More time spent satisfying type checker  
+⚠️ **Slower initial development**: More time spent satisfying type checker
 
 ### Neutral
 
 ℹ️ **Long-term productivity**: Slower at first, faster over time due to fewer bugs  
-ℹ️ **Incremental adoption**: Can use `// @ts-expect-error` with comments for exceptions  
+ℹ️ **Incremental adoption**: Can use `// @ts-expect-error` with comments for exceptions
 
 ## Code Examples
 
@@ -133,7 +135,7 @@ const count = data['count']; // Required, more explicit
 
 ```typescript
 // Use optional chaining
-user?.profile?.email
+user?.profile?.email;
 
 // Use nullish coalescing
 const name = user.name ?? 'Anonymous';
@@ -154,7 +156,7 @@ if (firstItem !== undefined) {
 }
 
 // Or use array methods
-array.forEach(item => processItem(item)); // Safe
+array.forEach((item) => processItem(item)); // Safe
 ```
 
 ### Object Properties
@@ -172,18 +174,21 @@ if (key in obj) {
 ## Alternatives Considered
 
 ### Standard Strict Mode (strict: true only)
+
 - ✅ Simpler, less verbose
 - ❌ Doesn't catch index access errors
 - ❌ Allows `undefined` in optional properties
 - **Rejected**: Leaves too many potential bugs
 
 ### Permissive Configuration
+
 - ✅ Fastest development
 - ❌ Minimal type safety
 - ❌ Runtime errors in production
 - **Rejected**: Defeats purpose of TypeScript
 
 ### Gradual Typing (allowJs)
+
 - ✅ Easy migration path
 - ❌ Mixed type safety across codebase
 - ❌ Confusing for team

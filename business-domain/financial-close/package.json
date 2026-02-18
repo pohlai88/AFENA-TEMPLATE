@@ -1,31 +1,31 @@
 {
-    "name": "afenda-financial-close",
-    "version": "0.1.0",
-    "description": "Month-end/quarter-end close automation and tracking",
-    "type": "module",
-    "exports": {
-        ".": {
-            "types": "./dist/index.d.ts",
-            "import": "./dist/index.js"
-        }
-    },
-    "files": [
-        "dist"
-    ],
-    "scripts": {
-        "build": "tsc",
-        "dev": "tsc --watch",
-        "clean": "rm -rf dist",
-        "type-check": "tsc --noEmit"
-    },
-    "dependencies": {
-        "afenda-canon": "workspace:*",
-        "afenda-database": "workspace:*",
-        "zod": "^4.3.6"
-    },
-    "devDependencies": {
-        "afenda-eslint-config": "workspace:*",
-        "afenda-typescript-config": "workspace:*",
-        "typescript": "^5.9.3"
+  "name": "afenda-financial-close",
+  "version": "0.1.0",
+  "description": "Month-end/quarter-end close automation and tracking",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
     }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "clean": "rm -rf dist",
+    "type-check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "afenda-canon": "workspace:*",
+    "afenda-database": "workspace:*",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "afenda-eslint-config": "workspace:*",
+    "afenda-typescript-config": "workspace:*",
+    "typescript": "catalog:"
+  }
 }

@@ -44,13 +44,13 @@ compliance reporting, regulatory filings, and compliance analytics.
 ## Usage
 
 ```typescript
-import { performSOXControl } from "afenda-regulatory-reporting";
+import { performSOXControl } from 'afenda-regulatory-reporting';
 
 const result = await performSOXControl(db, orgId, {
-  controlId: "SOX-ITGC-001",
+  controlId: 'SOX-ITGC-001',
   testDate: new Date(),
-  testerId: "auditor-123",
-  evidence: "access-review-report.pdf",
+  testerId: 'auditor-123',
+  evidence: 'access-review-report.pdf',
 });
 ```
 

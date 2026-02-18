@@ -41,7 +41,7 @@ that fail to meet minimum requirements.
 
 ---
 
-## 
+##
 
 How Quality Gates Work
 
@@ -101,15 +101,15 @@ AFENDA-NEXUS/
 
 ```json
 {
-    "minCoverageLines": 80,
-    "minCoverageFunctions": 80,
-    "minCoverageStatements": 80,
-    "minCoverageBranches": 75,
-    "maxCoverageDropPct": 2,
-    "maxTypeErrors": 0,
-    "maxLintErrors": 0,
-    "maxLintWarnings": 10,
-    "maxBuildTimeIncreasePct": 20
+  "minCoverageLines": 80,
+  "minCoverageFunctions": 80,
+  "minCoverageStatements": 80,
+  "minCoverageBranches": 75,
+  "maxCoverageDropPct": 2,
+  "maxTypeErrors": 0,
+  "maxLintErrors": 0,
+  "maxLintWarnings": 10,
+  "maxBuildTimeIncreasePct": 20
 }
 ```
 
@@ -119,20 +119,20 @@ The configuration is validated against this TypeScript interface:
 
 ```typescript
 interface QualityGatesConfig {
-    // Absolute coverage minimums (percentages)
-    minCoverageLines: number;
-    minCoverageFunctions: number;
-    minCoverageStatements: number;
-    minCoverageBranches: number;
+  // Absolute coverage minimums (percentages)
+  minCoverageLines: number;
+  minCoverageFunctions: number;
+  minCoverageStatements: number;
+  minCoverageBranches: number;
 
-    // Regression detection (percentages)
-    maxCoverageDropPct: number;
-    maxBuildTimeIncreasePct: number;
+  // Regression detection (percentages)
+  maxCoverageDropPct: number;
+  maxBuildTimeIncreasePct: number;
 
-    // Quality standards (counts)
-    maxTypeErrors: number;
-    maxLintErrors: number;
-    maxLintWarnings: number;
+  // Quality standards (counts)
+  maxTypeErrors: number;
+  maxLintErrors: number;
+  maxLintWarnings: number;
 }
 ```
 
@@ -152,7 +152,7 @@ interface QualityGatesConfig {
 
 ```json
 {
-    "minCoverageLines": 85
+  "minCoverageLines": 85
 }
 ```
 
@@ -179,7 +179,7 @@ interface QualityGatesConfig {
 
 ```json
 {
-    "minCoverageFunctions": 85
+  "minCoverageFunctions": 85
 }
 ```
 
@@ -200,7 +200,7 @@ interface QualityGatesConfig {
 
 ```json
 {
-    "minCoverageStatements": 80
+  "minCoverageStatements": 80
 }
 ```
 
@@ -221,7 +221,7 @@ interface QualityGatesConfig {
 
 ```json
 {
-    "minCoverageBranches": 70
+  "minCoverageBranches": 70
 }
 ```
 
@@ -249,7 +249,7 @@ interface QualityGatesConfig {
 
 ```json
 {
-    "maxCoverageDropPct": 1.5
+  "maxCoverageDropPct": 1.5
 }
 ```
 
@@ -282,7 +282,7 @@ If maxCoverageDropPct = 1:  ❌ Fail (1.5 > 1)
 
 ```json
 {
-    "maxBuildTimeIncreasePct": 15
+  "maxBuildTimeIncreasePct": 15
 }
 ```
 
@@ -316,7 +316,7 @@ If maxBuildTimeIncreasePct = 15:  ❌ Fail (20 > 15)
 
 ```json
 {
-    "maxTypeErrors": 0
+  "maxTypeErrors": 0
 }
 ```
 
@@ -342,7 +342,7 @@ If maxBuildTimeIncreasePct = 15:  ❌ Fail (20 > 15)
 
 ```json
 {
-    "maxLintErrors": 0
+  "maxLintErrors": 0
 }
 ```
 
@@ -366,7 +366,7 @@ If maxBuildTimeIncreasePct = 15:  ❌ Fail (20 > 15)
 
 ```json
 {
-    "maxLintWarnings": 5
+  "maxLintWarnings": 5
 }
 ```
 
@@ -474,35 +474,35 @@ The quality gates workflow is defined in `.github/workflows/quality-gates.yml`:
 name: Quality Gates & Security
 
 on:
-    pull_request:
-        types: [opened, synchronize, reopened]
+  pull_request:
+    types: [opened, synchronize, reopened]
 
 jobs:
-    quality-gates:
-        runs-on: ubuntu-latest
-        steps:
-            # ... setup steps ...
-            - name: Collect Metrics
-              run: pnpm --filter quality-metrics collect
-              env:
-                  DATABASE_URL: ${{ secrets.DATABASE_URL }}
+  quality-gates:
+    runs-on: ubuntu-latest
+    steps:
+      # ... setup steps ...
+      - name: Collect Metrics
+        run: pnpm --filter quality-metrics collect
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
 
-            - name: Check Quality Gates
-              id: gates
-              run: pnpm --filter quality-metrics gates --sha=${{ github.sha }}
-              continue-on-error: true
+      - name: Check Quality Gates
+        id: gates
+        run: pnpm --filter quality-metrics gates --sha=${{ github.sha }}
+        continue-on-error: true
 
-            - name: Post PR Comment
-              if: github.event_name == 'pull_request'
-              uses: actions/github-script@v7
-              with:
-                  script: |
-                      // Read gate results and post comment
-                      // ...
+      - name: Post PR Comment
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            // Read gate results and post comment
+            // ...
 
-            - name: Fail if gates failed
-              if: steps.gates.outcome == 'failure'
-              run: exit 1
+      - name: Fail if gates failed
+        if: steps.gates.outcome == 'failure'
+        run: exit 1
 ```
 
 ### Workflow Features
@@ -518,6 +518,7 @@ jobs:
 1. **Add workflow file** (already included)
 
 2. **Configure secrets** (optional for database):
+
    ```bash
    # In GitHub repo settings → Secrets
    DATABASE_URL=postgresql://user:pass@host/db
@@ -538,15 +539,15 @@ For production-critical code with high standards:
 
 ```json
 {
-    "minCoverageLines": 90,
-    "minCoverageFunctions": 90,
-    "minCoverageStatements": 90,
-    "minCoverageBranches": 85,
-    "maxCoverageDropPct": 0.5,
-    "maxTypeErrors": 0,
-    "maxLintErrors": 0,
-    "maxLintWarnings": 0,
-    "maxBuildTimeIncreasePct": 10
+  "minCoverageLines": 90,
+  "minCoverageFunctions": 90,
+  "minCoverageStatements": 90,
+  "minCoverageBranches": 85,
+  "maxCoverageDropPct": 0.5,
+  "maxTypeErrors": 0,
+  "maxLintErrors": 0,
+  "maxLintWarnings": 0,
+  "maxBuildTimeIncreasePct": 10
 }
 ```
 
@@ -560,15 +561,15 @@ For gradual quality improvement of legacy codebase:
 
 ```json
 {
-    "minCoverageLines": 60,
-    "minCoverageFunctions": 60,
-    "minCoverageStatements": 60,
-    "min CoverageBranches": 50,
-    "maxCoverageDropPct": 5,
-    "maxTypeErrors": 10,
-    "maxLintErrors": 5,
-    "maxLintWarnings": 50,
-    "maxBuildTimeIncreasePct": 30
+  "minCoverageLines": 60,
+  "minCoverageFunctions": 60,
+  "minCoverageStatements": 60,
+  "min CoverageBranches": 50,
+  "maxCoverageDropPct": 5,
+  "maxTypeErrors": 10,
+  "maxLintErrors": 5,
+  "maxLintWarnings": 50,
+  "maxBuildTimeIncreasePct": 30
 }
 ```
 
@@ -584,15 +585,15 @@ For rapid development with basic quality gates:
 
 ```json
 {
-    "minCoverageLines": 70,
-    "minCoverageFunctions": 70,
-    "minCoverageStatements": 70,
-    "minCoverageBranches": 65,
-    "maxCoverageDropPct": 3,
-    "maxTypeErrors": 0,
-    "maxLintErrors": 0,
-    "maxLintWarnings": 20,
-    "maxBuildTimeIncreasePct": 25
+  "minCoverageLines": 70,
+  "minCoverageFunctions": 70,
+  "minCoverageStatements": 70,
+  "minCoverageBranches": 65,
+  "maxCoverageDropPct": 3,
+  "maxTypeErrors": 0,
+  "maxLintErrors": 0,
+  "maxLintWarnings": 20,
+  "maxBuildTimeIncreasePct": 25
 }
 ```
 
@@ -606,15 +607,15 @@ For open-source library with high quality bar:
 
 ```json
 {
-    "minCoverageLines": 95,
-    "minCoverageFunctions": 95,
-    "minCoverageStatements": 95,
-    "minCoverageBranches": 90,
-    "maxCoverageDropPct": 0,
-    "maxTypeErrors": 0,
-    "maxLintErrors": 0,
-    "maxLintWarnings": 0,
-    "maxBuildTimeIncreasePct": 15
+  "minCoverageLines": 95,
+  "minCoverageFunctions": 95,
+  "minCoverageStatements": 95,
+  "minCoverageBranches": 90,
+  "maxCoverageDropPct": 0,
+  "maxTypeErrors": 0,
+  "maxLintErrors": 0,
+  "maxLintWarnings": 0,
+  "maxBuildTimeIncreasePct": 15
 }
 ```
 
@@ -633,6 +634,7 @@ For open-source library with high quality bar:
 **Solutions**:
 
 1. **Check baseline metrics**:
+
    ```bash
    # View historical snapshots
    curl http://localhost:3000/api/quality/history?limit=10
@@ -643,6 +645,7 @@ For open-source library with high quality bar:
    - Compare current vs baseline metrics
 
 3. **Verify configuration**:
+
    ```bash
    # Validate config file
    cat .quality-gates.json | jq .
@@ -682,9 +685,10 @@ pnpm --filter quality-metrics gates \
 **Solutions**:
 
 1. **Increase threshold temporarily**:
+
    ```json
    {
-       "maxBuildTimeIncreasePct": 30
+     "maxBuildTimeIncreasePct": 30
    }
    ```
 
@@ -703,12 +707,14 @@ pnpm --filter quality-metrics gates \
 **Solutions**:
 
 1. **Match CI TypeScript version**:
+
    ```bash
    # Check CI version in logs
    # Update package.json to match
    ```
 
 2. **Clean local cache**:
+
    ```bash
    rm -rf node_modules .next
    pnpm install

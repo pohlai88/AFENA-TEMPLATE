@@ -58,13 +58,13 @@ compatibility.
 All hooks are exported from the package barrel:
 
 ```tsx
-import { useClipboard, useDebounce, useMediaQuery } from "afenda-ui";
+import { useClipboard, useDebounce, useMediaQuery } from 'afenda-ui';
 ```
 
 Or import individually for tree-shaking:
 
 ```tsx
-import { useMediaQuery } from "afenda-ui/hooks/use-media-query";
+import { useMediaQuery } from 'afenda-ui/hooks/use-media-query';
 ```
 
 ## Conventions

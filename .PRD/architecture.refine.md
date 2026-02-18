@@ -1,4 +1,4 @@
-```markdown
+````markdown
 # Plan: Enterprise Code Quality Transformation
 
 **TL;DR**: Transform afenda from strong architectural foundation (6.9/10) to enterprise-grade system (9+/10) through systematic improvements in test coverage, observability, documentation standards, and developer experience. Focus on "insight-first" outputs where every artifact provides actionable intelligence for future consumption.
@@ -8,12 +8,14 @@
 ## Critical Findings
 
 **Strengths to Preserve:**
+
 - ⭐ Exceptional TypeScript strictness (10/10) - `noUncheckedIndexedAccess`, all strict flags
 - ⭐ Advanced architectural governance - `.architecture/` docs, gap registers, invariant tracking
-- ⭐ Sophisticated custom tooling - `afena-cli` with auto-gen docs and metadata validation
+- ⭐ Sophisticated custom tooling - `afenda-cli` with auto-gen docs and metadata validation
 - ⭐ Comprehensive CI/CD - 3-job workflow with security audits, schema validation, E2E tests
 
 **Critical Gaps to Address:**
+
 - 🔴 **Test Coverage: 4/10** - Only 1 of 11 packages has unit tests, no coverage tooling
 - 🔴 **Observability: 3/10** - Good logging, zero tracing/metrics/APM
 - 🔴 **Release Management: 0/10** - No changelogs, version tracking, or deployment insights
@@ -28,6 +30,7 @@
 **1.1 Configure Enterprise-Grade Coverage Tooling**
 
 Add to `vitest.config.ts`:
+
 ```typescript
 coverage: {
   provider: 'v8',
@@ -53,10 +56,12 @@ coverage: {
   skipFull: false // Always show 100% covered files
 }
 ```
+````
 
 **1.2 Create Coverage Badge Generation**
 
-Add to `tools/afena-cli/src/bundle/command.ts`:
+Add to `tools/afenda-cli/src/bundle/command.ts`:
+
 ```typescript
 // New task: Generate coverage badges
 {
@@ -70,17 +75,18 @@ Add to `tools/afena-cli/src/bundle/command.ts`:
 **1.3 Add Coverage to CI**
 
 Modify ci.yml:
+
 ```yaml
 - name: Unit tests with coverage
   run: pnpm test:coverage
-  
+
 - name: Upload coverage to Codecov
   uses: codecov/codecov-action@v4
   with:
     files: ./coverage/lcov.info
     flags: unittests
     fail_ci_if_error: true
-    
+
 - name: Coverage summary comment
   uses: romeovs/lcov-reporter-action@v0.3.1
   with:
@@ -91,6 +97,7 @@ Modify ci.yml:
 **1.4 Create Per-Package Test Templates**
 
 Generate standardized test structure for each package:
+
 ```
 packages/{package}/src/__tests__/
 ├── unit/           # Pure unit tests
@@ -99,6 +106,7 @@ packages/{package}/src/__tests__/
 ```
 
 **Files to create:**
+
 - `packages/logger/src/__tests__/unit/logger.test.ts`
 - `packages/database/src/__tests__/unit/schema-validation.test.ts`
 - `packages/canon/src/__tests__/unit/invariant.test.ts`
@@ -112,6 +120,7 @@ packages/{package}/src/__tests__/
 **2.1 Implement OpenTelemetry Tracing**
 
 Modify instrumentation.ts:
+
 ```typescript
 import { NodeSDK } from '@opentelemetry/sdk-node';
 import { getNodeAutoInstrumentations } from '@opentelemetry/auto-instrumentations-node';
@@ -136,6 +145,7 @@ sdk.start();
 **2.2 Add Custom Metrics Collection**
 
 Create `packages/logger/src/metrics.ts`:
+
 ```typescript
 import { metrics } from '@opentelemetry/api';
 
@@ -163,6 +173,7 @@ export const healthGauge = meter.createObservableGauge('service.health', {
 **2.3 Create Centralized Health Check System**
 
 Create `apps/web/app/api/health/route.ts`:
+
 ```typescript
 import { db } from '@afenda/database';
 import { logger } from '@afenda/logger';
@@ -179,12 +190,8 @@ export interface HealthCheck {
 }
 
 export async function GET() {
-  const checks = await Promise.allSettled([
-    checkDatabase(),
-    checkSearch(),
-    checkCache(),
-  ]);
-  
+  const checks = await Promise.allSettled([checkDatabase(), checkSearch(), checkCache()]);
+
   // Return structured health data
 }
 ```
@@ -192,6 +199,7 @@ export async function GET() {
 **2.4 Add Error Tracking Integration**
 
 Create `packages/logger/src/error-reporter.ts`:
+
 ```typescript
 import * as Sentry from '@sentry/nextjs';
 
@@ -202,7 +210,7 @@ export class ErrorReporter {
       Sentry.captureException(error, { contexts: { custom: context } });
     }
   }
-  
+
   static setUser(userId: string, email?: string) {
     Sentry.setUser({ id: userId, email });
   }
@@ -218,6 +226,7 @@ export class ErrorReporter {
 Modify templates.ts:
 
 Add new sections to auto-generated READMEs:
+
 ```typescript
 // Add to TemplateInput interface
 export interface TemplateInput {
@@ -239,7 +248,8 @@ export interface TemplateInput {
 
 **3.2 Generate API Documentation**
 
-Create `tools/afena-cli/src/docs/openapi-generator.ts`:
+Create `tools/afenda-cli/src/docs/openapi-generator.ts`:
+
 ```typescript
 import { Project } from 'ts-morph';
 import { OpenAPIV3 } from 'openapi-types';
@@ -247,17 +257,17 @@ import { OpenAPIV3 } from 'openapi-types';
 export function generateOpenAPISpec(routesDir: string): OpenAPIV3.Document {
   const project = new Project({ tsConfigFilePath: 'tsconfig.json' });
   const sourceFiles = project.addSourceFilesAtPaths(`${routesDir}/**/route.ts`);
-  
+
   const spec: OpenAPIV3.Document = {
     openapi: '3.0.0',
-    info: { 
+    info: {
       title: 'afenda API',
       version: '1.0.0',
-      description: 'Auto-generated from route handlers'
+      description: 'Auto-generated from route handlers',
     },
-    paths: {}
+    paths: {},
   };
-  
+
   // Parse route files, extract types, generate spec
   return spec;
 }
@@ -266,6 +276,7 @@ export function generateOpenAPISpec(routesDir: string): OpenAPIV3.Document {
 **3.3 Create CHANGELOG.md Generator**
 
 Create `.changeset/config.json`:
+
 ```json
 {
   "$schema": "https://unpkg.com/@changesets/config@2.3.0/schema.json",
@@ -285,11 +296,14 @@ Add automated changelog to command.ts.
 **3.4 Add Inline Documentation Standards**
 
 Create `docs/DOCUMENTATION_STANDARDS.md`:
+
 ```markdown
 # Documentation Standards
 
 ## JSDoc Comments
+
 All exported functions MUST have JSDoc with:
+
 - `@description` - What it does
 - `@param` - Each parameter with type and purpose
 - `@returns` - Return value and meaning
@@ -299,13 +313,15 @@ All exported functions MUST have JSDoc with:
 - `@see` - Related functions
 
 ## Insight Comments
+
 Add metadata for tooling consumption:
-/**
- * @complexity O(n)
- * @performance critical-path
- * @tested unit,integration
- * @monitors metrics.db.query.duration
- */
+/\*\*
+
+- @complexity O(n)
+- @performance critical-path
+- @tested unit,integration
+- @monitors metrics.db.query.duration
+  \*/
 ```
 
 ---
@@ -315,6 +331,7 @@ Add metadata for tooling consumption:
 **4.1 Create Comprehensive Environment Templates**
 
 Create `.env.example`:
+
 ```bash
 # Database
 DATABASE_URL=postgresql://user:password@localhost:5432/afenda
@@ -337,22 +354,27 @@ NEXT_PUBLIC_FEATURE_SEARCH=true
 **4.2 Add GitHub Templates**
 
 Create `.github/PULL_REQUEST_TEMPLATE.md`:
+
 ```markdown
 ## Description
+
 <!-- What does this PR do? -->
 
 ## Type of Change
+
 - [ ] Bug fix
 - [ ] New feature
 - [ ] Breaking change
 - [ ] Documentation update
 
 ## Testing
+
 - [ ] Unit tests added/updated
 - [ ] E2E tests added/updated
 - [ ] Manual testing completed
 
 ## Quality Checklist
+
 - [ ] Tests pass locally
 - [ ] Coverage threshold met (80%)
 - [ ] Type check passes
@@ -361,15 +383,18 @@ Create `.github/PULL_REQUEST_TEMPLATE.md`:
 - [ ] CHANGELOG entry added
 
 ## Performance Impact
+
 <!-- Any performance implications? -->
 
 ## Deployment Notes
+
 <!-- Special deployment considerations? -->
 ```
 
 **4.3 Create CONTRIBUTING.md**
 
 Create `CONTRIBUTING.md` with:
+
 - Development setup walkthrough
 - Testing requirements (80% coverage minimum)
 - Documentation standards
@@ -380,6 +405,7 @@ Create `CONTRIBUTING.md` with:
 **4.4 Add .editorconfig**
 
 Create `.editorconfig`:
+
 ```ini
 root = true
 
@@ -404,7 +430,8 @@ indent_style = tab
 
 **5.1 Create Quality Metrics Collector**
 
-Create `tools/afena-cli/src/quality/metrics-collector.ts`:
+Create `tools/afenda-cli/src/quality/metrics-collector.ts`:
+
 ```typescript
 export interface QualityMetrics {
   codebase: {
@@ -440,7 +467,8 @@ export interface QualityMetrics {
 
 **5.2 Generate Dashboard Markdown**
 
-Create `tools/afena-cli/src/quality/dashboard-generator.ts`:
+Create `tools/afenda-cli/src/quality/dashboard-generator.ts`:
+
 ```typescript
 export function generateQualityDashboard(metrics: QualityMetrics): string {
   return `
@@ -466,6 +494,7 @@ Overall Health Score: ${metrics.healthScore}/100
 **5.3 Add Quality Gate CLI Command**
 
 Add to cli.ts:
+
 ```typescript
 program
   .command('quality-gate')
@@ -473,7 +502,7 @@ program
   .action(async () => {
     const metrics = await collectQualityMetrics();
     const failures = [];
-    
+
     if (metrics.testing.coverage.lines < 80) {
       failures.push('Coverage below 80%');
     }
@@ -483,7 +512,7 @@ program
     if (metrics.healthScore < 85) {
       failures.push('Health score below 85');
     }
-    
+
     if (failures.length > 0) {
       log.error('Quality gate failed:', failures);
       process.exitCode = 1;
@@ -497,34 +526,36 @@ program
 
 **6.1 Add Code Complexity Analysis**
 
-Create `tools/afena-cli/src/quality/complexity-analyzer.ts`:
+Create `tools/afenda-cli/src/quality/complexity-analyzer.ts`:
+
 ```typescript
 import { Project, SyntaxKind } from 'ts-morph';
 
 export function analyzeComplexity(filePath: string) {
   const project = new Project();
   const sourceFile = project.addSourceFileAtPath(filePath);
-  
+
   const functions = sourceFile.getFunctions();
-  const complexities = functions.map(fn => ({
+  const complexities = functions.map((fn) => ({
     name: fn.getName(),
     cyclomaticComplexity: calculateCyclomaticComplexity(fn),
     cognitiveComplexity: calculateCognitiveComplexity(fn),
     loc: fn.getEndLineNumber() - fn.getStartLineNumber(),
   }));
-  
+
   return {
     file: filePath,
-    averageComplexity: avg(complexities.map(c => c.cyclomaticComplexity)),
-    maxComplexity: max(complexities.map(c => c.cyclomaticComplexity)),
-    hotspots: complexities.filter(c => c.cyclomaticComplexity > 10),
+    averageComplexity: avg(complexities.map((c) => c.cyclomaticComplexity)),
+    maxComplexity: max(complexities.map((c) => c.cyclomaticComplexity)),
+    hotspots: complexities.filter((c) => c.cyclomaticComplexity > 10),
   };
 }
 ```
 
 **6.2 Generate Dependency Graph Insights**
 
-Create `tools/afena-cli/src/quality/dependency-analyzer.ts`:
+Create `tools/afenda-cli/src/quality/dependency-analyzer.ts`:
+
 ```typescript
 export function analyzeDependencies() {
   return {
@@ -537,7 +568,7 @@ export function analyzeDependencies() {
       mostDepended: rankByIncomingEdges(),
       heaviestPackages: rankByTransitiveDeps(),
       updateRisk: calculateUpdateRisk(),
-    }
+    },
   };
 }
 ```
@@ -545,6 +576,7 @@ export function analyzeDependencies() {
 **6.3 Create Performance Budget Tracking**
 
 Create `.lighthouserc.json`:
+
 ```json
 {
   "ci": {
@@ -556,10 +588,10 @@ Create `.lighthouserc.json`:
     "assert": {
       "preset": "lighthouse:recommended",
       "assertions": {
-        "categories:performance": ["error", {"minScore": 0.9}],
-        "categories:accessibility": ["error", {"minScore": 0.95}],
-        "first-contentful-paint": ["error", {"maxNumericValue": 2000}],
-        "interactive": ["error", {"maxNumericValue": 3500}]
+        "categories:performance": ["error", { "minScore": 0.9 }],
+        "categories:accessibility": ["error", { "minScore": 0.95 }],
+        "first-contentful-paint": ["error", { "maxNumericValue": 2000 }],
+        "interactive": ["error", { "maxNumericValue": 3500 }]
       }
     },
     "upload": {
@@ -576,6 +608,7 @@ Create `.lighthouserc.json`:
 ### **Success Criteria**
 
 **Testing (Phase 1):**
+
 - [ ] All 11 packages have unit tests
 - [ ] Overall coverage ≥80% (lines, functions, branches)
 - [ ] Coverage reports generated in CI
@@ -583,6 +616,7 @@ Create `.lighthouserc.json`:
 - [ ] Test execution time <3 minutes
 
 **Observability (Phase 2):**
+
 - [ ] OpenTelemetry tracing operational
 - [ ] Custom metrics collecting business events
 - [ ] Centralized health endpoint returning structured data
@@ -590,6 +624,7 @@ Create `.lighthouserc.json`:
 - [ ] Distributed tracing visible in UI (Jaeger/Honeycomb)
 
 **Documentation (Phase 3):**
+
 - [ ] All public APIs have JSDoc comments
 - [ ] OpenAPI spec auto-generated from routes
 - [ ] Swagger UI accessible at `/api/docs`
@@ -597,6 +632,7 @@ Create `.lighthouserc.json`:
 - [ ] Architecture docs include performance and complexity insights
 
 **Developer Experience (Phase 4):**
+
 - [ ] `.env.example` with all required variables
 - [ ] PR/Issue templates in use
 - [ ] CONTRIBUTING.md comprehensive
@@ -604,6 +640,7 @@ Create `.lighthouserc.json`:
 - [ ] New developer onboarding <30 minutes
 
 **Quality Metrics (Phase 5):**
+
 - [ ] Quality dashboard generated automatically
 - [ ] Health score ≥85/100
 - [ ] Quality gate integrated in CI
@@ -611,6 +648,7 @@ Create `.lighthouserc.json`:
 - [ ] Dashboard accessible to stakeholders
 
 **Automated Insights (Phase 6):**
+
 - [ ] Complexity analysis runs on each commit
 - [ ] Dependency graph insights generated
 - [ ] Performance budgets enforced
@@ -631,7 +669,7 @@ Create `.lighthouserc.json`:
 
 **API Docs:** Custom OpenAPI generator using ts-morph (type-safe, auto-sync with code)
 
-**Quality Metrics:** Custom collector (full control, integrates with existing afena-cli architecture)
+**Quality Metrics:** Custom collector (full control, integrates with existing afenda-cli architecture)
 
 ---
 
@@ -640,14 +678,16 @@ Create `.lighthouserc.json`:
 ### **Current State Analysis**
 
 **Strong Foundation (Preserve & Build Upon):**
+
 - TypeScript configuration is world-class (strictest possible settings including `noUncheckedIndexedAccess`)
 - Architecture documentation system (.architecture/ folder) with gap registers and invariant tracking
-- Sophisticated custom tooling (afena-cli) for maintenance automation
+- Sophisticated custom tooling (afenda-cli) for maintenance automation
 - Comprehensive CI/CD with security audits, schema validation, multiple test tiers
 - Structured logging with Pino and AsyncLocalStorage for request context
 - ESLint with security plugin and custom invariant rules
 
 **Critical Gaps (Priority Fixes):**
+
 - **Test Coverage: 4/10** - Only afenda-crud has unit tests (1 file), 10 other packages have zero tests
 - **No coverage tooling** - No vitest coverage config, no thresholds, no reporting
 - **Observability: 3/10** - Good logging exists, but zero tracing, metrics, or APM integration
@@ -658,10 +698,11 @@ Create `.lighthouserc.json`:
 - **API Documentation: 5/10** - Planned but not implemented (no OpenAPI specs, no Swagger UI)
 
 **Medium Priority Gaps:**
+
 - Missing developer experience files (.env.example, CONTRIBUTING.md, .editorconfig, GitHub templates)
 - No performance monitoring (no Web Vitals tracking, no Lighthouse CI, no performance budgets)
 - No SAST tools (CodeQL, Semgrep) beyond basic eslint-plugin-security
-- Incomplete invariant checks (E1-E7, H00-H02 are stubbed out in tools/afena-cli/src/checks/invariants.ts)
+- Incomplete invariant checks (E1-E7, H00-H02 are stubbed out in tools/afenda-cli/src/checks/invariants.ts)
 - Many READMEs show placeholder text ("TODO: Add entity-specific...")
 
 **Package-Level Health:**
@@ -679,6 +720,7 @@ Create `.lighthouserc.json`:
 | apps/web | ✅ E2E only | ❌ | ✅ Manual | ✅ |
 
 **Observability Stack Current State:**
+
 - **Logging: 🟢 Good** - Pino with structured logs, ALS context tracking, graceful shutdown
 - **Metrics: 🔴 Poor** - Only one search lag endpoint, no general metrics collection
 - **Tracing: 🔴 None** - OpenTelemetry deps present in lockfile but completely unused
@@ -687,6 +729,7 @@ Create `.lighthouserc.json`:
 - **Monitoring: 🔴 None** - No dashboards, no alerts, no health aggregation
 
 **Overall Quality Score: 6.9/10**
+
 - Architecture: 9/10 (Excellent governance)
 - TypeScript: 10/10 (Strictest config)
 - CI/CD: 8/10 (Comprehensive but no coverage)
@@ -695,8 +738,10 @@ Create `.lighthouserc.json`:
 - Observability: 3/10 (Logging only)
 - Security: 6/10 (Basic scanning)
 - Developer Experience: 7/10 (Good tooling, missing basics)
+
 ```
 
 You can now copy this entire markdown content and paste it into a new file named `plan-enterpriseCodeQuality.prompt.md` in your editor!You can now copy this entire markdown content and paste it into a new file named `plan-enterpriseCodeQuality.prompt.md` in your editor!
 
 Similar code found with 2 license types
+```

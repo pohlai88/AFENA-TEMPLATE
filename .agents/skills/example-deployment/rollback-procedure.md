@@ -113,12 +113,12 @@ If rollback fails or issues persist:
 
 ## Rollback Decision Matrix
 
-| Issue Severity | User Impact | Action |
-|---------------|-------------|--------|
-| Critical | >50% users | Immediate rollback |
-| High | 10-50% users | Rollback within 15 min |
-| Medium | <10% users | Assess, may rollback |
-| Low | Minimal | Fix forward, no rollback |
+| Issue Severity | User Impact  | Action                   |
+| -------------- | ------------ | ------------------------ |
+| Critical       | >50% users   | Immediate rollback       |
+| High           | 10-50% users | Rollback within 15 min   |
+| Medium         | <10% users   | Assess, may rollback     |
+| Low            | Minimal      | Fix forward, no rollback |
 
 ## Notes
 

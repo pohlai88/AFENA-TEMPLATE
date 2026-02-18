@@ -21,12 +21,12 @@ and evidence packs for audit/compliance.
 
 ```typescript
 import {
-    createEvidencePack,
-    getDocumentAnalytics,
-    linkToTransaction,
-    processWithOCR,
-    uploadDocument,
-} from "afenda-document-mgmt";
+  createEvidencePack,
+  getDocumentAnalytics,
+  linkToTransaction,
+  processWithOCR,
+  uploadDocument,
+} from 'afenda-document-mgmt';
 ```
 
 ## Services

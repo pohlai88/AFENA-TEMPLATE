@@ -4,9 +4,9 @@ Enterprise payroll processing and tax compliance.
 
 ## Features
 
-- **
+- \*\*
 
-Payroll Processing**: Gross-to-net, deductions, direct deposit
+Payroll Processing\*\*: Gross-to-net, deductions, direct deposit
 
 - **Tax Withholding**: Federal, state, local, FICA calculations
 - **Year-End Reporting**: W-2 generation, 941 reconciliation

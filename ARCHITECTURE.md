@@ -1,132 +1,241 @@
 # AFENDA-NEXUS Architecture
 
-## Overview
+**A Layered ERP System with Strict Dependency Rules**
 
-AFENDA-NEXUS is a monorepo-based ERP system built on a **layered architecture** with strict dependency rules. The architecture enforces separation of concerns through four distinct layers, ensuring maintainability, testability, and scalability as the codebase grows.
+---
+
+## Table of Contents
+
+- [Architecture Principles](#architecture-principles)
+- [4-Layer Architecture](#4-layer-architecture)
+- [Layer 0: Configuration](#layer-0-configuration)
+- [Layer 1: Foundation](#layer-1-foundation)
+- [Layer 2: Domain Services](#layer-2-domain-services)
+- [Layer 3: Application](#layer-3-application)
+- [Dependency Rules](#dependency-rules)
+- [Package Standards](#package-standards)
+
+---
 
 ## Architecture Principles
 
-### 1. Layered Architecture
-The system follows a strict bottom-up dependency flow where lower layers have no knowledge of upper layers.
+### 1. Strict Layered Architecture
+**Bottom-up dependency flow only.** Lower layers have zero knowledge of upper layers.
 
 ### 2. Single Responsibility
-Each package has one clear purpose. Packages that grow too large are split into domain-specific packages.
+Each package owns one coherent domain. Large packages are split into focused sub-domains.
 
 ### 3. Explicit Dependencies
-All dependencies are declared in `package.json`. No implicit coupling through file system access.
+All dependencies declared in `package.json`. No implicit coupling through file system access.
 
 ### 4. Zero Circular Dependencies
-The dependency graph must be acyclic (DAG). Circular dependencies are architectural violations.
+The dependency graph is a DAG (Directed Acyclic Graph). Circular dependencies are architectural violations.
 
-### 5. Boundary Enforcement
-Packages only access other packages through their public APIs (`src/index.ts` exports). Internal modules are private.
+### 5. Public API Boundary
+Packages only access others through `src/index.ts` exports. Internal modules are private.
 
 ---
 
-## Layer Hierarchy
+## 4-Layer Architecture
 
 ```
-┌─────────────────────────────────────────────┐
-│  Layer 3: Application                       │
-│  - crud          - observability            │
-│  Orchestrates domain services, enforces     │
-│  policies, manages entity lifecycle         │
-└─────────────────────────────────────────────┘
-                    ↓
-┌─────────────────────────────────────────────┐
-│  Layer 2: Domain Services                   │
-│  - workflow      - advisory                 │
-│  - search        - migration                │
-│  - accounting    - inventory                │
-│  - crm           - intercompany             │
-│  - procurement   - purchasing               │
-│  Business logic, rules, domain operations   │
-└─────────────────────────────────────────────┘
-                    ↓
-┌─────────────────────────────────────────────┐
-│  Layer 1: Foundation                        │
-│  - canon         - database                 │
-│  - logger        - ui                       │
-│  Core primitives, schemas, data access      │
-└─────────────────────────────────────────────┘
-                    ↓
-┌─────────────────────────────────────────────┐
-│  Layer 0: Configuration                     │
-│  - eslint-config - typescript-config        │
-│  Shared tooling and configuration           │
-└─────────────────────────────────────────────┘
+┌─────────────────────────────────────────────────────────────┐
+│  Layer 3: Application Orchestration                         │
+│  ┌─────────┐  ┌──────────────┐                              │
+│  │  crud   │  │ observability│  Orchestrates business flows │
+│  └─────────┘  └──────────────┘  Enforces policies           │
+└─────────────────────────────────────────────────────────────┘
+                           ↑ depends on
+┌─────────────────────────────────────────────────────────────┐
+│  Layer 2: Domain Services (116 packages)                    │
+│  ┌──────────┐ ┌─────────┐ ┌──────────┐ ┌─────────┐         │
+│  │ workflow │ │advisory │ │accounting│ │   crm   │  ...    │
+│  └──────────┘ └─────────┘ └──────────┘ └─────────┘         │
+│  Business logic, domain rules, calculations                 │
+└─────────────────────────────────────────────────────────────┘
+                           ↑ depends on
+┌─────────────────────────────────────────────────────────────┐
+│  Layer 1: Foundation                                        │
+│  ┌────────┐  ┌──────────┐  ┌────────┐  ┌────┐             │
+│  │ canon  │  │ database │  │ logger │  │ ui │             │
+│  └────────┘  └──────────┘  └────────┘  └────┘             │
+│  Types, schemas, data access, observability                │
+└─────────────────────────────────────────────────────────────┘
+                           ↑ depends on
+┌─────────────────────────────────────────────────────────────┐
+│  Layer 0: Configuration                                     │
+│  ┌──────────────┐  ┌──────────────────┐                    │
+│  │ eslint-config│  │ typescript-config│                    │
+│  └──────────────┘  └──────────────────┘                    │
+│  Shared tooling configuration                              │
+└─────────────────────────────────────────────────────────────┘
 ```
 
 ---
 
-## Package Descriptions
+## Layer 0: Configuration
 
-### Layer 0: Configuration
-**No dependencies allowed**
+**Purpose:** Shared tooling and build configuration  
+**Dependencies:** None (foundation of the monorepo)  
+**Location:** `packages/eslint-config`, `packages/typescript-config`
 
-#### `eslint-config`
-Shared ESLint configurations for base, React, and Next.js projects.
+### Packages
 
-#### `typescript-config`
-Shared TypeScript compiler configurations.
+| Package | Purpose |
+|---------|---------|
+| `eslint-config` | ESLint rules for TypeScript, React, Next.js |
+| `typescript-config` | TypeScript compiler configurations (strict, base, library) |
+
+**Rules:**
+- ❌ Cannot depend on any workspace packages
+- ✅ Only external npm dependencies allowed (ESLint plugins, etc.)
 
 ---
 
-### Layer 1: Foundation
-**External dependencies only (no workspace dependencies)**
+## Layer 1: Foundation
 
-#### `canon`
-**The single source of truth for types, schemas, and contracts.**
-- 211+ entity type definitions
-- Action types and verbs
-- Policy types (permissions, scopes)
-- Validation schemas (Zod)
+**Purpose:** Core primitives, types, schemas, and data access  
+**Dependencies:** Layer 0 only  
+**Location:** `packages/canon`, `packages/database`, `packages/logger`, `packages/ui`
+
+### `canon` - The Type System
+
+**Definition:** Single source of truth for ALL types, enums, and schemas.
+
+**Exports:**
+- 211+ entity type definitions (Invoice, Payment, Customer, etc.)
+- Action types and verbs (CREATE, UPDATE, DELETE, etc.)
+- Policy types (permissions, scopes, field rules)
+- Zod validation schemas
 - ERP adapter contracts
-- Serialization utilities
 
-**Purpose**: Defines the system's ubiquitous language. All packages reference canon for types.
+**Function:**
+- Prevents type duplication across packages
+- Enforces ubiquitous language
+- Enables type-safe development
 
-**Key Rule**: Canon must remain dependency-free to prevent circular dependencies.
+**Features:**
+- Zero workspace dependencies
+- Only Zod for schema validation
+- Exports types, never implements business logic
 
-#### `database`
-**Database schema definitions and ORM configuration.**
-- 150+ Drizzle table definitions
-- Schema helpers (base-entity, doc-entity, erp-entity)
-- Governance rules (company-scope allowlist)
-- DB utilities (retry, batch, tenant policy)
-- Migration scripts
-- Code generator (`entity-new`)
+**Example:**
+```typescript
+// packages/canon/src/types/accounting.ts
+export interface TaxRate {
+  taxCode: string;
+  rate: number;
+  effectiveFrom: Date;
+  effectiveTo?: Date;
+}
 
-**Purpose**: Provides the data access layer with architectural governance.
+// All packages import from canon
+import type { TaxRate } from 'afenda-canon';
+```
 
-**Key Rule**: Database must not import business logic—it's purely structural.
+**Critical Rule:** ❌ Canon NEVER imports from business domains (Layer 2) or applications (Layer 3).
 
-#### `logger`
-**Centralized logging using Pino.**
-- Structured JSON logging
+---
+
+### `database` - Data Access Layer
+
+**Definition:** Database schema definitions and ORM configuration using Drizzle.
+
+**Exports:**
+- 150+ Drizzle table schemas (invoices, payments, customers, etc.)
+- Schema helpers (baseEntity, docEntity, erpEntity)
+- Database instances (db, dbRo, getDb)
+- Drizzle operators (eq, and, or, sql, etc.)
+- Governance rules (tenant policy, company-scope allowlist)
+
+**Function:**
+- Provides the data model for the entire system
+- Enforces database constraints and indexes
+- Enables type-safe database queries
+
+**Features:**
+- Migration scripts with Drizzle Kit
+- Code generator for new entities
+- RLS (Row Level Security) helpers
+- Connection pooling with Neon
+
+**Example:**
+```typescript
+// packages/database/src/schema/invoices.ts
+import { pgTable, text, integer, timestamp } from 'drizzle-orm/pg-core';
+import { baseEntity } from './helpers/base-entity';
+
+export const invoices = pgTable('invoices', {
+  ...baseEntity,  // id, orgId, createdAt, updatedAt, deletedAt
+  docNumber: text('doc_number').notNull(),
+  customerId: text('customer_id').notNull(),
+  totalMinor: integer('total_minor').notNull(),
+  currency: text('currency').notNull().default('USD'),
+});
+
+// Usage in domain services
+import { invoices } from 'afenda-database';
+import { eq } from 'drizzle-orm';
+
+const invoice = await db.select().from(invoices).where(eq(invoices.id, id));
+```
+
+**Critical Rule:** ❌ Database contains schemas only. No business logic allowed.
+
+---
+
+### `logger` - Observability
+
+**Definition:** Centralized structured logging using Pino.
+
+**Exports:**
+- Configured logger instance
 - Log level management
-- Performance-optimized
+- Performance-optimized JSON logging
 
-**Purpose**: Provides observability across all packages.
+**Function:**
+- Provides consistent logging across all packages
+- Enables log aggregation and monitoring
 
-#### `ui`
-**Shared React component library (shadcn/ui based).**
-- 60+ reusable components
-- Headless UI primitives (Radix)
+**Example:**
+```typescript
+import { logger } from 'afenda-logger';
+
+logger.info({ customerId, amount }, 'Processing payment');
+logger.error({ error, context }, 'Payment failed');
+```
+
+---
+
+### `ui` - Component Library
+
+**Definition:** Shared React component library based on shadcn/ui.
+
+**Exports:**
+- 60+ reusable components (Button, Dialog, Table, etc.)
+- Headless UI primitives (Radix UI)
 - Hooks and utilities
 - Design tokens
 
-**Purpose**: Provides consistent UI across applications.
+**Function:**
+- Ensures UI consistency across applications
+- Accelerates frontend development
 
 ---
 
-### Layer 2: Domain Services
-**Depends on: Foundation + logger only**
+## Layer 2: Domain Services
 
-Domain services implement business rules and domain-specific operations. Each service package focuses on a coherent domain area.
+**Purpose:** Business logic, domain rules, calculations  
+**Dependencies:** Layer 0 + Layer 1 only  
+**Location:** `packages/workflow`, `packages/advisory`, `business-domain/*` (116 packages)
 
-#### `workflow`
-**Rules engine for orchestrating business processes.**
+### Core Domain Services (packages/)
+
+#### `workflow` - Business Process Engine
+
+**Definition:** Rules engine for orchestrating business processes.
+
+**Function:**
 - Rule registry and evaluation
 - Condition/action DSL
 - Database-backed rule loading (cached)
@@ -134,468 +243,451 @@ Domain services implement business rules and domain-specific operations. Each se
 - Edit window enforcement
 - Workflow execution tracking
 
-**When to use**: Define business rules that trigger actions based on entity state changes.
+**Dependencies:** `afenda-canon`, `afenda-database`
 
-#### `advisory`
-**Analytics and forecasting for financial advisories.**
+**Example Use Cases:**
+- Auto-approve invoices under $10,000
+- Send notification when payment is overdue
+- Trigger workflow when inventory drops below reorder point
+
+---
+
+#### `advisory` - Analytics & Forecasting
+
+**Definition:** Financial analytics and anomaly detection.
+
+**Function:**
 - Anomaly detection (EWMA, CUSUM, MAD)
 - Time-series forecasting (SES, Holt, Holt-Winters)
 - Statistical scoring (Z-score, robust outliers)
 - Rule-based checks (credit limits, aging)
 - Evidence collection and fingerprinting
 
-**When to use**: Generate insights, detect anomalies, forecast trends.
+**Dependencies:** `afenda-canon`, `afenda-database`
 
-#### `search`
-**Full-text search with PostgreSQL FTS.**
-- Cross-entity search
-- Search index backfill
-- Search outbox worker pattern
-- Entity-specific adapters
-
-**When to use**: Enable full-text search across entities.
-
-#### `migration`
-**Data migration pipeline from legacy systems.**
-- Lineage state machine (reservation-based concurrency)
-- Structural query builders (PostgreSQL, MySQL, CSV)
-- Entity-agnostic conflict detection
-- Transform chain with ordered pipeline
-- Snapshot capture for rollback
-- Audit trail with canonical JSON
-- Rate limiting
-
-**When to use**: Import data from external ERP systems (ERPNext, Odoo, CSV).
-
-**Documentation**: See [`packages/migration/IMPLEMENTATION.md`](packages/migration/IMPLEMENTATION.md) for comprehensive guide.
-
-#### `accounting`
-**Financial accounting domain services.** *(New package)*
-- Tax calculation engine
-- FX rate lookup and conversion
-- Depreciation engine
-- Revenue recognition
-- Payment allocation
-- Fiscal period/year management
-
-**When to use**: Implement accounting-specific business logic.
-
-#### `inventory`
-**Inventory and manufacturing domain services.** *(New package)*
-- Stock level management
-- Unit of measure (UoM) conversion
-- Lot tracking and recall
-- Manufacturing BOM engine
-- Landed cost allocation
-- Three-way matching (PO/GRN/Invoice)
-
-**When to use**: Manage inventory, manufacturing, procurement operations.
-
-#### `crm`
-**Customer relationship management services.** *(New package)*
-- Pricing engine (tier-based, volume discounts)
-- Payment terms management
-- Credit limit enforcement
-- Customer tiering and segmentation
-
-**When to use**: Implement sales, pricing, and customer-specific logic.
-
-#### `intercompany`
-**Cross-entity operations and reconciliation.** *(New package)*
-- Intercompany transaction matching
-- Cross-entity reconciliation
-- Transfer pricing
-
-**When to use**: Handle transactions between related entities (group companies).
-
-#### `procurement`
-**Procurement and sourcing operations.** *(Implemented)*
-- Purchase requisition management
-- Vendor selection and qualification
-- Sourcing workflows
-- Contract management
-- Spend analysis
-
-**When to use**: Manage procurement workflows, requisitions, and vendor selection.
-
-#### `purchasing`
-**Purchase order management and execution.** *(Implemented)*
-- Purchase order creation and tracking
-- PO approval workflows
-- Order acknowledgment
-- Delivery schedule management
-- Purchase analytics
-
-**When to use**: Create and manage purchase orders, track deliveries.
+**Example Use Cases:**
+- Detect unusual expense patterns
+- Forecast cash flow for next quarter
+- Flag customers exceeding credit limits
 
 ---
 
-### Layer 3: Application
-**Depends on: All layers below**
+### Business Domain Packages (business-domain/)
 
-#### `crud`
-**Core CRUD operations with business rules enforcement.**
-- Entity mutation (create, update, delete)
-- Read operations with pagination
-- Policy engine (authorization)
-- Rate limiting & job quotas
-- Metering & usage tracking
-- Custom field validation
-- Lifecycle management
+**116 domain-specific packages** implementing focused business logic.
+
+#### Financial Management
+- `accounting` - Tax, FX, depreciation, revenue recognition
+- `fx-management` - Foreign exchange, hedge accounting
+- `consolidation` - Multi-level consolidation, eliminations
+- `tax-engine` - Tax compliance, VAT/GST
+- `treasury` - Cash management, forecasting
+- `fixed-assets` - Asset lifecycle, depreciation
+- `revenue-recognition` - ASC 606/IFRS 15
+
+#### Procurement & Supply Chain
+- `procurement` - Requisition, RFQ, contracts
+- `purchasing` - Purchase orders
+- `inventory` - Stock management, lot tracking
+- `warehouse` - Location, picking, packing
+- `receiving` - Goods receipt
+
+#### Order-to-Cash
+- `crm` - Customer management, pricing
+- `sales` - Quote-to-order
+- `shipping` - Fulfillment
+- `receivables` - Invoicing, collections
+
+#### Manufacturing
+- `production` - Work orders, BOM
+- `quality-mgmt` - Inspection, NCR
+- `plm` - Product lifecycle
+
+#### Human Resources
+- `hr-core` - Employee master
+- `payroll` - Payroll processing
+- `time-attendance` - Timesheets, PTO
+
+**And 90+ more...**
+
+### Domain Package Example
+
+```typescript
+// business-domain/accounting/src/services/tax-calculation.ts
+import type { TaxRate } from 'afenda-canon';
+
+export function calculateTax(
+  amountMinor: number,
+  rate: number
+): number {
+  if (amountMinor < 0) {
+    throw new Error('Amount must be non-negative');
+  }
+  if (rate < 0 || rate > 1) {
+    throw new Error('Rate must be between 0 and 1');
+  }
+  
+  return Math.round(amountMinor * rate);
+}
+
+// business-domain/accounting/src/index.ts
+export { calculateTax } from './services/tax-calculation';
+export type { TaxRate } from 'afenda-canon';  // Re-export types
+```
+
+**Dependencies Allowed:**
+- ✅ `afenda-canon` (types)
+- ✅ `afenda-database` (schemas)
+- ✅ `afenda-logger` (logging)
+- ✅ `drizzle-orm` (queries)
+- ✅ External npm (lodash, date-fns, etc.)
+
+**Dependencies Forbidden:**
+- ❌ Other business-domain packages (no cross-domain deps)
+- ❌ `afenda-crud` (Layer 3 - upper layer)
+- ❌ Local type definitions (use canon)
+
+---
+
+## Layer 3: Application
+
+**Purpose:** Orchestration, policy enforcement, API handlers  
+**Dependencies:** All layers (0, 1, 2)  
+**Location:** `packages/crud`, `packages/observability`
+
+### `crud` - Application Orchestrator
+
+**Definition:** The orchestration layer that coordinates domain services.
+
+**Function:**
+- Entity lifecycle management (create, read, update, delete)
+- Policy enforcement (permissions, field-level access)
+- Transaction coordination
+- Event publishing
 - Audit logging
-- Handler registry (entity-specific customizations)
+- Multi-domain orchestration
 
-**Purpose**: Orchestrates domain services, enforces policies, manages entity lifecycle.
+**Dependencies:**
+- Layer 1: `afenda-canon`, `afenda-database`, `afenda-logger`
+- Layer 2: `afenda-workflow`, `afenda-advisory`, `afenda-accounting`, `afenda-crm`, etc.
 
-**Architecture**: 
-- Uses domain services (accounting, inventory, crm, intercompany) for business logic
-- Delegates to workflow for rule evaluation
-- Uses database for persistence
-- Only 2 custom handlers (companies, contacts) + generic base handler for 209 entity types
+**Example:**
+```typescript
+// packages/crud/src/handlers/invoices.ts
+import { calculateTax } from 'afenda-accounting';
+import { checkCreditLimit } from 'afenda-crm';
+import { invoices } from 'afenda-database';
+import { logger } from 'afenda-logger';
+import type { NeonHttpDatabase } from 'drizzle-orm/neon-http';
 
-**Key Rule**: CRUD is the **only** package that orchestrates domain services. Domain services should not call each other directly.
+export async function createInvoice(
+  db: NeonHttpDatabase,
+  orgId: string,
+  data: InvoiceInput
+) {
+  // 1. Domain logic: Check credit (crm)
+  await checkCreditLimit(db, orgId, data.customerId, data.totalMinor);
+  
+  // 2. Domain logic: Calculate tax (accounting)
+  const taxMinor = calculateTax(data.subtotalMinor, data.taxRate);
+  
+  // 3. Data persistence
+  const [invoice] = await db.insert(invoices).values({
+    orgId,
+    customerId: data.customerId,
+    subtotalMinor: data.subtotalMinor,
+    taxMinor,
+    totalMinor: data.subtotalMinor + taxMinor,
+  }).returning();
+  
+  // 4. Observability
+  logger.info({ invoiceId: invoice.id }, 'Invoice created');
+  
+  return invoice;
+}
+```
 
-#### `observability`
-**Observability and monitoring infrastructure.** *(Implemented)*
+**Key Principle:** CRUD orchestrates domain services. It does NOT implement business logic.
+
+**Business Logic Lives In:**
+- `calculateTax()` → `afenda-accounting` (Layer 2)
+- `checkCreditLimit()` → `afenda-crm` (Layer 2)
+
+**CRUD Responsibilities:**
+- Coordinate calls to domain services
+- Manage database transactions
+- Enforce policies
+- Log events
+
+---
+
+### `observability` - Monitoring
+
+**Definition:** System-wide observability and telemetry.
+
+**Function:**
+- Performance metrics
+- Health checks
 - OpenTelemetry integration
-- Tracing and metrics collection
-- Performance monitoring
 - Error tracking
-- Distributed tracing
-
-**When to use**: Instrument application for monitoring, tracing, and observability.
 
 ---
 
 ## Dependency Rules
 
-### ✅ Allowed Dependencies
+### Visual Dependency Flow
 
-| Layer | Can Depend On |
-|-------|--------------|
-| Layer 0 (Config) | External packages only |
-| Layer 1 (Foundation) | Layer 0 + external packages |
-| Layer 2 (Domain) | Layer 0, Layer 1, logger + external packages |
-| Layer 3 (Application) | All layers |
+```
+┌─────────┐
+│  crud   │  Layer 3: Can import from all lower layers
+└────┬────┘
+     │
+     ├──→ workflow, advisory, accounting, crm... (Layer 2) ✅
+     ├──→ canon, database, logger, ui (Layer 1) ✅
+     └──→ eslint-config, typescript-config (Layer 0) ✅
 
-### ❌ Prohibited Dependencies
+┌────────────┐
+│ accounting │  Layer 2: Can ONLY import from Layer 0 & 1
+└──────┬─────┘
+       │
+       ├──→ canon, database, logger (Layer 1) ✅
+       └──→ typescript-config (Layer 0) ✅
+       
+       ❌ CANNOT import from crud (Layer 3)
+       ❌ CANNOT import from other Layer 2 (crm, inventory...)
 
-1. **No circular dependencies** - All packages must form a DAG
-2. **Foundation cannot depend on Domain/Application** - Keeps core clean
-3. **Domain services cannot depend on CRUD** - Prevents coupling
-4. **Domain services should not cross-depend** - Use CRUD for orchestration
-5. **No direct database ORM access from Application** - Use database package utilities
+┌─────────┐
+│  canon  │  Layer 1: Can ONLY import from Layer 0 + external
+└────┬────┘
+     │
+     ├──→ typescript-config (Layer 0) ✅
+     └──→ zod (external npm) ✅
+     
+     ❌ CANNOT import from any business-domain
+     ❌ CANNOT import from crud
 
-### 🟡 Documented Exceptions
-
-- **Advisory writes directly to database** - Performance optimization for analytics; documented as exception
-
----
-
-## Dependency Graph
-
-### Current State
-```mermaid
-graph TD
-    canon[canon<br/>Layer 1]
-    database[database<br/>Layer 1]
-    logger[logger<br/>Layer 1]
-    ui[ui<br/>Layer 1]
-    
-    workflow[workflow<br/>Layer 2]
-    advisory[advisory<br/>Layer 2]
-    search[search<br/>Layer 2]
-    migration[migration<br/>Layer 2]
-    accounting[accounting<br/>Layer 2]
-    inventory[inventory<br/>Layer 2]
-    crm[crm<br/>Layer 2]
-    intercompany[intercompany<br/>Layer 2]
-    procurement[procurement<br/>Layer 2]
-    purchasing[purchasing<br/>Layer 2]
-    
-    crud[crud<br/>Layer 3]
-    observability[observability<br/>Layer 3]
-    
-    canon --> workflow
-    database --> workflow
-    
-    canon --> advisory
-    database --> advisory
-    
-    database --> search
-    logger --> search
-    
-    canon --> migration
-    database --> migration
-    logger --> migration
-    
-    canon --> accounting
-    database --> accounting
-    logger --> accounting
-    
-    canon --> inventory
-    database --> inventory
-    logger --> inventory
-    
-    canon --> crm
-    database --> crm
-    logger --> crm
-    
-    canon --> intercompany
-    database --> intercompany
-    logger --> intercompany
-    
-    canon --> procurement
-    database --> procurement
-    logger --> procurement
-    workflow --> procurement
-    
-    canon --> purchasing
-    database --> purchasing
-    logger --> purchasing
-    procurement --> purchasing
-    
-    canon --> crud
-    database --> crud
-    workflow --> crud
-    accounting --> crud
-    inventory --> crud
-    crm --> crud
-    intercompany --> crud
-    procurement --> crud
-    purchasing --> crud
-    logger --> crud
-    
-    canon --> observability
-    logger --> observability
+┌────────────────┐
+│ eslint-config  │  Layer 0: No workspace dependencies
+└────────────────┘
+     
+     ❌ CANNOT import from ANY workspace package
+     ✅ ONLY external npm packages
 ```
 
-### Target State (Future Roadmap)
-See [Domain Roadmap](docs/roadmap/DOMAIN_ROADMAP.md) for additional proposed packages.
-```mermaid
-graph TD
-    canon[canon<br/>Layer 1]
-    database[database<br/>Layer 1]
-    logger[logger<br/>Layer 1]
-    ui[ui<br/>Layer 1]
-    
-    workflow[workflow<br/>Layer 2]
-    advisory[advisory<br/>Layer 2]
-    search[search<br/>Layer 2]
-    migration[migration<br/>Layer 2]
-    procurement[procurement<br/>Layer 2]
-    purchasing[purchasing<br/>Layer 2]
-    
-    crud[crud<br/>Layer 3]
-    observability[observability<br/>Layer 3]
-    
-    canon --> workflow
-    database --> workflow
-    
-    canon --> advisory
-    database --> advisory
-    
-    database --> search
-    logger --> search
-    
-    canon --> migration
-    database --> migration
-    logger --> migration
-    
-    canon --> crud
-    database --> crud
-    logger --> crud
-    workflow --> crud
-```
+### Dependency Matrix
 
-### Target State (After Domain Extraction)
-```mermaid
-graph TD
-    canon[canon<br/>Layer 1]
-    database[database<br/>Layer 1]
-    logger[logger<br/>Layer 1]
-    ui[ui<br/>Layer 1]
-    
-    workflow[workflow<br/>Layer 2]
-    advisory[advisory<br/>Layer 2]
-    search[search<br/>Layer 2]
-    migration[migration<br/>Layer 2]
-    accounting[accounting<br/>Layer 2]
-    inventory[inventory<br/>Layer 2]
-    crm[crm<br/>Layer 2]
-    intercompany[intercompany<br/>Layer 2]
-    procurement[procurement<br/>Layer 2]
-    purchasing[purchasing<br/>Layer 2]
-    
-    crud[crud<br/>Layer 3]
-    observability[observability<br/>Layer 3]
-    
-    canon --> workflow
-    database --> workflow
-    
-    canon --> advisory
-    database --> advisory
-    
-    database --> search
-    logger --> search
-    
-    canon --> migration
-    database --> migration
-    logger --> migration
-    
-    canon --> accounting
-    database --> accounting
-    
-    canon --> inventory
-    database --> inventory
-    
-    canon --> crm
-    database --> crm
-    
-    canon --> intercompany
-    database --> intercompany
-    
-    canon --> procurement
-    database --> procurement
-    
-    canon --> purchasing
-    database --> purchasing
-    
-    workflow --> crud
-    accounting --> crud
-    inventory --> crud
-    crm --> crud
-    intercompany --> crud
-    procurement --> crud
-    purchasing --> crud
-    logger --> crud
-```
+| Package Type | Can Import From | Forbidden |
+|--------------|----------------|-----------|
+| **Layer 3** | | |
+| crud, observability | Layers 0, 1, 2 | - |
+| **Layer 2** | | |
+| workflow, advisory | Layers 0, 1 | Layer 2 (other domains), Layer 3 |
+| business-domain/* | Layers 0, 1 | Layer 2 (other domains), Layer 3 |
+| **Layer 1** | | |
+| canon | Layer 0 + Zod | Layers 1, 2, 3 |
+| database | Layer 0 + Drizzle | Layers 1, 2, 3 |
+| logger | Layer 0 + Pino | Layers 1, 2, 3 |
+| ui | Layer 0 + React | Layers 1, 2, 3 |
+| **Layer 0** | | |
+| eslint-config | External npm only | All workspace packages |
+| typescript-config | External npm only | All workspace packages |
 
 ---
 
-## Future Roadmap
+## Package Standards
 
-For proposed enterprise domain packages (treasury, fixed-assets, tax-compliance, etc.), see:
-- [Domain Roadmap](docs/roadmap/DOMAIN_ROADMAP.md) - Complete enterprise ERP domain proposals
-
-The roadmap includes proposed packages for:
-- Financial Management (treasury, fixed-assets, tax-compliance)
-- Procurement-to-Pay (receiving, payables)
-- Order-to-Cash (order-management, shipping, receivables)
-- Manufacturing (production-planning, shop-floor, quality-management)
-- Warehouse & Logistics (warehouse-management, transportation)
-- HR & Payroll (human-resources, payroll, time-attendance)
-- And more...
-
----
-
-## When to Create a New Package
-
-Create a new package when:
-
-1. **Domain Cohesion** - You have 5+ related services in a coherent domain (e.g., accounting)
-2. **Reusability** - The functionality could be used independently or by multiple consumers
-3. **Clear Boundary** - The domain has well-defined inputs/outputs and minimal cross-cutting concerns
-4. **Size** - An existing package exceeds 2000 LOC and can be split coherently
-
-Do NOT create a new package for:
-
-1. **Single-use utilities** - Add to an existing package
-2. **Entity-specific logic** - Use CRUD handlers instead
-3. **One-off features** - Wait until the domain proves itself
-
----
-
-## Build Strategy
-
-### Compiled Packages (tsup)
-These packages are built to `dist/` with CommonJS + ESM outputs:
-
-- **`canon`** - External consumption (types used outside monorepo)
-- **`ui`** - React components may be published to npm
-- **`migration`** - CLI tool, may be consumed externally
-
-**Rationale**: These packages may be published or consumed outside the monorepo. Compilation ensures compatibility and performance.
-
-### Source Packages
-These packages export `src/index.ts` directly:
-
-- **`crud`, `workflow`, `advisory`, `search`**
-- **`accounting`, `inventory`, `crm`, `intercompany`** (new)
-- **`database`, `logger`**
-
-**Rationale**: Internal-only packages benefit from faster iteration without build steps. TypeScript compilation happens at the application level (Next.js, tooling).
-
-### Configuration Packages
-These packages re-export configuration files as-is:
-
-- **`eslint-config`**
-- **`typescript-config`**
-
-**Rationale**: ESLint and TypeScript consume configuration directly.
-
-**See**: [`docs/BUILD_STRATEGY.md`](docs/BUILD_STRATEGY.md) for details.
-
----
-
-## Package Structure Standards
-
-All packages follow this structure:
+### Directory Structure
 
 ```
 packages/my-package/
 ├── src/
-│   ├── index.ts          # Public API exports
-│   ├── types.ts          # Type definitions
-│   ├── services/         # Business logic (if applicable)
-│   ├── utils/            # Internal utilities
-│   └── ...
-├── package.json
-├── tsconfig.json
-├── tsconfig.build.json   # (if compiled)
-├── tsup.config.ts        # (if compiled)
-├── README.md
-└── vitest.config.ts      # (if has tests)
+│   ├── index.ts              # ✅ Public API - ONLY file that exports
+│   ├── services/             # Business logic functions
+│   │   ├── service-a.ts
+│   │   └── service-b.ts
+│   └── utils/                # Internal utilities (private)
+├── package.json              # All dependencies explicitly declared
+├── tsconfig.json             # Extends workspace config
+├── eslint.config.js          # Extends workspace config
+├── README.md                 # Required documentation
+└── vitest.config.ts          # Test configuration
 ```
 
-**Key Files**:
-- `src/index.ts` - **Only** file that exports public API
-- `README.md` - Must include: Purpose, When to Use, Key Concepts, API, Examples
-- `package.json` - Must declare all dependencies explicitly
+### package.json Template (Layer 2 Domain)
+
+```json
+{
+  "name": "afenda-my-domain",
+  "version": "0.1.0",
+  "private": true,
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "dependencies": {
+    "afenda-canon": "workspace:*",
+    "afenda-database": "workspace:*",
+    "afenda-logger": "workspace:*",
+    "drizzle-orm": "catalog:",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "afenda-eslint-config": "workspace:^",
+    "afenda-typescript-config": "workspace:*",
+    "typescript": "catalog:"
+  }
+}
+```
+
+### src/index.ts Pattern
+
+```typescript
+// ✅ CORRECT - Export public API only
+export { calculateTax } from './services/tax-calculation';
+export { lookupFxRate } from './services/fx-lookup';
+
+// ✅ Re-export types from canon (for convenience)
+export type { TaxRate, FxRate } from 'afenda-canon';
+
+// ❌ NEVER export internal utilities
+// export { helperFunction } from './utils/helpers';  // NO!
+```
 
 ---
 
-## Testing Strategy
+## Development Workflow
 
-- **Unit Tests** - All domain service functions (pure logic)
-- **Integration Tests** - CRUD handlers, database interactions
-- **E2E Tests** - Critical user workflows (in `apps/web/e2e/`)
+### 1. Add Types to Canon
 
-**Coverage Goals**:
-- Migration: >80% (enforced)
-- Domain services: >70%
-- CRUD handlers: >60%
+```typescript
+// packages/canon/src/types/accounting.ts
+export interface TaxRate {
+  taxCode: string;
+  rate: number;
+  effectiveFrom: Date;
+  effectiveTo?: Date;
+}
 
----
+// packages/canon/src/index.ts
+export type { TaxRate } from './types/accounting';
+```
 
-## Related Documentation
+### 2. Add Database Schema
 
-- [Package Governance Rules](packages/GOVERNANCE.md)
-- [Coding Standards](docs/CODING_STANDARDS.md)
-- [Build Strategy](docs/BUILD_STRATEGY.md)
-- [Migration Implementation Guide](packages/migration/IMPLEMENTATION.md)
-- [CRUD Handler Guide](packages/crud/docs/HANDLER_GUIDE.md)
-- [Adapter Pipeline](docs/adapter-pipeline.md)
+```typescript
+// packages/database/src/schema/tax-rates.ts
+import { pgTable, text, numeric, timestamp } from 'drizzle-orm/pg-core';
+import { baseEntity } from './helpers/base-entity';
+
+export const taxRates = pgTable('tax_rates', {
+  ...baseEntity,
+  taxCode: text('tax_code').notNull(),
+  rate: numeric('rate', { precision: 10, scale: 6 }).notNull(),
+  effectiveFrom: timestamp('effective_from').notNull(),
+});
+
+// packages/database/src/index.ts
+export { taxRates } from './schema/tax-rates';
+```
+
+### 3. Implement Domain Business Logic
+
+```typescript
+// business-domain/accounting/src/services/tax-calculation.ts
+import type { TaxRate } from 'afenda-canon';
+
+export function calculateTax(amountMinor: number, rate: number): number {
+  return Math.round(amountMinor * rate);
+}
+
+// business-domain/accounting/src/index.ts
+export { calculateTax } from './services/tax-calculation';
+```
+
+### 4. Use in CRUD (orchestration)
+
+```typescript
+// packages/crud/src/handlers/invoices.ts
+import { calculateTax } from 'afenda-accounting';
+
+const taxMinor = calculateTax(data.subtotalMinor, 0.0825);
+```
 
 ---
 
 ## Validation
 
-Run `pnpm run validate:deps` to check:
-- ✅ No circular dependencies
-- ✅ Layer rules enforced
-- ✅ No boundary violations
+### Check Dependencies
+
+```bash
+# Validate no circular dependencies
+pnpm run validate:deps
+
+# Check layer violations
+pnpm run lint:ci
+```
+
+### Build & Test
+
+```bash
+# Build all packages
+pnpm build
+
+# Test all packages
+pnpm test
+
+# Type-check all packages
+pnpm type-check
+```
 
 ---
 
-**Last Updated**: February 17, 2026
+## Summary
+
+### 4-Layer Architecture
+
+1. **Layer 0 (Configuration)** - eslint-config, typescript-config
+2. **Layer 1 (Foundation)** - canon, database, logger, ui
+3. **Layer 2 (Domain Services)** - workflow, advisory, business-domain/* (116 pkgs)
+4. **Layer 3 (Application)** - crud, observability
+
+### Key Rules
+
+| Layer | Exports | Imports From | Never Imports From |
+|-------|---------|--------------|-------------------|
+| **0** | Config | External npm only | Any workspace pkg |
+| **1** | Types, schemas, utils | Layer 0 + external | Layers 1, 2, 3 |
+| **2** | Business logic | Layers 0, 1 | Other Layer 2, Layer 3 |
+| **3** | Orchestration | Layers 0, 1, 2 | - |
+
+### Critical Patterns
+
+**Canon (Layer 1):**
+- ✅ Exports types, enums, schemas
+- ❌ Never imports from business domains
+
+**Database (Layer 1):**
+- ✅ Exports table schemas
+- ❌ Never contains business logic
+
+**Business Domains (Layer 2):**
+- ✅ Import types from canon
+- ✅ Import schemas from database
+- ❌ Never import from other domains
+- ❌ Never import from crud
+
+**CRUD (Layer 3):**
+- ✅ Orchestrates domain services
+- ✅ Imports from all lower layers
+- ❌ Never implements business logic
+
+### Benefits
+
+- ✅ Zero circular dependencies
+- ✅ Clean separation of concerns
+- ✅ Independent domain development
+- ✅ Type safety across the system
+- ✅ Scalable to 1000+ packages
+
+---
+
+**Last Updated:** February 18, 2026  
+**Version:** 2.0 (Clean State)

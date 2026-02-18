@@ -21,12 +21,12 @@ processing, and compliance monitoring.
 
 ```typescript
 import {
-    addObligation,
-    checkCompliance,
-    createContract,
-    getContractMetrics,
-    identifyRenewals,
-} from "afenda-contract-mgmt";
+  addObligation,
+  checkCompliance,
+  createContract,
+  getContractMetrics,
+  identifyRenewals,
+} from 'afenda-contract-mgmt';
 ```
 
 ## Services

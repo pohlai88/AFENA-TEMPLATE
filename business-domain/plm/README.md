@@ -21,12 +21,12 @@ BOM versioning, impact analysis, specifications, and PLM analytics.
 
 ```typescript
 import {
-    createECO,
-    versionBOM,
-    analyzeCostImpact,
-    defineSpecification,
-    getChangeMetrics,
-} from "afenda-plm";
+  createECO,
+  versionBOM,
+  analyzeCostImpact,
+  defineSpecification,
+  getChangeMetrics,
+} from 'afenda-plm';
 ```
 
 ## Services

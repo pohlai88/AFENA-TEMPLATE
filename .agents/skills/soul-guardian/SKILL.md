@@ -3,9 +3,9 @@ name: soul-guardian
 version: 0.0.2
 description: Drift detection + baseline integrity guard for agent workspace files with automatic alerting support
 homepage: https://clawsec.prompt.security
-metadata: {"openclaw":{"emoji":"👻","category":"security"}}
+metadata: { 'openclaw': { 'emoji': '👻', 'category': 'security' } }
 clawdis:
-  emoji: "👻"
+  emoji: '👻'
   requires:
     bins: [python3]
 ---
@@ -17,15 +17,18 @@ Protects your agent's core files (SOUL.md, AGENTS.md, etc.) from unauthorized ch
 ## Quick Start (3 Steps)
 
 ### Step 1: Initialize baselines
+
 ```bash
 cd ~/.openclaw/workspace
 python3 skills/soul-guardian/scripts/soul_guardian.py init --actor setup --note "initial baseline"
 ```
 
 ### Step 2: Enable monitoring
+
 ```bash
 python3 skills/soul-guardian/scripts/soul_guardian.py enable-monitoring
 ```
+
 This shows you how to add monitoring to your workflow.
 
 ### Step 3: Add to HEARTBEAT.md (Recommended)
@@ -34,11 +37,13 @@ Add this to your HEARTBEAT.md for automatic monitoring:
 
 ```markdown
 ## Soul Guardian Check
+
 - Run `python3 skills/soul-guardian/scripts/soul_guardian.py check --actor heartbeat --output-format alert`
 - If any output is produced, relay it to the user immediately as a security alert
 ```
 
 That's it! Soul Guardian will now:
+
 - ✅ Detect unauthorized changes to protected files
 - ✅ Auto-restore SOUL.md and AGENTS.md to approved baseline
 - ✅ Alert you when drift is detected and handled
@@ -47,44 +52,51 @@ That's it! Soul Guardian will now:
 
 ## What it protects (default policy)
 
-| File | Mode | Action on drift |
-|------|------|-----------------|
-| SOUL.md | restore | Auto-restore + alert |
-| AGENTS.md | restore | Auto-restore + alert |
-| USER.md | alert | Alert only |
-| TOOLS.md | alert | Alert only |
-| IDENTITY.md | alert | Alert only |
-| HEARTBEAT.md | alert | Alert only |
-| MEMORY.md | alert | Alert only |
-| memory/*.md | ignore | Ignored |
+| File         | Mode    | Action on drift      |
+| ------------ | ------- | -------------------- |
+| SOUL.md      | restore | Auto-restore + alert |
+| AGENTS.md    | restore | Auto-restore + alert |
+| USER.md      | alert   | Alert only           |
+| TOOLS.md     | alert   | Alert only           |
+| IDENTITY.md  | alert   | Alert only           |
+| HEARTBEAT.md | alert   | Alert only           |
+| MEMORY.md    | alert   | Alert only           |
+| memory/\*.md | ignore  | Ignored              |
 
 ## Commands
 
 ### Check for drift (with alert output)
+
 ```bash
 python3 skills/soul-guardian/scripts/soul_guardian.py check --output-format alert
 ```
+
 - Silent if no drift
 - Outputs human-readable alert if drift detected
 - Perfect for heartbeat integration
 
 ### Watch mode (continuous monitoring)
+
 ```bash
 python3 skills/soul-guardian/scripts/soul_guardian.py watch --interval 30
 ```
+
 Runs continuously, checking every 30 seconds.
 
 ### Approve intentional changes
+
 ```bash
 python3 skills/soul-guardian/scripts/soul_guardian.py approve --file SOUL.md --actor user --note "intentional update"
 ```
 
 ### View status
+
 ```bash
 python3 skills/soul-guardian/scripts/soul_guardian.py status
 ```
 
 ### Verify audit log integrity
+
 ```bash
 python3 skills/soul-guardian/scripts/soul_guardian.py verify-audit
 ```
@@ -120,6 +132,7 @@ This output is designed to be relayed directly to the user in TUI/chat.
 ## Security Model
 
 **What it does:**
+
 - Detects filesystem drift vs approved baseline (sha256)
 - Produces unified diffs for review
 - Maintains tamper-evident audit log with hash chaining
@@ -127,6 +140,7 @@ This output is designed to be relayed directly to the user in TUI/chat.
 - Uses atomic writes for restores
 
 **What it doesn't do:**
+
 - Cannot prove WHO made a change (actor is best-effort metadata)
 - Cannot protect if attacker controls both workspace AND state directory
 - Is not a substitute for backups
@@ -144,6 +158,7 @@ bash skills/soul-guardian/scripts/demo.sh
 ```
 
 This will:
+
 1. Verify clean state (silent check)
 2. Inject malicious content into SOUL.md
 3. Run heartbeat check (produces alert)

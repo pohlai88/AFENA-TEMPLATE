@@ -50,11 +50,11 @@ mutate() pipeline
 
 ## 4. Package Structure (live)
 
-| Metric | Value |
-| ------ | ----- |
-| **Source files** | 47 |
-| **Test files** | 0 |
-| **Source directories** | v2 |
+| Metric                 | Value |
+| ---------------------- | ----- |
+| **Source files**       | 47    |
+| **Test files**         | 0     |
+| **Source directories** | v2    |
 
 ```
 packages/workflow/src/
@@ -67,38 +67,38 @@ packages/workflow/src/
 
 ### Value Exports
 
-| Export | Source |
-| ------ | ------ |
-| `evaluateRules` | `./engine` |
-| `registerRule` | `./registry` |
-| `unregisterRule` | `./registry` |
-| `getRegisteredRules` | `./registry` |
-| `clearRules` | `./registry` |
-| `unregisterByPrefix` | `./registry` |
-| `always` | `./conditions` |
-| `never` | `./conditions` |
-| `fieldEquals` | `./conditions` |
-| `fieldChanged` | `./conditions` |
-| `actorHasRole` | `./conditions` |
-| `allOf` | `./conditions` |
-| `anyOf` | `./conditions` |
-| `interpretCondition` | `./interpreter` |
-| `interpretAction` | `./interpreter` |
-| `loadAndRegisterOrgRules` | `./db-loader` |
+| Export                    | Source          |
+| ------------------------- | --------------- |
+| `evaluateRules`           | `./engine`      |
+| `registerRule`            | `./registry`    |
+| `unregisterRule`          | `./registry`    |
+| `getRegisteredRules`      | `./registry`    |
+| `clearRules`              | `./registry`    |
+| `unregisterByPrefix`      | `./registry`    |
+| `always`                  | `./conditions`  |
+| `never`                   | `./conditions`  |
+| `fieldEquals`             | `./conditions`  |
+| `fieldChanged`            | `./conditions`  |
+| `actorHasRole`            | `./conditions`  |
+| `allOf`                   | `./conditions`  |
+| `anyOf`                   | `./conditions`  |
+| `interpretCondition`      | `./interpreter` |
+| `interpretAction`         | `./interpreter` |
+| `loadAndRegisterOrgRules` | `./db-loader`   |
 
 ### Type Exports
 
-| Type | Source |
-| ---- | ------ |
-| `RuleTiming` | `./types` |
-| `ConditionResult` | `./types` |
-| `ConditionFn` | `./types` |
-| `ActionResult` | `./types` |
-| `ActionFn` | `./types` |
-| `WorkflowRule` | `./types` |
-| `RuleContext` | `./types` |
+| Type                   | Source    |
+| ---------------------- | --------- |
+| `RuleTiming`           | `./types` |
+| `ConditionResult`      | `./types` |
+| `ConditionFn`          | `./types` |
+| `ActionResult`         | `./types` |
+| `ActionFn`             | `./types` |
+| `WorkflowRule`         | `./types` |
+| `RuleContext`          | `./types` |
 | `RuleEvaluationResult` | `./types` |
-| `RuleExecutionLog` | `./types` |
+| `RuleExecutionLog`     | `./types` |
 
 ---
 
@@ -113,10 +113,10 @@ packages/workflow/src/
 
 ### External
 
-| Package | Version |
-| ------- | ------- |
-| `drizzle-orm` | `^0.44.0` |
-| `zod` | `catalog:` |
+| Package       | Version    |
+| ------------- | ---------- |
+| `drizzle-orm` | `^0.44.0`  |
+| `zod`         | `catalog:` |
 
 ---
 

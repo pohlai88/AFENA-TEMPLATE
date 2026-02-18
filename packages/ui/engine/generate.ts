@@ -317,10 +317,11 @@ const DEFAULT_ZINDEX: Record<string, number> = {
   tooltip: 1080,
 };
 
-const DEFAULT_OPACITY_STEPS = [
-  0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50,
-  55, 60, 65, 70, 75, 80, 85, 90, 95, 100,
-];
+// Opacity steps available for custom utilities if needed
+// const DEFAULT_OPACITY_STEPS = [
+//   0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50,
+//   55, 60, 65, 70, 75, 80, 85, 90, 95, 100,
+// ];
 
 const DEFAULT_BORDER_WIDTHS: Record<string, string> = {
   DEFAULT: '1px',
@@ -344,6 +345,12 @@ function header(projectName: string, section: string): string {
 function generateGlobalsCSS(config: EngineConfig): string {
   const { projectName, brand, semanticColors, neutralBase, radiusBase } = config;
   const preset = NEUTRAL_PRESETS[neutralBase];
+  
+  // Validate preset exists
+  if (!preset) {
+    throw new Error(`Invalid neutralBase: "${neutralBase}". Must be one of: ${Object.keys(NEUTRAL_PRESETS).join(', ')}`);
+  }
+  
   let out = '';
 
   out += `/*\n`;
@@ -1026,7 +1033,8 @@ function generateSpacingCSS(config: EngineConfig): string {
 
 function generateEffectsCSS(config: EngineConfig): string {
   const { projectName } = config;
-  const opacitySteps = config.opacitySteps ?? DEFAULT_OPACITY_STEPS;
+  // opacitySteps available if needed for custom opacity utilities
+  // const opacitySteps = config.opacitySteps ?? DEFAULT_OPACITY_STEPS;
   const easings = { ...DEFAULT_EASINGS, ...config.easings };
   const motion = { ...DEFAULT_MOTION, ...config.motion };
   let out = header(projectName, 'Effects');

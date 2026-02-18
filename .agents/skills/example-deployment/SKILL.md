@@ -77,6 +77,7 @@ Monitor deployment logs for any errors.
 If issues are detected after deployment:
 
 1. **Immediate Rollback**
+
    ```bash
    pnpm deploy:rollback
    ```
@@ -94,6 +95,7 @@ If issues are detected after deployment:
 ## Supporting Resources
 
 See additional files in this directory:
+
 - `deployment-checklist.md` - Detailed checklist
 - `rollback-procedure.md` - Step-by-step rollback guide
 - `monitoring-dashboard.md` - Links to monitoring tools

@@ -13,34 +13,26 @@ Enterprise sales order management with ATP/CTP and RMA processing.
 ## Usage
 
 ```typescript
-import {
-  checkAvailableToPromise,
-  createQuotation,
-  createSalesOrder,
-} from "afenda-sales";
+import { checkAvailableToPromise, createQuotation, createSalesOrder } from 'afenda-sales';
 
 // Create quote
 const quote = await createQuotation(db, orgId, {
-  customerId: "CUST-001",
-  validUntil: "2025-03-15",
-  items: [
-    { productId: "PROD-123", quantity: 100, unitPrice: 50.00 },
-  ],
+  customerId: 'CUST-001',
+  validUntil: '2025-03-15',
+  items: [{ productId: 'PROD-123', quantity: 100, unitPrice: 50.0 }],
 });
 
 // Check ATP before order
 const atp = await checkAvailableToPromise(db, orgId, {
-  productId: "PROD-123",
+  productId: 'PROD-123',
   requestedQuantity: 100,
-  requestedDate: "2025-02-20",
+  requestedDate: '2025-02-20',
 });
 
 // Create order
 const order = await createSalesOrder(db, orgId, {
-  customerId: "CUST-001",
-  items: [
-    { productId: "PROD-123", quantity: 100, unitPrice: 50.00 },
-  ],
+  customerId: 'CUST-001',
+  items: [{ productId: 'PROD-123', quantity: 100, unitPrice: 50.0 }],
 });
 ```
 

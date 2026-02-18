@@ -14,15 +14,15 @@
     "security": "tsx src/security.ts"
   },
   "dependencies": {
-    "@paralleldrive/cuid2": "^3.3.0",
+    "@paralleldrive/cuid2": "catalog:",
     "afenda-database": "workspace:*",
-    "drizzle-orm": "^0.44.0",
-    "glob": "^10.3.10",
-    "simple-git": "^3.22.0"
+    "drizzle-orm": "catalog:",
+    "glob": "catalog:",
+    "simple-git": "catalog:"
   },
   "devDependencies": {
-    "@types/node": "^20.11.16",
-    "tsx": "^4.7.1",
-    "typescript": "^5.3.3"
+    "@types/node": "catalog:",
+    "tsx": "catalog:",
+    "typescript": "catalog:"
   }
 }

@@ -54,22 +54,27 @@ Common issues and solutions:
 ### Issue 1: [Problem Description]
 
 **Symptoms:**
+
 - What you might observe
 
 **Solution:**
+
 - How to fix it
 
 ### Issue 2: [Another Problem]
 
 **Symptoms:**
+
 - What you might observe
 
 **Solution:**
+
 - How to fix it
 
 ## Supporting Resources
 
 Reference additional files in this skill directory:
+
 - `supporting-doc-1.md` - Description
 - `supporting-doc-2.md` - Description
 - `config-template.yaml` - Description

@@ -28,6 +28,8 @@ jobs:
       pull-requests: write
 
     env:
+      # Disable TUI alternate buffer for output capture in CI
+      TURBO_UI: stream
       DATABASE_URL: ${{ secrets.DATABASE_URL || 'postgresql://ci:ci@ci-placeholder.neon.tech/neondb?sslmode=verify-full' }}
 
     steps:

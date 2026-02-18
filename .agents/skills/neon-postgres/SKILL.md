@@ -84,20 +84,20 @@ GRANT USAGE ON SCHEMA public TO readonly, readwrite, developer;
 
 -- Readonly: SELECT only
 GRANT SELECT ON ALL TABLES IN SCHEMA public TO readonly;
-ALTER DEFAULT PRIVILEGES IN SCHEMA public 
+ALTER DEFAULT PRIVILEGES IN SCHEMA public
   GRANT SELECT ON TABLES TO readonly;
 
 -- Readwrite: SELECT, INSERT, UPDATE, DELETE
 GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA public TO readwrite;
-ALTER DEFAULT PRIVILEGES IN SCHEMA public 
+ALTER DEFAULT PRIVILEGES IN SCHEMA public
   GRANT SELECT, INSERT, UPDATE, DELETE ON TABLES TO readwrite;
 
 -- Developer: Full access including DDL
 GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO developer;
 GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO developer;
-ALTER DEFAULT PRIVILEGES IN SCHEMA public 
+ALTER DEFAULT PRIVILEGES IN SCHEMA public
   GRANT ALL PRIVILEGES ON TABLES TO developer;
-ALTER DEFAULT PRIVILEGES IN SCHEMA public 
+ALTER DEFAULT PRIVILEGES IN SCHEMA public
   GRANT ALL PRIVILEGES ON SEQUENCES TO developer;
 
 -- 5. Create users and assign roles
@@ -239,7 +239,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      
+
       - name: Create Neon branch
         id: neon
         env:
@@ -251,7 +251,7 @@ jobs:
             --parent main \
             --output json | jq -r '.connection_uri')
           echo "DATABASE_URL=$CONN_STRING" >> $GITHUB_OUTPUT
-      
+
       - name: Deploy preview
         env:
           DATABASE_URL: ${{ steps.neon.outputs.DATABASE_URL }}
@@ -306,7 +306,7 @@ export async function withOrgContext<T>(
 ): Promise<T> {
   // Set org context for RLS
   await db.execute(sql`SET app.current_org_id = ${orgId}`);
-  
+
   try {
     return await callback();
   } finally {
@@ -320,11 +320,11 @@ import { withOrgContext } from '@afenda/database/middleware';
 
 export async function GET(req: Request) {
   const orgId = await getOrgFromAuth(req);
-  
+
   const documents = await withOrgContext(orgId, async () => {
     return await db.select().from(documentsTable);
   });
-  
+
   return Response.json({ documents });
 }
 ```
@@ -495,8 +495,8 @@ DATABASE_URL=$(neonctl connection-string feature/xyz) pnpm dev
 
 ```sql
 -- Check if RLS is enabled
-SELECT tablename, rowsecurity 
-FROM pg_tables 
+SELECT tablename, rowsecurity
+FROM pg_tables
 WHERE schemaname = 'public';
 
 -- Check active policies

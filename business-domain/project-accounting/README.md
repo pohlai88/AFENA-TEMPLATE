@@ -44,12 +44,12 @@ change orders, and project analytics.
 ## Usage
 
 ```typescript
-import { recordProjectCost } from "afenda-project-accounting";
+import { recordProjectCost } from 'afenda-project-accounting';
 
 const result = await recordProjectCost(db, orgId, {
-  projectId: "proj-123",
-  wbsElementId: "wbs-456",
-  costType: "labor",
+  projectId: 'proj-123',
+  wbsElementId: 'wbs-456',
+  costType: 'labor',
   amountMinor: 500000,
   transactionDate: new Date(),
 });

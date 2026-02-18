@@ -85,7 +85,7 @@ import {
   resolveMatchException,
   type ReturnAuthorization,
   trackInspectionRejects,
-} from "afenda-receiving";
+} from 'afenda-receiving';
 ```
 
 ## Usage Examples
@@ -93,29 +93,25 @@ import {
 ### Create and Inspect Goods Receipt
 
 ```typescript
-import {
-  acceptReceipt,
-  createGoodsReceipt,
-  inspectReceipt,
-} from "afenda-receiving";
-import { db } from "afenda-database";
+import { acceptReceipt, createGoodsReceipt, inspectReceipt } from 'afenda-receiving';
+import { db } from 'afenda-database';
 
 // Receiver creates GRN from delivery
 const grn = await createGoodsReceipt(db, orgId, {
-  poId: "PO-2026-05678",
-  receivedDate: "2026-02-20T10:30:00Z",
+  poId: 'PO-2026-05678',
+  receivedDate: '2026-02-20T10:30:00Z',
   carrierInfo: {
-    carrier: "UPS",
-    trackingNumber: "1Z999AA10123456789",
-    deliveryNote: "DN-98765",
+    carrier: 'UPS',
+    trackingNumber: '1Z999AA10123456789',
+    deliveryNote: 'DN-98765',
   },
   lines: [
     {
       poLineId: 1,
-      productId: "PROD-LAPTOP-001",
+      productId: 'PROD-LAPTOP-001',
       receivedQuantity: 5,
       packingSlipQty: 5,
-      condition: "good",
+      condition: 'good',
     },
   ],
 });
@@ -124,18 +120,18 @@ const grn = await createGoodsReceipt(db, orgId, {
 // Quality inspector performs inspection
 const inspection = await inspectReceipt(db, orgId, {
   grnId: grn.grnId,
-  inspectorId: "EMP-QC-001",
+  inspectorId: 'EMP-QC-001',
   qualityChecks: [
     {
       lineId: 1,
-      checkType: "visual_inspection",
-      result: "pass",
-      notes: "Packaging intact, labels correct",
+      checkType: 'visual_inspection',
+      result: 'pass',
+      notes: 'Packaging intact, labels correct',
     },
     {
       lineId: 1,
-      checkType: "functional_test",
-      result: "pass",
+      checkType: 'functional_test',
+      result: 'pass',
       sampleSize: 1, // Test 1 of 5 units
     },
   ],
@@ -145,10 +141,8 @@ const inspection = await inspectReceipt(db, orgId, {
 // Accept receipt and update inventory
 const acceptance = await acceptReceipt(db, orgId, {
   grnId: grn.grnId,
-  warehouseLocation: "LOC-WAREHOUSE-01",
-  binAssignments: [
-    { lineId: 1, binLocation: "BIN-A12-03", quantity: 5 },
-  ],
+  warehouseLocation: 'LOC-WAREHOUSE-01',
+  binAssignments: [{ lineId: 1, binLocation: 'BIN-A12-03', quantity: 5 }],
 });
 // Returns: { status: 'accepted', inventoryUpdated: true, putAwayTaskIds: ['PUT-001'] }
 ```
@@ -156,30 +150,30 @@ const acceptance = await acceptReceipt(db, orgId, {
 ### Handle Return to Vendor
 
 ```typescript
-import { createReturnAuthorization, processReturn } from "afenda-receiving";
+import { createReturnAuthorization, processReturn } from 'afenda-receiving';
 
 // Create RTV for defective items
 const rtv = await createReturnAuthorization(db, orgId, {
-  grnId: "GRN-2026-01235",
+  grnId: 'GRN-2026-01235',
   lines: [
     {
       grnLineId: 2,
       quantity: 3,
-      reason: "DEFECTIVE",
-      description: "Units fail POST, display artifacts",
-      photos: ["photo1.jpg", "photo2.jpg"],
+      reason: 'DEFECTIVE',
+      description: 'Units fail POST, display artifacts',
+      photos: ['photo1.jpg', 'photo2.jpg'],
     },
   ],
-  vendorContact: "returns@vendor.com",
+  vendorContact: 'returns@vendor.com',
 });
 // Returns: { rtvId: 'RTV-2026-0089', status: 'pending_vendor_approval', rmaNumber: null }
 
 // Process vendor response
 const returnProcessing = await processReturn(db, orgId, {
   rtvId: rtv.rtvId,
-  vendorDecision: "replacement",
-  rmaNumber: "RMA-VEND-45678",
-  expectedReplacementDate: "2026-03-05",
+  vendorDecision: 'replacement',
+  rmaNumber: 'RMA-VEND-45678',
+  expectedReplacementDate: '2026-03-05',
   creditMemoNumber: null, // No credit, replacement only
 });
 // Returns: { status: 'approved', disposition: 'replacement', shipmentTracking: null }
@@ -188,16 +182,12 @@ const returnProcessing = await processReturn(db, orgId, {
 ### 3-Way Matching
 
 ```typescript
-import {
-  matchToInvoice,
-  matchToOrder,
-  resolveMatchException,
-} from "afenda-receiving";
+import { matchToInvoice, matchToOrder, resolveMatchException } from 'afenda-receiving';
 
 // 2-way match: GRN vs PO
 const poMatch = await matchToOrder(db, orgId, {
-  grnId: "GRN-2026-01234",
-  poId: "PO-2026-05678",
+  grnId: 'GRN-2026-01234',
+  poId: 'PO-2026-05678',
   tolerances: {
     quantityVariancePct: 0.05, // Allow 5% qty variance
     priceVariancePct: 0.02, // Allow 2% price variance
@@ -207,12 +197,12 @@ const poMatch = await matchToOrder(db, orgId, {
 
 // 3-way match: GRN + PO + Invoice
 const invoiceMatch = await matchToInvoice(db, orgId, {
-  grnId: "GRN-2026-01234",
-  invoiceId: "INV-VEND-9876",
+  grnId: 'GRN-2026-01234',
+  invoiceId: 'INV-VEND-9876',
   tolerances: {
     quantityVariancePct: 0.05,
     priceVariancePct: 0.02,
-    totalAmountVariance: 50.00, // Allow $50 total variance
+    totalAmountVariance: 50.0, // Allow $50 total variance
   },
 });
 // Returns: {
@@ -224,10 +214,9 @@ const invoiceMatch = await matchToInvoice(db, orgId, {
 // Resolve variance exception
 const resolution = await resolveMatchException(db, orgId, {
   matchId: invoiceMatch.matchId,
-  resolution: "approve",
-  approverId: "MGR-AP-001",
-  reason:
-    "Vendor corrected price for quantity discount, approved by Procurement",
+  resolution: 'approve',
+  approverId: 'MGR-AP-001',
+  reason: 'Vendor corrected price for quantity discount, approved by Procurement',
 });
 // Returns: { status: 'resolved', invoiceApproved: true }
 ```
@@ -235,15 +224,13 @@ const resolution = await resolveMatchException(db, orgId, {
 ### Put-Away Management
 
 ```typescript
-import { assignStorageLocation, generatePutAwayTask } from "afenda-receiving";
+import { assignStorageLocation, generatePutAwayTask } from 'afenda-receiving';
 
 // System assigns optimal storage locations
 const assignment = await assignStorageLocation(db, orgId, {
-  grnId: "GRN-2026-01234",
-  items: [
-    { lineId: 1, productId: "PROD-LAPTOP-001", quantity: 5 },
-  ],
-  strategy: "ABC_CLASSIFICATION", // Fast-moving items near shipping
+  grnId: 'GRN-2026-01234',
+  items: [{ lineId: 1, productId: 'PROD-LAPTOP-001', quantity: 5 }],
+  strategy: 'ABC_CLASSIFICATION', // Fast-moving items near shipping
 });
 // Returns: {
 //   assignments: [{ lineId: 1, binLocation: 'BIN-A12-03', priority: 'high' }]
@@ -251,7 +238,7 @@ const assignment = await assignStorageLocation(db, orgId, {
 
 // Generate warehouse put-away tasks
 const putAwayTasks = await generatePutAwayTask(db, orgId, {
-  grnId: "GRN-2026-01234",
+  grnId: 'GRN-2026-01234',
   assignments: assignment.assignments,
 });
 // Returns: { taskIds: ['PUT-001'], assignedTo: 'WORKER-012', estimatedDuration: '15m' }

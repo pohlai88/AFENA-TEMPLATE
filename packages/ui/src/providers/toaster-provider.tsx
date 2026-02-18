@@ -1,7 +1,5 @@
 'use client';
 
-import * as React from 'react';
-
 import { Toaster } from '../components/sonner';
 
 /**
@@ -20,3 +18,4 @@ function ToasterProvider() {
 }
 
 export { ToasterProvider };
+

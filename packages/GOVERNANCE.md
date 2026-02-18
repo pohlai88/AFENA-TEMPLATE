@@ -209,9 +209,9 @@ layers, the entire architecture collapses.
 ```json
 // packages/canon/package.json
 {
-   "dependencies": {
-      "zod": "^3.22.0" // ✅ External
-   }
+  "dependencies": {
+    "zod": "^3.22.0" // ✅ External
+  }
 }
 ```
 
@@ -220,9 +220,9 @@ layers, the entire architecture collapses.
 ```json
 // packages/canon/package.json
 {
-   "dependencies": {
-      "afenda-workflow": "workspace:*" // ❌ Layer 2 dependency
-   }
+  "dependencies": {
+    "afenda-workflow": "workspace:*" // ❌ Layer 2 dependency
+  }
 }
 ```
 
@@ -291,10 +291,10 @@ await db.insert(advisories).values({ ... });
 
 ```typescript
 // ❌ FORBIDDEN: Reaching into internal modules
-import { internalHelper } from "afenda-crud/src/utils/internal-helper";
+import { internalHelper } from 'afenda-crud/src/utils/internal-helper';
 
 // ✅ ALLOWED: Using public API
-import { mutate } from "afenda-crud";
+import { mutate } from 'afenda-crud';
 ```
 
 **Enforcement**:
@@ -360,6 +360,7 @@ reasons:
 ### How to Request an Exception
 
 1. **Document in Code**:
+
    ```typescript
    // GOVERNANCE EXCEPTION: [Rule X]
    // Rationale: [Clear explanation]
@@ -406,6 +407,7 @@ reasons:
    - Orchestration? → Layer 3 (rare - we have CRUD)
 
 3. **Set Up Package**:
+
    ```bash
    mkdir -p packages/new-package/src
    cd packages/new-package
@@ -431,11 +433,12 @@ reasons:
 ### Deprecating a Package
 
 1. **Mark as Deprecated**:
+
    ```json
    // package.json
    {
-      "deprecated": "Merged into afenda-accounting. Use that instead.",
-      "version": "0.1.0"
+     "deprecated": "Merged into afenda-accounting. Use that instead.",
+     "version": "0.1.0"
    }
    ```
 

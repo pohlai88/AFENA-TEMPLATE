@@ -35,7 +35,7 @@ src/
 ## Usage
 
 ```tsx
-import { ComponentsAccordion } from "afenda-ui";
+import { ComponentsAccordion } from 'afenda-ui';
 ```
 
 ## Components
@@ -256,7 +256,7 @@ The CLI installs components into `src/components/`, adds Radix dependencies to
 **After adding**, update the barrel export in `src/index.ts`:
 
 ```ts
-export * from "./components/accordion";
+export * from './components/accordion';
 ```
 
 ### Updating Components (Sync from Upstream)

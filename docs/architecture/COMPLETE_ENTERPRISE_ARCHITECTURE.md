@@ -482,22 +482,22 @@ sales → contract-mgmt (contract terms)
 ### afenda NEXUS (44 packages) vs. Tier-1 ERPs
 
 | Capability              | SAP S/4HANA | Oracle Cloud | Dynamics 365 | NetSuite | afenda NEXUS |
-| ----------------------- | ----------- | ------------ | ------------ | -------- | ----------- |
-| Finance & Accounting    | ✅          | ✅           | ✅           | ✅       | ✅ (10 pkg) |
-| Supply Chain            | ✅          | ✅           | ✅           | ✅       | ✅ (14 pkg) |
-| Manufacturing           | ✅          | ✅           | ✅           | ⚠️       | ✅ (7 pkg)  |
-| HCM                     | ✅          | ✅           | ✅           | ⚠️       | ✅ (5 pkg)  |
-| CRM & Service           | ✅          | ✅           | ✅           | ✅       | ✅ (6 pkg)  |
-| Master Data Mgmt        | ✅          | ✅           | ⚠️           | ⚠️       | ✅ (NEW)    |
-| Financial Close         | ✅          | ✅           | ⚠️           | ⚠️       | ✅ (NEW)    |
-| Rebate Mgmt             | ✅          | ⚠️           | ⚠️           | ❌       | ✅ (NEW)    |
-| EAM                     | ✅          | ✅           | ✅           | ❌       | ✅ (NEW)    |
-| PLM                     | ✅          | ✅           | ⚠️           | ❌       | ✅ (NEW)    |
-| Trade Compliance        | ✅          | ✅           | ⚠️           | ⚠️       | ✅ (NEW)    |
-| Access Governance       | ✅          | ✅           | ✅           | ⚠️       | ✅ (NEW)    |
-| Modern Tech Stack       | ❌          | ❌           | ❌           | ❌       | ✅          |
-| AI-Ready Architecture   | ⚠️          | ⚠️           | ⚠️           | ❌       | ✅          |
-| Serverless/Cloud-Native | ⚠️          | ⚠️           | ⚠️           | ✅       | ✅          |
+| ----------------------- | ----------- | ------------ | ------------ | -------- | ------------ |
+| Finance & Accounting    | ✅          | ✅           | ✅           | ✅       | ✅ (10 pkg)  |
+| Supply Chain            | ✅          | ✅           | ✅           | ✅       | ✅ (14 pkg)  |
+| Manufacturing           | ✅          | ✅           | ✅           | ⚠️       | ✅ (7 pkg)   |
+| HCM                     | ✅          | ✅           | ✅           | ⚠️       | ✅ (5 pkg)   |
+| CRM & Service           | ✅          | ✅           | ✅           | ✅       | ✅ (6 pkg)   |
+| Master Data Mgmt        | ✅          | ✅           | ⚠️           | ⚠️       | ✅ (NEW)     |
+| Financial Close         | ✅          | ✅           | ⚠️           | ⚠️       | ✅ (NEW)     |
+| Rebate Mgmt             | ✅          | ⚠️           | ⚠️           | ❌       | ✅ (NEW)     |
+| EAM                     | ✅          | ✅           | ✅           | ❌       | ✅ (NEW)     |
+| PLM                     | ✅          | ✅           | ⚠️           | ❌       | ✅ (NEW)     |
+| Trade Compliance        | ✅          | ✅           | ⚠️           | ⚠️       | ✅ (NEW)     |
+| Access Governance       | ✅          | ✅           | ✅           | ⚠️       | ✅ (NEW)     |
+| Modern Tech Stack       | ❌          | ❌           | ❌           | ❌       | ✅           |
+| AI-Ready Architecture   | ⚠️          | ⚠️           | ⚠️           | ❌       | ✅           |
+| Serverless/Cloud-Native | ⚠️          | ⚠️           | ⚠️           | ✅       | ✅           |
 
 **Legend:** ✅ Full Support | ⚠️ Partial | ❌ Not Available
 

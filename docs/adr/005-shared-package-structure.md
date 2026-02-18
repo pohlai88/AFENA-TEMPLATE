@@ -8,6 +8,7 @@
 ## Context
 
 In our monorepo, we needed clear guidelines for:
+
 - When to create a new package vs. adding to existing package
 - Package naming conventions
 - Internal dependency structure
@@ -15,6 +16,7 @@ In our monorepo, we needed clear guidelines for:
 - Documentation standards
 
 Without guidelines, we risk:
+
 - Package proliferation (too many tiny packages)
 - Unclear dependencies (circular dependencies)
 - Inconsistent build configuration
@@ -43,7 +45,7 @@ We will follow a **domain-driven package structure** with clear rules for packag
    - `ui` - Shared React components (shadcn/ui)
 
 4. **Tooling** (`tools/`)
-   - `afena-cli` - CLI for metadata generation and housekeeping
+   - `afenda-cli` - CLI for metadata generation and housekeeping
 
 5. **Applications** (`apps/`)
    - `web` - Next.js web application
@@ -53,6 +55,7 @@ We will follow a **domain-driven package structure** with clear rules for packag
 #### When to Create a New Package
 
 ✅ **Create a new package when**:
+
 - Functionality is reusable across multiple apps
 - Domain logic is cohesive and self-contained
 - Package has clear public API
@@ -60,6 +63,7 @@ We will follow a **domain-driven package structure** with clear rules for packag
 - Package may be published to npm (future)
 
 ❌ **Don't create a package when**:
+
 - Functionality is app-specific
 - Package would have < 3 files
 - Logic is tightly coupled to single app
@@ -123,18 +127,18 @@ External Dependencies (npm packages)
 ✅ **Independent testing**: Each package has its own tests  
 ✅ **Type safety**: TypeScript project references across packages  
 ✅ **Scalability**: Easy to add new packages as project grows  
-✅ **Documentation**: Each package has its own README  
+✅ **Documentation**: Each package has its own README
 
 ### Negative
 
 ⚠️ **Initial overhead**: More files/folders than monolithic app  
 ⚠️ **Build complexity**: Must build dependencies before dependents  
-⚠️ **Versioning**: Internal version management (workspace protocol)  
+⚠️ **Versioning**: Internal version management (workspace protocol)
 
 ### Neutral
 
 ℹ️ **Migration path**: Can always consolidate packages if too granular  
-ℹ️ **Publishing**: Packages structured for future npm publishing  
+ℹ️ **Publishing**: Packages structured for future npm publishing
 
 ## Package Standards
 
@@ -212,6 +216,7 @@ MIT
 ### Build Configuration
 
 All packages use `tsup` for bundling:
+
 - **Output**: CommonJS, ES Modules, TypeScript declarations
 - **Source maps**: Enabled for debugging
 - **Tree-shaking**: Enabled via `treeshake: true`
@@ -234,9 +239,10 @@ All packages use `tsup` for bundling:
 ## Exceptions
 
 Some packages may deviate from structure:
+
 - **`eslint-config`**: Configuration-only, no `src/` directory
 - **`typescript-config`**: Configuration-only, no `src/` directory
-- **`afena-cli`**: CLI tool, may have different structure
+- **`afenda-cli`**: CLI tool, may have different structure
 
 ## References
 

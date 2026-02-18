@@ -69,74 +69,60 @@ authorization and audit logging.
 ## Quick Start
 
 ```typescript
-import { db } from "afenda-database";
+import { db } from 'afenda-database';
 import {
   allocateLandedCost,
   convertUom,
   explodeBomFromDb,
   matchDocumentLines,
   traceRecall,
-} from "afenda-inventory";
+} from 'afenda-inventory';
 
 // Convert 10 cases to units
 const conversion = await convertUom(
   db,
-  "org-123",
-  "uom-case-456",
-  "uom-unit-789",
+  'org-123',
+  'uom-case-456',
+  'uom-unit-789',
   10,
-  "product-abc",
+  'product-abc',
 );
 // => { fromQty: 10, toQty: 240, factor: 24, roundingMethod: 'half_up' }
 
 // Trace a recalled lot
-const recall = await traceRecall(
-  db,
-  "org-123",
-  "lot-tracking-xyz",
-);
+const recall = await traceRecall(db, 'org-123', 'lot-tracking-xyz');
 // => { lotTrackingId, trackingNo, affectedMovements: [...], totalAffected: 42 }
 
 // Explode BOM for work order
-const bom = await explodeBomFromDb(
-  db,
-  "org-123",
-  "company-456",
-  "product-finished-goods",
-  100,
-);
+const bom = await explodeBomFromDb(db, 'org-123', 'company-456', 'product-finished-goods', 100);
 // => { bomId, productId, lines: [...], totalComponents: 5 }
 
 // Allocate landed cost
 const allocation = await allocateLandedCost(
   db,
-  "org-123",
-  "landed-cost-doc-123",
+  'org-123',
+  'landed-cost-doc-123',
   50000, // $500.00 in minor units
-  "value",
+  'value',
   [
-    { receiptLineId: "line-1", qty: 10, valueMinor: 100000 },
-    { receiptLineId: "line-2", qty: 5, valueMinor: 50000 },
+    { receiptLineId: 'line-1', qty: 10, valueMinor: 100000 },
+    { receiptLineId: 'line-2', qty: 5, valueMinor: 50000 },
   ],
 );
 // => { landedCostDocId, method: 'value', totalAllocated: 50000, lines: [...] }
 
 // Evaluate 3-way match
-const matchResult = await matchDocumentLines(
-  db,
-  "org-123",
-  {
-    companyId: "company-456",
-    poLineId: "po-line-1",
-    grnLineId: "grn-line-1",
-    invoiceLineId: "inv-line-1",
-    poQty: 100,
-    poUnitPriceMinor: 1000,
-    grnQty: 98,
-    invoiceQty: 98,
-    invoiceUnitPriceMinor: 1020,
-  },
-);
+const matchResult = await matchDocumentLines(db, 'org-123', {
+  companyId: 'company-456',
+  poLineId: 'po-line-1',
+  grnLineId: 'grn-line-1',
+  invoiceLineId: 'inv-line-1',
+  poQty: 100,
+  poUnitPriceMinor: 1000,
+  grnQty: 98,
+  invoiceQty: 98,
+  invoiceUnitPriceMinor: 1020,
+});
 // => { matchResultId, evaluation: { matchType: 'three_way', status: 'exception', ... } }
 ```
 

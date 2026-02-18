@@ -1,10 +1,13 @@
 # afenda-architecture
 
 ## Description
+
 Guide to AFENDA-NEXUS monorepo architecture: 4-layer structure, dependency rules, package governance, and architectural decision-making.
 
 ## Trigger Conditions
+
 Use this skill when:
+
 - Creating or modifying packages
 - Resolving dependency issues
 - Planning new features across layers
@@ -35,11 +38,13 @@ Layer 0: Configuration (eslint-config, typescript-config)
 ## Layer Definitions
 
 ### Layer 0: Configuration
+
 **Packages**: `eslint-config`, `typescript-config`
 
 **Purpose**: Shared tooling and build configuration.
 
 **Dependency Rules**:
+
 - ✅ External npm packages only
 - ❌ **NO** workspace dependencies
 
@@ -48,25 +53,30 @@ Layer 0: Configuration (eslint-config, typescript-config)
 ---
 
 ### Layer 1: Foundation
+
 **Packages**: `canon`, `database`, `logger`, `ui`
 
 **Purpose**: Core primitives, types, schemas, and infrastructure.
 
 **Dependency Rules**:
+
 - ✅ Layer 0 (config packages)
 - ✅ External npm packages
 - ❌ **NO** Layer 1, 2, or 3 workspace dependencies
 
 **Special Rules**:
+
 - **`canon`**: The type system root - zero workspace dependencies
-- **`database`**: Data access root - zero workspace dependencies  
+- **`database`**: Data access root - zero workspace dependencies
 - **`logger`**: Infrastructure logging - zero workspace dependencies
 - **`ui`**: Presentation components - zero workspace dependencies
 
 **Key Packages**:
 
 #### `canon` (211+ entity types)
+
 The single source of truth for types, schemas, and contracts:
+
 - Entity type definitions
 - Action types and verbs
 - Policy types (permissions, scopes)
@@ -74,7 +84,9 @@ The single source of truth for types, schemas, and contracts:
 - ERP adapter contracts
 
 #### `database` (150+ tables)
+
 Database schema and ORM configuration:
+
 - Drizzle table definitions
 - Schema helpers (base-entity, doc-entity, erp-entity)
 - DB utilities (retry, batch, tenant policy)
@@ -82,24 +94,30 @@ Database schema and ORM configuration:
 - Code generators
 
 #### `logger`
+
 Structured logging via Pino:
+
 - Request/response logging
 - Error tracking
 - Performance metrics
 
 #### `ui`
+
 Reusable UI components:
+
 - Shared React components
 - Design system primitives
 
 ---
 
 ### Layer 2: Domain Services
+
 **Packages**: `workflow`, `advisory`, `search`, `migration`, `accounting`, `inventory`, `crm`, `intercompany`, `procurement`, `purchasing`
 
 **Purpose**: Domain-specific business logic and rules.
 
 **Dependency Rules**:
+
 - ✅ Layer 0 (config)
 - ✅ Layer 1 (foundation)
 - ✅ External npm packages
@@ -109,17 +127,20 @@ Reusable UI components:
 **Critical Rule**: Domain services **MUST NOT** call CRUD operations (creates circular dependency).
 
 **When to Allow Cross-Layer 2 Dependencies**:
+
 1. ✅ **Justified**: `procurement` → `workflow` (workflow is infrastructure-like)
 2. ✅ **Justified**: `purchasing` → `procurement` (clear upstream dependency)
 3. ⚠️ **Review Required**: `accounting` → `inventory` (consider orchestration in Layer 3)
 4. ❌ **Prohibited**: `search` → `advisory` (no clear business reason)
 
 **If Tempted to Add Cross-Layer 2 Dependency**:
+
 1. Can shared logic be extracted to Layer 1?
 2. Should Layer 3 orchestrate both services instead?
 3. Is there a clear, documented business justification?
 
 **Key Domain Packages**:
+
 - **`workflow`**: State machines, transitions, approval chains
 - **`advisory`**: Business rules and recommendation engine
 - **`accounting`**: GL accounts, journal entries, fiscal periods
@@ -132,16 +153,19 @@ Reusable UI components:
 ---
 
 ### Layer 3: Application
+
 **Packages**: `crud`, `observability`
 
 **Purpose**: Orchestrate domain services, enforce policies, manage entity lifecycle.
 
 **Dependency Rules**:
+
 - ✅ **ALL** lower layers (0, 1, 2)
 - ✅ External npm packages
 
 **Key Responsibilities**:
-1. **`crud`**: 
+
+1. **`crud`**:
    - Orchestrates domain services
    - Enforces authorization policies
    - Manages audit logging
@@ -161,18 +185,23 @@ Reusable UI components:
 ## Dependency Validation
 
 ### Automated Enforcement
+
 Run dependency validator:
+
 ```bash
 pnpm validate:deps
 ```
 
 This checks:
+
 - Layer isolation rules
 - Circular dependencies
 - Forbidden cross-layer references
 
 ### Manual Review Checklist
+
 When adding a new dependency:
+
 1. ✅ Is the target package in a lower layer?
 2. ✅ Is there a clear business justification?
 3. ✅ Does it create a circular dependency?
@@ -185,32 +214,38 @@ When adding a new dependency:
 ### 1. Determine the Correct Layer
 
 **Ask These Questions**:
+
 - **Layer 0**: Is this purely tooling/configuration? → `eslint-config`, `typescript-config`
 - **Layer 1**: Is this a core primitive used everywhere? → `canon`, `database`, `logger`, `ui`
 - **Layer 2**: Is this domain-specific business logic? → `accounting`, `inventory`, `crm`
 - **Layer 3**: Does it orchestrate multiple domains? → `crud`, `observability`
 
 ### 2. Package Naming Conventions
+
 - **Singular nouns**: `workflow`, `inventory`, `accounting`
 - **Domain-focused**: Reflects business capability, not technical implementation
 - **Avoid technical suffixes**: `accounting`, not `accounting-service`
 
 ### 3. Required Files
+
 Every package must have:
+
 - `package.json` (with correct dependencies)
 - `tsconfig.json` (extends from `typescript-config`)
 - `README.md` (purpose, API, examples)
 - `src/index.ts` (public API barrel export)
 
 ### 4. Public API (`src/index.ts`)
+
 Only export what other packages need:
+
 ```typescript
 // ✅ Good - explicit public API
-export { WorkflowEngine } from './workflow-engine.js'
-export type { WorkflowState } from './types.js'
+export { WorkflowEngine } from './workflow-engine.js';
+export type { WorkflowState } from './types.js';
 
 // ❌ Bad - exposes internals
-export * from './internal-helpers.js'
+export * from './internal-helpers.js';
 ```
 
 ---
@@ -218,18 +253,20 @@ export * from './internal-helpers.js'
 ## Common Anti-Patterns
 
 ### ❌ Anti-Pattern 1: Layer 2 Calling CRUD
+
 ```typescript
 // ❌ BAD - Domain service calling application layer
-import { createEntity } from '@afenda/crud'
+import { createEntity } from '@afenda/crud';
 
 export class InventoryService {
   async createItem(data: ItemInput) {
-    return createEntity('item', data) // CIRCULAR DEPENDENCY!
+    return createEntity('item', data); // CIRCULAR DEPENDENCY!
   }
 }
 ```
 
 **Solution**: CRUD calls domain services, not the reverse:
+
 ```typescript
 // ✅ GOOD - Domain service exposes logic, CRUD orchestrates
 export class InventoryService {
@@ -239,42 +276,45 @@ export class InventoryService {
 }
 
 // In CRUD layer:
-import { inventoryService } from '@afenda/inventory'
+import { inventoryService } from '@afenda/inventory';
 export async function createItem(data: ItemInput) {
-  const item = await db.insert(items).values(data)
-  await inventoryService.calculateStockLevel(item.id)
-  return item
+  const item = await db.insert(items).values(data);
+  await inventoryService.calculateStockLevel(item.id);
+  return item;
 }
 ```
 
 ### ❌ Anti-Pattern 2: Foundation Depending on Domain
+
 ```typescript
 // ❌ BAD - canon importing from accounting
-import { Account } from '@afenda/accounting'
+import { Account } from '@afenda/accounting';
 ```
 
 **Solution**: Types belong in `canon`, logic in domain:
+
 ```typescript
 // In canon:
 export interface Account {
-  id: string
-  name: string
-  type: AccountType
+  id: string;
+  name: string;
+  type: AccountType;
 }
 
 // In accounting:
-import type { Account } from '@afenda/canon'
+import type { Account } from '@afenda/canon';
 export class AccountingService {
   // Business logic using canon types
 }
 ```
 
 ### ❌ Anti-Pattern 3: Multiple Cross-Layer 2 Dependencies
+
 ```typescript
 // ❌ BAD - domain service depending on many peers
-import { InventoryService } from '@afenda/inventory'
-import { AccountingService } from '@afenda/accounting'
-import { CRMService } from '@afenda/crm'
+import { InventoryService } from '@afenda/inventory';
+import { AccountingService } from '@afenda/accounting';
+import { CRMService } from '@afenda/crm';
 
 export class OrderService {
   // This is orchestration, belongs in Layer 3!
@@ -282,12 +322,13 @@ export class OrderService {
 ```
 
 **Solution**: Move to CRUD (Layer 3):
+
 ```typescript
 // ✅ GOOD - orchestration in application layer
 // In crud package:
-import { inventoryService } from '@afenda/inventory'
-import { accountingService } from '@afenda/accounting'
-import { crmService } from '@afenda/crm'
+import { inventoryService } from '@afenda/inventory';
+import { accountingService } from '@afenda/accounting';
+import { crmService } from '@afenda/crm';
 
 export async function processOrder(orderId: string) {
   // Orchestrate multiple domains
@@ -299,11 +340,13 @@ export async function processOrder(orderId: string) {
 ## When to Split a Package
 
 **Split when**:
+
 - Package exceeds 2000 lines of code
 - Multiple unrelated concerns (e.g., `canon` becoming too large)
 - Domain logic becomes too broad (e.g., split `purchasing` from `procurement`)
 
 **How to split**:
+
 1. Identify cohesive subdomains
 2. Create new Layer 2 package
 3. Move types to `canon` if shared
@@ -315,16 +358,19 @@ export async function processOrder(orderId: string) {
 ## Circular Dependency Prevention
 
 ### Detection
+
 ```bash
 pnpm validate:deps
 ```
 
 ### Common Causes
+
 1. **Layer 2 ↔ Layer 3**: Domain calls CRUD, CRUD calls domain
 2. **Cross-Layer 2**: Service A imports Service B, Service B imports Service A
 3. **Foundation ↔ Domain**: `canon` imports from domain package
 
 ### Resolution Strategies
+
 1. **Extract to Lower Layer**: Move shared code to Layer 1
 2. **Inversion of Control**: Use dependency injection
 3. **Event-Driven**: Emit events instead of direct calls
@@ -335,6 +381,7 @@ pnpm validate:deps
 ## Architecture Decision Records (ADRs)
 
 See [docs/adr/](../../../docs/adr/) for architectural decisions:
+
 - [ADR-001: Use Neon Postgres](../../../docs/adr/001-use-neon-postgres.md)
 - [ADR-002: Monorepo with Turborepo](../../../docs/adr/002-monorepo-with-turborepo.md)
 - [ADR-003: TypeScript Strict Mode](../../../docs/adr/003-typescript-strict-mode.md)
@@ -358,14 +405,15 @@ See [docs/adr/](../../../docs/adr/) for architectural decisions:
 
 ### Layer Dependency Matrix
 
-| From Layer | Can Depend On |
-|------------|---------------|
-| Layer 0 | External only |
-| Layer 1 | Layer 0, External |
-| Layer 2 | Layer 0, 1, (Limited Layer 2), External |
-| Layer 3 | Layer 0, 1, 2, External |
+| From Layer | Can Depend On                           |
+| ---------- | --------------------------------------- |
+| Layer 0    | External only                           |
+| Layer 1    | Layer 0, External                       |
+| Layer 2    | Layer 0, 1, (Limited Layer 2), External |
+| Layer 3    | Layer 0, 1, 2, External                 |
 
 ### Package Count by Layer (Current)
+
 - **Layer 0**: 2 packages (config)
 - **Layer 1**: 4 packages (foundation)
 - **Layer 2**: 10 packages (domain)
@@ -373,6 +421,7 @@ See [docs/adr/](../../../docs/adr/) for architectural decisions:
 - **Total**: 18 packages
 
 ### Common Commands
+
 ```bash
 # Validate dependencies
 pnpm validate:deps

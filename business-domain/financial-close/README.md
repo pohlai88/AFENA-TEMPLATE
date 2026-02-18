@@ -21,12 +21,12 @@ task tracking, approvals, and analytics.
 
 ```typescript
 import {
-    approveClosePeriod,
-    assignCloseTask,
-    createCloseCalendar,
-    getCloseMetrics,
-    submitReconciliation,
-} from "afenda-financial-close";
+  approveClosePeriod,
+  assignCloseTask,
+  createCloseCalendar,
+  getCloseMetrics,
+  submitReconciliation,
+} from 'afenda-financial-close';
 ```
 
 ## Services

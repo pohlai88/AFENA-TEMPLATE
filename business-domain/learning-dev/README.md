@@ -44,11 +44,11 @@ career path planning, skill assessments, and learning analytics.
 ## Usage
 
 ```typescript
-import { enrollInTraining } from "afenda-learning-dev";
+import { enrollInTraining } from 'afenda-learning-dev';
 
 const result = await enrollInTraining(db, orgId, {
-  employeeId: "emp-123",
-  courseId: "course-leadership-101",
+  employeeId: 'emp-123',
+  courseId: 'course-leadership-101',
   enrollmentDate: new Date(),
 });
 ```

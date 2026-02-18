@@ -3,9 +3,9 @@ name: claw-release
 version: 0.0.1
 description: Release automation for Claw skills and website. Guides through version bumping, tagging, and release verification.
 homepage: https://clawsec.prompt.security
-metadata: {"openclaw":{"emoji":"🚀","category":"utility","internal":true}}
+metadata: { 'openclaw': { 'emoji': '🚀', 'category': 'utility', 'internal': true } }
 clawdis:
-  emoji: "🚀"
+  emoji: '🚀'
   requires:
     bins: [git, jq, gh]
 ---
@@ -20,10 +20,10 @@ Internal tool for releasing skills and managing the ClawSec catalog.
 
 ## Quick Reference
 
-| Release Type | Command | Tag Format |
-|-------------|---------|------------|
-| Skill release | `./scripts/release-skill.sh <name> <version>` | `<name>-v<version>` |
-| Pre-release | `./scripts/release-skill.sh <name> 1.0.0-beta1` | `<name>-v1.0.0-beta1` |
+| Release Type  | Command                                         | Tag Format            |
+| ------------- | ----------------------------------------------- | --------------------- |
+| Skill release | `./scripts/release-skill.sh <name> <version>`   | `<name>-v<version>`   |
+| Pre-release   | `./scripts/release-skill.sh <name> 1.0.0-beta1` | `<name>-v1.0.0-beta1` |
 
 ---
 
@@ -32,6 +32,7 @@ Internal tool for releasing skills and managing the ClawSec catalog.
 ### Step 1: Determine Version Type
 
 Ask what changed:
+
 - **Bug fixes only** → Patch (1.0.0 → 1.0.1)
 - **New features, backward compatible** → Minor (1.0.0 → 1.1.0)
 - **Breaking changes** → Major (1.0.0 → 2.0.0)
@@ -57,6 +58,7 @@ jq -r '.version' skills/<skill-name>/skill.json
 ```
 
 The script will:
+
 1. Validate version format (semver)
 2. Check tag doesn't already exist
 3. Update skill.json version
@@ -74,6 +76,7 @@ git push && git push origin <skill-name>-v<version>
 ### Step 5: Verify Release
 
 After pushing, the CI/CD pipeline will:
+
 1. Validate skill exists
 2. Verify version matches skill.json
 3. Verify version matches SKILL.md frontmatter (if exists)
@@ -83,6 +86,7 @@ After pushing, the CI/CD pipeline will:
 7. Trigger website rebuild (for non-internal skills)
 
 Verify at:
+
 - **GitHub Releases:** `https://github.com/prompt-security/clawsec/releases/tag/<skill-name>-v<version>`
 - **GitHub Actions:** Check workflow run status
 
@@ -114,19 +118,20 @@ Pre-releases are automatically marked in GitHub Releases.
 
 ## Common Issues
 
-| Error | Solution |
-|-------|----------|
-| `Tag already exists` | Choose a different version number |
-| `Version mismatch in CI` | Ensure you used the release script (not manual tagging) |
+| Error                       | Solution                                                                      |
+| --------------------------- | ----------------------------------------------------------------------------- |
+| `Tag already exists`        | Choose a different version number                                             |
+| `Version mismatch in CI`    | Ensure you used the release script (not manual tagging)                       |
 | `SKILL.md version mismatch` | Ensure you used the release script which updates both skill.json and SKILL.md |
-| `Uncommitted changes` | Commit or stash first: `git stash` or `git add . && git commit` |
-| `skill.json not found` | Verify skill directory path is correct |
+| `Uncommitted changes`       | Commit or stash first: `git stash` or `git add . && git commit`               |
+| `skill.json not found`      | Verify skill directory path is correct                                        |
 
 ---
 
 ## Internal Skills
 
 Skills with `"internal": true` in their `openclaw` section:
+
 - Are released normally via GitHub Releases
 - Are NOT shown in the public skills catalog website
 - Can still be downloaded directly from release URLs
@@ -137,19 +142,20 @@ This skill (`claw-release`) is an internal skill.
 
 ## Existing Skills
 
-| Skill | Category | Internal |
-|-------|----------|----------|
-| clawsec-feed | security | No |
-| clawtributor | security | No |
-| openclaw-audit-watchdog | security | No |
-| soul-guardian | security | No |
-| claw-release | utility | Yes |
+| Skill                   | Category | Internal |
+| ----------------------- | -------- | -------- |
+| clawsec-feed            | security | No       |
+| clawtributor            | security | No       |
+| openclaw-audit-watchdog | security | No       |
+| soul-guardian           | security | No       |
+| claw-release            | utility  | Yes      |
 
 ---
 
 ## Verification Checklist
 
 After release, confirm:
+
 - [ ] GitHub Release exists with correct tag
 - [ ] Release has: skill.json, SKILL.md, checksums.json, .skill package
 - [ ] Release is marked as pre-release if applicable

@@ -1,8 +1,6 @@
 {
-  "extends": "afenda-typescript-config/base.json",
+  "extends": "afenda-typescript-config/react-library.json",
   "compilerOptions": {
-    "composite": true,
-    "outDir": "./dist",
     "tsBuildInfoFile": "./dist/.tsbuildinfo"
   },
   "include": [

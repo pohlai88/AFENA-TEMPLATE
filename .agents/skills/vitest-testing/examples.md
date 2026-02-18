@@ -46,7 +46,7 @@ describe('cursor codec', () => {
 
   it('invalid base64url throws', () => {
     expect(() => decodeCursor('not-base64!@#', 'test-org')).toThrow(
-      'Invalid cursor: malformed base64url'
+      'Invalid cursor: malformed base64url',
     );
   });
 
@@ -75,6 +75,7 @@ describe('cursor codec', () => {
 ```
 
 **Key Patterns:**
+
 - Descriptive test names
 - Edge case testing (invalid input)
 - Type safety with `as const`
@@ -118,7 +119,7 @@ describe('kernel smoke tests', () => {
     // (This is a conceptual test - actual implementation varies)
     const systemCols = ['org_id', 'created_at', 'updated_at', 'created_by', 'updated_by'];
     const cleanInput = Object.fromEntries(
-      Object.entries(input).filter(([key]) => !systemCols.includes(key))
+      Object.entries(input).filter(([key]) => !systemCols.includes(key)),
     );
 
     expect(cleanInput).toEqual({ name: 'Test' });
@@ -127,6 +128,7 @@ describe('kernel smoke tests', () => {
 ```
 
 **Key Patterns:**
+
 - Module export validation
 - Invariant testing (K-05, K-06, K-11)
 - Conceptual tests for architecture rules
@@ -168,7 +170,17 @@ describe('INVARIANT-SYSTEM-01: system actor bypasses RLS', () => {
 
 describe('INVARIANT-SEED-01: default roles have correct permissions', () => {
   it('owner has 9 verbs', () => {
-    const ownerVerbs = ['create', 'read', 'update', 'delete', 'restore', 'approve', 'reject', 'list', 'export'];
+    const ownerVerbs = [
+      'create',
+      'read',
+      'update',
+      'delete',
+      'restore',
+      'approve',
+      'reject',
+      'list',
+      'export',
+    ];
     expect(ownerVerbs).toHaveLength(9);
   });
 
@@ -179,12 +191,13 @@ describe('INVARIANT-SEED-01: default roles have correct permissions', () => {
 
   it('viewer has 0 write verbs', () => {
     const viewerVerbs = ['read', 'list'];
-    expect(viewerVerbs.every(v => !['create', 'update', 'delete'].includes(v))).toBe(true);
+    expect(viewerVerbs.every((v) => !['create', 'update', 'delete'].includes(v))).toBe(true);
   });
 });
 ```
 
 **Key Patterns:**
+
 - Invariant documentation in test names
 - Parameterized testing with `forEach`
 - Architecture rule validation
@@ -212,7 +225,7 @@ async function execSql(sql: string, params: unknown[] = []): Promise<any[]> {
 
 async function setTenantContext(orgId: string, userId: string): Promise<void> {
   await execSql(
-    `SET LOCAL request.jwt.claims = '${JSON.stringify({ org_id: orgId, sub: userId })}'`
+    `SET LOCAL request.jwt.claims = '${JSON.stringify({ org_id: orgId, sub: userId })}'`,
   );
 }
 
@@ -239,7 +252,7 @@ describeIf('listEntities list+count integration', () => {
       await execSql(
         `INSERT INTO contacts (id, org_id, name, contact_type, doc_status)
          VALUES (gen_random_uuid(), $1, $2, 'customer', 'draft')`,
-        [ORG_X, `Contact ${i}`]
+        [ORG_X, `Contact ${i}`],
       );
     }
 
@@ -248,12 +261,12 @@ describeIf('listEntities list+count integration', () => {
 
     const listRows = await execSql(
       `SELECT * FROM contacts WHERE ${whereClause} ORDER BY created_at DESC LIMIT 10`,
-      params
+      params,
     );
 
     const countRows = await execSql(
       `SELECT count(*)::bigint as count FROM contacts WHERE ${whereClause}`,
-      params
+      params,
     );
 
     const totalCount = Number(countRows[0]?.count ?? 0);
@@ -274,7 +287,7 @@ describeIf('listEntities list+count integration', () => {
       await execSql(
         `INSERT INTO contacts (id, org_id, name, contact_type, doc_status)
          VALUES (gen_random_uuid(), $1, $2, 'customer', 'draft')`,
-        [ORG_X, `Cursor Contact ${i}`]
+        [ORG_X, `Cursor Contact ${i}`],
       );
     }
     await execSql('COMMIT');
@@ -311,13 +324,16 @@ describeIf('listEntities list+count integration', () => {
 
     // Cleanup
     await execSql('BEGIN');
-    await execSql(`DELETE FROM contacts WHERE org_id = $1 AND name LIKE 'Cursor Contact %'`, [ORG_X]);
+    await execSql(`DELETE FROM contacts WHERE org_id = $1 AND name LIKE 'Cursor Contact %'`, [
+      ORG_X,
+    ]);
     await execSql('COMMIT');
   });
 });
 ```
 
 **Key Patterns:**
+
 - `describeIf` for conditional execution
 - Transaction isolation with BEGIN/ROLLBACK
 - Tenant context setup
@@ -371,7 +387,7 @@ describe('cursor pagination - contract tests', () => {
         await execSql(
           `INSERT INTO contacts (id, org_id, name, contact_type, doc_status, created_at)
            VALUES (gen_random_uuid(), $1, $2, 'customer', 'draft', $3)`,
-          [ORG_X, `Collision-${tsIdx}-${i}`, ts]
+          [ORG_X, `Collision-${tsIdx}-${i}`, ts],
         );
       }
     }
@@ -437,6 +453,7 @@ describe('cursor pagination - contract tests', () => {
 ```
 
 **Key Patterns:**
+
 - Custom assertion helpers
 - Stress testing (100 rows, timestamp collisions)
 - Boundary testing (limit validation)
@@ -468,11 +485,7 @@ export function createMockEntityRef(type: string, id?: string) {
   };
 }
 
-export function createMockMutationSpec(
-  actionType: string,
-  input: any,
-  entityRef?: any
-) {
+export function createMockMutationSpec(actionType: string, input: any, entityRef?: any) {
   return {
     actionType,
     entityRef: entityRef ?? createMockEntityRef('contacts'),
@@ -515,7 +528,7 @@ console.log(result.data.id);
 export async function seedContacts(
   pgClient: any,
   orgId: string,
-  count: number
+  count: number,
 ): Promise<Array<{ id: string; name: string }>> {
   const contacts = [];
   for (let i = 0; i < count; i++) {
@@ -523,7 +536,7 @@ export async function seedContacts(
       `INSERT INTO contacts (id, org_id, name, contact_type, doc_status)
        VALUES (gen_random_uuid(), $1, $2, 'customer', 'draft')
        RETURNING id, name`,
-      [orgId, `Contact ${i}`]
+      [orgId, `Contact ${i}`],
     );
     contacts.push(result.rows[0]);
   }
@@ -565,7 +578,7 @@ export default mergeConfig(
       // Package-specific overrides
       testTimeout: 60_000, // Longer timeout for DB tests
     },
-  })
+  }),
 );
 ```
 
@@ -578,19 +591,17 @@ import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
   test: {
-    projects: ['packages/*', 'tools/afena-cli'],
-    reporters: process.env.GITHUB_ACTIONS === 'true'
-      ? ['default', 'github-actions', 'junit']
-      : ['default', 'junit'],
+    projects: ['packages/*', 'tools/afenda-cli'],
+    reporters:
+      process.env.GITHUB_ACTIONS === 'true'
+        ? ['default', 'github-actions', 'junit']
+        : ['default', 'junit'],
     outputFile: {
       junit: './test-results/junit.xml',
     },
     coverage: {
       provider: 'v8',
-      include: [
-        'packages/*/src/**/*.{js,jsx,ts,tsx}',
-        'tools/*/src/**/*.{js,jsx,ts,tsx}',
-      ],
+      include: ['packages/*/src/**/*.{js,jsx,ts,tsx}', 'tools/*/src/**/*.{js,jsx,ts,tsx}'],
       exclude: [
         '**/__tests__/**',
         '**/dist/**',
@@ -635,7 +646,7 @@ it('exact boundary collision: cursor inside timestamp cluster excludes earlier r
     await execSql(
       `INSERT INTO contacts (id, org_id, name, contact_type, doc_status, created_at)
        VALUES (gen_random_uuid(), $1, $2, 'customer', 'draft', $3)`,
-      [ORG_X, `Boundary-${i}`, ts]
+      [ORG_X, `Boundary-${i}`, ts],
     );
   }
   await execSql('COMMIT');
@@ -648,7 +659,7 @@ it('exact boundary collision: cursor inside timestamp cluster excludes earlier r
   expect(pageAll.ok).toBe(true);
 
   const rows = (pageAll.data as Array<{ id: string; createdAt: Date }>).filter(
-    (r) => r.createdAt.toISOString() === ts
+    (r) => r.createdAt.toISOString() === ts,
   );
 
   expect(rows.length).toBe(10);
@@ -705,7 +716,7 @@ it('mutations between pages: no duplicates when newer rows are inserted', async 
     await execSql(
       `INSERT INTO contacts (id, org_id, name, contact_type, doc_status)
        VALUES (gen_random_uuid(), $1, $2, 'customer', 'draft')`,
-      [ORG_X, `Mutation-${i}`]
+      [ORG_X, `Mutation-${i}`],
     );
   }
   await execSql('COMMIT');
@@ -733,7 +744,7 @@ it('mutations between pages: no duplicates when newer rows are inserted', async 
     await execSql(
       `INSERT INTO contacts (id, org_id, name, contact_type, doc_status, created_at)
        VALUES (gen_random_uuid(), $1, $2, 'customer', 'draft', $3)`,
-      [ORG_X, `Mutation-new-${i}`, newestTs]
+      [ORG_X, `Mutation-new-${i}`, newestTs],
     );
   }
   await execSql('COMMIT');

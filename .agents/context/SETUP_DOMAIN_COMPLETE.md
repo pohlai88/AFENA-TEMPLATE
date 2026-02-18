@@ -43,12 +43,12 @@
 
 **All 4 phases complete.** Migrations 0066-0072. Three canonical patterns validated: Singleton Config, Master Data, Line Entity.
 
-| Phase | Entities | Migration | Status |
-|-------|----------|-----------|--------|
-| **Phase 1** | branches, departments, accounts-settings, stock-settings, global-defaults | 0066-0069 | ✅ |
-| **Phase 2** | selling-settings, buying-settings, manufacturing-settings, designations, employee-groups, holiday-lists, holidays | 0070 | ✅ |
-| **Phase 3** | authorization-controls, authorization-rules, item-variant-settings, currency-exchange-settings, currency-exchange-settings-details, crm-settings | 0071 | ✅ |
-| **Phase 4** | south-africa-vat-settings, uae-vat-settings, incoming-call-settings, voice-call-settings, appointment-booking-settings, plaid-settings, subscription-settings, repost-accounting-ledger-settings, stock-reposting-settings | 0072 | ✅ |
+| Phase       | Entities                                                                                                                                                                                                                   | Migration | Status |
+| ----------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------- | ------ |
+| **Phase 1** | branches, departments, accounts-settings, stock-settings, global-defaults                                                                                                                                                  | 0066-0069 | ✅     |
+| **Phase 2** | selling-settings, buying-settings, manufacturing-settings, designations, employee-groups, holiday-lists, holidays                                                                                                          | 0070      | ✅     |
+| **Phase 3** | authorization-controls, authorization-rules, item-variant-settings, currency-exchange-settings, currency-exchange-settings-details, crm-settings                                                                           | 0071      | ✅     |
+| **Phase 4** | south-africa-vat-settings, uae-vat-settings, incoming-call-settings, voice-call-settings, appointment-booking-settings, plaid-settings, subscription-settings, repost-accounting-ledger-settings, stock-reposting-settings | 0072      | ✅     |
 
 **Pre-adopted (before Setup phases):** delivery-settings, pos-settings, projects-settings, support-settings, video-settings
 

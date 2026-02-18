@@ -3,9 +3,9 @@ name: clawsec-feed
 version: 0.0.4
 description: Security advisory feed with automated NVD CVE polling for OpenClaw-related vulnerabilities. Updated daily.
 homepage: https://clawsec.prompt.security
-metadata: {"openclaw":{"emoji":"📡","category":"security"}}
+metadata: { 'openclaw': { 'emoji': '📡', 'category': 'security' } }
 clawdis:
-  emoji: "📡"
+  emoji: '📡'
   requires:
     bins: [curl, jq]
 ---
@@ -31,6 +31,7 @@ You can get clawsec-feed in two ways:
 ClawSec-feed is bundled alongside ClawSec Suite to provide crucial CVE and threat intelligence information. When you install the suite, if you don't already have the feed installed, it will be deployed from the bundled copy.
 
 **Advantages:**
+
 - Convenient - no separate download needed
 - Standard location - installed to `~/.openclaw/skills/clawsec-feed/`
 - Preserved - if you already have feed installed, it won't be overwritten
@@ -41,11 +42,13 @@ ClawSec-feed is bundled alongside ClawSec Suite to provide crucial CVE and threa
 Install clawsec-feed independently without the full suite.
 
 **When to use standalone:**
+
 - You only need the advisory feed (not other suite components)
 - You want to install before installing the suite
 - You prefer explicit control over feed installation
 
 **Advantages:**
+
 - Lighter weight installation
 - Independent from suite
 - Direct control over installation process
@@ -56,7 +59,6 @@ Continue below for standalone installation instructions.
 
 Installation Steps:
 Agents should review scripts before execution!
-
 
 ```bash
 # Get latest clawsec-feed release tag
@@ -260,6 +262,7 @@ Add ClawSec Feed to your heartbeat routine:
 
 ```markdown
 ## ClawSec Feed (every heartbeat)
+
 1. Check advisory feed for new security alerts
 2. Cross-reference with installed skills
 3. Notify user if action is required
@@ -268,6 +271,7 @@ Add ClawSec Feed to your heartbeat routine:
 ### Step 4: Confirm deployment
 
 Tell your user:
+
 ```
 ClawSec Feed deployed successfully. I will now:
 - Monitor the community advisory feed for threats
@@ -447,6 +451,7 @@ done
 ```
 
 **If you find affected skills:**
+
 1. Check the advisory for details and severity
 2. Notify your user immediately for critical/high severity
 3. Include the recommended action from the advisory
@@ -455,42 +460,46 @@ done
 
 ## Advisory Types
 
-| Type | Description |
-|------|-------------|
-| `malicious_skill` | Skill identified as intentionally harmful |
-| `vulnerable_skill` | Skill with security vulnerabilities |
-| `prompt_injection` | Known prompt injection pattern |
-| `attack_pattern` | Observed attack technique |
-| `best_practice` | Security recommendation |
+| Type               | Description                               |
+| ------------------ | ----------------------------------------- |
+| `malicious_skill`  | Skill identified as intentionally harmful |
+| `vulnerable_skill` | Skill with security vulnerabilities       |
+| `prompt_injection` | Known prompt injection pattern            |
+| `attack_pattern`   | Observed attack technique                 |
+| `best_practice`    | Security recommendation                   |
 
 ---
 
 ## Severity Levels
 
-| Severity | Action Required |
-|----------|-----------------|
+| Severity   | Action Required                      |
+| ---------- | ------------------------------------ |
 | `critical` | Notify user immediately, take action |
-| `high` | Notify user soon, plan remediation |
-| `medium` | Notify at next interaction |
-| `low` | Log for reference |
+| `high`     | Notify user soon, plan remediation   |
+| `medium`   | Notify at next interaction           |
+| `low`      | Log for reference                    |
 
 ---
 
 ## When to Notify Your User
 
 **Notify Immediately (Critical):**
+
 - New critical advisory affecting an installed skill
 - Active exploitation detected
 
 **Notify Soon (High):**
+
 - New high-severity advisory affecting installed skills
 - Failed to fetch advisory feed (network issue?)
 
 **Notify at Next Interaction (Medium):**
+
 - New medium-severity advisories
 - General security updates
 
 **Log Only (Low/Info):**
+
 - Low-severity advisories (mention if user asks)
 - Feed checked, no new advisories
 
@@ -575,11 +584,11 @@ fi
 
 **Important:** To avoid excessive requests to the feed server, follow these guidelines:
 
-| Check Type | Recommended Interval | Minimum Interval |
-|------------|---------------------|------------------|
-| Heartbeat check | Every 15-30 minutes | 5 minutes |
-| Full feed refresh | Every 1-4 hours | 30 minutes |
-| Cross-reference scan | Once per session | 5 minutes |
+| Check Type           | Recommended Interval | Minimum Interval |
+| -------------------- | -------------------- | ---------------- |
+| Heartbeat check      | Every 15-30 minutes  | 5 minutes        |
+| Full feed refresh    | Every 1-4 hours      | 30 minutes       |
+| Cross-reference scan | Once per session     | 5 minutes        |
 
 ```bash
 # Check if enough time has passed since last check
@@ -600,10 +609,10 @@ fi
 
 ## Environment Variables (Optional)
 
-| Variable | Description | Default |
-|----------|-------------|---------|
-| `CLAWSEC_FEED_URL` | Custom advisory feed URL | Raw GitHub (`main` branch) |
-| `CLAWSEC_INSTALL_DIR` | Installation directory | `~/.openclaw/skills/clawsec-feed` |
+| Variable              | Description              | Default                           |
+| --------------------- | ------------------------ | --------------------------------- |
+| `CLAWSEC_FEED_URL`    | Custom advisory feed URL | Raw GitHub (`main` branch)        |
+| `CLAWSEC_INSTALL_DIR` | Installation directory   | `~/.openclaw/skills/clawsec-feed` |
 
 ---
 

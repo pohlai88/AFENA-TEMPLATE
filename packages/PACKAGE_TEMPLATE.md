@@ -43,11 +43,13 @@ This package follows AFENDA NEXUS monorepo configuration standards for consisten
 ```
 
 **Configuration Inheritance:**
+
 - `base.json` - Standard packages (most common)
 - `react-library.json` - React component libraries
 - `nextjs.json` - Next.js applications only
 
 **Key Principles:**
+
 - ✅ Extend shared presets to inherit common settings
 - ✅ Minimize overrides - rely on preset defaults
 - ✅ Use `tsBuildInfoFile` for incremental compilation
@@ -90,6 +92,7 @@ This package follows AFENDA NEXUS monorepo configuration standards for consisten
 ```
 
 **Configuration Standards:**
+
 - **Naming:** All packages use `afenda-` prefix
 - **Version:** Start at `0.1.0` for new packages
 - **Type:** Use `"type": "module"` for ESM
@@ -106,16 +109,16 @@ All packages should implement these scripts consistently:
   "scripts": {
     // Type checking (required)
     "type-check": "tsc --noEmit",
-    
+
     // Linting (required)
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx --cache --concurrency=auto",
     "lint:ci": "eslint . --ext .js,.jsx,.ts,.tsx --rule 'import/no-cycle: error'",
     "lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx --cache --fix",
-    
+
     // Building (if package builds artifacts)
     "build": "tsup src/index.ts --format esm,cjs --dts",
     "dev": "tsup src/index.ts --format esm,cjs --dts --watch",
-    
+
     // Testing (if package has tests)
     "test": "vitest",
     "test:watch": "vitest --watch",
@@ -136,6 +139,7 @@ Every package should have:
 - ⚠️ `.prettierrc` - Only if package-specific formatting needed (rare)
 
 **Prefer inheritance over duplication:**
+
 - ESLint config inherited from `afenda-eslint-config`
 - TypeScript config inherited from `afenda-typescript-config`
 - Prettier config inherited from root `.prettierrc.mjs`
@@ -159,15 +163,18 @@ pnpm type-check && pnpm lint && pnpm test
 ## Key Concepts
 
 ### [Concept 1]
+
 - **[Sub-concept]**: [Explanation]
 - **[Sub-concept]**: [Explanation]
 - **[Sub-concept]**: [Explanation]
 
 ### [Concept 2]
+
 - **[Sub-concept]**: [Explanation]
 - **[Sub-concept]**: [Explanation]
 
 ### [Concept 3]
+
 [Explanation of important concept]
 
 ## Dependencies
@@ -176,6 +183,7 @@ pnpm type-check && pnpm lint && pnpm test
 - `[dependency-2]`: [Why this dependency]
 
 **Dependency Rules:**
+
 - Follow [GOVERNANCE.md](GOVERNANCE.md) layer restrictions
 - Use workspace protocol for internal packages: `workspace:*`
 - Use catalog for common external packages: `catalog:`
@@ -199,12 +207,14 @@ import {
 [Function description]
 
 **Parameters:**
+
 - `param1` - [Description]
 - `param2` - [Description]
 
 **Returns:** [Description]
 
 **Example:**
+
 ```typescript
 const result = await functionName(db, orgId, {
   field1: 'value',
@@ -267,13 +277,16 @@ turbo run lint          # With caching
 ### Common Issues
 
 **"Cannot find module 'afenda-typescript-config'"**
+
 - Run `pnpm install` from root to link workspace dependencies
 
 **"Module ... has already exported a member named ..."**
+
 - Check for duplicate exports in barrel files
 - Review import/export structure
 
 **Circular dependency warnings during lint:ci**
+
 - Review cross-package imports
 - Consider extracting shared code to Layer 1
 - See [GOVERNANCE.md](GOVERNANCE.md) for dependency rules
@@ -281,6 +294,7 @@ turbo run lint          # With caching
 ---
 
 **See Also:**
+
 - [ARCHITECTURE.md](../ARCHITECTURE.md) - System architecture
 - [GOVERNANCE.md](GOVERNANCE.md) - Dependency rules and layer restrictions
 - [CODING_STANDARDS.md](../docs/CODING_STANDARDS.md) - Code conventions

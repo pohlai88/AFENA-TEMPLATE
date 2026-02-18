@@ -23,6 +23,7 @@ The monorepo uses a **hybrid build strategy**:
 - **Config packages** → Re-export as-is (JSON, JS)
 
 This hybrid approach balances:
+
 - ✅ **Fast iteration** - Source packages skip build steps
 - ✅ **External compatibility** - Compiled packages work outside monorepo
 - ✅ **Type safety** - Both approaches preserve TypeScript types
@@ -35,12 +36,14 @@ This hybrid approach balances:
 ### Compiled Packages
 
 **When to use**:
+
 - Package may be consumed outside the monorepo
 - Package is published to npm
 - Package contains non-TypeScript assets (CSS, images)
 - Package needs tree-shaking optimization
 
 **Characteristics**:
+
 - Built with `tsup` (or similar)
 - Outputs to `dist/` directory
 - Generates `.js`, `.mjs`, `.d.ts` files
@@ -54,12 +57,14 @@ This hybrid approach balances:
 ### Source Packages
 
 **When to use**:
+
 - Package is internal-only (consumed only within monorepo)
 - Consumers have TypeScript compilation (apps, tools)
 - Fast development iteration is priority
 - Package is simple (TypeScript only, no assets)
 
 **Characteristics**:
+
 - No build step required
 - `package.json` points to `src/index.ts`
 - TypeScript compilation happens at consumer level
@@ -73,10 +78,12 @@ This hybrid approach balances:
 ### Configuration Packages
 
 **When to use**:
+
 - Package exports config for tools (ESLint, TypeScript)
 - Consumers load config directly
 
 **Characteristics**:
+
 - No build step
 - Export `.js` or `.json` files
 - Consumed by tooling, not code
@@ -88,46 +95,47 @@ This hybrid approach balances:
 ## Package Categories
 
 ### Layer 0: Configuration
+
 **Build Approach**: Config (re-export as-is)
 
-| Package | Main Entry | Rationale |
-|---------|-----------|-----------|
-| `eslint-config` | `base.js` | ESLint loads JS directly |
-| `typescript-config` | `base.json` | TypeScript extends JSON |
+| Package             | Main Entry  | Rationale                |
+| ------------------- | ----------- | ------------------------ |
+| `eslint-config`     | `base.js`   | ESLint loads JS directly |
+| `typescript-config` | `base.json` | TypeScript extends JSON  |
 
 ---
 
 ### Layer 1: Foundation
 
-| Package | Build Approach | Main Entry | Rationale |
-|---------|---------------|-----------|-----------|
-| `canon` | **Compiled** | `dist/index.js` | External consumption (types may be imported by ERPNext adapter, tools) |
-| `database` | **Source** | `src/index.ts` | Internal only; apps compile at build time |
-| `logger` | **Source** | `src/index.ts` | Internal only; simple TypeScript module |
-| `ui` | **Compiled** | `dist/index.js` | React components; may publish to npm; has CSS/assets |
+| Package    | Build Approach | Main Entry      | Rationale                                                              |
+| ---------- | -------------- | --------------- | ---------------------------------------------------------------------- |
+| `canon`    | **Compiled**   | `dist/index.js` | External consumption (types may be imported by ERPNext adapter, tools) |
+| `database` | **Source**     | `src/index.ts`  | Internal only; apps compile at build time                              |
+| `logger`   | **Source**     | `src/index.ts`  | Internal only; simple TypeScript module                                |
+| `ui`       | **Compiled**   | `dist/index.js` | React components; may publish to npm; has CSS/assets                   |
 
 ---
 
 ### Layer 2: Domain Services
 
-| Package | Build Approach | Main Entry | Rationale |
-|---------|---------------|-----------|-----------|
-| `workflow` | **Source** | `src/index.ts` | Internal only; consumed by CRUD |
-| `advisory` | **Source** | `src/index.ts` | Internal only; analytics engine |
-| `search` | **Source** | `src/index.ts` | Internal only; search indexer |
-| `migration` | **Compiled** | `dist/index.js` | CLI tool; may be used standalone |
-| `accounting` | **Source** | `src/index.ts` | Internal only; domain services |
-| `inventory` | **Source** | `src/index.ts` | Internal only; domain services |
-| `crm` | **Source** | `src/index.ts` | Internal only; domain services |
-| `intercompany` | **Source** | `src/index.ts` | Internal only; domain services |
+| Package        | Build Approach | Main Entry      | Rationale                        |
+| -------------- | -------------- | --------------- | -------------------------------- |
+| `workflow`     | **Source**     | `src/index.ts`  | Internal only; consumed by CRUD  |
+| `advisory`     | **Source**     | `src/index.ts`  | Internal only; analytics engine  |
+| `search`       | **Source**     | `src/index.ts`  | Internal only; search indexer    |
+| `migration`    | **Compiled**   | `dist/index.js` | CLI tool; may be used standalone |
+| `accounting`   | **Source**     | `src/index.ts`  | Internal only; domain services   |
+| `inventory`    | **Source**     | `src/index.ts`  | Internal only; domain services   |
+| `crm`          | **Source**     | `src/index.ts`  | Internal only; domain services   |
+| `intercompany` | **Source**     | `src/index.ts`  | Internal only; domain services   |
 
 ---
 
 ### Layer 3: Application
 
-| Package | Build Approach | Main Entry | Rationale |
-|---------|---------------|-----------|-----------|
-| `crud` | **Source** | `src/index.ts` | Internal only; consumed by Next.js app |
+| Package | Build Approach | Main Entry     | Rationale                              |
+| ------- | -------------- | -------------- | -------------------------------------- |
+| `crud`  | **Source**     | `src/index.ts` | Internal only; consumed by Next.js app |
 
 ---
 
@@ -136,6 +144,7 @@ This hybrid approach balances:
 ### Compiled Package Configuration
 
 **package.json**:
+
 ```json
 {
   "name": "afenda-canon",
@@ -161,6 +170,7 @@ This hybrid approach balances:
 ```
 
 **tsconfig.json**:
+
 ```json
 {
   "extends": "@afenda/typescript-config/base.json",
@@ -174,6 +184,7 @@ This hybrid approach balances:
 ```
 
 **tsconfig.build.json** (for build-time compilation):
+
 ```json
 {
   "extends": "./tsconfig.json",
@@ -186,13 +197,14 @@ This hybrid approach balances:
 ```
 
 **tsup.config.ts**:
+
 ```typescript
 import { defineConfig } from 'tsup';
 
 export default defineConfig({
   entry: ['src/index.ts'],
   format: ['cjs', 'esm'],
-  dts: true,            // Generate .d.ts files
+  dts: true, // Generate .d.ts files
   sourcemap: true,
   clean: true,
   splitting: false,
@@ -205,6 +217,7 @@ export default defineConfig({
 ### Source Package Configuration
 
 **package.json**:
+
 ```json
 {
   "name": "afenda-crud",
@@ -219,12 +232,13 @@ export default defineConfig({
 ```
 
 **tsconfig.json**:
+
 ```json
 {
   "extends": "@afenda/typescript-config/base.json",
   "compilerOptions": {
     "rootDir": "./src",
-    "noEmit": true      // Source packages don't emit
+    "noEmit": true // Source packages don't emit
   },
   "include": ["src/**/*"]
 }
@@ -239,6 +253,7 @@ export default defineConfig({
 ### For Compiled Packages
 
 **Initial setup**:
+
 ```bash
 cd packages/canon
 pnpm install
@@ -246,11 +261,13 @@ pnpm build
 ```
 
 **During development**:
+
 ```bash
 pnpm dev    # tsup --watch (rebuilds on change)
 ```
 
 **Before commit**:
+
 ```bash
 pnpm build
 pnpm type-check
@@ -262,6 +279,7 @@ pnpm lint
 ### For Source Packages
 
 **Initial setup**:
+
 ```bash
 cd packages/crud
 pnpm install
@@ -269,12 +287,14 @@ pnpm install
 ```
 
 **During development**:
+
 ```typescript
 // Edit src/index.ts
 // Changes are immediately available to consumers
 ```
 
 **Before commit**:
+
 ```bash
 pnpm type-check
 pnpm lint
@@ -285,16 +305,19 @@ pnpm lint
 ### Workspace-Level Build
 
 **Build all compiled packages**:
+
 ```bash
 pnpm build    # From monorepo root
 ```
 
 This runs `turbo run build`, which:
+
 1. Detects packages with `build` script
 2. Builds in dependency order
 3. Caches outputs for speed
 
 **Turbo configuration** (`turbo.json`):
+
 ```json
 {
   "pipeline": {
@@ -313,6 +336,7 @@ This runs `turbo run build`, which:
 ### Internal Packages (Not Published)
 
 Source packages remain internal:
+
 - `crud`, `workflow`, `accounting`, `inventory`, `crm`, `intercompany`, `database`, `logger`
 
 **Never published to npm**. Consumed only within monorepo via `workspace:*` protocol.
@@ -322,11 +346,13 @@ Source packages remain internal:
 ### External Packages (May be Published)
 
 Compiled packages can be published:
+
 - `canon` - Type definitions for external adapters
 - `ui` - Component library for other projects
 - `migration` - Standalone CLI tool
 
 **Publishing checklist**:
+
 1. Update version in `package.json`
 2. Run `pnpm build` to generate `dist/`
 3. Test in isolation: `npm pack` → Install tarball elsewhere
@@ -334,6 +360,7 @@ Compiled packages can be published:
 5. Tag release in git
 
 **Example**:
+
 ```bash
 cd packages/canon
 pnpm version patch    # 0.1.0 → 0.1.1
@@ -352,15 +379,17 @@ git push --tags
 If a source package needs to be published:
 
 1. **Add build configuration**:
+
    ```bash
    cd packages/my-package
    touch tsup.config.ts tsconfig.build.json
    ```
 
 2. **Update tsup.config.ts**:
+
    ```typescript
    import { defineConfig } from 'tsup';
-   
+
    export default defineConfig({
      entry: ['src/index.ts'],
      format: ['cjs', 'esm'],
@@ -371,6 +400,7 @@ If a source package needs to be published:
    ```
 
 3. **Update package.json**:
+
    ```json
    {
      "main": "./dist/index.js",
@@ -391,11 +421,13 @@ If a source package needs to be published:
    ```
 
 4. **Add tsup to devDependencies**:
+
    ```bash
    pnpm add -D tsup
    ```
 
 5. **Build and test**:
+
    ```bash
    pnpm build
    ls dist/    # Verify outputs
@@ -412,6 +444,7 @@ If a source package needs to be published:
 If an internal-only package doesn't need compilation:
 
 1. **Update package.json**:
+
    ```json
    {
      "main": "./src/index.ts",
@@ -420,11 +453,13 @@ If an internal-only package doesn't need compilation:
    ```
 
 2. **Remove build scripts**:
+
    ```bash
    rm tsup.config.ts tsconfig.build.json
    ```
 
 3. **Update tsconfig.json**:
+
    ```json
    {
      "compilerOptions": {
@@ -434,6 +469,7 @@ If an internal-only package doesn't need compilation:
    ```
 
 4. **Remove dist/ from git**:
+
    ```bash
    git rm -r dist/
    echo "dist/" >> .gitignore
@@ -452,11 +488,13 @@ If an internal-only package doesn't need compilation:
 ### Build Times
 
 **Compiled packages** (2-5s per package):
+
 - `canon`: ~2s (types only, no heavy logic)
 - `ui`: ~5s (React components, tree-shaking)
 - `migration`: ~3s (CLI tools)
 
 **Source packages** (0s):
+
 - Instant availability
 - Compilation happens at app build time (Next.js)
 
@@ -467,6 +505,7 @@ If an internal-only package doesn't need compilation:
 ### App Build
 
 **Next.js app** (`apps/web`):
+
 - Compiles all source packages at build time
 - Next.js handles TypeScript transpilation
 - Tree-shaking works with both compiled and source packages
@@ -483,6 +522,7 @@ If an internal-only package doesn't need compilation:
 **Problem**: Importing from compiled package before it's built
 
 **Solution**:
+
 ```bash
 pnpm build    # Build all packages
 # OR
@@ -496,6 +536,7 @@ cd packages/canon && pnpm build    # Build specific package
 **Problem**: Source package changes aren't reflected in app
 
 **Solution**: Restart TypeScript server in IDE:
+
 - VS Code: `Cmd+Shift+P` → "TypeScript: Restart TS Server"
 - IntelliJ: `Cmd+Shift+A` → "Restart TypeScript Service"
 
@@ -506,11 +547,13 @@ cd packages/canon && pnpm build    # Build specific package
 **Problem**: Compiled package rebuilds on every change
 
 **Solution 1**: Use watch mode:
+
 ```bash
 pnpm dev    # tsup --watch
 ```
 
 **Solution 2**: Temporarily switch to source exports during development:
+
 ```json
 // package.json (temporary)
 "main": "./src/index.ts"
@@ -520,17 +563,70 @@ Remember to switch back before committing!
 
 ---
 
+### Turbo output disappears in CI/local debugging
+
+**Problem**: When running `pnpm build`, `pnpm test`, or other Turbo commands, the output disappears after completion, making it difficult to debug failures in CI or capture logs.
+
+**Cause**: Turbo's TUI (Text User Interface) mode uses the terminal's **alternate buffer**. This is a separate screen buffer that gets cleared when the command completes, leaving no trace in your scrollback history.
+
+**Benefits of TUI**:
+
+- ✅ Clean terminal history
+- ✅ Better local development experience
+- ✅ Real-time task visualization
+
+**Drawbacks of TUI**:
+
+- ❌ Output not captured in CI logs
+- ❌ Can't scroll back to see errors
+- ❌ Harder to debug build failures
+
+**Solution 1 - CI environments** (recommended, already configured):
+All CI workflows automatically set `TURBO_UI=stream` to disable the alternate buffer:
+
+```yaml
+env:
+  TURBO_UI: stream # Ensures output is captured
+```
+
+**Solution 2 - Local debugging**:
+Override the UI mode when you need to capture output:
+
+```bash
+# Disable TUI for this run
+TURBO_UI=stream pnpm build
+
+# Or use --output-logs flag
+pnpm build --output-logs=full
+
+# On Windows PowerShell
+$env:TURBO_UI="stream"; pnpm build
+```
+
+**Solution 3 - Permanent local change** (not recommended):
+Edit `turbo.json` to change the default UI mode:
+
+```json
+{
+  "ui": "stream" // or "tui" (default)
+}
+```
+
+**Note**: The monorepo uses `"ui": "tui"` by default for better local DX. CI workflows override this automatically.
+
+---
+
 ## Summary
 
-| Aspect | Compiled Packages | Source Packages |
-|--------|------------------|----------------|
-| **Build step** | Required (tsup) | None |
-| **Main entry** | `dist/index.js` | `src/index.ts` |
-| **Iteration speed** | Slower (requires rebuild) | Instant |
-| **External use** | ✅ Yes (publishable) | ❌ No (monorepo only) |
-| **Tree-shaking** | ✅ Pre-optimized | ✅ Consumer handles |
-| **Type safety** | ✅ .d.ts files | ✅ Source .ts files |
-| **Examples** | canon, ui, migration | crud, workflow, accounting |
+| Aspect              | Compiled Packages         | Source Packages            |
+| ------------------- | ------------------------- | -------------------------- |
+| **Build step**      | Required (tsup)           | None                       |
+| **Main entry**      | `dist/index.js`           | `src/index.ts`             |
+| **Iteration speed** | Slower (requires rebuild) | Instant                    |
+| **External use**    | ✅ Yes (publishable)      | ❌ No (monorepo only)      |
+| **Tree-shaking**    | ✅ Pre-optimized          | ✅ Consumer handles        |
+| **Type safety**     | ✅ .d.ts files            | ✅ Source .ts files        |
+| **Examples**        | canon, ui, migration      | crud, workflow, accounting |
 
 ---
 

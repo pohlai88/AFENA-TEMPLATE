@@ -22,12 +22,12 @@ accrual with compliance tracking.
 
 ```typescript
 import {
-    calculateRebateAccrual,
-    createRebateProgram,
-    getRebateMetrics,
-    submitRebateClaim,
-    verifyRebateCompliance,
-} from "afenda-rebate-mgmt";
+  calculateRebateAccrual,
+  createRebateProgram,
+  getRebateMetrics,
+  submitRebateClaim,
+  verifyRebateCompliance,
+} from 'afenda-rebate-mgmt';
 ```
 
 ## Services

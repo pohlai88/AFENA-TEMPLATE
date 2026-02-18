@@ -53,7 +53,7 @@ afenda-monorepo/
 │   ├── ui/               # Shared React components
 │   └── ...               # Other shared packages
 ├── tools/
-│   └── afena-cli/        # CLI tool for metadata generation
+│   └── afenda-cli/        # CLI tool for metadata generation
 └── docs/
     ├── adr/              # Architecture Decision Records
     ├── api/              # API documentation
@@ -150,29 +150,29 @@ pnpm test:coverage
 Example test:
 
 ```typescript
-import { describe, expect, it } from "vitest";
-import { createUser } from "./user-service";
+import { describe, expect, it } from 'vitest';
+import { createUser } from './user-service';
 
-describe("createUser", () => {
-  it("should create a new user", async () => {
+describe('createUser', () => {
+  it('should create a new user', async () => {
     const user = await createUser({
-      email: "test@example.com",
-      name: "Test User",
+      email: 'test@example.com',
+      name: 'Test User',
     });
 
     expect(user).toMatchObject({
-      email: "test@example.com",
-      name: "Test User",
+      email: 'test@example.com',
+      name: 'Test User',
     });
     expect(user.id).toBeDefined();
   });
 
-  it("should throw on duplicate email", async () => {
-    await createUser({ email: "test@example.com", name: "User 1" });
+  it('should throw on duplicate email', async () => {
+    await createUser({ email: 'test@example.com', name: 'User 1' });
 
-    await expect(
-      createUser({ email: "test@example.com", name: "User 2" }),
-    ).rejects.toThrow("Email already exists");
+    await expect(createUser({ email: 'test@example.com', name: 'User 2' })).rejects.toThrow(
+      'Email already exists',
+    );
   });
 });
 ```

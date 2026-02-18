@@ -13,39 +13,35 @@ Enterprise accounts payable and invoice processing.
 ## Usage
 
 ```typescript
-import {
-  captureInvoice,
-  generatePaymentFile,
-  submitForApproval,
-} from "afenda-payables";
+import { captureInvoice, generatePaymentFile, submitForApproval } from 'afenda-payables';
 
 // Capture supplier invoice
 const invoice = await captureInvoice(db, orgId, {
-  vendorId: "VENDOR-001",
-  invoiceNumber: "INV-2025-001",
-  invoiceDate: "2025-01-15",
-  dueDate: "2025-02-15",
-  totalAmount: 5000.00,
-  currency: "USD",
+  vendorId: 'VENDOR-001',
+  invoiceNumber: 'INV-2025-001',
+  invoiceDate: '2025-01-15',
+  dueDate: '2025-02-15',
+  totalAmount: 5000.0,
+  currency: 'USD',
   lines: [
-    { poLineId: 1, description: "Widgets", amount: 4500.00, glAccount: "5010" },
-    { description: "Freight", amount: 500.00, glAccount: "5150" },
+    { poLineId: 1, description: 'Widgets', amount: 4500.0, glAccount: '5010' },
+    { description: 'Freight', amount: 500.0, glAccount: '5150' },
   ],
-  paymentTerms: "2/10 Net 30", // 2% discount if paid in 10 days
+  paymentTerms: '2/10 Net 30', // 2% discount if paid in 10 days
 });
 
 // Route for approval
 await submitForApproval(db, orgId, {
   invoiceId: invoice.invoiceId,
-  approverId: "USER-123",
+  approverId: 'USER-123',
   checkBudget: true,
 });
 
 // Generate payment batch
 const payment = await generatePaymentFile(db, orgId, {
-  paymentRunId: "PAY-RUN-001",
-  format: "ACH",
-  bankAccount: "BANK-001",
+  paymentRunId: 'PAY-RUN-001',
+  format: 'ACH',
+  bankAccount: 'BANK-001',
 });
 ```
 

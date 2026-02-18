@@ -31,10 +31,10 @@ no `'use client'` in pages/layouts.
 
 ## 3. Package Structure (live)
 
-| Metric | Value |
-| ------ | ----- |
-| **Source files** | 97 |
-| **Test files** | 0 |
+| Metric                 | Value                             |
+| ---------------------- | --------------------------------- |
+| **Source files**       | 97                                |
+| **Test files**         | 0                                 |
 | **Source directories** | components, hooks, lib, providers |
 
 ```
@@ -51,68 +51,68 @@ packages/ui/src/
 
 ### Value Exports
 
-| Export | Source |
-| ------ | ------ |
-| `Providers` | `./providers` |
-| `ThemeProvider` | `./providers` |
-| `ToasterProvider` | `./providers` |
-| `GlobalTooltipProvider` | `./providers` |
-| `cn` | `./lib/utils` |
-| `cva` | `./lib/utils` |
-| `type VariantProps` | `./lib/utils` |
-| `dataSlot` | `./lib/utils` |
-| `cssVars` | `./lib/utils` |
-| `pickDataAttributes` | `./lib/utils` |
-| `composeRefs` | `./lib/compose-refs` |
-| `useComposedRefs` | `./lib/compose-refs` |
-| `composeEventHandlers` | `./lib/compose-event-handlers` |
-| `Keys` | `./lib/keyboard` |
-| `isKey` | `./lib/keyboard` |
-| `isPrintableKey` | `./lib/keyboard` |
-| `invariant` | `./lib/assertion` |
-| `isDefined` | `./lib/assertion` |
-| `isNonEmptyString` | `./lib/assertion` |
-| `isPlainObject` | `./lib/assertion` |
-| `isReactElement` | `./lib/assertion` |
-| `canUseDOM` | `./lib/dom` |
-| `getOwnerDocument` | `./lib/dom` |
-| `getOwnerWindow` | `./lib/dom` |
-| `getActiveElement` | `./lib/dom` |
-| `contains` | `./lib/dom` |
-| `getFocusableElements` | `./lib/dom` |
-| `scrollIntoViewIfNeeded` | `./lib/dom` |
-| `formatNumber` | `./lib/format` |
-| `formatCurrency` | `./lib/format` |
-| `formatCompact` | `./lib/format` |
-| `formatRelativeTime` | `./lib/format` |
-| `formatFileSize` | `./lib/format` |
-| `truncate` | `./lib/format` |
-| `getInitials` | `./lib/format` |
-| `generateId` | `./lib/aria` |
-| `ariaDescribedBy` | `./lib/aria` |
-| `ariaDisclosureTrigger` | `./lib/aria` |
-| `ariaLiveRegion` | `./lib/aria` |
-| `ariaSortColumn` | `./lib/aria` |
-| `ariaCountLabel` | `./lib/aria` |
-| `cssVar` | `./lib/color` |
-| `withOpacity` | `./lib/color` |
-| `getComputedCSSVar` | `./lib/color` |
-| `setCSSVar` | `./lib/color` |
-| `removeCSSVar` | `./lib/color` |
+| Export                   | Source                         |
+| ------------------------ | ------------------------------ |
+| `Providers`              | `./providers`                  |
+| `ThemeProvider`          | `./providers`                  |
+| `ToasterProvider`        | `./providers`                  |
+| `GlobalTooltipProvider`  | `./providers`                  |
+| `cn`                     | `./lib/utils`                  |
+| `cva`                    | `./lib/utils`                  |
+| `type VariantProps`      | `./lib/utils`                  |
+| `dataSlot`               | `./lib/utils`                  |
+| `cssVars`                | `./lib/utils`                  |
+| `pickDataAttributes`     | `./lib/utils`                  |
+| `composeRefs`            | `./lib/compose-refs`           |
+| `useComposedRefs`        | `./lib/compose-refs`           |
+| `composeEventHandlers`   | `./lib/compose-event-handlers` |
+| `Keys`                   | `./lib/keyboard`               |
+| `isKey`                  | `./lib/keyboard`               |
+| `isPrintableKey`         | `./lib/keyboard`               |
+| `invariant`              | `./lib/assertion`              |
+| `isDefined`              | `./lib/assertion`              |
+| `isNonEmptyString`       | `./lib/assertion`              |
+| `isPlainObject`          | `./lib/assertion`              |
+| `isReactElement`         | `./lib/assertion`              |
+| `canUseDOM`              | `./lib/dom`                    |
+| `getOwnerDocument`       | `./lib/dom`                    |
+| `getOwnerWindow`         | `./lib/dom`                    |
+| `getActiveElement`       | `./lib/dom`                    |
+| `contains`               | `./lib/dom`                    |
+| `getFocusableElements`   | `./lib/dom`                    |
+| `scrollIntoViewIfNeeded` | `./lib/dom`                    |
+| `formatNumber`           | `./lib/format`                 |
+| `formatCurrency`         | `./lib/format`                 |
+| `formatCompact`          | `./lib/format`                 |
+| `formatRelativeTime`     | `./lib/format`                 |
+| `formatFileSize`         | `./lib/format`                 |
+| `truncate`               | `./lib/format`                 |
+| `getInitials`            | `./lib/format`                 |
+| `generateId`             | `./lib/aria`                   |
+| `ariaDescribedBy`        | `./lib/aria`                   |
+| `ariaDisclosureTrigger`  | `./lib/aria`                   |
+| `ariaLiveRegion`         | `./lib/aria`                   |
+| `ariaSortColumn`         | `./lib/aria`                   |
+| `ariaCountLabel`         | `./lib/aria`                   |
+| `cssVar`                 | `./lib/color`                  |
+| `withOpacity`            | `./lib/color`                  |
+| `getComputedCSSVar`      | `./lib/color`                  |
+| `setCSSVar`              | `./lib/color`                  |
+| `removeCSSVar`           | `./lib/color`                  |
 
 ### Type Exports
 
-| Type | Source |
-| ---- | ------ |
-| `ComponentProps` | `./lib/types` |
+| Type               | Source        |
+| ------------------ | ------------- |
+| `ComponentProps`   | `./lib/types` |
 | `PolymorphicProps` | `./lib/types` |
-| `RequiredKeys` | `./lib/types` |
-| `OptionalKeys` | `./lib/types` |
-| `ValueOf` | `./lib/types` |
-| `DeepReadonly` | `./lib/types` |
-| `DeepPartial` | `./lib/types` |
-| `StrictOmit` | `./lib/types` |
-| `Merge` | `./lib/types` |
+| `RequiredKeys`     | `./lib/types` |
+| `OptionalKeys`     | `./lib/types` |
+| `ValueOf`          | `./lib/types` |
+| `DeepReadonly`     | `./lib/types` |
+| `DeepPartial`      | `./lib/types` |
+| `StrictOmit`       | `./lib/types` |
+| `Merge`            | `./lib/types` |
 
 ---
 
@@ -125,30 +125,30 @@ packages/ui/src/
 
 ### External
 
-| Package | Version |
-| ------- | ------- |
-| `@base-ui/react` | `^1.1.0` |
-| `@hookform/resolvers` | `^5.2.2` |
-| `@tanstack/react-table` | `^8.21.3` |
+| Package                    | Version    |
+| -------------------------- | ---------- |
+| `@base-ui/react`           | `^1.1.0`   |
+| `@hookform/resolvers`      | `^5.2.2`   |
+| `@tanstack/react-table`    | `^8.21.3`  |
 | `class-variance-authority` | `catalog:` |
-| `clsx` | `catalog:` |
-| `cmdk` | `^1.1.1` |
-| `date-fns` | `^4.1.0` |
-| `embla-carousel-react` | `^8.6.0` |
-| `input-otp` | `^1.4.2` |
-| `lucide-react` | `catalog:` |
-| `next-themes` | `^0.4.6` |
-| `radix-ui` | `^1.4.3` |
-| `react` | `catalog:` |
-| `react-day-picker` | `^9.13.2` |
-| `react-dom` | `catalog:` |
-| `react-hook-form` | `^7.71.1` |
-| `react-resizable-panels` | `^4` |
-| `recharts` | `2.15.4` |
-| `sonner` | `^2.0.7` |
-| `tailwind-merge` | `catalog:` |
-| `tw-animate-css` | `^1.4.0` |
-| `vaul` | `^1.1.2` |
+| `clsx`                     | `catalog:` |
+| `cmdk`                     | `^1.1.1`   |
+| `date-fns`                 | `^4.1.0`   |
+| `embla-carousel-react`     | `^8.6.0`   |
+| `input-otp`                | `^1.4.2`   |
+| `lucide-react`             | `catalog:` |
+| `next-themes`              | `^0.4.6`   |
+| `radix-ui`                 | `^1.4.3`   |
+| `react`                    | `catalog:` |
+| `react-day-picker`         | `^9.13.2`  |
+| `react-dom`                | `catalog:` |
+| `react-hook-form`          | `^7.71.1`  |
+| `react-resizable-panels`   | `^4`       |
+| `recharts`                 | `2.15.4`   |
+| `sonner`                   | `^2.0.7`   |
+| `tailwind-merge`           | `catalog:` |
+| `tw-animate-css`           | `^1.4.0`   |
+| `vaul`                     | `^1.1.2`   |
 
 ---
 

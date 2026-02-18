@@ -45,12 +45,14 @@ areas for improvement.
 ### Local Development
 
 1. **Start the development server**:
+
    ```bash
    cd AFENDA-NEXUS
    pnpm dev
    ```
 
 2. **Open in browser**:
+
    ```
    http://localhost:3000/quality
    ```
@@ -337,6 +339,7 @@ standards.
 1. **Wait for CI to complete** (usually 5-10 minutes)
 2. **Check PR comments** for quality gates results
 3. **If failed**, navigate to dashboard:
+
    ```bash
    # Checkout your PR branch locally
    git checkout feature/my-feature
@@ -349,6 +352,7 @@ standards.
 
    # Open http://localhost:3000/quality
    ```
+
 4. **Review failing metrics**:
    - Coverage below threshold? Add more tests
    - Type errors? Fix type annotations
@@ -447,6 +451,7 @@ standards.
 **Solutions**:
 
 1. **Verify dev server is running**:
+
    ```bash
    pnpm dev
    # Should show "ready on http://localhost:3000"
@@ -457,6 +462,7 @@ standards.
    - Look for red errors in Console tab
 
 3. **Verify route exists**:
+
    ```bash
    # Check file exists
    ls apps/web/app/quality/page.tsx
@@ -474,6 +480,7 @@ standards.
 **Solutions**:
 
 1. **Collect metrics first**:
+
    ```bash
    pnpm --filter quality-metrics collect
    ```
@@ -484,6 +491,7 @@ standards.
    - Should return 200 status with JSON data
 
 3. **Verify database connection** (if using DB):
+
    ```bash
    # Check DATABASE_URL is set
    echo $DATABASE_URL
@@ -507,6 +515,7 @@ standards.
 1. **Check browser console** for JavaScript errors
 
 2. **Verify recharts dependency**:
+
    ```bash
    # Should already be installed
    pnpm list recharts
@@ -534,6 +543,7 @@ standards.
    - Should fetch latest data
 
 3. **Check API is responding**:
+
    ```bash
    curl http://localhost:3000/api/quality/metrics
    # Should return recent timestamp
@@ -552,12 +562,14 @@ standards.
 **Solutions**:
 
 1. **Check DATABASE_URL is set**:
+
    ```bash
    echo $DATABASE_URL
    # Should show postgresql://...
    ```
 
 2. **Verify database is accessible**:
+
    ```bash
    psql $DATABASE_URL -c "SELECT 1"
    ```

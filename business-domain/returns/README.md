@@ -21,12 +21,12 @@ warranty claims, refurbishment, and returns analytics.
 
 ```typescript
 import {
-    createRMA,
-    inspectReturn,
-    checkWarranty,
-    createRefurbOrder,
-    getReturnRates,
-} from "afenda-returns";
+  createRMA,
+  inspectReturn,
+  checkWarranty,
+  createRefurbOrder,
+  getReturnRates,
+} from 'afenda-returns';
 ```
 
 ## Services

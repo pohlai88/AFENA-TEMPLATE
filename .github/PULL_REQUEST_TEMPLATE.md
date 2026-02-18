@@ -24,9 +24,9 @@
 
 <!-- Provide a detailed list of changes made in this PR -->
 
-- 
-- 
-- 
+-
+-
+-
 
 ## Testing
 
@@ -128,7 +128,7 @@
 
 ---
 
-<!-- 
-Thank you for contributing to afenda! 
+<!--
+Thank you for contributing to afenda!
 Please ensure all checkboxes are completed before requesting review.
 -->

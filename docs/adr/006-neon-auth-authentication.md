@@ -8,6 +8,7 @@
 ## Context
 
 We needed an authentication solution that:
+
 - Integrates seamlessly with Neon Postgres (our database)
 - Supports Row-Level Security (RLS) for multi-tenancy
 - Works with serverless/edge deployments
@@ -15,6 +16,7 @@ We needed an authentication solution that:
 - Minimizes custom auth code
 
 Traditional auth solutions (Auth0, Clerk, NextAuth) require:
+
 - Separate authentication service/database
 - Custom integration with database RLS
 - Complex session management
@@ -55,7 +57,7 @@ Row-Level Security Filters
 ✅ **Serverless-friendly**: Stateless, no session database  
 ✅ **Multi-tenancy ready**: RLS policies enforce tenant isolation  
 ✅ **Simple setup**: No separate auth service to deploy  
-✅ **OAuth built-in**: GitHub, Google, etc. supported out-of-box  
+✅ **OAuth built-in**: GitHub, Google, etc. supported out-of-box
 
 ### Negative
 
@@ -63,12 +65,12 @@ Row-Level Security Filters
 ⚠️ **Vendor lock-in**: Tightly coupled to Neon Postgres  
 ⚠️ **Limited providers**: Fewer OAuth providers than Auth0/Clerk  
 ⚠️ **Learning curve**: Different from traditional session-based auth  
-⚠️ **Migration complexity**: Moving away from Neon Auth would require rewrite  
+⚠️ **Migration complexity**: Moving away from Neon Auth would require rewrite
 
 ### Neutral
 
 ℹ️ **JWT expiration**: Tokens expire, refresh flow needed  
-ℹ️ **Client-side auth**: `useAuth()` hook for React components  
+ℹ️ **Client-side auth**: `useAuth()` hook for React components
 
 ## Implementation Details
 
@@ -126,7 +128,7 @@ import { useAuth } from '@neondatabase/auth/react';
 
 export default function Dashboard() {
   const { user, signOut } = useAuth();
-  
+
   return (
     <div>
       <p>Welcome, {user?.email}</p>
@@ -163,8 +165,8 @@ CREATE POLICY org_data ON <table>
   FOR ALL
   USING (
     organization_id IN (
-      SELECT organization_id 
-      FROM memberships 
+      SELECT organization_id
+      FROM memberships
       WHERE user_id = auth.user_id()
     )
   );
@@ -180,8 +182,8 @@ CREATE POLICY admin_all_access ON <table>
   FOR ALL
   USING (
     EXISTS (
-      SELECT 1 FROM users 
-      WHERE id = auth.user_id() 
+      SELECT 1 FROM users
+      WHERE id = auth.user_id()
       AND role = 'admin'
     )
   );
@@ -190,16 +192,19 @@ CREATE POLICY admin_all_access ON <table>
 ## Security Considerations
 
 ### JWT Validation
+
 - JWTs validated via JWKS endpoint
 - Signature verification on every request
 - Automatic token refresh before expiration
 
 ### Cookie Security
+
 - httpOnly cookies prevent XSS attacks
 - SameSite=Lax prevents CSRF
 - Secure flag in production (HTTPS only)
 
 ### RLS Best Practices
+
 - Always use `FORCE ROW LEVEL SECURITY`
 - Test RLS policies in staging
 - Use `SET ROLE` for admin queries (bypass RLS)
@@ -207,6 +212,7 @@ CREATE POLICY admin_all_access ON <table>
 ## Alternatives Considered
 
 ### Auth0
+
 - ✅ Mature, battle-tested
 - ✅ Many OAuth providers
 - ❌ Separate service ($25+/month)
@@ -214,6 +220,7 @@ CREATE POLICY admin_all_access ON <table>
 - **Rejected**: Too expensive, complex integration
 
 ### Clerk
+
 - ✅ Great DX, modern UI
 - ✅ Built-in user management
 - ❌ Expensive at scale ($25+/month)
@@ -221,6 +228,7 @@ CREATE POLICY admin_all_access ON <table>
 - **Rejected**: Vendor lock-in, cost
 
 ### NextAuth.js
+
 - ✅ Free, open source
 - ✅ Many providers
 - ❌ Session table required
@@ -229,6 +237,7 @@ CREATE POLICY admin_all_access ON <table>
 - **Rejected**: Requires session storage, more complex
 
 ### Custom JWT Auth
+
 - ✅ Full control
 - ❌ Security risk (easy to get wrong)
 - ❌ Time-consuming to build
@@ -236,6 +245,7 @@ CREATE POLICY admin_all_access ON <table>
 - **Rejected**: Too risky, reinventing wheel
 
 ### Supabase Auth
+
 - ✅ Similar RLS integration
 - ✅ Mature
 - ❌ Requires Supabase (not just Postgres)

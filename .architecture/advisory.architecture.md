@@ -32,10 +32,10 @@ persists with evidence and human-readable explanations.
 
 ## 3. Package Structure (live)
 
-| Metric | Value |
-| ------ | ----- |
-| **Source files** | 17 |
-| **Test files** | 0 |
+| Metric                 | Value                                           |
+| ---------------------- | ----------------------------------------------- |
+| **Source files**       | 17                                              |
+| **Test files**         | 0                                               |
 | **Source directories** | detectors, explain, forecasters, rules, scoring |
 
 ```
@@ -53,61 +53,61 @@ packages/advisory/src/
 
 ### Value Exports
 
-| Export | Source |
-| ------ | ------ |
-| `buildFingerprint` | `./fingerprint` |
-| `sha256Hex` | `./fingerprint` |
-| `stableStringify` | `./fingerprint` |
-| `detectEwma` | `./detectors/ewma` |
-| `detectCusum` | `./detectors/cusum` |
-| `detectMad` | `./detectors/mad` |
-| `forecastSes` | `./forecasters/ses` |
-| `forecastHolt` | `./forecasters/holt` |
-| `forecastHoltWinters` | `./forecasters/holt-winters` |
-| `zScore` | `./scoring/z-score` |
-| `zScoreFromArray` | `./scoring/z-score` |
-| `robustZScore` | `./scoring/z-score` |
-| `computeStats` | `./scoring/z-score` |
-| `confidenceBands` | `./scoring/confidence` |
-| `predictionInterval` | `./scoring/confidence` |
-| `registerRuleCheck` | `./rules/rule-detector` |
-| `unregisterRuleCheck` | `./rules/rule-detector` |
-| `getRegisteredRuleChecks` | `./rules/rule-detector` |
-| `clearRuleChecks` | `./rules/rule-detector` |
-| `evaluateRuleChecks` | `./rules/rule-detector` |
-| `creditLimitRule` | `./rules/rule-detector` |
-| `agingThresholdRule` | `./rules/rule-detector` |
-| `buildEvidence` | `./evidence` |
-| `verifyEvidenceHash` | `./evidence` |
-| `renderExplanation` | `./explain/render` |
-| `EXPLAIN_VERSION` | `./explain/version` |
-| `TEMPLATES` | `./explain/templates` |
-| `writeAdvisory` | `./writer` |
+| Export                    | Source                       |
+| ------------------------- | ---------------------------- |
+| `buildFingerprint`        | `./fingerprint`              |
+| `sha256Hex`               | `./fingerprint`              |
+| `stableStringify`         | `./fingerprint`              |
+| `detectEwma`              | `./detectors/ewma`           |
+| `detectCusum`             | `./detectors/cusum`          |
+| `detectMad`               | `./detectors/mad`            |
+| `forecastSes`             | `./forecasters/ses`          |
+| `forecastHolt`            | `./forecasters/holt`         |
+| `forecastHoltWinters`     | `./forecasters/holt-winters` |
+| `zScore`                  | `./scoring/z-score`          |
+| `zScoreFromArray`         | `./scoring/z-score`          |
+| `robustZScore`            | `./scoring/z-score`          |
+| `computeStats`            | `./scoring/z-score`          |
+| `confidenceBands`         | `./scoring/confidence`       |
+| `predictionInterval`      | `./scoring/confidence`       |
+| `registerRuleCheck`       | `./rules/rule-detector`      |
+| `unregisterRuleCheck`     | `./rules/rule-detector`      |
+| `getRegisteredRuleChecks` | `./rules/rule-detector`      |
+| `clearRuleChecks`         | `./rules/rule-detector`      |
+| `evaluateRuleChecks`      | `./rules/rule-detector`      |
+| `creditLimitRule`         | `./rules/rule-detector`      |
+| `agingThresholdRule`      | `./rules/rule-detector`      |
+| `buildEvidence`           | `./evidence`                 |
+| `verifyEvidenceHash`      | `./evidence`                 |
+| `renderExplanation`       | `./explain/render`           |
+| `EXPLAIN_VERSION`         | `./explain/version`          |
+| `TEMPLATES`               | `./explain/templates`        |
+| `writeAdvisory`           | `./writer`                   |
 
 ### Type Exports
 
-| Type | Source |
-| ---- | ------ |
-| `AdvisoryCategory` | `./types` |
-| `AdvisoryInput` | `./types` |
-| `AdvisoryMethod` | `./types` |
-| `AdvisoryStatus` | `./types` |
-| `ConfidenceBand` | `./types` |
-| `CusumResult` | `./types` |
-| `EvidenceInput` | `./types` |
-| `EvidenceType` | `./types` |
-| `EwmaResult` | `./types` |
-| `HoltResult` | `./types` |
-| `HoltWintersResult` | `./types` |
-| `MadOutlier` | `./types` |
-| `MadResult` | `./types` |
-| `RobustZScoreResult` | `./types` |
-| `RuleCheck` | `./types` |
-| `RuleCheckResult` | `./types` |
-| `SesResult` | `./types` |
-| `Severity` | `./types` |
-| `TimeSeriesPoint` | `./types` |
-| `ZScoreResult` | `./types` |
+| Type                  | Source     |
+| --------------------- | ---------- |
+| `AdvisoryCategory`    | `./types`  |
+| `AdvisoryInput`       | `./types`  |
+| `AdvisoryMethod`      | `./types`  |
+| `AdvisoryStatus`      | `./types`  |
+| `ConfidenceBand`      | `./types`  |
+| `CusumResult`         | `./types`  |
+| `EvidenceInput`       | `./types`  |
+| `EvidenceType`        | `./types`  |
+| `EwmaResult`          | `./types`  |
+| `HoltResult`          | `./types`  |
+| `HoltWintersResult`   | `./types`  |
+| `MadOutlier`          | `./types`  |
+| `MadResult`           | `./types`  |
+| `RobustZScoreResult`  | `./types`  |
+| `RuleCheck`           | `./types`  |
+| `RuleCheckResult`     | `./types`  |
+| `SesResult`           | `./types`  |
+| `Severity`            | `./types`  |
+| `TimeSeriesPoint`     | `./types`  |
+| `ZScoreResult`        | `./types`  |
 | `WriteAdvisoryResult` | `./writer` |
 
 ---
@@ -123,8 +123,8 @@ packages/advisory/src/
 
 ### External
 
-| Package | Version |
-| ------- | ------- |
+| Package       | Version   |
+| ------------- | --------- |
 | `drizzle-orm` | `^0.44.0` |
 
 ---

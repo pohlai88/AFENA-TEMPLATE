@@ -109,7 +109,7 @@ function insertAtMarker(filePath: string, marker: string, insertion: string, lab
   const dedupLines = insertion
     .trim()
     .split('\n')
-    .filter((l) => l.includes(entityName));
+    .filter((l) => entityName && l.includes(entityName));
   const dedupKey = dedupLines[0]?.trim() ?? insertion.trim().split('\n')[0]?.trim() ?? '';
   if (dedupKey && content.includes(dedupKey)) {
     console.warn(`  SKIP ${label}: already wired`);

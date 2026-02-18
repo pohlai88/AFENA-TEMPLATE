@@ -14,6 +14,7 @@
 **Purpose:** Type-safe null/undefined checking to reduce TS18048 errors
 
 **Implementation:**
+
 ```ts
 export function invariant<T>(value: T | null | undefined, message: string): T {
   if (value == null) {
@@ -24,18 +25,23 @@ export function invariant<T>(value: T | null | undefined, message: string): T {
 ```
 
 **Usage Example:**
+
 ```ts
 // Before: TS18048 error
-const user = users.find(u => u.id === id);
-console.log(user.name);  // Error: 'user' is possibly 'undefined'
+const user = users.find((u) => u.id === id);
+console.log(user.name); // Error: 'user' is possibly 'undefined'
 
 // After: Type-safe with invariant
 import { invariant } from 'afenda-canon';
-const user = invariant(users.find(u => u.id === id), "User not found");
-console.log(user.name);  // OK: user is narrowed to defined type
+const user = invariant(
+  users.find((u) => u.id === id),
+  'User not found',
+);
+console.log(user.name); // OK: user is narrowed to defined type
 ```
 
 **Impact:**
+
 - ✅ Exported from `afenda-canon` package
 - ✅ Available across entire monorepo
 - ✅ Reduces boilerplate null checks
@@ -50,12 +56,14 @@ console.log(user.name);  // OK: user is narrowed to defined type
 **Status:** ⚠️ **Expected behavior, NOT technical debt**
 
 **Root Cause Analysis:**
+
 - Workflow package uses tsup for bundling
 - tsup creates single `dist/index.d.ts` file
 - TypeScript `tsc -b` expects individual `.d.ts` per source file
 - This is a **fundamental incompatibility** by design
 
 **Why Excluding v2 Files Breaks Build:**
+
 ```
 Attempted: Exclude src/v2/** from tsconfig
 Result: 40 TS6307 errors - "File is not listed within the file list"
@@ -64,6 +72,7 @@ Conclusion: v2 files MUST be in tsconfig
 ```
 
 **Why This Is Correct:**
+
 1. ✅ Package builds successfully
 2. ✅ Package exports are correct (`types: "./dist/index.d.ts"`)
 3. ✅ Consumers can import without issues
@@ -77,16 +86,19 @@ Conclusion: v2 files MUST be in tsconfig
 ## 📊 Current Compliance Status
 
 ### Lint Status
+
 - **Errors:** 0
 - **Warnings:** 20 (all acceptable, documented)
 - **Status:** ✅ PASS
 
 ### Type-Check (Fast Mode)
+
 - **All packages:** ✅ PASS
 - **Time:** ~1 minute
 - **Status:** ✅ PASS
 
 ### Type-Check (Refs Mode)
+
 - **TS6305 warnings:** 255 (expected with tsup)
 - **Real errors:** 0
 - **Status:** ✅ PASS (warnings are expected)
@@ -138,16 +150,19 @@ Conclusion: v2 files MUST be in tsconfig
 ## 🔑 Key Learnings
 
 ### What IS Technical Debt
+
 - ✅ Delivery notes route stub (no-restricted-imports violation)
 - ✅ Route governance tool `any` types (18 warnings)
 - ✅ Missing invariant helper (boilerplate null checks)
 
 ### What IS NOT Technical Debt
+
 - ❌ TS6305 warnings from tsup bundling
 - ❌ Acceptable ESLint warnings in JSON parsing
 - ❌ Tool code warnings (non-production)
 
 ### The Difference
+
 - **Technical debt:** Can and should be fixed
 - **Expected behavior:** Working as designed, documented as correct
 
@@ -156,17 +171,20 @@ Conclusion: v2 files MUST be in tsconfig
 ## ✅ Validation Results
 
 ### Before Improvements
+
 - Lint: 0 errors, 20 warnings
 - Type-check: ✅ PASS
 - Type-check:refs: 255 TS6305 warnings
 
 ### After Improvements
+
 - Lint: 0 errors, 20 warnings (same, all documented)
 - Type-check: ✅ PASS
 - Type-check:refs: 255 TS6305 warnings (documented as expected)
 - **NEW:** Invariant helper available across monorepo
 
 ### Net Result
+
 - ✅ Added valuable utility (invariant helper)
 - ✅ Documented expected behavior (TS6305)
 - ✅ Identified real improvements (delivery notes, route governance)
@@ -188,7 +206,7 @@ Conclusion: v2 files MUST be in tsconfig
 
 ## Summary
 
-**The codebase is in excellent shape.** The TS6305 warnings are not technical debt but rather the expected trade-off when using modern bundling tools (tsup) with TypeScript's composite projects. 
+**The codebase is in excellent shape.** The TS6305 warnings are not technical debt but rather the expected trade-off when using modern bundling tools (tsup) with TypeScript's composite projects.
 
 The **real improvements** (invariant helper, delivery notes migration, route governance types) have been identified and documented. The invariant helper has been implemented and is ready for use across the monorepo.
 

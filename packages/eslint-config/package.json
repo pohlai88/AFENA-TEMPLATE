@@ -6,8 +6,14 @@
   "exports": {
     ".": "./index.js",
     "./base": "./base.js",
+    "./base.js": "./base.js",
+    "./base.cjs": "./base.js",
     "./react": "./react.js",
-    "./next": "./next.js"
+    "./react.js": "./react.js",
+    "./react.cjs": "./react.js",
+    "./next": "./next.js",
+    "./next.js": "./next.js",
+    "./next.cjs": "./next.js"
   },
   "dependencies": {
     "@typescript-eslint/eslint-plugin": "catalog:",

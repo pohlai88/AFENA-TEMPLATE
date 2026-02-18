@@ -21,12 +21,12 @@ base, and service analytics.
 
 ```typescript
 import {
-    createArticle,
-    createCase,
-    defineSLA,
-    escalateCase,
-    getCaseMetrics,
-} from "afenda-customer-service";
+  createArticle,
+  createCase,
+  defineSLA,
+  escalateCase,
+  getCaseMetrics,
+} from 'afenda-customer-service';
 ```
 
 ## Services

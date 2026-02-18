@@ -3,6 +3,10 @@
 import { ThemeProvider as NextThemesProvider } from 'next-themes';
 import * as React from 'react';
 
+export type ThemeProviderProps = React.PropsWithChildren<
+  React.ComponentPropsWithoutRef<typeof NextThemesProvider>
+>;
+
 /**
  * Theme provider wrapping `next-themes`.
  *
@@ -18,12 +22,12 @@ import * as React from 'react';
  * </ThemeProvider>
  * ```
  */
-function ThemeProvider({
-  children,
-  ...props
-}: React.ComponentProps<typeof NextThemesProvider>) {
+function ThemeProvider({ children, ...props }: ThemeProviderProps) {
+  // Type assertion needed: next-themes v0.4.x types don't include children in ThemeProviderProps
+  const Provider = NextThemesProvider as React.ComponentType<ThemeProviderProps>;
+  
   return (
-    <NextThemesProvider
+    <Provider
       attribute="class"
       defaultTheme="system"
       enableSystem
@@ -31,8 +35,9 @@ function ThemeProvider({
       {...props}
     >
       {children}
-    </NextThemesProvider>
+    </Provider>
   );
 }
 
 export { ThemeProvider };
+

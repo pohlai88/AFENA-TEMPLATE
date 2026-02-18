@@ -27,14 +27,15 @@ export function useThrottle<T>(value: T, interval = 500): T {
     if (elapsed >= interval) {
       lastUpdated.current = now;
       setThrottledValue(value);
-    } else {
-      const timer = setTimeout(() => {
-        lastUpdated.current = Date.now();
-        setThrottledValue(value);
-      }, interval - elapsed);
-
-      return () => clearTimeout(timer);
+      return undefined; // Explicit return for consistency
     }
+    
+    const timer = setTimeout(() => {
+      lastUpdated.current = Date.now();
+      setThrottledValue(value);
+    }, interval - elapsed);
+
+    return () => clearTimeout(timer);
   }, [value, interval]);
 
   return throttledValue;

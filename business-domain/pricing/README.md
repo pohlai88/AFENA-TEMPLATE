@@ -27,12 +27,12 @@ dynamic optimization, competitive analysis, and margin protection.
 
 ```typescript
 import {
-    analyzePriceRealization,
-    compareCompetitorPricing,
-    createPriceList,
-    getPricingDashboard,
-    optimizePrice,
-} from "afenda-pricing";
+  analyzePriceRealization,
+  compareCompetitorPricing,
+  createPriceList,
+  getPricingDashboard,
+  optimizePrice,
+} from 'afenda-pricing';
 ```
 
 ## Services

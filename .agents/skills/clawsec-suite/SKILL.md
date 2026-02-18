@@ -4,7 +4,7 @@ version: 0.1.2
 description: ClawSec suite manager with embedded advisory-feed monitoring, cryptographic signature verification, approval-gated malicious-skill response, and guided setup for additional security skills.
 homepage: https://clawsec.prompt.security
 clawdis:
-  emoji: "📦"
+  emoji: '📦'
   requires:
     bins: [curl, jq, shasum, openssl]
 ---
@@ -12,6 +12,7 @@ clawdis:
 # ClawSec Suite
 
 This means `clawsec-suite` can:
+
 - monitor the ClawSec advisory feed,
 - track which advisories are new since last check,
 - cross-reference advisories against locally installed skills,
@@ -21,6 +22,7 @@ This means `clawsec-suite` can:
 ## Included vs Optional Protections
 
 ### Built into clawsec-suite
+
 - Embedded feed seed file: `advisories/feed.json`
 - Portable heartbeat workflow in `HEARTBEAT.md`
 - Advisory polling + state tracking + affected-skill checks
@@ -30,6 +32,7 @@ This means `clawsec-suite` can:
 - Dynamic catalog discovery for installable skills: `scripts/discover_skill_catalog.mjs`
 
 ### Installed separately (dynamic catalog)
+
 `clawsec-suite` does not hard-code add-on skill names in this document.
 
 Discover the current catalog from the authoritative index (`https://clawsec.prompt.security/skills/index.json`) at runtime:
@@ -40,6 +43,7 @@ node "$SUITE_DIR/scripts/discover_skill_catalog.mjs"
 ```
 
 Fallback behavior:
+
 - If the remote catalog index is reachable and valid, the suite uses it.
 - If the remote index is unavailable or malformed, the script falls back to suite-local catalog metadata in `skill.json`.
 
@@ -146,6 +150,7 @@ node "$SUITE_DIR/scripts/setup_advisory_cron.mjs"
 ```
 
 What this adds:
+
 - scan on `agent:bootstrap` and `/new` (`command:new`),
 - compare advisory `affected` entries against installed skills,
 - notify when new matches appear,
@@ -163,6 +168,7 @@ node "$SUITE_DIR/scripts/guarded_skill_install.mjs" --skill helper-plus --versio
 ```
 
 Behavior:
+
 - If no advisory match is found, install proceeds.
 - If `--version` is omitted, matching is conservative: any advisory that references the skill name is treated as a match.
 - If advisory match is found, the script prints advisory context and exits with code `42`.
@@ -173,6 +179,7 @@ node "$SUITE_DIR/scripts/guarded_skill_install.mjs" --skill helper-plus --versio
 ```
 
 This enforces:
+
 1. First confirmation: user asked to install.
 2. Second confirmation: user explicitly approves install after seeing advisory details.
 
@@ -238,6 +245,7 @@ Use the suite heartbeat script as the single periodic security check entrypoint:
 - `skills/clawsec-suite/HEARTBEAT.md`
 
 It handles:
+
 - suite update checks,
 - feed polling,
 - new-advisory detection,
@@ -313,12 +321,12 @@ The advisory guardian resolves the suppression config using the same priority or
 
 ### Required Fields per Suppression Entry
 
-| Field | Description | Example |
-|-------|-------------|---------|
-| `checkId` | Advisory ID to suppress | `CVE-2026-25593` |
-| `skill` | Affected skill name | `clawsec-suite` |
-| `reason` | Justification for audit trail (required) | `First-party tooling, reviewed by security team` |
-| `suppressedAt` | ISO 8601 date (YYYY-MM-DD) | `2026-02-15` |
+| Field          | Description                              | Example                                          |
+| -------------- | ---------------------------------------- | ------------------------------------------------ |
+| `checkId`      | Advisory ID to suppress                  | `CVE-2026-25593`                                 |
+| `skill`        | Affected skill name                      | `clawsec-suite`                                  |
+| `reason`       | Justification for audit trail (required) | `First-party tooling, reviewed by security team` |
+| `suppressedAt` | ISO 8601 date (YYYY-MM-DD)               | `2026-02-15`                                     |
 
 ### Shared Config with Audit Pipeline
 

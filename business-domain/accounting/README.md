@@ -63,35 +63,25 @@ authorization and audit logging.
 ## Quick Start
 
 ```typescript
-import { db } from "afenda-database";
-import {
-  assertPeriodOpen,
-  calculateTaxForLine,
-  lookupFxRate,
-} from "afenda-accounting";
+import { db } from 'afenda-database';
+import { assertPeriodOpen, calculateTaxForLine, lookupFxRate } from 'afenda-accounting';
 
 // Calculate tax for a line item
 const taxResult = await calculateTaxForLine(
   db,
-  "org-123",
-  "GST-6",
+  'org-123',
+  'GST-6',
   100000, // $1000.00 in minor units
-  "2026-02-17",
+  '2026-02-17',
 );
 // => { taxCode: 'GST-6', rate: '6.000000', taxAmount: 6000, roundingMethod: 'half_up' }
 
 // Look up FX rate
-const fxRate = await lookupFxRate(
-  db,
-  "org-123",
-  "USD",
-  "MYR",
-  "2026-02-17",
-);
+const fxRate = await lookupFxRate(db, 'org-123', 'USD', 'MYR', '2026-02-17');
 // => { rate: '4.725000', effectiveDate: '2026-02-17', source: 'manual' }
 
 // Validate fiscal period
-await assertPeriodOpen(db, "org-123", "company-456", "2026-02-28");
+await assertPeriodOpen(db, 'org-123', 'company-456', '2026-02-28');
 // Throws if period is closed or doesn't exist
 ```
 

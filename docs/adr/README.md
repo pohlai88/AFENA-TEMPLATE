@@ -41,14 +41,14 @@ ADRs are numbered sequentially and use kebab-case:
 
 ## Current ADRs
 
-| Number | Title | Status |
-|--------|-------|--------|
-| [001](001-use-neon-postgres.md) | Use Neon Postgres for Database | Accepted |
-| [002](002-monorepo-with-turborepo.md) | Monorepo with Turborepo | Accepted |
-| [003](003-typescript-strict-mode.md) | TypeScript Strict Mode | Accepted |
+| Number                                    | Title                           | Status   |
+| ----------------------------------------- | ------------------------------- | -------- |
+| [001](001-use-neon-postgres.md)           | Use Neon Postgres for Database  | Accepted |
+| [002](002-monorepo-with-turborepo.md)     | Monorepo with Turborepo         | Accepted |
+| [003](003-typescript-strict-mode.md)      | TypeScript Strict Mode          | Accepted |
 | [004](004-opentelemetry-observability.md) | OpenTelemetry for Observability | Accepted |
-| [005](005-shared-package-structure.md) | Shared Package Structure | Accepted |
-| [006](006-neon-auth-authentication.md) | Neon Auth for Authentication | Accepted |
+| [005](005-shared-package-structure.md)    | Shared Package Structure        | Accepted |
+| [006](006-neon-auth-authentication.md)    | Neon Auth for Authentication    | Accepted |
 
 ## Process
 

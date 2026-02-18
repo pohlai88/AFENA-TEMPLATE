@@ -22,16 +22,16 @@
     "afenda-inventory": "workspace:*",
     "afenda-logger": "workspace:*",
     "afenda-workflow": "workspace:*",
-    "drizzle-orm": "^0.44.0",
+    "drizzle-orm": "catalog:",
     "fast-json-patch": "catalog:",
-    "ioredis": "^5.4.1"
+    "ioredis": "catalog:"
   },
   "devDependencies": {
     "@types/node": "catalog:",
-    "@types/pg": "^8.16.0",
+    "@types/pg": "catalog:",
     "afenda-eslint-config": "workspace:^",
     "afenda-typescript-config": "workspace:*",
-    "pg": "^8.18.0",
+    "pg": "catalog:",
     "tslib": "catalog:",
     "tsup": "catalog:",
     "typescript": "catalog:"

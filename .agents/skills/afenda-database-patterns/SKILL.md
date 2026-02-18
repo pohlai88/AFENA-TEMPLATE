@@ -1,10 +1,13 @@
 # afenda-database-patterns
 
 ## Description
+
 Database schema patterns, migrations, Row-Level Security (RLS), and Drizzle ORM conventions for AFENDA-NEXUS.
 
 ## Trigger Conditions
+
 Use this skill when:
+
 - Creating or modifying database schemas
 - Writing migrations
 - Setting up RLS policies
@@ -17,6 +20,7 @@ Use this skill when:
 ## Overview
 
 AFENDA-NEXUS uses **Neon Postgres** with **Drizzle ORM** for database management. The database architecture enforces:
+
 - **Multi-tenancy**: Row-Level Security (RLS) on all domain tables
 - **Composite Primary Keys**: `(org_id, id)` for data integrity
 - **Type Safety**: Drizzle schema generates TypeScript types
@@ -31,12 +35,14 @@ AFENDA-NEXUS uses **Neon Postgres** with **Drizzle ORM** for database management
 **All domain tables use composite PK: `(org_id, id)`**
 
 **Why**:
+
 - Enforces tenant isolation at database level
 - Prevents cross-tenant data references
 - Improves query performance with org_id prefix
 - Enables partition-pruning in future
 
 **Pattern**:
+
 ```typescript
 import { primaryKey } from 'drizzle-orm/pg-core';
 
@@ -46,13 +52,12 @@ export const contacts = pgTable(
     ...erpEntityColumns, // includes orgId, id
     name: text('name').notNull(),
   },
-  (table) => [
-    primaryKey({ columns: [table.orgId, table.id] }),
-  ],
+  (table) => [primaryKey({ columns: [table.orgId, table.id] })],
 );
 ```
 
 **Migration Pattern**:
+
 ```sql
 ALTER TABLE contacts DROP CONSTRAINT IF EXISTS contacts_pkey;
 ALTER TABLE contacts ADD CONSTRAINT contacts_pkey PRIMARY KEY (org_id, id);
@@ -65,7 +70,9 @@ ALTER TABLE contacts ADD CONSTRAINT contacts_pkey PRIMARY KEY (org_id, id);
 AFENDA uses **composition helpers** for consistent column sets:
 
 #### `baseEntityColumns`
+
 Foundation for ALL entities:
+
 ```typescript
 {
   orgId: text('org_id').notNull(),
@@ -79,7 +86,9 @@ Foundation for ALL entities:
 ```
 
 #### `erpEntityColumns`
+
 Adds `customData` JSONB for custom fields:
+
 ```typescript
 {
   ...baseEntityColumns,
@@ -88,7 +97,9 @@ Adds `customData` JSONB for custom fields:
 ```
 
 #### `withCompanyScope()`
+
 Explicit company ownership (RULE C-01):
+
 ```typescript
 // Only add company_id if table meets one of:
 // - LEGAL: Legal ownership / statutory reporting
@@ -102,7 +113,9 @@ export const salesOrders = pgTable('sales_orders', {
 ```
 
 #### `withSiteScope()`
+
 For inventory/warehouse operations:
+
 ```typescript
 export const stockBalances = pgTable('stock_balances', {
   ...withCompanySiteScope({ companyScope: 'OPERATIONS' }),
@@ -118,7 +131,9 @@ export const stockBalances = pgTable('stock_balances', {
 **EVERY domain table has RLS policies enforcing tenant isolation.**
 
 #### `tenantPolicy()`
+
 Standard multi-tenant RLS:
+
 ```typescript
 import { tenantPolicy } from '../helpers/tenant-policy';
 
@@ -136,6 +151,7 @@ export const companies = pgTable(
 ```
 
 **Generates SQL policies**:
+
 ```sql
 CREATE POLICY contacts_tenant_policy ON contacts
   FOR ALL
@@ -145,7 +161,9 @@ CREATE POLICY contacts_tenant_policy ON contacts
 ```
 
 #### `ownerPolicy()`
+
 User-scoped access within organization (opt-in):
+
 ```typescript
 import { ownerPolicy } from '../helpers/tenant-policy';
 
@@ -171,6 +189,7 @@ export const apiKeys = pgTable(
 ### 4. Indexes
 
 **Every table should have cursor pagination index**:
+
 ```typescript
 import { desc, index } from 'drizzle-orm/pg-core';
 
@@ -182,23 +201,21 @@ export const contacts = pgTable(
   },
   (table) => [
     primaryKey({ columns: [table.orgId, table.id] }),
-    index('contacts_org_created_id_idx').on(
-      table.orgId,
-      desc(table.createdAt),
-      desc(table.id)
-    ),
+    index('contacts_org_created_id_idx').on(table.orgId, desc(table.createdAt), desc(table.id)),
     tenantPolicy(table),
   ],
 );
 ```
 
 **Why this pattern**:
+
 - Supports keyset (cursor) pagination
 - Composite sort: `ORDER BY org_id, created_at DESC, id DESC`
 - Covers most list queries
 - Prevents sequential scans
 
 **Additional Indexes**:
+
 ```typescript
 // Unique constraint
 index('contacts_email_org_idx').on(table.orgId, table.email).unique(),
@@ -215,6 +232,7 @@ index('contacts_search_idx').using('gin', sql`to_tsvector('english', name)`),
 ### 5. Foreign Key Constraints
 
 **Pattern**: Reference composite PK `(org_id, id)`:
+
 ```typescript
 import { foreignKey } from 'drizzle-orm/pg-core';
 
@@ -241,6 +259,7 @@ export const salesOrderLines = pgTable(
 ```
 
 **Rules**:
+
 - Always include `org_id` in FK (prevents cross-tenant references)
 - Use `.onDelete('cascade')` for parent-child relationships
 - Use `.onDelete('restrict')` for master data (default)
@@ -250,6 +269,7 @@ export const salesOrderLines = pgTable(
 ### 6. Check Constraints
 
 **Validation at database level**:
+
 ```typescript
 import { check, sql } from 'drizzle-orm';
 
@@ -268,6 +288,7 @@ export const companies = pgTable(
 ```
 
 **Common Checks**:
+
 ```typescript
 // Positive values
 check('amount_positive', sql`amount > 0`),
@@ -299,6 +320,7 @@ check('requires_email_or_phone', sql`email IS NOT NULL OR phone IS NOT NULL`),
 ### Common Migration Operations
 
 #### Add Table
+
 ```sql
 -- 0078_new_feature.sql
 CREATE TABLE invoices (
@@ -330,6 +352,7 @@ CREATE POLICY invoices_tenant_policy ON invoices
 ---
 
 #### Add Column
+
 ```sql
 -- Add nullable first
 ALTER TABLE contacts ADD COLUMN email text;
@@ -347,6 +370,7 @@ CREATE INDEX contacts_email_idx ON contacts (org_id, email);
 ---
 
 #### Rename Column
+
 ```sql
 ALTER TABLE contacts RENAME COLUMN old_name TO new_name;
 ```
@@ -354,6 +378,7 @@ ALTER TABLE contacts RENAME COLUMN old_name TO new_name;
 ---
 
 #### Change Type
+
 ```sql
 -- Safe: text -> varchar
 ALTER TABLE contacts ALTER COLUMN phone TYPE varchar(20);
@@ -365,6 +390,7 @@ ALTER TABLE items ALTER COLUMN quantity TYPE integer USING quantity::integer;
 ---
 
 #### Drop Column (Backward Compatible)
+
 ```sql
 -- Step 1: Deploy code that doesn't use column
 -- Step 2: Drop column in next migration
@@ -374,6 +400,7 @@ ALTER TABLE contacts DROP COLUMN IF EXISTS deprecated_field;
 ---
 
 #### Composite PK Migration
+
 ```sql
 -- Drop old single-column PK
 ALTER TABLE contacts DROP CONSTRAINT IF EXISTS contacts_pkey;
@@ -434,8 +461,18 @@ ALTER TABLE users ALTER COLUMN full_name SET NOT NULL;
 **File Structure**: `packages/database/src/schema/<entity>.ts`
 
 **Template**:
+
 ```typescript
-import { pgTable, text, uuid, integer, timestamp, jsonb, index, primaryKey } from 'drizzle-orm/pg-core';
+import {
+  pgTable,
+  text,
+  uuid,
+  integer,
+  timestamp,
+  jsonb,
+  index,
+  primaryKey,
+} from 'drizzle-orm/pg-core';
 import { sql, desc } from 'drizzle-orm';
 import { erpEntityColumns } from '../helpers/erp-entity';
 import { tenantPolicy } from '../helpers/tenant-policy';
@@ -467,6 +504,7 @@ export type NewItem = typeof items.$inferInsert;
 ### Query Patterns
 
 #### Select with RLS
+
 ```typescript
 import { db } from '@afenda/database/db';
 import { items } from '@afenda/database/schema';
@@ -486,6 +524,7 @@ const activeItems = await db
 ---
 
 #### Insert
+
 ```typescript
 import { v4 as uuidv4 } from 'uuid';
 
@@ -504,32 +543,29 @@ const newItem = await db
 ---
 
 #### Update
+
 ```typescript
 await db
   .update(items)
   .set({ unitPrice: 1200, updatedAt: new Date() })
-  .where(and(
-    eq(items.orgId, orgId),
-    eq(items.id, itemId)
-  ));
+  .where(and(eq(items.orgId, orgId), eq(items.id, itemId)));
 ```
 
 ---
 
 #### Delete (Soft)
+
 ```typescript
 await db
   .update(items)
   .set({ deletedAt: new Date() })
-  .where(and(
-    eq(items.orgId, orgId),
-    eq(items.id, itemId)
-  ));
+  .where(and(eq(items.orgId, orgId), eq(items.id, itemId)));
 ```
 
 ---
 
 #### Join Queries
+
 ```typescript
 import { salesOrders, salesOrderLines, items } from '@afenda/database/schema';
 
@@ -542,17 +578,11 @@ const ordersWithLines = await db
   .from(salesOrders)
   .leftJoin(
     salesOrderLines,
-    and(
-      eq(salesOrders.orgId, salesOrderLines.orgId),
-      eq(salesOrders.id, salesOrderLines.orderId)
-    )
+    and(eq(salesOrders.orgId, salesOrderLines.orgId), eq(salesOrders.id, salesOrderLines.orderId)),
   )
   .leftJoin(
     items,
-    and(
-      eq(salesOrderLines.orgId, items.orgId),
-      eq(salesOrderLines.itemId, items.id)
-    )
+    and(eq(salesOrderLines.orgId, items.orgId), eq(salesOrderLines.itemId, items.id)),
   )
   .where(eq(salesOrders.orgId, orgId));
 ```
@@ -579,6 +609,7 @@ type ItemUpdate = Partial<Item>;
 ## Best Practices
 
 ### 1. Always Include org_id in Indexes
+
 ```typescript
 // ✅ Good - org_id first
 index('items_code_idx').on(table.orgId, table.itemCode),
@@ -590,6 +621,7 @@ index('items_code_idx').on(table.itemCode),
 ---
 
 ### 2. Use Composite FK
+
 ```typescript
 // ✅ Good - composite FK prevents cross-tenant references
 foreignKey({
@@ -607,28 +639,24 @@ foreignKey({
 ---
 
 ### 3. RLS on All Domain Tables
+
 ```typescript
 //✅ Good - tenant policy enforced
-export const contacts = pgTable(
-  'contacts',
-  { ...erpEntityColumns },
-  (table) => [
-    primaryKey({ columns: [table.orgId, table.id] }),
-    tenantPolicy(table),
-  ],
-);
+export const contacts = pgTable('contacts', { ...erpEntityColumns }, (table) => [
+  primaryKey({ columns: [table.orgId, table.id] }),
+  tenantPolicy(table),
+]);
 
 // ❌ Bad - no RLS (security vulnerability)
-export const contacts = pgTable(
-  'contacts',
-  { ...erpEntityColumns },
-  (table) => [primaryKey({ columns: [table.orgId, table.id] })],
-);
+export const contacts = pgTable('contacts', { ...erpEntityColumns }, (table) => [
+  primaryKey({ columns: [table.orgId, table.id] }),
+]);
 ```
 
 ---
 
 ### 4. Migration Naming
+
 ```bash
 # ✅ Good - descriptive names
 0078_add_invoice_tables.sql
@@ -642,6 +670,7 @@ export const contacts = pgTable(
 ---
 
 ### 5. Test Migrations
+
 ```bash
 # Apply migration
 pnpm drizzle-kit migrate
@@ -671,6 +700,7 @@ export const schema = {
 ```
 
 This registry:
+
 - Powers Drizzle migrations
 - Generates TypeScript types
 - Enables schema introspection
@@ -692,18 +722,20 @@ This registry:
 ## Quick Reference
 
 ### Column Types
+
 ```typescript
-text('name')                    // VARCHAR(unlimited)
-varchar('code', { length: 50 }) // VARCHAR(50)
-integer('quantity')             // INTEGER
-numeric('amount', { precision: 15, scale: 2 }) // DECIMAL(15,2)
-boolean('is_active')            // BOOLEAN
-timestamp('created_at', { withTimezone: true }) // TIMESTAMPTZ
-uuid('id')                      // UUID
-jsonb('data')                   // JSONB
+text('name'); // VARCHAR(unlimited)
+varchar('code', { length: 50 }); // VARCHAR(50)
+integer('quantity'); // INTEGER
+numeric('amount', { precision: 15, scale: 2 }); // DECIMAL(15,2)
+boolean('is_active'); // BOOLEAN
+timestamp('created_at', { withTimezone: true }); // TIMESTAMPTZ
+uuid('id'); // UUID
+jsonb('data'); // JSONB
 ```
 
 ### Constraints
+
 ```typescript
 .notNull()                      // NOT NULL
 .default(value)                 // DEFAULT value
@@ -714,9 +746,10 @@ check('name', sql`...`)        // CHECK constraint
 ```
 
 ### Indexes
+
 ```typescript
-index('name').on(col1, col2)            // Regular index
-index('name').on(col).unique()          // Unique index
-index('name').using('gin', expression)  // GIN index (full-text)
-index('name').using('gist', expression) // GIST index (geometry)
+index('name').on(col1, col2); // Regular index
+index('name').on(col).unique(); // Unique index
+index('name').using('gin', expression); // GIN index (full-text)
+index('name').using('gist', expression); // GIST index (geometry)
 ```

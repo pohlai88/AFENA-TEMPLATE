@@ -1,0 +1,31 @@
+{
+    "name": "afenda-export",
+    "version": "0.1.0",
+    "private": true,
+    "type": "module",
+    "main": "./src/index.ts",
+    "types": "./src/index.ts",
+    "exports": {
+        ".": {
+            "types": "./src/index.ts",
+            "default": "./src/index.ts"
+        }
+    },
+    "scripts": {
+        "type-check": "tsc --noEmit",
+        "lint": "eslint . --ext .js,.jsx,.ts,.tsx --cache --concurrency=auto",
+        "lint:ci": "eslint . --ext .js,.jsx,.ts,.tsx --rule 'import/no-cycle: error'",
+        "lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx --cache --fix"
+    },
+    "dependencies": {
+        "afenda-canon": "workspace:*",
+        "afenda-database": "workspace:*",
+        "drizzle-orm": "catalog:"
+    },
+    "devDependencies": {
+        "@types/node": "catalog:",
+        "afenda-eslint-config": "workspace:^",
+        "afenda-typescript-config": "workspace:*",
+        "typescript": "catalog:"
+    }
+}

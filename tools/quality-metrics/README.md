@@ -350,7 +350,7 @@ name: Quality Monitor
 
 on:
   schedule:
-    - cron: "0 */6 * * *" # Every 6 hours
+    - cron: '0 */6 * * *' # Every 6 hours
 
 jobs:
   monitor:
@@ -418,7 +418,7 @@ Track quality improvements over sprints:
 
 ```typescript
 // scripts/sprint-quality-report.ts
-import { readFile } from "fs/promises";
+import { readFile } from 'fs/promises';
 
 interface SprintMetrics {
   sprint: number;
@@ -429,8 +429,8 @@ interface SprintMetrics {
 }
 
 async function generateSprintReport() {
-  const history = await readFile(".quality-metrics/history.jsonl", "utf-8");
-  const metrics = history.split("\n").filter(Boolean).map(JSON.parse);
+  const history = await readFile('.quality-metrics/history.jsonl', 'utf-8');
+  const metrics = history.split('\n').filter(Boolean).map(JSON.parse);
 
   // Calculate sprint progress
   console.table(sprints);
@@ -620,7 +620,7 @@ Add custom metrics to track domain-specific quality indicators:
 
 ```typescript
 // src/collectors/custom-metrics.ts
-import { QualityMetrics } from "./types";
+import { QualityMetrics } from './types';
 
 export async function collectCustomMetrics(): Promise<Partial<QualityMetrics>> {
   return {
@@ -638,7 +638,7 @@ export async function collectCustomMetrics(): Promise<Partial<QualityMetrics>> {
 }
 
 async function measureApiResponseTime(): Promise<number> {
-  const endpoints = ["/api/health", "/api/status"];
+  const endpoints = ['/api/health', '/api/status'];
   const times = await Promise.all(
     endpoints.map(async (endpoint) => {
       const start = Date.now();
@@ -653,15 +653,15 @@ async function measureApiResponseTime(): Promise<number> {
 Register custom collector in `collect.ts`:
 
 ```typescript
-import { collectCustomMetrics } from "./collectors/custom-metrics";
+import { collectCustomMetrics } from './collectors/custom-metrics';
 
 export async function collect() {
   const metrics = {
-    ...await collectCoverage(),
-    ...await collectBuild(),
-    ...await collectCodeQuality(),
-    ...await collectGit(),
-    ...await collectCustomMetrics(), // Add custom metrics
+    ...(await collectCoverage()),
+    ...(await collectBuild()),
+    ...(await collectCodeQuality()),
+    ...(await collectGit()),
+    ...(await collectCustomMetrics()), // Add custom metrics
   };
 
   await saveMetrics(metrics);
@@ -676,7 +676,7 @@ Implement custom quality scoring:
 
 ```typescript
 // src/scoring/custom-scorer.ts
-import { QualityMetrics, QualityScore } from "./types";
+import { QualityMetrics, QualityScore } from './types';
 
 export function calculateCustomScore(metrics: QualityMetrics): QualityScore {
   // Custom weighting
@@ -716,41 +716,39 @@ Export metrics to external monitoring tools:
 
 ```typescript
 // scripts/export-to-datadog.ts
-import { readFile } from "fs/promises";
+import { readFile } from 'fs/promises';
 
 async function exportToDatadog() {
-  const metrics = JSON.parse(
-    await readFile(".quality-metrics/latest.json", "utf-8"),
-  );
+  const metrics = JSON.parse(await readFile('.quality-metrics/latest.json', 'utf-8'));
 
   const datadogMetrics = [
     {
-      metric: "afenda.quality.overall_score",
+      metric: 'afenda.quality.overall_score',
       points: [[Date.now() / 1000, metrics.scores.overall]],
-      tags: ["env:production", "team:platform"],
+      tags: ['env:production', 'team:platform'],
     },
     {
-      metric: "afenda.quality.coverage",
+      metric: 'afenda.quality.coverage',
       points: [[Date.now() / 1000, metrics.coverage.lines]],
-      tags: ["env:production", "team:platform"],
+      tags: ['env:production', 'team:platform'],
     },
     {
-      metric: "afenda.quality.build_time",
+      metric: 'afenda.quality.build_time',
       points: [[Date.now() / 1000, metrics.build.duration]],
-      tags: ["env:production", "team:platform"],
+      tags: ['env:production', 'team:platform'],
     },
   ];
 
-  await fetch("https://api.datadoghq.com/api/v1/series", {
-    method: "POST",
+  await fetch('https://api.datadoghq.com/api/v1/series', {
+    method: 'POST',
     headers: {
-      "Content-Type": "application/json",
-      "DD-API-KEY": process.env.DATADOG_API_KEY!,
+      'Content-Type': 'application/json',
+      'DD-API-KEY': process.env.DATADOG_API_KEY!,
     },
     body: JSON.stringify({ series: datadogMetrics }),
   });
 
-  console.log("✅ Exported metrics to Datadog");
+  console.log('✅ Exported metrics to Datadog');
 }
 
 exportToDatadog();
@@ -787,16 +785,13 @@ export async function analyzeIncremental() {
 }
 
 // 3. Caching
-import { createHash } from "crypto";
-import { readFile, writeFile } from "fs/promises";
+import { createHash } from 'crypto';
+import { readFile, writeFile } from 'fs/promises';
 
 const cache = new Map<string, any>();
 
-export async function collectWithCache(
-  key: string,
-  collector: () => Promise<any>,
-) {
-  const hash = createHash("md5").update(key).digest("hex");
+export async function collectWithCache(key: string, collector: () => Promise<any>) {
+  const hash = createHash('md5').update(key).digest('hex');
 
   if (cache.has(hash)) {
     return cache.get(hash);

@@ -1,7 +1,7 @@
 # afenda CLI & Meta Engine — Architecture Reference
 
 > **Auto-generated** by `afenda readme gen` at 2026-02-16T12:44:12Z. Do not edit — regenerate instead.
-> **Package:** `@afenda/cli` (`tools/afena-cli`)
+> **Package:** `@afenda/cli` (`tools/afenda-cli`)
 > **Purpose:** Capability Truth Ledger — scan, check, generate, fix. README generation. Entity scaffolding.
 
 ---
@@ -32,14 +32,14 @@ Architecture documents are auto-generated from live codebase introspection durin
 
 ## 3. Package Structure (live)
 
-| Metric | Value |
-| ------ | ----- |
-| **Source files** | 81 |
-| **Test files** | 0 |
+| Metric                 | Value                                                     |
+| ---------------------- | --------------------------------------------------------- |
+| **Source files**       | 81                                                        |
+| **Test files**         | 0                                                         |
 | **Source directories** | bundle, capability, checks, core, discovery, docs, readme |
 
 ```
-tools/afena-cli/src/
+tools/afenda-cli/src/
 ├── bundle/
 ├── capability/
 ├── checks/
@@ -61,17 +61,17 @@ tools/afena-cli/src/
 
 ### External
 
-| Package | Version |
-| ------- | ------- |
-| `commander` | `catalog:` |
+| Package       | Version    |
+| ------------- | ---------- |
+| `commander`   | `catalog:` |
 | `cosmiconfig` | `catalog:` |
-| `execa` | `catalog:` |
-| `fast-glob` | `catalog:` |
-| `listr2` | `catalog:` |
-| `picocolors` | `catalog:` |
-| `semver` | `catalog:` |
-| `strip-ansi` | `catalog:` |
-| `zod` | `catalog:` |
+| `execa`       | `catalog:` |
+| `fast-glob`   | `catalog:` |
+| `listr2`      | `catalog:` |
+| `picocolors`  | `catalog:` |
+| `semver`      | `catalog:` |
+| `strip-ansi`  | `catalog:` |
+| `zod`         | `catalog:` |
 
 ---
 

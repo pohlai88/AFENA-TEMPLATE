@@ -49,17 +49,17 @@ authorization and audit logging.
 ## Quick Start
 
 ```typescript
-import { db } from "afenda-database";
-import { evaluateDiscounts, priceLineItem, resolvePrice } from "afenda-crm";
+import { db } from 'afenda-database';
+import { evaluateDiscounts, priceLineItem, resolvePrice } from 'afenda-crm';
 
 // Resolve unit price for a product
 const price = await resolvePrice(
   db,
-  "org-123",
-  "product-456",
+  'org-123',
+  'product-456',
   10, // quantity
-  "2026-02-17",
-  "customer-789", // optional
+  '2026-02-17',
+  'customer-789', // optional
 );
 // => {
 //   priceMinor: 125000,
@@ -72,11 +72,11 @@ const price = await resolvePrice(
 // Evaluate applicable discounts
 const discounts = await evaluateDiscounts(
   db,
-  "org-123",
+  'org-123',
   1250000, // subtotal in minor units ($12,500.00)
-  "2026-02-17",
-  "product-456", // optional
-  "customer-789", // optional
+  '2026-02-17',
+  'product-456', // optional
+  'customer-789', // optional
 );
 // => [
 //   {
@@ -92,11 +92,11 @@ const discounts = await evaluateDiscounts(
 // Full line pricing (convenience function)
 const lineResult = await priceLineItem(
   db,
-  "org-123",
-  "product-456",
+  'org-123',
+  'product-456',
   10,
-  "2026-02-17",
-  "customer-789",
+  '2026-02-17',
+  'customer-789',
 );
 // => {
 //   unitPriceMinor: 125000,

@@ -20,12 +20,12 @@
     "afenda-database": "workspace:*",
     "afenda-workflow": "workspace:*",
     "afenda-receiving": "workspace:*",
-    "drizzle-orm": "^0.44.0",
-    "zod": "^3.24.1"
+    "drizzle-orm": "catalog:",
+    "zod": "catalog:"
   },
   "devDependencies": {
     "afenda-eslint-config": "workspace:*",
     "afenda-typescript-config": "workspace:*",
-    "typescript": "^5.8.2"
+    "typescript": "catalog:"
   }
 }

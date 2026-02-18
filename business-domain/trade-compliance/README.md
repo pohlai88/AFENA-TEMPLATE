@@ -25,12 +25,12 @@ calculation, restricted party screening, and trade documentation management.
 
 ```typescript
 import {
-    createCustomsDeclaration,
-    calculateLandedCost,
-    screenRestrictedParty,
-    generateTradeDocuments,
-    getTradeMetrics,
-} from "afenda-trade-compliance";
+  createCustomsDeclaration,
+  calculateLandedCost,
+  screenRestrictedParty,
+  generateTradeDocuments,
+  getTradeMetrics,
+} from 'afenda-trade-compliance';
 ```
 
 ## Services

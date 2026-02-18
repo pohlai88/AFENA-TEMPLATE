@@ -43,6 +43,8 @@
     "bundle:dry": "pnpm afenda bundle --dry-run",
     "housekeeping": "pnpm afenda housekeeping",
     "validate:deps": "tsx tools/scripts/validate-deps.ts",
+    "validate:catalog": "tsx tools/scripts/validate-catalog.ts",
+    "migrate:catalog": "tsx tools/scripts/migrate-to-catalog.ts",
     "housekeeping:fix": "pnpm afenda housekeeping --fix",
     "ci:check": "pnpm afenda housekeeping",
     "ci:housekeeping": "pnpm bundle",
@@ -117,6 +119,11 @@
     "pnpm": ">=9.5.0"
   },
   "packageManager": "pnpm@9.15.9",
+  "pnpm": {
+    "overrides": {
+      "es-abstract": "^1.23.3"
+    }
+  },
   "dependencies": {
     "@xyflow/react": "^12.10.0"
   }

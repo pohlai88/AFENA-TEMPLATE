@@ -40,7 +40,7 @@ for code generation, validation, documentation, and quality assurance.
 
 ### Quick Stats
 
-- **3 Core Tools** - afena-cli, quality-metrics, scripts
+- **3 Core Tools** - afenda-cli, quality-metrics, scripts
 - **20+ Commands** - Full-featured CLI toolkit
 - **Auto-Generated Docs** - Always up-to-date documentation
 - **CI-Integrated** - Automated quality checks in GitHub Actions
@@ -324,7 +324,7 @@ tools/
 ├── START_HERE.md                # Getting started guide
 ├── GUIDE.md                     # Development guide
 │
-├── afena-cli/                   # 🎯 Unified CLI tool
+├── afenda-cli/                   # 🎯 Unified CLI tool
 │   ├── src/
 │   │   ├── cli.ts               # Main CLI entry point
 │   │   ├── types.ts             # Zod schemas & TypeScript types
@@ -392,7 +392,7 @@ tools/
 
 ## Core Tools
 
-### 1. afena-cli
+### 1. afenda-cli
 
 **Purpose**: Unified command-line interface for all development operations
 
@@ -415,7 +415,7 @@ afenda bundle                # Run all maintenance tasks
 afenda housekeeping          # Run invariant checks
 ```
 
-**Documentation**: [afena-cli/README.md](./afena-cli/README.md)
+**Documentation**: [afenda-cli/README.md](./afenda-cli/README.md)
 
 ---
 
@@ -1069,8 +1069,8 @@ The following checks run automatically on every PR:
 1. **Make changes** to source files
 2. **Run lint/type-check**:
    ```bash
-   pnpm --filter afena-cli lint:fix
-   pnpm --filter afena-cli type-check
+   pnpm --filter afenda-cli lint:fix
+   pnpm --filter afenda-cli type-check
    ```
 3. **Test changes**:
    ```bash
@@ -1117,10 +1117,10 @@ pnpm --filter quality-metrics analyze
 
 - [START_HERE.md](./START_HERE.md) - Getting started guide
 - [GUIDE.md](./GUIDE.md) - Detailed development guide
-- [afena-cli/README.md](./afena-cli/README.md) - CLI tool documentation
+- [afenda-cli/README.md](./afenda-cli/README.md) - CLI tool documentation
 - [quality-metrics/README.md](./quality-metrics/README.md) - Quality metrics
   guide
-- [.agents/skills/afena-cli-usage/](../.agents/skills/afena-cli-usage/) - AI
+- [.agents/skills/afenda-cli-usage/](../.agents/skills/afenda-cli-usage/) - AI
   agent skill
 
 ---
@@ -1136,4 +1136,3 @@ pnpm --filter quality-metrics analyze
 **Maintained by**: AFENDA-NEXUS Team\
 **Last Updated**: February 17, 2026\
 **Auto-Generated**: Run `pnpm afenda tools-docs` to regenerate
-

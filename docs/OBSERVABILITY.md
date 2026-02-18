@@ -228,17 +228,20 @@ OTEL_EXPORTER_OTLP_HEADERS={"api-key":"YOUR_LICENSE_KEY"}
 ### 1. Sampling Strategy
 
 **Development**: 100% sampling
+
 ```bash
 OTEL_TRACES_SAMPLER=always_on
 ```
 
 **Production**: 10% sampling (adjust based on traffic)
+
 ```bash
 OTEL_TRACES_SAMPLER=parentbased_traceidratio
 OTEL_TRACES_SAMPLER_ARG=0.1
 ```
 
 **High-traffic**: 1% sampling
+
 ```bash
 OTEL_TRACES_SAMPLER_ARG=0.01
 ```
@@ -248,11 +251,13 @@ OTEL_TRACES_SAMPLER_ARG=0.01
 Use consistent, hierarchical names:
 
 ✅ **Good**:
+
 - `api.users.create`
 - `db.query.users.insert`
 - `service.email.send`
 
 ❌ **Bad**:
+
 - `createUser`
 - `queryDB`
 - `emailService`
@@ -350,24 +355,28 @@ const response = await fetchWithCorrelation('https://api.example.com/users');
 ### Key Metrics to Track
 
 **Application Performance**:
+
 - Request rate (requests/sec)
 - Error rate (% of requests)
 - P50, P95, P99 latency
 - Apdex score
 
 **Database**:
+
 - Query duration (P95, P99)
 - Connection pool utilization
 - Slow query count
 - Database errors
 
 **Business Metrics**:
+
 - Orders created
 - User signups
 - Revenue processed
 - API usage by tenant
 
 **Infrastructure**:
+
 - Memory usage (heap, RSS)
 - CPU utilization
 - Event loop lag
@@ -376,12 +385,14 @@ const response = await fetchWithCorrelation('https://api.example.com/users');
 ### Example Queries
 
 **Lightstep** (OpenTelemetry):
+
 ```
 span.operation = "api.orders.create"
 AND http.status_code >= 500
 ```
 
 **Honeycomb**:
+
 ```
 WHERE http.route = "/api/orders"
 GROUP BY http.status_code
@@ -389,6 +400,7 @@ CALCULATE COUNT
 ```
 
 **Sentry** (Discover):
+
 ```sql
 event.type:transaction
 transaction:/api/*
@@ -400,6 +412,7 @@ http.status_code:>=500
 ### 1. Sampling
 
 Most cost-effective lever:
+
 - **10% sampling** = 90% cost reduction
 - **1% sampling** = 99% cost reduction
 
@@ -423,12 +436,14 @@ span.setAttribute('http.method', 'GET');
 Don't trace every function:
 
 ✅ **Trace**:
+
 - API endpoints
 - Database queries
 - External API calls
 - Critical business logic
 
 ❌ **Skip**:
+
 - Utility functions
 - Getters/setters
 - Simple validators
@@ -437,6 +452,7 @@ Don't trace every function:
 ### 4. Retention
 
 Configure shorter retention for high-volume data:
+
 - **Traces**: 7-30 days
 - **Metrics**: 90 days
 - **Logs**: 7-14 days

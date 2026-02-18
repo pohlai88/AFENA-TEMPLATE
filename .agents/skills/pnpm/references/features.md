@@ -8,10 +8,10 @@ Force specific versions of dependencies:
 # pnpm-workspace.yaml (recommended)
 overrides:
   lodash: ^4.17.21
-  'foo@^1.0.0': ^1.2.3           # Specific parent version
-  'express>cookie': ^0.6.0        # Nested dep
-  'underscore': 'npm:lodash@^4'   # Replace package
-  'unwanted-pkg': '-'             # Remove entirely
+  'foo@^1.0.0': ^1.2.3 # Specific parent version
+  'express>cookie': ^0.6.0 # Nested dep
+  'underscore': 'npm:lodash@^4' # Replace package
+  'unwanted-pkg': '-' # Remove entirely
 ```
 
 Or in package.json:
@@ -73,8 +73,8 @@ Install packages under different names:
 ```
 
 ```ts
-import lodash3 from 'lodash3'
-import lodash4 from 'lodash4'
+import lodash3 from 'lodash3';
+import lodash4 from 'lodash4';
 ```
 
 Replace packages:
@@ -97,38 +97,38 @@ function readPackage(pkg, context) {
     pkg.peerDependencies = {
       ...pkg.peerDependencies,
       react: '*',
-    }
+    };
   }
 
   // Override version
   if (pkg.dependencies?.lodash) {
-    pkg.dependencies.lodash = '^4.17.21'
+    pkg.dependencies.lodash = '^4.17.21';
   }
 
   // Remove unwanted dep
-  delete pkg.optionalDependencies?.fsevents
+  delete pkg.optionalDependencies?.fsevents;
 
-  return pkg
+  return pkg;
 }
 
 function afterAllResolved(lockfile, context) {
-  context.log(`Resolved ${Object.keys(lockfile.packages || {}).length} packages`)
-  return lockfile
+  context.log(`Resolved ${Object.keys(lockfile.packages || {}).length} packages`);
+  return lockfile;
 }
 
 function beforePacking(pkg, context) {
   // Customize package.json before publishing (v10.28+)
-  pkg.main = './dist/index.js'
-  return pkg
+  pkg.main = './dist/index.js';
+  return pkg;
 }
 
 module.exports = {
   hooks: {
     readPackage,
     afterAllResolved,
-    beforePacking,  // v10.28+
+    beforePacking, // v10.28+
   },
-}
+};
 ```
 
 ## Peer Dependencies

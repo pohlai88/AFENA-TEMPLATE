@@ -44,12 +44,12 @@ competency assessments, 360-degree feedback, and performance analytics.
 ## Usage
 
 ```typescript
-import { setGoal } from "afenda-performance-mgmt";
+import { setGoal } from 'afenda-performance-mgmt';
 
 const result = await setGoal(db, orgId, {
-  employeeId: "emp-123",
-  goalName: "Increase sales by 20%",
-  targetDate: new Date("2026-12-31"),
+  employeeId: 'emp-123',
+  goalName: 'Increase sales by 20%',
+  targetDate: new Date('2026-12-31'),
   measurable: true,
 });
 ```

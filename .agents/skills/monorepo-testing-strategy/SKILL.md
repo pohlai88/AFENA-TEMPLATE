@@ -1,10 +1,13 @@
 # monorepo-testing-strategy
 
 ## Description
+
 Testing strategy for AFENDA-NEXUS monorepo: unit tests, integration tests, E2E tests, coverage requirements, and best practices.
 
 ## Trigger Conditions
+
 Use this skill when:
+
 - Writing tests for packages or applications
 - Questions about testing patterns
 - Coverage requirements
@@ -17,6 +20,7 @@ Use this skill when:
 ## Overview
 
 AFENDA-NEXUS uses a **layered testing strategy**:
+
 1. **Unit Tests**: Isolated function/class testing (Vitest)
 2. **Integration Tests**: Cross-module/database testing (Vitest + Neon)
 3. **E2E Tests**: User workflow testing (Playwright)
@@ -80,11 +84,11 @@ export default defineConfig({
     coverage: {
       provider: 'v8',
       thresholds: {
-        lines: 80,        // 80% line coverage
-        functions: 80,    // 80% function coverage
-        branches: 75,     // 75% branch coverage
-        statements: 80,   // 80% statement coverage
-        perFile: true,    // Enforce per file
+        lines: 80, // 80% line coverage
+        functions: 80, // 80% function coverage
+        branches: 75, // 75% branch coverage
+        statements: 80, // 80% statement coverage
+        perFile: true, // Enforce per file
       },
     },
   },
@@ -92,6 +96,7 @@ export default defineConfig({
 ```
 
 **Per-Layer Targets**:
+
 - **Layer 0 (Config)**: 50% (tooling, mostly external)
 - **Layer 1 (Foundation)**: 80% (critical infrastructure)
 - **Layer 2 (Domain)**: 80% (business logic)
@@ -102,9 +107,11 @@ export default defineConfig({
 ## Unit Tests
 
 ### Purpose
+
 Test individual functions/classes in **complete isolation**.
 
 ### Characteristics
+
 - **Fast**: < 100ms per test
 - **No external dependencies**: No database, API, filesystem
 - **Mock all dependencies**: Use `vi.mock()`, `vi.fn()`
@@ -231,9 +238,11 @@ describe('allocateByQty', () => {
 ## Integration Tests
 
 ### Purpose
+
 Test **interactions** between modules, database, external services.
 
 ### Characteristics
+
 - **Slower**: 100ms - 5s per test
 - **Real dependencies**: Test database, actual Drizzle queries
 - **End-to-end flows**: Within a package or across packages
@@ -314,9 +323,11 @@ describe('Item Service (Integration)', () => {
 ## E2E Tests (Playwright)
 
 ### Purpose
+
 Test **user workflows** end-to-end in a browser.
 
 ### Characteristics
+
 - **Slowest**: 2-10s per test
 - **Real browser**: Chromium, Firefox, WebKit
 - **Full stack**: Database → API → UI
@@ -375,7 +386,7 @@ export default defineConfig({
   testDir: './apps/web/e2e/tests',
   fullyParallel: true,
   retries: process.env.CI ? 2 : 0,
-  
+
   use: {
     baseURL: 'http://localhost:3000',
     trace: 'on-first-retry',
@@ -401,6 +412,7 @@ export default defineConfig({
 ## Test Fixtures & Factories
 
 ### Purpose
+
 Reusable test data, mocks, and setup utilities.
 
 ---
@@ -432,7 +444,7 @@ export const createMockItems = (count: number): Item[] => {
     createMockItem({
       itemCode: `ITM-${String(i + 1).padStart(3, '0')}`,
       itemName: `Test Item ${i + 1}`,
-    })
+    }),
   );
 };
 ```
@@ -491,7 +503,10 @@ it('calculates tax', ...);
 it('should allocate cost proportionally', () => {
   // Arrange: Set up test data
   const totalCost = 1000;
-  const lines = [{ id: 'line-1', qty: 3 }, { id: 'line-2', qty: 7 }];
+  const lines = [
+    { id: 'line-1', qty: 3 },
+    { id: 'line-2', qty: 7 },
+  ];
 
   // Act: Execute the function
   const result = allocateByQty(totalCost, lines);
@@ -638,26 +653,26 @@ on: [push, pull_request]
 jobs:
   test:
     runs-on: ubuntu-latest
-    
+
     steps:
       - uses: actions/checkout@v3
-      
+
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
           node-version: 20
-      
+
       - name: Install pnpm
         run: npm install -g pnpm
-      
+
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
-      
+
       - name: Run tests with coverage
         run: pnpm test:coverage
         env:
           TEST_DATABASE_URL: ${{ secrets.TEST_DATABASE_URL }}
-      
+
       - name: Upload coverage
         uses: codecov/codecov-action@v3
         with:
@@ -773,37 +788,32 @@ it('should complete within 1 second', async () => {
 ## Quick Reference
 
 ### Vitest Imports
+
 ```typescript
-import {
-  describe,
-  it,
-  expect,
-  beforeEach,
-  afterEach,
-  beforeAll,
-  afterAll,
-  vi,
-} from 'vitest';
+import { describe, it, expect, beforeEach, afterEach, beforeAll, afterAll, vi } from 'vitest';
 ```
 
 ### Mock Functions
+
 ```typescript
-vi.fn()                    // Create mock function
-vi.mock('module')           // Mock module
-vi.spyOn(obj, 'method')    // Spy on method
-vi.clearAllMocks()         // Clear all mocks
+vi.fn(); // Create mock function
+vi.mock('module'); // Mock module
+vi.spyOn(obj, 'method'); // Spy on method
+vi.clearAllMocks(); // Clear all mocks
 ```
 
 ### Assertions
+
 ```typescript
-expect(x).toBe(y)           // Strict equality
-expect(x).toEqual(y)        // Deep equality
-expect(x).toMatchObject(y)  // Partial match
-expect(fn).toThrow()        // Function throws
-expect(fn).toHaveBeenCalled() // Mock was called
+expect(x).toBe(y); // Strict equality
+expect(x).toEqual(y); // Deep equality
+expect(x).toMatchObject(y); // Partial match
+expect(fn).toThrow(); // Function throws
+expect(fn).toHaveBeenCalled(); // Mock was called
 ```
 
 ### Async Tests
+
 ```typescript
 it('async test', async () => {
   const result = await asyncFunction();

@@ -45,11 +45,11 @@ analytics.
 ## Usage
 
 ```typescript
-import { recordCarbonEmission } from "afenda-sustainability";
+import { recordCarbonEmission } from 'afenda-sustainability';
 
 const result = await recordCarbonEmission(db, orgId, {
-  emissionType: "scope1",
-  source: "company-vehicles",
+  emissionType: 'scope1',
+  source: 'company-vehicles',
   amountKg: 1250,
   recordDate: new Date(),
 });

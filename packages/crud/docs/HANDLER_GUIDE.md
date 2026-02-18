@@ -138,12 +138,12 @@ afterDelete(ctx, deleted)  → Clean up related data
 ```typescript
 // packages/crud/src/handlers/my-entity-handler.ts
 
-import { BaseHandler } from "./base-handler.js";
-import type { CreateInput, HandlerContext, UpdateInput } from "../types.js";
+import { BaseHandler } from './base-handler.js';
+import type { CreateInput, HandlerContext, UpdateInput } from '../types.js';
 
 export class MyEntityHandler extends BaseHandler {
   constructor() {
-    super("my-entities"); // Table name
+    super('my-entities'); // Table name
   }
 
   /**
@@ -151,7 +151,7 @@ export class MyEntityHandler extends BaseHandler {
    */
   async beforeCreate(ctx: HandlerContext, input: CreateInput) {
     // Custom validation
-    if (input.someField === "invalid") {
+    if (input.someField === 'invalid') {
       throw new Error('someField cannot be "invalid"');
     }
 
@@ -164,11 +164,11 @@ export class MyEntityHandler extends BaseHandler {
    */
   async afterCreate(ctx: HandlerContext, result: any) {
     // Trigger workflow
-    await triggerWorkflow(ctx.db, result.id, "my-entity-created");
+    await triggerWorkflow(ctx.db, result.id, 'my-entity-created');
 
     // Send notification
     await sendNotification(ctx.orgId, {
-      type: "entity-created",
+      type: 'entity-created',
       entityId: result.id,
     });
 
@@ -182,12 +182,12 @@ export class MyEntityHandler extends BaseHandler {
 ```typescript
 // packages/crud/src/handlers/index.ts
 
-import { MyEntityHandler } from "./my-entity-handler.js";
+import { MyEntityHandler } from './my-entity-handler.js';
 
 export const handlers = {
-  "companies": new CompaniesHandler(),
-  "contacts": new ContactsHandler(),
-  "my-entities": new MyEntityHandler(), // ← Add your handler
+  companies: new CompaniesHandler(),
+  contacts: new ContactsHandler(),
+  'my-entities': new MyEntityHandler(), // ← Add your handler
 };
 ```
 
@@ -196,26 +196,24 @@ export const handlers = {
 ```typescript
 // packages/crud/src/handlers/__tests__/my-entity-handler.test.ts
 
-import { describe, expect, it } from "vitest";
-import { MyEntityHandler } from "../my-entity-handler.js";
+import { describe, expect, it } from 'vitest';
+import { MyEntityHandler } from '../my-entity-handler.js';
 
-describe("MyEntityHandler", () => {
-  it("should reject invalid someField", async () => {
+describe('MyEntityHandler', () => {
+  it('should reject invalid someField', async () => {
     const handler = new MyEntityHandler();
     const ctx = createTestContext();
 
-    await expect(
-      handler.beforeCreate(ctx, { someField: "invalid" }),
-    ).rejects.toThrow('someField cannot be "invalid"');
+    await expect(handler.beforeCreate(ctx, { someField: 'invalid' })).rejects.toThrow(
+      'someField cannot be "invalid"',
+    );
   });
 
-  it("should allow valid input", async () => {
+  it('should allow valid input', async () => {
     const handler = new MyEntityHandler();
     const ctx = createTestContext();
 
-    await expect(
-      handler.beforeCreate(ctx, { someField: "valid" }),
-    ).resolves.not.toThrow();
+    await expect(handler.beforeCreate(ctx, { someField: 'valid' })).resolves.not.toThrow();
   });
 });
 ```
@@ -266,9 +264,9 @@ Import from domain packages, not from CRUD services:
 
 ```typescript
 // ✅ GOOD: Import from domain package
-import { checkBudget } from "afenda-crm";
-import { calculateLineTax } from "afenda-accounting";
-import { convertUom } from "afenda-inventory";
+import { checkBudget } from 'afenda-crm';
+import { calculateLineTax } from 'afenda-accounting';
+import { convertUom } from 'afenda-inventory';
 ```
 
 ### 4. Fail Fast
@@ -330,7 +328,7 @@ export class CompaniesHandler extends BaseHandler {
       // Prevent excessive nesting
       const depth = await this.getHierarchyDepth(ctx, input.parentId);
       if (depth >= 5) {
-        throw new Error("Maximum hierarchy depth (5 levels) exceeded");
+        throw new Error('Maximum hierarchy depth (5 levels) exceeded');
       }
     }
 
@@ -379,12 +377,10 @@ export class ContactsHandler extends BaseHandler {
 Test handler logic in isolation:
 
 ```typescript
-describe("MyEntityHandler", () => {
-  it("validates required fields", async () => {
+describe('MyEntityHandler', () => {
+  it('validates required fields', async () => {
     const handler = new MyEntityHandler();
-    await expect(
-      handler.beforeCreate(mockCtx, {}),
-    ).rejects.toThrow("requiredField is required");
+    await expect(handler.beforeCreate(mockCtx, {})).rejects.toThrow('requiredField is required');
   });
 });
 ```
@@ -394,8 +390,8 @@ describe("MyEntityHandler", () => {
 Test with real database:
 
 ```typescript
-describe("MyEntityHandler Integration", () => {
-  it("creates entity with audit log", async () => {
+describe('MyEntityHandler Integration', () => {
+  it('creates entity with audit log', async () => {
     const handler = new MyEntityHandler();
     const result = await handler.create(dbCtx, testInput);
 
@@ -432,7 +428,7 @@ export async function priceOrder(db, orgId, input) {
 }
 
 // packages/crud/src/handlers/sales-order-handler.ts
-import { priceOrder } from "afenda-sales";
+import { priceOrder } from 'afenda-sales';
 
 export class SalesOrderHandler extends BaseHandler {
   async beforeCreate(ctx, input) {

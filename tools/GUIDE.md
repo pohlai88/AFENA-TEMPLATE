@@ -621,7 +621,7 @@ describe('processResults', () => {
 
 ### Integration Tests
 
-**Location**: `tools/afena-cli/__tests__/integration/*.test.ts`
+**Location**: `tools/afenda-cli/__tests__/integration/*.test.ts`
 
 **Purpose**: Test full command execution
 
@@ -1060,14 +1060,14 @@ export async function runOptimizedCommand() {
 | ----------------------- | ---------------------------- |
 | `core/report-config.ts` | Report structure definitions |
 | `cli.ts`                | CLI command registration     |
-| `bin/afena`             | CLI entry point              |
+| `bin/afenda`            | CLI entry point              |
 | `package.json`          | Package metadata             |
 
 ### Related Documentation
 
 - Tools README - Complete tools overview
 - START_HERE.md - Quick start guide
-- afena-cli README - CLI reference
+- afenda-cli README - CLI reference
 - quality-metrics README - Metrics guide
 - CONTRIBUTING.md - Contribution guidelines
 

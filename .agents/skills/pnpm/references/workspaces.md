@@ -7,7 +7,7 @@ packages:
   - 'packages/*'
   - 'apps/*'
   - 'tools/*/packages/*'
-  - '!**/test/**'  # Exclude
+  - '!**/test/**' # Exclude
 
 # Catalogs for shared versions
 catalog:
@@ -163,7 +163,7 @@ node-version-file=.nvmrc
     "patchedDependencies": {
       "express@4.18.2": "patches/express@4.18.2.patch"
     },
-    "syncInjectedDepsAfterScripts": ["build"]  // v10.5+ - sync hardlinked deps after scripts
+    "syncInjectedDepsAfterScripts": ["build"] // v10.5+ - sync hardlinked deps after scripts
   }
 }
 ```

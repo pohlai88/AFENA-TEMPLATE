@@ -9,6 +9,7 @@ Real-time code quality monitoring with automated trend analysis, actionable insi
 ### 📊 Metrics Collection (`tools/quality-metrics`)
 
 Automated collection of:
+
 - **Test Coverage**: Lines, functions, branches, statements from Vitest
 - **Build Performance**: Duration, Turborepo cache hit rate, bundle sizes
 - **Code Quality**: TypeScript errors, ESLint warnings/errors, TODO counts
@@ -17,6 +18,7 @@ Automated collection of:
 ### 📈 Quality Dashboard (`/quality`)
 
 Interactive Next.js dashboard featuring:
+
 - Real-time metrics visualization
 - Coverage breakdown with visual progress bars
 - Status indicators (pass/warn/fail)
@@ -26,12 +28,14 @@ Interactive Next.js dashboard featuring:
 ### 🤖 GitHub Actions Integration
 
 Automated quality checks on:
+
 - Every push to main or feature branches
 - Pull request creation
 - Daily scheduled runs (2 AM UTC)
 - Manual workflow dispatch
 
 Features:
+
 - PR comments with quality reports
 - GitHub Pages deployment of HTML dashboard
 - Quality threshold enforcement (CI fails if below thresholds)
@@ -40,6 +44,7 @@ Features:
 ### 📋 Report Formats
 
 Three report formats:
+
 1. **Markdown**: For PRs and documentation
 2. **JSON**: For CI/CD integration
 3. **HTML**: For visual dashboards
@@ -54,6 +59,7 @@ pnpm quality:collect
 ```
 
 This generates:
+
 - `.quality-metrics/latest.json` - Current metrics snapshot
 - `.quality-metrics/history.jsonl` - Historical data (JSONL format)
 
@@ -64,6 +70,7 @@ pnpm quality:analyze
 ```
 
 Output:
+
 ```
 📊 Quality Metrics Analysis
 ═══════════════════════════════════════════════
@@ -153,6 +160,7 @@ pnpm dev
 Returns latest quality metrics.
 
 **Response:**
+
 ```json
 {
   "timestamp": "2024-02-17T12:00:00Z",
@@ -190,13 +198,13 @@ Returns last 30 metrics snapshots for trend visualization.
 
 ## Quality Thresholds
 
-| Metric | Target | Action |
-|--------|--------|--------|
-| Line Coverage | ≥ 80% | ❌ Fail if below |
-| Branch Coverage | ≥ 75% | ❌ Fail if below |
-| Type Errors | 0 | ❌ Fail if > 0 |
-| Lint Errors | 0 | ❌ Fail if > 0 |
-| Build Time | < 60s | ⚠️ Warn if above |
+| Metric          | Target | Action           |
+| --------------- | ------ | ---------------- |
+| Line Coverage   | ≥ 80%  | ❌ Fail if below |
+| Branch Coverage | ≥ 75%  | ❌ Fail if below |
+| Type Errors     | 0      | ❌ Fail if > 0   |
+| Lint Errors     | 0      | ❌ Fail if > 0   |
+| Build Time      | < 60s  | ⚠️ Warn if above |
 
 CI/CD pipeline fails if critical thresholds are not met.
 
@@ -221,6 +229,7 @@ Overall score (0-100) is weighted as:
 ### Environment Variables
 
 No configuration required - metrics are collected from:
+
 - `coverage/coverage-summary.json` (Vitest)
 - `.turbo/` (Turborepo cache)
 - TypeScript compiler output
@@ -281,6 +290,7 @@ pnpm dev
 ### CI workflow failing
 
 Check:
+
 1. Test coverage meets thresholds (≥ 80% lines)
 2. No TypeScript errors (`pnpm type-check`)
 3. No ESLint errors (`pnpm lint`)
@@ -289,16 +299,19 @@ Check:
 ## Integration Timeline
 
 ### Week 1: Baseline
+
 - Collect initial metrics
 - Review baseline scores
 - No enforcement
 
 ### Week 2-3: Monitoring
+
 - Daily metric collection
 - Track trends
 - Identify problem areas
 
 ### Week 4+: Enforcement
+
 - Enable quality gate in CI
 - Require thresholds for PR merges
 - Gradually raise thresholds
@@ -313,6 +326,7 @@ Check:
 ## Roadmap
 
 Future enhancements:
+
 - [ ] Test flakiness detection
 - [ ] Performance regression alerts
 - [ ] Bundle size tracking

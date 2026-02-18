@@ -11,25 +11,25 @@
 | Field                  | Value                                                                                |
 | ---------------------- | ------------------------------------------------------------------------------------ |
 | `architecture_version` | 1                                                                                    |
-| `last_ratified`        | 2026-02-16 *(unit tests deferred)*                                                   |
-| `ratified_by`          | Gap closure 2026-02 *(PR approver / arch owner)*                                      |
+| `last_ratified`        | 2026-02-16 _(unit tests deferred)_                                                   |
+| `ratified_by`          | Gap closure 2026-02 _(PR approver / arch owner)_                                     |
 | **Change process**     | PR label `arch-change`; required reviewers; CI gates (Gate 0, schema-lint) must pass |
 
 ---
 
 ## Ratification Gap Register (Mandatory, Near Top)
 
-| Gap ID     | Current State                          | Target Contract                                           | Risk           | Fix Phase | Validation to Add     | Exit Criteria                                                                    |
-| ---------- | -------------------------------------- | --------------------------------------------------------- | -------------- | --------- | --------------------- | -------------------------------------------------------------------------------- |
-| GAP-DB-001 | ~~PK (id) only~~                       | ✅ PK (org_id, id) for truth tables (migration 0051)   | —              | —         | schema-lint           | Closed 2026-02-15 — composite PK applied; stock_balances fixed                                |
-| GAP-DB-002 | ~~FKs sparse on domain~~               | ✅ All \*\_id columns have FK constraints                 | —              | —         | find-missing-fks.ts   | Closed 2026-02-14 (all FK constraints already in place)                          |
-| GAP-DB-003 | ~~stock_balances writable~~            | ✅ REVOKE UPDATE/DELETE (migration 0044)                  | —              | —         | migration             | Closed 2026-02-14                                                                |
-| GAP-DB-004 | ~~No outbox + search_documents~~       | ✅ Outbox + incremental search worker                     | —              | —         | drain/health/lag      | Closed 2026-02-15 — search_outbox, search_documents, chunked backfill, drain, Vercel cron, SEARCH_WORKER_DATABASE_URL |
-| GAP-DB-005 | ~~RLS_TABLES hand-maintained~~         | ✅ Generated from _registry (RLS_TABLES, REVOKE_\*)       | —              | —         | schema-lint           | Closed 2026-02-14                                                                |
-| GAP-DB-006 | ~~No data serialization layer~~        | ✅ packages/canon/src/serialization (coerceMutationInput) | —              | —         | canon/serialization   | Closed 2026-02-14; unit tests deferred                                             |
-| GAP-DB-007 | ~~No schema-derived allowlist~~        | ✅ pickWritable(table, input) in contacts, companies      | —              | —         | writable-columns.ts   | Closed 2026-02-14; unit tests deferred                                             |
-| GAP-DB-008 | ~~doc_postings lacks doc_version~~     | ✅ doc_version + unique (migration 0044)                  | —              | —         | migration             | Closed 2026-02-14                                                                |
-| GAP-DB-009 | No prepared statements for hot queries | ✅ Documented fallback (neon-http stateless)              | —              | —         | DRIZ-03b documented   | Closed 2026-02-14 (neon-http doesn't persist prepares; use batch/cache instead)  |
+| Gap ID     | Current State                          | Target Contract                                           | Risk | Fix Phase | Validation to Add   | Exit Criteria                                                                                                         |
+| ---------- | -------------------------------------- | --------------------------------------------------------- | ---- | --------- | ------------------- | --------------------------------------------------------------------------------------------------------------------- |
+| GAP-DB-001 | ~~PK (id) only~~                       | ✅ PK (org_id, id) for truth tables (migration 0051)      | —    | —         | schema-lint         | Closed 2026-02-15 — composite PK applied; stock_balances fixed                                                        |
+| GAP-DB-002 | ~~FKs sparse on domain~~               | ✅ All \*\_id columns have FK constraints                 | —    | —         | find-missing-fks.ts | Closed 2026-02-14 (all FK constraints already in place)                                                               |
+| GAP-DB-003 | ~~stock_balances writable~~            | ✅ REVOKE UPDATE/DELETE (migration 0044)                  | —    | —         | migration           | Closed 2026-02-14                                                                                                     |
+| GAP-DB-004 | ~~No outbox + search_documents~~       | ✅ Outbox + incremental search worker                     | —    | —         | drain/health/lag    | Closed 2026-02-15 — search_outbox, search_documents, chunked backfill, drain, Vercel cron, SEARCH_WORKER_DATABASE_URL |
+| GAP-DB-005 | ~~RLS_TABLES hand-maintained~~         | ✅ Generated from _registry (RLS_TABLES, REVOKE_\*)       | —    | —         | schema-lint         | Closed 2026-02-14                                                                                                     |
+| GAP-DB-006 | ~~No data serialization layer~~        | ✅ packages/canon/src/serialization (coerceMutationInput) | —    | —         | canon/serialization | Closed 2026-02-14; unit tests deferred                                                                                |
+| GAP-DB-007 | ~~No schema-derived allowlist~~        | ✅ pickWritable(table, input) in contacts, companies      | —    | —         | writable-columns.ts | Closed 2026-02-14; unit tests deferred                                                                                |
+| GAP-DB-008 | ~~doc_postings lacks doc_version~~     | ✅ doc_version + unique (migration 0044)                  | —    | —         | migration           | Closed 2026-02-14                                                                                                     |
+| GAP-DB-009 | No prepared statements for hot queries | ✅ Documented fallback (neon-http stateless)              | —    | —         | DRIZ-03b documented | Closed 2026-02-14 (neon-http doesn't persist prepares; use batch/cache instead)                                       |
 
 **Phase key:** P0 = IDs + skeleton; P1 = consolidated doc; P2 = serialization/sanitization + schema-driven; P3 = deprecations + generator changes
 
@@ -56,20 +56,20 @@
 
 ## Exception Index
 
-| ID             | Scope                                 |
-| -------------- | ------------------------------------- |
-| EX-RLS-001     | users, r2_files (authUid)             |
-| EX-CFG-001     | Edge env fallbacks                    |
-| EX-SCH-001..\* | Tables exempt from registry           |
-| EX-SCH-002     | search_backfill_state (worker-only)   |
-| EX-DRIZ-001    | Migration scripts (raw SQL)           |
-| EX-DRIZ-002    | Edge routes (no prepare)              |
-| EX-WP-001..003 | Migration/seed, system/auth, workflow |
-| EX-SER-001     | custom_data                           |
-| EX-SAN-001     | system columns                        |
+| ID             | Scope                                             |
+| -------------- | ------------------------------------------------- |
+| EX-RLS-001     | users, r2_files (authUid)                         |
+| EX-CFG-001     | Edge env fallbacks                                |
+| EX-SCH-001..\* | Tables exempt from registry                       |
+| EX-SCH-002     | search_backfill_state (worker-only)               |
+| EX-DRIZ-001    | Migration scripts (raw SQL)                       |
+| EX-DRIZ-002    | Edge routes (no prepare)                          |
+| EX-WP-001..003 | Migration/seed, system/auth, workflow             |
+| EX-SER-001     | custom_data                                       |
+| EX-SAN-001     | system columns                                    |
 | EX-SAN-002     | Audit logging of sanitization rejections deferred |
-| EX-GOV-\*      | Per-gate whitelists                   |
-| EX-FK-001..\*  | FK whitelist entries                  |
+| EX-GOV-\*      | Per-gate whitelists                               |
+| EX-FK-001..\*  | FK whitelist entries                              |
 
 **EX-SAN-002 — Audit logging of sanitization rejections deferred**
 
@@ -300,7 +300,7 @@ For NOT NULL on existing columns, use the same pattern: add `CHECK (col IS NOT N
 
 **Source of truth:** [packages/crud/src/mutate.ts](packages/crud/src/mutate.ts)
 
-**Validated by:** ESLint INVARIANT-01; HANDLER_REGISTRY excludes journal_line, stock_movement. _Unit tests deferred._
+**Validated by:** ESLint INVARIANT-01; HANDLER*REGISTRY excludes journal_line, stock_movement. \_Unit tests deferred.*
 
 **Exceptions:** EX-WP-001: migration/seed scripts (documented, non-app paths); EX-WP-002: system/auth tables (api_keys, roles, user_roles, user_scopes) bypass mutate; EX-WP-003: workflow engine and actions use db directly (control plane, not domain CRUD)
 
@@ -372,16 +372,16 @@ Zod is the single gate that turns `unknown` request JSON into typed `MutationSpe
 
 **DB Gate Suite (CI):**
 
-| Gate   | Description                                                                                                               | Current                     | Future            |
-| ------ | ------------------------------------------------------------------------------------------------------------------------- | --------------------------- | ----------------- |
-| Gate 0 | Doc contract completeness — database.architecture.md must include: Ratification Metadata table, Gap Register, Invariant index, Exception index | schema-lint runGate0() | db:lint |
-| Gate 1 | Tenant enforcement (org_id defaults, RLS enabled, policies)                                                               | schema-lint                 | schema-lint       |
-| Gate 2 | Identity rules (truth tables (org_id, id) or exception)                                                                   | schema-lint                 | schema-lint       |
-| Gate 3 | FK coverage (\*\_id has FK unless whitelisted)                                                                            | schema-lint                 | schema-lint       |
-| Gate 4 | Postable docs registered                                                                                                  | schema-lint.config.ts       | schema-derived    |
-| Gate 5 | REVOKE policy derivation correctness (append-only, projection worker-only)                                                | schema-lint runGate5        | migration lint    |
-| Gate 6 | Projection tables no app writes (REVOKE)                                                                                  | RLS migrations             | RLS migrations    |
-| Gate 7 | Registry drift — TABLE_REGISTRY, RLS_TABLES, REVOKE generated from schema + config                                 | schema-driven gen               | schema-driven gen |
+| Gate   | Description                                                                                                                                    | Current                | Future            |
+| ------ | ---------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------- | ----------------- |
+| Gate 0 | Doc contract completeness — database.architecture.md must include: Ratification Metadata table, Gap Register, Invariant index, Exception index | schema-lint runGate0() | db:lint           |
+| Gate 1 | Tenant enforcement (org_id defaults, RLS enabled, policies)                                                                                    | schema-lint            | schema-lint       |
+| Gate 2 | Identity rules (truth tables (org_id, id) or exception)                                                                                        | schema-lint            | schema-lint       |
+| Gate 3 | FK coverage (\*\_id has FK unless whitelisted)                                                                                                 | schema-lint            | schema-lint       |
+| Gate 4 | Postable docs registered                                                                                                                       | schema-lint.config.ts  | schema-derived    |
+| Gate 5 | REVOKE policy derivation correctness (append-only, projection worker-only)                                                                     | schema-lint runGate5   | migration lint    |
+| Gate 6 | Projection tables no app writes (REVOKE)                                                                                                       | RLS migrations         | RLS migrations    |
+| Gate 7 | Registry drift — TABLE_REGISTRY, RLS_TABLES, REVOKE generated from schema + config                                                             | schema-driven gen      | schema-driven gen |
 
 **GOV-00 validation (deterministic):** CI must verify the doc contains these exact headings:
 
@@ -393,9 +393,10 @@ Zod is the single gate that turns `unknown` request JSON into typed `MutationSpe
 **Gate 5 — REVOKE hardening:** REVOKE hardening for worker tables (migration 0054) verified. search_documents REVOKE INSERT/UPDATE/DELETE is part of Gate 5 posture.
 
 **Gate 7 — Schema-driven registry:** `_registry.ts` is 100% generated. Policy lives in config files:
+
 - `packages/database/table-registry.config.ts` — TABLE_KIND_OVERRIDES, REGISTRY_EXEMPT
 - `packages/database/revoke.config.ts` — REVOKE_UPDATE_DELETE_TABLES
-- `pnpm db:barrel` runs: generate-schema-barrel.ts (barrel + __TABLE_NAMES__ manifest) → generate-table-registry.ts
+- `pnpm db:barrel` runs: generate-schema-barrel.ts (barrel + **TABLE_NAMES** manifest) → generate-table-registry.ts
 - CI: db:barrel → db:lint → git diff on generated files. entity-new no longer touches registry.
 - entity-new `--kind <kind>` — auto-inserts into TABLE_KIND_OVERRIDES (truth, control, system, evidence, projection, link).
 
@@ -419,12 +420,12 @@ Zod is the single gate that turns `unknown` request JSON into typed `MutationSpe
 
 Keep **Drizzle schema (TS)**, **migration files (SQL)**, and **Neon DB** in sync:
 
-| Step | Command / Tool | Purpose |
-|------|-----------------|---------|
-| 1. Drift check | `pnpm --filter afenda-database db:drift-check` | Ensures `drizzle-kit generate` would produce no new migration (schema ↔ migrations in sync) |
-| 2. Apply migrations | `pnpm --filter afenda-database db:migrate` | Applies pending migrations to Neon (uses `DATABASE_URL_MIGRATIONS` or `DATABASE_URL`) |
-| 3. Introspect (optional) | `mcp_Neon_get_database_tables`, `mcp_Neon_describe_table_schema` | Verify Neon schema matches expectations |
-| 4. Compare branches | `mcp_Neon_compare_database_schema` | Compare schema between Neon branches before merge |
+| Step                     | Command / Tool                                                   | Purpose                                                                                     |
+| ------------------------ | ---------------------------------------------------------------- | ------------------------------------------------------------------------------------------- |
+| 1. Drift check           | `pnpm --filter afenda-database db:drift-check`                   | Ensures `drizzle-kit generate` would produce no new migration (schema ↔ migrations in sync) |
+| 2. Apply migrations      | `pnpm --filter afenda-database db:migrate`                       | Applies pending migrations to Neon (uses `DATABASE_URL_MIGRATIONS` or `DATABASE_URL`)       |
+| 3. Introspect (optional) | `mcp_Neon_get_database_tables`, `mcp_Neon_describe_table_schema` | Verify Neon schema matches expectations                                                     |
+| 4. Compare branches      | `mcp_Neon_compare_database_schema`                               | Compare schema between Neon branches before merge                                           |
 
 **If `db:migrate` fails with duplicate key on `__drizzle_migrations`:** Migration table may have custom hashes or sequence drift. Fix by: (1) updating hashes to match file content (SHA256 of migration SQL), (2) resetting the id sequence: `SELECT setval(pg_get_serial_sequence('drizzle.__drizzle_migrations', 'id'), (SELECT MAX(id) FROM drizzle.__drizzle_migrations));`
 

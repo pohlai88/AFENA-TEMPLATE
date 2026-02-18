@@ -7,7 +7,7 @@ at the top of the component tree (typically in `app/layout.tsx`).
 
 ```tsx
 // apps/web/app/layout.tsx
-import { Providers } from "afenda-ui/providers";
+import { Providers } from 'afenda-ui/providers';
 
 export default function RootLayout({ children }) {
   return (
@@ -52,10 +52,10 @@ the root layout stays clean and the Toaster can be configured in one place.
 To trigger toasts:
 
 ```tsx
-import { toast } from "afenda-ui";
+import { toast } from 'afenda-ui';
 
-toast.success("Changes saved");
-toast.error("Something went wrong");
+toast.success('Changes saved');
+toast.error('Something went wrong');
 ```
 
 ### `<GlobalTooltipProvider>`
@@ -70,21 +70,16 @@ single delay timer. Hovering from one tooltip to another skips the open delay.
 ## Individual Imports
 
 ```tsx
-import { Providers } from "afenda-ui/providers";
-import { ThemeProvider } from "afenda-ui/providers/theme-provider";
-import { ToasterProvider } from "afenda-ui/providers/toaster-provider";
-import { GlobalTooltipProvider } from "afenda-ui/providers/tooltip-provider";
+import { Providers } from 'afenda-ui/providers';
+import { ThemeProvider } from 'afenda-ui/providers/theme-provider';
+import { ToasterProvider } from 'afenda-ui/providers/toaster-provider';
+import { GlobalTooltipProvider } from 'afenda-ui/providers/tooltip-provider';
 ```
 
 Or from the barrel:
 
 ```tsx
-import {
-  GlobalTooltipProvider,
-  Providers,
-  ThemeProvider,
-  ToasterProvider,
-} from "afenda-ui";
+import { GlobalTooltipProvider, Providers, ThemeProvider, ToasterProvider } from 'afenda-ui';
 ```
 
 ## Nesting Order

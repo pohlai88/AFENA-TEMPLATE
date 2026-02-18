@@ -1,31 +1,27 @@
 import {
-  and,
-  batch,
-  branches,
-  companies,
-  contacts,
-  currencyExchanges,
-  departments,
-  desc,
-  eq,
-  getDb,
-  sql,
-  tasks,
-  videoSettings,
+    and,
+    batch,
+    companies,
+    contacts,
+    desc,
+    eq,
+    getDb,
+    sql,
 } from 'afenda-database';
+// TODO: Restore archived entities (branches, currencyExchanges, departments, tasks, videoSettings) when regenerated
 import { getLogger } from 'afenda-logger';
 // @entity-gen:read-import
 
 import { buildCursorWhere, decodeCursor, encodeCursor } from './cursor';
 import { err, ok } from './envelope';
-import { getLegacyRefs } from './read-legacy';
 import {
-  buildListCacheKey,
-  getCachedList,
-  getListCacheVersion,
-  isListCacheEnabled,
-  setCachedList,
+    buildListCacheKey,
+    getCachedList,
+    getListCacheVersion,
+    isListCacheEnabled,
+    setCachedList,
 } from './list-cache';
+import { getLegacyRefs } from './read-legacy';
 
 import type { ApiResponse, EntityType } from 'afenda-canon';
 
@@ -33,11 +29,12 @@ import type { ApiResponse, EntityType } from 'afenda-canon';
 const TABLE_REGISTRY: Record<string, any> = {
   contacts,
   companies,
-  'video-settings': videoSettings,
-  'currency-exchanges': currencyExchanges,
-  departments,
-  branches,
-  tasks,
+  // TODO: Restore archived entities when regenerated:
+  // 'video-settings': videoSettings,
+  // 'currency-exchanges': currencyExchanges,
+  // departments,
+  // branches,
+  // tasks,
   // @entity-gen:table-registry-read
 };
 

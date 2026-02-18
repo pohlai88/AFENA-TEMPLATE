@@ -6,7 +6,7 @@
 
 ## 🎯 Purpose
 
-These skills provide specialized knowledge and best practices for your AFENA-NEXUS monorepo, focusing on Next.js 16, pnpm workspace management, and TypeScript optimization.
+These skills provide specialized knowledge and best practices for your afenda-NEXUS monorepo, focusing on Next.js 16, pnpm workspace management, and TypeScript optimization.
 
 ---
 
@@ -278,7 +278,7 @@ Ask me things like:
 Your project also has custom skills in `.agent\skills`:
 
 - `afenda-architecture` - Your specific architecture patterns
-- `afena-cli-usage` - CLI tool usage
+- `afenda-cli-usage` - CLI tool usage
 - `afenda-database-patterns` - Database patterns and conventions
 - `ci-cd-pipeline` - CI/CD setup
 - `domain-driven-patterns` - DDD patterns

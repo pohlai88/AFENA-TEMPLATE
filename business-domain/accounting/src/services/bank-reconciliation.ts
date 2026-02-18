@@ -108,12 +108,12 @@ export function scoreMatch(
  * @param lines - Statement lines to match
  * @param candidates - Ledger candidates
  */
-export async function autoMatchStatementLines(
-  db: NeonHttpDatabase,
-  orgId: string,
+export function autoMatchStatementLines(
+  _db: NeonHttpDatabase,
+  _orgId: string,
   lines: StatementLineForMatch[],
   candidates: Array<Omit<MatchCandidate, 'confidence' | 'score'>>,
-): Promise<AutoMatchResult[]> {
+): AutoMatchResult[] {
   const results: AutoMatchResult[] = [];
 
   for (const line of lines) {
@@ -133,15 +133,20 @@ export async function autoMatchStatementLines(
       ? bestMatch.confidence === 'exact' || bestMatch.confidence === 'high'
       : false;
 
+    let reason: string;
+    if (matched && bestMatch) {
+      reason = `Auto-matched with ${bestMatch.confidence} confidence (score: ${bestMatch.score})`;
+    } else if (bestMatch) {
+      reason = `Requires manual review (${bestMatch.confidence} confidence, score: ${bestMatch.score})`;
+    } else {
+      reason = 'No suitable match found';
+    }
+
     results.push({
       lineId: line.lineId,
       matched,
       candidate: bestMatch,
-      reason: matched
-        ? `Auto-matched with ${bestMatch!.confidence} confidence (score: ${bestMatch!.score})`
-        : bestMatch
-          ? `Requires manual review (${bestMatch.confidence} confidence, score: ${bestMatch.score})`
-          : 'No suitable match found',
+      reason,
     });
   }
 
@@ -181,7 +186,18 @@ export async function recordReconciliationMatch(
     reconciledBy,
   } = params;
 
-  const [match] = await (tx as any)
+  // Using type assertion for Drizzle transaction typing (EX-LINT-DRZ-TX-001)
+  interface MatchResult {
+    id: string;
+  }
+  
+  const [match] = await (tx as unknown as {
+    insert: (table: typeof matchResults) => {
+      values: (data: Record<string, unknown>) => {
+        returning: <T>(cols: Record<string, unknown>) => Promise<T[]>;
+      };
+    };
+  })
     .insert(matchResults)
     .values({
       orgId,
@@ -195,5 +211,5 @@ export async function recordReconciliationMatch(
     })
     .returning({ id: matchResults.id });
 
-  return match.id;
+  return (match as MatchResult).id;
 }

@@ -9,14 +9,14 @@ Quick reference guide to all agent resources in this workspace.
 
 ## Quick Navigation
 
-| Category | Skills |
-|----------|--------|
-| **??? Architecture & Structure** | [afenda-architecture](#afenda-architecture) · [package-development](#package-development) · [afenda-database-patterns](#afenda-database-patterns) |
-| **?? Development Tools** | [afena-cli-usage](#afena-cli-usage) · [lint-types-debug](#lint-types-debug) |
-| **?? Testing & Quality** | [vitest-testing](#vitest-testing) · [monorepo-testing-strategy](#monorepo-testing-strategy) |
-| **??? Database & Infrastructure** | [neon-postgres](#neon-postgres) |
-| **?? Domain Design** | [domain-driven-patterns](#domain-driven-patterns) |
-| **?? Operations** | [ci-cd-pipeline](#ci-cd-pipeline) · [example-deployment](#example-deployment) |
+| Category                          | Skills                                                                                                                                            |
+| --------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **??? Architecture & Structure**  | [afenda-architecture](#afenda-architecture) ï¿½ [package-development](#package-development) ï¿½ [afenda-database-patterns](#afenda-database-patterns) |
+| **?? Development Tools**          | [afenda-cli-usage](#afenda-cli-usage) ï¿½ [lint-types-debug](#lint-types-debug)                                                                     |
+| **?? Testing & Quality**          | [vitest-testing](#vitest-testing) ï¿½ [monorepo-testing-strategy](#monorepo-testing-strategy)                                                       |
+| **??? Database & Infrastructure** | [neon-postgres](#neon-postgres)                                                                                                                   |
+| **?? Domain Design**              | [domain-driven-patterns](#domain-driven-patterns)                                                                                                 |
+| **?? Operations**                 | [ci-cd-pipeline](#ci-cd-pipeline) ï¿½ [example-deployment](#example-deployment)                                                                     |
 
 ---
 
@@ -25,9 +25,11 @@ Quick reference guide to all agent resources in this workspace.
 ### ??? Architecture & Structure
 
 #### @afenda-architecture ???
+
 **AFENDA-NEXUS monorepo architecture, layered dependencies, and package structure**
 
 **Use when:**
+
 - Creating new packages
 - Understanding layer dependencies
 - Navigating the monorepo structure
@@ -35,6 +37,7 @@ Quick reference guide to all agent resources in this workspace.
 - Planning package placement
 
 **Key Topics:**
+
 - 4-layer architecture (Layer 0-3)
 - Dependency flow rules (bottom-up only)
 - Package creation guidelines
@@ -42,6 +45,7 @@ Quick reference guide to all agent resources in this workspace.
 - When to split packages
 
 **Quick Reference:**
+
 - [ARCHITECTURE.md](../ARCHITECTURE.md)
 - [packages/GOVERNANCE.md](../packages/GOVERNANCE.md)
 
@@ -50,9 +54,11 @@ Quick reference guide to all agent resources in this workspace.
 ---
 
 #### @package-development ??
+
 **Creating, structuring, and maintaining packages in the AFENDA-NEXUS monorepo**
 
 **Use when:**
+
 - Creating new packages
 - Setting up package exports
 - Configuring package builds
@@ -60,6 +66,7 @@ Quick reference guide to all agent resources in this workspace.
 - Following package templates
 
 **Key Topics:**
+
 - Package structure templates (by layer)
 - Required files (package.json, tsconfig, README)
 - Export patterns (barrel exports, public API)
@@ -68,6 +75,7 @@ Quick reference guide to all agent resources in this workspace.
 - Documentation requirements
 
 **Quick Reference:**
+
 - [packages/PACKAGE_TEMPLATE.md](../packages/PACKAGE_TEMPLATE.md)
 - [packages/GOVERNANCE.md](../packages/GOVERNANCE.md)
 
@@ -76,9 +84,11 @@ Quick reference guide to all agent resources in this workspace.
 ---
 
 #### @afenda-database-patterns ??
+
 **Database schema patterns, migrations, RLS, and Drizzle ORM usage**
 
 **Use when:**
+
 - Creating database migrations
 - Implementing Row-Level Security (RLS)
 - Designing schema with composite PKs
@@ -86,6 +96,7 @@ Quick reference guide to all agent resources in this workspace.
 - Understanding multi-tenancy patterns
 
 **Key Topics:**
+
 - Migration file structure
 - RLS policy patterns
 - Drizzle schema conventions
@@ -94,6 +105,7 @@ Quick reference guide to all agent resources in this workspace.
 - Common migration operations
 
 **Quick Reference:**
+
 - [packages/database/src/migrations/](../packages/database/src/migrations/)
 - [packages/database/src/schema/](../packages/database/src/schema/)
 
@@ -103,10 +115,12 @@ Quick reference guide to all agent resources in this workspace.
 
 ### ?? Development Tools
 
-#### @afena-cli-usage ???
+#### @afenda-cli-usage ???
+
 **afenda CLI tool usage for code generation, validation, and monorepo management**
 
 **Use when:**
+
 - Generating code with CLI
 - Running meta commands
 - Using adapter pipeline
@@ -114,6 +128,7 @@ Quick reference guide to all agent resources in this workspace.
 - Managing monorepo operations
 
 **Key Topics:**
+
 - Core commands (`afenda meta`, `housekeeping`, `bundle`)
 - Adapter pipeline (`emit-all`, `handler-emit`, `bff-emit`)
 - Validation commands (`schema-validate`, `type-check:refs`)
@@ -121,6 +136,7 @@ Quick reference guide to all agent resources in this workspace.
 - Troubleshooting CLI issues
 
 **Quick Commands:**
+
 ```bash
 pnpm afenda meta list                        # List all entities
 pnpm afenda meta gen capability-map          # Generate capability map
@@ -128,14 +144,16 @@ pnpm afenda housekeeping validate-deps       # Check circular dependencies
 pnpm afenda bundle check-exports             # Validate package exports
 ```
 
-**File:** [skills/afena-cli-usage/SKILL.md](./skills/afena-cli-usage/SKILL.md) (12KB)
+**File:** [skills/afenda-cli-usage/SKILL.md](./skills/afenda-cli-usage/SKILL.md) (12KB)
 
 ---
 
 #### @lint-types-debug ??? (Enhanced with Official Docs)
+
 **Diagnose and fix ESLint and TypeScript errors with official flat config and strict mode patterns**
 
 **Use when:**
+
 - Lint or type-check fails
 - Debugging TypeScript strict mode errors
 - ESLint reports violations
@@ -144,6 +162,7 @@ pnpm afenda bundle check-exports             # Validate package exports
 - Setting up TypeScript project references
 
 **Key Topics:**
+
 - ESLint flat config format & ordering (official patterns)
 - TypeScript-ESLint type-aware linting with `projectService`
 - Official tsconfig.json recommended settings
@@ -152,6 +171,7 @@ pnpm afenda bundle check-exports             # Validate package exports
 - Migration guides and troubleshooting
 
 **Quick Commands:**
+
 ```bash
 pnpm run lint                    # Lint all packages
 pnpm run type-check              # Fast type check
@@ -161,6 +181,7 @@ pnpm eslint --print-config file  # Debug config
 ```
 
 **Official Sources:**
+
 - [ESLint Flat Config](https://eslint.org/docs/latest/use/configure/configuration-files)
 - [TypeScript-ESLint](https://typescript-eslint.io/getting-started/)
 - [TSConfig Reference](https://www.typescriptlang.org/tsconfig)
@@ -172,9 +193,11 @@ pnpm eslint --print-config file  # Debug config
 ### ?? Testing & Quality
 
 #### @vitest-testing ??? (Enhanced with Official Docs)
+
 **Comprehensive Vitest 3.2+ testing guide with official projects configuration**
 
 **Use when:**
+
 - Writing unit or integration tests
 - Setting up test coverage
 - Using MCP for AI-powered testing
@@ -183,6 +206,7 @@ pnpm eslint --print-config file  # Debug config
 - Understanding coverage thresholds
 
 **Key Topics:**
+
 - Vitest 3.2+ projects configuration (official patterns)
 - Official `defineConfig` and `defineProject` helpers
 - Coverage thresholds (per-file, global, negative numbers)
@@ -192,6 +216,7 @@ pnpm eslint --print-config file  # Debug config
 - CI/CD integration
 
 **Quick Commands:**
+
 ```bash
 pnpm test                        # Run all tests
 pnpm test:coverage               # With coverage
@@ -200,6 +225,7 @@ pnpm --filter pkg test           # Package-specific
 ```
 
 **Official Sources:**
+
 - [Vitest Documentation](https://vitest.dev/guide/)
 - [Projects Guide](https://vitest.dev/guide/workspace)
 - [Coverage Configuration](https://vitest.dev/config/#coverage)
@@ -209,9 +235,11 @@ pnpm --filter pkg test           # Package-specific
 ---
 
 #### @monorepo-testing-strategy ?
+
 **Testing strategy across the monorepo (unit, integration, E2E)**
 
 **Use when:**
+
 - Planning test strategy
 - Understanding test organization
 - Setting up new package tests
@@ -219,6 +247,7 @@ pnpm --filter pkg test           # Package-specific
 - Analyzing coverage across monorepo
 
 **Key Topics:**
+
 - Unit test patterns (per package)
 - Integration test patterns (database transactions)
 - E2E test patterns (Playwright)
@@ -227,6 +256,7 @@ pnpm --filter pkg test           # Package-specific
 - MCP usage for test generation
 
 **Quick Reference:**
+
 - [vitest.config.ts](../vitest.config.ts)
 - [playwright.config.ts](../playwright.config.ts)
 
@@ -237,9 +267,11 @@ pnpm --filter pkg test           # Package-specific
 ###??? Database & Infrastructure
 
 #### @neon-postgres ?? (Enhanced with Official Docs)
+
 **Neon Serverless Postgres with official connection pooling, RLS, and branching patterns**
 
 **Use when:**
+
 - Setting up Neon database
 - Configuring connection pooling (PgBouncer)
 - Implementing Row-Level Security (RLS)
@@ -248,6 +280,7 @@ pnpm --filter pkg test           # Package-specific
 - Using Neon CLI or Platform API
 
 **Key Topics:**
+
 - PgBouncer connection pooling (10K max connections, transaction mode)
 - Role-based access control (readonly/readwrite/developer)
 - Row-Level Security setup with multi-tenant examples
@@ -256,6 +289,7 @@ pnpm --filter pkg test           # Package-specific
 - Neon Auth, Drizzle integration, Platform API
 
 **Official Sources:**
+
 - [Neon Documentation](https://neon.com/docs/introduction)
 - [Connection Pooling Guide](https://neon.com/docs/connect/connection-pooling)
 - [Database Access & RLS](https://neon.com/docs/manage/database-access)
@@ -270,9 +304,11 @@ pnpm --filter pkg test           # Package-specific
 ### ?? Domain Design
 
 #### @domain-driven-patterns ?
+
 **Domain-driven design patterns used in AFENDA-NEXUS domain packages**
 
 **Use when:**
+
 - Creating domain packages
 - Implementing domain services
 - Designing business logic
@@ -280,6 +316,7 @@ pnpm --filter pkg test           # Package-specific
 - Working with ports and policies
 
 **Key Topics:**
+
 - Service pattern (business logic)
 - Policy pattern (class + ports)
 - Port pattern (interfaces, no I prefix)
@@ -288,6 +325,7 @@ pnpm --filter pkg test           # Package-specific
 - Domain event pattern
 
 **Quick Reference:**
+
 - Domain packages: accounting, inventory, crm, procurement
 - Service implementations
 - Policy examples
@@ -299,9 +337,11 @@ pnpm --filter pkg test           # Package-specific
 ### ?? Operations
 
 #### @ci-cd-pipeline ?
+
 **GitHub Actions CI/CD pipeline, security scanning, and deployment**
 
 **Use when:**
+
 - Understanding CI/CD workflows
 - Setting up security scanning
 - Configuring Renovate
@@ -310,6 +350,7 @@ pnpm --filter pkg test           # Package-specific
 - Managing pipeline performance
 
 **Key Topics:**
+
 - GitHub Actions workflows
 - Lint and type-check in CI
 - Test execution (unit + E2E)
@@ -319,6 +360,7 @@ pnpm --filter pkg test           # Package-specific
 - Pipeline optimization
 
 **Quick Reference:**
+
 - [.github/workflows/](../.github/workflows/)
 - [renovate.json5](../renovate.json5)
 
@@ -327,9 +369,11 @@ pnpm --filter pkg test           # Package-specific
 ---
 
 #### @example-deployment
+
 **Example skill showing deployment workflows with safety checks**
 
 **Use when:**
+
 - Planning production deployments
 - Setting up deployment checklists
 - Creating rollback procedures
@@ -343,11 +387,11 @@ pnpm --filter pkg test           # Package-specific
 
 Reference materials and completed work:
 
-| File | Description | Status |
-|------|-------------|--------|
-| [PROJECTS_DOMAIN_COMPLETE.md](./context/PROJECTS_DOMAIN_COMPLETE.md) | Projects domain adoption complete | 13/14 entities (93%) |
-| [SETUP_DOMAIN_COMPLETE.md](./context/SETUP_DOMAIN_COMPLETE.md) | Setup domain adoption complete | 27/27 entities (100%) |
-| [capability-map.md](./context/capability-map.md) | Auto-generated system capability map | Regenerate as needed |
+| File                                                                 | Description                          | Status                |
+| -------------------------------------------------------------------- | ------------------------------------ | --------------------- |
+| [PROJECTS_DOMAIN_COMPLETE.md](./context/PROJECTS_DOMAIN_COMPLETE.md) | Projects domain adoption complete    | 13/14 entities (93%)  |
+| [SETUP_DOMAIN_COMPLETE.md](./context/SETUP_DOMAIN_COMPLETE.md)       | Setup domain adoption complete       | 27/27 entities (100%) |
+| [capability-map.md](./context/capability-map.md)                     | Auto-generated system capability map | Regenerate as needed  |
 
 ---
 
@@ -355,10 +399,10 @@ Reference materials and completed work:
 
 Project-specific conventions:
 
-| Rule | Description | File |
-|------|-------------|------|
+| Rule             | Description                 | File                                         |
+| ---------------- | --------------------------- | -------------------------------------------- |
 | **neon-drizzle** | Neon/Drizzle usage patterns | [neon-drizzle.mdc](./rules/neon-drizzle.mdc) |
-| **vitest-mcp** | Vitest and MCP integration | [vitest-mcp.mdc](./rules/vitest-mcp.mdc) |
+| **vitest-mcp**   | Vitest and MCP integration  | [vitest-mcp.mdc](./rules/vitest-mcp.mdc)     |
 
 ---
 

@@ -272,7 +272,7 @@ and this project adheres to
 
 ### Developer Tools
 
-- `afena-cli` - Metadata generation tool
+- `afenda-cli` - Metadata generation tool
   - Generate entity metadata
   - Auto-generate package READMEs
   - Analyze codebase structure

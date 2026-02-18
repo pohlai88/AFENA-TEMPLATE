@@ -1,5 +1,11 @@
-import { dbSearchWorker, sql, withDbRetry } from 'afenda-database';
+// TODO: Restore dbSearchWorker and withDbRetry when search tables regenerated
+// import { dbSearchWorker, sql, withDbRetry } from 'afenda-database';
+import { getDb, sql } from 'afenda-database';
 import { getLogger } from 'afenda-logger';
+
+// FIXME: This file is non-functional without dbSearchWorker and withDbRetry
+const dbSearchWorker = getDb(); // Temporary stub
+const withDbRetry = <T>(fn: () => T) => fn(); // Temporary stub
 
 /**
  * Search outbox worker (GAP-DB-004).

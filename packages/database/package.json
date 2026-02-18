@@ -21,16 +21,16 @@
     "db:lint": "npx tsx src/scripts/schema-lint.ts"
   },
   "dependencies": {
-    "@neondatabase/serverless": "^1.0.0",
-    "drizzle-orm": "^0.44.0"
+    "@neondatabase/serverless": "catalog:",
+    "drizzle-orm": "catalog:"
   },
   "devDependencies": {
     "@types/node": "catalog:",
     "afenda-eslint-config": "workspace:^",
     "afenda-typescript-config": "workspace:*",
-    "dotenv": "^16.5.0",
-    "drizzle-kit": "^0.31.0",
-    "postgres": "^3.4.8",
+    "dotenv": "catalog:",
+    "drizzle-kit": "catalog:",
+    "postgres": "catalog:",
     "tslib": "catalog:",
     "tsup": "catalog:",
     "typescript": "catalog:"

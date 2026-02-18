@@ -17,18 +17,18 @@ Open `packages/ui/engine/tailwindengine.json` and set the 8 required fields:
   "colors": {
     "primary": "#10b981", // your main brand color (hex)
     "secondary": "#6366f1", // supporting color
-    "accent": "#f59e0b" // highlight / CTA color
+    "accent": "#f59e0b", // highlight / CTA color
   },
   "fonts": {
     "sans": "'Geist', sans-serif",
-    "mono": "'Geist Mono', monospace"
+    "mono": "'Geist Mono', monospace",
   },
   "spacingUnit": "4px", // base unit — all spacing is multiples of this
   "radiusBase": "0.375rem", // base border-radius
   "fontSizeBase": "1rem", // base font size — type scale grows from here
   "darkMode": "class", // "class" | "media" | "data-attribute"
   "projectName": "afenda", // appears in generated file headers
-  "shadowColor": "oklch(0 0 0 / 0.08)"
+  "shadowColor": "oklch(0 0 0 / 0.08)",
 }
 ```
 
@@ -55,9 +55,9 @@ your tokens.
 Your app's `globals.css` already imports the engine output:
 
 ```css
-@import "tailwindcss";
+@import 'tailwindcss';
 @source "../../../packages/ui/src";
-@import "../../../packages/ui/theme.css";
+@import '../../../packages/ui/theme.css';
 ```
 
 Now use the generated classes in your components:
@@ -201,9 +201,9 @@ These become usable as `theme-midnight:bg-blue-900` etc.
 In your new app's main CSS file:
 
 ```css
-@import "tailwindcss";
+@import 'tailwindcss';
 @source "../../../packages/ui/src";
-@import "../../../packages/ui/theme.css";
+@import '../../../packages/ui/theme.css';
 ```
 
 That's it. All tokens, utilities, variants, and component classes are available.
@@ -244,45 +244,45 @@ packages/ui/engine/
 
 ### Compulsory fields (8)
 
-| #  | Field              | Type            | Example                                    |
-| -- | ------------------ | --------------- | ------------------------------------------ |
-| 1  | `colors.primary`   | CSS hex         | `"#10b981"`                                |
-| 2  | `colors.secondary` | CSS hex         | `"#6366f1"`                                |
-| 3  | `colors.accent`    | CSS hex         | `"#f59e0b"`                                |
-| 4  | `fonts.sans`       | CSS font-family | `"'Geist', sans-serif"`                    |
-| 5  | `fonts.mono`       | CSS font-family | `"'Geist Mono', monospace"`                |
-| 6  | `spacingUnit`      | CSS length      | `"4px"`                                    |
-| 7  | `radiusBase`       | CSS length      | `"0.375rem"`                               |
-| 8  | `fontSizeBase`     | CSS length      | `"1rem"`                                   |
-| 9  | `darkMode`         | enum            | `"class"` / `"media"` / `"data-attribute"` |
-| 10 | `projectName`      | string          | `"afenda"`                                 |
-| 11 | `shadowColor`      | CSS color       | `"oklch(0 0 0 / 0.08)"`                    |
+| #   | Field              | Type            | Example                                    |
+| --- | ------------------ | --------------- | ------------------------------------------ |
+| 1   | `colors.primary`   | CSS hex         | `"#10b981"`                                |
+| 2   | `colors.secondary` | CSS hex         | `"#6366f1"`                                |
+| 3   | `colors.accent`    | CSS hex         | `"#f59e0b"`                                |
+| 4   | `fonts.sans`       | CSS font-family | `"'Geist', sans-serif"`                    |
+| 5   | `fonts.mono`       | CSS font-family | `"'Geist Mono', monospace"`                |
+| 6   | `spacingUnit`      | CSS length      | `"4px"`                                    |
+| 7   | `radiusBase`       | CSS length      | `"0.375rem"`                               |
+| 8   | `fontSizeBase`     | CSS length      | `"1rem"`                                   |
+| 9   | `darkMode`         | enum            | `"class"` / `"media"` / `"data-attribute"` |
+| 10  | `projectName`      | string          | `"afenda"`                                 |
+| 11  | `shadowColor`      | CSS color       | `"oklch(0 0 0 / 0.08)"`                    |
 
 > Note: `colors` has 3 sub-fields, `fonts` has 2 — totalling 8 top-level fields,
 > 11 values.
 
 ### Optional fields (12)
 
-| #  | Field                        | Type                   | Default                                     |
-| -- | ---------------------------- | ---------------------- | ------------------------------------------- |
-| 12 | `fonts.heading`              | CSS font-family        | Same as `fonts.sans`                        |
-| 13 | `semanticColors.destructive` | CSS hex                | `"#ef4444"`                                 |
-| 14 | `semanticColors.success`     | CSS hex                | Same as `colors.primary`                    |
-| 15 | `semanticColors.warning`     | CSS hex                | Same as `colors.accent`                     |
-| 16 | `semanticColors.info`        | CSS hex                | Same as `colors.secondary`                  |
-| 17 | `typeScaleRatio`             | number                 | `1.25`                                      |
-| 18 | `spacingSteps`               | number[]               | 33 standard steps (0.5–96)                  |
-| 19 | `motion.fast`                | CSS time               | `"150ms"`                                   |
-| 20 | `motion.normal`              | CSS time               | `"300ms"`                                   |
-| 21 | `motion.slow`                | CSS time               | `"500ms"`                                   |
-| 22 | `motion.reduced`             | CSS time               | `"0ms"`                                     |
-| 23 | `easings`                    | Record<string, string> | 5 curves (default, in, out, in-out, bounce) |
-| 24 | `zIndex`                     | Record<string, number> | 8 layers (dropdown–tooltip, 1000–1080)      |
-| 25 | `breakpoints`                | Record<string, string> | Tailwind v4 defaults                        |
-| 26 | `containers`                 | Record<string, string> | Derived from breakpoints                    |
-| 27 | `opacitySteps`               | number[]               | 0–100 by 5                                  |
-| 28 | `borderWidths`               | Record<string, string> | 0/1/2/4/8px                                 |
-| 29 | `customVariants`             | Record<string, string> | `{}`                                        |
+| #   | Field                        | Type                   | Default                                     |
+| --- | ---------------------------- | ---------------------- | ------------------------------------------- |
+| 12  | `fonts.heading`              | CSS font-family        | Same as `fonts.sans`                        |
+| 13  | `semanticColors.destructive` | CSS hex                | `"#ef4444"`                                 |
+| 14  | `semanticColors.success`     | CSS hex                | Same as `colors.primary`                    |
+| 15  | `semanticColors.warning`     | CSS hex                | Same as `colors.accent`                     |
+| 16  | `semanticColors.info`        | CSS hex                | Same as `colors.secondary`                  |
+| 17  | `typeScaleRatio`             | number                 | `1.25`                                      |
+| 18  | `spacingSteps`               | number[]               | 33 standard steps (0.5–96)                  |
+| 19  | `motion.fast`                | CSS time               | `"150ms"`                                   |
+| 20  | `motion.normal`              | CSS time               | `"300ms"`                                   |
+| 21  | `motion.slow`                | CSS time               | `"500ms"`                                   |
+| 22  | `motion.reduced`             | CSS time               | `"0ms"`                                     |
+| 23  | `easings`                    | Record<string, string> | 5 curves (default, in, out, in-out, bounce) |
+| 24  | `zIndex`                     | Record<string, number> | 8 layers (dropdown–tooltip, 1000–1080)      |
+| 25  | `breakpoints`                | Record<string, string> | Tailwind v4 defaults                        |
+| 26  | `containers`                 | Record<string, string> | Derived from breakpoints                    |
+| 27  | `opacitySteps`               | number[]               | 0–100 by 5                                  |
+| 28  | `borderWidths`               | Record<string, string> | 0/1/2/4/8px                                 |
+| 29  | `customVariants`             | Record<string, string> | `{}`                                        |
 
 ### Generated color palette (per color)
 
@@ -434,9 +434,9 @@ After the engine is set up, your app's `globals.css` should be minimal. The
 engine handles tokens, so remove any manual `:root` variables that overlap:
 
 ```css
-@import "tailwindcss";
+@import 'tailwindcss';
 @source "../../../packages/ui/src";
-@import "../../../packages/ui/theme.css";
+@import '../../../packages/ui/theme.css';
 
 /* Only keep app-specific overrides here, not design tokens */
 ```

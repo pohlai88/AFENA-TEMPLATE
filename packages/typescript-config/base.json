@@ -31,7 +31,6 @@
     "allowUnreachableCode": false,
     "exactOptionalPropertyTypes": true,
     // Emit
-    "composite": false,
     "declaration": true,
     "declarationMap": true,
     "sourceMap": true,

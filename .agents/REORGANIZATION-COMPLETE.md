@@ -30,7 +30,7 @@ The `.agent/` (singular) and `.agents/` (plural) directories have been successfu
 ✅ Moved **11 custom project skills** from `.agent/skills/` to `.agents/skills/`:
 
 - afenda-architecture
-- afena-cli-usage
+- afenda-cli-usage
 - afenda-database-patterns
 - ci-cd-pipeline
 - domain-driven-patterns
@@ -115,7 +115,7 @@ The `.agent/` (singular) and `.agents/` (plural) directories have been successfu
     │
     └── ─── Custom Project (11) ───
         ├── afenda-architecture/
-        ├── afena-cli-usage/
+        ├── afenda-cli-usage/
         ├── afenda-database-patterns/
         ├── ci-cd-pipeline/
         ├── domain-driven-patterns/
@@ -171,7 +171,7 @@ The `.agent/` (singular) and `.agents/` (plural) directories have been successfu
 #### 🏗️ Architecture & Development (7 skills)
 
 1. **afenda-architecture** - Monorepo architecture patterns
-2. **afena-cli-usage** - CLI commands and workflows
+2. **afenda-cli-usage** - CLI commands and workflows
 3. **afenda-database-patterns** - Database schema & migrations
 4. **package-development** - Package creation guide
 5. **domain-driven-patterns** - Domain-Driven Design patterns
@@ -353,7 +353,7 @@ Move-Item .agents\context .agent\context -Force
 Move-Item .agents\rules .agent\rules -Force
 
 # Move custom skills back
-$customSkills = @('afenda-architecture', 'afena-cli-usage', 'afenda-database-patterns', 'ci-cd-pipeline', 'domain-driven-patterns', 'example-deployment', 'lint-types-debug', 'monorepo-testing-strategy', 'neon-postgres', 'package-development', 'vitest-testing')
+$customSkills = @('afenda-architecture', 'afenda-cli-usage', 'afenda-database-patterns', 'ci-cd-pipeline', 'domain-driven-patterns', 'example-deployment', 'lint-types-debug', 'monorepo-testing-strategy', 'neon-postgres', 'package-development', 'vitest-testing')
 foreach ($skill in $customSkills) {
     Move-Item .agents\skills\$skill .agent\skills\$skill -Force
 }

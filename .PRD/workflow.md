@@ -72,7 +72,7 @@ Workflow equivalent of K-01 through K-15. Every one must be provable.
 
 ## Why NOT n8n / Camunda / Temporal
 
-| Engine                     | Strength                             | Why wrong for afenda                                                                                                       |
+| Engine                     | Strength                             | Why wrong for afenda                                                                                                      |
 | -------------------------- | ------------------------------------ | ------------------------------------------------------------------------------------------------------------------------- |
 | **n8n**                    | Integration automation (Zapier-like) | Doesn't understand doc lifecycle, multi-tenancy, or ERP audit trails. Impedance mismatch on every node.                   |
 | **Camunda**                | Enterprise BPMN process modeling     | Requires separate Zeebe engine + BPMN XML. Massive infra overhead for a SaaS. Doesn't share your DB/RLS/audit.            |

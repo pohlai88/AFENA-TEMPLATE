@@ -1,0 +1,124 @@
+{
+  "generatedAt": "2026-02-18T06:01:18.843Z",
+  "signature": "pnpm-lock.yaml:1771394477909:749367|apps/web/package.json:1771353415166:2069|packages/advisory/package.json:1771353415280:810|packages/canon/package.json:1771338357719:787|packages/crud/package.json:1771353415283:1173|packages/database/package.json:1771353415285:1025|packages/eslint-config/package.json:1771352007586:900|packages/logger/package.json:1771338357719:794|packages/migration/package.json:1771353415285:1227|packages/observability/package.json:1771356674388:2035|packages/search/package.json:1771353415291:809|packages/typescript-config/package.json:1771338357719:184|packages/ui/package.json:1771353415294:2106|packages/workflow/package.json:1771353415299:833|tools/afenda-cli/package.json:1771350816867:1206|tools/quality-metrics/package.json:1771353415318:720|afenda.registry.json:1771327807764:498|.afendarc.json:1770740027044:653",
+  "contentHash": "sha256:8b2742bee77236359cfcf0b0ba94e7e28dac74506113429f169803d20109a971",
+  "ungrouped": [
+    {
+      "source": "apps/web/package.json",
+      "currentScript": "lint:ci",
+      "suggestedCommand": "afenda (unclassified: lint:ci)",
+      "reason": "Unregistered script in apps/web"
+    },
+    {
+      "source": "apps/web/package.json",
+      "currentScript": "db:gen-types",
+      "suggestedCommand": "afenda (unclassified: db:gen-types)",
+      "reason": "Unregistered script in apps/web"
+    },
+    {
+      "source": "apps/web/package.json",
+      "currentScript": "ci:routes",
+      "suggestedCommand": "afenda (unclassified: ci:routes)",
+      "reason": "Unregistered script in apps/web"
+    },
+    {
+      "source": "apps/web/package.json",
+      "currentScript": "search:bootstrap",
+      "suggestedCommand": "afenda (unclassified: search:bootstrap)",
+      "reason": "Unregistered script in apps/web"
+    },
+    {
+      "source": "packages/advisory/package.json",
+      "currentScript": "lint:ci",
+      "suggestedCommand": "afenda (unclassified: lint:ci)",
+      "reason": "Unregistered script in packages/advisory"
+    },
+    {
+      "source": "packages/crud/package.json",
+      "currentScript": "lint:ci",
+      "suggestedCommand": "afenda (unclassified: lint:ci)",
+      "reason": "Unregistered script in packages/crud"
+    },
+    {
+      "source": "packages/database/package.json",
+      "currentScript": "db:generate",
+      "suggestedCommand": "afenda (unclassified: db:generate)",
+      "reason": "Unregistered script in packages/database"
+    },
+    {
+      "source": "packages/database/package.json",
+      "currentScript": "db:migrate",
+      "suggestedCommand": "afenda (unclassified: db:migrate)",
+      "reason": "Unregistered script in packages/database"
+    },
+    {
+      "source": "packages/database/package.json",
+      "currentScript": "db:push",
+      "suggestedCommand": "afenda (unclassified: db:push)",
+      "reason": "Unregistered script in packages/database"
+    },
+    {
+      "source": "packages/database/package.json",
+      "currentScript": "db:studio",
+      "suggestedCommand": "afenda (unclassified: db:studio)",
+      "reason": "Unregistered script in packages/database"
+    },
+    {
+      "source": "packages/database/package.json",
+      "currentScript": "db:lint",
+      "suggestedCommand": "afenda (unclassified: db:lint)",
+      "reason": "Unregistered script in packages/database"
+    },
+    {
+      "source": "packages/migration/package.json",
+      "currentScript": "lint:ci",
+      "suggestedCommand": "afenda (unclassified: lint:ci)",
+      "reason": "Unregistered script in packages/migration"
+    },
+    {
+      "source": "packages/observability/package.json",
+      "currentScript": "test:watch",
+      "suggestedCommand": "afenda dev",
+      "reason": "Unregistered script in packages/observability"
+    },
+    {
+      "source": "packages/observability/package.json",
+      "currentScript": "test:coverage",
+      "suggestedCommand": "afenda (unclassified: test:coverage)",
+      "reason": "Unregistered script in packages/observability"
+    },
+    {
+      "source": "packages/search/package.json",
+      "currentScript": "lint:ci",
+      "suggestedCommand": "afenda (unclassified: lint:ci)",
+      "reason": "Unregistered script in packages/search"
+    },
+    {
+      "source": "packages/ui/package.json",
+      "currentScript": "lint:ci",
+      "suggestedCommand": "afenda (unclassified: lint:ci)",
+      "reason": "Unregistered script in packages/ui"
+    },
+    {
+      "source": "packages/ui/package.json",
+      "currentScript": "engine:generate",
+      "suggestedCommand": "afenda (unclassified: engine:generate)",
+      "reason": "Unregistered script in packages/ui"
+    },
+    {
+      "source": "packages/workflow/package.json",
+      "currentScript": "lint:ci",
+      "suggestedCommand": "afenda (unclassified: lint:ci)",
+      "reason": "Unregistered script in packages/workflow"
+    },
+    {
+      "source": "tools/quality-metrics",
+      "suggestedCommand": "afenda (tool: quality-metrics)",
+      "reason": "Tool directory not wired into afenda CLI"
+    }
+  ],
+  "missingReadmes": [],
+  "staleReadmes": [
+    "tools/afenda-cli"
+  ]
+}

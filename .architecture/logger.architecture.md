@@ -23,16 +23,16 @@ Edge Runtime safe: ALS uses lazy `require('node:async_hooks')` with try/catch fa
 - **Redaction**: Passwords, tokens, secrets, authorization headers auto-redacted
 - **Audit channel**: Dedicated child logger with stable schema (`channel: 'audit'`)
 - **Component loggers**: `createComponentLogger(parent, 'crud')` for scoped logging
-- **No console.***: CI invariant E2 enforces Pino-only logging in runtime paths
+- **No console.\***: CI invariant E2 enforces Pino-only logging in runtime paths
 
 ---
 
 ## 3. Package Structure (live)
 
-| Metric | Value |
-| ------ | ----- |
-| **Source files** | 6 |
-| **Test files** | 0 |
+| Metric                 | Value  |
+| ---------------------- | ------ |
+| **Source files**       | 6      |
+| **Test files**         | 0      |
 | **Source directories** | (flat) |
 
 ---
@@ -47,8 +47,8 @@ Edge Runtime safe: ALS uses lazy `require('node:async_hooks')` with try/catch fa
 
 ### Type Exports
 
-| Type | Source |
-| ---- | ------ |
+| Type     | Source |
+| -------- | ------ |
 | `Logger` | `pino` |
 
 ---
@@ -62,9 +62,9 @@ Edge Runtime safe: ALS uses lazy `require('node:async_hooks')` with try/catch fa
 
 ### External
 
-| Package | Version |
-| ------- | ------- |
-| `pino` | `catalog:` |
+| Package                   | Version    |
+| ------------------------- | ---------- |
+| `pino`                    | `catalog:` |
 | `pino-abstract-transport` | `catalog:` |
 
 ---

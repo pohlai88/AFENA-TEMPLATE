@@ -34,6 +34,7 @@ Complete shadcn/ui documentation extracted from the official shadcn/ui repositor
 This skill includes **201 MDX files** (1.4MB) covering:
 
 ### Getting Started
+
 - **Installation** - Setup for Next.js, Vite, Remix, Astro, Laravel, Gatsby, React Router, Tanstack Router
 - **CLI** - shadcn/ui CLI commands and usage
 - **Components JSON** - Configuration and customization
@@ -41,6 +42,7 @@ This skill includes **201 MDX files** (1.4MB) covering:
 - **Typography** - Font setup and typography utilities
 
 ### Components (50+)
+
 - **Accordion** - Collapsible content sections
 - **Alert** - Contextual feedback messages
 - **Avatar** - User profile images
@@ -84,6 +86,7 @@ This skill includes **201 MDX files** (1.4MB) covering:
 - **And many more...**
 
 ### Advanced Features
+
 - **Charts** - Recharts integration (Area, Bar, Line, Pie, Radar, Radial)
 - **Forms** - React Hook Form, Tanstack Form, Zod integration
 - **Data Tables** - Advanced table patterns
@@ -92,6 +95,7 @@ This skill includes **201 MDX files** (1.4MB) covering:
 - **Icons** - Icon libraries (Lucide, Radix Icons)
 
 ### Framework Integration
+
 - **Next.js** - App Router, Pages Router
 - **Vite** - React + Vite setup
 - **Remix** - Remix integration
@@ -102,6 +106,7 @@ This skill includes **201 MDX files** (1.4MB) covering:
 - **Tanstack Router** - Tanstack Router integration
 
 ### Registry & Distribution
+
 - **Registry** - Component registry system
 - **Custom Registry** - Build your own component registry
 - **Namespace** - Custom namespaces
@@ -109,6 +114,7 @@ This skill includes **201 MDX files** (1.4MB) covering:
 - **MCP** - Model Context Protocol integration
 
 ### Developer Resources
+
 - **Changelog** - Version history and updates
 - **About** - Project philosophy and principles
 - **FAQ** - Frequently asked questions
@@ -132,6 +138,7 @@ This skill provides comprehensive documentation for:
 shadcn/ui is **not a component library**. It's a collection of re-usable components that you can copy and paste into your apps.
 
 **Key Benefits:**
+
 - **Own the code** - Components are copied to your project
 - **Customizable** - Full control over styling and behavior
 - **Accessible** - Built on Radix UI primitives
@@ -160,6 +167,7 @@ docs/
 ## Documentation Source
 
 Official shadcn/ui documentation extracted from:
+
 - Repository: https://github.com/shadcn-ui/ui
 - Website: https://ui.shadcn.com
 - Last Updated: 2026-02-07

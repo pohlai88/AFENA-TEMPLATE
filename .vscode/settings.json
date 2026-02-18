@@ -152,7 +152,11 @@
   "testing.showAllTests": true,
   // Enable code lens for tests
   "testing.enableCodeLens": true,
+  // ── Markdown ──────────────────────────────────────────────
   "markdown.validate.enabled": true,
+  "markdown.validate.fileLinks.enabled": "warning",
+  "markdown.validate.fragmentLinks.enabled": "warning",
+  "markdown.validate.ignoredLinks": [],
   "[markdown]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
