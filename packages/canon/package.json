@@ -33,6 +33,21 @@
       "import": "./dist/mappings/index.mjs",
       "require": "./dist/mappings/index.js"
     },
+    "./enums": {
+      "types": "./dist/enums/index.d.ts",
+      "import": "./dist/enums/index.mjs",
+      "require": "./dist/enums/index.js"
+    },
+    "./registries": {
+      "types": "./dist/registries/index.d.ts",
+      "import": "./dist/registries/index.mjs",
+      "require": "./dist/registries/index.js"
+    },
+    "./validators": {
+      "types": "./dist/validators/index.d.ts",
+      "import": "./dist/validators/index.mjs",
+      "require": "./dist/validators/index.js"
+    },
     "./package.json": "./package.json"
   },
   "typesVersions": {
@@ -48,6 +63,15 @@
       ],
       "mappings": [
         "dist/mappings/index.d.ts"
+      ],
+      "enums": [
+        "dist/enums/index.d.ts"
+      ],
+      "registries": [
+        "dist/registries/index.d.ts"
+      ],
+      "validators": [
+        "dist/validators/index.d.ts"
       ]
     }
   },
@@ -62,6 +86,7 @@
     "test:coverage": "vitest run --coverage"
   },
   "dependencies": {
+    "lru-cache": "^11.0.0",
     "zod": "catalog:"
   },
   "devDependencies": {

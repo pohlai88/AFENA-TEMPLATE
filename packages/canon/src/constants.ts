@@ -26,12 +26,13 @@ export const CANON_KEYSPACE_VERSION = 1 as const;
  * Always: validators can import everything else; index.ts imports validators.
  */
 export const CANON_LAYER_RULES = {
+  utils: { mayImport: [] as const },
   enums: { mayImport: [] as const },
   types: { mayImport: ['enums'] as const },
-  schemas: { mayImport: ['enums', 'types'] as const },
-  'lite-meta': { mayImport: ['enums', 'types', 'schemas'] as const },
-  mappings: { mayImport: ['enums', 'types', 'schemas', 'lite-meta'] as const },
-  registries: { mayImport: ['enums', 'types', 'schemas', 'lite-meta'] as const },
+  schemas: { mayImport: ['enums', 'types', 'utils'] as const },
+  'lite-meta': { mayImport: ['enums', 'types', 'schemas', 'utils'] as const },
+  mappings: { mayImport: ['enums', 'types', 'schemas', 'lite-meta', 'utils'] as const },
+  registries: { mayImport: ['enums', 'types', 'schemas', 'lite-meta', 'utils'] as const },
   validators: {
     mayImport: [
       'enums',
@@ -40,6 +41,7 @@ export const CANON_LAYER_RULES = {
       'lite-meta',
       'mappings',
       'registries',
+      'utils',
     ] as const,
   },
 } as const satisfies Record<string, { mayImport: readonly string[] }>;

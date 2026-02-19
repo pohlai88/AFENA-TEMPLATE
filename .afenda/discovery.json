@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-02-18T06:01:18.843Z",
-  "signature": "pnpm-lock.yaml:1771394477909:749367|apps/web/package.json:1771353415166:2069|packages/advisory/package.json:1771353415280:810|packages/canon/package.json:1771338357719:787|packages/crud/package.json:1771353415283:1173|packages/database/package.json:1771353415285:1025|packages/eslint-config/package.json:1771352007586:900|packages/logger/package.json:1771338357719:794|packages/migration/package.json:1771353415285:1227|packages/observability/package.json:1771356674388:2035|packages/search/package.json:1771353415291:809|packages/typescript-config/package.json:1771338357719:184|packages/ui/package.json:1771353415294:2106|packages/workflow/package.json:1771353415299:833|tools/afenda-cli/package.json:1771350816867:1206|tools/quality-metrics/package.json:1771353415318:720|afenda.registry.json:1771327807764:498|.afendarc.json:1770740027044:653",
-  "contentHash": "sha256:8b2742bee77236359cfcf0b0ba94e7e28dac74506113429f169803d20109a971",
+  "generatedAt": "2026-02-18T15:07:20.296Z",
+  "signature": "pnpm-lock.yaml:1771427238871:750634|apps/web/package.json:1771353415166:2069|packages/advisory/package.json:1771353415280:810|packages/canon/package.json:1771427167988:1987|packages/crud/package.json:1771353415283:1173|packages/database/package.json:1771353415285:1025|packages/eslint-config/package.json:1771352007586:900|packages/logger/package.json:1771338357719:794|packages/migration/package.json:1771353415285:1227|packages/observability/package.json:1771356674388:2035|packages/search/package.json:1771353415291:809|packages/typescript-config/package.json:1771338357719:184|packages/ui/package.json:1771353415294:2106|packages/workflow/package.json:1771353415299:833|tools/afenda-cli/package.json:1771350816867:1206|tools/quality-metrics/package.json:1771353415318:720|afenda.registry.json:1771327807764:498|.afendarc.json:1770740027044:653",
+  "contentHash": "sha256:da84412e54a8edd8c825c3a12f18960f235c93705eefe4a4cc5e8053c56634f4",
   "ungrouped": [
     {
       "source": "apps/web/package.json",
@@ -32,6 +32,18 @@
       "currentScript": "lint:ci",
       "suggestedCommand": "afenda (unclassified: lint:ci)",
       "reason": "Unregistered script in packages/advisory"
+    },
+    {
+      "source": "packages/canon/package.json",
+      "currentScript": "test:watch",
+      "suggestedCommand": "afenda dev",
+      "reason": "Unregistered script in packages/canon"
+    },
+    {
+      "source": "packages/canon/package.json",
+      "currentScript": "test:coverage",
+      "suggestedCommand": "afenda (unclassified: test:coverage)",
+      "reason": "Unregistered script in packages/canon"
     },
     {
       "source": "packages/crud/package.json",
@@ -119,6 +131,7 @@
   ],
   "missingReadmes": [],
   "staleReadmes": [
+    "packages/canon",
     "tools/afenda-cli"
   ]
 }

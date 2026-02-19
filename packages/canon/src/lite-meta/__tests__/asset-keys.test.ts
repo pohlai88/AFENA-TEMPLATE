@@ -15,7 +15,7 @@ import {
   parseAssetKey,
   validateAssetKey,
   type AssetKeyPrefix,
-} from '../asset-keys';
+} from '../core/asset-keys';
 
 describe('Asset Key System', () => {
   describe('K1: Round-trip identity', () => {

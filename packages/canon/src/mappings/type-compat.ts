@@ -630,7 +630,15 @@ export const TYPE_COMPAT_MATRIX: Record<DataType, Record<DataType, CompatLevel>>
  * TC1 invariant: getCompatLevel(T, T) === 'exact' for all T
  */
 export function getCompatLevel(from: DataType, to: DataType): CompatLevel {
-  return TYPE_COMPAT_MATRIX[from]?.[to] ?? 'incompatible';
+  // Use 'in' operator for explicit presence check (not truthy check)
+  if (!(from in TYPE_COMPAT_MATRIX)) {
+    return 'incompatible';
+  }
+  const row = TYPE_COMPAT_MATRIX[from];
+  if (!(to in row)) {
+    return 'incompatible';
+  }
+  return row[to];
 }
 
 /**

@@ -150,6 +150,58 @@ import { invoiceSchema, type Invoice } from 'afenda-canon';
 const validated: Invoice = invoiceSchema.parse(input);
 ```
 
+### Schema Catalog
+
+Canon exports a **static catalog** of all schemas for runtime discovery:
+
+```typescript
+import { 
+  CANON_SCHEMAS, 
+  getSchema, 
+  findSchemas,
+  extractOpenApiSeeds 
+} from 'afenda-canon';
+
+// Get specific schema by ID
+const entityIdSchema = getSchema('canon.branded.entityId');
+if (entityIdSchema) {
+  const result = entityIdSchema.schema.parse(uuid);
+}
+
+// Find all branded schemas
+const branded = findSchemas({ category: 'branded' });
+
+// Find all identifier schemas
+const identifiers = findSchemas({ tags: ['identifier'] });
+
+// Extract OpenAPI seeds (for Axis layer)
+const seeds = extractOpenApiSeeds();
+```
+
+### Entity Contract Registry
+
+Access entity lifecycle contracts and metadata:
+
+```typescript
+import { 
+  ENTITY_CONTRACT_REGISTRY,
+  getContract,
+  findByVerb,
+  findWithLifecycle 
+} from 'afenda-canon';
+
+// Get specific entity contract
+const contract = getContract('invoices');
+console.log(contract.label); // 'Invoice'
+console.log(contract.hasLifecycle); // true
+
+// Find all entities that support 'approve' action
+const approvable = findByVerb('approve');
+
+// Find all transactional documents
+const transactional = findWithLifecycle();
+```
+
 ---
 
 ## 🔗 Dependencies
@@ -409,9 +461,8 @@ cat package.json | grep -A 5 dependencies
 
 **In this package:**
 - `README.md` (this file) - Quick start and usage guide
-- `canon.architecture.md` - Complete architecture specification (2113 lines)
-- `CANON-V1-COMPLETE.md` - Production readiness certification
-- `IMPLEMENTATION-STATUS.md` - Test coverage and status summary
+- `canon.architecture.md` - Complete architecture specification
+- `src/*/README.md` - Detailed documentation for each subdirectory
 
 **Related:**
 - [ARCHITECTURE.md](../../ARCHITECTURE.md) - Complete 4-layer architecture

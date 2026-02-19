@@ -49,6 +49,22 @@ export type {
     CapabilityDescriptor, CapabilityDomain, CapabilityKey, CapabilityKind, CapabilityNamespace, CapabilityRisk, CapabilityScope, CapabilityStatus, ParsedCapabilityKey, RbacScope, RbacTier, VisPolicy
 } from './types/capability';
 
+// ── Branded IDs ─────────────────────────────────────────────
+export {
+    asAuditLogId, asBatchId, asEntityId, asMutationId, asOrgId, asUserId,
+    isAuditLogId, isBatchId, isEntityId, isMutationId, isOrgId, isUserId,
+    tryAsAuditLogId, tryAsBatchId, tryAsEntityId, tryAsMutationId, tryAsOrgId, tryAsUserId
+} from './types/ids';
+export type {
+    AssetKey, AuditLogId, BatchId, EntityId, MutationId, OrgId, UserId
+} from './types/ids';
+
+// ── Result Types ────────────────────────────────────────────
+export {
+    CANON_ISSUE_CODES, createIssue, err, errSingle, ok, zodErrorToCanonIssues
+} from './types/result';
+export type { CanonIssue, CanonIssueCode, CanonResult, WellKnownIssueCode } from './types/result';
+
 // ── ERP Enums ────────────────────────────────────────────
 export * from './enums/index';
 
@@ -92,9 +108,10 @@ export type { TypeConfigSchemas } from './schemas/data-types';
 
 // ── Validators ───────────────────────────────────────────
 export {
-    DATA_TYPE_VALUE_COLUMN_MAP, validateFieldValue
-} from './validators/custom-field-value';
-export type { FieldValidationResult } from './validators/custom-field-value';
+    CUSTOM_FIELD_VALIDATORS,
+    getFieldValidator,
+    validateCustomFieldValue
+} from './validators/presets/custom-field-value';
 
 // ── Constants ────────────────────────────────────────────
 export {
@@ -139,8 +156,44 @@ export {
 
 // ── Registries (Entity Contracts, Capability Catalog) ────────
 export {
-    // Entity Registry
-    ENTITY_CONTRACT_REGISTRY
+    // Entity Contract Registry - Types and functions
+    buildEntityContractRegistry,
+    // Entity Contracts Data
+    companiesContract,
+    contactsContract,
+    costCentersContract,
+    currenciesContract,
+    customersContract,
+    // Utilities
+    deepFreeze, deliveryNotesContract,
+    employeesContract,
+    // Entity Registry - Built and validated
+    ENTITY_CONTRACT_BUILD_EVENTS,
+    ENTITY_CONTRACT_REGISTRY,
+    ENTITY_CONTRACT_VALIDATION_REPORT, ENTITY_CONTRACTS,
+    // Errors
+    EntityContractRegistryError,
+    // Validation
+    entityContractSchema, findByLabel,
+    findByVerb,
+    findContracts,
+    findWithLifecycle,
+    findWithSoftDelete,
+    getContract,
+    getSize, goodsReceiptsContract, hasContract, invoicesContract,
+    journalEntriesContract, lifecycleTransitionSchema, listContracts, paymentsContract, paymentTermsContract, productsContract,
+    projectsContract,
+    purchaseInvoicesContract,
+    purchaseOrdersContract,
+    quotationsContract,
+    salesOrdersContract,
+    sitesContract,
+    suppliersContract,
+    taxCodesContract,
+    uomContract, validateLifecycleGraph, warehousesContract, type BuildOptions,
+    type EntityContractMap,
+    type RegistryBuildResult,
+    type RegistryEvent, type ValidationIssue, type ValidationReport, type ValidationSeverity
 } from './registries/index';
 // Note: Capability exports (CAPABILITY_CATALOG, etc.) are already exported above
 // from types/capability for backward compatibility.
@@ -155,3 +208,33 @@ export {
 
 // ── Shared JSON Value Schema (v4) ────────────────────────
 export { jsonValueSchema } from './schemas/json-value';
+
+// ── Schema Catalog ──────────────────────────────────────────
+export {
+    CANON_SCHEMA_BY_CATEGORY, CANON_SCHEMA_MAP, CANON_SCHEMAS
+} from './schemas/catalog';
+export {
+    findSchemas, getSchema, getSchemaMeta, getSchemasByCategory, hasSchema, listSchemas
+} from './schemas/catalog/discovery';
+export {
+    extractOpenApiSeeds, getOpenApiSeed
+} from './schemas/catalog/openapi';
+export type { OpenApiSchemaSeed } from './schemas/catalog/openapi';
+export type {
+    CanonSchemaItem, OpenApiSeed, SchemaCategory, SchemaFilters, SchemaId, SchemaMeta, SchemaTag
+} from './schemas/catalog/types';
+
+// ── Schema Utilities ────────────────────────────────────────
+export { createSchemaBuilder, SchemaBuilder } from './schemas/builders';
+export { clearSchemaCache, getSchemaCacheStats, memoizeSchema } from './schemas/cache';
+export { isSchemaErrorCode, SCHEMA_ERROR_CODES } from './schemas/error-codes';
+export type { SchemaErrorCode } from './schemas/error-codes';
+export { commonFields } from './schemas/fields';
+export { parseOrThrow, safeParse, SchemaValidationError } from './schemas/safe-parse';
+export type { ParseResult } from './schemas/safe-parse';
+
+// ── Validator Core ──────────────────────────────────────────
+export { isValidationCode, VAL_CODES } from './validators/core/codes';
+export type { ValidationCode } from './validators/core/codes';
+export type { NormalizingValidator, ValidationContext, ValidationResult, Validator, ValidationIssue as ValidatorIssue, ValidationSeverity as ValidatorSeverity } from './validators/core/types';
+

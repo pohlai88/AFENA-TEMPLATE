@@ -11,6 +11,10 @@
  */
 
 import type { DataType } from '../enums/data-types';
+import { encodeCacheKey, getCachedMapping, setCachedMapping } from './cache';
+import { buildReasonCodes, type MappingReasonCode } from './reason-codes';
+import { recordMappingEvent } from './telemetry';
+import type { MappingWarning } from './warnings';
 
 /**
  * Postgres type to Canon DataType mapping (V1)
@@ -176,7 +180,8 @@ export function normalizePgType(pgType: string): {
 }
 
 /**
- * Map a Postgres type to Canon DataType
+ * Map a Postgres type to Canon DataType (core implementation)
+ * Pure function without caching or telemetry
  *
  * @param pgType - PostgreSQL type name
  * @param meta - Optional metadata (characterMaximumLength, numericPrecision, numericScale)
@@ -188,13 +193,15 @@ export function normalizePgType(pgType: string): {
  * M2 invariant: Strict mode throws on unknown types; never silent fallback
  * M3 invariant: Returns confidence per CONFIDENCE_SEMANTICS
  */
-export function mapPostgresType(
+function mapPostgresTypeCore(
   pgType: string,
   meta?: { maxLength?: number; precision?: number; scale?: number },
   opts?: { mode?: 'strict' | 'loose' }
 ): {
   canonType: DataType;
   confidence: number;
+  reasonCodes: MappingReasonCode[];
+  warnings: MappingWarning[];
   notes?: string;
 } {
   const mode = opts?.mode ?? 'strict';
@@ -210,6 +217,8 @@ export function mapPostgresType(
       return {
         canonType,
         confidence: CONFIDENCE_SEMANTICS.SEMANTIC_EQUIV,
+        reasonCodes: buildReasonCodes({ primary: 'SEMANTIC_EQUIV' }),
+        warnings: [],
         notes: 'Postgres timestamp types preserve full precision; timezone handling differs slightly',
       };
     }
@@ -223,6 +232,8 @@ export function mapPostgresType(
       return {
         canonType,
         confidence: CONFIDENCE_SEMANTICS.NARROWING_WITH_METADATA,
+        reasonCodes: buildReasonCodes({ primary: 'NARROWING_WITH_METADATA' }),
+        warnings: [],
         notes: `varchar(${meta.maxLength}) mapped to long_text`,
       };
     }
@@ -232,6 +243,8 @@ export function mapPostgresType(
       return {
         canonType,
         confidence: CONFIDENCE_SEMANTICS.NARROWING_WITH_METADATA,
+        reasonCodes: buildReasonCodes({ primary: 'NARROWING_WITH_METADATA' }),
+        warnings: [],
         notes: 'UUID mapped to entity_ref (reference semantics depend on schema context)',
       };
     }
@@ -240,6 +253,8 @@ export function mapPostgresType(
     return {
       canonType,
       confidence: CONFIDENCE_SEMANTICS.EXACT,
+      reasonCodes: buildReasonCodes({ primary: 'EXACT_MATCH' }),
+      warnings: [],
     };
   }
 
@@ -250,10 +265,18 @@ export function mapPostgresType(
         `Unknown PostgreSQL type: '${pgType}'. Domain types require schema resolution. Use loose mode to fallback.`
       );
     }
+    const warning: MappingWarning = {
+      code: 'DOMAIN_TYPE_DETECTED',
+      message: `Unknown domain type '${pgType}' (schema resolution required); fell back to short_text`,
+      pgType,
+      fallbackType: 'short_text',
+    };
     return {
       canonType: 'short_text',
       confidence: CONFIDENCE_SEMANTICS.LOSSY_FALLBACK,
-      notes: `Unknown domain type '${pgType}' (schema resolution required); fell back to short_text`,
+      reasonCodes: buildReasonCodes({ primary: 'LOSSY_FALLBACK', flags: ['DOMAIN_TYPE_DETECTED'] }),
+      warnings: [warning],
+      notes: warning.message,
     };
   }
 
@@ -264,10 +287,18 @@ export function mapPostgresType(
         `Composite types not supported in strict mode: '${pgType}'. Use loose mode to map to json.`
       );
     }
+    const warning: MappingWarning = {
+      code: 'COMPOSITE_TYPE_DETECTED',
+      message: `Composite type '${pgType}' mapped to json (loses structure)`,
+      pgType,
+      fallbackType: 'json',
+    };
     return {
       canonType: 'json',
       confidence: CONFIDENCE_SEMANTICS.LOSSY_FALLBACK,
-      notes: `Composite type '${pgType}' mapped to json (loses structure)`,
+      reasonCodes: buildReasonCodes({ primary: 'LOSSY_FALLBACK', flags: ['COMPOSITE_TYPE_DETECTED'] }),
+      warnings: [warning],
+      notes: warning.message,
     };
   }
 
@@ -278,11 +309,83 @@ export function mapPostgresType(
     );
   }
 
+  const warning: MappingWarning = {
+    code: 'UNKNOWN_PG_TYPE',
+    message: `Unknown type '${pgType}'; fell back to short_text`,
+    pgType,
+    fallbackType: 'short_text',
+  };
   return {
     canonType: 'short_text',
     confidence: CONFIDENCE_SEMANTICS.LOSSY_FALLBACK,
-    notes: `Unknown type '${pgType}'; fell back to short_text`,
+    reasonCodes: buildReasonCodes({ primary: 'LOSSY_FALLBACK', flags: ['UNKNOWN_PG_TYPE'] }),
+    warnings: [warning],
+    notes: warning.message,
   };
+}
+
+/**
+ * Map a Postgres type to Canon DataType (public API with caching and telemetry)
+ *
+ * @param pgType - PostgreSQL type name
+ * @param meta - Optional metadata (characterMaximumLength, numericPrecision, numericScale)
+ * @param opts - Options (mode: 'strict' | 'loose')
+ *
+ * This is the blessed entrypoint with caching and telemetry.
+ * Use mapPostgresTypeCore for pure logic without side effects.
+ */
+export function mapPostgresType(
+  pgType: string,
+  meta?: { maxLength?: number; precision?: number; scale?: number },
+  opts?: { mode?: 'strict' | 'loose' }
+): {
+  canonType: DataType;
+  confidence: number;
+  reasonCodes: MappingReasonCode[];
+  warnings: MappingWarning[];
+  notes?: string;
+} {
+  const mode = opts?.mode ?? 'strict';
+
+  // Check cache first
+  const cacheKey = encodeCacheKey(pgType, meta, mode);
+  const cached = getCachedMapping(cacheKey);
+
+  if (cached) {
+    // Record telemetry for cache hit (zero overhead if disabled)
+    recordMappingEvent({
+      operation: 'postgres_map',
+      durationMs: 0, // Cached, no computation time
+      confidence: cached.confidence,
+      reasonCodes: cached.reasonCodes,
+      fromType: pgType,
+      toType: cached.canonType,
+      cached: true,
+    });
+    return cached;
+  }
+
+  // Not cached - measure execution time if telemetry enabled
+  const startTime = performance.now();
+
+  // Call core function
+  const result = mapPostgresTypeCore(pgType, meta, opts);
+
+  // Cache result
+  setCachedMapping(cacheKey, result);
+
+  // Record telemetry (zero overhead if disabled)
+  recordMappingEvent({
+    operation: 'postgres_map',
+    durationMs: performance.now() - startTime,
+    confidence: result.confidence,
+    reasonCodes: result.reasonCodes,
+    fromType: pgType,
+    toType: result.canonType,
+    cached: false,
+  });
+
+  return result;
 }
 
 /**

@@ -15,7 +15,7 @@ import {
   parseAssetKey,
   validateAssetKey,
   type AssetKeyPrefix,
-} from '../asset-keys';
+} from '../core/asset-keys';
 
 describe('Asset Key Invariants (Property-Based)', () => {
   /**

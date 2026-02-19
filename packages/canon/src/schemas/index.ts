@@ -4,25 +4,36 @@
  * Zod schemas for runtime validation and type inference.
  */
 
-// Action Schema
-export { actionTypeSchema } from './action';
+// ── Schema Utilities ────────────────────────────────────────
+// Cache
+export { clearSchemaCache, getSchemaCacheStats, memoizeSchema } from './cache';
+
+// Error Codes
+export { isSchemaErrorCode, SCHEMA_ERROR_CODES } from './error-codes';
+export type { SchemaErrorCode } from './error-codes';
+
+// Safe Parse
+export { parseOrThrow, safeParse, SchemaValidationError } from './safe-parse';
+export type { ParseResult } from './safe-parse';
+
+// Common Fields
+export { commonFields } from './fields';
+
+// Schema Builders
+export { createSchemaBuilder, SchemaBuilder } from './builders';
+
+// ── Schema Definitions ──────────────────────────────────────
+// Action Schemas
+export { actionFamilySchema, actionTypeSchema } from './action';
 
 // Branded ID Schemas (Phase 1)
 export {
-  entityIdSchema,
-  orgIdSchema,
-  userIdSchema,
-  batchIdSchema,
-  mutationIdSchema,
-  auditLogIdSchema,
+  auditLogIdSchema, batchIdSchema, entityIdSchema, mutationIdSchema, orgIdSchema,
+  userIdSchema
 } from './branded';
 
 // Data Type Schemas
-export {
-  getTypeConfigSchema,
-  TYPE_CONFIG_SCHEMAS,
-  validateTypeConfig,
-} from './data-types';
+export { getTypeConfigSchema, TYPE_CONFIG_SCHEMAS, validateTypeConfig } from './data-types';
 export type { TypeConfigSchemas } from './data-types';
 
 // Entity Schema
@@ -36,9 +47,7 @@ export { errorCodeSchema, kernelErrorSchema } from './errors';
 
 // Schema Helpers (Phase 1)
 export {
-  withMeta,
-  primitives,
-  createEnumSchema,
+  createEnumSchema, primitives, withMeta
 } from './helpers';
 
 // JSON Value Schema
@@ -46,17 +55,56 @@ export { jsonValueSchema } from './json-value';
 
 // LiteMetadata Schemas (Zod v4)
 export {
-  assetDescriptorSchema,
-  assetKeySchema,
-  assetKeyInputSchema,
-  parsedAssetKeySchema,
+  assetDescriptorSchema, assetKeyInputSchema, assetKeySchema, parsedAssetKeySchema,
   qualityDimensionSchema,
   qualityRuleSchema,
-  qualityRuleTypeSchema,
+  qualityRuleTypeSchema
 } from './lite-meta';
 
 // Mutation Schema
 export { mutationSpecSchema } from './mutation';
 
+// Audit Schema
+export { auditLogEntrySchema } from './audit';
+
 // Receipt Schema
 export { receiptSchema, receiptStatusSchema } from './receipt';
+
+// Capability Schemas
+export {
+  capabilityDescriptorSchema, capabilityDomainSchema, capabilityExceptionSchema,
+  capabilityExceptionsFileSchema, capabilityKindSchema, capabilityNamespaceSchema,
+  capabilityRiskSchema, capabilityScopeSchema, capabilityStatusSchema,
+  exceptionScopeSchema, rbacScopeSchema, rbacTierSchema
+} from './capability';
+export type { CapabilityException, ExceptionScope } from './capability';
+
+// ── Schema Catalog (Phase 3) ────────────────────────────────
+// Frozen catalog and discovery API
+export {
+  CANON_SCHEMA_BY_CATEGORY,
+  CANON_SCHEMA_MAP, CANON_SCHEMAS
+} from './catalog';
+
+export {
+  findSchemas,
+  getSchema, getSchemaMeta, getSchemasByCategory, hasSchema,
+  listSchemas
+} from './catalog/discovery';
+
+export {
+  extractOpenApiSeeds,
+  getOpenApiSeed
+} from './catalog/openapi';
+
+export type { OpenApiSchemaSeed } from './catalog/openapi';
+export type {
+  CanonSchemaItem,
+  OpenApiSeed,
+  SchemaCategory,
+  SchemaFilters,
+  SchemaId,
+  SchemaMeta,
+  SchemaTag
+} from './catalog/types';
+

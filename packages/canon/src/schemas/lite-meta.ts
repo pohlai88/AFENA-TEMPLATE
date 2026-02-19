@@ -7,7 +7,9 @@
 
 import { z } from 'zod';
 
-import { parseAssetKey } from '../lite-meta/asset-keys';
+import { parseAssetKey, type AssetKeyPrefix } from '../lite-meta/core/asset-keys';
+import { ASSET_TYPE_PREFIXES } from '../lite-meta/types/asset-type-prefixes';
+import { SCHEMA_ERROR_CODES } from './error-codes';
 
 /**
  * Asset Key Schema (CANONICAL - strict validation)
@@ -160,6 +162,26 @@ export const assetDescriptorSchema = z
 
     // Glossary Aspect
     glossaryTerms: z.array(z.string()).optional(),
+  })
+  .superRefine((data, ctx) => {
+    // INV-META-01: Asset key prefix must match asset type
+    const parsed = parseAssetKey(data.assetKey);
+    if (!parsed.valid) return; // Let assetKeySchema handle invalid keys
+
+    const allowedPrefixes = ASSET_TYPE_PREFIXES[data.assetType];
+    if (!allowedPrefixes) return; // Unknown asset type, skip validation
+
+    const hasValidPrefix = allowedPrefixes.some((prefix: AssetKeyPrefix) =>
+      data.assetKey.startsWith(prefix)
+    );
+
+    if (!hasValidPrefix) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: `${SCHEMA_ERROR_CODES.META_PREFIX_MISMATCH}: asset key prefix must match type (expected: ${allowedPrefixes.join(' or ')})`,
+        path: ['assetKey'],
+      });
+    }
   })
   .meta({
     id: 'AssetDescriptor',

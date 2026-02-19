@@ -14,7 +14,7 @@ import { z } from 'zod';
  * Metadata is used when generating JSON Schema or OpenAPI specs.
  * 
  * @param schema - Any Zod schema
- * @param meta - Metadata object with id, description, and optional examples
+ * @param meta - Metadata object with id, description, and optional fields
  * @returns Schema with metadata attached
  * 
  * @example
@@ -31,7 +31,7 @@ import { z } from 'zod';
  */
 export function withMeta<T extends z.ZodTypeAny>(
   schema: T,
-  meta: { id: string; description: string; examples?: unknown[] }
+  meta: { id: string; description: string; examples?: unknown[]; deprecated?: boolean; tags?: string[] }
 ): T {
   return schema.meta(meta);
 }
@@ -108,7 +108,7 @@ export const primitives = {
  */
 export function createEnumSchema<T extends readonly [string, ...string[]]>(
   values: T,
-  meta: { id: string; description: string }
+  meta: { id: string; description: string; examples?: unknown[] }
 ) {
   return z.enum(values).meta(meta);
 }

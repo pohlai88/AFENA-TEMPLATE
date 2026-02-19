@@ -3,51 +3,44 @@
  *
  * Pure metadata operations: asset identification, alias resolution, lineage,
  * quality rules, column classification, and glossary types.
+ * 
+ * Architecture:
+ * - core/ — Pure deterministic functions (zero side effects)
+ * - cache/ — In-memory caching with stats
+ * - types/ — Shared types (errors, diagnostics)
+ * - hooks/ — Instrumentation callbacks (optional)
  */
 
-// Asset Keys
-export {
-    ASSET_KEY_PREFIX_SPECS, analyzeAssetKey, assertAssetTypeMatchesKey, buildAssetKey,
-    canonicalizeKey, deriveAssetTypeFromKey, parseAssetKey,
-    validateAssetKey, type AssetKeyPrefix,
-    type ParsedAssetKey
-} from './asset-keys';
+// Re-export everything from core (pure functions)
+export * from './core';
 
-// Asset Fingerprint
+// Re-export cache utilities
 export {
-    assetFingerprint,
-    descriptorsEqual, type AssetDescriptor
-} from './asset-fingerprint';
+    getAllCacheStats,
+    memoize, Memoized, memoizeWith, NoOpCacheStore, TieredCache, type CacheOptions, type CacheSetOptions, type CacheStats, type CacheStore, type MemoizeOptions
+} from './cache';
 
-// Alias Resolution
+// Re-export instrumentation hooks
 export {
-    ALIAS_SCOPE_SPECIFICITY, matchAlias,
-    resolveAlias, slugify, type AliasCandidate,
-    type AliasMatch, type AliasTrace, type ResolutionContext, type ResolutionResult, type ResolutionRule
-} from './alias-resolution';
+    clearInstrumentationHooks, getInstrumentationHooks, Instrumented, isInstrumentationEnabled, setInstrumentationHooks, withInstrumentation, type CacheContext, type CallContext,
+    type CallEndContext, type ErrorContext, type InstrumentationHooks
+} from './hooks';
 
-// Lineage
+// Re-export resilience features
 export {
-    explainLineageEdge, inferEdgeType, topoSortLineage, validateLineageEdge, type LineageEdge
-} from './lineage';
+    andThen, AssetTypeMismatchError, BatchOperationError, BudgetExceededError, CacheError, ClassificationError, classifyColumnsSafe, ConfigurationError, CpuBudgetTracker, DEFAULT_BUDGETS, formatError, getErrorContext, getUserMessage, InvalidAssetKeyError, isError, isErrorType, isLiteMetaError, isOk, LiteMetaError, mapResult, parseAssetKeySafe, unwrap,
+    unwrapOr, ValidationError, withBudget, type CpuBudget,
+    type Result
+} from './resilience';
 
-// Quality Rules
+// Re-export batch operations
 export {
-    DIMENSION_TO_RULES,
-    compileQualityRule,
-    scoreQualityTier, type QualityCheckResult, type QualityDimension, type QualityPlan, type QualityRule, type QualityRuleType
-} from './quality-rules';
+    calculateOptimalChunkSize, classifyColumnsBatch, classifyColumnsBatchGrouped, classifyColumnsBatchPII, classifyColumnsBatchStats,
+    classifyColumnsMulti, filterInChunks, groupByInChunks, parseAssetKeyBatch, parseAssetKeyBatchSeparate,
+    parseAssetKeyBatchStats, parseAssetKeyBatchValid, processInChunks,
+    processInChunksWithIndex, reduceInChunks, type BatchClassificationStats, type BatchParseStats, type ColumnClassificationResult, type ColumnInfo
+} from './batch';
 
-// Classification
-export {
-    PII_PATTERNS,
-    classifyColumn,
-    classifyColumns, type PIIPattern
-} from './classification';
-
-// Glossary
-export {
-    type GlossaryTerm,
-    type TermLink
-} from './glossary';
+// Re-export shared types
+export { ASSET_TYPE_PREFIXES } from './types';
 

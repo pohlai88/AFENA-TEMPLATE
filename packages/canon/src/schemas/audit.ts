@@ -1,8 +1,8 @@
 import { z } from 'zod';
 
 import { channelSchema } from '../enums/channel';
-
 import { actionFamilySchema } from './action';
+import { SCHEMA_ERROR_CODES } from './error-codes';
 import { jsonValueSchema } from './json-value';
 
 export const auditLogEntrySchema = z.object({
@@ -30,4 +30,15 @@ export const auditLogEntrySchema = z.object({
   before: jsonValueSchema.nullable(),
   after: jsonValueSchema.nullable(),
   diff: jsonValueSchema.nullable(),
+}).superRefine((data, ctx) => {
+  // INV-AUDIT-01: Version progression check
+  if (data.versionBefore !== null && data.versionAfter !== null) {
+    if (data.versionAfter <= data.versionBefore) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: `${SCHEMA_ERROR_CODES.AUDIT_VERSION_REGRESSION}: versionAfter must be > versionBefore`,
+        path: ['versionAfter'],
+      });
+    }
+  }
 });

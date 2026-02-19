@@ -6,7 +6,7 @@
  */
 
 import { describe, expect, it } from 'vitest';
-import { assetFingerprint, type AssetDescriptor } from '../asset-fingerprint';
+import { assetFingerprint, type AssetDescriptor } from '../core/asset-fingerprint';
 
 describe('Asset Fingerprint', () => {
   describe('F1: Deterministic hashing', () => {

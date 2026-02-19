@@ -6,7 +6,7 @@
  */
 
 import { describe, expect, it } from 'vitest';
-import { classifyColumn, PII_PATTERNS } from '../classification';
+import { classifyColumn, PII_PATTERNS } from '../core/classification';
 
 describe('Classification', () => {
   describe('C1: Pattern matching', () => {
