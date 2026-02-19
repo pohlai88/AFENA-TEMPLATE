@@ -6,10 +6,10 @@
  */
 
 import { getActionFamily } from '../action';
-import { inferKindFromVerb } from './verbs';
-import { validateCapabilityKey } from './parser';
-import { ACTION_FAMILY_TO_TIER, KIND_TO_TIER, KIND_TO_SCOPE, type RbacTier, type RbacScope } from './rbac';
 import type { CapabilityKind } from './kinds';
+import { validateCapabilityKey } from './parser';
+import { ACTION_FAMILY_TO_TIER, KIND_TO_SCOPE, KIND_TO_TIER, type RbacScope, type RbacTier } from './rbac';
+import { inferKindFromVerb } from './verbs';
 
 export type CapabilityStatus = 'planned' | 'active' | 'deprecated';
 export type CapabilityScope = 'org' | 'company' | 'site' | 'global';
@@ -331,3 +331,57 @@ export const CAPABILITY_KEYS = Object.keys(CAPABILITY_CATALOG);
 
 /** Type-safe union of all capability keys. */
 export type CapabilityKey = keyof typeof CAPABILITY_CATALOG;
+
+// ── Capability Resolution API ───────────────────────────────
+
+/**
+ * Resolve a capability descriptor from the catalog.
+ * Returns undefined if the capability is not registered.
+ *
+ * Used by enforcePolicyV2 to validate against Canon vocabulary.
+ *
+ * @example
+ * ```ts
+ * const cap = resolveCapabilityDescriptor('contacts', 'create');
+ * if (cap) {
+ *   console.log(cap.scope, cap.risks);
+ * }
+ * ```
+ */
+export function resolveCapabilityDescriptor(
+  entityType: string,
+  verb: string,
+): CapabilityDescriptor | undefined {
+  const key = `${entityType}.${verb}`;
+  return CAPABILITY_CATALOG[key];
+}
+
+/**
+ * Check if a capability key exists in the catalog.
+ *
+ * @example
+ * ```ts
+ * if (hasCapability('contacts', 'create')) {
+ *   // proceed with policy check using Canon vocabulary
+ * }
+ * ```
+ */
+export function hasCapability(entityType: string, verb: string): boolean {
+  return `${entityType}.${verb}` in CAPABILITY_CATALOG;
+}
+
+/**
+ * Get all registered capabilities for an entity type.
+ * Returns an array of capability descriptors.
+ *
+ * @example
+ * ```ts
+ * const contactCaps = getCapabilitiesForEntity('contacts');
+ * // => [contacts.create, contacts.update, contacts.delete, ...]
+ * ```
+ */
+export function getCapabilitiesForEntity(entityType: string): CapabilityDescriptor[] {
+  return Object.values(CAPABILITY_CATALOG).filter(
+    (cap) => cap.entities?.includes(entityType) || cap.key.startsWith(`${entityType}.`),
+  );
+}

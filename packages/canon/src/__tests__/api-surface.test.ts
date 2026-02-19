@@ -64,6 +64,7 @@ describe('Public API Surface Audit', () => {
       'ACTION_FAMILY_TO_TIER',
       'ACTION_TYPES',
       'ACTION_VERBS',
+      'CANON_EVENT_NAMES',
       'CANON_ISSUE_CODES',
       'CAPABILITY_CATALOG',
       'CAPABILITY_DOMAINS',
@@ -90,6 +91,7 @@ describe('Public API Surface Audit', () => {
       'asMutationId',
       'asOrgId',
       'asUserId',
+      'assertCanonEventName',
       'createIssue',
       'err',
       'errSingle',
@@ -129,6 +131,8 @@ describe('Public API Surface Audit', () => {
     expect(exportedKeys).toContain('entityIdSchema');
     expect(exportedKeys).toContain('entityRefSchema');
     expect(exportedKeys).toContain('receiptSchema');
+    expect(exportedKeys).toContain('mutationReceiptSchema');
+    expect(exportedKeys).toContain('retryableReasonSchema');
   });
 
   it('mappings exports match approved list', async () => {

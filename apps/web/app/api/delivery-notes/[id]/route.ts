@@ -1,6 +1,6 @@
 import { NextRequest } from 'next/server';
 
-import { readDeliveryNoteWithLines } from 'afenda-crud';
+import { readDeliveryNoteWithLines } from 'afenda-crud/internal';
 import { getRequestId } from 'afenda-logger';
 
 import { withAuthOrApiKey } from '@/lib/api/with-auth-or-api-key';

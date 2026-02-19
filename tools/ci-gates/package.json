@@ -1,0 +1,14 @@
+{
+    "name": "ci-gates",
+    "version": "0.0.1",
+    "private": true,
+    "scripts": {
+        "test": "vitest run"
+    },
+    "devDependencies": {
+        "afenda-crud": "workspace:*",
+        "afenda-typescript-config": "workspace:*",
+        "typescript": "catalog:",
+        "vitest": "catalog:"
+    }
+}

@@ -1,4 +1,10 @@
-import { SYSTEM_ACTOR_USER_ID, isSystemChannel } from 'afenda-canon';
+import {
+  buildCapabilityKey,
+  hasCapability,
+  isSystemChannel,
+  resolveCapabilityDescriptor,
+  SYSTEM_ACTOR_USER_ID
+} from 'afenda-canon';
 import {
   and,
   batch,
@@ -10,7 +16,6 @@ import {
   userScopes,
 } from 'afenda-database';
 
-import type { MutationContext } from './context';
 import type {
   AuthoritySnapshotV2,
   AuthScope,
@@ -20,8 +25,9 @@ import type {
   PolicyDecision,
   ResolvedActor,
   ResolvedPermission,
-  UserScopeAssignment,
+  UserScopeAssignment
 } from 'afenda-canon';
+import type { MutationContext } from '../../context';
 
 /**
  * Resolve actor's full permission set from DB.
@@ -271,6 +277,13 @@ export async function enforcePolicyV2(
 
   const actor = await resolveActor(ctx.actor.orgId, ctx.actor.userId);
 
+  // ── K-05/Phase 6.4: Resolve capability from Canon vocabulary ────────────
+  // Build the capability key and resolve from CAPABILITY_CATALOG.
+  // This validates the verb against Canon's vocabulary and enriches the audit trail.
+  const capabilityKey = buildCapabilityKey(spec.entityRef.type, verb);
+  const capabilityDescriptor = resolveCapabilityDescriptor(spec.entityRef.type, verb);
+  const isKnownCapability = hasCapability(spec.entityRef.type, verb);
+
   const decision = evaluatePolicyDecision(
     actor,
     spec.entityRef.type,
@@ -287,6 +300,7 @@ export async function enforcePolicyV2(
       (p.verb === '*' || p.verb === verb),
   );
 
+  // Build base authority snapshot
   const authoritySnapshot: AuthoritySnapshotV2 = {
     policyVersion: 'v2',
     verb,
@@ -298,6 +312,12 @@ export async function enforcePolicyV2(
       roleIds: actor.roleIds,
     },
     matchedPermissions,
+    // Phase 6.4: Include Canon capability vocabulary in authority snapshot
+    capabilityKey,
+    capabilityKnown: isKnownCapability,
+    // Only include capabilityScope and capabilityRisks if descriptor exists
+    ...(capabilityDescriptor?.scope && { capabilityScope: capabilityDescriptor.scope }),
+    ...(capabilityDescriptor?.risks && { capabilityRisks: capabilityDescriptor.risks }),
   };
 
   if (!decision.ok) {

@@ -84,6 +84,18 @@ export { ownerPolicy, tenantPolicy } from './helpers/tenant-policy';
 // Standard index helpers (PK + indexes + CHECK + RLS in one call)
 export { docIndexes, erpIndexes } from './helpers/standard-indexes';
 
+// ── DB Retry Utilities (Phase 3) ─────────────────────────
+export { getDbTimeoutCode, isDbTimeoutError, withDbRetry } from './helpers/db-retry';
+
+// ── Schema-Derived Allowlist Helper (Phase 3) ────────────
+export { getWritableColumnNames, pickWritable } from './helpers/pick-writable';
+
+// ── Batch Query Helper (Phase 3) ─────────────────────────
+export { batch } from './helpers/batch';
+
+// ── Entity Registry API (Phase 3) ────────────────────────
+export { ENTITY_TABLE_MAP, getTableForEntityType, isKnownEntityType, listEntityTypes } from './registry-api';
+
 // ============================================================================
 // DRIZZLE OPERATORS (Deprecated - Import from drizzle-orm directly)
 // ============================================================================

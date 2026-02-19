@@ -18,6 +18,18 @@ export const ERROR_CODES = [
 export type ErrorCode = (typeof ERROR_CODES)[number];
 
 /**
+ * Reason why a failed mutation is eligible for retry.
+ *
+ * Used in `MutationReceiptError.retryableReason` to communicate the cause of a
+ * server-side failure so callers can apply appropriate back-off / retry strategies.
+ *
+ * - `rate_limited`    — throttled by the rate limiter; honour `retryAfterMs`
+ * - `db_timeout`      — statement_timeout or idle_in_transaction timed out
+ * - `transient_error` — other transient infrastructure failure (network, etc.)
+ */
+export type RetryableReason = 'rate_limited' | 'db_timeout' | 'transient_error';
+
+/**
  * Internal error class for Canon validation errors
  * 
  * NOTE: This is for internal use only. Public APIs should return CanonResult instead.

@@ -83,3 +83,21 @@ export function validateCapabilityKey(key: string): ParsedCapabilityKey {
     throw new Error(`Unknown namespace "${parsed.ns}" in key "${key}"`);
   return parsed;
 }
+
+/**
+ * Build a capability key from entity type and verb.
+ *
+ * Standard format: `{entityType}.{verb}` (e.g., `contacts.create`)
+ *
+ * Used by enforcePolicyV2 to resolve required capabilities from Canon vocabulary.
+ * Does NOT validate against CAPABILITY_CATALOG — use `resolveCapabilityKey()` for that.
+ *
+ * @example
+ * ```ts
+ * buildCapabilityKey('contacts', 'create') // => 'contacts.create'
+ * buildCapabilityKey('sales_orders', 'approve') // => 'sales_orders.approve'
+ * ```
+ */
+export function buildCapabilityKey(entityType: string, verb: string): string {
+  return `${entityType}.${verb}`;
+}

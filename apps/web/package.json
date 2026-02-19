@@ -25,6 +25,7 @@
     "@xyflow/react": "catalog:",
     "afenda-canon": "workspace:*",
     "afenda-crud": "workspace:*",
+    "afenda-crud-convenience": "workspace:*",
     "afenda-database": "workspace:^",
     "afenda-logger": "workspace:*",
     "afenda-observability": "workspace:*",

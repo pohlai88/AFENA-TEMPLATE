@@ -1,4 +1,4 @@
-import type { ApiResponse, ErrorCode, KernelError, Receipt } from 'afenda-canon';
+import type { ApiResponse, ErrorCode, KernelError, MutationReceipt } from 'afenda-canon';
 
 /** Optional meta fields to merge into the response envelope. */
 export type ApiMetaExtras = { totalCount?: number; nextCursor?: string };
@@ -7,7 +7,7 @@ export type ApiMetaExtras = { totalCount?: number; nextCursor?: string };
 export function ok<T>(
   data: T,
   requestId: string,
-  receipt?: Receipt,
+  receipt?: MutationReceipt,
   meta?: ApiMetaExtras,
 ): ApiResponse<T> {
   const base = { requestId, receipt };
@@ -23,7 +23,7 @@ export function err(
   code: ErrorCode,
   message: string,
   requestId: string,
-  receipt?: Receipt,
+  receipt?: MutationReceipt,
   details?: Record<string, unknown>,
 ): ApiResponse<never> {
   const error: KernelError = { code, message };

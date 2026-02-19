@@ -1,5 +1,5 @@
 import { sql } from 'drizzle-orm';
-import { check, date, index, jsonb, numeric, pgTable, text } from 'drizzle-orm/pg-core';
+import { bigint, check, date, index, integer, jsonb, numeric, pgTable, text } from 'drizzle-orm/pg-core';
 
 import { tenantPk } from '../helpers/base-entity';
 import { erpEntityColumns } from '../helpers/erp-entity';
@@ -19,6 +19,16 @@ export const assets = pgTable(
     location: text('location'),
     status: text('status').notNull().default('active'),
     assetData: jsonb('asset_data').notNull().default(sql`'{}'::jsonb`),
+
+    // ── Depreciation Fields (Phase A Accounting) ─────────────
+    /** Acquisition cost in minor units (cents) for depreciation calculation */
+    acquisitionCostMinor: bigint('acquisition_cost_minor', { mode: 'number' }),
+    /** Residual/salvage value in minor units (cents) */
+    residualValueMinor: bigint('residual_value_minor', { mode: 'number' }),
+    /** Useful life in months for depreciation */
+    usefulLifeMonths: integer('useful_life_months'),
+    /** Depreciation method: 'straight_line', 'declining_balance', 'units_of_production', 'none' */
+    depreciationMethod: text('depreciation_method').default('none'),
   },
   (table) => [
     tenantPk(table),

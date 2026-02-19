@@ -1,7 +1,7 @@
 import { getActionFamily } from 'afenda-canon';
 
-import type { MutationContext } from './context';
 import type { ActionFamily, MutationSpec } from 'afenda-canon';
+import type { MutationContext } from '../../context';
 
 const POLICY_VERSION = 'v1' as const;
 

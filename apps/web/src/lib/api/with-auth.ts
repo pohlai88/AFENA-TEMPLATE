@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-import { checkRateLimit } from 'afenda-crud';
+import { checkRateLimit } from 'afenda-crud/internal';
 import { db, sql } from 'afenda-database';
 import { runWithContext } from 'afenda-logger';
 

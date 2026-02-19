@@ -4,7 +4,7 @@ export type { NewUser, User } from './users';
 export { r2Files } from './r2-files';
 export type { NewR2File, R2File } from './r2-files';
 
-export { r2FilesRelations, usersRelations } from './relations';
+export { deliveryNoteLinesRelations, deliveryNotesRelations, r2FilesRelations, usersRelations } from './relations';
 
 export { auditLogs } from './audit-logs';
 export type { AuditLog, NewAuditLog } from './audit-logs';
@@ -269,5 +269,69 @@ export type { FranchiseApplication, NewFranchiseApplication } from './franchise-
 
 export { outletAudits } from './outlet-audits';
 export type { NewOutletAudit, OutletAudit } from './outlet-audits';
+
+// ── Procurement: Delivery Notes ──────────────────────────
+export { deliveryNotes } from './delivery-notes';
+export type { DeliveryNote, NewDeliveryNote } from './delivery-notes';
+
+export { deliveryNoteLines } from './delivery-note-lines';
+export type { DeliveryNoteLine, NewDeliveryNoteLine } from './delivery-note-lines';
+
+// ── Webhooks ─────────────────────────────────────────────
+export { webhookEndpoints } from './webhook-endpoints';
+export type { NewWebhookEndpoint, WebhookEndpoint } from './webhook-endpoints';
+
+export { webhookDeliveries } from './webhook-deliveries';
+export type { NewWebhookDelivery, WebhookDelivery } from './webhook-deliveries';
+
+// ── Transactional Outbox (Phase 2 K-12) ──────────────────
+export {
+    integrationOutbox,
+    searchOutbox,
+    webhookOutbox,
+    workflowOutbox
+} from './outbox';
+export type {
+    IntegrationOutboxRow,
+    SearchOutboxRow,
+    WebhookOutboxRow,
+    WorkflowOutboxRow
+} from './outbox';
+
+// ── Idempotency Keys (Phase 2 K-10) ──────────────────────
+export { idempotencyKeys } from './idempotency-keys';
+export type { IdempotencyKey, NewIdempotencyKey } from './idempotency-keys';
+
+// ── FX / Media Settings ───────────────────────────────────
+export { currencyExchanges } from './currency-exchanges';
+export type { CurrencyExchange, NewCurrencyExchange } from './currency-exchanges';
+
+export { videoSettings } from './video-settings';
+export type { NewVideoSettings, VideoSettings } from './video-settings';
+
+// ── Accounting Domain (Phase A) ──────────────────────────
+export { fxRates } from './fx-rates';
+export type { FxRate, NewFxRate } from './fx-rates';
+
+export { fiscalPeriods } from './fiscal-periods';
+export type { FiscalPeriod, NewFiscalPeriod } from './fiscal-periods';
+
+export { taxRates } from './tax-rates';
+export type { NewTaxRate, TaxRate } from './tax-rates';
+
+export { depreciationSchedules } from './depreciation-schedules';
+export type { DepreciationSchedule, NewDepreciationSchedule } from './depreciation-schedules';
+
+export { matchResults } from './match-results';
+export type { MatchResult, NewMatchResult } from './match-results';
+
+export { paymentAllocations } from './payment-allocations';
+export type { NewPaymentAllocation, PaymentAllocation } from './payment-allocations';
+
+export { revenueSchedules } from './revenue-schedules';
+export type { NewRevenueSchedule, RevenueSchedule } from './revenue-schedules';
+
+export { revenueScheduleLines } from './revenue-schedule-lines';
+export type { NewRevenueScheduleLine, RevenueScheduleLine } from './revenue-schedule-lines';
 
 // @entity-gen:schema-barrel

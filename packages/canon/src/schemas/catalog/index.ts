@@ -12,17 +12,17 @@ import type { CanonSchemaItem, SchemaCategory, SchemaId } from './types';
 import { actionTypeSchema } from '../action';
 import { auditLogEntrySchema } from '../audit';
 import {
-  auditLogIdSchema,
-  batchIdSchema,
-  entityIdSchema,
-  mutationIdSchema,
-  orgIdSchema,
-  userIdSchema,
+    auditLogIdSchema,
+    batchIdSchema,
+    entityIdSchema,
+    mutationIdSchema,
+    orgIdSchema,
+    userIdSchema,
 } from '../branded';
 import {
-  capabilityDomainSchema,
-  capabilityKindSchema,
-  capabilityNamespaceSchema,
+    capabilityDomainSchema,
+    capabilityKindSchema,
+    capabilityNamespaceSchema,
 } from '../capability';
 import { entityRefSchema, entityTypeSchema } from '../entity';
 import { apiResponseSchema } from '../envelope';
@@ -30,13 +30,13 @@ import { errorCodeSchema, kernelErrorSchema } from '../errors';
 import { commonFields } from '../fields';
 import { jsonValueSchema } from '../json-value';
 import {
-  assetKeyInputSchema,
-  assetKeySchema,
-  parsedAssetKeySchema,
-  qualityRuleSchema,
+    assetKeyInputSchema,
+    assetKeySchema,
+    parsedAssetKeySchema,
+    qualityRuleSchema,
 } from '../lite-meta';
 import { mutationSpecSchema } from '../mutation';
-import { receiptSchema, receiptStatusSchema } from '../receipt';
+import { mutationReceiptSchema, receiptSchema, receiptStatusSchema } from '../receipt';
 
 /**
  * Frozen catalog of all Canon schemas
@@ -431,11 +431,23 @@ export const CANON_SCHEMAS: readonly CanonSchemaItem[] = Object.freeze([
     category: 'api',
     name: 'receipt',
     version: 1,
-    tags: ['core'],
+    tags: ['core', 'deprecated'],
     schema: receiptSchema,
     meta: {
-      title: 'Receipt',
-      description: 'Mutation receipt',
+      title: 'Receipt (legacy)',
+      description: 'Flat mutation receipt — use mutationReceipt instead',
+    },
+  },
+  {
+    id: 'canon.api.mutationReceipt',
+    category: 'api',
+    name: 'mutationReceipt',
+    version: 1,
+    tags: ['core'],
+    schema: mutationReceiptSchema,
+    meta: {
+      title: 'Mutation Receipt',
+      description: 'Discriminated-union mutation receipt (ok | rejected | error)',
     },
   },
 

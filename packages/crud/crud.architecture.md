@@ -26,6 +26,7 @@
 **Definition:** The Application Layer orchestrator that coordinates domain services, enforces policies, and manages entity lifecycles through a single, auditable mutation path.
 
 **Purpose:**
+
 - Provides the **ONLY** entry point for all domain data writes (`mutate()`)
 - Orchestrates domain services from Layer 2 (business logic)
 - Enforces authorization, rate limiting, and governance policies
@@ -66,6 +67,7 @@
 ```
 
 **Dependency Rules:**
+
 - ✅ Can import from Layers 0, 1, 2
 - ❌ Cannot import from other Layer 3 packages (observability)
 - ❌ Cannot implement business logic (delegate to Layer 2)
@@ -87,6 +89,7 @@ await db.insert(invoices).values({ ... });
 ```
 
 **Why:** Ensures every write is:
+
 - Authorized (policy engine)
 - Audited (audit_logs + entity_versions)
 - Versioned (optimistic concurrency)
@@ -114,13 +117,13 @@ const taxMinor = await calculateLineTax(db, orgId, { ... });
 await db.transaction(async (tx) => {
   // 1. Write entity
   const [entity] = await tx.insert(table).values(data).returning();
-  
+
   // 2. Write audit log
   await tx.insert(auditLogs).values({ ... });
-  
+
   // 3. Write version snapshot
   await tx.insert(entityVersions).values({ ... });
-  
+
   // All or nothing - atomic commit
 });
 ```
@@ -128,6 +131,7 @@ await db.transaction(async (tx) => {
 ### 4. Complete Audit Trail (K-03)
 
 **Every mutation ALWAYS writes:**
+
 - `audit_logs` — Who did what, when, why
 - `entity_versions` — Full snapshot for point-in-time recovery
 
@@ -136,6 +140,7 @@ await db.transaction(async (tx) => {
 **209 of 211 entities use the generic base handler.**
 
 Only create custom handlers when absolutely necessary:
+
 - Specialized validation (hierarchy checks, duplicates)
 - Complex relationships (cascading updates)
 - Domain-specific orchestration
@@ -174,6 +179,7 @@ No handlers, registries, services, diffing, outbox writers, policy internals, or
 ### What is Explicitly NOT Exported
 
 **NOT exported (by design):**
+
 - Custom field utilities (`custom-field-validation`, `sync`)
 - Doc numbering allocators
 - Webhook dispatchers / signature verifiers
@@ -192,6 +198,7 @@ CRUD must remain "the mutation throat", not a convenience barrel.
 **If you really want "one import" ergonomics, it must live outside the kernel:**
 
 `packages/crud-convenience`
+
 - Re-exports domain services
 - Exports infra helper services
 - Depends on `packages/crud`
@@ -208,11 +215,13 @@ import { calculateLineTax } from 'afenda-crud-convenience';
 ### Migration Path for Existing Code
 
 **Before (v1.0 - deprecated):**
+
 ```typescript
 import { calculateLineTax, priceLineItem } from 'afenda-crud';
 ```
 
 **After (v1.1 - correct):**
+
 ```typescript
 import { calculateLineTax } from 'afenda-accounting';
 import { priceLineItem } from 'afenda-crm';
@@ -220,6 +229,7 @@ import { mutate } from 'afenda-crud';
 ```
 
 **Why this matters:**
+
 - ✅ Preserves layer purity (Layer 3 doesn't become god module)
 - ✅ Prevents circular dependencies when domains need CRUD helpers
 - ✅ Improves domain testability (mock domains, not CRUD)
@@ -284,7 +294,13 @@ Outbox intents are **records of intent**, not delivery.
 ```typescript
 type OutboxIntent =
   | { kind: 'workflow'; event: string; entityType: string; entityId: string; payload: unknown }
-  | { kind: 'search'; op: 'upsert' | 'delete'; entityType: string; entityId: string; payload?: unknown }
+  | {
+      kind: 'search';
+      op: 'upsert' | 'delete';
+      entityType: string;
+      entityId: string;
+      payload?: unknown;
+    }
   | { kind: 'webhook'; event: string; urlId: string; payload: unknown }
   | { kind: 'integration'; target: string; event: string; payload: unknown };
 ```
@@ -362,24 +378,27 @@ type OutboxIntent =
 ### Phase Vocabulary (Plan → Commit → Deliver)
 
 **Plan Phase** (Steps 1–3):
+
 - Validation + policy enforcement
 - Deterministic intent planning
 - No external IO, no DB writes (except reads for "load current" and policy data)
 - Reject-fast on policy/lifecycle violations
 
 **Commit Phase** (Step 4):
+
 - Single atomic transaction
 - All DB writes (entity, audit, version, idempotency, outbox intents)
 - No external IO (K-13)
 - All-or-nothing commit
 
 **Deliver Phase** (Step 5):
+
 - Best-effort triggers
 - Signal workers to process outbox
 - Cache invalidation
 - Metering (retryable)
 
-**Critical rule:** Side effect *intents* are committed in Commit Phase; side effect *delivery* happens in Deliver Phase.
+**Critical rule:** Side effect _intents_ are committed in Commit Phase; side effect _delivery_ happens in Deliver Phase.
 
 ---
 
@@ -489,7 +508,7 @@ Deliver phase failures must not lose side effects because outbox intents are alr
 
 #### Doc numbering
 
-- **Allocate number deterministically in Plan Phase** *only if safe*
+- **Allocate number deterministically in Plan Phase** _only if safe_
   **OR** allocate in Commit Phase via DB sequence/locking (preferred for strict uniqueness)
 - Result becomes part of `sanitizedInput` and thus part of the plan
 
@@ -525,6 +544,7 @@ await db.insert(invoices).values({ ... });
 ```
 
 **Enforcement:**
+
 - ESLint rule `INVARIANT-01` prevents direct DB writes
 - CI grep gate checks for violations
 
@@ -567,11 +587,14 @@ await db.transaction(async (tx) => {
 **If mismatch → reject with stable code `EXPECTED_VERSION_MISMATCH`.**
 
 ```typescript
-await mutate({
-  actionType: 'invoices.update',
-  entityRef: { type: 'invoices', id: '123' },
-  input: { status: 'approved', expectedVersion: 5 },
-}, ctx);
+await mutate(
+  {
+    actionType: 'invoices.update',
+    entityRef: { type: 'invoices', id: '123' },
+    input: { status: 'approved', expectedVersion: 5 },
+  },
+  ctx,
+);
 ```
 
 ### K-05: Minimal Export Surface
@@ -679,6 +702,7 @@ type KernelErrorCode =
 **All must-not-lose side effects MUST be represented as outbox intents written inside the same database transaction as the mutation. External delivery is performed by workers after commit.**
 
 **Pattern:**
+
 ```typescript
 // Pre-transaction: prepare intents (Plan Phase)
 const intents: OutboxIntent[] = [
@@ -690,11 +714,11 @@ const intents: OutboxIntent[] = [
 await db.transaction(async (tx) => {
   // 1. Write entity
   const [entity] = await tx.insert(table).values(data).returning();
-  
+
   // 2. Write audit + version
   await tx.insert(auditLogs).values({ ... });
   await tx.insert(entityVersions).values({ ... });
-  
+
   // 3. Write outbox intents (CRITICAL - K-12)
   for (const intent of intents) {
     if (intent.kind === 'workflow') {
@@ -704,7 +728,7 @@ await db.transaction(async (tx) => {
     }
     // ... other intent types
   }
-  
+
   // COMMIT - all or nothing
 });
 
@@ -719,6 +743,7 @@ signalOutboxWorkers();
 **It is forbidden to execute external IO inside `db.transaction(...)`. Only database writes and deterministic computation are allowed.**
 
 **Forbidden operations:**
+
 - ❌ HTTP calls (fetch, axios, webhooks)
 - ❌ Queue publishes (SQS, Kafka, RabbitMQ)
 - ❌ Redis pub/sub
@@ -727,6 +752,7 @@ signalOutboxWorkers();
 - ❌ File system writes (except temp files for transaction scope)
 
 **Allowed operations:**
+
 - ✅ Database writes (INSERT, UPDATE, DELETE)
 - ✅ Database reads (SELECT)
 - ✅ Deterministic computation (math, string ops, JSON serialization)
@@ -762,9 +788,9 @@ signalOutboxWorkers();
 // From Canon entity contract
 interface EntityContract {
   writeRules: {
-    immutable: string[];      // ['docNumber', 'fiscalYear']
-    writeOnce: string[];      // ['postedAt', 'approvedBy']
-    serverOwned: string[];    // ['status', 'postingStatus', 'version']
+    immutable: string[]; // ['docNumber', 'fiscalYear']
+    writeOnce: string[]; // ['postedAt', 'approvedBy']
+    serverOwned: string[]; // ['status', 'postingStatus', 'version']
   };
 }
 ```
@@ -908,7 +934,7 @@ return { ...input, _outboxIntents: intents };
 
 ### Purpose
 
-Handlers are **entity adapters** that allow CRUD to apply a consistent mutation kernel across hundreds of entities while supporting *rare* entity-specific orchestration.
+Handlers are **entity adapters** that allow CRUD to apply a consistent mutation kernel across hundreds of entities while supporting _rare_ entity-specific orchestration.
 
 **Handlers do not define business rules.**
 They may coordinate Layer 2 services, but all domain decisions live in Layer 2.
@@ -963,7 +989,7 @@ Handlers may participate in planning through optional hooks:
 - Any external IO (HTTP, queues, search engines, Redis pub/sub)
 - Embedding domain rules that belong in Layer 2
 
-> Plan hooks build a *plan*, not reality.
+> Plan hooks build a _plan_, not reality.
 
 #### Commit Phase Responsibilities (Single Transaction)
 
@@ -988,7 +1014,7 @@ Handlers may participate in commit through DB-only hooks.
 
 #### Deliver Phase Responsibilities (Best-effort)
 
-Handlers should *not* implement Deliver hooks unless absolutely necessary.
+Handlers should _not_ implement Deliver hooks unless absolutely necessary.
 
 **Allowed in Deliver hooks ✅**
 
@@ -1456,7 +1482,7 @@ Map DB errors into stable codes:
 
 - Unique violation → `UNIQUE_CONSTRAINT` (retryable: false)
 - FK violation → `FK_CONSTRAINT` (retryable: false)
-- Serialization/deadlock → `CONFLICT_RETRY` (retryable: true) *(optional code)*
+- Serialization/deadlock → `CONFLICT_RETRY` (retryable: true) _(optional code)_
 - Unknown → `INTERNAL` (retryable: maybe)
 
 ---
@@ -1474,28 +1500,70 @@ Map DB errors into stable codes:
 
 ---
 
-### Optional: CI Gates that Enforce Anti-Patterns (v1.1)
+### CI Gates that Enforce Anti-Patterns (v1.1)
 
-#### Gate G-CRUD-01: Export Surface Gate
+**All gates implemented in `tools/ci-gates/` and run via `pnpm --filter ci-gates test`.**
 
-Test that `src/index.ts` exports only approved symbols.
+#### Gate G-CRUD-01: Export Surface Gate ✅
 
-#### Gate G-CRUD-02: No External IO in Commit
+**File:** `tools/ci-gates/crud-exports.test.ts`
 
-Lint/grep ban patterns inside `commit/*` and `db.transaction(...)`:
+Test that `src/index.ts` exports only approved symbols (K-05 enforcement).
 
-- `fetch(`
-- `axios.`
-- `redis.`
-- `publish(`
-- `send(`
-- `queue.`
-- `kafka.`
-- etc.
+**Approved exports:**
 
-#### Gate G-CRUD-03: Plan is Read-only
+- 7 value exports: `mutate`, `readEntity`, `listEntities`, `buildSystemContext`, `buildUserContext`, `KERNEL_ERROR_CODES`, `setObservabilityHooks`
+- 6 type exports: `MutationContext`, `MutationSpec`, `ApiResponse`, `MutationReceipt`, `KernelErrorCode`, `ObservabilityHooks`
 
-Ban `insert/update/delete` usage under `plan/*`.
+**Prevents:** Accidental export of internal services, domain re-exports.
+
+#### Gate G-CRUD-02: No External IO in Commit ✅
+
+**File:** `tools/ci-gates/commit-no-io.test.ts`
+
+Scans `commit/*` for banned imports that violate K-13 (no external IO in transaction).
+
+**Banned patterns:**
+
+- HTTP clients: `fetch`, `axios`, `got`, `node-fetch`
+- Queues/caches: `ioredis`, `redis`, `bullmq`, `kafkajs`
+- Filesystem: `node:fs`, `fs-extra`
+- Email/SMS: `nodemailer`, `twilio`, `@sendgrid/`
+- Cloud SDKs: `aws-sdk`, `@aws-sdk/`, `@azure/`, `@google-cloud/`
+
+**Prevents:** "Entity saved but event lost" bugs, transaction contention.
+
+#### Gate G-CRUD-03: No Direct DB Imports ✅
+
+**File:** `tools/ci-gates/no-direct-db.test.ts`
+
+Scans all `src/` files for bare `db`/`dbRo` imports (Phase 6 expansion).
+
+**Enforces:** All code must use `withMutationTransaction()`, `withReadSession()`, or `createDbSession()`.
+
+**Exception:** `commit/session.ts` (the session factory itself).
+
+**Prevents:** RLS bypass, missing retry logic, governor gaps.
+
+#### Gate G-CRUD-04: Outbox Intent Coverage ✅
+
+**File:** `tools/ci-gates/outbox-intent-coverage.test.ts`
+
+Verifies handlers with side effects are registered and accessible.
+
+**Tracked entities:** Currently empty (base handlers only). Add financial document handlers here as they're created.
+
+**Prevents:** Silent loss of workflow/search/webhook events.
+
+#### Gate G-CRUD-05: Stable Error Code Enforcement ✅
+
+**File:** `tools/ci-gates/stable-error-codes.test.ts`
+
+Scans all source files for error code strings and validates against canonical `KernelErrorCode` enum.
+
+**Allowed codes:** `FORBIDDEN`, `RATE_LIMITED`, `JOB_QUOTA_EXCEEDED`, `VALIDATION_FAILED`, `LIFECYCLE_DENIED`, `EDIT_WINDOW_EXPIRED`, `EXPECTED_VERSION_MISMATCH`, `UNIQUE_CONSTRAINT`, `FK_CONSTRAINT`, `IDEMPOTENCY_KEY_REUSE_CONFLICT`, `OUTBOX_WRITE_FAILED`, `CLOSED_FISCAL_PERIOD`, `POSTED_DOCUMENT_IMMUTABLE`, `INTERNAL`, `CONFLICT_RETRY`, `POLICY_DENIED`, `NOT_FOUND`
+
+**Prevents:** Unstable error codes that break client error handling, retry logic, monitoring.
 
 ---
 
@@ -1518,6 +1586,7 @@ if (decision.decision === 'deny') {
 ```
 
 **Policy sources:**
+
 1. Role-based permissions (from `roles` table)
 2. Workflow rules (from `afenda-workflow`)
 3. Custom entity policies (from handlers)
@@ -1534,6 +1603,7 @@ if (!rlResult.allowed) {
 ```
 
 **Limits:**
+
 - `mutation`: 1000 req/min per org
 - `api`: 5000 req/min per org
 - `job`: 100 concurrent jobs per org
@@ -1580,12 +1650,7 @@ meterDbTimeout(orgId, queryType);
 **State machine validation for entities with `hasLifecycle: true`.**
 
 ```typescript
-const result = enforceLifecycle(
-  entityContract,
-  verb,
-  currentStatus,
-  targetStatus
-);
+const result = enforceLifecycle(entityContract, verb, currentStatus, targetStatus);
 
 if (!result.allowed) {
   throw new LifecycleError(result.reason);
@@ -1593,6 +1658,7 @@ if (!result.allowed) {
 ```
 
 **Example (invoices):**
+
 ```
 draft → submitted → approved → active
   ↓         ↓          ↓
@@ -1620,12 +1686,12 @@ await enforceEditWindow(ctx.db, ctx.orgId, {
 
 ```typescript
 import {
-  lookupFxRate,              // Foreign exchange rates
-  calculateLineTax,          // Tax calculation
-  allocatePayment,           // Payment allocation
+  lookupFxRate, // Foreign exchange rates
+  calculateLineTax, // Tax calculation
+  allocatePayment, // Payment allocation
   generateDepreciationSchedule, // Asset depreciation
-  recognizeRevenue,          // Revenue recognition
-  autoMatchStatementLines,   // Bank reconciliation
+  recognizeRevenue, // Revenue recognition
+  autoMatchStatementLines, // Bank reconciliation
 } from 'afenda-accounting';
 ```
 
@@ -1633,11 +1699,11 @@ import {
 
 ```typescript
 import {
-  resolvePrice,              // Price resolution
-  evaluateDiscounts,         // Discount evaluation
-  priceLineItem,             // Line item pricing
-  checkBudget,               // Budget enforcement
-  commitBudget,              // Budget commitment
+  resolvePrice, // Price resolution
+  evaluateDiscounts, // Discount evaluation
+  priceLineItem, // Line item pricing
+  checkBudget, // Budget enforcement
+  commitBudget, // Budget commitment
 } from 'afenda-crm';
 ```
 
@@ -1645,11 +1711,11 @@ import {
 
 ```typescript
 import {
-  convertUom,                // Unit of measure conversion
-  allocateLandedCost,        // Landed cost allocation
-  traceRecall,               // Lot recall tracing
-  explodeBom,                // Bill of materials explosion
-  calculateCostRollup,       // Manufacturing cost rollup
+  convertUom, // Unit of measure conversion
+  allocateLandedCost, // Landed cost allocation
+  traceRecall, // Lot recall tracing
+  explodeBom, // Bill of materials explosion
+  calculateCostRollup, // Manufacturing cost rollup
 } from 'afenda-inventory';
 ```
 
@@ -1657,9 +1723,9 @@ import {
 
 ```typescript
 import {
-  createIntercompanyTransaction,  // IC transaction creation
-  matchIntercompanyTransactions,   // IC matching
-  generateEliminationEntries,      // Consolidation eliminations
+  createIntercompanyTransaction, // IC transaction creation
+  matchIntercompanyTransactions, // IC matching
+  generateEliminationEntries, // Consolidation eliminations
 } from 'afenda-intercompany';
 ```
 
@@ -1667,8 +1733,8 @@ import {
 
 ```typescript
 import {
-  evaluateRules,             // Rule evaluation
-  loadAndRegisterOrgRules,   // Rule loading
+  evaluateRules, // Rule evaluation
+  loadAndRegisterOrgRules, // Rule loading
 } from 'afenda-workflow';
 ```
 
@@ -1831,7 +1897,7 @@ if (entityType === 'invoices' || entityType === 'journal-entries') {
 if (current.postingStatus === 'posted') {
   throw new LifecycleError(
     'POSTED_DOCUMENT_IMMUTABLE',
-    'Posted documents cannot be edited. Create a reversal instead.'
+    'Posted documents cannot be edited. Create a reversal instead.',
   );
 }
 ```
@@ -1845,17 +1911,23 @@ if (current.postingStatus === 'posted') {
 ```typescript
 // Correct pattern for correcting posted invoice
 // 1. Create reversal
-await mutate({
-  actionType: 'invoices.reverse',
-  entityRef: { type: 'invoices', id: originalId },
-}, ctx);
+await mutate(
+  {
+    actionType: 'invoices.reverse',
+    entityRef: { type: 'invoices', id: originalId },
+  },
+  ctx,
+);
 
 // 2. Create new corrected invoice
-await mutate({
-  actionType: 'invoices.create',
-  entityRef: { type: 'invoices' },
-  input: { ...correctedData, reversesId: originalId },
-}, ctx);
+await mutate(
+  {
+    actionType: 'invoices.create',
+    entityRef: { type: 'invoices' },
+    input: { ...correctedData, reversesId: originalId },
+  },
+  ctx,
+);
 ```
 
 ### Edit Window Enforcement
@@ -1916,16 +1988,16 @@ export function getObservabilityHooks() {
 export async function mutate(spec: MutationSpec, ctx: MutationContext) {
   const hooks = getObservabilityHooks();
   const startTime = performance.now();
-  
+
   hooks.onMutationStart(ctx, spec);
-  
+
   try {
     // ... mutation logic ...
-    
+
     const receipt = { status: 'ok', ... };
     hooks.onMutationCommitted(ctx, receipt, performance.now() - startTime);
     return ok(receipt);
-    
+
   } catch (error) {
     if (error instanceof LifecycleError) {
       hooks.onMutationRejected(ctx, error.code, error.message);
@@ -1951,18 +2023,18 @@ setObservabilityHooks({
       verb: extractVerb(spec.actionType),
     });
   },
-  
+
   onMutationCommitted(ctx, receipt, durationMs) {
     recordMetric('crud.mutation.committed', 1, {
       entityType: receipt.entityType,
       durationMs,
     });
   },
-  
+
   onMutationRejected(ctx, code, reason) {
     recordMetric('crud.mutation.rejected', 1, { code });
   },
-  
+
   onMutationFailed(ctx, error) {
     recordError('crud.mutation.failed', error);
   },
@@ -1970,6 +2042,7 @@ setObservabilityHooks({
 ```
 
 **Benefits:**
+
 - ✅ CRUD never imports observability
 - ✅ Observability can "plug in" cleanly
 - ✅ Default no-op for tests
@@ -2034,19 +2107,15 @@ rules: {
 
 ```typescript
 // tools/ci-gates/outbox-coverage.test.ts
-const HANDLERS_WITH_SIDE_EFFECTS = [
-  'invoices',
-  'payments',
-  'journal-entries',
-];
+const HANDLERS_WITH_SIDE_EFFECTS = ['invoices', 'payments', 'journal-entries'];
 
 for (const entityType of HANDLERS_WITH_SIDE_EFFECTS) {
   test(`${entityType} handler writes outbox intents`, async () => {
     const handler = HANDLER_REGISTRY[entityType];
     const spy = vi.spyOn(workflowOutbox, 'insert');
-    
+
     await handler.create(mockCtx, mockInput);
-    
+
     expect(spy).toHaveBeenCalled();
   });
 }
@@ -2090,14 +2159,14 @@ pnpm run ci:gates
 ```json
 {
   "dependencies": {
-    "afenda-canon": "workspace:*",        // Layer 1: Types, schemas
-    "afenda-database": "workspace:*",     // Layer 1: DB schemas
-    "afenda-logger": "workspace:*",       // Layer 1: Logging
-    "afenda-workflow": "workspace:*",     // Layer 2: Rules engine
-    "afenda-accounting": "workspace:*",   // Layer 2: Accounting domain
-    "afenda-crm": "workspace:*",          // Layer 2: CRM domain
-    "afenda-inventory": "workspace:*",    // Layer 2: Inventory domain
-    "afenda-intercompany": "workspace:*"  // Layer 2: IC domain
+    "afenda-canon": "workspace:*", // Layer 1: Types, schemas
+    "afenda-database": "workspace:*", // Layer 1: DB schemas
+    "afenda-logger": "workspace:*", // Layer 1: Logging
+    "afenda-workflow": "workspace:*", // Layer 2: Rules engine
+    "afenda-accounting": "workspace:*", // Layer 2: Accounting domain
+    "afenda-crm": "workspace:*", // Layer 2: CRM domain
+    "afenda-inventory": "workspace:*", // Layer 2: Inventory domain
+    "afenda-intercompany": "workspace:*" // Layer 2: IC domain
   }
 }
 ```
@@ -2107,9 +2176,9 @@ pnpm run ci:gates
 ```json
 {
   "dependencies": {
-    "drizzle-orm": "catalog:",       // Database queries
-    "fast-json-patch": "catalog:",   // JSON patch operations
-    "ioredis": "catalog:"            // Rate limiting
+    "drizzle-orm": "catalog:", // Database queries
+    "fast-json-patch": "catalog:", // JSON patch operations
+    "ioredis": "catalog:" // Rate limiting
   }
 }
 ```
@@ -2141,7 +2210,7 @@ export class InvoicesHandler extends BaseHandler {
     // ❌ Implementing tax calculation in CRUD!
     const taxMinor = input.subtotalMinor * 0.0825;
     const totalMinor = input.subtotalMinor + taxMinor;
-    
+
     return { ...input, taxMinor, totalMinor };
   }
 }
@@ -2160,7 +2229,7 @@ export class InvoicesHandler extends BaseHandler {
       baseMinor: input.subtotalMinor,
       taxRateId: input.taxRateId,
     });
-    
+
     return { ...input, taxMinor };
   }
 }
@@ -2176,6 +2245,7 @@ await db.insert(invoices).values({ ... });
 ```
 
 **Why wrong:**
+
 - Bypasses authorization
 - No audit trail
 - No versioning
@@ -2254,16 +2324,16 @@ export class ProductsHandler extends BaseHandler {
 
 ### Key Responsibilities
 
-| Responsibility | Implementation |
-|----------------|----------------|
-| **Single Write Path** | `mutate()` is the ONLY entry point (K-01) |
-| **Orchestration** | Coordinates domain services, never implements logic |
-| **Authorization** | Policy engine enforces permissions |
-| **Audit Trail** | Every mutation writes audit_logs + entity_versions (K-03) |
-| **Versioning** | Optimistic concurrency via expectedVersion (K-04) |
-| **Governance** | Rate limits, job quotas, metering |
-| **Lifecycle** | State machine enforcement for workflow entities |
-| **Events** | Publishes to workflow and search outboxes |
+| Responsibility        | Implementation                                            |
+| --------------------- | --------------------------------------------------------- |
+| **Single Write Path** | `mutate()` is the ONLY entry point (K-01)                 |
+| **Orchestration**     | Coordinates domain services, never implements logic       |
+| **Authorization**     | Policy engine enforces permissions                        |
+| **Audit Trail**       | Every mutation writes audit_logs + entity_versions (K-03) |
+| **Versioning**        | Optimistic concurrency via expectedVersion (K-04)         |
+| **Governance**        | Rate limits, job quotas, metering                         |
+| **Lifecycle**         | State machine enforcement for workflow entities           |
+| **Events**            | Publishes to workflow and search outboxes                 |
 
 ### Critical Rules
 
@@ -2295,13 +2365,13 @@ export class ProductsHandler extends BaseHandler {
 
 ### Read vs Write Semantics
 
-| Aspect | Writes (mutate) | Reads (readEntity, listEntities) |
-|--------|----------------|----------------------------------|
-| **Consistency** | Strict (truth tables) | Best-effort (may use projections) |
-| **Audit** | Always logged | Optional query logging |
-| **Authorization** | Policy engine | RLS + policy engine |
-| **Caching** | Never cached | May use list cache |
-| **Versioning** | Optimistic concurrency | Point-in-time snapshots |
+| Aspect            | Writes (mutate)        | Reads (readEntity, listEntities)  |
+| ----------------- | ---------------------- | --------------------------------- |
+| **Consistency**   | Strict (truth tables)  | Best-effort (may use projections) |
+| **Audit**         | Always logged          | Optional query logging            |
+| **Authorization** | Policy engine          | RLS + policy engine               |
+| **Caching**       | Never cached           | May use list cache                |
+| **Versioning**    | Optimistic concurrency | Point-in-time snapshots           |
 
 ### Future Split (Optional)
 
@@ -2313,6 +2383,7 @@ packages/query     → Read models, projections, search
 ```
 
 **Benefits:**
+
 - Separate scaling (CQRS pattern)
 - Read models can denormalize
 - Write path stays pure
@@ -2332,16 +2403,19 @@ packages/query     → Read models, projections, search
 ### v1.1 (February 19, 2026) - Ratification Grade
 
 **Breaking Changes:**
+
 - Removed domain service re-exports from main barrel (import directly from domains)
 - Tightened public API to kernel-only exports
 
 **New Invariants:**
+
 - **K-16:** Transactional Outbox (exactly-once intent)
 - **K-17:** Stable Error Codes (canonical taxonomy)
 - **K-18:** Handler Purity (orchestrate, never implement)
 - **K-19:** Field Write Policy (immutable, write-once, server-owned)
 
 **Enhancements:**
+
 - Expanded K-10 with idempotency storage + replay semantics
 - Relocated K-08 to Database Layer Invariants section
 - Added Lifecycle Enforcement Hooks (closed periods, posting locks)
@@ -2350,6 +2424,7 @@ packages/query     → Read models, projections, search
 - Renamed stub-handler → base-handler
 
 **Documentation:**
+
 - Added Database Layer Invariants section
 - Added CI Gates section
 - Added Read APIs semantic comparison

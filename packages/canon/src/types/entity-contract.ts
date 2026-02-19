@@ -1,6 +1,36 @@
-import type { ActionKind } from './action-spec';
 import type { DocStatus } from '../enums/doc-status';
 import type { UpdateMode } from '../enums/update-mode';
+import type { ActionKind } from './action-spec';
+
+/**
+ * Field write rules for K-15 FieldPolicyEngine enforcement.
+ * Declared per EntityContract; enforced centrally in the Plan phase.
+ */
+export interface FieldWriteRules {
+  /**
+   * Fields that can NEVER be changed after creation (user or system).
+   * Violations are hard errors (not stripped silently).
+   */
+  immutable?: string[];
+  /**
+   * Fields that can be set exactly once (from null → non-null).
+   * Subsequent updates are rejected.
+   */
+  writeOnce?: string[];
+  /**
+   * Fields managed by the server; silently stripped from user input.
+   * System context (channel='system') may still write these.
+   */
+  serverOwned?: string[];
+  /**
+   * Fields that are derived/computed; user input always rejected.
+   */
+  computed?: string[];
+  /**
+   * Fields that cannot be set to null once they have a value.
+   */
+  nonNullable?: string[];
+}
 
 /**
  * Lifecycle transition — defines which verbs/decisions
@@ -48,4 +78,10 @@ export interface EntityContract {
 
   /** Default verb order for secondary (overflow) actions. */
   secondaryVerbs: ActionKind[];
+
+  /**
+   * Field write rules for K-15 FieldPolicyEngine (Phase 3).
+   * If omitted, no field-level policy is applied (all user fields allowed).
+   */
+  writeRules?: FieldWriteRules;
 }

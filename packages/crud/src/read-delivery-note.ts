@@ -4,7 +4,7 @@
  */
 import { and, deliveryNotes, eq, getDb } from 'afenda-database';
 
-import { err, ok } from './envelope';
+import { err, ok } from './util/envelope';
 
 import type { ApiResponse } from 'afenda-canon';
 

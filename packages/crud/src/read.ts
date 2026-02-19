@@ -12,16 +12,16 @@ import {
 import { getLogger } from 'afenda-logger';
 // @entity-gen:read-import
 
-import { buildCursorWhere, decodeCursor, encodeCursor } from './cursor';
-import { err, ok } from './envelope';
 import {
     buildListCacheKey,
     getCachedList,
     getListCacheVersion,
     isListCacheEnabled,
     setCachedList,
-} from './list-cache';
+} from './deliver/invalidate-cache';
 import { getLegacyRefs } from './read-legacy';
+import { buildCursorWhere, decodeCursor, encodeCursor } from './util/cursor';
+import { err, ok } from './util/envelope';
 
 import type { ApiResponse, EntityType } from 'afenda-canon';
 

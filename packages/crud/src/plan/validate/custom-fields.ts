@@ -1,13 +1,12 @@
 import {
-  validateFieldValue,
-  validateTypeConfig,
-  DATA_TYPE_VALUE_COLUMN_MAP,
+    DATA_TYPE_VALUE_COLUMN_MAP,
+    validateFieldValue,
+    validateTypeConfig,
 } from 'afenda-canon';
-import { db, dbRo, customFields } from 'afenda-database';
-import { eq, and } from 'drizzle-orm';
+import { createDbSession, customFields } from 'afenda-database';
+import { and, eq } from 'drizzle-orm';
 
 import type { DataType } from 'afenda-canon';
-import type { DbInstance } from 'afenda-database';
 
 export interface CustomFieldDef {
   id: string;
@@ -29,37 +28,49 @@ export interface ValidationError {
 
 /**
  * Load active custom field definitions for an entity type.
- * Uses RO compute by default.
+ *
+ * Uses a scoped DbSession so every query carries the org RLS context via
+ * SET LOCAL. `forcePrimary` routes to the read-write compute (primary) for
+ * callers that need post-write consistency; defaults to the read replica.
  */
 export async function loadFieldDefs(
   orgId: string,
   entityType: string,
   options?: { forcePrimary?: boolean },
 ): Promise<CustomFieldDef[]> {
-  const conn: DbInstance = options?.forcePrimary ? db : dbRo;
-  const rows = await conn
-    .select()
-    .from(customFields)
-    .where(
-      and(
-        eq(customFields.orgId, orgId),
-        eq(customFields.entityType, entityType),
-        eq(customFields.isActive, true),
-        eq(customFields.isDeprecated, false),
-      ),
-    );
+  // __system__ userId is safe here: custom_field_defs are org-scoped
+  // schema metadata, not user-scoped data rows.
+  const session = createDbSession({ orgId, userId: '__system__', role: 'authenticated' });
 
-  return rows.map((r) => ({
-    id: r.id,
-    orgId: r.orgId,
-    entityType: r.entityType,
-    fieldName: r.fieldName,
-    fieldType: r.fieldType,
-    typeConfig: (r.typeConfig ?? {}) as Record<string, unknown>,
-    isRequired: r.isRequired,
-    defaultValue: r.defaultValue,
-    storageMode: r.storageMode,
-  }));
+  const query = async (db: any) => {
+    const rows = await db
+      .select()
+      .from(customFields)
+      .where(
+        and(
+          eq(customFields.orgId, orgId),
+          eq(customFields.entityType, entityType),
+          eq(customFields.isActive, true),
+          eq(customFields.isDeprecated, false),
+        ),
+      );
+
+    return rows.map((r: any) => ({
+      id: r.id,
+      orgId: r.orgId,
+      entityType: r.entityType,
+      fieldName: r.fieldName,
+      fieldType: r.fieldType,
+      typeConfig: (r.typeConfig ?? {}) as Record<string, unknown>,
+      isRequired: r.isRequired,
+      defaultValue: r.defaultValue,
+      storageMode: r.storageMode,
+    })) as CustomFieldDef[];
+  };
+
+  // forcePrimary: use a write transaction to ensure primary-replica consistency
+  // (any post-write read that must see the latest data should set this flag)
+  return options?.forcePrimary ? session.rw(query) : session.ro(query);
 }
 
 /**

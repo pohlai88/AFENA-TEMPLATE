@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
 import { kernelErrorSchema } from './errors';
-import { receiptSchema } from './receipt';
+import { mutationReceiptSchema } from './receipt';
 
 export const apiResponseSchema = z.object({
   ok: z.boolean(),
@@ -9,6 +9,6 @@ export const apiResponseSchema = z.object({
   error: kernelErrorSchema.optional(),
   meta: z.object({
     requestId: z.string(),
-    receipt: receiptSchema.optional(),
+    receipt: mutationReceiptSchema.optional(),
   }),
 });

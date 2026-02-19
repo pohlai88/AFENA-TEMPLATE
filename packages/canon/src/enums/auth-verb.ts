@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import { createEnumKit, createSubset, type BaseEnumMetadata } from './_enum-kit';
 
-export const AUTH_VERBS = ['create', 'update', 'delete', 'submit', 'cancel', 'amend', 'approve', 'reject', 'restore'] as const;
+export const AUTH_VERBS = ['create', 'update', 'delete', 'submit', 'cancel', 'amend', 'approve', 'reject', 'restore', 'reverse'] as const;
 export type AuthVerb = (typeof AUTH_VERBS)[number];
 export const authVerbSchema = z.enum(AUTH_VERBS);
 
@@ -76,6 +76,13 @@ export const AUTH_VERB_METADATA = {
         tone: 'info',
         family: 'recovery',
         sortOrder: 9,
+    },
+    reverse: {
+        label: 'Reverse',
+        description: 'Reverse posted financial document',
+        tone: 'danger',
+        family: 'lifecycle',
+        sortOrder: 10,
     },
 } as const satisfies Record<AuthVerb, AuthVerbMetadata>;
 

@@ -70,4 +70,24 @@ export interface AuthoritySnapshotV2 {
     roleIds: string[];
   };
   matchedPermissions: ResolvedPermission[];
+  /**
+   * Phase 6.4: Canon capability vocabulary integration.
+   * The capability key derived from entityType.verb (e.g., 'contacts.create').
+   */
+  capabilityKey?: string;
+  /**
+   * Whether the capability is registered in CAPABILITY_CATALOG.
+   * If false, the entity/verb is not yet in Canon's vocabulary (observability during migration).
+   */
+  capabilityKnown?: boolean;
+  /**
+   * Scope from the capability descriptor (org, company, site, global).
+   * Only populated if capabilityKnown is true.
+   */
+  capabilityScope?: 'org' | 'company' | 'site' | 'global';
+  /**
+   * Risks associated with this capability (financial, pii, audit, irreversible).
+   * Only populated if capabilityKnown is true.
+   */
+  capabilityRisks?: ('financial' | 'pii' | 'audit' | 'irreversible')[];
 }

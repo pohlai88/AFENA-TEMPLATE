@@ -12,7 +12,8 @@ export type ActionKind =
   | 'submit'
   | 'cancel'
   | 'approve'
-  | 'reject';
+  | 'reject'
+  | 'reverse'; // Financial document reversal (ERP safety pattern)
 
 /**
  * ActionGroup — how actions are grouped in the UI.

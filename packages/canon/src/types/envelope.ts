@@ -1,5 +1,5 @@
 import type { KernelError } from './errors';
-import type { Receipt } from './receipt';
+import type { MutationReceipt } from './receipt';
 
 /**
  * Canonical API response envelope.
@@ -11,6 +11,6 @@ export interface ApiResponse<T = unknown> {
   error?: KernelError | undefined;
   meta: {
     requestId: string;
-    receipt?: Receipt | undefined;
+    receipt?: MutationReceipt | undefined;
   };
 }

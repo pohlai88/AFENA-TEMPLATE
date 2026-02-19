@@ -1,10 +1,6 @@
-// TODO: Restore webhook tables when entities regenerated
-// import { and, eq, webhookEndpoints, webhookDeliveries, sql } from 'afenda-database';
-import { and, eq, sql } from 'afenda-database';
+import { and, eq, sql, webhookDeliveries, webhookEndpoints } from 'afenda-database';
 
 import type { NeonHttpDatabase } from 'drizzle-orm/neon-http';
-
-// FIXME: This file is non-functional without webhookEndpoints and webhookDeliveries tables
 
 /**
  * Webhook dispatch result for a single endpoint.
