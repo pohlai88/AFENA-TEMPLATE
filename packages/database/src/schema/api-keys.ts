@@ -4,6 +4,7 @@ import { check, index, pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-cor
 import { tenantPolicy } from '../helpers/tenant-policy';
 
 import type { InferInsertModel, InferSelectModel } from 'drizzle-orm';
+import { tenantPk } from '../helpers/base-entity';
 
 /**
  * API keys for external integrations.
@@ -13,8 +14,8 @@ import type { InferInsertModel, InferSelectModel } from 'drizzle-orm';
 export const apiKeys = pgTable(
   'api_keys',
   {
-    id: uuid('id').defaultRandom().primaryKey(),
-    orgId: text('org_id')
+    id: uuid('id').defaultRandom().notNull(),
+    orgId: uuid('org_id')
       .notNull()
       .default(sql`(auth.require_org_id())`),
     label: text('label').notNull(),
@@ -30,6 +31,7 @@ export const apiKeys = pgTable(
     revokedAt: timestamp('revoked_at', { withTimezone: true }),
   },
   (table) => [
+    tenantPk(table),
     index('api_keys_org_idx').on(table.orgId),
     index('api_keys_hash_idx').on(table.keyHash),
     check('api_keys_org_not_empty', sql`org_id <> ''`),

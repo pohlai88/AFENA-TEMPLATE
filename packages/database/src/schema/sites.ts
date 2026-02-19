@@ -3,6 +3,7 @@ import { check, index, jsonb, pgTable, text, uniqueIndex } from 'drizzle-orm/pg-
 
 import { erpEntityColumns } from '../helpers/erp-entity';
 import { tenantPolicy } from '../helpers/tenant-policy';
+import { tenantPk } from '../helpers/base-entity';
 
 export const sites = pgTable(
   'sites',
@@ -14,6 +15,7 @@ export const sites = pgTable(
     address: jsonb('address'),
   },
   (table) => [
+    tenantPk(table),
     index('sites_org_id_idx').on(table.orgId, table.id),
     index('sites_org_created_idx').on(table.orgId, table.createdAt),
     check('sites_org_not_empty', sql`org_id <> ''`),

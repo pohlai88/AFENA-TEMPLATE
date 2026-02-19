@@ -2,12 +2,13 @@ import { sql } from 'drizzle-orm';
 import { boolean, check, index, pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core';
 
 import { tenantPolicy } from '../helpers/tenant-policy';
+import { tenantPk } from '../helpers/base-entity';
 
 export const metaSemanticTerms = pgTable(
   'meta_semantic_terms',
   {
-    id: uuid('id').defaultRandom().primaryKey(),
-    orgId: text('org_id')
+    id: uuid('id').defaultRandom().notNull(),
+    orgId: uuid('org_id')
       .notNull()
       .default(sql`(auth.require_org_id())`),
     termKey: text('term_key').notNull(),
@@ -22,6 +23,7 @@ export const metaSemanticTerms = pgTable(
     updatedAt: timestamp('updated_at', { withTimezone: true }).defaultNow().notNull(),
   },
   (table) => [
+    tenantPk(table),
     index('meta_semantic_terms_org_id_idx').on(table.orgId, table.id),
     check('meta_semantic_terms_org_not_empty', sql`org_id <> ''`),
     check(

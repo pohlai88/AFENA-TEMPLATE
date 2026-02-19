@@ -90,9 +90,11 @@ export function inferCsvColumnType(
     };
   }
 
-  // Stratified sampling
+  // Stratified sampling (bypass for small datasets to avoid missing values)
   let samples: string[];
-  if (strategy === 'stratified') {
+  if (values.length <= maxSamples) {
+    samples = [...values];
+  } else if (strategy === 'stratified') {
     const third = Math.floor(maxSamples / 3);
     samples = [
       ...values.slice(0, third),
@@ -121,41 +123,21 @@ export function inferCsvColumnType(
     };
   }
 
+  // Confidence adjustment for mostly-empty columns
+  const emptyRatio = 1 - (nonEmpty.length / samples.length);
+  const confidenceAdjust = emptyRatio > 0.5 ? 0.7 : 1.0;
+
   // Check distinct values
   const distinct = new Set(nonEmpty);
 
-  // Low distinct: likely enum/select/boolean
-  if (distinct.size <= 10 && distinct.size < nonEmpty.length * 0.5) {
-    // Check if boolean
-    if (distinct.size <= 2 && [...distinct].every(isBoolean)) {
-      return {
-        canonType: 'boolean',
-        confidence: 0.95,
-        reasonCodes: buildReasonCodes({ primary: 'SEMANTIC_EQUIV', flags: ['LOW_DISTINCT_VALUES'] }),
-        warnings: [],
-        notes: `${distinct.size} distinct boolean values`,
-      };
-    }
-
-    // Likely enum/single_select
+  // Low distinct: check boolean first (before type-specific detection)
+  if (distinct.size <= 2 && distinct.size <= nonEmpty.length * 0.5 && [...distinct].every(isBoolean)) {
     return {
-      canonType: 'enum',
-      confidence: 0.85,
-      reasonCodes: buildReasonCodes({ primary: 'NARROWING_WITH_METADATA', flags: ['LOW_DISTINCT_VALUES'] }),
+      canonType: 'boolean',
+      confidence: 0.95 * confidenceAdjust,
+      reasonCodes: buildReasonCodes({ primary: 'SEMANTIC_EQUIV', flags: ['LOW_DISTINCT_VALUES'] }),
       warnings: [],
-      notes: `${distinct.size} distinct values suggest enum`,
-    };
-  }
-
-  // High distinct: likely text (early exit for performance)
-  if (distinct.size > maxDistinct) {
-    const avgLength = nonEmpty.reduce((sum, s) => sum + s.length, 0) / nonEmpty.length;
-    return {
-      canonType: avgLength < 100 ? 'short_text' : 'long_text',
-      confidence: CONFIDENCE_SEMANTICS.NARROWING_WITH_METADATA,
-      reasonCodes: buildReasonCodes({ primary: 'NARROWING_WITH_METADATA', flags: ['HIGH_DISTINCT_VALUES'] }),
-      warnings: [],
-      notes: `${distinct.size} distinct values, avg length ${Math.round(avgLength)}`,
+      notes: `${distinct.size} distinct boolean values`,
     };
   }
 
@@ -165,7 +147,7 @@ export function inferCsvColumnType(
   if (nonEmpty.every(isIsoDate)) {
     return {
       canonType: 'date',
-      confidence: 1.0,
+      confidence: 1.0 * confidenceAdjust,
       reasonCodes: buildReasonCodes({ primary: 'EXACT_MATCH' }),
       warnings: [],
       notes: `All ${nonEmpty.length} samples matched ISO date format`,
@@ -176,7 +158,7 @@ export function inferCsvColumnType(
   if (nonEmpty.every(isIsoDateTime)) {
     return {
       canonType: 'datetime',
-      confidence: 1.0,
+      confidence: 1.0 * confidenceAdjust,
       reasonCodes: buildReasonCodes({ primary: 'EXACT_MATCH' }),
       warnings: [],
       notes: `All ${nonEmpty.length} samples matched ISO datetime format`,
@@ -187,7 +169,7 @@ export function inferCsvColumnType(
   if (nonEmpty.every(isInteger)) {
     return {
       canonType: 'integer',
-      confidence: 1.0,
+      confidence: 1.0 * confidenceAdjust,
       reasonCodes: buildReasonCodes({ primary: 'EXACT_MATCH' }),
       warnings: [],
       notes: `All ${nonEmpty.length} samples are integers`,
@@ -198,7 +180,7 @@ export function inferCsvColumnType(
   if (nonEmpty.every(isDecimal)) {
     return {
       canonType: 'decimal',
-      confidence: 1.0,
+      confidence: 1.0 * confidenceAdjust,
       reasonCodes: buildReasonCodes({ primary: 'EXACT_MATCH' }),
       warnings: [],
       notes: `All ${nonEmpty.length} samples are decimal numbers`,
@@ -209,10 +191,33 @@ export function inferCsvColumnType(
   if (nonEmpty.every(isUuid)) {
     return {
       canonType: 'entity_ref',
-      confidence: 0.9,
+      confidence: 0.9 * confidenceAdjust,
       reasonCodes: buildReasonCodes({ primary: 'SEMANTIC_EQUIV' }),
       warnings: [],
       notes: `All ${nonEmpty.length} samples matched UUID format`,
+    };
+  }
+
+  // Low distinct (after type-specific): likely enum/select
+  if (distinct.size <= 10 && distinct.size <= nonEmpty.length * 0.5) {
+    return {
+      canonType: 'enum',
+      confidence: 0.85 * confidenceAdjust,
+      reasonCodes: buildReasonCodes({ primary: 'NARROWING_WITH_METADATA', flags: ['LOW_DISTINCT_VALUES'] }),
+      warnings: [],
+      notes: `${distinct.size} distinct values suggest enum`,
+    };
+  }
+
+  // High distinct: likely text (after type-specific checks so numeric columns aren't misclassified)
+  if (distinct.size > maxDistinct) {
+    const avgLength = nonEmpty.reduce((sum, s) => sum + s.length, 0) / nonEmpty.length;
+    return {
+      canonType: avgLength < 100 ? 'short_text' : 'long_text',
+      confidence: CONFIDENCE_SEMANTICS.NARROWING_WITH_METADATA * confidenceAdjust,
+      reasonCodes: buildReasonCodes({ primary: 'NARROWING_WITH_METADATA', flags: ['HIGH_DISTINCT_VALUES'] }),
+      warnings: [],
+      notes: `${distinct.size} distinct values, avg length ${Math.round(avgLength)}`,
     };
   }
 
@@ -221,7 +226,7 @@ export function inferCsvColumnType(
   if (avgLength < 100) {
     return {
       canonType: 'short_text',
-      confidence: CONFIDENCE_SEMANTICS.NARROWING_WITH_METADATA,
+      confidence: CONFIDENCE_SEMANTICS.NARROWING_WITH_METADATA * confidenceAdjust,
       reasonCodes: buildReasonCodes({ primary: 'NARROWING_WITH_METADATA' }),
       warnings: [],
       notes: `Inferred short_text based on average sample length ${Math.round(avgLength)} chars`,
@@ -231,7 +236,7 @@ export function inferCsvColumnType(
   // Long text (>= 100 chars average)
   return {
     canonType: 'long_text',
-    confidence: CONFIDENCE_SEMANTICS.NARROWING_WITH_METADATA,
+    confidence: CONFIDENCE_SEMANTICS.NARROWING_WITH_METADATA * confidenceAdjust,
     reasonCodes: buildReasonCodes({ primary: 'NARROWING_WITH_METADATA' }),
     warnings: [],
     notes: `Inferred long_text based on average sample length ${Math.round(avgLength)} chars`,

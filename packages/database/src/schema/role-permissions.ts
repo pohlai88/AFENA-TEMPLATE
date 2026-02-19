@@ -4,6 +4,7 @@ import { check, index, jsonb, pgTable, text, timestamp, uniqueIndex, uuid } from
 import { tenantPolicy } from '../helpers/tenant-policy';
 
 import { roles } from './roles';
+import { tenantPk, tenantFk, tenantFkIndex} from '../helpers/base-entity';
 
 /**
  * Role permissions — org-scoped verb+scope grants per entity type.
@@ -13,13 +14,12 @@ import { roles } from './roles';
 export const rolePermissions = pgTable(
   'role_permissions',
   {
-    id: uuid('id').defaultRandom().primaryKey(),
-    orgId: text('org_id')
+    id: uuid('id').defaultRandom().notNull(),
+    orgId: uuid('org_id')
       .notNull()
       .default(sql`(auth.require_org_id())`),
     roleId: uuid('role_id')
-      .notNull()
-      .references(() => roles.id),
+      .notNull(),
     entityType: text('entity_type').notNull(),
     verb: text('verb').notNull(),
     scope: text('scope').notNull().default('org'),
@@ -29,6 +29,9 @@ export const rolePermissions = pgTable(
     createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
   },
   (table) => [
+    tenantPk(table),
+    tenantFk(table, 'role', table.roleId, roles),
+    tenantFkIndex(table, 'role', table.roleId),
     uniqueIndex('role_perms_org_role_entity_verb_scope_idx').on(
       table.orgId,
       table.roleId,

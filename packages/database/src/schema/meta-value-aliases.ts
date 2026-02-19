@@ -4,17 +4,17 @@ import { boolean, check, index, pgTable, text, timestamp, uuid } from 'drizzle-o
 import { tenantPolicy } from '../helpers/tenant-policy';
 
 import { metaAliasSets } from './meta-alias-sets';
+import { tenantPk, tenantFk, tenantFkIndex} from '../helpers/base-entity';
 
 export const metaValueAliases = pgTable(
   'meta_value_aliases',
   {
-    id: uuid('id').defaultRandom().primaryKey(),
-    orgId: text('org_id')
+    id: uuid('id').defaultRandom().notNull(),
+    orgId: uuid('org_id')
       .notNull()
       .default(sql`(auth.require_org_id())`),
     aliasSetId: uuid('alias_set_id')
-      .notNull()
-      .references(() => metaAliasSets.id, { onDelete: 'restrict' }),
+      .notNull(),
     targetKey: text('target_key').notNull(),
     alias: text('alias').notNull(),
     synonyms: text('synonyms')
@@ -32,6 +32,9 @@ export const metaValueAliases = pgTable(
       .default(sql`(auth.user_id())`),
   },
   (table) => [
+    tenantPk(table),
+    tenantFk(table, 'alias_set', table.aliasSetId, metaAliasSets, 'restrict'),
+    tenantFkIndex(table, 'alias_set', table.aliasSetId),
     index('meta_value_aliases_org_id_idx').on(table.orgId, table.id),
     check('meta_value_aliases_org_not_empty', sql`org_id <> ''`),
     check(

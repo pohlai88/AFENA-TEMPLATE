@@ -5,6 +5,7 @@ import { tenantPolicy } from '../helpers/tenant-policy';
 
 import { migrationConflicts } from './migration-conflicts';
 import { migrationJobs } from './migration-jobs';
+import { tenantPk, tenantFk, tenantFkIndex} from '../helpers/base-entity';
 
 /**
  * Migration conflict resolutions — how conflicts were resolved.
@@ -13,10 +14,10 @@ import { migrationJobs } from './migration-jobs';
 export const migrationConflictResolutions = pgTable(
   'migration_conflict_resolutions',
   {
-    id: uuid('id').defaultRandom().primaryKey(),
-    orgId: text('org_id').notNull(),
-    conflictId: uuid('conflict_id').notNull().references(() => migrationConflicts.id),
-    migrationJobId: uuid('migration_job_id').references(() => migrationJobs.id),
+    id: uuid('id').defaultRandom().notNull(),
+    orgId: uuid('org_id').notNull(),
+    conflictId: uuid('conflict_id').notNull(),
+    migrationJobId: uuid('migration_job_id'),
     decision: text('decision').notNull(),
     chosenCandidateId: uuid('chosen_candidate_id'),
     fieldDecisions: jsonb('field_decisions'),
@@ -25,6 +26,11 @@ export const migrationConflictResolutions = pgTable(
     resolvedBy: text('resolved_by').notNull().default(sql`auth.user_id()`),
   },
   (table) => [
+    tenantPk(table),
+    tenantFk(table, 'migration_job', table.migrationJobId, migrationJobs),
+    tenantFkIndex(table, 'migration_job', table.migrationJobId),
+    tenantFk(table, 'conflict', table.conflictId, migrationConflicts),
+    tenantFkIndex(table, 'conflict', table.conflictId),
     index('migration_conflict_resolutions_conflict_idx').on(table.conflictId),
     index('migration_conflict_resolutions_job_idx').on(table.migrationJobId, table.decision),
     check('migration_conflict_resolutions_decision_chk', sql`decision IN ('merged', 'created_new', 'skipped')`),

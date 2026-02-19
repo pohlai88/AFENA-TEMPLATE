@@ -4,17 +4,17 @@ import { boolean, check, index, integer, pgTable, text, uniqueIndex, uuid } from
 import { tenantPolicy } from '../helpers/tenant-policy';
 
 import { entityViews } from './entity-views';
+import { tenantPk, tenantFk, tenantFkIndex} from '../helpers/base-entity';
 
 export const entityViewFields = pgTable(
   'entity_view_fields',
   {
-    id: uuid('id').defaultRandom().primaryKey(),
-    orgId: text('org_id')
+    id: uuid('id').defaultRandom().notNull(),
+    orgId: uuid('org_id')
       .notNull()
       .default(sql`(auth.require_org_id())`),
     viewId: uuid('view_id')
-      .notNull()
-      .references(() => entityViews.id, { onDelete: 'cascade' }),
+      .notNull(),
     fieldSource: text('field_source').notNull(),
     fieldKey: text('field_key').notNull(),
     displayOrder: integer('display_order').notNull().default(0),
@@ -25,6 +25,9 @@ export const entityViewFields = pgTable(
     componentOverride: text('component_override'),
   },
   (table) => [
+    tenantPk(table),
+    tenantFk(table, 'view', table.viewId, entityViews, 'cascade'),
+    tenantFkIndex(table, 'view', table.viewId),
     index('entity_view_fields_org_id_idx').on(table.orgId, table.id),
     uniqueIndex('entity_view_fields_org_view_field_key_uniq').on(
       table.orgId,

@@ -1,6 +1,7 @@
 import { sql } from 'drizzle-orm';
 import { crudPolicy, authenticatedRole } from 'drizzle-orm/neon';
 import { boolean, check, integer, jsonb, pgTable, text, timestamp, uniqueIndex, uuid } from 'drizzle-orm/pg-core';
+import { tenantPk } from '../helpers/base-entity';
 
 /**
  * Entity version history — fork-aware, snapshot-first.
@@ -9,8 +10,8 @@ import { boolean, check, integer, jsonb, pgTable, text, timestamp, uniqueIndex, 
 export const entityVersions = pgTable(
   'entity_versions',
   {
-    id: uuid('id').defaultRandom().primaryKey(),
-    orgId: text('org_id').notNull(),
+    id: uuid('id').defaultRandom().notNull(),
+    orgId: uuid('org_id').notNull(),
     entityType: text('entity_type').notNull(),
     entityId: text('entity_id').notNull(),
     version: integer('version').notNull(),
@@ -23,6 +24,7 @@ export const entityVersions = pgTable(
     createdBy: text('created_by').notNull(),
   },
   (table) => [
+    tenantPk(table),
     uniqueIndex('entity_versions_unique_idx').on(
       table.orgId,
       table.entityType,

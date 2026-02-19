@@ -3,6 +3,7 @@ import { index, integer, jsonb, pgTable, text, timestamp, unique, uuid } from 'd
 import { tenantPolicy } from '../helpers/tenant-policy';
 
 import { migrationJobs } from './migration-jobs';
+import { tenantPk, tenantFk, tenantFkIndex} from '../helpers/base-entity';
 
 /**
  * Migration checkpoints — step-level resume store.
@@ -11,9 +12,9 @@ import { migrationJobs } from './migration-jobs';
 export const migrationCheckpoints = pgTable(
   'migration_checkpoints',
   {
-    id: uuid('id').defaultRandom().primaryKey(),
-    orgId: text('org_id').notNull(),
-    migrationJobId: uuid('migration_job_id').notNull().references(() => migrationJobs.id),
+    id: uuid('id').defaultRandom().notNull(),
+    orgId: uuid('org_id').notNull(),
+    migrationJobId: uuid('migration_job_id').notNull(),
 
     entityType: text('entity_type').notNull(),
 
@@ -26,6 +27,9 @@ export const migrationCheckpoints = pgTable(
     updatedAt: timestamp('updated_at', { withTimezone: true }).defaultNow().notNull(),
   },
   (table) => [
+    tenantPk(table),
+    tenantFk(table, 'migration_job', table.migrationJobId, migrationJobs),
+    tenantFkIndex(table, 'migration_job', table.migrationJobId),
     unique('migration_checkpoints_job_entity_uniq').on(table.migrationJobId, table.entityType),
     index('migration_checkpoints_job_idx').on(table.migrationJobId),
     tenantPolicy(table),

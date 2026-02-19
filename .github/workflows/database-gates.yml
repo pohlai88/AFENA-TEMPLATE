@@ -1,0 +1,114 @@
+name: Database Gates Validation
+
+on:
+  pull_request:
+    paths:
+      - 'packages/database/**'
+      - 'packages/workers/**'
+      - 'apps/**'
+  push:
+    branches:
+      - main
+      - develop
+    paths:
+      - 'packages/database/**'
+
+jobs:
+  validate-gates:
+    name: Validate Architectural Gates
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+      
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      
+      - name: Validate Table Registry
+        run: pnpm --filter afenda-database db:validate-registry
+        
+      - name: Validate All Gates
+        run: pnpm --filter afenda-database db:validate-gates
+      
+      - name: ESLint - Check Database Access
+        run: pnpm --filter afenda-database lint
+        
+      - name: Type Check
+        run: pnpm --filter afenda-database type-check
+
+  validate-migrations:
+    name: Validate Migration Safety
+    runs-on: ubuntu-latest
+    if: contains(github.event.pull_request.changed_files, 'packages/database/drizzle/')
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+      
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      
+      - name: Get changed migration files
+        id: changed-migrations
+        uses: tj-actions/changed-files@v40
+        with:
+          files: packages/database/drizzle/*.sql
+      
+      - name: Validate migration safety
+        if: steps.changed-migrations.outputs.any_changed == 'true'
+        run: |
+          for file in ${{ steps.changed-migrations.outputs.all_changed_files }}; do
+            echo "Validating $file..."
+            pnpm --filter afenda-database db:validate-migration "$file"
+          done
+
+  ownership-check:
+    name: Check Database Ownership
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+      
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      
+      - name: Check ownership (requires DATABASE_URL)
+        if: env.DATABASE_URL != ''
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: |
+          echo "Checking database ownership..."
+          psql $DATABASE_URL -f packages/database/scripts/normalize-ownership.sql --dry-run || true

@@ -1,5 +1,5 @@
 import { sql } from 'drizzle-orm';
-import { bigint, check, date, integer, pgTable, primaryKey, text } from 'drizzle-orm/pg-core';
+import { bigint, check, date, integer, pgTable, primaryKey, uuid } from 'drizzle-orm/pg-core';
 
 import { tenantPolicy } from '../helpers/tenant-policy';
 
@@ -11,7 +11,7 @@ import { tenantPolicy } from '../helpers/tenant-policy';
 export const orgUsageDaily = pgTable(
   'org_usage_daily',
   {
-    orgId: text('org_id')
+    orgId: uuid('org_id')
       .notNull()
       .default(sql`(auth.require_org_id())`),
     day: date('day').notNull(),

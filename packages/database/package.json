@@ -18,7 +18,11 @@
     "db:migrate": "drizzle-kit migrate",
     "db:push": "drizzle-kit push",
     "db:studio": "drizzle-kit studio",
-    "db:lint": "npx tsx src/scripts/schema-lint.ts"
+    "db:lint": "npx tsx src/scripts/schema-lint.ts",
+    "db:validate-registry": "npx tsx scripts/validate-registry.ts",
+    "db:validate-migration": "npx tsx scripts/validate-migration-safety.ts",
+    "db:validate-gates": "npx tsx scripts/validate-gates.ts",
+    "db:validate-query-plans": "npx tsx scripts/validate-query-plans.ts"
   },
   "dependencies": {
     "@neondatabase/serverless": "catalog:",
@@ -26,13 +30,17 @@
   },
   "devDependencies": {
     "@types/node": "catalog:",
+    "@types/pg": "catalog:",
     "afenda-eslint-config": "workspace:^",
     "afenda-typescript-config": "workspace:*",
     "dotenv": "catalog:",
     "drizzle-kit": "catalog:",
+    "eslint": "catalog:",
+    "pg": "catalog:",
     "postgres": "catalog:",
     "tslib": "catalog:",
     "tsup": "catalog:",
+    "tsx": "catalog:",
     "typescript": "catalog:"
   }
 }

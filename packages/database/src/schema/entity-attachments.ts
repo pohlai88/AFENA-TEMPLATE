@@ -2,6 +2,7 @@ import { sql } from 'drizzle-orm';
 import { check, index, pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core';
 
 import { tenantPolicy } from '../helpers/tenant-policy';
+import { tenantPk } from '../helpers/base-entity';
 
 /**
  * Entity attachments — junction table linking files to any entity.
@@ -13,8 +14,8 @@ import { tenantPolicy } from '../helpers/tenant-policy';
 export const entityAttachments = pgTable(
   'entity_attachments',
   {
-    id: uuid('id').defaultRandom().primaryKey(),
-    orgId: text('org_id')
+    id: uuid('id').defaultRandom().notNull(),
+    orgId: uuid('org_id')
       .notNull()
       .default(sql`(auth.require_org_id())`),
     entityType: text('entity_type').notNull(),
@@ -27,6 +28,7 @@ export const entityAttachments = pgTable(
     createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
   },
   (table) => [
+    tenantPk(table),
     index('entity_attach_org_entity_idx').on(table.orgId, table.entityType, table.entityId),
     index('entity_attach_org_file_idx').on(table.orgId, table.fileId),
     check('entity_attach_org_not_empty', sql`org_id <> ''`),

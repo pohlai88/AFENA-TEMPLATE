@@ -2,6 +2,7 @@ import { sql } from 'drizzle-orm';
 import { check, index, pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core';
 
 import { tenantPolicy } from '../helpers/tenant-policy';
+import { tenantPk } from '../helpers/base-entity';
 
 /**
  * Communications log — email, comment, note, call records attached to entities.
@@ -13,8 +14,8 @@ import { tenantPolicy } from '../helpers/tenant-policy';
 export const communications = pgTable(
   'communications',
   {
-    id: uuid('id').defaultRandom().primaryKey(),
-    orgId: text('org_id')
+    id: uuid('id').defaultRandom().notNull(),
+    orgId: uuid('org_id')
       .notNull()
       .default(sql`(auth.require_org_id())`),
     entityType: text('entity_type').notNull(),
@@ -28,6 +29,7 @@ export const communications = pgTable(
     createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
   },
   (table) => [
+    tenantPk(table),
     index('comms_org_entity_idx').on(table.orgId, table.entityType, table.entityId),
     index('comms_org_created_idx').on(table.orgId, table.createdAt),
     check('comms_org_not_empty', sql`org_id <> ''`),

@@ -2,6 +2,7 @@ import { sql } from 'drizzle-orm';
 import { check, index, integer, jsonb, pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core';
 
 import { tenantPolicy } from '../helpers/tenant-policy';
+import { tenantPk } from '../helpers/base-entity';
 
 /**
  * Migration jobs — top-level job registry.
@@ -10,8 +11,8 @@ import { tenantPolicy } from '../helpers/tenant-policy';
 export const migrationJobs = pgTable(
   'migration_jobs',
   {
-    id: uuid('id').defaultRandom().primaryKey(),
-    orgId: text('org_id').notNull(),
+    id: uuid('id').defaultRandom().notNull(),
+    orgId: uuid('org_id').notNull(),
     entityType: text('entity_type').notNull(),
     sourceConfig: jsonb('source_config').notNull(),
     fieldMappings: jsonb('field_mappings').notNull(),
@@ -31,6 +32,7 @@ export const migrationJobs = pgTable(
     createdBy: text('created_by').notNull().default(sql`auth.user_id()`),
   },
   (table) => [
+    tenantPk(table),
     index('migration_jobs_org_status_idx').on(table.orgId, table.status),
     index('migration_jobs_entity_type_idx').on(table.entityType),
     check('migration_jobs_status_chk', sql`status IN ('pending', 'preflight', 'ready', 'blocked', 'running', 'paused', 'cancelling', 'cancelled', 'completed', 'failed', 'rolled_back')`),

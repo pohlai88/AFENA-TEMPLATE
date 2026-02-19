@@ -1,6 +1,7 @@
 import { sql } from 'drizzle-orm';
-import { check, date, index, integer, jsonb, numeric, pgTable, text, uuid } from 'drizzle-orm/pg-core';
+import { check, index, jsonb, pgTable, text } from 'drizzle-orm/pg-core';
 
+import { tenantPk } from '../helpers/base-entity';
 import { erpEntityColumns } from '../helpers/erp-entity';
 import { tenantPolicy } from '../helpers/tenant-policy';
 
@@ -18,6 +19,7 @@ export const jobApplications = pgTable(
     applicationData: jsonb('application_data').notNull().default(sql`'{}'::jsonb`),
   },
   (table) => [
+    tenantPk(table),
     index('job_applications_org_id_idx').on(table.orgId, table.id),
     index('job_applications_org_created_idx').on(table.orgId, table.createdAt),
     check('job_applications_org_not_empty', sql`org_id <> ''`),

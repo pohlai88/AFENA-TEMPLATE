@@ -1,9 +1,11 @@
 import { sql } from 'drizzle-orm';
-import { check, date, index, integer, jsonb, numeric, pgTable, text, uuid } from 'drizzle-orm/pg-core';
+import { check, date, index, jsonb, pgTable, text, uuid } from 'drizzle-orm/pg-core';
 
-import { erpEntityColumns } from '../helpers/erp-entity';
-import { tenantPolicy } from '../helpers/tenant-policy';
+import { tenantPk } from '../helpers/base-entity';
 import { docStatusEnum } from '../helpers/doc-status';
+import { erpEntityColumns } from '../helpers/erp-entity';
+import { moneyMinor } from '../helpers/field-types';
+import { tenantPolicy } from '../helpers/tenant-policy';
 
 export const purchaseRequisitions = pgTable(
   'purchase_requisitions',
@@ -15,11 +17,12 @@ export const purchaseRequisitions = pgTable(
     requestorId: uuid('requestor_id').notNull(),
     requestDate: date('request_date'),
     requiredDate: date('required_date'),
-    totalAmount: numeric('total_amount', { precision: 18, scale: 2 }),
+    totalAmountMinor: moneyMinor('total_amount_minor'),
     currency: text('currency').notNull().default('MYR'),
     prLines: jsonb('pr_lines').notNull().default(sql`'[]'::jsonb`),
   },
   (table) => [
+    tenantPk(table),
     index('purchase_requisitions_org_id_idx').on(table.orgId, table.id),
     index('purchase_requisitions_org_created_idx').on(table.orgId, table.createdAt),
     check('purchase_requisitions_org_not_empty', sql`org_id <> ''`),

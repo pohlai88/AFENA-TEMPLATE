@@ -1,6 +1,7 @@
 import { sql } from 'drizzle-orm';
-import { check, date, index, integer, jsonb, numeric, pgTable, text, uuid } from 'drizzle-orm/pg-core';
+import { check, date, index, integer, jsonb, numeric, pgTable, text } from 'drizzle-orm/pg-core';
 
+import { tenantPk } from '../helpers/base-entity';
 import { erpEntityColumns } from '../helpers/erp-entity';
 import { tenantPolicy } from '../helpers/tenant-policy';
 
@@ -20,6 +21,7 @@ export const fixedAssets = pgTable(
     assetDetails: jsonb('asset_details').notNull().default(sql`'{}'::jsonb`),
   },
   (table) => [
+    tenantPk(table),
     index('fixed_assets_org_id_idx').on(table.orgId, table.id),
     index('fixed_assets_org_created_idx').on(table.orgId, table.createdAt),
     check('fixed_assets_org_not_empty', sql`org_id <> ''`),

@@ -3,6 +3,7 @@ import { check, index, jsonb, pgTable, text } from 'drizzle-orm/pg-core';
 
 import { erpEntityColumns } from '../helpers/erp-entity';
 import { tenantPolicy } from '../helpers/tenant-policy';
+import { tenantPk } from '../helpers/base-entity';
 
 export const warehouses = pgTable(
   'warehouses',
@@ -16,6 +17,7 @@ export const warehouses = pgTable(
     isActive: text('is_active').notNull().default('true'),
   },
   (table) => [
+    tenantPk(table),
     index('warehouses_org_id_idx').on(table.orgId, table.id),
     index('warehouses_org_code_idx').on(table.orgId, table.code),
     index('warehouses_org_created_idx').on(table.orgId, table.createdAt),

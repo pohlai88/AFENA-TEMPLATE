@@ -1,9 +1,10 @@
 import { sql } from 'drizzle-orm';
-import { check, date, index, integer, jsonb, numeric, pgTable, text, uuid } from 'drizzle-orm/pg-core';
+import { check, index, jsonb, numeric, pgTable, text } from 'drizzle-orm/pg-core';
 
+import { tenantPk } from '../helpers/base-entity';
+import { docStatusEnum } from '../helpers/doc-status';
 import { erpEntityColumns } from '../helpers/erp-entity';
 import { tenantPolicy } from '../helpers/tenant-policy';
-import { docStatusEnum } from '../helpers/doc-status';
 
 export const franchiseApplications = pgTable(
   'franchise_applications',
@@ -20,6 +21,7 @@ export const franchiseApplications = pgTable(
     applicationData: jsonb('application_data').notNull().default(sql`'{}'::jsonb`),
   },
   (table) => [
+    tenantPk(table),
     index('franchise_applications_org_id_idx').on(table.orgId, table.id),
     index('franchise_applications_org_created_idx').on(table.orgId, table.createdAt),
     check('franchise_applications_org_not_empty', sql`org_id <> ''`),

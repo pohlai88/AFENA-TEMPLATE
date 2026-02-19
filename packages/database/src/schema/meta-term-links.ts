@@ -4,21 +4,24 @@ import { check, index, pgTable, text, timestamp, uniqueIndex, uuid } from 'drizz
 import { tenantPolicy } from '../helpers/tenant-policy';
 
 import { metaSemanticTerms } from './meta-semantic-terms';
+import { tenantPk, tenantFk, tenantFkIndex} from '../helpers/base-entity';
 
 export const metaTermLinks = pgTable(
   'meta_term_links',
   {
-    id: uuid('id').defaultRandom().primaryKey(),
-    orgId: text('org_id')
+    id: uuid('id').defaultRandom().notNull(),
+    orgId: uuid('org_id')
       .notNull()
       .default(sql`(auth.require_org_id())`),
     termId: uuid('term_id')
-      .notNull()
-      .references(() => metaSemanticTerms.id, { onDelete: 'cascade' }),
+      .notNull(),
     targetKey: text('target_key').notNull(),
     createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
   },
   (table) => [
+    tenantPk(table),
+    tenantFk(table, 'term', table.termId, metaSemanticTerms, 'cascade'),
+    tenantFkIndex(table, 'term', table.termId),
     index('meta_term_links_org_id_idx').on(table.orgId, table.id),
     uniqueIndex('meta_term_links_uniq').on(table.orgId, table.termId, table.targetKey),
     check('meta_term_links_org_not_empty', sql`org_id <> ''`),

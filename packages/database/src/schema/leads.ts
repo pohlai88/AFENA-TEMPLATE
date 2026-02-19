@@ -3,6 +3,7 @@ import { check, index, jsonb, pgTable, text } from 'drizzle-orm/pg-core';
 
 import { erpEntityColumns } from '../helpers/erp-entity';
 import { tenantPolicy } from '../helpers/tenant-policy';
+import { tenantPk } from '../helpers/base-entity';
 
 export const leads = pgTable(
   'leads',
@@ -20,6 +21,7 @@ export const leads = pgTable(
     contactInfo: jsonb('contact_info').notNull().default(sql`'{}'::jsonb`),
   },
   (table) => [
+    tenantPk(table),
     index('leads_org_id_idx').on(table.orgId, table.id),
     index('leads_org_email_idx').on(table.orgId, table.email),
     index('leads_org_created_idx').on(table.orgId, table.createdAt),

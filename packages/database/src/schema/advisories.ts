@@ -1,6 +1,7 @@
 import { sql } from 'drizzle-orm';
 import { crudPolicy, authenticatedRole } from 'drizzle-orm/neon';
 import { check, doublePrecision, index, jsonb, pgTable, text, timestamp, uniqueIndex, uuid } from 'drizzle-orm/pg-core';
+import { tenantPk } from '../helpers/base-entity';
 
 /**
  * Advisories — deterministic advisory engine output.
@@ -12,8 +13,8 @@ import { check, doublePrecision, index, jsonb, pgTable, text, timestamp, uniqueI
 export const advisories = pgTable(
   'advisories',
   {
-    id: uuid('id').defaultRandom().primaryKey(),
-    orgId: text('org_id')
+    id: uuid('id').defaultRandom().notNull(),
+    orgId: uuid('org_id')
       .notNull()
       .default(sql`(auth.require_org_id())`),
     type: text('type').notNull(),
@@ -39,6 +40,7 @@ export const advisories = pgTable(
       .default(sql`COALESCE(auth.user_id(), 'system')`),
   },
   (table) => [
+    tenantPk(table),
     // CHECK constraints — enforce enum-like values at DB level
     check('advisories_type_taxonomy', sql`type ~ '^(anomaly|forecast|rule)\.[a-z0-9_]+\.[a-z0-9_]+$'`),
     check('advisories_severity_enum', sql`severity IN ('info','warn','critical')`),

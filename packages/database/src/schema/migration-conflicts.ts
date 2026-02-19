@@ -4,6 +4,7 @@ import { check, index, jsonb, pgTable, text, timestamp, uuid } from 'drizzle-orm
 import { tenantPolicy } from '../helpers/tenant-policy';
 
 import { migrationJobs } from './migration-jobs';
+import { tenantPk, tenantFk, tenantFkIndex} from '../helpers/base-entity';
 
 /**
  * Migration conflicts — detected duplicates during migration.
@@ -12,9 +13,9 @@ import { migrationJobs } from './migration-jobs';
 export const migrationConflicts = pgTable(
   'migration_conflicts',
   {
-    id: uuid('id').defaultRandom().primaryKey(),
-    orgId: text('org_id').notNull(),
-    migrationJobId: uuid('migration_job_id').notNull().references(() => migrationJobs.id),
+    id: uuid('id').defaultRandom().notNull(),
+    orgId: uuid('org_id').notNull(),
+    migrationJobId: uuid('migration_job_id').notNull(),
     entityType: text('entity_type').notNull(),
     legacyRecord: jsonb('legacy_record').notNull(),
     candidateMatches: jsonb('candidate_matches').notNull(),
@@ -23,6 +24,9 @@ export const migrationConflicts = pgTable(
     createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
   },
   (table) => [
+    tenantPk(table),
+    tenantFk(table, 'migration_job', table.migrationJobId, migrationJobs),
+    tenantFkIndex(table, 'migration_job', table.migrationJobId),
     index('migration_conflicts_job_idx').on(table.migrationJobId),
     index('migration_conflicts_resolution_idx').on(table.orgId, table.resolution),
     check('migration_conflicts_confidence_chk', sql`confidence IN ('high', 'medium', 'low')`),

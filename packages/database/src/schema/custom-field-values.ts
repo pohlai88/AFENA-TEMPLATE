@@ -18,12 +18,13 @@ import {
 import { tenantPolicy } from '../helpers/tenant-policy';
 
 import { customFields } from './custom-fields';
+import { tenantPk } from '../helpers/base-entity';
 
 export const customFieldValues = pgTable(
   'custom_field_values',
   {
-    id: uuid('id').defaultRandom().primaryKey(),
-    orgId: text('org_id')
+    id: uuid('id').defaultRandom().notNull(),
+    orgId: uuid('org_id')
       .notNull()
       .default(sql`(auth.require_org_id())`),
     entityType: text('entity_type').notNull(),
@@ -44,6 +45,7 @@ export const customFieldValues = pgTable(
     source: text('source').notNull().default('user'),
   },
   (table) => [
+    tenantPk(table),
     // Composite FK: prevents cross-entity field corruption
     foreignKey({
       columns: [table.orgId, table.entityType, table.fieldId],

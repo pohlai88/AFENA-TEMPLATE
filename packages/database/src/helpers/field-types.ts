@@ -1,18 +1,23 @@
 import { sql } from 'drizzle-orm';
 import {
+  bigint,
   date,
-  integer,
   jsonb,
   numeric,
   text,
-  uuid,
+  uuid
 } from 'drizzle-orm/pg-core';
 
 // ── Money ────────────────────────────────────────────────
 
-/** Integer minor units (cents/sen). Safe, fast, no float rounding. */
+/** 
+ * Bigint minor units (cents/sen). Safe for high-value finance, no float rounding.
+ * Uses bigint to prevent overflow on large transactions.
+ * Mode 'number' for JS number type (safe up to Number.MAX_SAFE_INTEGER).
+ * Use mode 'bigint' for true bigint JS type if handling very large values.
+ */
 export const moneyMinor = (name: string) =>
-  integer(name).notNull().default(0);
+  bigint(name, { mode: 'number' }).notNull().default(0);
 
 /** ISO 4217 currency code. */
 export const currencyCode = (name: string) =>
@@ -24,7 +29,7 @@ export const fxRate = (name: string) =>
 
 /** Converted amount in base currency minor units. */
 export const baseAmountMinor = (name: string) =>
-  integer(name).notNull().default(0);
+  bigint(name, { mode: 'number' }).notNull().default(0);
 
 /**
  * Full money document columns for financial entities.

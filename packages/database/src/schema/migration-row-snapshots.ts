@@ -4,6 +4,7 @@ import { check, index, jsonb, integer, pgTable, text, timestamp, unique, uuid } 
 import { tenantPolicy } from '../helpers/tenant-policy';
 
 import { migrationJobs } from './migration-jobs';
+import { tenantPk, tenantFk, tenantFkIndex} from '../helpers/base-entity';
 
 /**
  * Migration row snapshots — Fix 4: O(changed rows) rollback.
@@ -14,9 +15,9 @@ import { migrationJobs } from './migration-jobs';
 export const migrationRowSnapshots = pgTable(
   'migration_row_snapshots',
   {
-    id: uuid('id').defaultRandom().primaryKey(),
-    orgId: text('org_id').notNull(),
-    migrationJobId: uuid('migration_job_id').notNull().references(() => migrationJobs.id),
+    id: uuid('id').defaultRandom().notNull(),
+    orgId: uuid('org_id').notNull(),
+    migrationJobId: uuid('migration_job_id').notNull(),
     entityType: text('entity_type').notNull(),
     entityId: uuid('entity_id').notNull(),
     beforeWriteCore: jsonb('before_write_core').notNull(),
@@ -25,6 +26,9 @@ export const migrationRowSnapshots = pgTable(
     capturedAt: timestamp('captured_at', { withTimezone: true }).defaultNow().notNull(),
   },
   (table) => [
+    tenantPk(table),
+    tenantFk(table, 'migration_job', table.migrationJobId, migrationJobs),
+    tenantFkIndex(table, 'migration_job', table.migrationJobId),
     index('migration_row_snapshots_job_idx').on(table.migrationJobId, table.entityType),
     unique('migration_row_snapshots_job_entity_uniq').on(
       table.migrationJobId, table.entityType, table.entityId

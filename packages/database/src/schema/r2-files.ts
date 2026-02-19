@@ -1,8 +1,6 @@
 import { sql } from 'drizzle-orm';
-import { crudPolicy, authenticatedRole, authUid } from 'drizzle-orm/neon';
+import { authenticatedRole, authUid, crudPolicy } from 'drizzle-orm/neon';
 import { index, integer, pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core';
-
-import { users } from './users';
 
 export const r2Files = pgTable(
   'r2_files',
@@ -10,8 +8,7 @@ export const r2Files = pgTable(
     id: uuid('id').defaultRandom().primaryKey(),
     userId: text('user_id')
       .notNull()
-      .default(sql`(auth.user_id())`)
-      .references(() => users.userId, { onDelete: 'cascade' }),
+      .default(sql`(auth.user_id())`),
     objectKey: text('object_key').notNull().unique(),
     fileUrl: text('file_url').notNull(),
     fileName: text('file_name'),

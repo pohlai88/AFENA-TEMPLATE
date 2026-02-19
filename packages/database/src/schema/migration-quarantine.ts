@@ -4,6 +4,7 @@ import { check, index, integer, jsonb, pgTable, text, timestamp, uniqueIndex, uu
 import { tenantPolicy } from '../helpers/tenant-policy';
 
 import { migrationJobs } from './migration-jobs';
+import { tenantPk, tenantFk, tenantFkIndex} from '../helpers/base-entity';
 
 /**
  * Migration quarantine — per-record retry + error isolation.
@@ -12,11 +13,11 @@ import { migrationJobs } from './migration-jobs';
 export const migrationQuarantine = pgTable(
   'migration_quarantine',
   {
-    id: uuid('id').defaultRandom().primaryKey(),
+    id: uuid('id').defaultRandom().notNull(),
     attemptId: uuid('attempt_id').defaultRandom().notNull(),
 
-    orgId: text('org_id').notNull(),
-    migrationJobId: uuid('migration_job_id').notNull().references(() => migrationJobs.id),
+    orgId: uuid('org_id').notNull(),
+    migrationJobId: uuid('migration_job_id').notNull(),
 
     entityType: text('entity_type').notNull(),
     legacyId: text('legacy_id').notNull(),
@@ -39,6 +40,9 @@ export const migrationQuarantine = pgTable(
     resolvedAt: timestamp('resolved_at', { withTimezone: true }),
   },
   (table) => [
+    tenantPk(table),
+    tenantFk(table, 'migration_job', table.migrationJobId, migrationJobs),
+    tenantFkIndex(table, 'migration_job', table.migrationJobId),
     index('migration_quarantine_job_idx').on(table.migrationJobId),
     index('migration_quarantine_status_idx').on(table.migrationJobId, table.status),
     check('migration_quarantine_status_chk', sql`status IN ('quarantined', 'retrying', 'resolved', 'abandoned')`),

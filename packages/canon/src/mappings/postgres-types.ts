@@ -42,6 +42,7 @@ export const POSTGRES_TO_CANON: Record<string, DataType> = {
   real: 'decimal',
   'double precision': 'decimal',
   numeric: 'decimal',
+  decimal: 'decimal',
   money: 'decimal',
   serial: 'integer',
   bigserial: 'integer',

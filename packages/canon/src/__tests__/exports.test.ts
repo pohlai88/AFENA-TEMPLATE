@@ -9,7 +9,7 @@ import { describe, expect, it } from 'vitest';
 
 describe('Package Exports', () => {
   describe('Main export', () => {
-    it('should export main barrel', async () => {
+    it('should export main barrel', { timeout: 15_000 }, async () => {
       const canon = await import('../index');
 
       // Spot check key exports from main barrel

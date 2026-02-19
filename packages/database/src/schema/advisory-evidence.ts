@@ -3,6 +3,7 @@ import { crudPolicy, authenticatedRole } from 'drizzle-orm/neon';
 import { check, index, jsonb, pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core';
 
 import { advisories } from './advisories';
+import { tenantPk, tenantFk, tenantFkIndex} from '../helpers/base-entity';
 
 /**
  * Advisory evidence — append-only ledger of data that produced an advisory.
@@ -14,13 +15,12 @@ import { advisories } from './advisories';
 export const advisoryEvidence = pgTable(
   'advisory_evidence',
   {
-    id: uuid('id').defaultRandom().primaryKey(),
-    orgId: text('org_id')
+    id: uuid('id').defaultRandom().notNull(),
+    orgId: uuid('org_id')
       .notNull()
       .default(sql`(auth.require_org_id())`),
     advisoryId: uuid('advisory_id')
-      .notNull()
-      .references(() => advisories.id),
+      .notNull(),
     evidenceType: text('evidence_type').notNull(),
     source: text('source').notNull(),
     payload: jsonb('payload').notNull(),
@@ -28,6 +28,9 @@ export const advisoryEvidence = pgTable(
     createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
   },
   (table) => [
+    tenantPk(table),
+    tenantFk(table, 'advisory', table.advisoryId, advisories),
+    tenantFkIndex(table, 'advisory', table.advisoryId),
     // CHECK constraints
     check('advisory_evidence_org_not_empty', sql`org_id <> ''`),
     check('advisory_evidence_type_enum', sql`evidence_type IN ('query','snapshot','metric_series','calculation')`),

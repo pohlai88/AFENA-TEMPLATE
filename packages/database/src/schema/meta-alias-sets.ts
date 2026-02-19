@@ -2,12 +2,13 @@ import { sql } from 'drizzle-orm';
 import { boolean, check, index, pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core';
 
 import { tenantPolicy } from '../helpers/tenant-policy';
+import { tenantPk } from '../helpers/base-entity';
 
 export const metaAliasSets = pgTable(
   'meta_alias_sets',
   {
-    id: uuid('id').defaultRandom().primaryKey(),
-    orgId: text('org_id')
+    id: uuid('id').defaultRandom().notNull(),
+    orgId: uuid('org_id')
       .notNull()
       .default(sql`(auth.require_org_id())`),
     setKey: text('set_key').notNull(),
@@ -26,6 +27,7 @@ export const metaAliasSets = pgTable(
     updatedAt: timestamp('updated_at', { withTimezone: true }).defaultNow().notNull(),
   },
   (table) => [
+    tenantPk(table),
     index('meta_alias_sets_org_id_idx').on(table.orgId, table.id),
     check('meta_alias_sets_org_not_empty', sql`org_id <> ''`),
     check(

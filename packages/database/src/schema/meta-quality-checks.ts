@@ -4,17 +4,17 @@ import { check, index, jsonb, pgTable, text, timestamp, uuid } from 'drizzle-orm
 import { tenantPolicy } from '../helpers/tenant-policy';
 
 import { metaAssets } from './meta-assets';
+import { tenantPk, tenantFk, tenantFkIndex} from '../helpers/base-entity';
 
 export const metaQualityChecks = pgTable(
   'meta_quality_checks',
   {
-    id: uuid('id').defaultRandom().primaryKey(),
-    orgId: text('org_id')
+    id: uuid('id').defaultRandom().notNull(),
+    orgId: uuid('org_id')
       .notNull()
       .default(sql`(auth.require_org_id())`),
     targetAssetId: uuid('target_asset_id')
-      .notNull()
-      .references(() => metaAssets.id, { onDelete: 'cascade' }),
+      .notNull(),
     ruleType: text('rule_type').notNull(),
     config: jsonb('config')
       .notNull()
@@ -25,6 +25,9 @@ export const metaQualityChecks = pgTable(
     createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
   },
   (table) => [
+    tenantPk(table),
+    tenantFk(table, 'target_asset', table.targetAssetId, metaAssets, 'cascade'),
+    tenantFkIndex(table, 'target_asset', table.targetAssetId),
     index('meta_quality_checks_org_id_idx').on(table.orgId, table.id),
     check('meta_quality_checks_org_not_empty', sql`org_id <> ''`),
     tenantPolicy(table),

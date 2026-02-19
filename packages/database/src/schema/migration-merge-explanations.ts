@@ -4,6 +4,7 @@ import { check, index, integer, jsonb, pgTable, text, timestamp, uuid } from 'dr
 import { tenantPolicy } from '../helpers/tenant-policy';
 
 import { migrationJobs } from './migration-jobs';
+import { tenantPk, tenantFk, tenantFkIndex} from '../helpers/base-entity';
 
 /**
  * Migration merge explanations — queryable "why" for conflict decisions.
@@ -12,9 +13,9 @@ import { migrationJobs } from './migration-jobs';
 export const migrationMergeExplanations = pgTable(
   'migration_merge_explanations',
   {
-    id: uuid('id').defaultRandom().primaryKey(),
-    orgId: text('org_id').notNull(),
-    migrationJobId: uuid('migration_job_id').notNull().references(() => migrationJobs.id),
+    id: uuid('id').defaultRandom().notNull(),
+    orgId: uuid('org_id').notNull(),
+    migrationJobId: uuid('migration_job_id').notNull(),
 
     entityType: text('entity_type').notNull(),
     legacyId: text('legacy_id').notNull(),
@@ -27,6 +28,9 @@ export const migrationMergeExplanations = pgTable(
     createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
   },
   (table) => [
+    tenantPk(table),
+    tenantFk(table, 'migration_job', table.migrationJobId, migrationJobs),
+    tenantFkIndex(table, 'migration_job', table.migrationJobId),
     index('migration_merge_explanations_job_idx').on(table.migrationJobId),
     index('migration_merge_explanations_decision_idx').on(table.migrationJobId, table.decision),
     check('migration_merge_explanations_decision_chk', sql`decision IN ('merged', 'manual_review', 'created_new')`),

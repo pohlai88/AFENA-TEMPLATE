@@ -1,8 +1,6 @@
 import { sql } from 'drizzle-orm';
-import { crudPolicy, authenticatedRole } from 'drizzle-orm/neon';
+import { authenticatedRole, crudPolicy } from 'drizzle-orm/neon';
 import { index, jsonb, pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core';
-
-import { migrationJobs } from './migration-jobs';
 
 /**
  * Migration reports — signed, canonical JSON with SHA-256 hash.
@@ -12,7 +10,7 @@ export const migrationReports = pgTable(
   'migration_reports',
   {
     id: uuid('id').defaultRandom().primaryKey(),
-    jobId: uuid('job_id').notNull().references(() => migrationJobs.id),
+    jobId: uuid('job_id').notNull(),
     reportData: jsonb('report_data').notNull(),
     reportHash: text('report_hash').notNull(),
     createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),

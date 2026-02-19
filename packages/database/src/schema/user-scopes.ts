@@ -2,6 +2,7 @@ import { sql } from 'drizzle-orm';
 import { check, index, pgTable, text, timestamp, uniqueIndex, uuid } from 'drizzle-orm/pg-core';
 
 import { tenantPolicy } from '../helpers/tenant-policy';
+import { tenantPk } from '../helpers/base-entity';
 
 /**
  * User scopes — org-scoped scope assignments.
@@ -11,8 +12,8 @@ import { tenantPolicy } from '../helpers/tenant-policy';
 export const userScopes = pgTable(
   'user_scopes',
   {
-    id: uuid('id').defaultRandom().primaryKey(),
-    orgId: text('org_id')
+    id: uuid('id').defaultRandom().notNull(),
+    orgId: uuid('org_id')
       .notNull()
       .default(sql`(auth.require_org_id())`),
     userId: text('user_id').notNull(),
@@ -21,6 +22,7 @@ export const userScopes = pgTable(
     createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
   },
   (table) => [
+    tenantPk(table),
     uniqueIndex('user_scopes_org_user_type_id_idx').on(
       table.orgId,
       table.userId,

@@ -1,6 +1,7 @@
 import { sql } from 'drizzle-orm';
 import { crudPolicy, authenticatedRole } from 'drizzle-orm/neon';
 import { check, index, integer, jsonb, pgTable, text, timestamp, uniqueIndex, uuid } from 'drizzle-orm/pg-core';
+import { tenantPk } from '../helpers/base-entity';
 
 /**
  * Audit log — base + 3 JSONB payload columns.
@@ -10,8 +11,8 @@ import { check, index, integer, jsonb, pgTable, text, timestamp, uniqueIndex, uu
 export const auditLogs = pgTable(
   'audit_logs',
   {
-    id: uuid('id').defaultRandom().primaryKey(),
-    orgId: text('org_id').notNull(),
+    id: uuid('id').defaultRandom().notNull(),
+    orgId: uuid('org_id').notNull(),
     actorUserId: text('actor_user_id').notNull(),
     actorName: text('actor_name'),
     ownerId: text('owner_id'),
@@ -41,6 +42,7 @@ export const auditLogs = pgTable(
     diff: jsonb('diff'),
   },
   (table) => [
+    tenantPk(table),
     index('audit_logs_org_created_idx').on(table.orgId, table.createdAt),
     index('audit_logs_entity_timeline_idx').on(table.entityType, table.entityId, table.createdAt),
     index('audit_logs_batch_idx').on(table.batchId, table.createdAt),

@@ -4,25 +4,28 @@ import { boolean, check, index, integer, pgTable, text, timestamp, uniqueIndex, 
 import { tenantPolicy } from '../helpers/tenant-policy';
 
 import { metaAliasSets } from './meta-alias-sets';
+import { tenantPk, tenantFk, tenantFkIndex} from '../helpers/base-entity';
 
 export const metaAliasResolutionRules = pgTable(
   'meta_alias_resolution_rules',
   {
-    id: uuid('id').defaultRandom().primaryKey(),
-    orgId: text('org_id')
+    id: uuid('id').defaultRandom().notNull(),
+    orgId: uuid('org_id')
       .notNull()
       .default(sql`(auth.require_org_id())`),
     scopeType: text('scope_type').notNull(),
     scopeKey: text('scope_key').notNull(),
     aliasSetId: uuid('alias_set_id')
-      .notNull()
-      .references(() => metaAliasSets.id, { onDelete: 'restrict' }),
+      .notNull(),
     priority: integer('priority').notNull().default(0),
     isActive: boolean('is_active').notNull().default(true),
     createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
     updatedAt: timestamp('updated_at', { withTimezone: true }).defaultNow().notNull(),
   },
   (table) => [
+    tenantPk(table),
+    tenantFk(table, 'alias_set', table.aliasSetId, metaAliasSets, 'restrict'),
+    tenantFkIndex(table, 'alias_set', table.aliasSetId),
     index('meta_alias_resolution_rules_org_id_idx').on(table.orgId, table.id),
     uniqueIndex('meta_alias_resolution_rules_scope_uniq').on(
       table.orgId,

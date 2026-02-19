@@ -1,9 +1,10 @@
 import { sql } from 'drizzle-orm';
-import { check, date, index, integer, jsonb, numeric, pgTable, text, uuid } from 'drizzle-orm/pg-core';
+import { check, date, index, jsonb, numeric, pgTable, text } from 'drizzle-orm/pg-core';
 
+import { tenantPk } from '../helpers/base-entity';
+import { docStatusEnum } from '../helpers/doc-status';
 import { erpEntityColumns } from '../helpers/erp-entity';
 import { tenantPolicy } from '../helpers/tenant-policy';
-import { docStatusEnum } from '../helpers/doc-status';
 
 export const campaigns = pgTable(
   'campaigns',
@@ -21,6 +22,7 @@ export const campaigns = pgTable(
     campaignData: jsonb('campaign_data').notNull().default(sql`'{}'::jsonb`),
   },
   (table) => [
+    tenantPk(table),
     index('campaigns_org_id_idx').on(table.orgId, table.id),
     index('campaigns_org_created_idx').on(table.orgId, table.createdAt),
     check('campaigns_org_not_empty', sql`org_id <> ''`),

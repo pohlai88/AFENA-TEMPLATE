@@ -1,6 +1,7 @@
 import { sql } from 'drizzle-orm';
 import { crudPolicy, authenticatedRole } from 'drizzle-orm/neon';
 import { boolean, check, index, integer, jsonb, pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core';
+import { tenantPk } from '../helpers/base-entity';
 
 /**
  * Workflow execution log — append-only evidence of rule evaluations.
@@ -10,8 +11,8 @@ import { boolean, check, index, integer, jsonb, pgTable, text, timestamp, uuid }
 export const workflowExecutions = pgTable(
   'workflow_executions',
   {
-    id: uuid('id').defaultRandom().primaryKey(),
-    orgId: text('org_id').notNull(),
+    id: uuid('id').defaultRandom().notNull(),
+    orgId: uuid('org_id').notNull(),
     ruleId: text('rule_id').notNull(),
     ruleName: text('rule_name'),
     timing: text('timing').notNull(),
@@ -26,6 +27,7 @@ export const workflowExecutions = pgTable(
     createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
   },
   (table) => [
+    tenantPk(table),
     // CHECK constraints
     check('workflow_executions_org_not_empty', sql`org_id <> ''`),
     check('workflow_executions_timing_check', sql`timing in ('before', 'after')`),

@@ -1,2 +1,0 @@
-ALTER TABLE "role_permissions" DROP CONSTRAINT "role_perms_verb_valid";--> statement-breakpoint
-ALTER TABLE "role_permissions" ADD CONSTRAINT "role_perms_verb_valid" CHECK (verb IN ('create', 'update', 'delete', 'submit', 'cancel', 'amend', 'approve', 'reject', 'restore'));

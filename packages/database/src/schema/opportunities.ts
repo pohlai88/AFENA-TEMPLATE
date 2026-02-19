@@ -1,7 +1,9 @@
 import { sql } from 'drizzle-orm';
-import { check, date, index, integer, jsonb, numeric, pgTable, text, uuid } from 'drizzle-orm/pg-core';
+import { check, date, index, integer, jsonb, pgTable, text } from 'drizzle-orm/pg-core';
 
+import { tenantPk } from '../helpers/base-entity';
 import { erpEntityColumns } from '../helpers/erp-entity';
+import { moneyMinor } from '../helpers/field-types';
 import { tenantPolicy } from '../helpers/tenant-policy';
 
 export const opportunities = pgTable(
@@ -11,7 +13,7 @@ export const opportunities = pgTable(
 
     name: text('name').notNull(),
     accountName: text('account_name'),
-    amount: numeric('amount', { precision: 18, scale: 2 }),
+    amountMinor: moneyMinor('amount_minor'),
     stage: text('stage').notNull().default('prospecting'),
     probability: integer('probability'),
     expectedCloseDate: date('expected_close_date'),
@@ -19,6 +21,7 @@ export const opportunities = pgTable(
     details: jsonb('details').notNull().default(sql`'{}'::jsonb`),
   },
   (table) => [
+    tenantPk(table),
     index('opportunities_org_id_idx').on(table.orgId, table.id),
     index('opportunities_org_created_idx').on(table.orgId, table.createdAt),
     check('opportunities_org_not_empty', sql`org_id <> ''`),

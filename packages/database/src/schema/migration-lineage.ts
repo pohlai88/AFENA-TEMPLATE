@@ -13,6 +13,7 @@ import {
 import { tenantPolicy } from '../helpers/tenant-policy';
 
 import { migrationJobs } from './migration-jobs';
+import { tenantPk, tenantFk, tenantFkIndex} from '../helpers/base-entity';
 
 /**
  * Migration lineage — Fix 1: State Machine with atomic reservations.
@@ -27,11 +28,10 @@ import { migrationJobs } from './migration-jobs';
 export const migrationLineage = pgTable(
   'migration_lineage',
   {
-    id: uuid('id').defaultRandom().primaryKey(),
-    orgId: text('org_id').notNull(),
+    id: uuid('id').defaultRandom().notNull(),
+    orgId: uuid('org_id').notNull(),
     migrationJobId: uuid('migration_job_id')
-      .notNull()
-      .references(() => migrationJobs.id),
+      .notNull(),
     entityType: text('entity_type').notNull(),
     legacyId: text('legacy_id').notNull(),
     legacySystem: text('legacy_system').notNull(),
@@ -44,6 +44,9 @@ export const migrationLineage = pgTable(
     dedupeKey: text('dedupe_key'),
   },
   (table) => [
+    tenantPk(table),
+    tenantFk(table, 'migration_job', table.migrationJobId, migrationJobs),
+    tenantFkIndex(table, 'migration_job', table.migrationJobId),
     index('migration_lineage_job_idx').on(table.migrationJobId),
     index('migration_lineage_reservations_idx')
       .on(table.orgId, table.entityType, table.legacySystem, table.reservedAt)
