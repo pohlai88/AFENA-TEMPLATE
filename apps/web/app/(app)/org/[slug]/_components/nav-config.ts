@@ -169,8 +169,28 @@ export const NAV_GROUPS: NavGroup[] = [
 ];
 
 /**
+ * Fallback labels for common sub-routes not in NAV_ITEMS.
+ * NAV_ITEMS remains primary source (NAV-02); this map handles entity sub-pages.
+ */
+const SUB_ROUTE_LABELS: Record<string, string> = {
+  edit: 'Edit',
+  new: 'New',
+  audit: 'Audit',
+  versions: 'Versions',
+  trash: 'Trash',
+  instances: 'Instances',
+  health: 'Health',
+  approvals: 'Approvals',
+  editor: 'Editor',
+  roles: 'Roles',
+  definition: 'Definition',
+  definitionId: 'Definition',
+  instanceId: 'Instance',
+};
+
+/**
  * Resolve breadcrumb label from a URL segment.
- * Falls back to title-cased segment if not in nav config.
+ * Primary: NAV_ITEMS. Fallback: SUB_ROUTE_LABELS. Last: title-cased segment.
  */
 export function getBreadcrumbLabel(segment: string): string {
   const item = NAV_ITEMS.find((i) => {
@@ -178,5 +198,6 @@ export function getBreadcrumbLabel(segment: string): string {
     return parts[parts.length - 1] === segment;
   });
   if (item) return item.label;
+  if (SUB_ROUTE_LABELS[segment]) return SUB_ROUTE_LABELS[segment];
   return segment.charAt(0).toUpperCase() + segment.slice(1);
 }

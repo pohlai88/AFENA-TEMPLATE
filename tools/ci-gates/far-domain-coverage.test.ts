@@ -17,6 +17,7 @@ import { describe, expect, test } from 'vitest';
  * @see FIN-REP-SNAP-01
  * @see FIN-CTRL-SOD-01
  * @see FIN-MG-ADJ-01
+ * @see FIN-EINV-01
  *
  * Finance Domain Coverage Gate
  *
@@ -364,5 +365,64 @@ describe('FIN-MG-ADJ-01: multi-GAAP adjustments', () => {
     const source = readSource(service);
     expect(source).toContain('listCompanyLedgers');
     expect(source).toContain('fetchLedger');
+  });
+});
+
+// ── FIN-EINV-01: E-Invoicing (Peppol / MyInvois / UBL) ─────────────────────
+
+describe('FIN-EINV-01: e-invoicing domain coverage', () => {
+  test('e-invoicing package exists with calculators', () => {
+    const calcDir = join(FINANCE_ROOT, 'e-invoicing', 'src', 'calculators');
+    expect(fileExists(calcDir)).toBe(true);
+    const files = findFilesContaining(calcDir, 'CalculatorResult');
+    expect(files.length).toBeGreaterThanOrEqual(5);
+  });
+
+  test('e-invoicing has intent builders with idempotencyKey', () => {
+    const intentFile = join(FINANCE_ROOT, 'e-invoicing', 'src', 'commands', 'einvoice-intent.ts');
+    expect(fileExists(intentFile)).toBe(true);
+    const source = readSource(intentFile);
+    expect(source).toContain('idempotencyKey');
+    expect(source).toContain('einvoice.issue');
+    expect(source).toContain('einvoice.submit');
+    expect(source).toContain('einvoice.clear');
+  });
+
+  test('e-invoicing has DB schema for e_invoices and e_invoice_submissions', () => {
+    const invoicesSchema = join(SCHEMA_DIR, 'e-invoices.ts');
+    const submissionsSchema = join(SCHEMA_DIR, 'e-invoice-submissions.ts');
+    expect(fileExists(invoicesSchema)).toBe(true);
+    expect(fileExists(submissionsSchema)).toBe(true);
+    const invoiceSource = readSource(invoicesSchema);
+    expect(invoiceSource).toContain('e_invoices');
+    expect(invoiceSource).toContain('format');
+    expect(invoiceSource).toContain('erpIndexes');
+    const submissionSource = readSource(submissionsSchema);
+    expect(submissionSource).toContain('clearance_status');
+    expect(submissionSource).toContain('erpIndexes');
+  });
+
+  test('e-invoicing service has issue, submit, and clearance operations', () => {
+    const service = join(FINANCE_ROOT, 'e-invoicing', 'src', 'services', 'einvoice-service.ts');
+    expect(fileExists(service)).toBe(true);
+    const source = readSource(service);
+    expect(source).toContain('issueEInvoice');
+    expect(source).toContain('submitEInvoice');
+    expect(source).toContain('recordClearance');
+  });
+
+  test('e-invoicing queries filter by orgId (SK-11)', () => {
+    const queryFile = join(FINANCE_ROOT, 'e-invoicing', 'src', 'queries', 'einvoice-query.ts');
+    expect(fileExists(queryFile)).toBe(true);
+    const source = readSource(queryFile);
+    expect(source).toContain('orgId');
+    expect(source).toContain('eInvoices');
+  });
+
+  test('e-invoicing barrel has @see FIN-EINV annotation', () => {
+    const barrel = join(FINANCE_ROOT, 'e-invoicing', 'src', 'index.ts');
+    expect(fileExists(barrel)).toBe(true);
+    const source = readSource(barrel);
+    expect(source).toContain('@see FIN-EINV');
   });
 });

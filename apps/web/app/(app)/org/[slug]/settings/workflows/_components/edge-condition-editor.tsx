@@ -5,6 +5,7 @@ import { Button } from 'afenda-ui/components/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from 'afenda-ui/components/card';
 import { Input } from 'afenda-ui/components/input';
 import { Label } from 'afenda-ui/components/label';
+import { Textarea } from 'afenda-ui/components/textarea';
 import { GitBranch, X } from 'lucide-react';
 import { useCallback, useState } from 'react';
 
@@ -92,11 +93,12 @@ export function EdgeConditionEditor({ edge, onUpdate, onClose }: EdgeConditionEd
         {/* DSL Expression */}
         <div className="space-y-1">
           <Label className="text-xs">Condition (DSL)</Label>
-          <textarea
+          <Textarea
             value={expression}
             onChange={(e) => setExpression(e.target.value)}
             placeholder="entity.grand_total > 10000 && actor.roles contains 'finance_manager'"
-            className="h-20 w-full rounded-md border bg-background px-3 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-ring"
+            className="h-20 min-h-0 text-xs"
+            rows={4}
           />
           <p className="text-[10px] text-muted-foreground">
             Typed DSL only. No JS. Max 500 chars.

@@ -40,7 +40,7 @@ export function computeTaxSubtotals(
   const { lines, currency } = inputs;
 
   if (lines.length === 0) {
-    throw DomainError.validation('At least one line required for tax subtotals');
+    throw new DomainError('VALIDATION_FAILED', 'At least one line required for tax subtotals');
   }
 
   const grouped = new Map<string, { taxRate: number; taxableMinor: number }>();

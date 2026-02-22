@@ -548,4 +548,14 @@ export type { NewOpeningBalanceBatch, OpeningBalanceBatch } from './opening-bala
 export { openingBalanceLines } from './opening-balance-lines';
 export type { NewOpeningBalanceLine, OpeningBalanceLine } from './opening-balance-lines';
 
+// ── E-Invoicing (Phase 3) ───────────────────────────────
+export { eInvoices } from './e-invoices';
+export type { EInvoiceRow, NewEInvoiceRow } from './e-invoices';
+
+export { eInvoiceLines } from './e-invoice-lines';
+export type { EInvoiceLineRow, NewEInvoiceLineRow } from './e-invoice-lines';
+
+export { eInvoiceSubmissions } from './e-invoice-submissions';
+export type { EInvoiceSubmissionRow, NewEInvoiceSubmissionRow } from './e-invoice-submissions';
+
 // @entity-gen:schema-barrel

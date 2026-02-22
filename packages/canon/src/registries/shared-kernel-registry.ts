@@ -849,6 +849,38 @@ export const SHARED_KERNEL_REGISTRY = {
     idempotency: 'required',
     keys: { natural: [['org_id', 'grant_id']] },
   },
+
+  // ── E-Invoicing ────────────────────────────────────────
+  'einvoice.e_invoices': {
+    kind: 'truth',
+    owner: 'e-invoicing',
+    rls: 'tenantPolicy',
+    pii: 'low',
+    write_policy: 'intent-only',
+    invariants: [
+      'format in (ubl, peppol-bis, myinvois, factur-x, xrechnung)',
+      'total = sum(line_amounts)',
+    ],
+    readers: ['e-invoicing', 'receivables', 'payables', 'statutory-reporting'],
+    writes: ['einvoice.issue'],
+    idempotency: 'required',
+    keys: { natural: [['org_id', 'invoice_id']] },
+  },
+  'einvoice.e_invoice_submissions': {
+    kind: 'evidence',
+    owner: 'e-invoicing',
+    rls: 'tenantPolicy',
+    pii: 'none',
+    write_policy: 'intent-only',
+    invariants: [
+      'clearance_status in (cleared, rejected, pending)',
+      'one active submission per invoice',
+    ],
+    readers: ['e-invoicing', 'statutory-reporting'],
+    writes: ['einvoice.submit', 'einvoice.clear'],
+    idempotency: 'required',
+    keys: { natural: [['org_id', 'invoice_id', 'submission_id']] },
+  },
 } as const satisfies Record<string, SharedKernelEntry>;
 
 export type SharedKernelTableKey = keyof typeof SHARED_KERNEL_REGISTRY;

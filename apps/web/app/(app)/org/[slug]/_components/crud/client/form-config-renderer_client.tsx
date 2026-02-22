@@ -1,11 +1,15 @@
 'use client';
 
+import { Checkbox } from 'afenda-ui/components/checkbox';
+import { FieldGroup, FieldSet } from 'afenda-ui/components/field';
 import { Input } from 'afenda-ui/components/input';
 import { Label } from 'afenda-ui/components/label';
+import { NativeSelect, NativeSelectOption } from 'afenda-ui/components/native-select';
+import { useId, useState } from 'react';
 
 /**
  * FormConfigRenderer — Renders form fields from form.config.
- * Config-driven forms; no per-entity form components needed.
+ * Config-driven forms; uses afenda-ui (shadcn) components only.
  */
 
 type FormFieldConfig = {
@@ -42,10 +46,24 @@ export function FormConfigRenderer({
   defaultValues = {},
   namePrefix = '',
 }: FormConfigRendererProps) {
+  const baseId = useId();
   const name = (key: string) => (namePrefix ? `${namePrefix}.${key}` : key);
+  const [boolValues, setBoolValues] = useState<Record<string, boolean>>(() => {
+    const init: Record<string, boolean> = {};
+    for (const fieldKey of config.order) {
+      const field = config.fields[fieldKey];
+      if (field?.type === 'boolean') {
+        const camelKey = toCamel(fieldKey);
+        const dv = defaultValues[fieldKey] ?? defaultValues[camelKey] ?? '';
+        init[fieldKey] =
+          typeof dv === 'boolean' ? dv : String(dv) === 'true';
+      }
+    }
+    return init;
+  });
 
   return (
-    <div className="space-y-4">
+    <FieldSet className="space-y-4">
       {config.order.map((fieldKey) => {
         const field = config.fields[fieldKey];
         if (!field) return null;
@@ -53,51 +71,69 @@ export function FormConfigRenderer({
         const inputName = name(fieldKey);
         const camelKey = toCamel(fieldKey);
         const defaultValue = defaultValues[fieldKey] ?? defaultValues[camelKey] ?? '';
+        const uid = `${baseId}-${fieldKey}`;
 
         if (field.type === 'boolean') {
-          const checked =
-            typeof defaultValue === 'boolean'
-              ? defaultValue
-              : String(defaultValue) === 'true';
+          const checked = boolValues[fieldKey] ?? false;
           return (
-            <div key={fieldKey} className="flex items-center space-x-2">
+            <FieldGroup key={fieldKey} className="flex flex-row items-center gap-2">
               <input
-                type="checkbox"
-                id={inputName}
+                type="hidden"
                 name={inputName}
-                value="true"
-                defaultChecked={checked}
-                className="border-input size-4 rounded border"
+                value={checked ? 'true' : 'false'}
+                readOnly
+                aria-hidden
               />
-              <Label htmlFor={inputName} className="font-normal cursor-pointer">
+              <Checkbox
+                id={uid}
+                checked={checked}
+                onCheckedChange={(c) =>
+                  setBoolValues((prev) => ({ ...prev, [fieldKey]: !!c }))
+                }
+                aria-describedby={field.required ? `${uid}-req` : undefined}
+                aria-required={field.required}
+              />
+              <Label
+                htmlFor={uid}
+                className="font-normal cursor-pointer"
+              >
                 {field.label}
-                {field.required && <span className="text-destructive ml-0.5">*</span>}
+                {field.required && (
+                  <span id={`${uid}-req`} className="text-destructive ml-0.5">
+                    *
+                  </span>
+                )}
               </Label>
-            </div>
+            </FieldGroup>
           );
         }
 
         if (field.type === 'enum' && field.choices?.length) {
           return (
-            <div key={fieldKey} className="space-y-2">
-              <Label htmlFor={inputName}>
+            <FieldGroup key={fieldKey} className="space-y-2">
+              <Label htmlFor={uid}>
                 {field.label}
-                {field.required && <span className="text-destructive ml-0.5">*</span>}
+                {field.required && (
+                  <span className="text-destructive ml-0.5">*</span>
+                )}
               </Label>
-              <select
-                id={inputName}
+              <NativeSelect
+                id={uid}
                 name={inputName}
                 defaultValue={String(defaultValue)}
-                className="border-input bg-background ring-offset-background focus-visible:ring-ring flex h-9 w-full rounded-md border px-3 py-1 text-sm shadow-xs focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                required={field.required}
+                className="w-full"
               >
-                <option value="">Select {field.label}</option>
+                <NativeSelectOption value="">
+                  Select {field.label}
+                </NativeSelectOption>
                 {field.choices.map((opt) => (
-                  <option key={opt} value={opt}>
+                  <NativeSelectOption key={opt} value={opt}>
                     {opt}
-                  </option>
+                  </NativeSelectOption>
                 ))}
-              </select>
-            </div>
+              </NativeSelect>
+            </FieldGroup>
           );
         }
 
@@ -110,22 +146,24 @@ export function FormConfigRenderer({
               : 'text';
 
         return (
-          <div key={fieldKey} className="space-y-2">
-            <Label htmlFor={inputName}>
+          <FieldGroup key={fieldKey} className="space-y-2">
+            <Label htmlFor={uid}>
               {field.label}
-              {field.required && <span className="text-destructive ml-0.5">*</span>}
+              {field.required && (
+                <span className="text-destructive ml-0.5">*</span>
+              )}
             </Label>
             <Input
-              id={inputName}
+              id={uid}
               name={inputName}
               type={inputType}
               defaultValue={String(defaultValue ?? '')}
               placeholder={field.label}
               required={field.required}
             />
-          </div>
+          </FieldGroup>
         );
       })}
-    </div>
+    </FieldSet>
   );
 }

@@ -10,6 +10,7 @@ import {
 } from 'afenda-ui/components/card';
 import { Input } from 'afenda-ui/components/input';
 import { Label } from 'afenda-ui/components/label';
+import { NativeSelect, NativeSelectOption } from 'afenda-ui/components/native-select';
 import { Plus } from 'lucide-react';
 
 import { createWorkflowDefinition } from '@/app/actions/workflows';
@@ -101,15 +102,15 @@ export default async function NewWorkflowDefinitionPage({
 
             <div className="space-y-2">
               <Label htmlFor="definitionKind">Kind</Label>
-              <select
+              <NativeSelect
                 id="definitionKind"
                 name="definitionKind"
-                className="border-input focus-visible:ring-ring flex h-9 w-full rounded-md border bg-transparent px-3 py-1 text-sm shadow-sm transition-colors focus-visible:ring-1 focus-visible:outline-none"
+                className="w-full"
               >
-                <option value="org_patch">Org Patch (customize slots)</option>
-                <option value="envelope">Envelope (system lifecycle)</option>
-                <option value="effective">Effective (compiled)</option>
-              </select>
+                <NativeSelectOption value="org_patch">Org Patch (customize slots)</NativeSelectOption>
+                <NativeSelectOption value="envelope">Envelope (system lifecycle)</NativeSelectOption>
+                <NativeSelectOption value="effective">Effective (compiled)</NativeSelectOption>
+              </NativeSelect>
               <p className="text-muted-foreground text-xs">
                 Most workflows should use &quot;Org Patch&quot; to customize body slots within the
                 system envelope.

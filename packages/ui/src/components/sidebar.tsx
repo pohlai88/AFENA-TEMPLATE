@@ -346,7 +346,9 @@ function SidebarSeparator({ className, ...props }: React.ComponentProps<typeof S
 
 function SidebarContent({ className, ...props }: React.ComponentProps<'div'>) {
   return (
-    <div
+    <nav
+      role="navigation"
+      aria-label="Main navigation"
       data-slot="sidebar-content"
       data-sidebar="content"
       className={cn(

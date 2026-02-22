@@ -1,6 +1,6 @@
 # afenda Interaction Kernel (CRUD-SAP) — Architecture Reference
 
-> **Auto-generated** by `afenda readme gen` at 2026-02-22T03:55:55Z. Do not edit — regenerate instead.
+> **Auto-generated** by `afenda readme gen` at 2026-02-22T06:11:18Z. Do not edit — regenerate instead.
 > **Package:** `afenda-crud` (`packages/crud`)
 > **Purpose:** Single mutation entry point for all domain data — the afenda Interaction Kernel (AIK).
 

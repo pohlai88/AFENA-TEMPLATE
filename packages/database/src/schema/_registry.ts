@@ -1894,6 +1894,49 @@ export const TABLE_REGISTRY: Record<string, TableMetadata> = {
     hasUpdatedAtTrigger: false,
     description: 'Per-org video/media configuration',
   },
+
+  // ── E-Invoicing (Peppol / MyInvois / UBL) ────────────
+  e_invoices: {
+    kind: 'truth',
+    hasRls: true,
+    hasTenant: true,
+    hasCompositePk: true,
+    hasUpdatedAtTrigger: true,
+    hasNaturalKey: true,
+    naturalKeyImmutable: true,
+    description: 'E-invoice documents (UBL/Peppol/MyInvois/Factur-X/XRechnung)',
+    domain: 'finance',
+    subdomain: 'e-invoicing',
+    dataSensitivity: 'financial',
+    retentionClass: 'statutory',
+    supportsIntercompany: true,
+  },
+
+  e_invoice_lines: {
+    kind: 'truth',
+    hasRls: true,
+    hasTenant: true,
+    hasCompositePk: true,
+    hasUpdatedAtTrigger: true,
+    description: 'E-invoice line items (EN 16931 BG-25)',
+    domain: 'finance',
+    subdomain: 'e-invoicing',
+    dataSensitivity: 'financial',
+    retentionClass: 'statutory',
+  },
+
+  e_invoice_submissions: {
+    kind: 'evidence',
+    hasRls: true,
+    hasTenant: true,
+    hasCompositePk: true,
+    hasUpdatedAtTrigger: false,
+    description: 'E-invoice submission/clearance records from tax authority or access point',
+    domain: 'finance',
+    subdomain: 'e-invoicing',
+    dataSensitivity: 'financial',
+    retentionClass: 'statutory',
+  },
 };
 
 /**

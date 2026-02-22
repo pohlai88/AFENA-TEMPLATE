@@ -47,7 +47,7 @@ export function checkFormatCompliance(
 
   const rules = FORMAT_RULES[format];
   if (!rules) {
-    throw DomainError.validation(`Unsupported e-invoice format: ${format}`);
+    throw new DomainError('VALIDATION_FAILED', `Unsupported e-invoice format: ${format}`);
   }
 
   const fieldMap: Record<string, boolean> = {

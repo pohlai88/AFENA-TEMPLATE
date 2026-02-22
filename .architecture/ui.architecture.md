@@ -1,6 +1,6 @@
 # afenda UI Design System — Architecture Reference
 
-> **Auto-generated** by `afenda readme gen` at 2026-02-22T03:55:55Z. Do not edit — regenerate instead.
+> **Auto-generated** by `afenda readme gen` at 2026-02-22T06:11:18Z. Do not edit — regenerate instead.
 > **Package:** `afenda-ui` (`packages/ui`)
 > **Purpose:** Four-layer design system: Engine tokens → CSS bridge → shadcn/ui primitives → App shell.
 
@@ -155,3 +155,9 @@ packages/ui/src/
 ## Cross-References
 
 - [`route.architecture.md`](./route.architecture.md)
+
+---
+
+## ERP App Shell
+
+- [`erp-architecture.ui.md`](./../packages/ui/erp-architecture.ui.md) — Governance spec for org-scoped app shell, nav SSOT, forms

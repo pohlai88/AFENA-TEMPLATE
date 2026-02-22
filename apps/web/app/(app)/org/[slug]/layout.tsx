@@ -37,11 +37,19 @@ export default async function OrgLayout({
 
   return (
     <OrgProvider value={orgContextValue}>
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:rounded-md focus:bg-background focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:ring-2 focus:ring-ring"
+      >
+        Skip navigation
+      </a>
       <SidebarProvider>
         <AppSidebar currentOrg={orgContextValue} orgs={userOrgs} />
         <SidebarInset>
           <AppHeader />
-          <main className="flex-1 p-4">{children}</main>
+          <main id="main-content" className="flex-1 p-4">
+            {children}
+          </main>
         </SidebarInset>
       </SidebarProvider>
     </OrgProvider>

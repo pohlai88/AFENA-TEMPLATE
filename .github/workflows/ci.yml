@@ -149,6 +149,9 @@ jobs:
       - name: CI invariants
         run: pnpm ci:invariants
 
+      - name: UI gates (UI-ARCH-01, UI-RSC-01, UI-NAV-01, UI-TOKEN-01, UI-A11Y-01)
+        run: pnpm ci:ui-gates
+
       - name: DB barrel + registry (Gate 7)
         run: pnpm --filter afenda-database db:barrel
 

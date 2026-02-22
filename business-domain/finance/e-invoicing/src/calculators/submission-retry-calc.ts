@@ -32,13 +32,13 @@ export function evaluateSubmissionRetry(
   const { attemptCount, maxRetries, baseDelayMs, lastErrorCode, isTransient } = inputs;
 
   if (attemptCount < 0) {
-    throw DomainError.validation('Attempt count cannot be negative');
+    throw new DomainError('VALIDATION_FAILED', 'Attempt count cannot be negative');
   }
   if (maxRetries < 1) {
-    throw DomainError.validation('Max retries must be at least 1');
+    throw new DomainError('VALIDATION_FAILED', 'Max retries must be at least 1');
   }
   if (baseDelayMs < 0) {
-    throw DomainError.validation('Base delay cannot be negative');
+    throw new DomainError('VALIDATION_FAILED', 'Base delay cannot be negative');
   }
 
   const attemptsRemaining = Math.max(0, maxRetries - attemptCount);

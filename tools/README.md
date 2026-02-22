@@ -369,6 +369,7 @@ tools/
 │
 ├── ci-ais-benchmark-gate.mjs    # 🎯 AIS Benchmark confidence gate (AIS-01…AIS-06)
 ├── ci-finance-audit-gate.mjs   # 🎯 Finance Audit confidence gate (FAR-01…FAR-06)
+├── ci-ui-gates.mjs             # 🎯 ERP UI architecture gates (UI-ARCH-01…UI-A11Y-01)
 ├── finance-evidence-pack.mjs   # 📦 Close-period evidence pack assembler
 ├── finance-audit-docs.mjs      # 📝 Scorecard + dashboard generator
 │
@@ -885,6 +886,32 @@ pnpm finance:docs
 | `ci-finance-audit-gate.mjs` | `.afenda/finance-audit.ledger.json`                                   |
 | `finance-evidence-pack.mjs` | `.afenda/evidence-packs/{period}-finance-evidence.json`               |
 | `finance-audit-docs.mjs`    | `.afenda/FINANCE-AUDIT-SCORECARD.md` + `finance-audit-dashboard.json` |
+
+---
+
+### CI UI Gates
+
+Enforces ERP Architecture UI governance (Section 10 of `packages/ui/erp-architecture.ui.md`).
+Runs in `.github/workflows/ci.yml` as step "UI gates".
+
+```bash
+# Run all 5 gates (exit 1 on failure)
+pnpm ci:ui-gates
+```
+
+| Gate         | Check                                                       |
+| ------------ | ----------------------------------------------------------- |
+| **UI-ARCH-01** | `erp-architecture.ui.md` exists; `ui.architecture.md` links to it |
+| **UI-RSC-01**  | No `'use client'` in layout.tsx or page.tsx under org routes   |
+| **UI-NAV-01**  | `@entity-gen:nav-items` in nav-config.ts                       |
+| **UI-TOKEN-01**| No hardcoded hex/rgb/hsl (excludes `hsl(var(...))`, allowlist)   |
+| **UI-A11Y-01** | Shell renders `<nav>` and `<main>` landmarks                     |
+
+**Constraint (Zero Drift):** All UI must use shadcn-based afenda-ui components only; no raw `<input>`, `<select>`, `<button>`, `<textarea>`. See `erp-architecture.ui.md` Section 6a.
+
+**Script**: `tools/ci-ui-gates.mjs`
+
+**Spec**: [packages/ui/erp-architecture.ui.md](../packages/ui/erp-architecture.ui.md) — Section 10, 13
 
 ---
 

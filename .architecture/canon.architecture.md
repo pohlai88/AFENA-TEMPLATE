@@ -1,6 +1,6 @@
 # afenda Canon (Type Authority) — Architecture Reference
 
-> **Auto-generated** by `afenda readme gen` at 2026-02-22T03:55:55Z. Do not edit — regenerate instead.
+> **Auto-generated** by `afenda readme gen` at 2026-02-22T06:11:18Z. Do not edit — regenerate instead.
 > **Package:** `afenda-canon` (`packages/canon`)
 > **Purpose:** Single source of truth for all types, schemas, enums, and capability definitions across the monorepo.
 

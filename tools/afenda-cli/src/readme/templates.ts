@@ -100,6 +100,17 @@ function relatedSection(relatedPackages: string[]): string {
   return lines.join('\n');
 }
 
+function relatedDocsSection(relatedDocs: Array<{ path: string; label: string }>): string {
+  if (relatedDocs.length === 0) return '';
+
+  const lines = ['## Related Docs', ''];
+  for (const doc of relatedDocs) {
+    lines.push(`- [${doc.label}](${doc.path})`);
+  }
+  lines.push('');
+  return lines.join('\n');
+}
+
 function packageOverviewSection(
   structure?: {
     hasTests: boolean;
@@ -541,6 +552,7 @@ export interface TemplateInput {
   dependencies: Record<string, string>;
   peerDependencies: Record<string, string>;
   relatedPackages: string[];
+  relatedDocs?: Array<{ path: string; label: string }>;
   structure?: {
     hasTests: boolean;
     hasDocs: boolean;
@@ -599,6 +611,9 @@ export function renderTemplate(input: TemplateInput): string {
   parts.push(depsSection(input.dependencies, 'Dependencies'));
   parts.push(depsSection(input.peerDependencies, 'Peer Dependencies'));
   parts.push(relatedSection(input.relatedPackages));
+  if (input.relatedDocs && input.relatedDocs.length > 0) {
+    parts.push(relatedDocsSection(input.relatedDocs));
+  }
   parts.push(contributingSection(input.packageType));
 
   return parts.filter((p) => p.length > 0).join('\n');

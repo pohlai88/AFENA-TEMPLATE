@@ -10,6 +10,7 @@
 import { sql } from 'drizzle-orm';
 import { bigint, check, index, integer, pgTable, text, uuid } from 'drizzle-orm/pg-core';
 
+import { journalEntries } from './journal-entries';
 import { tenantPk } from '../helpers/base-entity';
 import { erpEntityColumns } from '../helpers/erp-entity';
 import { tenantPolicy } from '../helpers/tenant-policy';

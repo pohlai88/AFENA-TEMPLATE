@@ -60,6 +60,7 @@
     "canon:test:coverage": "pnpm --filter afenda-canon test:coverage",
     "ci:invariants": "pnpm afenda housekeeping",
     "ci:domain-gates": "node tools/ci-domain-gates.mjs",
+    "ci:ui-gates": "node tools/ci-ui-gates.mjs",
     "ci:ais-benchmark": "node tools/ci-ais-benchmark-gate.mjs",
     "ci:finance-audit": "node tools/ci-finance-audit-gate.mjs",
     "ci:finance-audit:emit": "node tools/ci-finance-audit-gate.mjs --emit-only",

@@ -42,10 +42,10 @@ export function computeInvoiceTotals(
   } = inputs;
 
   if (lineExtensionTotalMinor < 0) {
-    throw DomainError.validation('Line extension total cannot be negative');
+    throw new DomainError('VALIDATION_FAILED', 'Line extension total cannot be negative');
   }
   if (taxTotalMinor < 0) {
-    throw DomainError.validation('Tax total cannot be negative');
+    throw new DomainError('VALIDATION_FAILED', 'Tax total cannot be negative');
   }
 
   const taxExclusiveAmountMinor =

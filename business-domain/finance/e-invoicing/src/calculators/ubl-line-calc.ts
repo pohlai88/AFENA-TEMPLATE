@@ -35,13 +35,13 @@ export function computeUblLine(
   const { lineNo, quantity, unitPriceMinor, taxRate, allowanceMinor = 0, chargeMinor = 0 } = inputs;
 
   if (quantity <= 0) {
-    throw DomainError.validation('Quantity must be positive');
+    throw new DomainError('VALIDATION_FAILED', 'Quantity must be positive');
   }
   if (unitPriceMinor < 0) {
-    throw DomainError.validation('Unit price cannot be negative');
+    throw new DomainError('VALIDATION_FAILED', 'Unit price cannot be negative');
   }
   if (taxRate < 0 || taxRate > 1) {
-    throw DomainError.validation('Tax rate must be between 0 and 1');
+    throw new DomainError('VALIDATION_FAILED', 'Tax rate must be between 0 and 1');
   }
 
   const grossMinor = Math.round(quantity * unitPriceMinor);

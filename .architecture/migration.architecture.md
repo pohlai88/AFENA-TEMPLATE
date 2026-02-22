@@ -1,6 +1,6 @@
 # afenda Migration Engine — Architecture Reference
 
-> **Auto-generated** by `afenda readme gen` at 2026-02-22T03:55:55Z. Do not edit — regenerate instead.
+> **Auto-generated** by `afenda readme gen` at 2026-02-22T06:11:18Z. Do not edit — regenerate instead.
 > **Package:** `afenda-migration` (`packages/migration`)
 > **Purpose:** Legacy data migration pipeline with atomicity guarantees, conflict detection, and signed audit reports.
 

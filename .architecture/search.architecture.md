@@ -1,6 +1,6 @@
 # afenda Search Engine — Architecture Reference
 
-> **Auto-generated** by `afenda readme gen` at 2026-02-22T03:55:55Z. Do not edit — regenerate instead.
+> **Auto-generated** by `afenda readme gen` at 2026-02-22T06:11:18Z. Do not edit — regenerate instead.
 > **Package:** `afenda-search` (`packages/search`)
 > **Purpose:** Full-text search helpers, per-entity adapters, and cross-entity search registry.
 

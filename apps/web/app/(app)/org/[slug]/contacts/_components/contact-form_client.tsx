@@ -4,6 +4,11 @@ import { useRouter } from 'next/navigation';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
+  FieldGroup,
+  FieldLegend,
+  FieldSet,
+} from 'afenda-ui/components/field';
+import {
   Form,
   FormControl,
   FormField,
@@ -118,92 +123,105 @@ export function ContactForm({
         submitLabel={isEdit ? 'Update Contact' : 'Create Contact'}
         onCancel={() => router.back()}
       >
-        <FormField
-          control={form.control}
-          name="name"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel className="flex items-center gap-1.5">
-                <User className="h-3.5 w-3.5" />
-                Name <span className="text-destructive">*</span>
-              </FormLabel>
-              <FormControl>
-                <Input placeholder="Full name" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+        <FieldSet>
+          <FieldLegend>Basic information</FieldLegend>
+          <FieldGroup>
+            <FormField
+              control={form.control}
+              name="name"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="flex items-center gap-1.5">
+                    <User className="h-3.5 w-3.5" />
+                    Name <span className="text-destructive">*</span>
+                  </FormLabel>
+                  <FormControl>
+                    <Input placeholder="Full name" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </FieldGroup>
+        </FieldSet>
 
-        <div className="grid gap-4 sm:grid-cols-2">
-          <FormField
-            control={form.control}
-            name="email"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel className="flex items-center gap-1.5">
-                  <Mail className="h-3.5 w-3.5" />
-                  Email
-                </FormLabel>
-                <FormControl>
-                  <Input type="email" placeholder="email@example.com" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+        <FieldSet>
+          <FieldLegend>Contact details</FieldLegend>
+          <FieldGroup className="grid gap-4 sm:grid-cols-2">
+            <FormField
+              control={form.control}
+              name="email"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="flex items-center gap-1.5">
+                    <Mail className="h-3.5 w-3.5" />
+                    Email
+                  </FormLabel>
+                  <FormControl>
+                    <Input type="email" placeholder="email@example.com" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="phone"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="flex items-center gap-1.5">
+                    <Phone className="h-3.5 w-3.5" />
+                    Phone
+                  </FormLabel>
+                  <FormControl>
+                    <Input placeholder="+1 (555) 000-0000" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </FieldGroup>
+          <FieldGroup>
+            <FormField
+              control={form.control}
+              name="company"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="flex items-center gap-1.5">
+                    <Building2 className="h-3.5 w-3.5" />
+                    Company
+                  </FormLabel>
+                  <FormControl>
+                    <Input placeholder="Company name" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </FieldGroup>
+        </FieldSet>
 
-          <FormField
-            control={form.control}
-            name="phone"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel className="flex items-center gap-1.5">
-                  <Phone className="h-3.5 w-3.5" />
-                  Phone
-                </FormLabel>
-                <FormControl>
-                  <Input placeholder="+1 (555) 000-0000" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </div>
-
-        <FormField
-          control={form.control}
-          name="company"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel className="flex items-center gap-1.5">
-                <Building2 className="h-3.5 w-3.5" />
-                Company
-              </FormLabel>
-              <FormControl>
-                <Input placeholder="Company name" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
-          name="notes"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel className="flex items-center gap-1.5">
-                <FileText className="h-3.5 w-3.5" />
-                Notes
-              </FormLabel>
-              <FormControl>
-                <Textarea placeholder="Additional notes..." rows={3} {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+        <FieldSet>
+          <FieldLegend>Additional information</FieldLegend>
+          <FieldGroup>
+            <FormField
+              control={form.control}
+              name="notes"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="flex items-center gap-1.5">
+                    <FileText className="h-3.5 w-3.5" />
+                    Notes
+                  </FormLabel>
+                  <FormControl>
+                    <Textarea placeholder="Additional notes..." rows={3} {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </FieldGroup>
+        </FieldSet>
       </EntityFormShell>
     </Form>
   );

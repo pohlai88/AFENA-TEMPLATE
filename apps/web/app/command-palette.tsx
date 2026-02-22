@@ -1,6 +1,6 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 
 import { useQuery } from '@tanstack/react-query';
 import {
@@ -12,13 +12,10 @@ import {
   CommandList,
   CommandSeparator,
 } from 'afenda-ui/components/command';
-import {
-  Home,
-  Plus,
-  Trash2,
-  Users,
-} from 'lucide-react';
+import { Home, Plus, Trash2, Users } from 'lucide-react';
 import { useCallback, useEffect, useState } from 'react';
+
+import { NAV_ITEMS } from '@/app/(app)/org/[slug]/_components/nav-config';
 
 interface SearchResult {
   id: string;
@@ -37,10 +34,13 @@ async function fetchSearch(query: string): Promise<SearchResult[]> {
 
 export function CommandPalette() {
   const router = useRouter();
+  const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState('');
 
-  // ⌘K / Ctrl+K keyboard shortcut
+  const orgSlug = pathname?.match(/^\/org\/([^/]+)/)?.[1];
+  const orgPrefix = orgSlug ? `/org/${orgSlug}` : '';
+
   useEffect(() => {
     function onKeyDown(e: KeyboardEvent) {
       if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
@@ -52,7 +52,6 @@ export function CommandPalette() {
     return () => document.removeEventListener('keydown', onKeyDown);
   }, []);
 
-  // Search with react-query (debounced via staleTime)
   const { data: searchResults = [], isFetching } = useQuery({
     queryKey: ['search', query],
     queryFn: () => fetchSearch(query),
@@ -70,12 +69,12 @@ export function CommandPalette() {
     [router],
   );
 
-  // Determine org slug from current URL
-  const orgSlug = typeof window !== 'undefined'
-    ? window.location.pathname.match(/^\/org\/([^/]+)/)?.[1]
-    : undefined;
-
-  const orgPrefix = orgSlug ? `/org/${orgSlug}` : '';
+  const navActions = orgSlug
+    ? NAV_ITEMS.filter((i) => i.commandPaletteAction).map((item) => ({
+        ...item,
+        href: item.href(orgSlug),
+      }))
+    : [];
 
   return (
     <CommandDialog
@@ -97,8 +96,7 @@ export function CommandPalette() {
           {isFetching ? 'Searching...' : 'No results found.'}
         </CommandEmpty>
 
-        {/* Search results */}
-        {searchResults.length > 0 && (
+        {searchResults.length > 0 && orgPrefix && (
           <CommandGroup heading="Contacts">
             {searchResults.map((result) => (
               <CommandItem
@@ -118,15 +116,11 @@ export function CommandPalette() {
           </CommandGroup>
         )}
 
-        {/* Quick actions */}
         {orgPrefix && (
           <>
             <CommandSeparator />
             <CommandGroup heading="Actions">
-              <CommandItem
-                value="new-contact"
-                onSelect={() => navigate(`${orgPrefix}/contacts/new`)}
-              >
+              <CommandItem value="new-contact" onSelect={() => navigate(`${orgPrefix}/contacts/new`)}>
                 <Plus className="mr-2 h-4 w-4" />
                 New Contact
               </CommandItem>
@@ -134,32 +128,37 @@ export function CommandPalette() {
           </>
         )}
 
-        {/* Navigation */}
         <CommandSeparator />
         <CommandGroup heading="Navigation">
-          <CommandItem
-            value="go-dashboard"
-            onSelect={() => navigate('/dashboard')}
-          >
-            <Home className="mr-2 h-4 w-4" />
-            Dashboard
-          </CommandItem>
-          {orgPrefix && (
+          {navActions.length > 0 ? (
+            navActions.map((item) => (
+              <CommandItem
+                key={item.label}
+                value={item.commandPaletteAction ?? item.label}
+                onSelect={() => navigate(item.href)}
+              >
+                <item.icon className="mr-2 h-4 w-4" aria-hidden />
+                <span>{item.commandPaletteAction ?? item.label}</span>
+              </CommandItem>
+            ))
+          ) : (
             <>
-              <CommandItem
-                value="go-contacts"
-                onSelect={() => navigate(`${orgPrefix}/contacts`)}
-              >
-                <Users className="mr-2 h-4 w-4" />
-                Contacts
+              <CommandItem value="go-dashboard" onSelect={() => navigate('/dashboard')}>
+                <Home className="mr-2 h-4 w-4" />
+                Dashboard
               </CommandItem>
-              <CommandItem
-                value="go-trash"
-                onSelect={() => navigate(`${orgPrefix}/contacts/trash`)}
-              >
-                <Trash2 className="mr-2 h-4 w-4" />
-                Trash
-              </CommandItem>
+              {orgPrefix && (
+                <>
+                  <CommandItem value="go-contacts" onSelect={() => navigate(`${orgPrefix}/contacts`)}>
+                    <Users className="mr-2 h-4 w-4" />
+                    Contacts
+                  </CommandItem>
+                  <CommandItem value="go-trash" onSelect={() => navigate(`${orgPrefix}/contacts/trash`)}>
+                    <Trash2 className="mr-2 h-4 w-4" />
+                    Trash
+                  </CommandItem>
+                </>
+              )}
             </>
           )}
         </CommandGroup>

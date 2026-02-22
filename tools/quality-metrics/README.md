@@ -296,7 +296,7 @@ apps/web/
 │   └── api/quality/  # Metrics API
 └── src/
     └── components/
-        └── quality-dashboard.tsx  # Dashboard UI
+        └── quality-dashboard-enhanced.tsx  # Dashboard UI
 ```
 
 ## Metrics Structure

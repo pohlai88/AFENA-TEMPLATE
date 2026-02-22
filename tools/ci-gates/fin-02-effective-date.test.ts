@@ -36,6 +36,7 @@ const EFFECTIVE_DATE_FIELDS = [
   'paymentDate',
   'periodStart',
   'taxPeriod',
+  'issueDate',
 ] as const;
 
 describe('FIN-02: effectiveAt required on accounting event intents', () => {
@@ -89,7 +90,7 @@ describe('FIN-02: effectiveAt required on accounting event intents', () => {
     if (violations.length > 0) {
       throw new Error(
         `FIN-02: ${violations.length} effective-dated intent(s) missing date/period field:\n` +
-          violations.map((v) => `  - ${v}`).join('\n'),
+        violations.map((v) => `  - ${v}`).join('\n'),
       );
     }
 

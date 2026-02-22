@@ -60,7 +60,7 @@ export function AppSidebar({ currentOrg, orgs }: AppSidebarProps) {
                         isActive={isActive}
                         tooltip={item.label}
                       >
-                        <Link href={href}>
+                        <Link href={href} aria-current={isActive ? 'page' : undefined}>
                           <item.icon />
                           <span>{item.label}</span>
                         </Link>
