@@ -1,0 +1,11 @@
+@import 'tailwindcss';
+@import '@neondatabase/auth/ui/tailwind';
+@source '../../../packages/ui/src';
+@import '../../../packages/ui/theme.css';
+@import '../../../packages/ui/src/styles/globals.css';
+
+/* App-level font override: Next.js Geist fonts loaded via next/font */
+@theme inline {
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}

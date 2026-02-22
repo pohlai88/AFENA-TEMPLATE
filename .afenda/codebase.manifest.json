@@ -1,0 +1,1742 @@
+{
+  "version": "1.0",
+  "generatedAt": "2026-02-22T03:14:33.556Z",
+  "packageGraph": {
+    "nodes": [
+      {
+        "name": "afenda-monorepo",
+        "path": "package.json",
+        "version": "0.1.0",
+        "private": true,
+        "dependencies": [],
+        "devDependencies": []
+      },
+      {
+        "name": "web",
+        "path": "apps/web",
+        "version": "0.1.0",
+        "private": true,
+        "dependencies": [
+          "afenda-canon",
+          "afenda-crud",
+          "afenda-crud-convenience",
+          "afenda-database",
+          "afenda-logger",
+          "afenda-observability",
+          "afenda-search",
+          "afenda-ui",
+          "afenda-workflow"
+        ],
+        "devDependencies": [
+          "afenda-eslint-config",
+          "afenda-typescript-config"
+        ]
+      },
+      {
+        "name": "afenda-crud",
+        "path": "packages/crud",
+        "version": "0.1.0",
+        "private": true,
+        "dependencies": [
+          "afenda-canon",
+          "afenda-database",
+          "afenda-logger",
+          "afenda-workflow"
+        ],
+        "devDependencies": [
+          "afenda-eslint-config",
+          "afenda-typescript-config"
+        ]
+      },
+      {
+        "name": "afenda-crud-convenience",
+        "path": "packages/crud-convenience",
+        "version": "0.1.0",
+        "private": true,
+        "dependencies": [
+          "afenda-crud"
+        ],
+        "devDependencies": [
+          "afenda-eslint-config",
+          "afenda-typescript-config"
+        ]
+      },
+      {
+        "name": "afenda-canon",
+        "path": "packages/canon",
+        "version": "0.1.0",
+        "private": true,
+        "dependencies": [],
+        "devDependencies": [
+          "afenda-eslint-config",
+          "afenda-typescript-config"
+        ]
+      },
+      {
+        "name": "afenda-eslint-config",
+        "path": "packages/eslint-config",
+        "version": "0.1.0",
+        "private": true,
+        "dependencies": [],
+        "devDependencies": []
+      },
+      {
+        "name": "afenda-database",
+        "path": "packages/database",
+        "version": "0.1.0",
+        "private": true,
+        "dependencies": [],
+        "devDependencies": [
+          "afenda-eslint-config",
+          "afenda-typescript-config"
+        ]
+      },
+      {
+        "name": "afenda-logger",
+        "path": "packages/logger",
+        "version": "0.1.0",
+        "private": true,
+        "dependencies": [],
+        "devDependencies": [
+          "afenda-eslint-config",
+          "afenda-typescript-config"
+        ]
+      },
+      {
+        "name": "afenda-observability",
+        "path": "packages/observability",
+        "version": "0.1.0",
+        "private": true,
+        "dependencies": [
+          "afenda-logger"
+        ],
+        "devDependencies": [
+          "afenda-eslint-config",
+          "afenda-typescript-config"
+        ]
+      },
+      {
+        "name": "afenda-search",
+        "path": "packages/search",
+        "version": "0.1.0",
+        "private": true,
+        "dependencies": [
+          "afenda-database",
+          "afenda-logger"
+        ],
+        "devDependencies": [
+          "afenda-eslint-config",
+          "afenda-typescript-config"
+        ]
+      },
+      {
+        "name": "afenda-typescript-config",
+        "path": "packages/typescript-config",
+        "version": "0.1.0",
+        "private": true,
+        "dependencies": [],
+        "devDependencies": []
+      },
+      {
+        "name": "afenda-ui",
+        "path": "packages/ui",
+        "version": "0.1.0",
+        "private": true,
+        "dependencies": [],
+        "devDependencies": [
+          "afenda-eslint-config",
+          "afenda-typescript-config"
+        ]
+      },
+      {
+        "name": "afenda-migration",
+        "path": "packages/migration",
+        "version": "0.1.0",
+        "private": true,
+        "dependencies": [
+          "afenda-canon",
+          "afenda-database",
+          "afenda-logger"
+        ],
+        "devDependencies": [
+          "afenda-eslint-config",
+          "afenda-typescript-config"
+        ]
+      },
+      {
+        "name": "afenda-workflow",
+        "path": "packages/workflow",
+        "version": "0.1.0",
+        "private": true,
+        "dependencies": [
+          "afenda-canon",
+          "afenda-database"
+        ],
+        "devDependencies": [
+          "afenda-eslint-config",
+          "afenda-typescript-config"
+        ]
+      },
+      {
+        "name": "@afenda/cli",
+        "path": "tools/afenda-cli",
+        "version": "0.1.0",
+        "private": true,
+        "dependencies": [
+          "afenda-canon"
+        ],
+        "devDependencies": [
+          "afenda-eslint-config",
+          "afenda-typescript-config"
+        ]
+      },
+      {
+        "name": "ci-gates",
+        "path": "tools/ci-gates",
+        "version": "0.0.1",
+        "private": true,
+        "dependencies": [],
+        "devDependencies": [
+          "afenda-crud",
+          "afenda-typescript-config"
+        ]
+      },
+      {
+        "name": "quality-metrics",
+        "path": "tools/quality-metrics",
+        "version": "0.1.0",
+        "private": true,
+        "dependencies": [
+          "afenda-database"
+        ],
+        "devDependencies": []
+      }
+    ],
+    "edges": [
+      {
+        "from": "web",
+        "to": "afenda-canon",
+        "dev": false
+      },
+      {
+        "from": "web",
+        "to": "afenda-crud",
+        "dev": false
+      },
+      {
+        "from": "web",
+        "to": "afenda-crud-convenience",
+        "dev": false
+      },
+      {
+        "from": "web",
+        "to": "afenda-database",
+        "dev": false
+      },
+      {
+        "from": "web",
+        "to": "afenda-logger",
+        "dev": false
+      },
+      {
+        "from": "web",
+        "to": "afenda-observability",
+        "dev": false
+      },
+      {
+        "from": "web",
+        "to": "afenda-search",
+        "dev": false
+      },
+      {
+        "from": "web",
+        "to": "afenda-ui",
+        "dev": false
+      },
+      {
+        "from": "web",
+        "to": "afenda-workflow",
+        "dev": false
+      },
+      {
+        "from": "web",
+        "to": "afenda-eslint-config",
+        "dev": true
+      },
+      {
+        "from": "web",
+        "to": "afenda-typescript-config",
+        "dev": true
+      },
+      {
+        "from": "afenda-crud",
+        "to": "afenda-canon",
+        "dev": false
+      },
+      {
+        "from": "afenda-crud",
+        "to": "afenda-database",
+        "dev": false
+      },
+      {
+        "from": "afenda-crud",
+        "to": "afenda-logger",
+        "dev": false
+      },
+      {
+        "from": "afenda-crud",
+        "to": "afenda-workflow",
+        "dev": false
+      },
+      {
+        "from": "afenda-crud",
+        "to": "afenda-eslint-config",
+        "dev": true
+      },
+      {
+        "from": "afenda-crud",
+        "to": "afenda-typescript-config",
+        "dev": true
+      },
+      {
+        "from": "afenda-crud-convenience",
+        "to": "afenda-crud",
+        "dev": false
+      },
+      {
+        "from": "afenda-crud-convenience",
+        "to": "afenda-eslint-config",
+        "dev": true
+      },
+      {
+        "from": "afenda-crud-convenience",
+        "to": "afenda-typescript-config",
+        "dev": true
+      },
+      {
+        "from": "afenda-canon",
+        "to": "afenda-eslint-config",
+        "dev": true
+      },
+      {
+        "from": "afenda-canon",
+        "to": "afenda-typescript-config",
+        "dev": true
+      },
+      {
+        "from": "afenda-database",
+        "to": "afenda-eslint-config",
+        "dev": true
+      },
+      {
+        "from": "afenda-database",
+        "to": "afenda-typescript-config",
+        "dev": true
+      },
+      {
+        "from": "afenda-logger",
+        "to": "afenda-eslint-config",
+        "dev": true
+      },
+      {
+        "from": "afenda-logger",
+        "to": "afenda-typescript-config",
+        "dev": true
+      },
+      {
+        "from": "afenda-observability",
+        "to": "afenda-logger",
+        "dev": false
+      },
+      {
+        "from": "afenda-observability",
+        "to": "afenda-eslint-config",
+        "dev": true
+      },
+      {
+        "from": "afenda-observability",
+        "to": "afenda-typescript-config",
+        "dev": true
+      },
+      {
+        "from": "afenda-search",
+        "to": "afenda-database",
+        "dev": false
+      },
+      {
+        "from": "afenda-search",
+        "to": "afenda-logger",
+        "dev": false
+      },
+      {
+        "from": "afenda-search",
+        "to": "afenda-eslint-config",
+        "dev": true
+      },
+      {
+        "from": "afenda-search",
+        "to": "afenda-typescript-config",
+        "dev": true
+      },
+      {
+        "from": "afenda-ui",
+        "to": "afenda-eslint-config",
+        "dev": true
+      },
+      {
+        "from": "afenda-ui",
+        "to": "afenda-typescript-config",
+        "dev": true
+      },
+      {
+        "from": "afenda-migration",
+        "to": "afenda-canon",
+        "dev": false
+      },
+      {
+        "from": "afenda-migration",
+        "to": "afenda-database",
+        "dev": false
+      },
+      {
+        "from": "afenda-migration",
+        "to": "afenda-logger",
+        "dev": false
+      },
+      {
+        "from": "afenda-migration",
+        "to": "afenda-eslint-config",
+        "dev": true
+      },
+      {
+        "from": "afenda-migration",
+        "to": "afenda-typescript-config",
+        "dev": true
+      },
+      {
+        "from": "afenda-workflow",
+        "to": "afenda-canon",
+        "dev": false
+      },
+      {
+        "from": "afenda-workflow",
+        "to": "afenda-database",
+        "dev": false
+      },
+      {
+        "from": "afenda-workflow",
+        "to": "afenda-eslint-config",
+        "dev": true
+      },
+      {
+        "from": "afenda-workflow",
+        "to": "afenda-typescript-config",
+        "dev": true
+      },
+      {
+        "from": "@afenda/cli",
+        "to": "afenda-canon",
+        "dev": false
+      },
+      {
+        "from": "@afenda/cli",
+        "to": "afenda-eslint-config",
+        "dev": true
+      },
+      {
+        "from": "@afenda/cli",
+        "to": "afenda-typescript-config",
+        "dev": true
+      },
+      {
+        "from": "ci-gates",
+        "to": "afenda-crud",
+        "dev": true
+      },
+      {
+        "from": "ci-gates",
+        "to": "afenda-typescript-config",
+        "dev": true
+      },
+      {
+        "from": "quality-metrics",
+        "to": "afenda-database",
+        "dev": false
+      }
+    ]
+  },
+  "schemaCatalog": {
+    "tableCount": 161,
+    "totalColumns": 1688,
+    "tables": [
+      {
+        "name": "acct_derived_entries",
+        "file": "packages/database/src/schema/acct-derived-entries.ts",
+        "columnCount": 12,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "acct_events",
+        "file": "packages/database/src/schema/acct-events.ts",
+        "columnCount": 10,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "acct_mapping_versions",
+        "file": "packages/database/src/schema/acct-mapping-versions.ts",
+        "columnCount": 10,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "acct_mappings",
+        "file": "packages/database/src/schema/acct-mappings.ts",
+        "columnCount": 5,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "advisories",
+        "file": "packages/database/src/schema/advisories.ts",
+        "columnCount": 21,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "advisory_evidence",
+        "file": "packages/database/src/schema/advisory-evidence.ts",
+        "columnCount": 8,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "api_keys",
+        "file": "packages/database/src/schema/api-keys.ts",
+        "columnCount": 11,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "assets",
+        "file": "packages/database/src/schema/assets.ts",
+        "columnCount": 13,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "audit_logs",
+        "file": "packages/database/src/schema/audit-logs.ts",
+        "columnCount": 27,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "audit_programs",
+        "file": "packages/database/src/schema/audit-programs.ts",
+        "columnCount": 8,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "bank_accounts",
+        "file": "packages/database/src/schema/bank-accounts.ts",
+        "columnCount": 9,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "bank_matching_rules",
+        "file": "packages/database/src/schema/bank-matching-rules.ts",
+        "columnCount": 10,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "bank_statements",
+        "file": "packages/database/src/schema/bank-statements.ts",
+        "columnCount": 12,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "billing_cycles",
+        "file": "packages/database/src/schema/billing-cycles.ts",
+        "columnCount": 9,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "biological_asset_items",
+        "file": "packages/database/src/schema/biological-asset-items.ts",
+        "columnCount": 5,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "boms",
+        "file": "packages/database/src/schema/boms.ts",
+        "columnCount": 6,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "borrowing_cost_items",
+        "file": "packages/database/src/schema/borrowing-cost-items.ts",
+        "columnCount": 4,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "budgets",
+        "file": "packages/database/src/schema/budgets.ts",
+        "columnCount": 6,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "campaigns",
+        "file": "packages/database/src/schema/campaigns.ts",
+        "columnCount": 9,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "chart_of_accounts",
+        "file": "packages/database/src/schema/chart-of-accounts.ts",
+        "columnCount": 9,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "close_evidence",
+        "file": "packages/database/src/schema/close-evidence.ts",
+        "columnCount": 9,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "close_tasks",
+        "file": "packages/database/src/schema/close-tasks.ts",
+        "columnCount": 12,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "communications",
+        "file": "packages/database/src/schema/communications.ts",
+        "columnCount": 9,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "companies",
+        "file": "packages/database/src/schema/companies.ts",
+        "columnCount": 7,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "contacts",
+        "file": "packages/database/src/schema/contacts.ts",
+        "columnCount": 5,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "contracts",
+        "file": "packages/database/src/schema/contracts.ts",
+        "columnCount": 9,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "cost_centers",
+        "file": "packages/database/src/schema/cost-centers.ts",
+        "columnCount": 5,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "credit_exposures",
+        "file": "packages/database/src/schema/credit-exposures.ts",
+        "columnCount": 10,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "credit_limits",
+        "file": "packages/database/src/schema/credit-limits.ts",
+        "columnCount": 13,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "crop_plans",
+        "file": "packages/database/src/schema/crop-plans.ts",
+        "columnCount": 8,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "currencies",
+        "file": "packages/database/src/schema/currencies.ts",
+        "columnCount": 9,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "currency_exchanges",
+        "file": "packages/database/src/schema/currency-exchanges.ts",
+        "columnCount": 6,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "custom_field_sync_queue",
+        "file": "packages/database/src/schema/custom-field-sync-queue.ts",
+        "columnCount": 9,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "custom_field_values",
+        "file": "packages/database/src/schema/custom-field-values.ts",
+        "columnCount": 16,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "custom_fields",
+        "file": "packages/database/src/schema/custom-fields.ts",
+        "columnCount": 24,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "customers",
+        "file": "packages/database/src/schema/customers.ts",
+        "columnCount": 11,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "deferred_tax_items",
+        "file": "packages/database/src/schema/deferred-tax-items.ts",
+        "columnCount": 4,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "delivery_note_lines",
+        "file": "packages/database/src/schema/delivery-note-lines.ts",
+        "columnCount": 12,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "delivery_notes",
+        "file": "packages/database/src/schema/delivery-notes.ts",
+        "columnCount": 11,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "depreciation_schedules",
+        "file": "packages/database/src/schema/depreciation-schedules.ts",
+        "columnCount": 7,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "document_types",
+        "file": "packages/database/src/schema/document-types.ts",
+        "columnCount": 9,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "documents",
+        "file": "packages/database/src/schema/documents.ts",
+        "columnCount": 8,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "dunning_notices",
+        "file": "packages/database/src/schema/dunning-notices.ts",
+        "columnCount": 9,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "dunning_runs",
+        "file": "packages/database/src/schema/dunning-runs.ts",
+        "columnCount": 5,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "elimination_journals",
+        "file": "packages/database/src/schema/elimination-journals.ts",
+        "columnCount": 6,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "employee_benefit_plans",
+        "file": "packages/database/src/schema/employee-benefit-plans.ts",
+        "columnCount": 6,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "employees",
+        "file": "packages/database/src/schema/employees.ts",
+        "columnCount": 11,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "entity_attachments",
+        "file": "packages/database/src/schema/entity-attachments.ts",
+        "columnCount": 8,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "entity_versions",
+        "file": "packages/database/src/schema/entity-versions.ts",
+        "columnCount": 12,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "entity_view_fields",
+        "file": "packages/database/src/schema/entity-view-fields.ts",
+        "columnCount": 11,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "entity_views",
+        "file": "packages/database/src/schema/entity-views.ts",
+        "columnCount": 10,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "expense_reports",
+        "file": "packages/database/src/schema/expense-reports.ts",
+        "columnCount": 7,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "financial_instruments",
+        "file": "packages/database/src/schema/financial-instruments.ts",
+        "columnCount": 19,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "fiscal_periods",
+        "file": "packages/database/src/schema/fiscal-periods.ts",
+        "columnCount": 7,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "fixed_assets",
+        "file": "packages/database/src/schema/fixed-assets.ts",
+        "columnCount": 9,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "forecasts",
+        "file": "packages/database/src/schema/forecasts.ts",
+        "columnCount": 6,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "franchise_applications",
+        "file": "packages/database/src/schema/franchise-applications.ts",
+        "columnCount": 8,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "fx_rates",
+        "file": "packages/database/src/schema/fx-rates.ts",
+        "columnCount": 4,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "government_grant_items",
+        "file": "packages/database/src/schema/government-grant-items.ts",
+        "columnCount": 6,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "hedge_designations",
+        "file": "packages/database/src/schema/hedge-designations.ts",
+        "columnCount": 11,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "hedge_effectiveness_tests",
+        "file": "packages/database/src/schema/hedge-effectiveness-tests.ts",
+        "columnCount": 13,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "ic_agreements",
+        "file": "packages/database/src/schema/ic-agreements.ts",
+        "columnCount": 11,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "ic_transactions",
+        "file": "packages/database/src/schema/ic-transactions.ts",
+        "columnCount": 11,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "idempotency_keys",
+        "file": "packages/database/src/schema/idempotency-keys.ts",
+        "columnCount": 9,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "impairment_tests",
+        "file": "packages/database/src/schema/impairment-tests.ts",
+        "columnCount": 5,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "intangible_assets",
+        "file": "packages/database/src/schema/intangible-assets.ts",
+        "columnCount": 18,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "inventory_transfers",
+        "file": "packages/database/src/schema/inventory-transfers.ts",
+        "columnCount": 6,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "inventory_valuation_items",
+        "file": "packages/database/src/schema/inventory-valuation-items.ts",
+        "columnCount": 3,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "investment_properties",
+        "file": "packages/database/src/schema/investment-properties.ts",
+        "columnCount": 5,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "job_applications",
+        "file": "packages/database/src/schema/job-applications.ts",
+        "columnCount": 7,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "journal_entries",
+        "file": "packages/database/src/schema/journal-entries.ts",
+        "columnCount": 15,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "journal_lines",
+        "file": "packages/database/src/schema/journal-lines.ts",
+        "columnCount": 9,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "leads",
+        "file": "packages/database/src/schema/leads.ts",
+        "columnCount": 10,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "leases",
+        "file": "packages/database/src/schema/leases.ts",
+        "columnCount": 9,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "leave_requests",
+        "file": "packages/database/src/schema/leave-requests.ts",
+        "columnCount": 7,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "ledgers",
+        "file": "packages/database/src/schema/ledgers.ts",
+        "columnCount": 10,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "legal_entities",
+        "file": "packages/database/src/schema/legal-entities.ts",
+        "columnCount": 8,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "livestock_records",
+        "file": "packages/database/src/schema/livestock-records.ts",
+        "columnCount": 7,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "match_results",
+        "file": "packages/database/src/schema/match-results.ts",
+        "columnCount": 10,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "meta_alias_resolution_rules",
+        "file": "packages/database/src/schema/meta-alias-resolution-rules.ts",
+        "columnCount": 9,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "meta_alias_sets",
+        "file": "packages/database/src/schema/meta-alias-sets.ts",
+        "columnCount": 14,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "meta_aliases",
+        "file": "packages/database/src/schema/meta-aliases.ts",
+        "columnCount": 19,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "meta_assets",
+        "file": "packages/database/src/schema/meta-assets.ts",
+        "columnCount": 14,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "meta_lineage_edges",
+        "file": "packages/database/src/schema/meta-lineage-edges.ts",
+        "columnCount": 7,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "meta_quality_checks",
+        "file": "packages/database/src/schema/meta-quality-checks.ts",
+        "columnCount": 9,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "meta_semantic_terms",
+        "file": "packages/database/src/schema/meta-semantic-terms.ts",
+        "columnCount": 12,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "meta_term_links",
+        "file": "packages/database/src/schema/meta-term-links.ts",
+        "columnCount": 5,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "meta_value_aliases",
+        "file": "packages/database/src/schema/meta-value-aliases.ts",
+        "columnCount": 13,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "migration_checkpoints",
+        "file": "packages/database/src/schema/migration-checkpoints.ts",
+        "columnCount": 10,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "migration_conflict_resolutions",
+        "file": "packages/database/src/schema/migration-conflict-resolutions.ts",
+        "columnCount": 10,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "migration_conflicts",
+        "file": "packages/database/src/schema/migration-conflicts.ts",
+        "columnCount": 9,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "migration_jobs",
+        "file": "packages/database/src/schema/migration-jobs.ts",
+        "columnCount": 19,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "migration_lineage",
+        "file": "packages/database/src/schema/migration-lineage.ts",
+        "columnCount": 13,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "migration_merge_explanations",
+        "file": "packages/database/src/schema/migration-merge-explanations.ts",
+        "columnCount": 10,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "migration_quarantine",
+        "file": "packages/database/src/schema/migration-quarantine.ts",
+        "columnCount": 19,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "migration_reports",
+        "file": "packages/database/src/schema/migration-reports.ts",
+        "columnCount": 5,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "migration_row_snapshots",
+        "file": "packages/database/src/schema/migration-row-snapshots.ts",
+        "columnCount": 9,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "mutation_batches",
+        "file": "packages/database/src/schema/mutation-batches.ts",
+        "columnCount": 12,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "number_sequences",
+        "file": "packages/database/src/schema/number-sequences.ts",
+        "columnCount": 9,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "opening_balance_batches",
+        "file": "packages/database/src/schema/opening-balance-batches.ts",
+        "columnCount": 7,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "opening_balance_lines",
+        "file": "packages/database/src/schema/opening-balance-lines.ts",
+        "columnCount": 7,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "opportunities",
+        "file": "packages/database/src/schema/opportunities.ts",
+        "columnCount": 7,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "org_usage_daily",
+        "file": "packages/database/src/schema/org-usage-daily.ts",
+        "columnCount": 7,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "workflow_outbox",
+        "file": "packages/database/src/schema/outbox.ts",
+        "columnCount": 58,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "search_outbox",
+        "file": "packages/database/src/schema/outbox.ts",
+        "columnCount": 58,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "webhook_outbox",
+        "file": "packages/database/src/schema/outbox.ts",
+        "columnCount": 58,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "integration_outbox",
+        "file": "packages/database/src/schema/outbox.ts",
+        "columnCount": 58,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "outlet_audits",
+        "file": "packages/database/src/schema/outlet-audits.ts",
+        "columnCount": 7,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "payment_allocations",
+        "file": "packages/database/src/schema/payment-allocations.ts",
+        "columnCount": 9,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "payment_method_accounts",
+        "file": "packages/database/src/schema/payment-method-accounts.ts",
+        "columnCount": 2,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "payment_methods",
+        "file": "packages/database/src/schema/payment-methods.ts",
+        "columnCount": 4,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "payment_runs",
+        "file": "packages/database/src/schema/payment-runs.ts",
+        "columnCount": 12,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "payment_terms_template_details",
+        "file": "packages/database/src/schema/payment-terms-template-details.ts",
+        "columnCount": 7,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "payment_terms_templates",
+        "file": "packages/database/src/schema/payment-terms-templates.ts",
+        "columnCount": 3,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "payments",
+        "file": "packages/database/src/schema/payments.ts",
+        "columnCount": 11,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "performance_reviews",
+        "file": "packages/database/src/schema/performance-reviews.ts",
+        "columnCount": 7,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "posting_periods",
+        "file": "packages/database/src/schema/posting-periods.ts",
+        "columnCount": 10,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "products",
+        "file": "packages/database/src/schema/products.ts",
+        "columnCount": 10,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "projects",
+        "file": "packages/database/src/schema/projects.ts",
+        "columnCount": 9,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "provision_movements",
+        "file": "packages/database/src/schema/provision-movements.ts",
+        "columnCount": 8,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "provisions",
+        "file": "packages/database/src/schema/provisions.ts",
+        "columnCount": 13,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "purchase_requisitions",
+        "file": "packages/database/src/schema/purchase-requisitions.ts",
+        "columnCount": 7,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "quality_inspections",
+        "file": "packages/database/src/schema/quality-inspections.ts",
+        "columnCount": 7,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "r2_files",
+        "file": "packages/database/src/schema/r2-files.ts",
+        "columnCount": 9,
+        "hasRls": false,
+        "hasOrgId": false
+      },
+      {
+        "name": "recipes",
+        "file": "packages/database/src/schema/recipes.ts",
+        "columnCount": 7,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "reconciliation_items",
+        "file": "packages/database/src/schema/reconciliation-items.ts",
+        "columnCount": 12,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "returns",
+        "file": "packages/database/src/schema/returns.ts",
+        "columnCount": 7,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "revenue_schedule_lines",
+        "file": "packages/database/src/schema/revenue-schedule-lines.ts",
+        "columnCount": 8,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "revenue_schedules",
+        "file": "packages/database/src/schema/revenue-schedules.ts",
+        "columnCount": 11,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "risk_assessments",
+        "file": "packages/database/src/schema/risk-assessments.ts",
+        "columnCount": 9,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "role_permissions",
+        "file": "packages/database/src/schema/role-permissions.ts",
+        "columnCount": 8,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "roles",
+        "file": "packages/database/src/schema/roles.ts",
+        "columnCount": 6,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "sbp_grants",
+        "file": "packages/database/src/schema/sbp-grants.ts",
+        "columnCount": 7,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "service_tickets",
+        "file": "packages/database/src/schema/service-tickets.ts",
+        "columnCount": 9,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "shipments",
+        "file": "packages/database/src/schema/shipments.ts",
+        "columnCount": 9,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "sites",
+        "file": "packages/database/src/schema/sites.ts",
+        "columnCount": 4,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "statement_layouts",
+        "file": "packages/database/src/schema/statement-layouts.ts",
+        "columnCount": 7,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "statement_lines",
+        "file": "packages/database/src/schema/statement-lines.ts",
+        "columnCount": 11,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "subscriptions",
+        "file": "packages/database/src/schema/subscriptions.ts",
+        "columnCount": 13,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "supplier_invoices",
+        "file": "packages/database/src/schema/supplier-invoices.ts",
+        "columnCount": 15,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "suppliers",
+        "file": "packages/database/src/schema/suppliers.ts",
+        "columnCount": 9,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "tax_rates",
+        "file": "packages/database/src/schema/tax-rates.ts",
+        "columnCount": 8,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "timesheets",
+        "file": "packages/database/src/schema/timesheets.ts",
+        "columnCount": 6,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "tp_calculations",
+        "file": "packages/database/src/schema/tp-calculations.ts",
+        "columnCount": 14,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "tp_policies",
+        "file": "packages/database/src/schema/tp-policies.ts",
+        "columnCount": 12,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "treasury_accounts",
+        "file": "packages/database/src/schema/treasury-accounts.ts",
+        "columnCount": 6,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "uom_conversions",
+        "file": "packages/database/src/schema/uom-conversions.ts",
+        "columnCount": 5,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "uom",
+        "file": "packages/database/src/schema/uom.ts",
+        "columnCount": 5,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "user_roles",
+        "file": "packages/database/src/schema/user-roles.ts",
+        "columnCount": 5,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "user_scopes",
+        "file": "packages/database/src/schema/user-scopes.ts",
+        "columnCount": 6,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "users",
+        "file": "packages/database/src/schema/users.ts",
+        "columnCount": 7,
+        "hasRls": false,
+        "hasOrgId": false
+      },
+      {
+        "name": "video_settings",
+        "file": "packages/database/src/schema/video-settings.ts",
+        "columnCount": 9,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "warehouses",
+        "file": "packages/database/src/schema/warehouses.ts",
+        "columnCount": 6,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "webhook_deliveries",
+        "file": "packages/database/src/schema/webhook-deliveries.ts",
+        "columnCount": 12,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "webhook_endpoints",
+        "file": "packages/database/src/schema/webhook-endpoints.ts",
+        "columnCount": 9,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "wht_certificates",
+        "file": "packages/database/src/schema/wht-certificates.ts",
+        "columnCount": 14,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "wht_codes",
+        "file": "packages/database/src/schema/wht-codes.ts",
+        "columnCount": 8,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "wht_rates",
+        "file": "packages/database/src/schema/wht-rates.ts",
+        "columnCount": 6,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "work_orders",
+        "file": "packages/database/src/schema/work-orders.ts",
+        "columnCount": 8,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "workflow_executions",
+        "file": "packages/database/src/schema/workflow-executions.ts",
+        "columnCount": 14,
+        "hasRls": false,
+        "hasOrgId": true
+      },
+      {
+        "name": "workflow_rules",
+        "file": "packages/database/src/schema/workflow-rules.ts",
+        "columnCount": 9,
+        "hasRls": false,
+        "hasOrgId": true
+      }
+    ]
+  },
+  "stats": {
+    "totalFiles": 925,
+    "totalLoc": 104006,
+    "totalTestFiles": 87,
+    "totalTestLoc": 15502,
+    "packages": [
+      {
+        "name": "apps/web",
+        "fileCount": 196,
+        "loc": 16683,
+        "testFileCount": 6,
+        "testLoc": 212
+      },
+      {
+        "name": "packages/canon",
+        "fileCount": 172,
+        "loc": 23351,
+        "testFileCount": 42,
+        "testLoc": 9990
+      },
+      {
+        "name": "packages/crud",
+        "fileCount": 52,
+        "loc": 5376,
+        "testFileCount": 0,
+        "testLoc": 0
+      },
+      {
+        "name": "packages/crud-convenience",
+        "fileCount": 1,
+        "loc": 44,
+        "testFileCount": 0,
+        "testLoc": 0
+      },
+      {
+        "name": "packages/database",
+        "fileCount": 196,
+        "loc": 15502,
+        "testFileCount": 5,
+        "testLoc": 1009
+      },
+      {
+        "name": "packages/eslint-config",
+        "fileCount": 7,
+        "loc": 600,
+        "testFileCount": 0,
+        "testLoc": 0
+      },
+      {
+        "name": "packages/logger",
+        "fileCount": 6,
+        "loc": 611,
+        "testFileCount": 0,
+        "testLoc": 0
+      },
+      {
+        "name": "packages/migration",
+        "fileCount": 43,
+        "loc": 4367,
+        "testFileCount": 1,
+        "testLoc": 37
+      },
+      {
+        "name": "packages/observability",
+        "fileCount": 7,
+        "loc": 1366,
+        "testFileCount": 0,
+        "testLoc": 0
+      },
+      {
+        "name": "packages/search",
+        "fileCount": 10,
+        "loc": 967,
+        "testFileCount": 1,
+        "testLoc": 42
+      },
+      {
+        "name": "packages/typescript-config",
+        "fileCount": 0,
+        "loc": 0,
+        "testFileCount": 0,
+        "testLoc": 0
+      },
+      {
+        "name": "packages/ui",
+        "fileCount": 98,
+        "loc": 10923,
+        "testFileCount": 0,
+        "testLoc": 0
+      },
+      {
+        "name": "packages/workflow",
+        "fileCount": 47,
+        "loc": 7409,
+        "testFileCount": 2,
+        "testLoc": 69
+      },
+      {
+        "name": "tools/afenda-cli",
+        "fileCount": 65,
+        "loc": 9560,
+        "testFileCount": 0,
+        "testLoc": 0
+      },
+      {
+        "name": "tools/ci-gates",
+        "fileCount": 0,
+        "loc": 0,
+        "testFileCount": 30,
+        "testLoc": 4143
+      },
+      {
+        "name": "tools/codemods",
+        "fileCount": 0,
+        "loc": 0,
+        "testFileCount": 0,
+        "testLoc": 0
+      },
+      {
+        "name": "tools/docs",
+        "fileCount": 0,
+        "loc": 0,
+        "testFileCount": 0,
+        "testLoc": 0
+      },
+      {
+        "name": "tools/quality-metrics",
+        "fileCount": 16,
+        "loc": 4654,
+        "testFileCount": 0,
+        "testLoc": 0
+      },
+      {
+        "name": "tools/scripts",
+        "fileCount": 9,
+        "loc": 2593,
+        "testFileCount": 0,
+        "testLoc": 0
+      }
+    ]
+  }
+}

@@ -1,0 +1,84 @@
+.TH AFENDA 1 "2026-02-22" "0.1.0" "User Commands"
+.SH NAME
+afenda \- afenda monorepo CLI — unified command interface
+
+.SH SYNOPSIS
+.B afenda
+[\fIoptions\fR] \fIcommand\fR [\fIargs\fR]
+
+.SH DESCRIPTION
+.PP
+afenda monorepo CLI — unified command interface.
+
+.SH COMMANDS
+.TP
+.B afenda types
+Type generation commands
+.TP
+.B afenda docs
+Documentation commands
+.TP
+.B afenda guard
+Guardrail checks (non-blocking)
+.TP
+.B afenda clean
+Cleanup commands
+.TP
+.B afenda dev
+Start development server(s)
+.TP
+.B afenda build
+Build packages
+.TP
+.B afenda list
+Show registered commands from registry
+.TP
+.B afenda doctor
+Check environment (node, pnpm, turbo, git) and audit configuration
+.TP
+.B afenda completion
+Generate shell completion script for bash, zsh, or fish
+.TP
+.B afenda man-pages
+Generate man pages from Commander help
+.TP
+.B afenda readme
+README generation and validation
+.TP
+.B afenda discover
+Run discovery scanner manually
+.TP
+.B afenda bundle
+Run all maintenance tasks (README, metadata, housekeeping)
+.TP
+.B afenda housekeeping
+Run housekeeping checks
+.TP
+.B afenda meta
+Capability Truth Ledger — scan, check, generate, fix
+.TP
+.B afenda project
+Generate and validate PROJECT.md at monorepo root
+.TP
+.B afenda domain
+Business domain package commands
+.TP
+.B afenda tools-docs
+Generate tools directory documentation
+
+.SH OPTIONS
+.TP
+.BR -V,  --version
+output the version number
+.TP
+.BR --register
+Register discovered scripts into registry
+.TP
+.BR --register-dry-run
+Preview register changes without applying
+.TP
+.BR --apply
+Also update package.json scripts
+
+.SH "SEE ALSO"
+.B afenda --help

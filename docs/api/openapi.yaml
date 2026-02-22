@@ -1,0 +1,331 @@
+openapi: 3.1.0
+info:
+  title: afenda API
+  version: 0.1.0
+  description: |
+    afenda platform REST API for entity management, workflows, and advisory services.
+    
+    ## Authentication
+    All endpoints (except public routes) require JWT authentication via Neon Auth.
+    Include the JWT token in the `Authorization` header:
+    
+    ```
+    Authorization: Bearer <jwt-token>
+    ```
+    
+    ## Rate Limiting
+    - **Authenticated**: 1000 requests/hour
+    - **Unauthenticated**: 100 requests/hour
+    
+    ## Versioning
+    API version is included in the URL path: `/api/v1/...`
+  contact:
+    name: afenda Support
+    email: support@afenda.dev
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+
+servers:
+  - url: http://localhost:3000/api
+    description: Local development
+  - url: https://staging.afenda.dev/api
+    description: Staging environment
+  - url: https://app.afenda.dev/api
+    description: Production environment
+
+tags:
+  - name: Health
+    description: Health check and system status endpoints
+  - name: Users
+    description: User management
+  - name: Organizations
+    description: Organization and team management
+  - name: Entities
+    description: Entity CRUD operations
+  - name: Workflows
+    description: Workflow execution and management
+  - name: Advisory
+    description: Advisory and validation services
+
+paths:
+  /health:
+    get:
+      summary: Health Check
+      description: Returns the health status of the application and its dependencies
+      operationId: getHealth
+      tags:
+        - Health
+      responses:
+        '200':
+          description: Application is healthy
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthStatus'
+              example:
+                healthy: true
+                name: afenda-web
+                checks:
+                  database:
+                    healthy: true
+                    message: Database connection OK
+                    responseTime: 15
+                  memory:
+                    healthy: true
+                    message: "Memory usage: 256MB / 1024MB"
+                    responseTime: 1
+                timestamp: "2026-02-17T10:30:00Z"
+                uptime: 3600
+        '503':
+          description: Application is unhealthy
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthStatus'
+
+  /ready:
+    get:
+      summary: Readiness Probe
+      description: Kubernetes-compatible readiness probe
+      operationId: getReadiness
+      tags:
+        - Health
+      responses:
+        '200':
+          description: Application is ready to accept traffic
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: OK
+        '503':
+          description: Application is not ready
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: NOT READY
+
+  /alive:
+    get:
+      summary: Liveness Probe
+      description: Kubernetes-compatible liveness probe
+      operationId: getLiveness
+      tags:
+        - Health
+      responses:
+        '200':
+          description: Application is alive
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: OK
+
+  /users/me:
+    get:
+      summary: Get Current User
+      description: Returns the authenticated user's profile
+      operationId: getCurrentUser
+      tags:
+        - Users
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Current user profile
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /users/{userId}:
+    get:
+      summary: Get User by ID
+      description: Returns a specific user's profile (requires permission)
+      operationId: getUserById
+      tags:
+        - Users
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: User ID
+      responses:
+        '200':
+          description: User profile
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: JWT token from Neon Auth
+
+  schemas:
+    HealthStatus:
+      type: object
+      required:
+        - healthy
+        - name
+        - checks
+        - timestamp
+        - uptime
+      properties:
+        healthy:
+          type: boolean
+          description: Overall health status
+        name:
+          type: string
+          description: Service name
+        checks:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/HealthCheck'
+          description: Individual health check results
+        timestamp:
+          type: string
+          format: date-time
+          description: ISO timestamp of health check
+        uptime:
+          type: integer
+          description: Service uptime in seconds
+
+    HealthCheck:
+      type: object
+      required:
+        - healthy
+      properties:
+        healthy:
+          type: boolean
+          description: Check passed
+        message:
+          type: string
+          description: Optional status message
+        responseTime:
+          type: integer
+          description: Check response time in milliseconds
+        metadata:
+          type: object
+          additionalProperties: true
+          description: Additional check-specific data
+
+    User:
+      type: object
+      required:
+        - id
+        - email
+        - createdAt
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: User ID
+        email:
+          type: string
+          format: email
+          description: User email address
+        name:
+          type: string
+          description: User display name
+        avatarUrl:
+          type: string
+          format: uri
+          description: User avatar URL
+        role:
+          type: string
+          enum: [user, admin]
+          description: User role
+        createdAt:
+          type: string
+          format: date-time
+          description: Account creation timestamp
+        updatedAt:
+          type: string
+          format: date-time
+          description: Last update timestamp
+
+    Error:
+      type: object
+      required:
+        - error
+        - message
+      properties:
+        error:
+          type: string
+          description: Error code
+        message:
+          type: string
+          description: Human-readable error message
+        details:
+          type: object
+          additionalProperties: true
+          description: Additional error details
+        correlationId:
+          type: string
+          description: Request correlation ID for debugging
+
+  responses:
+    Unauthorized:
+      description: Authentication required or invalid token
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            error: UNAUTHORIZED
+            message: Authentication required
+            correlationId: abc-123-def-456
+
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            error: NOT_FOUND
+            message: Resource not found
+            correlationId: abc-123-def-456
+
+    BadRequest:
+      description: Invalid request parameters
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            error: BAD_REQUEST
+            message: Invalid request parameters
+            details:
+              field: email
+              reason: Invalid email format
+            correlationId: abc-123-def-456
+
+    InternalServerError:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            error: INTERNAL_SERVER_ERROR
+            message: An unexpected error occurred
+            correlationId: abc-123-def-456

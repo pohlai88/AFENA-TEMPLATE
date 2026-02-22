@@ -1,0 +1,155 @@
+# pnpm workspace configuration
+# See: https://pnpm.io/pnpm-workspace_yaml
+
+packages:
+  - 'apps/*'
+  - 'business-domain/*'
+  - 'business-domain/*/*'
+  - 'packages/*'
+  - 'tools/*'
+
+# Catalog - centralized dependency version management
+# Use 'catalog:' in package.json to reference these versions
+catalog:
+  # ── Core ──────────────────────────────────────────────
+  typescript: ~5.9.3
+  '@types/node': ~25.2.3
+
+  # ── React ─────────────────────────────────────────────
+  react: ~19.2.4
+  react-dom: ~19.2.4
+  '@types/react': ~19.2.13
+  '@types/react-dom': ~19.2.3
+
+  # ── Next.js ───────────────────────────────────────────
+  next: ~16.1.6
+  eslint-config-next: ~16.1.6
+
+  # ── ESLint ────────────────────────────────────────────
+  eslint: ~9.39.2
+  '@typescript-eslint/eslint-plugin': ~8.55.0
+  '@typescript-eslint/parser': ~8.55.0
+  eslint-config-prettier: ~10.1.8
+  eslint-plugin-import: ~2.32.0
+  eslint-plugin-jsx-a11y: ~6.10.2
+  eslint-plugin-react: ~7.37.5
+  eslint-plugin-react-hooks: ~5.2.0
+  eslint-plugin-security: ~3.0.1
+  eslint-plugin-pino: ~1.0.3
+
+  # ── Build ─────────────────────────────────────────────
+  tsup: ~8.5.1
+  tsx: ~4.21.0
+  turbo: ~2.8.5
+
+  # ── Logging ───────────────────────────────────────────
+  pino: ~10.3.1
+  pino-abstract-transport: ~3.0.0
+  pino-pretty: ~13.1.3
+
+  # ── Formatting ────────────────────────────────────────
+  prettier: ~3.8.1
+
+  # ── shadcn/ui ────────────────────────────────────────
+  class-variance-authority: ~0.7.1
+  lucide-react: ~0.475.0
+  '@radix-ui/react-slot': ~1.2.3
+
+  # ── Database ──────────────────────────────────────────
+  drizzle-orm: ~0.44.7
+  '@neondatabase/serverless': ~1.0.2
+  drizzle-kit: ~0.31.0
+
+  # ── Math / Precision ──────────────────────────────────
+  decimal.js: ~10.6.0
+
+  # ── Utilities ─────────────────────────────────────────
+  rimraf: ~6.1.2
+  openapi-typescript: ~7.12.0
+  tslib: ~2.8.1
+  clsx: ~2.1.1
+  tailwind-merge: ~3.4.0
+  tailwindcss: ~4.1.18
+  '@tailwindcss/postcss': ~4.1.18
+  postcss: ~8.5.6
+  prettier-plugin-tailwindcss: ~0.7.2
+
+  # ── Testing ────────────────────────────────────────────
+  lru-cache: ~11.0.0
+  fast-check: ~4.5.3
+  '@fast-check/vitest': ~0.2.4
+  testcontainers: ~11.12.0
+  '@testcontainers/postgresql': ~11.12.0
+
+  # ── afenda CLI deps ───────────────────────────────────
+  commander: ~14.0.3
+  cosmiconfig: ~9.0.0
+  execa: ~5.1.1
+  fast-glob: ~3.3.3
+  listr2: ~3.14.0
+  picocolors: ~1.1.1
+  semver: ~7.7.4
+  strip-ansi: ~6.0.1
+  zod: ~4.3.6
+  '@tanstack/react-query': ~5.80.7
+  fast-json-patch: ~3.1.1
+  vitest: ~4.0.18
+  '@types/semver': ~7.7.1
+  ts-morph: ~25.0.0
+
+  # ── Additional Dependencies ───────────────────────────
+  # UI & React ecosystem
+  '@base-ui/react': ~1.1.0
+  '@hookform/resolvers': ~5.2.2
+  '@tanstack/react-table': ~8.21.3
+  cmdk: ~1.1.1
+  'date-fns': ~4.1.0
+  'embla-carousel-react': ~8.6.0
+  'input-otp': ~1.4.2
+  'next-themes': ~0.4.6
+  'radix-ui': ~1.4.3
+  'react-day-picker': ~9.13.2
+  'react-hook-form': ~7.71.1
+  'react-resizable-panels': ~4.0.0
+  recharts: 2.15.4
+  sonner: ~2.0.7
+  'tw-animate-css': ~1.4.0
+  vaul: ~1.1.2
+
+  # AWS SDK
+  '@aws-sdk/client-s3': ~3.987.0
+  '@aws-sdk/s3-request-presigner': ~3.987.0
+
+  # Neon & Database
+  '@neondatabase/api-client': ~2.6.0
+  dotenv: ~16.6.1
+  postgres: ~3.4.8
+  ioredis: ~5.4.1
+  '@types/pg': ~8.16.0
+  pg: ~8.18.0
+
+  # Data processing
+  fuse.js: ~7.1.0
+  'libphonenumber-js': ~1.12.36
+  'p-limit': ~7.3.0
+  papaparse: ~5.5.3
+  '@types/papaparse': ~5.5.2
+
+  # Observability
+  '@opentelemetry/api': ~1.9.0
+  '@opentelemetry/sdk-node': ~0.55.0
+  '@opentelemetry/auto-instrumentations-node': ~0.52.0
+  '@opentelemetry/exporter-trace-otlp-http': ~0.55.0
+  '@opentelemetry/exporter-metrics-otlp-http': ~0.55.0
+  '@opentelemetry/resources': ~1.29.0
+  '@opentelemetry/semantic-conventions': ~1.29.0
+  '@opentelemetry/instrumentation': ~0.55.0
+  '@sentry/node': ~8.48.0
+
+  # React Flow
+  '@xyflow/react': ~12.10.0
+
+  # Quality metrics
+  '@paralleldrive/cuid2': ~3.3.0
+  glob: ~10.3.10
+  'simple-git': ~3.22.0

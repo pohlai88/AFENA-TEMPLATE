@@ -1,0 +1,257 @@
+name: Quality Gates
+run-name: Quality Gates on ${{ github.ref }} (${{ github.event_name }})
+
+permissions:
+  contents: read
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+  workflow_dispatch:
+    inputs:
+      sha:
+        description: 'Git SHA to check'
+        required: true
+      base-branch:
+        description: 'Base branch for comparison'
+        required: false
+        default: 'main'
+
+concurrency:
+  group: quality-gates-${{ github.event.pull_request.number || github.sha }}
+  cancel-in-progress: true
+
+jobs:
+  db-contract-tests:
+    name: DB Contract Tests (RLS, Triggers, CHECKs)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Cache Turborepo
+        uses: actions/cache@v4
+        with:
+          path: .turbo
+          key: ${{ runner.os }}-turbo-${{ hashFiles('pnpm-lock.yaml', 'turbo.json') }}
+          restore-keys: ${{ runner.os }}-turbo-
+
+      - name: Build database package
+        run: pnpm turbo build --filter=afenda-database
+
+      - name: Run DB contract tests
+        run: pnpm test:db-contracts
+
+  quality-gates:
+    name: Enforce Quality Standards
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+      pull-requests: write
+
+    env:
+      TURBO_UI: stream
+      TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+      TURBO_TEAM: ${{ vars.TURBO_TEAM }}
+      DATABASE_URL: ${{ secrets.DATABASE_URL || 'postgresql://ci:ci@ci-placeholder.neon.tech/neondb?sslmode=verify-full' }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Full history for git metrics
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Cache Turborepo
+        uses: actions/cache@v4
+        with:
+          path: .turbo
+          key: ${{ runner.os }}-turbo-${{ hashFiles('pnpm-lock.yaml', 'turbo.json') }}
+          restore-keys: ${{ runner.os }}-turbo-
+
+      - name: Build packages
+        run: pnpm build
+
+      - name: Run tests with coverage
+        env:
+          NODE_ENV: test
+        run: pnpm test:coverage
+
+      - name: Collect quality metrics
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          ORG_ID: ${{ secrets.ORG_ID || 'org_ci_default' }}
+        run: pnpm --filter quality-metrics collect
+
+      - name: Check quality gates
+        id: gates
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: |
+          set +e # Don't fail immediately
+
+          SHA="${{ github.event.pull_request.head.sha || github.event.inputs.sha || github.sha }}"
+          BASE_BRANCH="${{ github.event.pull_request.base.ref || github.event.inputs.base-branch || 'main' }}"
+
+          pnpm --filter quality-metrics gates \
+            --sha="${SHA}" \
+            --base-branch="${BASE_BRANCH}" \
+            > /tmp/gates-report.txt 2>&1
+
+          EXIT_CODE=$?
+
+          if [ $EXIT_CODE -eq 0 ]; then
+            echo "gates_passed=true" >> $GITHUB_OUTPUT
+          else
+            echo "gates_passed=false" >> $GITHUB_OUTPUT
+          fi
+
+          # Always save the report
+          cat /tmp/gates-report.txt
+
+          exit 0 # Don't fail yet, let comment step run first
+
+      - name: Security scan
+        id: security
+        run: |
+          set +e # Don't fail immediately
+
+          pnpm --filter quality-metrics security \
+            --format=markdown \
+            > /tmp/security-report.txt 2>&1
+
+          EXIT_CODE=$?
+
+          if [ $EXIT_CODE -eq 0 ]; then
+            echo "security_passed=true" >> $GITHUB_OUTPUT
+          else
+            echo "security_passed=false" >> $GITHUB_OUTPUT
+          fi
+
+          cat /tmp/security-report.txt
+
+          exit 0 # Don't fail yet
+
+      - name: Post PR comment
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+
+            let gatesReport = '';
+            let securityReport = '';
+
+            try {
+              gatesReport = fs.readFileSync('/tmp/gates-report.txt', 'utf8');
+            } catch (e) {
+              gatesReport = '⚠️  Quality gates report not available';
+            }
+
+            try {
+              securityReport = fs.readFileSync('.quality-metrics/security-report.md', 'utf8');
+            } catch (e) {
+              securityReport = '⚠️  Security report not available';
+            }
+
+            const gatesPassed = '${{ steps.gates.outputs.gates_passed }}' === 'true';
+            const securityPassed = '${{ steps.security.outputs.security_passed }}' === 'true';
+            const allPassed = gatesPassed && securityPassed;
+
+            const emoji = allPassed ? '✅' : '❌';
+            const status = allPassed ? 'PASSED' : 'FAILED';
+
+            const body = `## ${emoji} Quality & Security Check ${status}
+
+            <details>
+            <summary>📊 Quality Gates ${gatesPassed ? '✅' : '❌'}</summary>
+
+            \`\`\`
+            ${gatesReport}
+            \`\`\`
+
+            </details>
+
+            <details>
+            <summary>🔒 Security Scan ${securityPassed ? '✅' : '❌'}</summary>
+
+            ${securityReport}
+
+            </details>
+
+            ---
+            <sub>Generated by Quality Gates workflow • [View workflow run](${process.env.GITHUB_SERVER_URL}/${process.env.GITHUB_REPOSITORY}/actions/runs/${process.env.GITHUB_RUN_ID})</sub>
+            `;
+
+            // Delete old comments
+            const comments = await github.rest.issues.listComments({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+            });
+
+            for (const comment of comments.data) {
+              if (comment.user.type === 'Bot' && comment.body?.includes('Quality & Security Check')) {
+                await github.rest.issues.deleteComment({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  comment_id: comment.id,
+                });
+              }
+            }
+
+            // Post new comment
+            await github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: body
+            });
+
+      - name: Fail if gates not passed
+        if: steps.gates.outputs.gates_passed == 'false'
+        run: |
+          echo "❌ Quality gates failed!"
+          exit 1
+
+      - name: Fail if security not passed
+        if: steps.security.outputs.security_passed == 'false'
+        run: |
+          echo "❌ Security scan failed!"
+          exit 1
+
+      - name: Upload quality metrics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: quality-metrics
+          path: |
+            .quality-metrics/
+          retention-days: 30

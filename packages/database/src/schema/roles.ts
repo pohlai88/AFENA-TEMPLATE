@@ -1,0 +1,35 @@
+import { sql } from 'drizzle-orm';
+import { boolean, check, index, pgTable, text, timestamp, uniqueIndex, uuid } from 'drizzle-orm/pg-core';
+
+import { tenantPolicy } from '../helpers/tenant-policy';
+import { tenantPk } from '../helpers/base-entity';
+
+/**
+ * Roles — org-scoped role definitions.
+ * Each org defines its own roles (admin, manager, clerk, etc.).
+ * System roles (is_system=true) are seeded and cannot be deleted.
+ */
+export const roles = pgTable(
+  'roles',
+  {
+    id: uuid('id').defaultRandom().notNull(),
+    orgId: uuid('org_id')
+      .notNull()
+      .default(sql`(auth.org_id()::uuid)`),
+    key: text('key').notNull(),
+    name: text('name').notNull(),
+    isSystem: boolean('is_system').notNull().default(false),
+    createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
+  },
+  (table) => [
+    tenantPk(table),
+    uniqueIndex('roles_org_key_idx').on(table.orgId, table.key),
+    index('roles_org_id_idx').on(table.orgId),
+    check('roles_org_not_empty', sql`org_id <> '00000000-0000-0000-0000-000000000000'::uuid`),
+    check('roles_key_not_empty', sql`key <> ''`),
+    tenantPolicy(table),
+  ],
+);
+
+export type Role = typeof roles.$inferSelect;
+export type NewRole = typeof roles.$inferInsert;

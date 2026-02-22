@@ -1,0 +1,680 @@
+{
+  "version": "1.0",
+  "generatedAt": "2026-02-21T08:48:50.560Z",
+  "registry": "finance-audit-registry.ts",
+  "thresholds": {
+    "covered": 60,
+    "partial": 30
+  },
+  "summary": {
+    "total": 23,
+    "covered": 23,
+    "partial": 0,
+    "missing": 0,
+    "avgConfidence": 100,
+    "coveragePct": 100,
+    "weightedScore": 100
+  },
+  "sections": [
+    {
+      "key": "finance.baseline",
+      "title": "Cross-Cutting Baseline (applies to all finance capabilities)",
+      "items": [
+        {
+          "id": "FIN-BL-ISO-01",
+          "title": "Tenant isolation enforced on all finance tables",
+          "severity": "S0",
+          "weight": 5,
+          "confidence": 100,
+          "status": "covered",
+          "signals": {
+            "e1": true,
+            "e2": true,
+            "e3": true,
+            "e4": true,
+            "e5": true,
+            "e6": true,
+            "e7": true
+          },
+          "evidence": {
+            "entities": "4/4: Org, Company, Ledger",
+            "apis": "1/1: authz.check",
+            "test": "tools\\ci-gates\\far-rls-isolation.test.ts (ID match)",
+            "reports": "1/1",
+            "idRef": "business-domain\\finance\\accounting-hub\\src\\index.ts"
+          }
+        },
+        {
+          "id": "FIN-BL-AUD-01",
+          "title": "Every mutation produces an auditable trail (who/what/when/why)",
+          "severity": "S0",
+          "weight": 5,
+          "confidence": 100,
+          "status": "covered",
+          "signals": {
+            "e1": true,
+            "e2": true,
+            "e3": true,
+            "e4": true,
+            "e5": true,
+            "e6": true,
+            "e7": true
+          },
+          "evidence": {
+            "entities": "3/3: AuditLog, PolicyDecision, Approval",
+            "apis": "1/1: mutate",
+            "test": "tools\\ci-gates\\far-auditlog-coverage.test.ts (ID match)",
+            "reports": "1/1",
+            "idRef": "business-domain\\finance\\accounting-hub\\src\\index.ts"
+          }
+        }
+      ]
+    },
+    {
+      "key": "finance.masterdata",
+      "title": "Finance Master Data (CoA, Periods, Dimensions, Policies)",
+      "items": [
+        {
+          "id": "FIN-MD-COA-01",
+          "title": "Published CoA versions are immutable; postings reference a version",
+          "severity": "S0",
+          "weight": 5,
+          "confidence": 100,
+          "status": "covered",
+          "signals": {
+            "e1": true,
+            "e2": true,
+            "e3": true,
+            "e4": true,
+            "e5": true,
+            "e6": true,
+            "e7": true
+          },
+          "evidence": {
+            "entities": "3/3: ChartOfAccounts, GLAccount, CoAVersion",
+            "apis": "2/2: coa.create, coa.publishVersion",
+            "test": "tools\\ci-gates\\far-domain-coverage.test.ts (ID match)",
+            "reports": "1/1",
+            "idRef": "business-domain\\finance\\gl-platform\\src\\index.ts"
+          }
+        },
+        {
+          "id": "FIN-MD-PERIOD-01",
+          "title": "Period controls enforced (open/soft-close/hard-close/lock + overrides)",
+          "severity": "S0",
+          "weight": 5,
+          "confidence": 100,
+          "status": "covered",
+          "signals": {
+            "e1": true,
+            "e2": true,
+            "e3": true,
+            "e4": true,
+            "e5": true,
+            "e6": true,
+            "e7": true
+          },
+          "evidence": {
+            "entities": "4/4: FiscalCalendar, FiscalPeriod, PeriodStatus",
+            "apis": "4/4: period.open, period.hardClose, override.request",
+            "test": "tools\\ci-gates\\far-posting-immutability.test.ts (ID match)",
+            "reports": "1/1",
+            "idRef": "business-domain\\finance\\gl-platform\\src\\index.ts"
+          }
+        },
+        {
+          "id": "FIN-MD-DIM-01",
+          "title": "Required dimensions enforced by rule (by account/doc type)",
+          "severity": "S0",
+          "weight": 5,
+          "confidence": 100,
+          "status": "covered",
+          "signals": {
+            "e1": true,
+            "e2": true,
+            "e3": true,
+            "e4": true,
+            "e5": true,
+            "e6": true,
+            "e7": true
+          },
+          "evidence": {
+            "entities": "3/3: Dimension, DimensionValue, DimensionRule",
+            "apis": "1/1: dimension.assignRequiredRules",
+            "test": "tools\\ci-gates\\far-domain-coverage.test.ts (ID match)",
+            "reports": "1/1",
+            "idRef": "business-domain\\finance\\gl-platform\\src\\index.ts"
+          }
+        }
+      ]
+    },
+    {
+      "key": "finance.gl",
+      "title": "General Ledger (Journals, Posting Kernel, Reversal, Allocations)",
+      "items": [
+        {
+          "id": "FIN-GL-POST-01",
+          "title": "Posting is idempotent, atomic, and balanced-by-construction",
+          "severity": "S0",
+          "weight": 5,
+          "confidence": 100,
+          "status": "covered",
+          "signals": {
+            "e1": true,
+            "e2": true,
+            "e3": true,
+            "e4": true,
+            "e5": true,
+            "e6": true,
+            "e7": true
+          },
+          "evidence": {
+            "entities": "4/4: JournalHeader, JournalLine, PostingRun",
+            "apis": "2/2: journal.post, journal.validate",
+            "test": "tools\\ci-gates\\far-idempotency.test.ts (ID match)",
+            "reports": "1/1",
+            "idRef": "business-domain\\finance\\accounting-hub\\src\\index.ts"
+          }
+        },
+        {
+          "id": "FIN-GL-IMMUT-01",
+          "title": "Posted entries are immutable; corrections only via reversal + new entry",
+          "severity": "S0",
+          "weight": 5,
+          "confidence": 100,
+          "status": "covered",
+          "signals": {
+            "e1": true,
+            "e2": true,
+            "e3": true,
+            "e4": true,
+            "e5": true,
+            "e6": true,
+            "e7": true
+          },
+          "evidence": {
+            "entities": "2/2: PostedJournal, ReversalRef",
+            "apis": "2/2: journal.reverse, journal.correct",
+            "test": "tools\\ci-gates\\far-posting-immutability.test.ts (ID match)",
+            "reports": "1/1",
+            "idRef": "business-domain\\finance\\gl-platform\\src\\index.ts"
+          }
+        }
+      ]
+    },
+    {
+      "key": "finance.ap",
+      "title": "Accounts Payable (Invoices, Matching, Payments, Reconciliation)",
+      "items": [
+        {
+          "id": "FIN-AP-INV-01",
+          "title": "AP invoice posting produces governed GL entries + approval chain",
+          "severity": "S0",
+          "weight": 5,
+          "confidence": 100,
+          "status": "covered",
+          "signals": {
+            "e1": true,
+            "e2": true,
+            "e3": true,
+            "e4": true,
+            "e5": true,
+            "e6": true,
+            "e7": true
+          },
+          "evidence": {
+            "entities": "4/4: Vendor, APInvoice, APInvoiceLine",
+            "apis": "2/2: ap.invoice.post, ap.invoice.approve",
+            "test": "tools\\ci-gates\\far-domain-coverage.test.ts (ID match)",
+            "reports": "2/2",
+            "idRef": "business-domain\\finance\\payables\\src\\commands\\payables-intent.ts"
+          }
+        },
+        {
+          "id": "FIN-AP-PAY-01",
+          "title": "Payments are controlled (maker-checker) and bank files are hashable",
+          "severity": "S0",
+          "weight": 5,
+          "confidence": 100,
+          "status": "covered",
+          "signals": {
+            "e1": true,
+            "e2": true,
+            "e3": true,
+            "e4": true,
+            "e5": true,
+            "e6": true,
+            "e7": true
+          },
+          "evidence": {
+            "entities": "3/3: PaymentBatch, BankFile, PaymentStatus",
+            "apis": "3/3: ap.payment.propose, ap.payment.execute, ap.bankfile.generate",
+            "test": "tools\\ci-gates\\far-domain-coverage.test.ts (ID match)",
+            "reports": "1/1",
+            "idRef": "business-domain\\finance\\payables\\src\\commands\\payables-intent.ts"
+          }
+        }
+      ]
+    },
+    {
+      "key": "finance.ar",
+      "title": "Accounts Receivable (Invoices, Receipts, Matching, Credit Control)",
+      "items": [
+        {
+          "id": "FIN-AR-INV-01",
+          "title": "AR invoice posting generates GL entries, respects credit policy, traceable",
+          "severity": "S0",
+          "weight": 5,
+          "confidence": 100,
+          "status": "covered",
+          "signals": {
+            "e1": true,
+            "e2": true,
+            "e3": true,
+            "e4": true,
+            "e5": true,
+            "e6": true,
+            "e7": true
+          },
+          "evidence": {
+            "entities": "5/5: Customer, ARInvoice, Receipt",
+            "apis": "2/2: ar.invoice.post, credit.override.request",
+            "test": "tools\\ci-gates\\far-domain-coverage.test.ts (ID match)",
+            "reports": "2/2",
+            "idRef": "business-domain\\finance\\credit-management\\src\\index.ts"
+          }
+        }
+      ]
+    },
+    {
+      "key": "finance.cashbank",
+      "title": "Cash & Bank (Statements, Reconciliation, Cash Positioning baseline)",
+      "items": [
+        {
+          "id": "FIN-CB-REC-01",
+          "title": "Bank reconciliation sessions close immutably with full traceability",
+          "severity": "S1",
+          "weight": 4,
+          "confidence": 100,
+          "status": "covered",
+          "signals": {
+            "e1": true,
+            "e2": true,
+            "e3": true,
+            "e4": true,
+            "e5": true,
+            "e6": true,
+            "e7": true
+          },
+          "evidence": {
+            "entities": "3/3: BankAccount, BankStatement, ReconciliationSession",
+            "apis": "2/2: bank.statement.import, bank.reconcile.close",
+            "test": "tools\\ci-gates\\far-domain-coverage.test.ts (ID match)",
+            "reports": "1/1",
+            "idRef": "business-domain\\finance\\bank-reconciliation\\src\\index.ts"
+          }
+        }
+      ]
+    },
+    {
+      "key": "finance.fa",
+      "title": "Fixed Assets (Capitalization, Depreciation, Disposal, Multi-book)",
+      "items": [
+        {
+          "id": "FIN-FA-DEPR-01",
+          "title": "Depreciation runs are deterministic and post correctly to GL",
+          "severity": "S1",
+          "weight": 4,
+          "confidence": 100,
+          "status": "covered",
+          "signals": {
+            "e1": true,
+            "e2": true,
+            "e3": true,
+            "e4": true,
+            "e5": true,
+            "e6": true,
+            "e7": true
+          },
+          "evidence": {
+            "entities": "4/4: Asset, AssetClass, DepreciationBook",
+            "apis": "1/1: fa.depreciation.runAndPost",
+            "test": "tools\\ci-gates\\far-domain-coverage.test.ts (ID match)",
+            "reports": "2/2",
+            "idRef": "business-domain\\finance\\fixed-assets\\src\\index.ts"
+          }
+        }
+      ]
+    },
+    {
+      "key": "finance.inventoryAccounting",
+      "title": "Inventory Accounting Interface (Valuation → GL, GR/IR if enabled)",
+      "items": [
+        {
+          "id": "FIN-INV-VAL-01",
+          "title": "Inventory valuation events post to GL and reconcile to subledger",
+          "severity": "S1",
+          "weight": 4,
+          "confidence": 100,
+          "status": "covered",
+          "signals": {
+            "e1": true,
+            "e2": true,
+            "e3": true,
+            "e4": true,
+            "e5": true,
+            "e6": true,
+            "e7": true
+          },
+          "evidence": {
+            "entities": "3/3: InventoryValuationEvent, CostLayer, InventoryToGLPosting",
+            "apis": "1/1: inventory.postValuationEvent",
+            "test": "tools\\ci-gates\\far-domain-coverage.test.ts (ID match)",
+            "reports": "1/1",
+            "idRef": "business-domain\\finance\\inventory-valuation\\src\\index.ts"
+          }
+        }
+      ]
+    },
+    {
+      "key": "finance.tax",
+      "title": "Tax Engine (Determination, Calculation, Posting, Reporting)",
+      "items": [
+        {
+          "id": "FIN-TAX-CALC-01",
+          "title": "Tax calculation is correct, rounded deterministically, and mapped to accounts",
+          "severity": "S1",
+          "weight": 4,
+          "confidence": 100,
+          "status": "covered",
+          "signals": {
+            "e1": true,
+            "e2": true,
+            "e3": true,
+            "e4": true,
+            "e5": true,
+            "e6": true,
+            "e7": true
+          },
+          "evidence": {
+            "entities": "4/4: TaxCode, TaxRate, TaxRule",
+            "apis": "1/1: tax.determine",
+            "test": "tools\\ci-gates\\far-domain-coverage.test.ts (ID match)",
+            "reports": "1/1",
+            "idRef": "business-domain\\finance\\tax-engine\\src\\index.ts"
+          }
+        }
+      ]
+    },
+    {
+      "key": "finance.fx",
+      "title": "Multi-Currency & FX (Rates, Revaluation, Translation, Audit)",
+      "items": [
+        {
+          "id": "FIN-FX-REV-01",
+          "title": "FX revaluation runs are reproducible with rate snapshots and produce postings",
+          "severity": "S0",
+          "weight": 5,
+          "confidence": 100,
+          "status": "covered",
+          "signals": {
+            "e1": true,
+            "e2": true,
+            "e3": true,
+            "e4": true,
+            "e5": true,
+            "e6": true,
+            "e7": true
+          },
+          "evidence": {
+            "entities": "4/4: ExchangeRate, RateType, FXRevaluationRun",
+            "apis": "2/2: fx.rate.importAndLock, fx.revalue.runAndPost",
+            "test": "tools\\ci-gates\\far-posting-balanced.test.ts (ID match)",
+            "reports": "1/1",
+            "idRef": "business-domain\\finance\\fx-management\\src\\index.ts"
+          }
+        }
+      ]
+    },
+    {
+      "key": "finance.group",
+      "title": "Multi-Company & Group Accounting (Structure, Mapping, Consolidation readiness)",
+      "items": [
+        {
+          "id": "FIN-GRP-STRUCT-01",
+          "title": "Group structure is versioned by effective date; ownership changes auditable",
+          "severity": "S1",
+          "weight": 4,
+          "confidence": 100,
+          "status": "covered",
+          "signals": {
+            "e1": true,
+            "e2": true,
+            "e3": true,
+            "e4": true,
+            "e5": true,
+            "e6": true,
+            "e7": true
+          },
+          "evidence": {
+            "entities": "3/3: Group, Ownership, ConsolidationScope",
+            "apis": "1/1: group.updateOwnership",
+            "test": "tools\\ci-gates\\far-domain-coverage.test.ts (ID match)",
+            "reports": "1/1",
+            "idRef": "business-domain\\finance\\consolidation\\src\\index.ts"
+          }
+        }
+      ]
+    },
+    {
+      "key": "finance.intercompany",
+      "title": "Intercompany (Mirroring, Balancing, Reconciliation, Settlement, Eliminations)",
+      "items": [
+        {
+          "id": "FIN-IC-MIRROR-01",
+          "title": "IC transactions are mirrored with shared references and auto-balancing",
+          "severity": "S0",
+          "weight": 5,
+          "confidence": 100,
+          "status": "covered",
+          "signals": {
+            "e1": true,
+            "e2": true,
+            "e3": true,
+            "e4": true,
+            "e5": true,
+            "e6": true,
+            "e7": true
+          },
+          "evidence": {
+            "entities": "4/4: ICPartner, ICDocument, ICMatch",
+            "apis": "2/2: ic.createAndMirror, ic.settle",
+            "test": "tools\\ci-gates\\far-posting-balanced.test.ts (ID match)",
+            "reports": "2/2",
+            "idRef": "business-domain\\finance\\consolidation\\src\\index.ts"
+          }
+        }
+      ]
+    },
+    {
+      "key": "finance.close",
+      "title": "Financial Close (Checklist, Runs, Locks, Evidence Pack)",
+      "items": [
+        {
+          "id": "FIN-CLOSE-PACK-01",
+          "title": "Close generates an evidence pack (TB, recons, run logs, approvals) and locks period",
+          "severity": "S0",
+          "weight": 5,
+          "confidence": 100,
+          "status": "covered",
+          "signals": {
+            "e1": true,
+            "e2": true,
+            "e3": true,
+            "e4": true,
+            "e5": true,
+            "e6": true,
+            "e7": true
+          },
+          "evidence": {
+            "entities": "4/4: CloseCalendar, CloseTask, CloseRun",
+            "apis": "3/3: close.run.execute, period.lock, close.pack.generate",
+            "test": "tools\\ci-gates\\far-posting-immutability.test.ts (ID match)",
+            "reports": "1/1",
+            "idRef": "business-domain\\finance\\financial-close\\src\\index.ts"
+          }
+        }
+      ]
+    },
+    {
+      "key": "finance.reporting",
+      "title": "Financial Reporting (Statements, Drill-down, Snapshots)",
+      "items": [
+        {
+          "id": "FIN-REP-SNAP-01",
+          "title": "Statement snapshots are reproducible and drill-down is complete",
+          "severity": "S1",
+          "weight": 4,
+          "confidence": 100,
+          "status": "covered",
+          "signals": {
+            "e1": true,
+            "e2": true,
+            "e3": true,
+            "e4": true,
+            "e5": true,
+            "e6": true,
+            "e7": true
+          },
+          "evidence": {
+            "entities": "3/3: ReportDefinition, ReportSnapshot, StatementLineMapping",
+            "apis": "2/2: report.runSnapshot, report.drilldown",
+            "test": "tools\\ci-gates\\far-domain-coverage.test.ts (ID match)",
+            "reports": "3/3",
+            "idRef": "business-domain\\finance\\statutory-reporting\\src\\index.ts"
+          }
+        }
+      ]
+    },
+    {
+      "key": "finance.controls",
+      "title": "Controls & Security (SoD, approvals, privileged actions, overrides)",
+      "items": [
+        {
+          "id": "FIN-CTRL-SOD-01",
+          "title": "Segregation of Duties enforced for posting, payments, close locks",
+          "severity": "S0",
+          "weight": 5,
+          "confidence": 100,
+          "status": "covered",
+          "signals": {
+            "e1": true,
+            "e2": true,
+            "e3": true,
+            "e4": true,
+            "e5": true,
+            "e6": true,
+            "e7": true
+          },
+          "evidence": {
+            "entities": "4/4: SoDRule, Role, Permission",
+            "apis": "1/1: sod.evaluate",
+            "test": "tools\\ci-gates\\far-domain-coverage.test.ts (ID match)",
+            "reports": "1/1",
+            "idRef": "business-domain\\finance\\credit-management\\src\\index.ts"
+          }
+        }
+      ]
+    },
+    {
+      "key": "finance.multigaap",
+      "title": "Multi-GAAP / IFRS (Multi-book, Adjustments, Variance reporting)",
+      "items": [
+        {
+          "id": "FIN-MG-ADJ-01",
+          "title": "Adjustments are isolated by book/ledger and variance reporting exists",
+          "severity": "S1",
+          "weight": 4,
+          "confidence": 100,
+          "status": "covered",
+          "signals": {
+            "e1": true,
+            "e2": true,
+            "e3": true,
+            "e4": true,
+            "e5": true,
+            "e6": true,
+            "e7": true
+          },
+          "evidence": {
+            "entities": "3/3: LedgerBook, AdjustmentJournal, BookVariance",
+            "apis": "2/2: adjustment.post, books.variance.report",
+            "test": "tools\\ci-gates\\far-domain-coverage.test.ts (ID match)",
+            "reports": "1/1",
+            "idRef": "business-domain\\finance\\gl-platform\\src\\index.ts"
+          }
+        }
+      ]
+    },
+    {
+      "key": "finance.integrations",
+      "title": "Integrations (Imports, outbox, replay safety, external references)",
+      "items": [
+        {
+          "id": "FIN-INT-OUTBOX-01",
+          "title": "Outbox-driven integration is replay-safe and idempotent",
+          "severity": "S0",
+          "weight": 5,
+          "confidence": 100,
+          "status": "covered",
+          "signals": {
+            "e1": true,
+            "e2": true,
+            "e3": true,
+            "e4": true,
+            "e5": true,
+            "e6": true,
+            "e7": true
+          },
+          "evidence": {
+            "entities": "4/4: OutboxEvent, ImportBatch, ExternalRef",
+            "apis": "3/3: import.validate, import.commit, outbox.publish",
+            "test": "tools\\ci-gates\\far-idempotency.test.ts (ID match)",
+            "reports": "1/1",
+            "idRef": "business-domain\\finance\\accounting-hub\\src\\index.ts"
+          }
+        }
+      ]
+    },
+    {
+      "key": "finance.ops",
+      "title": "Operational Excellence (SLAs, performance baselines, observability)",
+      "items": [
+        {
+          "id": "FIN-OPS-SLA-01",
+          "title": "Posting and close meet performance baselines with observability",
+          "severity": "S2",
+          "weight": 3,
+          "confidence": 100,
+          "status": "covered",
+          "signals": {
+            "e1": true,
+            "e2": true,
+            "e3": true,
+            "e4": true,
+            "e5": true,
+            "e6": true,
+            "e7": true
+          },
+          "evidence": {
+            "entities": "3/3: Metric, SLA, AlertRule",
+            "apis": "2/2: health.finance, metrics.export",
+            "test": "tools\\ci-gates\\far-migration-lineage.test.ts (ID match)",
+            "reports": "1/1",
+            "idRef": "business-domain\\finance\\accounting-hub\\src\\index.ts"
+          }
+        }
+      ]
+    }
+  ]
+}

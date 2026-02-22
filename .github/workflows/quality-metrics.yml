@@ -1,0 +1,187 @@
+name: Quality Metrics
+run-name: Quality Metrics on ${{ github.ref }} (${{ github.event_name }})
+
+permissions:
+  contents: read
+
+on:
+  push:
+    branches: [main, feat/*]
+  pull_request:
+    branches: [main]
+  schedule:
+    # Run daily at 2 AM UTC
+    - cron: '0 2 * * *'
+  workflow_dispatch:
+
+jobs:
+  collect-metrics:
+    name: Collect & Analyze Quality Metrics
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+
+    env:
+      TURBO_UI: stream
+      TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+      TURBO_TEAM: ${{ vars.TURBO_TEAM }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Need full history for git metrics
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Cache Turborepo
+        uses: actions/cache@v4
+        with:
+          path: .turbo
+          key: ${{ runner.os }}-turbo-${{ hashFiles('pnpm-lock.yaml', 'turbo.json') }}
+          restore-keys: ${{ runner.os }}-turbo-
+
+      - name: Run tests with coverage
+        run: pnpm test:coverage
+        continue-on-error: true
+
+      - name: Build packages
+        run: pnpm build
+        continue-on-error: true
+
+      - name: Install quality-metrics dependencies
+        run: pnpm install --filter quality-metrics
+
+      - name: Collect metrics
+        run: pnpm --filter quality-metrics collect
+
+      - name: Analyze metrics
+        id: analyze
+        run: |
+          pnpm --filter quality-metrics analyze > analysis.txt
+          cat analysis.txt
+
+      - name: Detect test flakiness
+        id: flakiness
+        run: |
+          pnpm --filter quality-metrics flakiness > flakiness.txt
+          cat flakiness.txt
+        continue-on-error: true
+
+      - name: Detect performance regressions
+        id: performance
+        run: |
+          pnpm --filter quality-metrics performance > performance.txt
+          cat performance.txt
+        continue-on-error: true
+
+      - name: Generate automated insights
+        id: insights
+        run: |
+          pnpm --filter quality-metrics insights > insights.txt
+          cat insights.txt
+        continue-on-error: true
+
+      - name: Generate markdown report
+        run: pnpm --filter quality-metrics report markdown
+
+      - name: Generate HTML report
+        run: pnpm --filter quality-metrics report html
+
+      - name: Upload metrics artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: quality-metrics
+          path: |
+            .quality-metrics/
+            analysis.txt
+            flakiness.txt
+            performance.txt
+            insights.txt
+          retention-days: 90
+
+      - name: Comment PR with metrics
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const report = fs.readFileSync('.quality-metrics/report.md', 'utf8');
+            
+            let comment = '## 📊 Quality Metrics Report\n\n' + report;
+            
+            // Add flakiness results if available
+            if (fs.existsSync('flakiness.txt')) {
+              const flakiness = fs.readFileSync('flakiness.txt', 'utf8');
+              comment += '\n\n---\n\n## 🔍 Flakiness Detection\n\n```\n' + flakiness + '\n```';
+            }
+            
+            // Add performance results if available
+            if (fs.existsSync('performance.txt')) {
+              const performance = fs.readFileSync('performance.txt', 'utf8');
+              comment += '\n\n---\n\n## ⚡ Performance Analysis\n\n```\n' + performance + '\n```';
+            }
+            
+            // Add insights if available
+            if (fs.existsSync('insights.txt')) {
+              const insights = fs.readFileSync('insights.txt', 'utf8');
+              comment += '\n\n---\n\n## 🔮 Automated Insights\n\n```\n' + insights + '\n```';
+            }
+            
+            await github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: comment
+            });
+
+      - name: Deploy HTML report to GitHub Pages
+        if: github.ref == 'refs/heads/main'
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: .quality-metrics
+          destination_dir: quality-metrics
+          enable_jekyll: false
+
+      - name: Check quality thresholds
+        run: |
+          # Parse latest metrics and fail if below thresholds
+          node -e "
+            const fs = require('fs');
+            const metrics = JSON.parse(fs.readFileSync('.quality-metrics/latest.json', 'utf8'));
+            
+            const failures = [];
+            
+            if (metrics.coverage.lines < 80) {
+              failures.push(\`❌ Line coverage ${metrics.coverage.lines.toFixed(1)}% is below 80% threshold\`);
+            }
+            if (metrics.coverage.branches < 75) {
+              failures.push(\`❌ Branch coverage ${metrics.coverage.branches.toFixed(1)}% is below 75% threshold\`);
+            }
+            if (metrics.codeQuality.typeErrors > 0) {
+              failures.push(\`❌ Found ${metrics.codeQuality.typeErrors} TypeScript errors\`);
+            }
+            if (metrics.codeQuality.lintErrors > 0) {
+              failures.push(\`❌ Found ${metrics.codeQuality.lintErrors} ESLint errors\`);
+            }
+            
+            if (failures.length > 0) {
+              console.log('\\n🚨 Quality Thresholds Failed:\\n');
+              failures.forEach(f => console.log(f));
+              process.exit(1);
+            } else {
+              console.log('\\n✅ All quality thresholds passed!');
+            }
+          "

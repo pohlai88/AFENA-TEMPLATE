@@ -1,0 +1,114 @@
+{
+  "version": "1.0.0",
+  "generatedAt": "2026-02-20T15:48:37.415Z",
+  "summary": {
+    "intentUnionMembers": 76,
+    "registryEntries": 76,
+    "declaredIntentCount": 76,
+    "declaredPackageCount": 37,
+    "filesChecksummed": 25,
+    "integrityOk": true
+  },
+  "files": {
+    "src/index.ts": {
+      "sha256": "d28e11937b9c08ef50ae54ba86a1d8bf450106abb659f897410fbf9a363a65ef",
+      "size": 16332
+    },
+    "src/ports/accounting-read-port.ts": {
+      "sha256": "7075b0f883eb5c8834c8c2cf0c0a939cb4da2f49dc51410f82b4feb77c08a909",
+      "size": 1729
+    },
+    "src/ports/document-number-port.ts": {
+      "sha256": "7b149a75985ca6bda1f21e87efc1fbdf3f0a45c6b2b8a6fd53569c028cabf6bc",
+      "size": 1231
+    },
+    "src/ports/fx-rate-port.ts": {
+      "sha256": "274c675524ae4d2f1000da91d685e2743aa3e48e33b5f22d2f90be6355c0e8a7",
+      "size": 1318
+    },
+    "src/ports/index.ts": {
+      "sha256": "b0de9f95ca85c46f9b8034e19db212709cb60c9374d8e40ebbb07ff26614bd82",
+      "size": 804
+    },
+    "src/ports/ledger-control-port.ts": {
+      "sha256": "5d3881b437009e7b4a56960b5cc7d205bdcc1e6aa38f2c8584967159fd27c0a8",
+      "size": 1682
+    },
+    "src/ports/party-master-port.ts": {
+      "sha256": "f433b3f567c3fe9e8becca161f8a95128d0f4e2c4ca3ef1f0b448c2cc3a5c4c5",
+      "size": 1418
+    },
+    "src/ports/tax-rate-port.ts": {
+      "sha256": "027a4d30abb4c4a2ce3b03398b99601a020312b8021cf31e9941aa45b2e02dbf",
+      "size": 1182
+    },
+    "src/registries/capability-registry.ts": {
+      "sha256": "0aa953960ce7b23fd01bda7b2e207413672debc109b74d8126a4764e32876b3a",
+      "size": 722
+    },
+    "src/registries/domain-intent-registry.ts": {
+      "sha256": "f13a5188f493225db285ac990007008af758c1b2713e381675b5dea7646cf52d",
+      "size": 31044
+    },
+    "src/registries/domain-taxonomy.ts": {
+      "sha256": "99abf213c529822b17b12510a26766eb0109322099d1f6fa8b33cfba24b77192",
+      "size": 91
+    },
+    "src/registries/entity-contracts-comprehensive.data.ts": {
+      "sha256": "fc726c51ad74d2ad15eb4473ac1b375e22c64f8ef09fbf95f3c3892d774c2ad9",
+      "size": 19799
+    },
+    "src/registries/entity-contracts-generated.data.ts": {
+      "sha256": "b92692eeee46d32da1c3dc8112e0324f061ce1349462d391933cd662e043a767",
+      "size": 10148
+    },
+    "src/registries/entity-contracts.data.ts": {
+      "sha256": "4916b8aa79523143c27d882ee91c1ff77dc1258010d31eab250bf5c8ea9c6b60",
+      "size": 6825
+    },
+    "src/registries/overlay-activation.ts": {
+      "sha256": "f57d502dd6cafef13c5655d12288660ac875c49a5458bcf06357cc7e1e068e1a",
+      "size": 338
+    },
+    "src/registries/shared-kernel-registry.ts": {
+      "sha256": "9f4234389e5e449a19e9f95c22ea6fbc6d925bb4ffbb5dca906adf4fec379feb",
+      "size": 29425
+    },
+    "src/types/action.ts": {
+      "sha256": "a34a98465b5707fcd29e86ecf9a3d857eb546a67a55a3d290700d36e91be1166",
+      "size": 2784
+    },
+    "src/types/branded.ts": {
+      "sha256": "a5cf3d0d3558e55fa8997f7d98b76bfc4a8fe5a8654bf8af99d6293c89384ac1",
+      "size": 1400
+    },
+    "src/types/capability.ts": {
+      "sha256": "38ff11c86210ea17321152297b13d4d300982969c1512d9d7007f5f3550ef328",
+      "size": 346
+    },
+    "src/types/domain-context.ts": {
+      "sha256": "3ba8b72a4838d134fb638e5287272c582a7d6a4f3df368e5517c82c4b2f7098a",
+      "size": 575
+    },
+    "src/types/domain-error.ts": {
+      "sha256": "1eb72d972908f28067c96024aa5d357a57ff9ed015a3d702a8ae056fab63076b",
+      "size": 502
+    },
+    "src/types/domain-event.ts": {
+      "sha256": "af91981f4fc2b29ef2bff5ef647a0acdf99f28631d60d4ae0e7920052dfa63d0",
+      "size": 1386
+    },
+    "src/types/domain-intent.ts": {
+      "sha256": "06ead5a0ad672c7c1dd7a80086e8abd3bcf410df1297beb7b828de3452036190",
+      "size": 24605
+    },
+    "src/types/domain-result.ts": {
+      "sha256": "7cd92b64b4b6c07b71413305149367ac2f1e3758d5c5a75afda027c83733efd6",
+      "size": 247
+    },
+    "src/types/entity.ts": {
+      "sha256": "5f044db9555be4edc7c8fbebe1f16aafc31644ad34a54ac4fab02eb53e5758a1",
+      "size": 2223
+    }
+  }
+}

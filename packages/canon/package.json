@@ -1,0 +1,143 @@
+{
+  "name": "afenda-canon",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "sideEffects": false,
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    },
+    "./lite-meta": {
+      "types": "./dist/lite-meta/index.d.ts",
+      "import": "./dist/lite-meta/index.js",
+      "require": "./dist/lite-meta/index.cjs"
+    },
+    "./schemas": {
+      "types": "./dist/schemas/index.d.ts",
+      "import": "./dist/schemas/index.js",
+      "require": "./dist/schemas/index.cjs"
+    },
+    "./types": {
+      "types": "./dist/types/index.d.ts",
+      "import": "./dist/types/index.js",
+      "require": "./dist/types/index.cjs"
+    },
+    "./mappings": {
+      "types": "./dist/mappings/index.d.ts",
+      "import": "./dist/mappings/index.js",
+      "require": "./dist/mappings/index.cjs"
+    },
+    "./enums": {
+      "types": "./dist/enums/index.d.ts",
+      "import": "./dist/enums/index.js",
+      "require": "./dist/enums/index.cjs"
+    },
+    "./registries": {
+      "types": "./dist/registries/index.d.ts",
+      "import": "./dist/registries/index.js",
+      "require": "./dist/registries/index.cjs"
+    },
+    "./validators": {
+      "types": "./dist/validators/index.d.ts",
+      "import": "./dist/validators/index.js",
+      "require": "./dist/validators/index.cjs"
+    },
+    "./domain": {
+      "types": "./dist/domain/index.d.ts",
+      "import": "./dist/domain/index.js",
+      "require": "./dist/domain/index.cjs"
+    },
+    "./domain/finance": {
+      "types": "./dist/domain/finance.d.ts",
+      "import": "./dist/domain/finance.js",
+      "require": "./dist/domain/finance.cjs"
+    },
+    "./domain/supply-chain": {
+      "types": "./dist/domain/supply-chain.d.ts",
+      "import": "./dist/domain/supply-chain.js",
+      "require": "./dist/domain/supply-chain.cjs"
+    },
+    "./domain/hr": {
+      "types": "./dist/domain/hr.d.ts",
+      "import": "./dist/domain/hr.js",
+      "require": "./dist/domain/hr.cjs"
+    },
+    "./domain/manufacturing": {
+      "types": "./dist/domain/manufacturing.d.ts",
+      "import": "./dist/domain/manufacturing.js",
+      "require": "./dist/domain/manufacturing.cjs"
+    },
+    "./package.json": "./package.json"
+  },
+  "typesVersions": {
+    "*": {
+      "lite-meta": [
+        "dist/lite-meta/index.d.ts"
+      ],
+      "schemas": [
+        "dist/schemas/index.d.ts"
+      ],
+      "types": [
+        "dist/types/index.d.ts"
+      ],
+      "mappings": [
+        "dist/mappings/index.d.ts"
+      ],
+      "enums": [
+        "dist/enums/index.d.ts"
+      ],
+      "registries": [
+        "dist/registries/index.d.ts"
+      ],
+      "validators": [
+        "dist/validators/index.d.ts"
+      ],
+      "domain": [
+        "dist/domain/index.d.ts"
+      ],
+      "domain/finance": [
+        "dist/domain/finance.d.ts"
+      ],
+      "domain/supply-chain": [
+        "dist/domain/supply-chain.d.ts"
+      ],
+      "domain/hr": [
+        "dist/domain/hr.d.ts"
+      ],
+      "domain/manufacturing": [
+        "dist/domain/manufacturing.d.ts"
+      ]
+    }
+  },
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
+    "lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx --fix",
+    "type-check": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "manifest": "node scripts/generate-manifest.mjs"
+  },
+  "dependencies": {
+    "lru-cache": "catalog:",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@fast-check/vitest": "catalog:",
+    "@types/node": "catalog:",
+    "afenda-eslint-config": "workspace:^",
+    "afenda-typescript-config": "workspace:*",
+    "fast-check": "catalog:",
+    "tslib": "catalog:",
+    "tsup": "catalog:",
+    "typescript": "catalog:"
+  }
+}

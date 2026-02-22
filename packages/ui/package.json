@@ -1,0 +1,70 @@
+{
+  "name": "afenda-ui",
+  "version": "0.1.0",
+  "private": true,
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "module": "./dist/index.mjs",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    },
+    "./components/*": "./src/components/*.tsx",
+    "./providers": "./src/providers/index.tsx",
+    "./providers/*": "./src/providers/*.tsx",
+    "./hooks/*": "./src/hooks/*.ts",
+    "./lib/*": "./src/lib/*.ts",
+    "./styles/*": "./src/styles/*.css"
+  },
+  "scripts": {
+    "prebuild": "tsx engine/generate.ts",
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx --cache --concurrency=auto",
+    "lint:ci": "eslint . --ext .js,.jsx,.ts,.tsx --rule 'import/no-cycle: error'",
+    "lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx --cache --fix",
+    "type-check": "tsc --noEmit",
+    "engine:generate": "tsx engine/generate.ts"
+  },
+  "dependencies": {
+    "@base-ui/react": "catalog:",
+    "@hookform/resolvers": "catalog:",
+    "@tanstack/react-table": "catalog:",
+    "class-variance-authority": "catalog:",
+    "clsx": "catalog:",
+    "cmdk": "catalog:",
+    "date-fns": "catalog:",
+    "embla-carousel-react": "catalog:",
+    "input-otp": "catalog:",
+    "lucide-react": "catalog:",
+    "next-themes": "catalog:",
+    "radix-ui": "catalog:",
+    "react": "catalog:",
+    "react-day-picker": "catalog:",
+    "react-dom": "catalog:",
+    "react-hook-form": "catalog:",
+    "react-resizable-panels": "catalog:",
+    "recharts": "catalog:",
+    "sonner": "catalog:",
+    "tailwind-merge": "catalog:",
+    "tw-animate-css": "catalog:",
+    "vaul": "catalog:"
+  },
+  "devDependencies": {
+    "@types/react": "catalog:",
+    "@types/react-dom": "catalog:",
+    "afenda-eslint-config": "workspace:^",
+    "afenda-typescript-config": "workspace:*",
+    "tailwindcss": "catalog:",
+    "tsup": "catalog:",
+    "typescript": "catalog:",
+    "zod": "catalog:"
+  },
+  "peerDependencies": {
+    "react": "^19.2.3",
+    "react-dom": "^19.2.3",
+    "tailwindcss": ">=4.0.0"
+  }
+}

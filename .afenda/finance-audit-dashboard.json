@@ -1,0 +1,327 @@
+{
+  "dashboardVersion": "1.0",
+  "generatedAt": "2026-02-21T08:49:12.867Z",
+  "ledgerVersion": "1.0",
+  "summary": {
+    "total": 23,
+    "covered": 23,
+    "partial": 0,
+    "missing": 0,
+    "avgConfidence": 100,
+    "coveragePct": 100,
+    "weightedScore": 100
+  },
+  "bySeverity": {
+    "S0": {
+      "total": 15,
+      "covered": 15,
+      "partial": 0,
+      "missing": 0,
+      "avgConfidence": 100
+    },
+    "S1": {
+      "total": 7,
+      "covered": 7,
+      "partial": 0,
+      "missing": 0,
+      "avgConfidence": 100
+    },
+    "S2": {
+      "total": 1,
+      "covered": 1,
+      "partial": 0,
+      "missing": 0,
+      "avgConfidence": 100
+    },
+    "S3": {
+      "total": 0,
+      "covered": 0,
+      "partial": 0,
+      "missing": 0,
+      "avgConfidence": 0
+    }
+  },
+  "signalCoverage": {
+    "e1": {
+      "fired": 23,
+      "total": 23,
+      "pct": 100
+    },
+    "e2": {
+      "fired": 23,
+      "total": 23,
+      "pct": 100
+    },
+    "e3": {
+      "fired": 23,
+      "total": 23,
+      "pct": 100
+    },
+    "e4": {
+      "fired": 23,
+      "total": 23,
+      "pct": 100
+    },
+    "e5": {
+      "fired": 23,
+      "total": 23,
+      "pct": 100
+    },
+    "e6": {
+      "fired": 23,
+      "total": 23,
+      "pct": 100
+    },
+    "e7": {
+      "fired": 23,
+      "total": 23,
+      "pct": 100
+    }
+  },
+  "sectionScores": [
+    {
+      "key": "finance.baseline",
+      "title": "Cross-Cutting Baseline (applies to all finance capabilities)",
+      "itemCount": 2,
+      "avgConfidence": 100,
+      "covered": 2,
+      "partial": 0,
+      "missing": 0
+    },
+    {
+      "key": "finance.masterdata",
+      "title": "Finance Master Data (CoA, Periods, Dimensions, Policies)",
+      "itemCount": 3,
+      "avgConfidence": 100,
+      "covered": 3,
+      "partial": 0,
+      "missing": 0
+    },
+    {
+      "key": "finance.gl",
+      "title": "General Ledger (Journals, Posting Kernel, Reversal, Allocations)",
+      "itemCount": 2,
+      "avgConfidence": 100,
+      "covered": 2,
+      "partial": 0,
+      "missing": 0
+    },
+    {
+      "key": "finance.ap",
+      "title": "Accounts Payable (Invoices, Matching, Payments, Reconciliation)",
+      "itemCount": 2,
+      "avgConfidence": 100,
+      "covered": 2,
+      "partial": 0,
+      "missing": 0
+    },
+    {
+      "key": "finance.ar",
+      "title": "Accounts Receivable (Invoices, Receipts, Matching, Credit Control)",
+      "itemCount": 1,
+      "avgConfidence": 100,
+      "covered": 1,
+      "partial": 0,
+      "missing": 0
+    },
+    {
+      "key": "finance.cashbank",
+      "title": "Cash & Bank (Statements, Reconciliation, Cash Positioning baseline)",
+      "itemCount": 1,
+      "avgConfidence": 100,
+      "covered": 1,
+      "partial": 0,
+      "missing": 0
+    },
+    {
+      "key": "finance.fa",
+      "title": "Fixed Assets (Capitalization, Depreciation, Disposal, Multi-book)",
+      "itemCount": 1,
+      "avgConfidence": 100,
+      "covered": 1,
+      "partial": 0,
+      "missing": 0
+    },
+    {
+      "key": "finance.inventoryAccounting",
+      "title": "Inventory Accounting Interface (Valuation → GL, GR/IR if enabled)",
+      "itemCount": 1,
+      "avgConfidence": 100,
+      "covered": 1,
+      "partial": 0,
+      "missing": 0
+    },
+    {
+      "key": "finance.tax",
+      "title": "Tax Engine (Determination, Calculation, Posting, Reporting)",
+      "itemCount": 1,
+      "avgConfidence": 100,
+      "covered": 1,
+      "partial": 0,
+      "missing": 0
+    },
+    {
+      "key": "finance.fx",
+      "title": "Multi-Currency & FX (Rates, Revaluation, Translation, Audit)",
+      "itemCount": 1,
+      "avgConfidence": 100,
+      "covered": 1,
+      "partial": 0,
+      "missing": 0
+    },
+    {
+      "key": "finance.group",
+      "title": "Multi-Company & Group Accounting (Structure, Mapping, Consolidation readiness)",
+      "itemCount": 1,
+      "avgConfidence": 100,
+      "covered": 1,
+      "partial": 0,
+      "missing": 0
+    },
+    {
+      "key": "finance.intercompany",
+      "title": "Intercompany (Mirroring, Balancing, Reconciliation, Settlement, Eliminations)",
+      "itemCount": 1,
+      "avgConfidence": 100,
+      "covered": 1,
+      "partial": 0,
+      "missing": 0
+    },
+    {
+      "key": "finance.close",
+      "title": "Financial Close (Checklist, Runs, Locks, Evidence Pack)",
+      "itemCount": 1,
+      "avgConfidence": 100,
+      "covered": 1,
+      "partial": 0,
+      "missing": 0
+    },
+    {
+      "key": "finance.reporting",
+      "title": "Financial Reporting (Statements, Drill-down, Snapshots)",
+      "itemCount": 1,
+      "avgConfidence": 100,
+      "covered": 1,
+      "partial": 0,
+      "missing": 0
+    },
+    {
+      "key": "finance.controls",
+      "title": "Controls & Security (SoD, approvals, privileged actions, overrides)",
+      "itemCount": 1,
+      "avgConfidence": 100,
+      "covered": 1,
+      "partial": 0,
+      "missing": 0
+    },
+    {
+      "key": "finance.multigaap",
+      "title": "Multi-GAAP / IFRS (Multi-book, Adjustments, Variance reporting)",
+      "itemCount": 1,
+      "avgConfidence": 100,
+      "covered": 1,
+      "partial": 0,
+      "missing": 0
+    },
+    {
+      "key": "finance.integrations",
+      "title": "Integrations (Imports, outbox, replay safety, external references)",
+      "itemCount": 1,
+      "avgConfidence": 100,
+      "covered": 1,
+      "partial": 0,
+      "missing": 0
+    },
+    {
+      "key": "finance.ops",
+      "title": "Operational Excellence (SLAs, performance baselines, observability)",
+      "itemCount": 1,
+      "avgConfidence": 100,
+      "covered": 1,
+      "partial": 0,
+      "missing": 0
+    }
+  ],
+  "topRisks": [
+    {
+      "id": "FIN-BL-ISO-01",
+      "title": "Tenant isolation enforced on all finance tables",
+      "severity": "S0",
+      "weight": 5,
+      "confidence": 100,
+      "status": "covered"
+    },
+    {
+      "id": "FIN-BL-AUD-01",
+      "title": "Every mutation produces an auditable trail (who/what/when/why)",
+      "severity": "S0",
+      "weight": 5,
+      "confidence": 100,
+      "status": "covered"
+    },
+    {
+      "id": "FIN-MD-COA-01",
+      "title": "Published CoA versions are immutable; postings reference a version",
+      "severity": "S0",
+      "weight": 5,
+      "confidence": 100,
+      "status": "covered"
+    },
+    {
+      "id": "FIN-MD-PERIOD-01",
+      "title": "Period controls enforced (open/soft-close/hard-close/lock + overrides)",
+      "severity": "S0",
+      "weight": 5,
+      "confidence": 100,
+      "status": "covered"
+    },
+    {
+      "id": "FIN-MD-DIM-01",
+      "title": "Required dimensions enforced by rule (by account/doc type)",
+      "severity": "S0",
+      "weight": 5,
+      "confidence": 100,
+      "status": "covered"
+    },
+    {
+      "id": "FIN-GL-POST-01",
+      "title": "Posting is idempotent, atomic, and balanced-by-construction",
+      "severity": "S0",
+      "weight": 5,
+      "confidence": 100,
+      "status": "covered"
+    },
+    {
+      "id": "FIN-GL-IMMUT-01",
+      "title": "Posted entries are immutable; corrections only via reversal + new entry",
+      "severity": "S0",
+      "weight": 5,
+      "confidence": 100,
+      "status": "covered"
+    },
+    {
+      "id": "FIN-AP-INV-01",
+      "title": "AP invoice posting produces governed GL entries + approval chain",
+      "severity": "S0",
+      "weight": 5,
+      "confidence": 100,
+      "status": "covered"
+    },
+    {
+      "id": "FIN-AP-PAY-01",
+      "title": "Payments are controlled (maker-checker) and bank files are hashable",
+      "severity": "S0",
+      "weight": 5,
+      "confidence": 100,
+      "status": "covered"
+    },
+    {
+      "id": "FIN-AR-INV-01",
+      "title": "AR invoice posting generates GL entries, respects credit policy, traceable",
+      "severity": "S0",
+      "weight": 5,
+      "confidence": 100,
+      "status": "covered"
+    }
+  ]
+}

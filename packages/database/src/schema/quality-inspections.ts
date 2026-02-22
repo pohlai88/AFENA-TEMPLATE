@@ -1,0 +1,33 @@
+import { sql } from 'drizzle-orm';
+import { check, date, index, jsonb, pgTable, text } from 'drizzle-orm/pg-core';
+
+import { tenantPk } from '../helpers/base-entity';
+import { docStatusEnum } from '../helpers/doc-status';
+import { erpEntityColumns } from '../helpers/erp-entity';
+import { tenantPolicy } from '../helpers/tenant-policy';
+
+export const qualityInspections = pgTable(
+  'quality_inspections',
+  {
+    ...erpEntityColumns,
+    docStatus: docStatusEnum('doc_status').notNull().default('draft'),
+    docNo: text('doc_no'),
+    inspectionNumber: text('inspection_number'),
+    inspectionType: text('inspection_type').notNull(),
+    inspectionDate: date('inspection_date'),
+    inspector: text('inspector'),
+    result: text('result'),
+    inspectionData: jsonb('inspection_data').notNull().default(sql`'{}'::jsonb`),
+  },
+  (table) => [
+    tenantPk(table),
+    index('quality_inspections_org_id_idx').on(table.orgId, table.id),
+    index('quality_inspections_org_created_idx').on(table.orgId, table.createdAt),
+    check('quality_inspections_org_not_empty', sql`org_id <> '00000000-0000-0000-0000-000000000000'::uuid`),
+    check('quality_inspections_doc_status_valid', sql`doc_status IN ('draft', 'submitted', 'active', 'cancelled')`),
+    tenantPolicy(table),
+  ],
+);
+
+export type QualityInspection = typeof qualityInspections.$inferSelect;
+export type NewQualityInspection = typeof qualityInspections.$inferInsert;

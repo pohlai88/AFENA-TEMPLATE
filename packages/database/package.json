@@ -1,0 +1,56 @@
+{
+  "name": "afenda-database",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
+    "lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx --fix",
+    "type-check": "tsc --noEmit",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "node scripts/run-migrate.mjs",
+    "db:migrate:kit": "drizzle-kit migrate",
+    "db:push": "drizzle-kit push",
+    "db:studio": "drizzle-kit studio",
+    "db:lint": "npx tsx src/scripts/schema-lint.ts",
+    "db:validate-registry": "npx tsx scripts/validate-registry.ts",
+    "db:validate-migration": "npx tsx scripts/validate-migration-safety.ts",
+    "db:validate-gates": "npx tsx scripts/validate-gates.ts",
+    "db:validate-query-plans": "npx tsx scripts/validate-query-plans.ts",
+    "db:check": "drizzle-kit check",
+    "db:export": "drizzle-kit export --config=drizzle.ci.config.ts",
+    "db:drizzle:ci": "node scripts/drizzle-migration-ci.mjs",
+    "db:drizzle:neon-guard": "node scripts/drizzle-neon-guard.mjs",
+    "db:bootstrap": "node scripts/bootstrap-neon.mjs",
+    "db:patch-migration-triggers": "node scripts/patch-migration-triggers.mjs",
+    "build:measure": "node scripts/measure-build-time.mjs"
+  },
+  "dependencies": {
+    "@neondatabase/serverless": "catalog:",
+    "drizzle-orm": "catalog:"
+  },
+  "devDependencies": {
+    "@testcontainers/postgresql": "catalog:",
+    "@types/node": "catalog:",
+    "@types/pg": "catalog:",
+    "afenda-eslint-config": "workspace:^",
+    "afenda-typescript-config": "workspace:*",
+    "dotenv": "catalog:",
+    "drizzle-kit": "catalog:",
+    "eslint": "catalog:",
+    "pg": "catalog:",
+    "postgres": "catalog:",
+    "testcontainers": "catalog:",
+    "tslib": "catalog:",
+    "tsup": "catalog:",
+    "tsx": "catalog:",
+    "typescript": "catalog:"
+  }
+}

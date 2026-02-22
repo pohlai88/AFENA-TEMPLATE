@@ -1,0 +1,479 @@
+{
+  "packVersion": "1.0",
+  "assembledAt": "2026-02-21T08:32:03.418Z",
+  "period": "2026-02",
+  "assembler": "finance-evidence-pack.mjs",
+  "ledgerSnapshot": {
+    "generatedAt": "2026-02-21T08:29:57.054Z",
+    "version": "1.0",
+    "summary": {
+      "total": 23,
+      "covered": 23,
+      "partial": 0,
+      "missing": 0,
+      "avgConfidence": 90,
+      "coveragePct": 100,
+      "weightedScore": 90
+    },
+    "requirementScores": [
+      {
+        "id": "FIN-BL-ISO-01",
+        "title": "Tenant isolation enforced on all finance tables",
+        "severity": "S0",
+        "weight": 5,
+        "confidence": 90,
+        "status": "covered",
+        "signals": {
+          "e1": true,
+          "e2": true,
+          "e3": true,
+          "e4": true,
+          "e5": true,
+          "e6": true,
+          "e7": false
+        }
+      },
+      {
+        "id": "FIN-BL-AUD-01",
+        "title": "Every mutation produces an auditable trail (who/what/when/why)",
+        "severity": "S0",
+        "weight": 5,
+        "confidence": 90,
+        "status": "covered",
+        "signals": {
+          "e1": true,
+          "e2": true,
+          "e3": true,
+          "e4": true,
+          "e5": true,
+          "e6": true,
+          "e7": false
+        }
+      },
+      {
+        "id": "FIN-MD-COA-01",
+        "title": "Published CoA versions are immutable; postings reference a version",
+        "severity": "S0",
+        "weight": 5,
+        "confidence": 90,
+        "status": "covered",
+        "signals": {
+          "e1": true,
+          "e2": true,
+          "e3": true,
+          "e4": true,
+          "e5": true,
+          "e6": true,
+          "e7": false
+        }
+      },
+      {
+        "id": "FIN-MD-PERIOD-01",
+        "title": "Period controls enforced (open/soft-close/hard-close/lock + overrides)",
+        "severity": "S0",
+        "weight": 5,
+        "confidence": 90,
+        "status": "covered",
+        "signals": {
+          "e1": true,
+          "e2": true,
+          "e3": true,
+          "e4": true,
+          "e5": true,
+          "e6": true,
+          "e7": false
+        }
+      },
+      {
+        "id": "FIN-MD-DIM-01",
+        "title": "Required dimensions enforced by rule (by account/doc type)",
+        "severity": "S0",
+        "weight": 5,
+        "confidence": 90,
+        "status": "covered",
+        "signals": {
+          "e1": true,
+          "e2": true,
+          "e3": true,
+          "e4": true,
+          "e5": true,
+          "e6": true,
+          "e7": false
+        }
+      },
+      {
+        "id": "FIN-GL-POST-01",
+        "title": "Posting is idempotent, atomic, and balanced-by-construction",
+        "severity": "S0",
+        "weight": 5,
+        "confidence": 90,
+        "status": "covered",
+        "signals": {
+          "e1": true,
+          "e2": true,
+          "e3": true,
+          "e4": true,
+          "e5": true,
+          "e6": true,
+          "e7": false
+        }
+      },
+      {
+        "id": "FIN-GL-IMMUT-01",
+        "title": "Posted entries are immutable; corrections only via reversal + new entry",
+        "severity": "S0",
+        "weight": 5,
+        "confidence": 90,
+        "status": "covered",
+        "signals": {
+          "e1": true,
+          "e2": true,
+          "e3": true,
+          "e4": true,
+          "e5": true,
+          "e6": true,
+          "e7": false
+        }
+      },
+      {
+        "id": "FIN-AP-INV-01",
+        "title": "AP invoice posting produces governed GL entries + approval chain",
+        "severity": "S0",
+        "weight": 5,
+        "confidence": 90,
+        "status": "covered",
+        "signals": {
+          "e1": true,
+          "e2": true,
+          "e3": true,
+          "e4": true,
+          "e5": true,
+          "e6": true,
+          "e7": false
+        }
+      },
+      {
+        "id": "FIN-AP-PAY-01",
+        "title": "Payments are controlled (maker-checker) and bank files are hashable",
+        "severity": "S0",
+        "weight": 5,
+        "confidence": 90,
+        "status": "covered",
+        "signals": {
+          "e1": true,
+          "e2": true,
+          "e3": true,
+          "e4": true,
+          "e5": true,
+          "e6": true,
+          "e7": false
+        }
+      },
+      {
+        "id": "FIN-AR-INV-01",
+        "title": "AR invoice posting generates GL entries, respects credit policy, traceable",
+        "severity": "S0",
+        "weight": 5,
+        "confidence": 90,
+        "status": "covered",
+        "signals": {
+          "e1": true,
+          "e2": true,
+          "e3": true,
+          "e4": true,
+          "e5": true,
+          "e6": true,
+          "e7": false
+        }
+      },
+      {
+        "id": "FIN-CB-REC-01",
+        "title": "Bank reconciliation sessions close immutably with full traceability",
+        "severity": "S1",
+        "weight": 4,
+        "confidence": 90,
+        "status": "covered",
+        "signals": {
+          "e1": true,
+          "e2": true,
+          "e3": true,
+          "e4": true,
+          "e5": true,
+          "e6": true,
+          "e7": false
+        }
+      },
+      {
+        "id": "FIN-FA-DEPR-01",
+        "title": "Depreciation runs are deterministic and post correctly to GL",
+        "severity": "S1",
+        "weight": 4,
+        "confidence": 90,
+        "status": "covered",
+        "signals": {
+          "e1": true,
+          "e2": true,
+          "e3": true,
+          "e4": true,
+          "e5": true,
+          "e6": true,
+          "e7": false
+        }
+      },
+      {
+        "id": "FIN-INV-VAL-01",
+        "title": "Inventory valuation events post to GL and reconcile to subledger",
+        "severity": "S1",
+        "weight": 4,
+        "confidence": 90,
+        "status": "covered",
+        "signals": {
+          "e1": true,
+          "e2": true,
+          "e3": true,
+          "e4": true,
+          "e5": true,
+          "e6": true,
+          "e7": false
+        }
+      },
+      {
+        "id": "FIN-TAX-CALC-01",
+        "title": "Tax calculation is correct, rounded deterministically, and mapped to accounts",
+        "severity": "S1",
+        "weight": 4,
+        "confidence": 90,
+        "status": "covered",
+        "signals": {
+          "e1": true,
+          "e2": true,
+          "e3": true,
+          "e4": true,
+          "e5": true,
+          "e6": true,
+          "e7": false
+        }
+      },
+      {
+        "id": "FIN-FX-REV-01",
+        "title": "FX revaluation runs are reproducible with rate snapshots and produce postings",
+        "severity": "S0",
+        "weight": 5,
+        "confidence": 90,
+        "status": "covered",
+        "signals": {
+          "e1": true,
+          "e2": true,
+          "e3": true,
+          "e4": true,
+          "e5": true,
+          "e6": true,
+          "e7": false
+        }
+      },
+      {
+        "id": "FIN-GRP-STRUCT-01",
+        "title": "Group structure is versioned by effective date; ownership changes auditable",
+        "severity": "S1",
+        "weight": 4,
+        "confidence": 90,
+        "status": "covered",
+        "signals": {
+          "e1": true,
+          "e2": true,
+          "e3": true,
+          "e4": true,
+          "e5": true,
+          "e6": true,
+          "e7": false
+        }
+      },
+      {
+        "id": "FIN-IC-MIRROR-01",
+        "title": "IC transactions are mirrored with shared references and auto-balancing",
+        "severity": "S0",
+        "weight": 5,
+        "confidence": 90,
+        "status": "covered",
+        "signals": {
+          "e1": true,
+          "e2": true,
+          "e3": true,
+          "e4": true,
+          "e5": true,
+          "e6": true,
+          "e7": false
+        }
+      },
+      {
+        "id": "FIN-CLOSE-PACK-01",
+        "title": "Close generates an evidence pack (TB, recons, run logs, approvals) and locks period",
+        "severity": "S0",
+        "weight": 5,
+        "confidence": 90,
+        "status": "covered",
+        "signals": {
+          "e1": true,
+          "e2": true,
+          "e3": true,
+          "e4": true,
+          "e5": true,
+          "e6": true,
+          "e7": false
+        }
+      },
+      {
+        "id": "FIN-REP-SNAP-01",
+        "title": "Statement snapshots are reproducible and drill-down is complete",
+        "severity": "S1",
+        "weight": 4,
+        "confidence": 90,
+        "status": "covered",
+        "signals": {
+          "e1": true,
+          "e2": true,
+          "e3": true,
+          "e4": true,
+          "e5": true,
+          "e6": true,
+          "e7": false
+        }
+      },
+      {
+        "id": "FIN-CTRL-SOD-01",
+        "title": "Segregation of Duties enforced for posting, payments, close locks",
+        "severity": "S0",
+        "weight": 5,
+        "confidence": 90,
+        "status": "covered",
+        "signals": {
+          "e1": true,
+          "e2": true,
+          "e3": true,
+          "e4": true,
+          "e5": true,
+          "e6": true,
+          "e7": false
+        }
+      },
+      {
+        "id": "FIN-MG-ADJ-01",
+        "title": "Adjustments are isolated by book/ledger and variance reporting exists",
+        "severity": "S1",
+        "weight": 4,
+        "confidence": 90,
+        "status": "covered",
+        "signals": {
+          "e1": true,
+          "e2": true,
+          "e3": true,
+          "e4": true,
+          "e5": true,
+          "e6": true,
+          "e7": false
+        }
+      },
+      {
+        "id": "FIN-INT-OUTBOX-01",
+        "title": "Outbox-driven integration is replay-safe and idempotent",
+        "severity": "S0",
+        "weight": 5,
+        "confidence": 90,
+        "status": "covered",
+        "signals": {
+          "e1": true,
+          "e2": true,
+          "e3": true,
+          "e4": true,
+          "e5": true,
+          "e6": true,
+          "e7": false
+        }
+      },
+      {
+        "id": "FIN-OPS-SLA-01",
+        "title": "Posting and close meet performance baselines with observability",
+        "severity": "S2",
+        "weight": 3,
+        "confidence": 90,
+        "status": "covered",
+        "signals": {
+          "e1": true,
+          "e2": true,
+          "e3": true,
+          "e4": true,
+          "e5": true,
+          "e6": true,
+          "e7": false
+        }
+      }
+    ]
+  },
+  "gateResults": {
+    "FAR-01": {
+      "name": "S0 requirements ≥ partial",
+      "result": "pass",
+      "detail": "0 S0 missing"
+    },
+    "FAR-02": {
+      "name": "High-weight not missing",
+      "result": "pass",
+      "detail": "0 high-weight missing"
+    },
+    "FAR-03": {
+      "name": "Avg confidence ≥ 25",
+      "result": "pass",
+      "detail": "avg=90"
+    },
+    "FAR-04": {
+      "name": "Unique requirement IDs",
+      "result": "pass",
+      "detail": "0 duplicates"
+    },
+    "FAR-05": {
+      "name": "Non-empty sections",
+      "result": "pass",
+      "detail": "0 empty"
+    },
+    "FAR-06": {
+      "name": "Global gates referenced",
+      "result": "pass",
+      "detail": "checked by ci-finance-audit-gate"
+    }
+  },
+  "schemaIntegrity": {
+    "checksumAlgorithm": "sha256",
+    "files": {
+      "journal-entries.ts": "459b7f5f3842f8e2e6472cb858054cdf232ec1e55a72a136d86ec01796baf8da",
+      "journal-lines.ts": "283b1fcf490164d8bbbe1074e7113e028e278524609c4dbfee0931dadbc5dbad",
+      "ledgers.ts": "bdfd7695c9a6bf3d3aedb1c99a895fda38690ddbc2e8b20ba5186592b7b4bf78",
+      "fiscal-periods.ts": "7812a0f7bbb8adf7e6f2da50a07293318aa1acff212f52857cd9cb884e8a0cdc",
+      "chart-of-accounts.ts": "f100eaf6359efb27a177a25d5d906d34d211b1c33b123f791d7894444f2a1ae0",
+      "audit-logs.ts": "7ab81feedc8c0a20b16ceecd3a513286a840cda389e13b8e7287b999ca4d36ec",
+      "companies.ts": "5c35aa8007a3269280744bacb3e2805cca526d65667f61e7f4520042c1b13af2",
+      "fx-rates.ts": "2392cca79bc73c1c47969b6d0b4e43c1ef484c59bcf015e9ceb63126e701dd6b",
+      "tax-rates.ts": "08813c8b276c43f8b68b412ac3336fde038f665227eb9b03f37af243e5b9a962",
+      "assets.ts": "cf740cdcf07b5e40c3393059bc5ff1cf19b22a87e888eeecf5787fd5970688ff",
+      "fixed-assets.ts": "acab24dd0b2b52564f1ca95980c48e3a94ae9aa1befe091c390ecbc8990f4a60",
+      "payment-allocations.ts": "68c6f843dd337af99f0b890d06f779181ccbc03a2ab94886d6eebcb8aaf1f32c",
+      "reconciliation-items.ts": "ad87b8d5c77c27d609d780d58e5dcc9e316a1bcdb6d9cde6cf9b8842d5325a40",
+      "bank-statements.ts": "b23c756f552a2071bf27f79447959703f916037fa7b430e0b2acc385a46b9fc8",
+      "close-tasks.ts": "d4cb96d72eb47116bd5071866c6e3988e5ca04d5b71c8c9a57df3071eeea9a10",
+      "close-evidence.ts": "153caa38a584a659db6cf8431354bcdab362283d5a20ee44a2ad2cce2c1822e8",
+      "acct-events.ts": "6211a7355f4c3e44431c46f37286ca46e6507758975474054d50fda3bbd89bff",
+      "acct-derived-entries.ts": "b3f0e5ca19c7e0434bf15586336f38b8e28a69424b4d9d8132abea4a6738b423",
+      "acct-mappings.ts": "15415a402da31e6d46164d644577a5c982d043bea6313bb1b2260c510597a7ef",
+      "acct-mapping-versions.ts": "fe07459f319caa579508a139dff858f09be00ebb829ab43d5281425780bc16f0"
+    },
+    "fileCount": 20
+  },
+  "migrationIntegrity": {
+    "journalHash": "cf4d15ce1a264fff49198654409f2485270673bda323ab8ddcfcd7d7c7377af5",
+    "entryCount": 1,
+    "latestTag": "0000_0000_baseline",
+    "migrationHashes": {
+      "0000_0000_baseline": "c2348d8609b89f2c0106297e0a1d0d92545f2c15a9b001c90d1374dd6694bb4a"
+    }
+  },
+  "packChecksum": "9fdea1b368fd9342c8e1af228a02c51e3020621c6938dabcc2dd2e0d195756b1"
+}

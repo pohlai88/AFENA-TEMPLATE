@@ -1,0 +1,49 @@
+name: SBOM
+run-name: SBOM (${{ github.event_name }})
+
+permissions:
+  contents: read
+
+on:
+  release:
+    types: [published]
+  schedule:
+    - cron: "0 6 * * 1" # Weekly Monday 6am UTC
+  workflow_dispatch:
+
+jobs:
+  afenda-sbom:
+    name: Generate SBOM
+    timeout-minutes: 10
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: "pnpm"
+
+      - name: Install dependencies (frozen lockfile)
+        run: pnpm install --frozen-lockfile
+
+      - name: Generate CycloneDX SBOM
+        run: pnpm dlx @cyclonedx/cdxgen -r --no-install-deps -o sbom.json
+
+      - name: Generate SHA-256 checksum
+        run: sha256sum sbom.json > sbom.sha256
+
+      - name: Upload SBOM artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: sbom-${{ github.sha }}
+          path: |
+            sbom.json
+            sbom.sha256
+          retention-days: 90

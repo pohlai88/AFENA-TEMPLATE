@@ -1,0 +1,37 @@
+---
+description: Prefer vitest-mcp tools for test runs and coverage analysis
+globs: "**/*.test.{ts,tsx}"
+alwaysApply: false
+---
+
+# Vitest MCP — Prefer MCP Over Raw Commands
+
+When running tests, debugging failures, or analyzing coverage, **use vitest-mcp tools** (via `@djankies/vitest-mcp`) instead of raw `pnpm test` or `npx vitest run`.
+
+## Initialization
+
+Before using MCP tools, call `set_project_root` with the absolute path to the monorepo root. On Windows, use forward slashes:
+
+- `C:/AI-BOS/AFENDA-NEXUS`
+
+## Prefer
+
+- `set_project_root` → `run_tests({ target: "./packages/crud", grep: "cursor" })` for scoped runs
+- `analyze_coverage({ project: "crud" })` for coverage gap analysis
+- `list_tests()` for test discovery
+
+## Avoid (when MCP available)
+
+- `pnpm test` or `npx vitest run` for debugging specific files — use MCP for scoped runs
+- Manual coverage inspection when `analyze_coverage` can surface gaps
+
+## When to use manual commands
+
+- CI/CD pipelines (`pnpm test`, `pnpm test:coverage`)
+- Full suite runs for coverage thresholds
+- User explicitly requests terminal commands
+
+## Reference
+
+- [vitest-mcp](https://github.com/djankies/vitest-mcp)
+- `.windsurf/skills/vitest-testing/SKILL.md` (full testing guide)

@@ -1,0 +1,93 @@
+# Windsurf AI Assistant Rules
+
+## Document Creation Rules
+
+### Rule 1: No Unauthorized Document Creation
+- **CRITICAL:** You are NOT ALLOWED to create, save, or write any documents at any location without explicit user approval
+- Before creating ANY file, you MUST:
+  1. Ask the user for permission
+  2. Show the proposed file path
+  3. Show the proposed content (or summary if large)
+  4. Wait for explicit approval
+- This applies to:
+  - Markdown files (.md)
+  - Code files (.ts, .js, .tsx, .jsx, etc.)
+  - Configuration files (.json, .yaml, .config.*, etc.)
+  - Documentation files
+  - Test files
+  - ANY file type
+
+### Rule 2: No Unauthorized Summaries
+- **CRITICAL:** You are NOT ALLOWED to create summary documents without explicit user approval
+- This includes:
+  - SUMMARY.md files
+  - IMPLEMENTATION-SUMMARY.md files
+  - Any file with "summary" in the name
+  - Checkpoint documents
+  - Progress reports
+- Before creating any summary:
+  1. Ask the user if they want a summary
+  2. Get explicit approval
+  3. Only then create the summary
+
+## Directory Management Rules
+
+### Rule 3: Respect Module Structure
+- You are ONLY ALLOWED to create files in directories that are documented in `docs/architecture/module-structure.md`
+- If a directory is not shown in the module structure documentation:
+  - You are NOT ALLOWED to create it
+  - You MUST update the documentation first
+  - Get user approval for the documentation change
+  - Only then create the directory
+
+### Rule 4: Maintain Clean Directory Structure
+- Before creating any file:
+  1. Verify the target directory exists in module-structure.md
+  2. Verify the file belongs in that directory
+  3. Check for existing files that might need to be moved
+- After creating files:
+  1. Verify all files are in their correct locations
+  2. Move misplaced files to correct directories
+  3. Clean up any empty or incorrect directories
+
+## Test File Rules
+
+### Rule 5: Dedicated Test Subdirectory
+- Test files MUST be placed in dedicated `__tests__/` subdirectories
+- Test file naming: `{name}.test.ts` or `{name}.spec.ts`
+- Test files are NOT ALLOWED in the same directory as source files (except for simple value objects)
+- Structure:
+  ```
+  domain/
+  ├── services/
+  │   ├── service-name.ts
+  │   └── __tests__/
+  │       └── service-name.test.ts
+  ├── policies/
+  │   ├── policy-name.ts
+  │   └── __tests__/
+  │       └── policy-name.test.ts
+  ```
+
+### Rule 6: Mock Files Location
+- Mock implementations MUST be in `__mocks__/` subdirectories
+- Location: `domain/ports/__mocks__/`
+- Naming: `{interface-name}.mock.ts`
+
+## Enforcement
+
+These rules are MANDATORY and MUST be followed at all times. Violation of these rules is not acceptable.
+
+If you are unsure whether an action violates these rules:
+1. STOP
+2. Ask the user for clarification
+3. Wait for explicit approval
+
+## Exceptions
+
+The ONLY exception to these rules is when the user explicitly says:
+- "Proceed without asking"
+- "Auto-approve all changes"
+- "Skip approval for this session"
+
+Otherwise, ALWAYS ask for approval before creating files.

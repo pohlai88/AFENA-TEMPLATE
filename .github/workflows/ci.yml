@@ -1,0 +1,265 @@
+name: CI
+run-name: CI on ${{ github.ref }} (${{ github.event_name }})
+
+permissions:
+  contents: read
+
+on:
+  push:
+    branches: ['main']
+    paths-ignore:
+      - '**.md'
+      - 'docs/**'
+      - '.agents/**'
+  pull_request:
+    types: [opened, synchronize]
+    paths-ignore:
+      - '**.md'
+      - 'docs/**'
+      - '.agents/**'
+
+concurrency:
+  group: ci-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  afenda-ci:
+    name: Build
+    timeout-minutes: 15
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    env:
+      # Disable TUI alternate buffer for output capture in CI
+      TURBO_UI: stream
+      # Dummy values — Next.js evaluates API route modules at build time.
+      # Modules that throw at import time need valid-looking placeholders.
+      DATABASE_URL: 'postgresql://ci:ci@ci-placeholder.neon.tech/neondb?sslmode=verify-full'
+      NEON_AUTH_BASE_URL: 'https://ci-placeholder.neon.tech'
+      NEON_AUTH_COOKIE_SECRET: 'ci-placeholder-secret-32chars-minimum'
+      # Vercel Remote Cache (set TURBO_TOKEN + TURBO_TEAM in repo secrets/vars)
+      TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+      TURBO_TEAM: ${{ vars.TURBO_TEAM }}
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
+
+      - name: Install dependencies (frozen lockfile)
+        run: pnpm install --frozen-lockfile
+
+      - name: Cache Turborepo
+        uses: actions/cache@v4
+        with:
+          path: .turbo
+          key: ${{ runner.os }}-turbo-${{ hashFiles('pnpm-lock.yaml', 'turbo.json') }}
+          restore-keys: ${{ runner.os }}-turbo-
+
+      - name: Set base SHA for affected detection
+        id: base
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            git fetch origin ${{ github.event.pull_request.base.ref }} 2>/dev/null || true
+            BASE=$(git merge-base origin/${{ github.event.pull_request.base.ref }} HEAD 2>/dev/null || echo "")
+          else
+            BASE="${{ github.event.before }}"
+          fi
+          if [ -z "$BASE" ] || [ "${BASE}" = "0000000000000000000000000000000000000000" ]; then
+            echo "filter=" >> $GITHUB_OUTPUT
+            echo "use_filter=false" >> $GITHUB_OUTPUT
+          else
+            echo "filter=...[${BASE}...HEAD]" >> $GITHUB_OUTPUT
+            echo "use_filter=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Job summary (scope)
+        run: |
+          echo "### CI Scope" >> $GITHUB_STEP_SUMMARY
+          if [ "${{ steps.base.outputs.use_filter }}" = "true" ]; then
+            echo "- **Mode:** Affected-only (\`${{ steps.base.outputs.filter }}\`)" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "- **Mode:** Full monorepo (no base SHA)" >> $GITHUB_STEP_SUMMARY
+          fi
+
+      - name: Build (affected)
+        run: |
+          if [ "${{ steps.base.outputs.use_filter }}" = "true" ]; then
+            pnpm exec turbo run build --filter="${{ steps.base.outputs.filter }}"
+          else
+            pnpm build
+          fi
+
+      - name: Unit tests with coverage (affected)
+        env:
+          NODE_ENV: test
+          TEST_DATABASE_URL: 'postgresql://ci:ci@ci-placeholder.neon.tech/neondb?sslmode=verify-full'
+        run: |
+          if [ "${{ steps.base.outputs.use_filter }}" = "true" ]; then
+            pnpm exec turbo run test --filter="${{ steps.base.outputs.filter }}"
+          fi
+          pnpm --filter afenda-crud test:coverage
+          pnpm test:coverage
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: ./coverage/coverage-final.json
+          flags: unittests
+          name: afenda-coverage
+          fail_ci_if_error: false
+          verbose: true
+
+      - name: Coverage summary comment
+        if: github.event_name == 'pull_request'
+        uses: romeovs/lcov-reporter-action@v0.3.1
+        with:
+          lcov-file: ./coverage/lcov.info
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          delete-old-comments: true
+
+      - name: Lint (affected)
+        run: |
+          if [ "${{ steps.base.outputs.use_filter }}" = "true" ]; then
+            pnpm exec turbo run lint:ci --filter="${{ steps.base.outputs.filter }}"
+          else
+            pnpm lint:ci
+          fi
+
+      - name: Type check (affected)
+        run: |
+          if [ "${{ steps.base.outputs.use_filter }}" = "true" ]; then
+            pnpm exec turbo run type-check --filter="${{ steps.base.outputs.filter }}"
+          else
+            pnpm type-check
+          fi
+
+      - name: CI invariants
+        run: pnpm ci:invariants
+
+      - name: DB barrel + registry (Gate 7)
+        run: pnpm --filter afenda-database db:barrel
+
+      - name: DB schema lint (Gate 0 + schema rules)
+        run: pnpm --filter afenda-database db:lint
+
+      - name: Drizzle migration gates (MIG-DRZ-01..04)
+        run: pnpm --filter afenda-database db:drizzle:ci
+
+      - name: Generated files up to date (Gate 7 diff)
+        run: |
+          git diff --exit-code packages/database/src/schema/index.ts \
+            packages/database/src/schema/__schema-manifest.ts \
+            packages/database/src/schema/_registry.ts || (
+            echo "::error::Generated schema files are stale. Run 'pnpm --filter afenda-database db:barrel' and commit."
+            exit 1
+          )
+
+      - name: Adapter gates (N2 contract, spine denylist)
+        run: pnpm ci:adapter-gates
+
+      - name: Domain CI gates (SK-01 through SK-08)
+        run: pnpm ci:domain-gates
+
+      - name: AIS Benchmark gates (AIS-01 through AIS-06)
+        run: pnpm ci:ais-benchmark
+
+  afenda-e2e:
+    name: E2E Tests
+    timeout-minutes: 30
+    runs-on: ubuntu-latest
+    needs: afenda-ci
+    env:
+      TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+      TURBO_TEAM: ${{ vars.TURBO_TEAM }}
+      DATABASE_URL: 'postgresql://ci:ci@ci-placeholder.neon.tech/neondb?sslmode=verify-full'
+      NEON_AUTH_BASE_URL: 'https://ci-placeholder.neon.tech'
+      NEON_AUTH_COOKIE_SECRET: 'ci-placeholder-secret-32chars-minimum'
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
+
+      - name: Install dependencies (frozen lockfile)
+        run: pnpm install --frozen-lockfile
+
+      - name: Cache Turborepo
+        uses: actions/cache@v4
+        with:
+          path: .turbo
+          key: ${{ runner.os }}-turbo-${{ hashFiles('pnpm-lock.yaml', 'turbo.json') }}
+          restore-keys: ${{ runner.os }}-turbo-
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+
+      - name: Build
+        run: pnpm build
+
+      - name: Run E2E tests
+        run: pnpm test:e2e
+        continue-on-error: true
+
+      - name: Upload Playwright report
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 7
+
+      - name: Upload test results
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: e2e-test-results
+          path: test-results/
+          retention-days: 7
+
+  afenda-audit:
+    name: Dependency Audit
+    timeout-minutes: 5
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
+
+      - name: Install dependencies (frozen lockfile)
+        run: pnpm install --frozen-lockfile
+
+      - name: Audit production dependencies
+        run: pnpm audit --prod --audit-level=moderate
+        continue-on-error: true
+        # Known transitive vuln: fastify <5.7.2 via @neondatabase/neon-js beta.
+        # Non-blocking until Neon publishes a fix. Remove continue-on-error when resolved.

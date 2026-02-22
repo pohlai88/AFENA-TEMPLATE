@@ -1,0 +1,87 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "Quality Plugins Configuration",
+    "description": "Configuration for quality metrics plugin system",
+    "type": "object",
+    "properties": {
+        "enabled": {
+            "type": "boolean",
+            "description": "Enable or disable the entire plugin system",
+            "default": true
+        },
+        "pluginsDir": {
+            "type": "string",
+            "description": "Directory to discover plugins from",
+            "default": "tools/quality-metrics/plugins"
+        },
+        "timeout": {
+            "type": "number",
+            "description": "Plugin execution timeout in milliseconds",
+            "default": 30000,
+            "minimum": 1000,
+            "maximum": 300000
+        },
+        "plugins": {
+            "type": "object",
+            "description": "Individual plugin configurations",
+            "additionalProperties": {
+                "type": "object",
+                "properties": {
+                    "enabled": {
+                        "type": "boolean",
+                        "description": "Enable or disable this specific plugin",
+                        "default": true
+                    },
+                    "config": {
+                        "type": "object",
+                        "description": "Plugin-specific configuration",
+                        "additionalProperties": true
+                    }
+                }
+            }
+        },
+        "database": {
+            "type": "object",
+            "description": "Database integration settings",
+            "properties": {
+                "enabled": {
+                    "type": "boolean",
+                    "description": "Enable database storage for plugin metrics",
+                    "default": true
+                },
+                "savePluginMetrics": {
+                    "type": "boolean",
+                    "description": "Save plugin metric results to database",
+                    "default": true
+                },
+                "tableName": {
+                    "type": "string",
+                    "description": "Database table name for plugin metrics",
+                    "default": "quality_plugin_metrics"
+                }
+            }
+        }
+    },
+    "required": [],
+    "additionalProperties": false,
+    "examples": [
+        {
+            "enabled": true,
+            "pluginsDir": "tools/quality-metrics/plugins",
+            "timeout": 30000,
+            "plugins": {
+                "code-smells": {
+                    "enabled": true,
+                    "config": {
+                        "maxFunctionLength": 50,
+                        "maxNestingLevel": 4
+                    }
+                }
+            },
+            "database": {
+                "enabled": true,
+                "savePluginMetrics": true
+            }
+        }
+    ]
+}

@@ -1,0 +1,39 @@
+{
+  "timestamp": "2026-02-17T08:17:06.556Z",
+  "overallHealth": "fair",
+  "healthScore": 60,
+  "insights": [
+    {
+      "id": "low-coverage",
+      "category": "quality",
+      "priority": "critical",
+      "title": "Test Coverage Below Target (0.0%)",
+      "description": "Line coverage is below the recommended 80% threshold.",
+      "impact": "Untested code increases bug risk and reduces confidence in deployments.",
+      "recommendation": "Focus on testing critical business logic, edge cases, and recent changes. Aim for 80%+ coverage.",
+      "detectedAt": "2026-02-17T08:08:55.139Z"
+    },
+    {
+      "id": "low-branch-coverage",
+      "category": "quality",
+      "priority": "medium",
+      "title": "Branch Coverage Below Target (0.0%)",
+      "description": "Branch coverage measures how well conditional logic is tested.",
+      "impact": "Untested branches can hide bugs in error handling and edge cases.",
+      "recommendation": "Test both success and failure paths. Add tests for error conditions and edge cases.",
+      "detectedAt": "2026-02-17T08:08:55.139Z"
+    }
+  ],
+  "topPriorities": [
+    {
+      "id": "low-coverage",
+      "category": "quality",
+      "priority": "critical",
+      "title": "Test Coverage Below Target (0.0%)",
+      "description": "Line coverage is below the recommended 80% threshold.",
+      "impact": "Untested code increases bug risk and reduces confidence in deployments.",
+      "recommendation": "Focus on testing critical business logic, edge cases, and recent changes. Aim for 80%+ coverage.",
+      "detectedAt": "2026-02-17T08:08:55.139Z"
+    }
+  ]
+}

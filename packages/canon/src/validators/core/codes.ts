@@ -1,0 +1,61 @@
+/**
+ * Validation Error Codes
+ * 
+ * Machine-readable error codes for structured validation reporting.
+ * All validators must use these constants (no ad-hoc strings).
+ */
+
+export const VAL_CODES = {
+  // Type errors
+  TYPE_MISMATCH: 'VAL_TYPE_MISMATCH',
+  INVALID_FORMAT: 'VAL_INVALID_FORMAT',
+  UNKNOWN_DATA_TYPE: 'VAL_UNKNOWN_DATA_TYPE',
+
+  // String errors
+  STRING_TOO_SHORT: 'VAL_STRING_TOO_SHORT',
+  STRING_TOO_LONG: 'VAL_STRING_TOO_LONG',
+  STRING_PATTERN_MISMATCH: 'VAL_STRING_PATTERN_MISMATCH',
+  STRING_NOT_ASCII: 'VAL_STRING_NOT_ASCII',
+  STRING_NOT_SLUG: 'VAL_STRING_NOT_SLUG',
+
+  // Number errors
+  NUMBER_TOO_SMALL: 'VAL_NUMBER_TOO_SMALL',
+  NUMBER_TOO_LARGE: 'VAL_NUMBER_TOO_LARGE',
+  NUMBER_NOT_INTEGER: 'VAL_NUMBER_NOT_INTEGER',
+  NUMBER_PRECISION_EXCEEDED: 'VAL_NUMBER_PRECISION_EXCEEDED',
+  NUMBER_SCALE_EXCEEDED: 'VAL_NUMBER_SCALE_EXCEEDED',
+
+  // Temporal errors
+  DATE_INVALID_FORMAT: 'VAL_DATE_INVALID_FORMAT',
+  DATE_OUT_OF_RANGE: 'VAL_DATE_OUT_OF_RANGE',
+  DATETIME_INVALID_FORMAT: 'VAL_DATETIME_INVALID_FORMAT',
+
+  // Enum errors
+  ENUM_INVALID_CHOICE: 'VAL_ENUM_INVALID_CHOICE',
+  ENUM_TOO_MANY_SELECTIONS: 'VAL_ENUM_TOO_MANY_SELECTIONS',
+
+  // Reference errors
+  REF_INVALID_UUID: 'VAL_REF_INVALID_UUID',
+  REF_INVALID_ENTITY_REF: 'VAL_REF_INVALID_ENTITY_REF',
+
+  // JSON errors
+  JSON_INVALID_STRUCTURE: 'VAL_JSON_INVALID_STRUCTURE',
+  JSON_NOT_SERIALIZABLE: 'VAL_JSON_NOT_SERIALIZABLE',
+  JSON_CIRCULAR_REFERENCE: 'VAL_JSON_CIRCULAR_REFERENCE',
+
+  // Array errors
+  ARRAY_TOO_SHORT: 'VAL_ARRAY_TOO_SHORT',
+  ARRAY_TOO_LONG: 'VAL_ARRAY_TOO_LONG',
+
+  // Required field errors
+  REQUIRED_FIELD_MISSING: 'VAL_REQUIRED_FIELD_MISSING',
+} as const;
+
+export type ValidationCode = (typeof VAL_CODES)[keyof typeof VAL_CODES];
+
+/**
+ * Check if a string is a valid validation code
+ */
+export function isValidationCode(code: string): code is ValidationCode {
+  return Object.values(VAL_CODES).includes(code as ValidationCode);
+}

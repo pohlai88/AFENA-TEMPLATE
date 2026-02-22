@@ -1,0 +1,186 @@
+name: Database Gates Validation
+run-name: Database Gates on ${{ github.ref }} (${{ github.event_name }})
+
+permissions:
+  contents: read
+
+on:
+  pull_request:
+    paths:
+      - 'packages/database/**'
+      - 'packages/workers/**'
+      - 'apps/**'
+  push:
+    branches:
+      - main
+      - develop
+    paths:
+      - 'packages/database/**'
+
+jobs:
+  validate-gates:
+    name: Validate Architectural Gates
+    runs-on: ubuntu-latest
+    env:
+      TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+      TURBO_TEAM: ${{ vars.TURBO_TEAM }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Cache Turborepo
+        uses: actions/cache@v4
+        with:
+          path: .turbo
+          key: ${{ runner.os }}-turbo-${{ hashFiles('pnpm-lock.yaml', 'turbo.json') }}
+          restore-keys: ${{ runner.os }}-turbo-
+
+      - name: Build
+        run: pnpm build
+
+      - name: Validate Table Registry
+        run: pnpm --filter afenda-database db:validate-registry
+
+      - name: Validate All Gates
+        run: pnpm --filter afenda-database db:validate-gates
+
+      - name: ESLint - Check Database Access
+        run: pnpm --filter afenda-database lint
+
+      - name: Type Check
+        run: pnpm --filter afenda-database type-check
+
+  drizzle-migration-gates:
+    name: Drizzle Migration Gates (Offline)
+    runs-on: ubuntu-latest
+    env:
+      TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+      TURBO_TEAM: ${{ vars.TURBO_TEAM }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Cache Turborepo
+        uses: actions/cache@v4
+        with:
+          path: .turbo
+          key: ${{ runner.os }}-turbo-${{ hashFiles('pnpm-lock.yaml', 'turbo.json') }}
+          restore-keys: ${{ runner.os }}-turbo-
+
+      - name: Build
+        run: pnpm build
+
+      - name: Drizzle offline gates (MIG-DRZ-01..04 + Gate A + Gate B)
+        run: pnpm --filter afenda-database db:drizzle:ci
+
+      - name: Validate migration safety (changed files)
+        id: changed-migrations
+        uses: tj-actions/changed-files@v44
+        with:
+          files: packages/database/drizzle/**/*.sql
+
+      - name: Run migration safety validator
+        if: steps.changed-migrations.outputs.any_changed == 'true'
+        run: |
+          for file in ${{ steps.changed-migrations.outputs.all_changed_files }}; do
+            echo "Validating $file..."
+            pnpm --filter afenda-database db:validate-migration "$file"
+          done
+
+  drizzle-neon-guard:
+    name: Drizzle Neon Guard (Online)
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    env:
+      TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+      TURBO_TEAM: ${{ vars.TURBO_TEAM }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Cache Turborepo
+        uses: actions/cache@v4
+        with:
+          path: .turbo
+          key: ${{ runner.os }}-turbo-${{ hashFiles('pnpm-lock.yaml', 'turbo.json') }}
+          restore-keys: ${{ runner.os }}-turbo-
+
+      - name: Build
+        run: pnpm build
+
+      - name: Drizzle Neon guard (MIG-DRZ-05a/b/c + MIG-DRZ-06)
+        env:
+          DATABASE_URL_MIGRATIONS: ${{ secrets.DATABASE_URL_MIGRATIONS }}
+          NEON_API_KEY: ${{ secrets.NEON_API_KEY }}
+          NEON_PROJECT_ID: ${{ secrets.NEON_PROJECT_ID }}
+        run: pnpm --filter afenda-database db:drizzle:neon-guard
+
+  ownership-check:
+    name: Check Database Ownership
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Check ownership (requires DATABASE_URL)
+        if: env.DATABASE_URL != ''
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: |
+          echo "Checking database ownership..."
+          psql $DATABASE_URL -f packages/database/scripts/normalize-ownership.sql --dry-run || true

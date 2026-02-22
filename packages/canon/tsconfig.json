@@ -1,0 +1,19 @@
+{
+  "extends": "afenda-typescript-config/react-library.json",
+  "compilerOptions": {
+    "composite": true,
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "tsBuildInfoFile": "./dist/.tsbuildinfo"
+  },
+  "include": [
+    "src/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "build",
+    "**/*.test.*",
+    "**/*.spec.*"
+  ]
+}

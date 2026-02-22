@@ -1,0 +1,29 @@
+{
+  "name": "afenda-workflow",
+  "version": "0.1.0",
+  "private": true,
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx --cache --concurrency=auto",
+    "lint:ci": "eslint . --ext .js,.jsx,.ts,.tsx --rule 'import/no-cycle: error'",
+    "lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx --cache --fix",
+    "type-check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "afenda-canon": "workspace:*",
+    "afenda-database": "workspace:*",
+    "drizzle-orm": "catalog:",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@types/node": "catalog:",
+    "afenda-eslint-config": "workspace:^",
+    "afenda-typescript-config": "workspace:*",
+    "tslib": "catalog:",
+    "tsup": "catalog:",
+    "typescript": "catalog:"
+  }
+}

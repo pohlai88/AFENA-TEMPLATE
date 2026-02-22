@@ -1,0 +1,157 @@
+# afenda UI Design System — Architecture Reference
+
+> **Auto-generated** by `afenda readme gen` at 2026-02-22T03:55:55Z. Do not edit — regenerate instead.
+> **Package:** `afenda-ui` (`packages/ui`)
+> **Purpose:** Four-layer design system: Engine tokens → CSS bridge → shadcn/ui primitives → App shell.
+
+---
+
+## 1. Architecture Overview
+
+Layer 0 (Engine): `tailwindengine.json` → codegen → CSS custom properties.
+Layer 1 (Bridge): `globals.css` maps engine tokens → shadcn semantic variables.
+Layer 2 (Components): 56 shadcn/ui primitives + custom hooks + utility lib.
+Layer 3 (App Shell): Sidebar, header, breadcrumbs, command palette, auth UI.
+
+Zero-drift constraints: no hardcoded colors, no client-invented actions, no `console.*`,
+no `'use client'` in pages/layouts.
+
+---
+
+## 2. Key Design Decisions
+
+- **Tailwind v4**: `@theme inline` registers `--color-*` for utility classes
+- **shadcn/ui**: new-york style, Radix UI unified package
+- **Token bridge**: Engine tokens → bare CSS vars (shadcn) + `@theme inline` (Tailwind v4)
+- **Glass utility**: Dark-mode-aware in `@layer utilities` (not `@utility`)
+- **Button polish**: Transition, shadow, lift on hover, press scale (both modes)
+- **Import aliases**: `afenda-ui/components` and `afenda-ui/lib/utils` in app workspace
+
+---
+
+## 3. Package Structure (live)
+
+| Metric | Value |
+| ------ | ----- |
+| **Source files** | 97 |
+| **Test files** | 0 |
+| **Source directories** | components, hooks, lib, providers |
+
+```
+packages/ui/src/
+├── components/
+├── hooks/
+├── lib/
+├── providers/
+```
+
+---
+
+## 4. Public API (barrel exports)
+
+### Value Exports
+
+| Export | Source |
+| ------ | ------ |
+| `Providers` | `./providers` |
+| `ThemeProvider` | `./providers` |
+| `ToasterProvider` | `./providers` |
+| `GlobalTooltipProvider` | `./providers` |
+| `cn` | `./lib/utils` |
+| `cva` | `./lib/utils` |
+| `type VariantProps` | `./lib/utils` |
+| `dataSlot` | `./lib/utils` |
+| `cssVars` | `./lib/utils` |
+| `pickDataAttributes` | `./lib/utils` |
+| `composeRefs` | `./lib/compose-refs` |
+| `useComposedRefs` | `./lib/compose-refs` |
+| `composeEventHandlers` | `./lib/compose-event-handlers` |
+| `Keys` | `./lib/keyboard` |
+| `isKey` | `./lib/keyboard` |
+| `isPrintableKey` | `./lib/keyboard` |
+| `invariant` | `./lib/assertion` |
+| `isDefined` | `./lib/assertion` |
+| `isNonEmptyString` | `./lib/assertion` |
+| `isPlainObject` | `./lib/assertion` |
+| `isReactElement` | `./lib/assertion` |
+| `canUseDOM` | `./lib/dom` |
+| `getOwnerDocument` | `./lib/dom` |
+| `getOwnerWindow` | `./lib/dom` |
+| `getActiveElement` | `./lib/dom` |
+| `contains` | `./lib/dom` |
+| `getFocusableElements` | `./lib/dom` |
+| `scrollIntoViewIfNeeded` | `./lib/dom` |
+| `formatNumber` | `./lib/format` |
+| `formatCurrency` | `./lib/format` |
+| `formatCompact` | `./lib/format` |
+| `formatRelativeTime` | `./lib/format` |
+| `formatFileSize` | `./lib/format` |
+| `truncate` | `./lib/format` |
+| `getInitials` | `./lib/format` |
+| `generateId` | `./lib/aria` |
+| `ariaDescribedBy` | `./lib/aria` |
+| `ariaDisclosureTrigger` | `./lib/aria` |
+| `ariaLiveRegion` | `./lib/aria` |
+| `ariaSortColumn` | `./lib/aria` |
+| `ariaCountLabel` | `./lib/aria` |
+| `cssVar` | `./lib/color` |
+| `withOpacity` | `./lib/color` |
+| `getComputedCSSVar` | `./lib/color` |
+| `setCSSVar` | `./lib/color` |
+| `removeCSSVar` | `./lib/color` |
+
+### Type Exports
+
+| Type | Source |
+| ---- | ------ |
+| `ComponentProps` | `./lib/types` |
+| `PolymorphicProps` | `./lib/types` |
+| `RequiredKeys` | `./lib/types` |
+| `OptionalKeys` | `./lib/types` |
+| `ValueOf` | `./lib/types` |
+| `DeepReadonly` | `./lib/types` |
+| `DeepPartial` | `./lib/types` |
+| `StrictOmit` | `./lib/types` |
+| `Merge` | `./lib/types` |
+
+---
+
+## 5. Dependencies
+
+### Internal (workspace)
+
+- `afenda-eslint-config`
+- `afenda-typescript-config`
+
+### External
+
+| Package | Version |
+| ------- | ------- |
+| `@base-ui/react` | `catalog:` |
+| `@hookform/resolvers` | `catalog:` |
+| `@tanstack/react-table` | `catalog:` |
+| `class-variance-authority` | `catalog:` |
+| `clsx` | `catalog:` |
+| `cmdk` | `catalog:` |
+| `date-fns` | `catalog:` |
+| `embla-carousel-react` | `catalog:` |
+| `input-otp` | `catalog:` |
+| `lucide-react` | `catalog:` |
+| `next-themes` | `catalog:` |
+| `radix-ui` | `catalog:` |
+| `react` | `catalog:` |
+| `react-day-picker` | `catalog:` |
+| `react-dom` | `catalog:` |
+| `react-hook-form` | `catalog:` |
+| `react-resizable-panels` | `catalog:` |
+| `recharts` | `catalog:` |
+| `sonner` | `catalog:` |
+| `tailwind-merge` | `catalog:` |
+| `tw-animate-css` | `catalog:` |
+| `vaul` | `catalog:` |
+
+---
+
+## Cross-References
+
+- [`route.architecture.md`](./route.architecture.md)

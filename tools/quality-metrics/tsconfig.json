@@ -1,0 +1,14 @@
+{
+  "extends": "afenda-typescript-config/base.json",
+  "compilerOptions": {
+    // Quality Metrics Tool - Node.js ESM
+    "tsBuildInfoFile": "./dist/.tsbuildinfo"
+  },
+  "include": [
+    "src/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist"
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "$schema": "./tools/afenda-cli/schema/registry.schema.json",
+  "commands": {
+    "clean": {
+      "default": "turbo run clean",
+      "subcommands": {
+        "all": "rimraf node_modules && turbo run clean"
+      }
+    },
+    "dev": {
+      "default": "turbo run dev"
+    },
+    "build": {
+      "default": "turbo run build"
+    }
+  },
+  "ignore": {
+    "scripts": [
+      "lint",
+      "lint:fix",
+      "type-check",
+      "type-check:strict",
+      "format",
+      "format:check"
+    ]
+  }
+}

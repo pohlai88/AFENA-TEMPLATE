@@ -1,0 +1,177 @@
+{
+  // ── Tailwind CSS v4 IntelliSense ─────────────────────────
+  // v4 auto-detects config from CSS files (@import "tailwindcss")
+  // No tailwind.config.js needed — config lives in globals.css via @theme
+  "tailwindCSS.experimental.configFile": {
+    "apps/web/app/globals.css": [
+      "apps/web/**",
+      "packages/ui/**"
+    ]
+  },
+  "tailwindCSS.includeLanguages": {
+    "typescript": "javascript",
+    "typescriptreact": "javascript"
+  },
+  "tailwindCSS.classAttributes": [
+    "class",
+    "className",
+    "tw"
+  ],
+  "tailwindCSS.experimental.classRegex": [
+    [
+      "cn\\(([^)]*)\\)",
+      "'([^']*)'"
+    ],
+    [
+      "cn\\(([^)]*)\\)",
+      "\"([^\"]*)\""
+    ],
+    [
+      "cn\\(([^)]*)\\)",
+      "`([^`]*)`"
+    ],
+    [
+      "clsx\\(([^)]*)\\)",
+      "'([^']*)'"
+    ],
+    [
+      "clsx\\(([^)]*)\\)",
+      "\"([^\"]*)\""
+    ],
+    [
+      "clsx\\(([^)]*)\\)",
+      "`([^`]*)`"
+    ],
+    [
+      "twMerge\\(([^)]*)\\)",
+      "'([^']*)'"
+    ],
+    [
+      "twMerge\\(([^)]*)\\)",
+      "\"([^\"]*)\""
+    ]
+  ],
+  "tailwindCSS.emmetCompletions": true,
+  "tailwindCSS.files.exclude": [
+    "**/node_modules/**",
+    "**/.git/**"
+  ],
+  // v4 lint — only cssConflict and invalidTailwindDirective are relevant
+  // invalidApply, invalidScreen, invalidConfigPath are v3-only concepts
+  "tailwindCSS.lint.cssConflict": "warning",
+  "tailwindCSS.lint.invalidTailwindDirective": "error",
+  "tailwindCSS.lint.suggestCanonicalClasses": "ignore",
+  // ── Editor ───────────────────────────────────────────────
+  "editor.quickSuggestions": {
+    "strings": "on"
+  },
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit",
+    "source.organizeImports": "explicit"
+  },
+  "editor.suggest.showWords": false,
+  // ── CSS ──────────────────────────────────────────────────
+  // Prevent native VS Code CSS validation from flagging @theme, @source, etc.
+  "css.validate": false,
+  "less.validate": false,
+  "scss.validate": false,
+  "files.associations": {
+    "*.css": "tailwindcss"
+  },
+  // ── ESLint ───────────────────────────────────────────────
+  // Include root so root-level files get linted; patterns for workspace packages
+  "eslint.workingDirectories": [
+    ".",
+    {
+      "pattern": "apps/*"
+    },
+    {
+      "pattern": "packages/*"
+    },
+    {
+      "pattern": "tools/*"
+    }
+  ],
+  // ── TypeScript ───────────────────────────────────────────
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "typescript.enablePromptUseWorkspaceTsdk": true,
+  // Import preferences (enforces aliasing rules)
+  "typescript.preferences.importModuleSpecifier": "relative",
+  "typescript.preferences.importModuleSpecifierEnding": "minimal",
+  "typescript.preferences.quoteStyle": "single",
+  "typescript.preferences.preferTypeOnlyAutoImports": true,
+  "typescript.suggest.paths": true,
+  "typescript.suggest.autoImports": true,
+  "javascript.preferences.importModuleSpecifier": "relative",
+  "javascript.preferences.quoteStyle": "single",
+  "javascript.suggest.paths": true,
+  "javascript.suggest.autoImports": true,
+  // Path IntelliSense for @ aliases
+  "path-intellisense.mappings": {
+    "@": "${workspaceFolder}/apps/web",
+    "@afenda/ui": "${workspaceFolder}/packages/ui/src",
+    "@afenda/database": "${workspaceFolder}/packages/database/src",
+    "@afenda/logger": "${workspaceFolder}/packages/logger/src",
+    "@afenda/canon": "${workspaceFolder}/packages/canon/src",
+    "@afenda/crud": "${workspaceFolder}/packages/crud/src",
+    "@afenda/workflow": "${workspaceFolder}/packages/workflow/src",
+    "@afenda/search": "${workspaceFolder}/packages/search/src"
+  },
+  // ── Terminal ───────────────────────────────────────────────
+  // Use PowerShell 7+ (pwsh) which supports && chaining.
+  // Falls back to cmd.exe if pwsh is not installed.
+  "terminal.integrated.defaultProfile.windows": "PowerShell",
+  "terminal.integrated.profiles.windows": {
+    "PowerShell": {
+      "source": "PowerShell",
+      "args": [
+        "-NoLogo"
+      ]
+    }
+  },
+  // ── Vitest ────────────────────────────────────────────────
+  "vitest.enable": true,
+  "vitest.nodeExecutable": "C:\\nvm4w\\nodejs\\node.exe",
+  "vitest.rootConfig": "./vitest.config.ts",
+  "vitest.debugExclude": [
+    "**/node_modules/**",
+    "**/dist/**",
+    "**/coverage/**"
+  ],
+  "vitest.commandLine": "pnpm test",
+  "vitest.watchCommandLine": "pnpm test:watch",
+  "vitest.uiCommandLine": "pnpm test:ui",
+  "vitest.coverageCommandLine": "pnpm test:coverage",
+  "vitest.workspaceConfig": "./vitest.config.ts",
+  "vitest.packageConfig": "./vitest.config.ts",
+  // Enable inline test results
+  "testing.automaticallyOpenPeekView": "failureInVisibleDocument",
+  // Show test status in gutter
+  "testing.showAllTests": true,
+  // Enable code lens for tests
+  "testing.enableCodeLens": true,
+  // ── Markdown ──────────────────────────────────────────────
+  "markdown.validate.enabled": true,
+  "markdown.validate.fileLinks.enabled": "warning",
+  "markdown.validate.fragmentLinks.enabled": "warning",
+  "markdown.validate.ignoredLinks": [],
+  "[markdown]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[json]": {
+    "editor.defaultFormatter": "vscode.json-language-features"
+  },
+  "[jsonc]": {
+    "editor.defaultFormatter": "vscode.json-language-features"
+  },
+  "[powershell]": {
+    "editor.defaultFormatter": "ms-vscode.powershell"
+  },
+  // ── Cursor connectivity (reduces "Connection failed" errors on VPN/proxy) ──
+  "cursor.general.disableHttp2": false
+  // If behind a corporate proxy, add:
+  // "http.proxy": "http://proxy-host:port",
+  // "https.proxy": "http://proxy-host:port"
+}

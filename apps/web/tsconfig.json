@@ -1,0 +1,82 @@
+{
+  "extends": "afenda-typescript-config/nextjs.json",
+  "compilerOptions": {
+    // Build Configuration
+    "tsBuildInfoFile": ".next/cache/tsconfig.tsbuildinfo",
+    // Path Mapping - App-specific
+    "baseUrl": ".",
+    "paths": {
+      // App-level @ alias - for Next.js app imports only
+      "@/*": [
+        "./*"
+      ],
+      // Shared packages - workspace dependencies
+      "@afenda/ui": [
+        "../../packages/ui/src"
+      ],
+      "@afenda/database": [
+        "../../packages/database/src"
+      ],
+      "@afenda/logger": [
+        "../../packages/logger/src"
+      ],
+      "@afenda/canon": [
+        "../../packages/canon/src"
+      ],
+      "@afenda/crud": [
+        "../../packages/crud/src"
+      ],
+      "@afenda/workflow": [
+        "../../packages/workflow/src"
+      ],
+      "@afenda/search": [
+        "../../packages/search/src"
+      ],
+      "@afenda/observability": [
+        "../../packages/observability/src"
+      ],
+      "@afenda/migration": [
+        "../../packages/migration/src"
+      ],
+      // Convenience aliases for UI subpaths
+      "@/ui/*": [
+        "../../packages/ui/src/*"
+      ],
+      "@/lib/*": [
+        "./src/lib/*",
+        "../../packages/ui/src/lib/*"
+      ],
+      "@/components/*": [
+        "./components/*",
+        "../../packages/ui/src/components/*"
+      ],
+      "@/hooks/*": [
+        "./hooks/*",
+        "../../packages/ui/src/hooks/*"
+      ],
+      "@/app/*": [
+        "./app/*"
+      ],
+      "@/types/*": [
+        "./src/types/*"
+      ]
+    }
+  },
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    "**/*.js",
+    "**/*.jsx",
+    ".next/types/**/*.ts",
+    ".next/dev/types/**/*.ts",
+    "./types/**/*.d.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    ".next",
+    "dist",
+    "build",
+    "*.config.*"
+  ]
+}

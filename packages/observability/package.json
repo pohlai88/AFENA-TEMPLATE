@@ -1,0 +1,72 @@
+{
+  "name": "afenda-observability",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "OpenTelemetry instrumentation, metrics, and observability utilities for afenda",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    },
+    "./tracing": {
+      "types": "./dist/tracing.d.ts",
+      "import": "./dist/tracing.mjs",
+      "require": "./dist/tracing.js"
+    },
+    "./metrics": {
+      "types": "./dist/metrics.d.ts",
+      "import": "./dist/metrics.mjs",
+      "require": "./dist/metrics.js"
+    },
+    "./health": {
+      "types": "./dist/health.d.ts",
+      "import": "./dist/health.mjs",
+      "require": "./dist/health.js"
+    }
+  },
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "clean": "rm -rf dist .turbo node_modules",
+    "type-check": "tsc --noEmit",
+    "lint": "eslint . --ext .js,.ts --cache",
+    "lint:fix": "eslint . --ext .js,.ts --cache --fix",
+    "test": "vitest run",
+    "test:watch": "vitest watch",
+    "test:coverage": "vitest run --coverage"
+  },
+  "dependencies": {
+    "@opentelemetry/api": "catalog:",
+    "@opentelemetry/sdk-node": "catalog:",
+    "@opentelemetry/auto-instrumentations-node": "catalog:",
+    "@opentelemetry/exporter-trace-otlp-http": "catalog:",
+    "@opentelemetry/exporter-metrics-otlp-http": "catalog:",
+    "@opentelemetry/resources": "catalog:",
+    "@opentelemetry/semantic-conventions": "catalog:",
+    "@opentelemetry/instrumentation": "catalog:",
+    "@sentry/node": "catalog:",
+    "afenda-logger": "workspace:*"
+  },
+  "devDependencies": {
+    "afenda-eslint-config": "workspace:*",
+    "afenda-typescript-config": "workspace:*",
+    "tsup": "catalog:",
+    "typescript": "catalog:",
+    "vitest": "catalog:"
+  },
+  "keywords": [
+    "observability",
+    "opentelemetry",
+    "tracing",
+    "metrics",
+    "monitoring",
+    "sentry"
+  ],
+  "author": "afenda Team",
+  "license": "MIT"
+}

@@ -1,0 +1,34 @@
+{
+  "watchPatterns": {},
+  "guardrails": {
+    "enabled": ["deps", "versions", "size"],
+    "warnOnly": true
+  },
+  "discovery": {
+    "scanPaths": [
+      "apps/*/package.json",
+      "packages/*/package.json",
+      "tools/*",
+      "scripts/*"
+    ],
+    "verbose": false,
+    "staleThresholdSeconds": 60,
+    "commonScripts": [
+      "test",
+      "build",
+      "dev",
+      "clean",
+      "start",
+      "preinstall",
+      "postinstall",
+      "prepare"
+    ],
+    "customPrefixes": ["type-", "docs:", "gen:", "sync:", "guard:"]
+  },
+  "docs": {
+    "readme": {
+      "ignore": [],
+      "required": []
+    }
+  }
+}

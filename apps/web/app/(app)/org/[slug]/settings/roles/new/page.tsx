@@ -1,0 +1,19 @@
+import { notFound } from 'next/navigation';
+
+import { PageHeader } from '@/app/(app)/org/[slug]/_components/crud/client/page-header';
+import { getOrgContext } from '@/app/(app)/org/[slug]/_server/org-context_server';
+
+import { NewRoleForm } from './_components/new-role-form_client';
+
+export default async function NewRolePage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
+  const ctx = await getOrgContext(slug);
+  if (!ctx) notFound();
+
+  return (
+    <div className="space-y-6">
+      <PageHeader title="New Role" description="Create a new role for your organization" />
+      <NewRoleForm orgSlug={slug} />
+    </div>
+  );
+}

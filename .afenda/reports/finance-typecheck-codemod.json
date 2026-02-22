@@ -1,0 +1,11 @@
+{
+  "dryRun": false,
+  "filesChanged": 20,
+  "patterns": {
+    "B1": 17,
+    "B2": 11,
+    "B3": 1,
+    "B4": 1
+  },
+  "B4_skipped": []
+}

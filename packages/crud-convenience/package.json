@@ -1,0 +1,36 @@
+{
+    "name": "afenda-crud-convenience",
+    "version": "0.1.0",
+    "private": true,
+    "type": "module",
+    "sideEffects": false,
+    "main": "./dist/index.js",
+    "module": "./dist/index.mjs",
+    "types": "./dist/index.d.ts",
+    "exports": {
+        ".": {
+            "types": "./dist/index.d.ts",
+            "import": "./dist/index.mjs",
+            "require": "./dist/index.js"
+        }
+    },
+    "scripts": {
+        "build": "tsup",
+        "dev": "tsup --watch",
+        "lint": "eslint . --ext .js,.jsx,.ts,.tsx --cache --concurrency=auto",
+        "lint:ci": "eslint . --ext .js,.jsx,.ts,.tsx --rule 'import/no-cycle: error'",
+        "lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx --cache --fix",
+        "type-check": "tsc --noEmit"
+    },
+    "dependencies": {
+        "afenda-crud": "workspace:*"
+    },
+    "devDependencies": {
+        "@types/node": "catalog:",
+        "afenda-eslint-config": "workspace:^",
+        "afenda-typescript-config": "workspace:*",
+        "tslib": "catalog:",
+        "tsup": "catalog:",
+        "typescript": "catalog:"
+    }
+}

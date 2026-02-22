@@ -1,0 +1,47 @@
+# Build output
+dist/
+build/
+.next/
+.turbo/
+out/
+
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Lock files
+pnpm-lock.yaml
+
+# Generated files
+*.d.ts
+*.d.cts
+*.d.mts
+*.tsbuildinfo
+
+# SQL migrations (hand-written, formatting would break them)
+drizzle/
+packages/database/drizzle/
+
+# Coverage
+coverage/
+
+# Archive
+ARCHIVE/
+
+# Environment
+.env
+.env.*
+
+# Editor
+.vscode/
+.idea/
+
+# Pre-existing broken files
+tools/quality-metrics/src/performance.ts
+
+# Third-party / community skills (not our code)
+.agents/skills/openclaw-audit-watchdog/
+.agents/skills/prompt-agent/
+.agents/skills/soul-guardian/
+.agents/skills/clawtributor/
+.agents/skills/clawsec-*/

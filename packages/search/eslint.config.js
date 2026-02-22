@@ -1,0 +1,29 @@
+const baseConfig = require('afenda-eslint-config/base');
+
+module.exports = [
+  { ignores: ['dist/**', '*.config.*', '**/*.test.*', '**/*.spec.*'] },
+  ...baseConfig,
+  {
+    languageOptions: {
+      parserOptions: {
+        projectService: true,
+        tsconfigRootDir: __dirname,
+      },
+    },
+    rules: {
+      // packages/search does read-only queries — allow db.select()
+      // INVARIANT-01 db.insert/update/delete rules intentionally omitted here
+      'no-restricted-syntax': [
+        'error',
+        {
+          selector: "CallExpression[callee.object.name='console']",
+          message: 'Use afenda-logger instead of console.* (INVARIANT-08)',
+        },
+        {
+          selector: "CallExpression[callee.object.property.name='console']",
+          message: 'Use afenda-logger instead of console.* (INVARIANT-08)',
+        },
+      ],
+    },
+  },
+];

@@ -1,0 +1,6 @@
+# CODEOWNERS - Require review for workflow and automation changes
+# See: https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+# Replace @afenda-maintainers with your org's team or specific users
+
+# Workflow files require designated reviewer approval
+.github/workflows/ @afenda-maintainers

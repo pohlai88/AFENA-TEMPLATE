@@ -1,0 +1,27 @@
+{
+  "extends": "afenda-typescript-config/react-library.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/*": [
+        "./src/*"
+      ]
+    },
+    "tsBuildInfoFile": "./dist/.tsbuildinfo",
+    // Override for third-party library compatibility
+    // Libraries like react-day-picker, @base-ui/react, next-themes don't support exactOptionalPropertyTypes
+    "exactOptionalPropertyTypes": false
+  },
+  "include": [
+    "src/**/*",
+    "engine/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "build",
+    "**/*.test.*",
+    "**/*.spec.*",
+    "**/*.stories.*"
+  ]
+}
