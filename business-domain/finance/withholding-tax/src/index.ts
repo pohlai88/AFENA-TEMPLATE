@@ -3,8 +3,20 @@ export { computeWht, validateWhtAmounts } from './calculators/wht-engine';
 export type {
   WhtComputationInput,
   WhtComputationResult,
-  WhtRateConfig,
+  WhtRateConfig
 } from './calculators/wht-engine';
+
+export { computeWhtCertificate } from './calculators/wht-certificate-generation';
+export type { WhtCertificateInput, WhtCertificateResult } from './calculators/wht-certificate-generation';
+
+export { computeWhtRemittance } from './calculators/wht-remittance-calc';
+export type { WhtCertificateForRemittance, WhtRemittanceInput, WhtRemittanceResult } from './calculators/wht-remittance-calc';
+
+export { evaluateWhtExemption } from './calculators/wht-exemption-check';
+export type { WhtExemptionCheckInput, WhtExemptionCheckResult } from './calculators/wht-exemption-check';
+
+export { computeWhtReconciliation } from './calculators/wht-reconciliation';
+export type { WhtReconciliationInput, WhtReconciliationResult } from './calculators/wht-reconciliation';
 
 // ── Queries ─────────────────────────────────────────────
 export {
@@ -12,12 +24,12 @@ export {
   getCertificatesByPayee,
   getWhtCertificate,
   getWhtCode,
-  getWhtRates,
+  getWhtRates
 } from './queries/wht-query';
 export type {
   WhtCertificateReadModel,
   WhtCodeReadModel,
-  WhtRateReadModel,
+  WhtRateReadModel
 } from './queries/wht-query';
 
 // ── Commands ────────────────────────────────────────────
@@ -30,5 +42,6 @@ export {
   fetchWhtCodes,
   fetchWhtRates,
   issueCertificate,
-  remitToAuthority,
+  remitToAuthority
 } from './services/wht-service';
+

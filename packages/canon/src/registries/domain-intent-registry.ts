@@ -1171,4 +1171,45 @@ export const DOMAIN_INTENT_REGISTRY: Record<
     auditClass: 'financial',
     effectiveDating: true,
   },
+
+  // ── E-Invoicing ─────────────────────────────────────────
+  'einvoice.issue': {
+    owner: 'e-invoicing',
+    tableTarget: 'einvoice.e_invoices',
+    idempotency: {
+      policy: 'required',
+      scope: 'document',
+      recipe: 'hash(org_id, invoice_id)',
+    },
+    severity: 'high',
+    ledgerImpact: false,
+    auditClass: 'financial',
+    effectiveDating: true,
+  },
+  'einvoice.submit': {
+    owner: 'e-invoicing',
+    tableTarget: 'einvoice.e_invoice_submissions',
+    idempotency: {
+      policy: 'required',
+      scope: 'document',
+      recipe: 'hash(org_id, invoice_id, submission_id)',
+    },
+    severity: 'high',
+    ledgerImpact: false,
+    auditClass: 'financial',
+    effectiveDating: false,
+  },
+  'einvoice.clear': {
+    owner: 'e-invoicing',
+    tableTarget: 'einvoice.e_invoice_submissions',
+    idempotency: {
+      policy: 'required',
+      scope: 'document',
+      recipe: 'hash(org_id, invoice_id, submission_id)',
+    },
+    severity: 'high',
+    ledgerImpact: false,
+    auditClass: 'financial',
+    effectiveDating: false,
+  },
 };

@@ -11,7 +11,7 @@
     "build": "tsup",
     "dev": "tsup --watch",
     "lint": "eslint src --ext .js,.jsx,.ts,.tsx --cache --concurrency=auto",
-    "lint:ci": "eslint src --ext .js,.jsx,.ts,.tsx --rule 'import/no-cycle: error'",
+    "lint:ci": "eslint src --ext .js,.jsx,.ts,.tsx --cache --rule 'import/no-cycle: error'",
     "lint:fix": "eslint src --ext .js,.jsx,.ts,.tsx --cache --fix",
     "type-check": "tsc --noEmit",
     "meta:check": "node dist/index.js meta check",

@@ -21,6 +21,9 @@ export type { CompoundInstrumentInput, CompoundInstrumentResult } from './calcul
 export { evaluateDerecognition } from './calculators/derecognition';
 export type { DerecognitionResult, TransferDetails } from './calculators/derecognition';
 
+export { evaluateEclStageTransition } from './calculators/ecl-stage-transition';
+export type { EclStageTransitionInput, EclStageTransitionResult } from './calculators/ecl-stage-transition';
+
 // ── Queries ─────────────────────────────────────────────
 export { getFinancialInstrument } from './queries/fi-query';
 export type { FinancialInstrumentReadModel } from './queries/fi-query';

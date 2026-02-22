@@ -16,3 +16,6 @@ export type { PartitionRecommendation, PartitionResult, TableStats } from './cal
 export { validateBatchPosting } from './calculators/batch-posting';
 export type { BatchEntryResult, BatchJournalEntry, BatchPostingResult } from './calculators/batch-posting';
 
+export { computeTrialBalance } from './calculators/trial-balance-computation';
+export type { TrialBalanceInput, TrialBalanceLine, TrialBalanceResult } from './calculators/trial-balance-computation';
+

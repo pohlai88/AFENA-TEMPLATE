@@ -94,6 +94,24 @@ After step 6, the repo will have one commit and only your account as contributor
 
 ---
 
+## Copy secrets/variables from old repo (CLI)
+
+**Secrets cannot be copied** — GitHub encrypts them; values are never exposed. You must recreate from your records (Vercel for TURBO_TOKEN, etc.).
+
+**Variables can be copied** — The API returns variable values. Use the script when both repos exist and you're authenticated:
+
+```powershell
+# Ensure gh is authenticated: gh auth login
+.\scripts\copy-gh-secrets-vars.ps1 -SourceRepo "pohlai88/AFENA-TEMPLATE" -TargetRepo "pohlai88/afenda-nexus"
+```
+
+- Copies repository variables (e.g. TURBO_TEAM) automatically
+- Lists secret names; you set values manually: `gh secret set TURBO_TOKEN --repo pohlai88/afenda-nexus`
+
+If the old repo is deleted, recreate from: [Vercel → Tokens](https://vercel.com/account/tokens) (TURBO_TOKEN), Neon dashboard (DATABASE_URL), Codecov (CODECOV_TOKEN).
+
+---
+
 ## Push to new repo (after deleting old)
 
 If you **delete the repo and create a new one**, follow this to avoid re-introducing unwanted contributors:

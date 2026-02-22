@@ -36,3 +36,9 @@ export {
 export { computeHedgeDiscontinuation } from './calculators/hedge-discontinuation';
 export type { DiscontinuationResult, HedgeDiscontinuationInput } from './calculators/hedge-discontinuation';
 
+export { computeHedgeCostOfHedging } from './calculators/hedge-cost-of-hedging';
+export type { HedgeCostOfHedgingInput, HedgeCostOfHedgingResult } from './calculators/hedge-cost-of-hedging';
+
+export { computeNetInvestmentHedge } from './calculators/net-investment-hedge';
+export type { NetInvestmentHedgeInput, NetInvestmentHedgeResult } from './calculators/net-investment-hedge';
+

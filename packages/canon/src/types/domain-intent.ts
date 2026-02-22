@@ -817,6 +817,43 @@ export type SbpExpensePayload = {
   recogniseTo: 'equity-reserve' | 'liability';
 };
 
+// ── E-Invoicing ─────────────────────────────────────────
+
+/** e-invoicing — issue e-invoice (Peppol / MyInvois / UBL) */
+export type EInvoiceIssuePayload = {
+  invoiceId: string;
+  format: 'ubl' | 'peppol-bis' | 'myinvois' | 'factur-x' | 'xrechnung';
+  recipientId: string;
+  totalMinor: number;
+  currency: string;
+  issueDate: string;
+  lines: Array<{
+    lineNo: number;
+    description: string;
+    quantityMinor: number;
+    unitPriceMinor: number;
+    taxCode: string;
+    taxAmountMinor: number;
+  }>;
+};
+
+/** e-invoicing — submit to tax authority / access point */
+export type EInvoiceSubmitPayload = {
+  invoiceId: string;
+  submissionId: string;
+  accessPoint: string;
+  submittedAt: string;
+};
+
+/** e-invoicing — record clearance / validation response */
+export type EInvoiceClearPayload = {
+  invoiceId: string;
+  submissionId: string;
+  clearanceStatus: 'cleared' | 'rejected' | 'pending';
+  validationErrors?: string[];
+  clearedAt?: string;
+};
+
 // ── Domain Intent Union ─────────────────────────────────
 
 // ── Intent variant union (discriminated by `type`) ──────
@@ -941,7 +978,11 @@ type DomainIntentVariant =
   // Share-Based Payment (IFRS 2)
   | { type: 'sbp.grant'; payload: SbpGrantPayload }
   | { type: 'sbp.vest'; payload: SbpVestPayload }
-  | { type: 'sbp.expense'; payload: SbpExpensePayload };
+  | { type: 'sbp.expense'; payload: SbpExpensePayload }
+  // E-Invoicing
+  | { type: 'einvoice.issue'; payload: EInvoiceIssuePayload }
+  | { type: 'einvoice.submit'; payload: EInvoiceSubmitPayload }
+  | { type: 'einvoice.clear'; payload: EInvoiceClearPayload };
 
 /**
  * Domain intent with optional idempotency key (SK-09).

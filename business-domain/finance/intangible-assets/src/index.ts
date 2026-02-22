@@ -31,3 +31,9 @@ export { amortise, capitalise, fetchAsset, impair } from './services/intangible-
 export { validateGoodwillProhibition } from './calculators/goodwill-prohibition';
 export type { GoodwillProhibitionResult, IntangibleProposal } from './calculators/goodwill-prohibition';
 
+export { computeIntangibleRevaluation } from './calculators/intangible-revaluation';
+export type { IntangibleRevaluationInput, IntangibleRevaluationResult } from './calculators/intangible-revaluation';
+
+export { reviewUsefulLife } from './calculators/useful-life-review';
+export type { UsefulLifeReviewInput, UsefulLifeReviewResult } from './calculators/useful-life-review';
+

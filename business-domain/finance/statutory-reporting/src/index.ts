@@ -42,3 +42,11 @@ export type { AccountingPoliciesNoteInput, AccountingPoliciesNoteResult, NoteSec
 export { generateRelatedPartyDisclosure } from './calculators/related-party-disclosure';
 export type { RelatedPartyInput, RelatedPartyResult, RelatedPartyTransaction } from './calculators/related-party-disclosure';
 
+export { tagWithXbrl } from './calculators/xbrl-tagger';
+export type {
+  StatementLineItem,
+  XbrlMapping,
+  XbrlTaggingResult,
+  XbrlTaxonomyElement
+} from './calculators/xbrl-tagger';
+

@@ -17,7 +17,7 @@
         "test:watch": "vitest",
         "lint": "eslint src --ext .ts --cache",
         "lint:fix": "eslint src --ext .ts --cache --fix",
-        "lint:ci": "eslint src --ext .ts --rule 'import/no-cycle: error'"
+        "lint:ci": "eslint src --ext .ts --cache --rule 'import/no-cycle: error'"
     },
     "dependencies": {
         "afenda-canon": "workspace:*",

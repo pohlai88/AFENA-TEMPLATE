@@ -14,6 +14,15 @@ export type { ProvisionResult, UnwindResult } from './calculators/provision-calc
 export { evaluateOnerousContract } from './calculators/onerous-contract';
 export type { OnerousContractInput, OnerousContractResult } from './calculators/onerous-contract';
 
+export { computeProvisionUtilisation } from './calculators/provision-utilisation';
+export type { ProvisionUtilisationInput, ProvisionUtilisationResult } from './calculators/provision-utilisation';
+
+export { computeProvisionReversal } from './calculators/provision-reversal';
+export type { ProvisionReversalInput, ProvisionReversalResult } from './calculators/provision-reversal';
+
+export { assessContingentLiability } from './calculators/contingent-liability-assessment';
+export type { ContingentLiabilityInput, ContingentLiabilityResult } from './calculators/contingent-liability-assessment';
+
 // ── Queries ─────────────────────────────────────────────
 export { getProvision, getProvisionMovements } from './queries/provision-query';
 export type { ProvisionMovementReadModel, ProvisionReadModel } from './queries/provision-query';

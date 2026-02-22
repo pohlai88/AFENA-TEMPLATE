@@ -31,3 +31,6 @@ export type {
 export { TAX_BOX_SCHEMAS, computeTaxBoxes } from './calculators/tax-box-schema';
 export type { TaxBoxDefinition, TaxBoxSchema } from './calculators/tax-box-schema';
 
+export { computeReverseCharge } from './calculators/reverse-charge-calc';
+export type { ReverseChargeInput, ReverseChargeResult } from './calculators/reverse-charge-calc';
+

@@ -335,6 +335,15 @@ pnpm -r exec -- rm -rf .eslintcache
 pnpm lint
 ```
 
+**Slow type-check or lint (memory-constrained)**
+
+On large monorepos or CI, type-heavy workloads may benefit from:
+
+```bash
+NODE_OPTIONS=--max-semi-space-size=256 pnpm type-check
+NODE_OPTIONS=--max-semi-space-size=256 pnpm lint:ci
+```
+
 **For more troubleshooting:** See [CONFIGURATION_GUIDE.md](docs/CONFIGURATION_GUIDE.md#troubleshooting)
 
 ## Learn More

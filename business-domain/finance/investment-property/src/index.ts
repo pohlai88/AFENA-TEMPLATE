@@ -15,6 +15,18 @@ export type {
   TransferAdjustmentResult
 } from './calculators/inv-property-calc';
 
+export { computeFairValueModel } from './calculators/fair-value-model';
+export type { FairValueModelInput, FairValueModelResult } from './calculators/fair-value-model';
+
+export { computeCostModelDepreciation } from './calculators/cost-model-depreciation';
+export type { CostModelDepreciationInput, CostModelDepreciationResult } from './calculators/cost-model-depreciation';
+
+export { classifyTransfer } from './calculators/transfer-classification';
+export type { TransferClassificationInput, TransferClassificationResult } from './calculators/transfer-classification';
+
+export { computeInvPropertyDisclosure } from './calculators/inv-property-disclosure';
+export type { InvPropertyDisclosureInput, InvPropertyDisclosureResult } from './calculators/inv-property-disclosure';
+
 export {
   buildInvPropertyMeasureIntent,
   buildInvPropertyTransferIntent

@@ -13,6 +13,18 @@ export type { ImpairmentTestReadModel } from './queries/impairment-query';
 export { computeRecoverableAmount, testImpairment } from './calculators/impairment-calc';
 export type { ImpairmentCalcResult } from './calculators/impairment-calc';
 
+export { allocateGoodwillToCgus } from './calculators/cgu-allocation';
+export type { CguAllocationInput, CguAllocationResult, CguData } from './calculators/cgu-allocation';
+
+export { computeGoodwillImpairment } from './calculators/goodwill-impairment';
+export type { GoodwillImpairmentInput, GoodwillImpairmentResult } from './calculators/goodwill-impairment';
+
+export { computeImpairmentReversal } from './calculators/impairment-reversal';
+export type { ImpairmentReversalInput, ImpairmentReversalResult } from './calculators/impairment-reversal';
+
+export { computeImpairmentDisclosure } from './calculators/impairment-disclosure';
+export type { ImpairmentDisclosureInput, ImpairmentDisclosureResult, ImpairmentEvent } from './calculators/impairment-disclosure';
+
 export {
   buildImpairmentRecogniseIntent,
   buildImpairmentReverseIntent,

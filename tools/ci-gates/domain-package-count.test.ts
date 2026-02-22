@@ -9,7 +9,7 @@ import { describe, expect, test } from 'vitest';
  * Update EXPECTED_COUNT when adding new domain packages.
  */
 
-const EXPECTED_COUNT = 37;
+const EXPECTED_COUNT = 38;
 
 describe('G-DOM-01: DOMAIN_PACKAGE_COUNT invariant', () => {
   test(`DOMAIN_PACKAGE_COUNT equals ${EXPECTED_COUNT}`, async () => {
